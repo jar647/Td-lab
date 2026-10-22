@@ -162,7 +162,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None)
                 if (opp,position) not in def_opp: continue
                 share=100*player_events[(team,pid)]/team_events[team]
                 health=injury_status.get(pid,'ROSTER_ACTIVE' if weekly_roster_codes.get(pid)=='ACT' else 'UNVERIFIED')
-                result.append({'availability':health,'player':p.player,'pos':position,'team':team,'opp':opp,
+                result.append({'player_id':pid,'availability':health,'player':p.player,'pos':position,'team':team,'opp':opp,
                     'games':games,'tdallowed':mean(player_td.get((opp,position),0)/dg),
                     'rzallowed':mean(def_opp[(opp,position)]/dg),
                     'rzshare':mean(share),'playerRz':mean(player_events[(team,pid)]/og),
@@ -192,6 +192,30 @@ def main():
         weekly_rosters=None
     result,meta=build(pbp,schedules,rosters,injuries=injuries,weekly_rosters=weekly_rosters)
     print('AVAILABILITY DIAGNOSTICS: '+json.dumps(meta['availability_diagnostics']))
+    # Freeze each week's first published candidate set for honest, forward-only grading.
+    # Never replace snapshots as subsequent results become known.
+    history=OUT/'history'
+    history.mkdir(exist_ok=True)
+    snapshot=history/f'{SEASON}-week-{meta["week"]}.json'
+    if not snapshot.exists():
+        snapshot.write_text(json.dumps({'season':SEASON,'week':meta['week'],'captured_at':meta['generated_at'],'players':result},indent=2))
+    # Grade previous frozen snapshots against completed PBP. TD scored is measured
+    # using the scorer ID, not red-zone opportunities or the candidate's score.
+    for prior in sorted(history.glob(f'{SEASON}-week-*.json')):
+        try:
+            record=json.loads(prior.read_text())
+            w=int(record['week'])
+            if w>=meta['week']: continue
+            game_rows=pbp[(pd.to_numeric(pbp.week,errors='coerce')==w)&(pd.to_numeric(pbp.season,errors='coerce')==SEASON)]
+            if game_rows.empty or 'td_player_id' not in game_rows.columns: continue
+            # Require all scheduled regular-season games in that week to have PBP
+            expected=schedules[(pd.to_numeric(schedules.season,errors='coerce')==SEASON)&(pd.to_numeric(schedules.week,errors='coerce')==w)&(schedules.game_type.astype(str).str.upper()=='REG')]
+            if len(set(game_rows.game_id.dropna()))<len(expected): continue
+            scored=set(game_rows.loc[pd.to_numeric(game_rows.touchdown,errors='coerce')==1,'td_player_id'].dropna().astype(str))
+            graded=[{'player_id':p.get('player_id'),'player':p['player'],'pos':p['pos'],'team':p['team'],'scored_td':p.get('player_id') in scored} for p in record['players']]
+            (history/f'{SEASON}-week-{w}-results.json').write_text(json.dumps({'season':SEASON,'week':w,'graded_at':meta['generated_at'],'graded_count':len(graded),'scored_count':sum(p['scored_td'] for p in graded),'players':graded},indent=2))
+        except (ValueError,KeyError,TypeError) as exc:
+            print(f'Unable to grade {prior.name}: {exc}',file=sys.stderr)
     # Atomic replacement after full successful validation. Never publish dummy data.
     (OUT/'matchups.json.tmp').write_text(json.dumps(result,ensure_ascii=False,separators=(',',':')))
     (OUT/'status.json.tmp').write_text(json.dumps(meta,indent=2))
