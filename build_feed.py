@@ -127,8 +127,19 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None)
                 roster_status.update(dict(zip(wr.gsis_id.astype(str),wr.status.fillna('').astype(str).str.upper().str.strip())))
     injury_diagnostics['columns']=list(injuries.columns) if injuries is not None else []
     injury_diagnostics['report_status_counts']=injuries.loc[pd.to_numeric(injuries.week,errors='coerce')==week,'report_status'].fillna('MISSING').astype(str).value_counts().head(20).to_dict() if injuries is not None and {'week','report_status'}.issubset(injuries.columns) else {}
+    # NFL weekly roster codes: ACT active roster, RES reserve, DEV practice squad.
+    # ACT is roster membership only, not game-day clearance.
+    weekly_roster_codes={}
+    if weekly_rosters is not None and not weekly_rosters.empty and {'gsis_id','week','status'}.issubset(weekly_rosters.columns):
+        wr=weekly_rosters.copy()
+        if 'season' in wr: wr=wr[pd.to_numeric(wr.season,errors='coerce')==SEASON]
+        wr=wr[pd.to_numeric(wr.week,errors='coerce')<=week]
+        if not wr.empty:
+            wr=wr.sort_values('week').drop_duplicates('gsis_id',keep='last')
+            weekly_roster_codes=dict(zip(wr.gsis_id.astype(str),wr.status.fillna('').astype(str).str.upper().str.strip()))
+    nonactive_codes={'RES','DEV','CUT','RET','EXE','TRD','TRT'}
     result=[]
-    excluded={'out_report':0,'unavailable_roster':0}
+    excluded={'out_report':0,'unavailable_roster':0,'nonactive_weekly_roster':0}
     for _,game in slate.iterrows():
         for team,opp in [(game.home_team,game.away_team),(game.away_team,game.home_team)]:
             team=str(team);opp=str(opp)
@@ -145,21 +156,24 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None)
                 if roster_status.get(pid,'') in unavailable_roster:
                     excluded['unavailable_roster']+=1
                     continue
+                if weekly_roster_codes.get(pid) in nonactive_codes:
+                    excluded['nonactive_weekly_roster']+=1
+                    continue
                 if (opp,position) not in def_opp: continue
                 share=100*player_events[(team,pid)]/team_events[team]
-                health=injury_status.get(pid,'UNVERIFIED')
+                health=injury_status.get(pid,'ROSTER_ACTIVE' if weekly_roster_codes.get(pid)=='ACT' else 'UNVERIFIED')
                 result.append({'availability':health,'player':p.player,'pos':position,'team':team,'opp':opp,
                     'games':games,'tdallowed':mean(player_td.get((opp,position),0)/dg),
                     'rzallowed':mean(def_opp[(opp,position)]/dg),
                     'rzshare':mean(share),'playerRz':mean(player_events[(team,pid)]/og),
                     'odds':'','prob':'','market':'ATD',
-                    'notes':f'Availability: {health} (current-week official injury report only; UNVERIFIED does not mean active). nflverse play-by-play; {SEASON} weeks {max(1,week-WINDOW)}-{week-1}; red-zone rushes + intended targets; position verified by roster; no odds or calibrated TD probability. Player RZ share is share of recorded team red-zone rushes and intended targets (not all plays).'})
+                    'notes':f'Availability: {health} (ROSTER_ACTIVE means listed on active roster, NOT cleared for game day; UNVERIFIED does not mean active). nflverse play-by-play; {SEASON} weeks {max(1,week-WINDOW)}-{week-1}; red-zone rushes + intended targets; position verified by roster; no odds or calibrated TD probability. Player RZ share is share of recorded team red-zone rushes and intended targets (not all plays).'})
     if not result: raise RuntimeError('No matchup records passed source and sample validation')
     result.sort(key=lambda r:(r['team'],r['pos'],r['player']))
     return result, {'season':SEASON,'week':week,'generated_at':now.isoformat(),
                     'matchups':len(result),'source':'nflverse play-by-play and rosters',
                     'odds_source':None,'probability_model':None,
-                    'lookback_weeks':WINDOW,'availability_diagnostics':{'injuries':injury_diagnostics,'weekly_rosters':weekly_diagnostics,'excluded':excluded,'unverified_output':sum(r['availability']=='UNVERIFIED' for r in result)},'injury_policy':'Current-week OUT excluded; doubtful/questionable flagged; explicit reserve/injured roster statuses excluded when available; all others unverified. Late inactive declarations are not independently verified.','status':'ready'}
+                    'lookback_weeks':WINDOW,'availability_diagnostics':{'injuries':injury_diagnostics,'weekly_rosters':weekly_diagnostics,'excluded':excluded,'unverified_output':sum(r['availability']=='UNVERIFIED' for r in result)},'injury_policy':'Current-week OUT excluded; doubtful/questionable flagged; weekly RES/DEV/CUT/RET/EXE/TRD/TRT excluded. ROSTER_ACTIVE only confirms active roster membership, not game-day clearance; late inactives unverified.','status':'ready'}
 
 def main():
     import nflreadpy as nfl
