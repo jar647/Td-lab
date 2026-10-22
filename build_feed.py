@@ -68,6 +68,12 @@ def build(pbp, schedules, rosters, now=None, injuries=None):
     if 'week' in roster: roster=roster.sort_values('week')
     roster=roster.dropna(subset=['gsis_id','position']).drop_duplicates('gsis_id',keep='last')
     pos_by_id=dict(zip(roster.gsis_id.astype(str),roster.position.astype(str)))
+    # Explicit inactive roster designations are stronger than missing injury reports.
+    # Unknown or undocumented roster statuses are not assumed active.
+    roster_status={}
+    if 'status' in roster.columns:
+        roster_status=dict(zip(roster.gsis_id.astype(str),roster.status.fillna('').astype(str).str.upper().str.strip()))
+    unavailable_roster={'INJURED RESERVE','INJURED_RESERVE','RESERVE/INJURED','RESERVE-INJURED','IR','RESERVE/PUP','RESERVE/NFI','PUP','NFI','SUSPENDED','RESERVE/SUSPENDED'}
     # An opportunity is a documented red-zone rush or an intended target inside the 20.
     # Exclude penalties/no-plays and pass plays without a recorded intended receiver.
     if 'play' in plays: plays=plays[pd.to_numeric(plays.play,errors='coerce').fillna(1)==1]
@@ -113,7 +119,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None):
             for _,p in players.iterrows():
                 pid=p.player_id;position=p.pos
                 if roster_team.get(pid)!=team: continue
-                if injury_status.get(pid)=='OUT': continue
+                if injury_status.get(pid)=='OUT' or roster_status.get(pid,'') in unavailable_roster: continue
                 if (opp,position) not in def_opp: continue
                 share=100*player_events[(team,pid)]/team_events[team]
                 health=injury_status.get(pid,'UNVERIFIED')
@@ -128,7 +134,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None):
     return result, {'season':SEASON,'week':week,'generated_at':now.isoformat(),
                     'matchups':len(result),'source':'nflverse play-by-play and rosters',
                     'odds_source':None,'probability_model':None,
-                    'lookback_weeks':WINDOW,'injury_policy':'Current-week OUT excluded; doubtful/questionable flagged; all others unverified. IR and late inactive declarations are not independently verified.','status':'ready'}
+                    'lookback_weeks':WINDOW,'injury_policy':'Current-week OUT excluded; doubtful/questionable flagged; explicit reserve/injured roster statuses excluded when available; all others unverified. Late inactive declarations are not independently verified.','status':'ready'}
 
 def main():
     import nflreadpy as nfl
