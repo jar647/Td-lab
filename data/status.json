@@ -1,7 +1,7 @@
 {
   "season": 2026,
   "week": 7,
-  "generated_at": "2026-10-22T21:42:25.780460+00:00",
+  "generated_at": "2026-10-22T21:48:50.753565+00:00",
   "matchups": 277,
   "source": "nflverse play-by-play and rosters",
   "odds_source": null,
@@ -11,12 +11,46 @@
     "injuries": {
       "rows_for_week": 273,
       "source_rows": 2062,
-      "matched_ids": 13
+      "matched_ids": 13,
+      "columns": [
+        "season",
+        "season_type",
+        "game_type",
+        "team",
+        "week",
+        "gsis_id",
+        "position",
+        "full_name",
+        "first_name",
+        "last_name",
+        "report_primary_injury",
+        "report_secondary_injury",
+        "report_status",
+        "practice_primary_injury",
+        "practice_secondary_injury",
+        "practice_status"
+      ],
+      "report_status_counts": {
+        "MISSING": 260,
+        "Out": 7,
+        "Questionable": 5,
+        "Doubtful": 1
+      }
     },
     "weekly_rosters": {
       "source_rows": 2275,
       "latest_week": 7,
-      "status_column": true
+      "status_column": true,
+      "status_counts": {
+        "ACT": 1470,
+        "DEV": 480,
+        "RES": 278,
+        "CUT": 26,
+        "RET": 16,
+        "EXE": 3,
+        "TRD": 1,
+        "TRT": 1
+      }
     },
     "excluded": {
       "out_report": 1,
