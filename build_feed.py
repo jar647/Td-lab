@@ -42,7 +42,7 @@ def availability(injuries, week):
             result[pid]=status
     return result
 
-def build(pbp, schedules, rosters, now=None, injuries=None):
+def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None):
     now = now or datetime.now(timezone.utc)
     required(pbp, ['season','week','game_id','posteam','defteam','yardline_100','play_type',
                    'rush_attempt','pass_attempt','rusher_player_id','receiver_player_id',
@@ -108,7 +108,25 @@ def build(pbp, schedules, rosters, now=None, injuries=None):
     # Use real opponent slate and only players whose latest roster team matches it.
     roster_team=dict(zip(roster.gsis_id.astype(str),roster.team.astype(str)))
     injury_status=availability(injuries,week)
+    injury_diagnostics={'rows_for_week':0,'source_rows':0,'matched_ids':len(injury_status)}
+    if injuries is not None and not injuries.empty:
+        injury_diagnostics['source_rows']=len(injuries)
+        if 'week' in injuries.columns:
+            injury_diagnostics['rows_for_week']=int((pd.to_numeric(injuries.week,errors='coerce')==week).sum())
+    weekly_diagnostics={'source_rows':0,'latest_week':None,'status_column':False}
+    if weekly_rosters is not None and not weekly_rosters.empty and {'gsis_id','week'}.issubset(weekly_rosters.columns):
+        wr=weekly_rosters.copy()
+        if 'season' in wr:
+            wr=wr[pd.to_numeric(wr.season,errors='coerce')==SEASON]
+        wr=wr[pd.to_numeric(wr.week,errors='coerce')<=week]
+        if not wr.empty:
+            latest_week=int(pd.to_numeric(wr.week,errors='coerce').max())
+            wr=wr[pd.to_numeric(wr.week,errors='coerce')==latest_week]
+            weekly_diagnostics={'source_rows':len(wr),'latest_week':latest_week,'status_column':'status' in wr.columns}
+            if 'status' in wr.columns:
+                roster_status.update(dict(zip(wr.gsis_id.astype(str),wr.status.fillna('').astype(str).str.upper().str.strip())))
     result=[]
+    excluded={'out_report':0,'unavailable_roster':0}
     for _,game in slate.iterrows():
         for team,opp in [(game.home_team,game.away_team),(game.away_team,game.home_team)]:
             team=str(team);opp=str(opp)
@@ -119,7 +137,12 @@ def build(pbp, schedules, rosters, now=None, injuries=None):
             for _,p in players.iterrows():
                 pid=p.player_id;position=p.pos
                 if roster_team.get(pid)!=team: continue
-                if injury_status.get(pid)=='OUT' or roster_status.get(pid,'') in unavailable_roster: continue
+                if injury_status.get(pid)=='OUT':
+                    excluded['out_report']+=1
+                    continue
+                if roster_status.get(pid,'') in unavailable_roster:
+                    excluded['unavailable_roster']+=1
+                    continue
                 if (opp,position) not in def_opp: continue
                 share=100*player_events[(team,pid)]/team_events[team]
                 health=injury_status.get(pid,'UNVERIFIED')
@@ -134,7 +157,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None):
     return result, {'season':SEASON,'week':week,'generated_at':now.isoformat(),
                     'matchups':len(result),'source':'nflverse play-by-play and rosters',
                     'odds_source':None,'probability_model':None,
-                    'lookback_weeks':WINDOW,'injury_policy':'Current-week OUT excluded; doubtful/questionable flagged; explicit reserve/injured roster statuses excluded when available; all others unverified. Late inactive declarations are not independently verified.','status':'ready'}
+                    'lookback_weeks':WINDOW,'availability_diagnostics':{'injuries':injury_diagnostics,'weekly_rosters':weekly_diagnostics,'excluded':excluded,'unverified_output':sum(r['availability']=='UNVERIFIED' for r in result)},'injury_policy':'Current-week OUT excluded; doubtful/questionable flagged; explicit reserve/injured roster statuses excluded when available; all others unverified. Late inactive declarations are not independently verified.','status':'ready'}
 
 def main():
     import nflreadpy as nfl
@@ -146,7 +169,13 @@ def main():
     except Exception as exc:
         print(f'Injury source unavailable; marking all statuses unverified: {exc}',file=sys.stderr)
         injuries=None
-    result,meta=build(pbp,schedules,rosters,injuries=injuries)
+    try:
+        weekly_rosters=frame(nfl.load_rosters_weekly([SEASON]))
+    except Exception as exc:
+        print(f'Weekly rosters unavailable: {exc}',file=sys.stderr)
+        weekly_rosters=None
+    result,meta=build(pbp,schedules,rosters,injuries=injuries,weekly_rosters=weekly_rosters)
+    print('AVAILABILITY DIAGNOSTICS: '+json.dumps(meta['availability_diagnostics']))
     # Atomic replacement after full successful validation. Never publish dummy data.
     (OUT/'matchups.json.tmp').write_text(json.dumps(result,ensure_ascii=False,separators=(',',':')))
     (OUT/'status.json.tmp').write_text(json.dumps(meta,indent=2))
