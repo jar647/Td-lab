@@ -21,7 +21,28 @@ def required(df, columns, label):
 
 def mean(x): return round(float(x), 3)
 
-def build(pbp, schedules, rosters, now=None):
+def availability(injuries, week):
+    """Use current-week official game reports only; absence of a report is unknown."""
+    if injuries is None or injuries.empty:
+        return {}
+    needed={'gsis_id','week','report_status'}
+    if not needed.issubset(injuries.columns):
+        return {}
+    rows=injuries.copy()
+    if 'season' in rows:
+        rows=rows[pd.to_numeric(rows.season,errors='coerce')==SEASON]
+    rows=rows[pd.to_numeric(rows.week,errors='coerce')==week]
+    if 'date_modified' in rows:
+        rows=rows.sort_values('date_modified',na_position='first')
+    result={}
+    for _,r in rows.iterrows():
+        pid=str(r.gsis_id)
+        status=str(r.report_status).strip().upper()
+        if status in ('OUT','DOUBTFUL','QUESTIONABLE'):
+            result[pid]=status
+    return result
+
+def build(pbp, schedules, rosters, now=None, injuries=None):
     now = now or datetime.now(timezone.utc)
     required(pbp, ['season','week','game_id','posteam','defteam','yardline_100','play_type',
                    'rush_attempt','pass_attempt','rusher_player_id','receiver_player_id',
@@ -80,6 +101,7 @@ def build(pbp, schedules, rosters, now=None):
     def_opp=events.groupby(['defense','pos']).size().to_dict()
     # Use real opponent slate and only players whose latest roster team matches it.
     roster_team=dict(zip(roster.gsis_id.astype(str),roster.team.astype(str)))
+    injury_status=availability(injuries,week)
     result=[]
     for _,game in slate.iterrows():
         for team,opp in [(game.home_team,game.away_team),(game.away_team,game.home_team)]:
@@ -91,27 +113,34 @@ def build(pbp, schedules, rosters, now=None):
             for _,p in players.iterrows():
                 pid=p.player_id;position=p.pos
                 if roster_team.get(pid)!=team: continue
+                if injury_status.get(pid)=='OUT': continue
                 if (opp,position) not in def_opp: continue
                 share=100*player_events[(team,pid)]/team_events[team]
-                result.append({'player':p.player,'pos':position,'team':team,'opp':opp,
+                health=injury_status.get(pid,'UNVERIFIED')
+                result.append({'availability':health,'player':p.player,'pos':position,'team':team,'opp':opp,
                     'games':games,'tdallowed':mean(player_td.get((opp,position),0)/dg),
                     'rzallowed':mean(def_opp[(opp,position)]/dg),
                     'rzshare':mean(share),'playerRz':mean(player_events[(team,pid)]/og),
                     'odds':'','prob':'','market':'ATD',
-                    'notes':f'nflverse play-by-play; {SEASON} weeks {max(1,week-WINDOW)}-{week-1}; red-zone rushes + intended targets; position verified by roster; no odds or calibrated TD probability. Player RZ share is share of recorded team red-zone rushes and intended targets (not all plays).'})
+                    'notes':f'Availability: {health} (current-week official injury report only; UNVERIFIED does not mean active). nflverse play-by-play; {SEASON} weeks {max(1,week-WINDOW)}-{week-1}; red-zone rushes + intended targets; position verified by roster; no odds or calibrated TD probability. Player RZ share is share of recorded team red-zone rushes and intended targets (not all plays).'})
     if not result: raise RuntimeError('No matchup records passed source and sample validation')
     result.sort(key=lambda r:(r['team'],r['pos'],r['player']))
     return result, {'season':SEASON,'week':week,'generated_at':now.isoformat(),
                     'matchups':len(result),'source':'nflverse play-by-play and rosters',
                     'odds_source':None,'probability_model':None,
-                    'lookback_weeks':WINDOW,'status':'ready'}
+                    'lookback_weeks':WINDOW,'injury_policy':'Current-week OUT excluded; doubtful/questionable flagged; all others unverified. IR and late inactive declarations are not independently verified.','status':'ready'}
 
 def main():
     import nflreadpy as nfl
     pbp=frame(nfl.load_pbp([SEASON]))
     schedules=frame(nfl.load_schedules([SEASON]))
     rosters=frame(nfl.load_rosters([SEASON]))
-    result,meta=build(pbp,schedules,rosters)
+    try:
+        injuries=frame(nfl.load_injuries([SEASON]))
+    except Exception as exc:
+        print(f'Injury source unavailable; marking all statuses unverified: {exc}',file=sys.stderr)
+        injuries=None
+    result,meta=build(pbp,schedules,rosters,injuries=injuries)
     # Atomic replacement after full successful validation. Never publish dummy data.
     (OUT/'matchups.json.tmp').write_text(json.dumps(result,ensure_ascii=False,separators=(',',':')))
     (OUT/'status.json.tmp').write_text(json.dumps(meta,indent=2))
