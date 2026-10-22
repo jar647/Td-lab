@@ -207,13 +207,22 @@ def main():
             w=int(record['week'])
             if w>=meta['week']: continue
             game_rows=pbp[(pd.to_numeric(pbp.week,errors='coerce')==w)&(pd.to_numeric(pbp.season,errors='coerce')==SEASON)]
-            if game_rows.empty or 'td_player_id' not in game_rows.columns: continue
+            if game_rows.empty: continue
+            needed_td={'rush_touchdown','pass_touchdown','rusher_player_id','receiver_player_id'}
+            if not needed_td.issubset(game_rows.columns):
+                print(f'Cannot grade week {w}: missing touchdown scorer columns',file=sys.stderr)
+                continue
             # Require all scheduled regular-season games in that week to have PBP
             expected=schedules[(pd.to_numeric(schedules.season,errors='coerce')==SEASON)&(pd.to_numeric(schedules.week,errors='coerce')==w)&(schedules.game_type.astype(str).str.upper()=='REG')]
             if len(set(game_rows.game_id.dropna()))<len(expected): continue
-            scored=set(game_rows.loc[pd.to_numeric(game_rows.touchdown,errors='coerce')==1,'td_player_id'].dropna().astype(str))
+            # Require games to have finished, not merely started.
+            if 'gameday' in expected.columns and pd.to_datetime(expected.gameday,errors='coerce',utc=True).max() >= pd.Timestamp(now)-pd.Timedelta(days=2):
+                continue
+            rush=game_rows.loc[pd.to_numeric(game_rows.rush_touchdown,errors='coerce')==1,'rusher_player_id'].dropna().astype(str)
+            receiving=game_rows.loc[pd.to_numeric(game_rows.pass_touchdown,errors='coerce')==1,'receiver_player_id'].dropna().astype(str)
+            scored=set(rush).union(set(receiving))
             graded=[{'player_id':p.get('player_id'),'player':p['player'],'pos':p['pos'],'team':p['team'],'scored_td':p.get('player_id') in scored} for p in record['players']]
-            (history/f'{SEASON}-week-{w}-results.json').write_text(json.dumps({'season':SEASON,'week':w,'graded_at':meta['generated_at'],'graded_count':len(graded),'scored_count':sum(p['scored_td'] for p in graded),'players':graded},indent=2))
+            (history/f'{SEASON}-week-{w}-results.json').write_text(json.dumps({'season':SEASON,'week':w,'graded_at':meta['generated_at'],'graded_count':len(graded),'scored_count':sum(p['scored_td'] for p in graded),'grading_scope':'Rushing and receiving touchdowns only; excludes passing and return TDs','players':graded},indent=2))
         except (ValueError,KeyError,TypeError) as exc:
             print(f'Unable to grade {prior.name}: {exc}',file=sys.stderr)
     # Atomic replacement after full successful validation. Never publish dummy data.
