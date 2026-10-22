@@ -1,6 +1,11 @@
 name: TD LAB verified NFL feed
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'build_feed.py'
+      - '.github/workflows/update-feed.yml'
   pull_request:
     branches: [main]
   schedule:
