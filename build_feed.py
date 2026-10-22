@@ -221,7 +221,17 @@ def main():
             rush=game_rows.loc[pd.to_numeric(game_rows.rush_touchdown,errors='coerce')==1,'rusher_player_id'].dropna().astype(str)
             receiving=game_rows.loc[pd.to_numeric(game_rows.pass_touchdown,errors='coerce')==1,'receiver_player_id'].dropna().astype(str)
             scored=set(rush).union(set(receiving))
-            graded=[{'player_id':p.get('player_id'),'player':p['player'],'pos':p['pos'],'team':p['team'],'scored_td':p.get('player_id') in scored} for p in record['players']]
+            def score_candidate(p):
+                def capped(k,den):
+                    return min(1,max(0,float(p.get(k,0))/den))
+                raw=100*(.35*capped('tdallowed',1.5)+.20*capped('rzallowed',4)+.25*capped('rzshare',50)+.20*capped('playerRz',2.5))
+                return int(raw*(.65+.35*min(1,float(p.get('games',0))/6))+.5)
+            eligible=[p for p in record['players'] if p.get('availability')=='ROSTER_ACTIVE']
+            ranked_ids=set()
+            for position in ('RB','WR','TE','QB'):
+                group=sorted((p for p in eligible if p.get('pos')==position),key=lambda p:(-score_candidate(p),str(p.get('player',''))))
+                ranked_ids.update(str(p.get('player_id')) for p in group[:3])
+            graded=[{'player_id':p.get('player_id'),'player':p['player'],'pos':p['pos'],'team':p['team'],'score':score_candidate(p),'top3_position':str(p.get('player_id')) in ranked_ids,'scored_td':p.get('player_id') in scored} for p in record['players']]
             (history/f'{SEASON}-week-{w}-results.json').write_text(json.dumps({'season':SEASON,'week':w,'graded_at':meta['generated_at'],'graded_count':len(graded),'scored_count':sum(p['scored_td'] for p in graded),'grading_scope':'Rushing and receiving touchdowns only; excludes passing and return TDs','players':graded},indent=2))
         except (ValueError,KeyError,TypeError) as exc:
             print(f'Unable to grade {prior.name}: {exc}',file=sys.stderr)
