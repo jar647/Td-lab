@@ -122,9 +122,11 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None)
         if not wr.empty:
             latest_week=int(pd.to_numeric(wr.week,errors='coerce').max())
             wr=wr[pd.to_numeric(wr.week,errors='coerce')==latest_week]
-            weekly_diagnostics={'source_rows':len(wr),'latest_week':latest_week,'status_column':'status' in wr.columns}
+            weekly_diagnostics={'source_rows':len(wr),'latest_week':latest_week,'status_column':'status' in wr.columns,'status_counts':wr.status.fillna('MISSING').astype(str).value_counts().head(30).to_dict() if 'status' in wr.columns else {}}
             if 'status' in wr.columns:
                 roster_status.update(dict(zip(wr.gsis_id.astype(str),wr.status.fillna('').astype(str).str.upper().str.strip())))
+    injury_diagnostics['columns']=list(injuries.columns) if injuries is not None else []
+    injury_diagnostics['report_status_counts']=injuries.loc[pd.to_numeric(injuries.week,errors='coerce')==week,'report_status'].fillna('MISSING').astype(str).value_counts().head(20).to_dict() if injuries is not None and {'week','report_status'}.issubset(injuries.columns) else {}
     result=[]
     excluded={'out_report':0,'unavailable_roster':0}
     for _,game in slate.iterrows():
