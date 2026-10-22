@@ -1,12 +1,29 @@
 {
   "season": 2026,
   "week": 7,
-  "generated_at": "2026-10-22T21:29:04.389251+00:00",
+  "generated_at": "2026-10-22T21:42:25.780460+00:00",
   "matchups": 277,
   "source": "nflverse play-by-play and rosters",
   "odds_source": null,
   "probability_model": null,
   "lookback_weeks": 5,
+  "availability_diagnostics": {
+    "injuries": {
+      "rows_for_week": 273,
+      "source_rows": 2062,
+      "matched_ids": 13
+    },
+    "weekly_rosters": {
+      "source_rows": 2275,
+      "latest_week": 7,
+      "status_column": true
+    },
+    "excluded": {
+      "out_report": 1,
+      "unavailable_roster": 0
+    },
+    "unverified_output": 277
+  },
   "injury_policy": "Current-week OUT excluded; doubtful/questionable flagged; explicit reserve/injured roster statuses excluded when available; all others unverified. Late inactive declarations are not independently verified.",
   "status": "ready"
 }
