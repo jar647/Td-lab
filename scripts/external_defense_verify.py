@@ -69,3 +69,20 @@ def verify_files(primary_path, external_path, output_path, source_name):
     if result["status"] != "VERIFIED":
         raise SystemExit("Independent defensive verification failed closed")
     return result
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description="Fail-closed independent defensive totals audit")
+    parser.add_argument("--primary", required=True)
+    parser.add_argument("--external", required=True)
+    parser.add_argument("--report", required=True)
+    parser.add_argument("--source", required=True)
+    args = parser.parse_args()
+    try:
+        report = verify_files(args.primary, args.external, args.report, args.source)
+        print(json.dumps(report))
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        Path(args.report).write_text(json.dumps({
+            "status": "BLOCKED", "independent_external_source_verified": False,
+            "discrepancies": [str(exc)]}, indent=2) + "\n")
+        raise SystemExit(f"External verification blocked: {exc}")
