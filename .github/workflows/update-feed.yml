@@ -44,7 +44,7 @@ jobs:
           EXTERNAL_DEFENSE_SOURCE: ${{ vars.EXTERNAL_DEFENSE_SOURCE }}
         run: |
           if [ -z "$EXTERNAL_DEFENSE_SOURCE" ]; then
-            echo "External provider not configured; defensive verification remains BLOCKED."
+            python -c 'import json,pathlib; pathlib.Path("data/external_defense_verification.json").write_text(json.dumps({"status":"BLOCKED","independent_external_source_verified":False,"discrepancies":["External provider not configured"]},indent=2)+"\\n")'
           else
             python scripts/external_defense_verify.py --primary data/defense_stats_audit.json --external data/external_defense_stats.json --report data/external_defense_verification.json --source "$EXTERNAL_DEFENSE_SOURCE"
           fi
