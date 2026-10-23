@@ -96,6 +96,9 @@ try:
                 print("NFL touchdown player-prop definitions:", len(player_props))
                 nfl_props = [m for m in entries if isinstance(m, dict) and str(m.get("sportId")) == "14" and m.get("playerProp") is True]
                 print("All NFL player-prop definitions:", len(nfl_props))
+                target_def = next((m for m in nfl_props if str(m.get("marketId")) == "14388"), None)
+                if target_def:
+                    print("Target market definition:", json.dumps({k: target_def.get(k) for k in ("marketId", "marketName", "marketType", "outcomes", "playerProp", "sportId")}, default=str)[:1500])
                 for m in nfl_props[:12]:
                     print("NFL player prop sample:", m.get("marketId"), str(m.get("marketName"))[:100])
                 available_td = [m for m in td if str(m.get("marketId")) in markets]
