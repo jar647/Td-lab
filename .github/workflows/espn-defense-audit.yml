@@ -19,6 +19,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Test ESPN defensive audit parsing and comparisons
+        run: python -m unittest discover -s tests -p "test_espn_defense.py"
       - name: Fetch completed ESPN games for the primary audit window
         run: |
           python - <<'PY'
