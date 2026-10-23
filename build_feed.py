@@ -336,6 +336,19 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
         if not wr.empty:
             wr=wr.sort_values('week').drop_duplicates('gsis_id',keep='last')
             weekly_roster_codes=dict(zip(wr.gsis_id.astype(str),wr.status.fillna('').astype(str).str.upper().str.strip()))
+    # Jersey numbers from nflverse weekly roster snapshots, keyed by GSIS player ID.
+    jersey_by_player={}
+    if weekly_rosters is not None and not weekly_rosters.empty and {'gsis_id','week','jersey_number'}.issubset(weekly_rosters.columns):
+        jerseys=weekly_rosters.copy()
+        if 'season' in jerseys: jerseys=jerseys[pd.to_numeric(jerseys.season,errors='coerce')==SEASON]
+        jerseys=jerseys[pd.to_numeric(jerseys.week,errors='coerce')<=week]
+        jerseys=jerseys.sort_values('week').dropna(subset=['gsis_id','jersey_number']).drop_duplicates('gsis_id',keep='last')
+        for _,jr in jerseys.iterrows():
+            try:
+                number=int(jr.jersey_number)
+                if 0<=number<=99: jersey_by_player[str(jr.gsis_id)]=number
+            except (ValueError,TypeError,OverflowError):
+                pass
     nonactive_codes={'RES','DEV','CUT','RET','EXE','TRD','TRT'}
     result=[]
     excluded={'out_report':0,'unavailable_roster':0,'nonactive_weekly_roster':0}
@@ -361,7 +374,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                 if (opp,position) not in def_opp: continue
                 share=100*player_events[(team,pid)]/team_events[team]
                 health=injury_status.get(pid,'ROSTER_ACTIVE' if weekly_roster_codes.get(pid)=='ACT' else 'UNVERIFIED')
-                result.append({'player_id':pid,'availability':health,'player':p.player,'pos':position,'team':team,'opp':opp,
+                result.append({'player_id':pid,'availability':health,'player':p.player,'jersey_number':jersey_by_player.get(pid),'pos':position,'team':team,'opp':opp,
                     'games':games,'tdallowed':mean(player_td.get((opp,position),0)/dg),
                     'rzallowed':mean(def_opp[(opp,position)]/dg),
                     'rzshare':mean(share),'playerRz':mean(player_events[(team,pid)]/og),
