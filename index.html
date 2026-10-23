@@ -156,26 +156,27 @@ async function loadPerformance(){
  }catch(e){el.textContent='Performance data unavailable: '+e.message}
 }
 let tdProbabilityModel=null;
+function researchLean(r){
+ return r.market==='ATD'&&r.availability==='ROSTER_ACTIVE'&&!manuallyInactive(r)&&score(r)>=70&&num(r.games)>=3&&num(r.rzshare)>=20&&num(r.playerRz)>=1&&num(r.goalLine5)>=.2;
+}
 function playerDecision(r){
  if(r.market!=='ATD')return 'RESEARCH ONLY';
  if(r.availability!=='ROSTER_ACTIVE'||manuallyInactive(r))return 'PASS · AVAILABILITY';
- if(!hardRockFeedFresh||!r.player_id||!hardRockMatched.has(r.player_id))return 'PASS · NO CURRENT PRICE';
- const rank=score(r),odds=hardRockMatched.get(r.player_id);
- if(!tdProbabilityModel||tdProbabilityModel.status!=='validated'){
-  return rank>=70&&num(r.games)>=3&&num(r.rzshare)>=20&&num(r.playerRz)>=1&&num(r.goalLine5)>=.2?'LEAN · UNVALIDATED':'PASS · INSUFFICIENT EVIDENCE';
- }
- const m=tdProbabilityModel,b=Math.min(9,Math.max(0,Math.floor(rank/10)));
- if(!Array.isArray(m.supported_score_deciles)||m.supported_score_deciles[b]!==true||!Array.isArray(m.probability_by_score_decile))return 'PASS · UNSUPPORTED MODEL RANGE';
- const prob=m.probability_by_score_decile[b];
- if(!Number.isFinite(prob)||prob<=0||prob>=1)return 'PASS · NO VALID PROBABILITY';
- if(prob-implied(odds)/100>=.05)return 'LEAN · VALUE SIGNAL; STATUS UNVERIFIED';
- return 'PASS · PRICE NOT FAVORABLE';
+ if(!researchLean(r))return 'PASS · USAGE SCREEN';
+ const hasPrice=hardRockFeedFresh&&r.player_id&&hardRockMatched.has(r.player_id);
+ const m=tdProbabilityModel;
+ if(!m||m.status!=='validated')return hasPrice?'LEAN · MODEL UNVALIDATED':'LEAN · PRICE UNVERIFIED';
+ const bucket=Math.min(9,Math.max(0,Math.floor(score(r)/10)));
+ if(!hasPrice)return 'LEAN · PRICE UNVERIFIED';
+ if(!Array.isArray(m.supported_score_deciles)||m.supported_score_deciles[bucket]!==true||!Array.isArray(m.probability_by_score_decile))return 'LEAN · MODEL RANGE UNSUPPORTED';
+ const prob=m.probability_by_score_decile[bucket],odds=hardRockMatched.get(r.player_id);
+ if(!Number.isFinite(prob)||prob<=0||prob>=1)return 'LEAN · PROBABILITY UNVERIFIED';
+ return prob-implied(odds)/100>=.05?'LEAN · VALUE SIGNAL; INACTIVES UNVERIFIED':'PASS · PRICE NOT FAVORABLE';
 }
 function renderResearchLeans(list){
- if(!hardRockFeedFresh)return;
- const candidates=autoRecords.filter(r=>r.market==='ATD'&&playerDecision(r)==='LEAN · UNVALIDATED').map(r=>({r,odds:hardRockMatched.get(r.player_id),rank:score(r)})).sort((a,b)=>b.rank-a.rank||b.r.playerRz-a.r.playerRz).slice(0,3);
- if(!candidates.length){list.innerHTML='<p class="muted">No research leans meet the usage, matchup, sample and current-price screens. PASS.</p>';return}
- list.innerHTML='<div style="font-weight:900;color:#ffd27b;margin:14px 0 8px">🟡 TOP RESEARCH LEANS · NOT VERIFIED BETS</div>'+candidates.map(x=>'<div class="row" style="padding:12px 0;border-bottom:1px solid #294438"><div><b>'+escapeHTML(x.r.player)+'</b><div class="muted">'+escapeHTML(x.r.team)+' vs '+escapeHTML(x.r.opp)+' · Hard Rock '+(x.odds>0?'+':'')+escapeHTML(x.odds)+' · Score '+x.rank+'/100</div><div class="muted">Why: '+escapeHTML(x.r.rzshare)+'% red-zone share · '+escapeHTML(x.r.playerRz)+' red-zone opp/game · '+escapeHTML(x.r.goalLine5)+' inside-five opp/game</div><div class="muted">Not a validated value bet; official inactives unverified.</div></div><span class="pill">LEAN</span></div>').join('');
+ const candidates=autoRecords.filter(researchLean).map(r=>({r,odds:hardRockFeedFresh&&r.player_id&&hardRockMatched.has(r.player_id)?hardRockMatched.get(r.player_id):null,rank:score(r)})).sort((a,b)=>b.rank-a.rank||b.r.playerRz-a.r.playerRz).slice(0,3);
+ if(!candidates.length){list.innerHTML='<p class="muted">No research leans meet the matchup and usage screens. PASS.</p>';return}
+ list.innerHTML='<div style="font-weight:900;color:#ffd27b;margin:14px 0 8px">🟡 TOP 3 RESEARCH LEANS · NOT VERIFIED BETS</div>'+candidates.map(x=>'<div class="row" style="padding:12px 0;border-bottom:1px solid #294438"><div><b>'+escapeHTML(x.r.player)+'</b><div class="muted">'+escapeHTML(x.r.team)+' vs '+escapeHTML(x.r.opp)+' · '+(x.odds===null?'Hard Rock price unverified':'Hard Rock '+(x.odds>0?'+':'')+escapeHTML(x.odds))+' · Score '+x.rank+'/100</div><div class="muted">Why: '+escapeHTML(x.r.rzshare)+'% red-zone share · '+escapeHTML(x.r.playerRz)+' red-zone opp/game · '+escapeHTML(x.r.goalLine5)+' inside-five opp/game</div><div class="muted">Not a proven value bet; official game-day status unverified.</div></div><span class="pill">LEAN</span></div>').join('');
 }
 function renderBestBets(){
  const status=document.getElementById('bestBetsStatus'),list=document.getElementById('bestBetsList');
@@ -190,7 +191,7 @@ function renderBestBets(){
   const odds=hardRockMatched.get(r.player_id),prob=m.probability_by_score_decile[Math.min(9,Math.max(0,Math.floor(score(r)/10)))],impliedProb=implied(odds)/100;
   return {r,odds,prob,impliedProb,edge:prob-impliedProb};
  }).filter(x=>Number.isFinite(x.prob)&&x.prob>0&&x.prob<1&&x.edge>=0.05).sort((a,b)=>b.edge-a.edge).slice(0,3);
- if(!candidates.length){status.innerHTML='<div style="font-size:30px;font-weight:950;color:#ffc27c">PASS · NO QUALIFYING BETS</div><div style="margin-top:8px">No player clears the minimum 5-percentage-point estimated edge at the available prices.</div>';return}
+ if(!candidates.length){status.innerHTML='<div style="font-size:30px;font-weight:950;color:#ffc27c">NO VERIFIED BETS</div><div style="margin-top:8px">No player clears the validated 5-percentage-point value threshold. Research leans appear below.</div>';renderResearchLeans(list);return}
  status.innerHTML='<div style="font-size:30px;font-weight:950;color:#ffc27c">PASS · GAME-DAY STATUS UNVERIFIED</div><div style="margin-top:8px">'+candidates.length+' potential value candidates identified, but game-day clearance and executable prices have not been independently confirmed. Do not treat them as BET signals.</div>';
  list.innerHTML=candidates.map(x=>'<div class="row" style="padding:10px 0;border-bottom:1px solid #294438"><div><b>'+escapeHTML(x.r.player)+'</b><div class="muted">'+escapeHTML(x.r.team)+' vs '+escapeHTML(x.r.opp)+' · Hard Rock '+(x.odds>0?'+':'')+escapeHTML(x.odds)+'</div><div class="muted">TD estimate '+(100*x.prob).toFixed(1)+'% · Market implied '+(100*x.impliedProb).toFixed(1)+'% · Difference +'+(100*x.edge).toFixed(1)+' pp</div></div><span class="pill">PASS · VERIFY</span></div>').join('');
 }
