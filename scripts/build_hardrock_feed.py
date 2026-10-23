@@ -45,13 +45,20 @@ def main():
             name, price = player.get("playerName"), str(player.get("priceAmerican") or "")
             if not name or not price.lstrip("+-").isdigit():
                 continue
-            selections.append({"player_name": name, "american_odds": int(price)})
+            price = int(price)
+            if abs(price) < 100:
+                raise RuntimeError("Invalid American odds; existing feed preserved")
+            selections.append({"player_name": name, "american_odds": price})
         if selections:
-            games.append({"fixture_id": str(fixture["fixtureId"]), "fixture_metadata": {k: fixture.get(k) for k in ("homeTeam", "awayTeam", "homeTeamName", "awayTeamName", "home", "away", "startTime", "startDate", "date") if fixture.get(k) is not None}, "selections": sorted(selections, key=lambda p:p["player_name"])})
+            games.append({"fixture_id": str(fixture["fixtureId"]), "fixture_metadata": {k: fixture.get(k) for k in ("participant1Id", "participant2Id", "participant1Name", "participant2Name", "participant1Abbr", "participant2Abbr", "homeTeam", "awayTeam", "homeTeamName", "awayTeamName", "home", "away", "startTime", "startDate", "date") if fixture.get(k) is not None}, "selections": sorted(selections, key=lambda p:p["player_name"])})
+    if not games:
+        raise RuntimeError("No active Hard Rock anytime-TD prices; existing feed preserved")
     result = {"source": "OddsPapi / Hard Rock Bet", "market_id": 14388, "outcome_id": 14388, "retrieved_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(), "games": games}
     dest = Path("data/hardrock_anytime_td.json")
     dest.parent.mkdir(exist_ok=True)
-    dest.write_text(json.dumps(result, indent=2) + "\n")
+    temporary = dest.with_suffix(".json.tmp")
+    temporary.write_text(json.dumps(result, indent=2) + "\n")
+    temporary.replace(dest)
     print("Exported", len(games), "games and", sum(len(g["selections"]) for g in games), "active YES prices")
 
 if __name__ == "__main__":

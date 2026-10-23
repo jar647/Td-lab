@@ -17,9 +17,9 @@ def main():
     stamp = dt.datetime.fromisoformat(feed["retrieved_at_utc"].replace("Z", "+00:00"))
     if stamp.tzinfo is None:
         raise ValueError("Timestamp must include timezone")
-    age = abs((dt.datetime.now(dt.timezone.utc) - stamp).total_seconds())
-    if age > 900:
-        raise ValueError("Refusing to archive feed older than 15 minutes")
+    age = (dt.datetime.now(dt.timezone.utc) - stamp).total_seconds()
+    if not 0 <= age <= 900:
+        raise ValueError("Refusing future-dated feed or feed older than 15 minutes")
     games = feed.get("games", [])
     if not games:
         raise ValueError("No games; refusing empty snapshot")

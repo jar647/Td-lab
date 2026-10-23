@@ -15,7 +15,7 @@ class BestBetsSafetyTests(unittest.TestCase):
         self.assertIn("hardRockFeedFresh=false;hardRockMatched=new Map();hardRockMatchCount=0;renderBoard();renderBestBets()", HTML)
 
     def test_price_feed_must_be_current(self):
-        self.assertIn("age<6*3600000", HTML)
+        self.assertIn("age<=15*60000", HTML)
         self.assertIn("data.market_id!==14388||data.outcome_id!==14388", HTML)
 
 if __name__ == "__main__":
