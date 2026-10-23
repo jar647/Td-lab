@@ -161,7 +161,7 @@ function renderBestBets(){
  if(!status||!list)return;
  list.innerHTML='';
  const m=tdProbabilityModel;
- if(!hardRockFeedFresh||!m||m.status!=='validated'||!Array.isArray(m.probability_by_score_decile)||m.probability_by_score_decile.length!==10){
+ if(!hardRockFeedFresh||!m||m.status!=='validated'||m.source!=='eligible frozen pregame snapshots with completed graded results'||m.train_weeks<4||m.test_weeks<2||m.train_players<250||m.test_players<100||!Number.isFinite(m.holdout_brier)||!Number.isFinite(m.holdout_baseline_brier)||m.holdout_brier>=m.holdout_baseline_brier||!Array.isArray(m.probability_by_score_decile)||m.probability_by_score_decile.length!==10){
   status.textContent='NO VERIFIED BETS · Model probabilities have not passed independent calibration. No betting edge claimed.';
   return;
  }
