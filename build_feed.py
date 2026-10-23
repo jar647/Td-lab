@@ -127,6 +127,33 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     defense_position_yards=targets.groupby(['defteam','pos']).yards.sum().to_dict()
     defense_position_rz_targets=targets.groupby(['defteam','pos']).redzone.sum().to_dict()
     player_rz_targets=targets.groupby(['posteam','pid']).redzone.sum().to_dict()
+    # Yardage/reception prop inputs: recorded plays only, with separate defensive
+    # positional splits. These are historical per-game averages, not betting lines.
+    def metric_group(data, keys, col):
+        return data.groupby(keys)[col].sum().to_dict() if not data.empty else {}
+    rushes=plays[(pd.to_numeric(plays.rush_attempt,errors='coerce')==1)&plays.rusher_player_id.notna()].copy()
+    rushes['pid']=rushes.rusher_player_id.astype(str)
+    rushes['pos']=rushes.pid.map(pos_by_id)
+    rushes=rushes[rushes.pos.isin(['QB','RB','WR','TE'])]
+    rushes['yards']=pd.to_numeric(rushes.rushing_yards,errors='coerce').fillna(0) if 'rushing_yards' in rushes else 0
+    rushes['attempts']=1
+    player_rush_yards=metric_group(rushes,['posteam','pid'],'yards')
+    player_carries=metric_group(rushes,['posteam','pid'],'attempts')
+    defense_rush_yards=metric_group(rushes,['defteam','pos'],'yards')
+    defense_rush_attempts=metric_group(rushes,['defteam','pos'],'attempts')
+    targets['receptions']=pd.to_numeric(targets.complete_pass,errors='coerce').fillna(0).clip(0,1) if 'complete_pass' in targets else 0
+    player_rec_yards=metric_group(targets,['posteam','pid'],'yards')
+    player_receptions=metric_group(targets,['posteam','pid'],'receptions')
+    defense_receptions=metric_group(targets,['defteam','pos'],'receptions')
+    passes=plays[(pd.to_numeric(plays.pass_attempt,errors='coerce')==1)&plays.passer_player_id.notna()].copy() if 'passer_player_id' in plays else pd.DataFrame()
+    if not passes.empty:
+        passes['pid']=passes.passer_player_id.astype(str)
+        passes['yards']=pd.to_numeric(passes.passing_yards,errors='coerce').fillna(0) if 'passing_yards' in passes else 0
+        passes['attempts']=1
+    player_pass_yards=metric_group(passes,['posteam','pid'],'yards')
+    player_pass_attempts=metric_group(passes,['posteam','pid'],'attempts')
+    defense_pass_yards=metric_group(passes,['defteam'],'yards')
+    defense_pass_attempts=metric_group(passes,['defteam'],'attempts')
     # PFR snap records identify players by PFR ID, not GSIS ID. Join only
     # through an explicit roster PFR identifier; never fuzzy-match names.
     snap_share_by_player={}
@@ -212,6 +239,17 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     'playerTargetShare':mean(100*player_targets.get((team,pid),0)/team_targets[team]) if position!='QB' and team_targets.get(team,0)>0 else None,
                     'playerRzTargets':mean(player_rz_targets.get((team,pid),0)/og) if position!='QB' else None,
                     'snapShare':snap_share_by_player.get((team,pid)),
+                    'playerPassYards':mean(player_pass_yards.get((team,pid),0)/og) if position=='QB' else None,
+                    'playerPassAttempts':mean(player_pass_attempts.get((team,pid),0)/og) if position=='QB' else None,
+                    'defPassYardsAllowed':mean(defense_pass_yards.get(opp,0)/dg) if position=='QB' else None,
+                    'defPassAttemptsAllowed':mean(defense_pass_attempts.get(opp,0)/dg) if position=='QB' else None,
+                    'playerRushYards':mean(player_rush_yards.get((team,pid),0)/og),
+                    'playerCarries':mean(player_carries.get((team,pid),0)/og),
+                    'defRushYardsAllowed':mean(defense_rush_yards.get((opp,position),0)/dg),
+                    'defRushAttemptsAllowed':mean(defense_rush_attempts.get((opp,position),0)/dg),
+                    'playerRecYards':mean(player_rec_yards.get((team,pid),0)/og) if position!='QB' else None,
+                    'playerReceptions':mean(player_receptions.get((team,pid),0)/og) if position!='QB' else None,
+                    'defReceptionsAllowed':mean(defense_receptions.get((opp,position),0)/dg) if position!='QB' else None,
                     'goalLine5':mean(player_inside5.get((team,pid),0)/og),
                     'recentRz2':mean(recent_player_events.get((team,pid),0)/recent_offense_games[team]) if recent_offense_games.get(team,0)>0 else None,
                     'recentRz2Games':int(recent_offense_games.get(team,0)),
