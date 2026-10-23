@@ -54,8 +54,14 @@ def evaluate_year(season):
             continue
         # build() uses current-week schedule and prior weeks of PBP only.
         try:
-            players, _ = feed.build(pbp, schedules, rosters, now=kickoff_day.to_pydatetime(),
-                                    injuries=injuries, weekly_rosters=weekly_rosters)
+            past_rosters = rosters.copy()
+            if 'week' in past_rosters.columns:
+                past_rosters = past_rosters[pd.to_numeric(past_rosters.week, errors='coerce') <= week]
+            past_weekly = weekly_rosters.copy()
+            if 'week' in past_weekly.columns:
+                past_weekly = past_weekly[pd.to_numeric(past_weekly.week, errors='coerce') <= week]
+            players, _ = feed.build(pbp, schedules, past_rosters, now=kickoff_day.to_pydatetime(),
+                                    injuries=injuries, weekly_rosters=past_weekly)
         except RuntimeError as exc:
             print("Skipping", season, week, exc)
             continue
