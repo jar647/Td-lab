@@ -131,6 +131,21 @@ function alignmentLabel(r){
  const offense=num(r.playerRz)>=1&&num(r.rzshare)>=15;
  return defense&&offense&&alignmentScore(r)>=65?'🔥 PRIME MATCHUP':defense&&offense?'STRONG MATCHUP':num(r.playerRz)>=1&&alignmentScore(r)>=55?'LEAN':'LOW PRIORITY';
 }
+const PROP_LINES_KEY='td-lab-prop-lines-v1';
+let propLines={};try{propLines=JSON.parse(localStorage.getItem(PROP_LINES_KEY)||'{}')||{}}catch(e){propLines={}}
+function propLineKey(r,category){return [r.player_id||r.player,r.team,r.opp,category].join('|')}
+function setPropLine(key,value){const v=String(value).trim();if(v==='')delete propLines[key];else if(Number.isFinite(Number(v))&&Number(v)>=0&&Number(v)<=9999)propLines[key]=Number(v);else return;localStorage.setItem(PROP_LINES_KEY,JSON.stringify(propLines));renderPropMatchups();}
+function propDecision(x,cfg,category){
+ const line=propLines[propLineKey(x.r,category)];
+ if(line==null)return {label:'⚪ LINE NEEDED',detail:'Enter a sportsbook line to evaluate.'};
+ const avg=Number(x.r[cfg.player]),field={PASS:'recent3PassYards',RUSH:'recent3RushYards',REC:'recent3RecYards',CATCH:'recent3Receptions'}[category];
+ const recent=x.r[field]==null?null:Number(x.r[field]);
+ if(!Number.isFinite(avg)||avg<=0)return {label:'🛑 PASS',detail:'Insufficient production.'};
+ const ratio=line>0?avg/line:Infinity,trend=recent==null?null:(line>0?recent/line:Infinity);
+ if(x.label==='🔥 PRIME MATCHUP'&&ratio>=1.12&&(trend==null||trend>=1.02))return {label:'✅ PLAY',detail:'PRIME matchup, average at least 12% above line, recent production supportive.'};
+ if(x.label==='LOW PRIORITY'||ratio<.9||(trend!=null&&trend<.85))return {label:'🛑 PASS',detail:'Matchup or production fails the line test.'};
+ return {label:'⚠️ CAUTION',detail:'Mixed signals or a small margin above the line.'};
+}
 let propCategory='PASS';
 function setPropCategory(category,button){
  propCategory=category;
@@ -163,13 +178,17 @@ function renderPropMatchups(){
  const trendText=x=>x.trendRatio==null?'Trend unavailable':x.trendRatio>=1.15?'📈 Usage rising':x.trendRatio<=.85?'📉 Usage falling':'➡️ Usage stable';
  const contextKey={PASS:'opponentOffenseBaselinePass',RUSH:'opponentOffenseBaselineRush',REC:'opponentOffenseBaselineRec',CATCH:'opponentOffenseBaselineCatch'}[propCategory];
  const why=x=>'Why: opponent allows '+escapeHTML(x.r[cfg.def])+' '+cfg.unit+'/game; player averages '+escapeHTML(x.r[cfg.usage])+' opportunities/game. '+trendText(x)+(x.r[contextKey]!=null?'. Opponents faced average '+escapeHTML(x.r[contextKey])+' '+cfg.unit+'/game.':'')+(x.r.injuryReportStatus&&x.r.injuryReportStatus!=='NOT_REPORTED'?'. Injury report: '+escapeHTML(x.r.injuryReportStatus):'');
+ const propLineUI=x=>{
+  const key=propLineKey(x.r,propCategory),line=propLines[key],decision=propDecision(x,cfg,propCategory);
+  return '<div style="margin-top:10px;padding:10px;border:1px solid #315145;border-radius:9px"><b>'+decision.label+'</b><div class="muted">'+decision.detail+'</div><label>SPORTSBOOK LINE · MANUAL ENTRY</label><input type="number" min="0" max="9999" step="0.5" style="max-width:180px" value="'+(line==null?'':escapeHTML(line))+'" placeholder="Enter line" onchange="setPropLine('+JSON.stringify(key).replace(/"/g,'&quot;')+',this.value)"></div>';
+ };
  const top=document.getElementById('propTopDawg');
  if(top){
   const winner=ranked.find(x=>x.label==='🔥 PRIME MATCHUP');
   const categoryNames={PASS:'PASSING YARDS',RUSH:'RUSHING YARDS',REC:'RECEIVING YARDS',CATCH:'RECEPTIONS'};
-  top.innerHTML=winner?'<div style="border:1px solid #00c97a;background:#112b20;border-radius:13px;padding:14px"><div style="font-size:12px;font-weight:900;color:#6dffc2">🏆 '+categoryNames[propCategory]+' · TOP DAWG OF THE WEEK</div><div class="row" style="margin-top:8px"><div><h3 style="font-size:20px;color:white;margin:0">'+escapeHTML(winner.r.player)+'</h3><div class="muted">'+escapeHTML(winner.r.pos)+' · '+escapeHTML(winner.r.team)+' vs '+escapeHTML(winner.r.opp)+'</div></div><b class="score">'+winner.score+'/100</b></div><div style="font-weight:850;color:#00e28a;margin:9px 0">🔥 PRIME MATCHUP</div><div class="statsline">Defense: '+escapeHTML(winner.r[cfg.def])+' '+cfg.unit+'/game · '+escapeHTML(winner.r[cfg.volume])+' opportunities/game</div><div class="statsline">Player: '+escapeHTML(winner.r[cfg.player])+' '+cfg.unit+'/game · '+escapeHTML(winner.r[cfg.usage])+' opportunities/game</div></div>':'<div class="empty">🏆 No PRIME MATCHUP qualifies for '+categoryNames[propCategory]+' this week. No Top Dawg awarded.</div>';
+  top.innerHTML=winner?'<div style="border:1px solid #00c97a;background:#112b20;border-radius:13px;padding:14px"><div style="font-size:12px;font-weight:900;color:#6dffc2">🏆 '+categoryNames[propCategory]+' · TOP DAWG OF THE WEEK</div><div class="row" style="margin-top:8px"><div><h3 style="font-size:20px;color:white;margin:0">'+escapeHTML(winner.r.player)+'</h3><div class="muted">'+escapeHTML(winner.r.pos)+' · '+escapeHTML(winner.r.team)+' vs '+escapeHTML(winner.r.opp)+'</div></div><b class="score">'+winner.score+'/100</b></div><div style="font-weight:850;color:#00e28a;margin:9px 0">🔥 PRIME MATCHUP</div>'+propLineUI(winner)+'<div class="statsline">Defense: '+escapeHTML(winner.r[cfg.def])+' '+cfg.unit+'/game · '+escapeHTML(winner.r[cfg.volume])+' opportunities/game</div><div class="statsline">Player: '+escapeHTML(winner.r[cfg.player])+' '+cfg.unit+'/game · '+escapeHTML(winner.r[cfg.usage])+' opportunities/game</div></div>':'<div class="empty">🏆 No PRIME MATCHUP qualifies for '+categoryNames[propCategory]+' this week. No Top Dawg awarded.</div>';
  }
- el.innerHTML=ranked.length?ranked.slice(0,15).map(({r,score,label},i)=>'<div class="matchrow"><div class="row"><div style="flex:1"><b>'+(i+1)+'. '+escapeHTML(r.player)+'</b> <span class="pill">'+escapeHTML(r.pos)+'</span><div class="muted">'+escapeHTML(r.team)+' vs '+escapeHTML(r.opp)+'</div></div><b style="color:#6dffc2">'+score+'/100</b></div><div style="margin:6px 0;font-weight:800;color:#6dffc2">'+label+'</div><div class="statsline">'+why({r,trendRatio:ranked[i].trendRatio})+'</div><div class="statsline">Defense allows '+escapeHTML(r[cfg.def])+' '+cfg.unit+'/game · '+escapeHTML(r[cfg.volume])+' opportunities/game</div><div class="statsline">Player averages '+escapeHTML(r[cfg.player])+' '+cfg.unit+'/game · '+escapeHTML(r[cfg.usage])+' opportunities/game</div></div>').join(''):'<p class="muted">No eligible players with complete '+cfg.unit+' metrics in the current feed.</p>';
+ el.innerHTML=ranked.length?ranked.slice(0,15).map(({r,score,label},i)=>'<div class="matchrow"><div class="row"><div style="flex:1"><b>'+(i+1)+'. '+escapeHTML(r.player)+'</b> <span class="pill">'+escapeHTML(r.pos)+'</span><div class="muted">'+escapeHTML(r.team)+' vs '+escapeHTML(r.opp)+'</div></div><b style="color:#6dffc2">'+score+'/100</b></div><div style="margin:6px 0;font-weight:800;color:#6dffc2">'+label+'</div>'+propLineUI(ranked[i])+'<div class="statsline">'+why({r,trendRatio:ranked[i].trendRatio})+'</div><div class="statsline">Defense allows '+escapeHTML(r[cfg.def])+' '+cfg.unit+'/game · '+escapeHTML(r[cfg.volume])+' opportunities/game</div><div class="statsline">Player averages '+escapeHTML(r[cfg.player])+' '+cfg.unit+'/game · '+escapeHTML(r[cfg.usage])+' opportunities/game</div></div>').join(''):'<p class="muted">No eligible players with complete '+cfg.unit+' metrics in the current feed.</p>';
 }
 function renderSimpleMatchups(){
  const el=document.getElementById('simpleRankings');if(!el)return;
