@@ -74,6 +74,26 @@ try:
                 print(" ", field, "count:", len(values), "sample:", json.dumps(sample, ensure_ascii=True, default=str)[:450])
     if not matches:
         print("No named touchdown markets detected; inspect market keys/metadata before integrating.")
+        for mid, m in list(markets.items())[:3]:
+            if isinstance(m, dict):
+                print("Anonymous market:", str(mid)[:30], "keys:", sorted(m.keys()))
+                print("Anonymous market safe structure:", json.dumps(m, default=str)[:750])
+        try:
+            catalog = get("markets")
+            if isinstance(catalog, dict):
+                print("Market catalog top-level keys:", list(catalog)[:12])
+                entries = catalog.get("markets", catalog.get("data", []))
+            else:
+                entries = catalog
+            if isinstance(entries, dict):
+                entries = list(entries.values())
+            if isinstance(entries, list):
+                td = [m for m in entries if isinstance(m, dict) and any(k in json.dumps(m).lower() for k in ("touchdown", "anytime scorer"))]
+                print("Market catalog entries:", len(entries), "touchdown-labeled:", len(td))
+                for item in td[:12]:
+                    print("Catalog touchdown match:", json.dumps(item, default=str)[:500])
+        except RuntimeError as exc:
+            print("Market catalog lookup unavailable:", str(exc))
     print("Read-only discovery only. No odds published to TD LAB.")
 except (RuntimeError, ValueError, TypeError, KeyError) as exc:
     sys.exit("Odds provider probe failed: " + str(exc))
