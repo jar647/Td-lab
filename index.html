@@ -137,14 +137,22 @@ function propLineKey(r,category){return [r.player_id||r.player,r.team,r.opp,cate
 function setPropLine(key,value){const v=String(value).trim();if(v==='')delete propLines[key];else if(Number.isFinite(Number(v))&&Number(v)>=0&&Number(v)<=9999)propLines[key]=Number(v);else return;localStorage.setItem(PROP_LINES_KEY,JSON.stringify(propLines));renderPropMatchups();}
 function propDecision(x,cfg,category){
  const line=propLines[propLineKey(x.r,category)];
- if(line==null)return {label:'⚪ LINE NEEDED',detail:'Enter a sportsbook line to evaluate.'};
- const avg=Number(x.r[cfg.player]),field={PASS:'recent3PassYards',RUSH:'recent3RushYards',REC:'recent3RecYards',CATCH:'recent3Receptions'}[category];
+ const alt=suggestAltLine(x,cfg,category);
+ if(line==null)return {label:'⚪ ENTER POSTED LINE',detail:'Enter the main sportsbook line to compare an OVER with a conservative ALT.'};
+ const avg=Number(x.r[cfg.player]),def=Number(x.r[cfg.def]);
+ const field={PASS:'recent3PassYards',RUSH:'recent3RushYards',REC:'recent3RecYards',CATCH:'recent3Receptions'}[category];
  const recent=x.r[field]==null?null:Number(x.r[field]);
- if(!Number.isFinite(avg)||avg<=0)return {label:'🛑 PASS',detail:'Insufficient production.'};
- const ratio=line>0?avg/line:Infinity,trend=recent==null?null:(line>0?recent/line:Infinity);
- if(x.label==='🔥 PRIME MATCHUP'&&ratio>=1.12&&(trend==null||trend>=1.02))return {label:'✅ PLAY',detail:'PRIME matchup, average at least 12% above line, recent production supportive.'};
- if(x.label==='LOW PRIORITY'||ratio<.9||(trend!=null&&trend<.85))return {label:'🛑 PASS',detail:'Matchup or production fails the line test.'};
- return {label:'⚠️ CAUTION',detail:'Mixed signals or a small margin above the line.'};
+ const strong=['🔥 PRIME MATCHUP','STRONG MATCHUP'].includes(x.label);
+ if(!Number.isFinite(avg)||avg<=0||!Number.isFinite(def)||def<=0)return {label:'🛑 PASS',detail:'Production or defensive data insufficient.'};
+ const avgMargin=avg/Math.max(line,1),defMargin=def/Math.max(line,1);
+ const recentSupports=recent==null||recent>=line*1.05;
+ // Posted OVER needs independent support from player production, opponent
+ // allowance and recent form. Matchup score alone cannot override the line.
+ if(strong&&avgMargin>=1.12&&defMargin>=1.08&&recentSupports)
+  return {label:'✅ PLAY OVER '+line,detail:'Posted OVER qualifies: player average '+avg.toFixed(1)+', defense allows '+def.toFixed(1)+(recent==null?'':', last-three average '+recent.toFixed(1))+'.'};
+ if(strong&&alt&&alt.line<line)
+  return {label:'⚠️ CAUTION · ALT '+alt.line+'+',detail:'The posted OVER '+line+' does not clear every screen. Prefer researching '+alt.line+'+ instead. Alternate availability and price unverified.'};
+ return {label:'🛑 PASS',detail:strong?'Posted OVER is not sufficiently supported and no lower qualifying ALT is available.':'Matchup does not qualify for an OVER or alternate recommendation.'};
 }
 // Conservative research ladders. Suggested ATL thresholds are not sportsbook quotes.
 function suggestAltLine(x,cfg,category){
@@ -198,10 +206,10 @@ function renderPropMatchups(){
  const contextKey={PASS:'opponentOffenseBaselinePass',RUSH:'opponentOffenseBaselineRush',REC:'opponentOffenseBaselineRec',CATCH:'opponentOffenseBaselineCatch'}[propCategory];
  const why=x=>'Why: opponent allows '+escapeHTML(x.r[cfg.def])+' '+cfg.unit+'/game; player averages '+escapeHTML(x.r[cfg.usage])+' opportunities/game. '+trendText(x)+(x.r[contextKey]!=null?'. Opponents faced average '+escapeHTML(x.r[contextKey])+' '+cfg.unit+'/game.':'')+(x.r.injuryReportStatus&&x.r.injuryReportStatus!=='NOT_REPORTED'?'. Injury report: '+escapeHTML(x.r.injuryReportStatus):'');
  const propLineUI=x=>{
-  const key=propLineKey(x.r,propCategory),line=propLines[key],suggestion=suggestAltLine(x,cfg,propCategory);
-  const decision=propDecision(x,cfg,propCategory);
-  const recommendation=suggestion?'<div style="font-size:17px;font-weight:900;color:#6dffc2;margin:7px 0">🎯 Suggested ALT: '+suggestion.line+'+ '+(propCategory==='CATCH'?'receptions':'yards')+'</div><div class="muted">Research threshold: 80% of the lowest of defense allowed ('+escapeHTML(suggestion.def)+'/game), player average ('+escapeHTML(suggestion.avg)+'/game)'+(suggestion.recent!=null?', and last-three average ('+escapeHTML(suggestion.recent)+'/game)':'')+'. Rounded down to a standard ladder. Availability at sportsbook not verified.</div>':'<div class="muted">🛑 No qualifying conservative alternate line from the current matchup and production data.</div>';
-  return '<div style="margin-top:10px;padding:10px;border:1px solid #315145;border-radius:9px">'+recommendation+'<div style="margin-top:8px"><b>Posted-line screen: '+decision.label+'</b><div class="muted">'+decision.detail+'</div></div><label>OPTIONAL SPORTSBOOK LINE · MANUAL ENTRY</label><input type="number" min="0" max="9999" step="0.5" style="max-width:180px" value="'+(line==null?'':escapeHTML(line))+'" placeholder="Enter line" onchange="setPropLine('+JSON.stringify(key).replace(/"/g,'&quot;')+',this.value)"></div>';
+  const key=propLineKey(x.r,propCategory),line=propLines[key],suggestion=suggestAltLine(x,cfg,propCategory),decision=propDecision(x,cfg,propCategory);
+  const unit=propCategory==='CATCH'?'receptions':'yards';
+  const recommendation=suggestion?'<div style="font-size:16px;font-weight:850;color:#6dffc2">🎯 Research ALT: '+suggestion.line+'+ '+unit+'</div><div class="muted">Calculated from 80% of the lowest of defense allowed ('+escapeHTML(suggestion.def)+'/game), player average ('+escapeHTML(suggestion.avg)+'/game)'+(suggestion.recent!=null?', last-three average ('+escapeHTML(suggestion.recent)+'/game)':'')+'. This is not a verified sportsbook offering.</div>':'<div class="muted">No qualifying research ALT from available metrics.</div>';
+  return '<div style="margin-top:10px;padding:10px;border:1px solid #315145;border-radius:9px"><label>ENTER CURRENT SPORTSBOOK LINE</label><input type="number" min="0" max="9999" step="0.5" style="max-width:180px" value="'+(line==null?'':escapeHTML(line))+'" placeholder="e.g. 286.5" onchange="setPropLine('+JSON.stringify(key).replace(/"/g,'&quot;')+',this.value)"><div style="font-size:17px;font-weight:900;margin:12px 0 5px">'+decision.label+'</div><div class="muted" style="margin-bottom:10px">'+decision.detail+'</div>'+recommendation+'</div>';
  };
  const top=document.getElementById('propTopDawg');
  if(top){
