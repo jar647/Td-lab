@@ -34,5 +34,15 @@ jobs:
           git add data/hardrock_anytime_td.json data/odds_history/ data/forward/
           if ! git diff --cached --quiet; then
             git commit -m "Refresh verified Hard Rock anytime TD prices"
-            git push
+            for attempt in 1 2 3; do
+              git fetch origin main
+              git rebase -X theirs origin/main
+              if git push origin HEAD:main; then
+                exit 0
+              fi
+              echo "Concurrent update detected, retrying ($attempt)"
+              sleep 3
+            done
+            echo "Failed to publish fresh odds after three attempts" >&2
+            exit 1
           fi
