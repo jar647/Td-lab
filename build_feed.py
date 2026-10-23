@@ -236,6 +236,8 @@ def main():
         print(f"MODEL BATTLE READY: Week {meta['week']} frozen before first game day with experimental features for all roster-active candidates")
     else:
         print(f"MODEL BATTLE NOT READY: Week {meta['week']} status={snapshot_state['readiness']}; capture={snapshot_state['captured_at']}; frozen_candidates={snapshot_state['candidate_count']}",file=sys.stderr)
+    snapshot_state['first_game_day_utc']=first_day.isoformat() if not pd.isna(first_day) else None
+    snapshot_state['next_action']='WAIT_FOR_NEXT_WEEK' if snapshot.exists() and not snapshot_state['accuracy_eligible'] else ('READY_FOR_GRADING' if snapshot_state['accuracy_eligible'] and snapshot_state['challenger_features_complete'] else ('WAIT_FOR_COMPLETE_FEATURES' if snapshot_state['accuracy_eligible'] else 'AWAIT_PREGAME_CAPTURE'))
     meta['snapshot_diagnostics']=snapshot_state
     # Snapshot capture must precede kickoff of every game being evaluated.
     # A snapshot taken after any kickoff is retained for transparency but not
