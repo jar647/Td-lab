@@ -199,7 +199,13 @@ def main():
     history.mkdir(exist_ok=True)
     snapshot=history/f'{SEASON}-week-{meta["week"]}.json'
     if not snapshot.exists():
-        snapshot.write_text(json.dumps({'season':SEASON,'week':meta['week'],'captured_at':meta['generated_at'],'players':result},indent=2))
+        slate=schedules[(pd.to_numeric(schedules.season,errors='coerce')==SEASON)&(pd.to_numeric(schedules.week,errors='coerce')==meta['week'])&(schedules.game_type.astype(str).str.upper()=='REG')]
+        first_day=pd.to_datetime(slate.gameday,errors='coerce',utc=True).min() if not slate.empty else pd.NaT
+        if not pd.isna(first_day) and pd.Timestamp(now)<first_day:
+            snapshot.write_text(json.dumps({'season':SEASON,'week':meta['week'],'captured_at':meta['generated_at'],'players':result,'capture_policy':'before first scheduled game day (UTC)'},indent=2))
+            print(f'Froze pregame snapshot for Week {meta["week"]}')
+        else:
+            print(f'Skipped Week {meta["week"]} snapshot: first game day already started or schedule missing',file=sys.stderr)
     # Snapshot capture must precede kickoff of every game being evaluated.
     # A snapshot taken after any kickoff is retained for transparency but not
     # eligible for honest pregame prediction accuracy calculations.
