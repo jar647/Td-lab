@@ -1,0 +1,16 @@
+name: NBA.com single-source connectivity check
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-nba:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install nba_api pandas
+      - run: python scripts/check_nba_source.py
