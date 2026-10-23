@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - 'backtest_historical.py'
+      - 'evaluate_historical.py'
+      - 'scripts/calibrate_td.py'
       - '.github/workflows/backtest-historical.yml'
 permissions:
   contents: read
@@ -22,9 +24,13 @@ jobs:
         run: pip install -r requirements.txt
       - name: Reconstruct 2024 and 2025 retrospective weeks
         run: python backtest_historical.py
+      - name: Evaluate chronological holdout against baseline
+        run: python evaluate_historical.py
       - name: Preserve research-only dataset
         uses: actions/upload-artifact@v4
         with:
           name: td-lab-retrospective-2024-2025
-          path: data/retrospective/weekly.json
+          path: |
+            data/retrospective/weekly.json
+            data/retrospective/evaluation.json
           retention-days: 30
