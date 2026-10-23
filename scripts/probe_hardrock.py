@@ -94,6 +94,14 @@ try:
                     print("Catalog touchdown match:", json.dumps(item, default=str)[:500])
                 player_props = [m for m in td if m.get("sportId") == 14 and m.get("playerProp") is True]
                 print("NFL touchdown player-prop definitions:", len(player_props))
+                nfl_props = [m for m in entries if isinstance(m, dict) and str(m.get("sportId")) == "14" and m.get("playerProp") is True]
+                print("All NFL player-prop definitions:", len(nfl_props))
+                for m in nfl_props[:12]:
+                    print("NFL player prop sample:", m.get("marketId"), str(m.get("marketName"))[:100])
+                available_td = [m for m in td if str(m.get("marketId")) in markets]
+                print("Touchdown-labeled definitions present in sampled game:", len(available_td))
+                for m in available_td[:12]:
+                    print("Available touchdown definition:", m.get("marketId"), str(m.get("marketName"))[:100], "playerProp:", m.get("playerProp"))
                 for item in player_props[:15]:
                     mid = str(item.get("marketId"))
                     print("Player market:", mid, str(item.get("marketName"))[:90], "present in sampled game:", mid in markets)
