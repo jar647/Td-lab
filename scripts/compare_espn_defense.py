@@ -15,8 +15,13 @@ def compare(primary, espn):
     if primary.get("season") != espn.get("season"):
         problems.append("Season mismatch")
     weeks = espn.get("weeks", [])
-    if not isinstance(weeks, list) or len(weeks) != primary.get("lookback_weeks") or max(weeks, default=-1) != primary.get("week") - 1:
+    expected_weeks = list(range(primary.get("week", 0) - primary.get("lookback_weeks", 0), primary.get("week", 0)))
+    if not isinstance(weeks, list) or weeks != expected_weeks:
         problems.append("Week window mismatch")
+    if espn.get("source") != "ESPN NFL game summary (unofficial)" or espn.get("derived_from_nflverse") is not False:
+        problems.append("Independent ESPN source provenance missing")
+    if espn.get("status") != "PARTIAL_NOT_VERIFIED":
+        problems.append("Unexpected ESPN audit status")
     a = {(r["defense"], r["position"]): r for r in primary.get("rows", [])}
     b = {(r["defense"], r["position"]): r for r in espn.get("rows", [])}
     if len(a) != len(primary.get("rows", [])) or len(b) != len(espn.get("rows", [])):
