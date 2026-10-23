@@ -1,0 +1,19 @@
+name: Independent defense verification tests
+on:
+  push:
+    branches: [main, external-defense-verification-foundation]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verification-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run independent verification unit tests
+        run: python -m unittest discover -s tests -p 'test_external_defense_verify.py' -v
