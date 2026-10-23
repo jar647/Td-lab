@@ -27,7 +27,29 @@ def evaluate(doc):
     base = sum(y for _, y in train) / len(train)
     model = sum((estimates[b]-y)**2 for b,y in test)/len(test)
     naive = sum((base-y)**2 for _,y in test)/len(test)
-    return dict(status="research_only", bet_ready=False, train_weeks=len(training_weeks),
+    # Break down held-out accuracy by position and score bucket to reveal
+    # whether apparent improvement is concentrated in one subgroup.
+    by_position = {}
+    for pos in ("RB", "WR", "TE", "QB"):
+        subset = [(score_to_bucket(p["score"]), int(p["scored_td"]))
+                  for w in testing_weeks for p in w["players"]
+                  if p.get("pos") == pos and isinstance(p.get("scored_td"), bool)]
+        if not subset:
+            continue
+        pos_model = sum((estimates[b] - y) ** 2 for b, y in subset) / len(subset)
+        pos_base = sum((base - y) ** 2 for _, y in subset) / len(subset)
+        by_position[pos] = {"players": len(subset),
+                            "observed_td_rate": round(sum(y for _, y in subset) / len(subset), 5),
+                            "model_brier": round(pos_model, 6),
+                            "baseline_brier": round(pos_base, 6),
+                            "beats_baseline": pos_model < pos_base}
+    by_bucket = []
+    for bucket in range(10):
+        subset = [y for b, y in test if b == bucket]
+        by_bucket.append({"bucket": bucket, "count": len(subset),
+                          "estimated_td_rate": round(estimates[bucket], 5),
+                          "observed_td_rate": round(sum(subset) / len(subset), 5) if subset else None})
+    return dict(by_position=by_position, by_score_bucket=by_bucket, status="research_only", bet_ready=False, train_weeks=len(training_weeks),
                 test_weeks=len(testing_weeks), train_seasons=sorted({int(w["season"]) for w in training_weeks}),
                 holdout_season=held_out_season, train_players=len(train), test_players=len(test),
                 model_brier=round(model,6), baseline_brier=round(naive,6),
