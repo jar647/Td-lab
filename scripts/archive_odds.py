@@ -23,9 +23,15 @@ def main():
     games = feed.get("games", [])
     if not games:
         raise ValueError("No games; refusing empty snapshot")
+    pregame_games = []
     for game in games:
         if not game.get("fixture_id") or not game.get("fixture_metadata", {}).get("startTime"):
             raise ValueError("Missing fixture identity or kickoff time")
+        kickoff = dt.datetime.fromisoformat(game["fixture_metadata"]["startTime"].replace("Z", "+00:00"))
+        if kickoff.tzinfo is None:
+            raise ValueError("Kickoff timestamp must include timezone")
+        if kickoff <= stamp:
+            continue
         for p in game.get("selections", []):
             odds = p.get("american_odds")
             if not p.get("player_name") or not isinstance(odds, int) or -100 < odds < 100:
