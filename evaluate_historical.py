@@ -27,8 +27,9 @@ def evaluate(doc):
     base = sum(y for _, y in train) / len(train)
     model = sum((estimates[b]-y)**2 for b,y in test)/len(test)
     naive = sum((base-y)**2 for _,y in test)/len(test)
-    return dict(status="research_only", bet_ready=False, train_weeks=len(weeks)-4,
-                test_weeks=4, train_players=len(train), test_players=len(test),
+    return dict(status="research_only", bet_ready=False, train_weeks=len(training_weeks),
+                test_weeks=len(testing_weeks), train_seasons=sorted({int(w["season"]) for w in training_weeks}),
+                holdout_season=held_out_season, train_players=len(train), test_players=len(test),
                 model_brier=round(model,6), baseline_brier=round(naive,6),
                 beats_baseline=model<naive,
                 warning="Retrospective results may contain hindsight and do not establish live betting value.")
