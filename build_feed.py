@@ -255,13 +255,33 @@ def main():
                     return min(1,max(0,float(p.get(k,0))/den))
                 raw=100*(.35*capped('tdallowed',1.5)+.20*capped('rzallowed',4)+.25*capped('rzshare',50)+.20*capped('playerRz',2.5))
                 return int(raw*(.65+.35*min(1,float(p.get('games',0))/6))+.5)
+            # Experimental challenger: preserve the original score, and compare only
+            # against frozen pregame snapshots with BOTH research fields present.
+            # Not a calibrated probability; no hindsight feature recomputation.
+            def challenger_score(p):
+                baseline=score_candidate(p)
+                recent=p.get('recentRz2')
+                goal=p.get('goalLine5')
+                if recent is None or goal is None: return None
+                try:
+                    recent=float(recent); goal=float(goal)
+                    if not (0<=recent<100 and 0<=goal<100): return None
+                except (ValueError,TypeError): return None
+                # 80% baseline, 12% recent usage, 8% inside-five usage.
+                return round(.80*baseline + 12*min(1,recent/2.5) + 8*min(1,goal/1.0))
             eligible=[p for p in record['players'] if p.get('availability')=='ROSTER_ACTIVE']
             ranked_ids=set()
             for position in ('RB','WR','TE','QB'):
                 group=sorted((p for p in eligible if p.get('pos')==position),key=lambda p:(-score_candidate(p),str(p.get('player',''))))
                 ranked_ids.update(str(p.get('player_id')) for p in group[:3])
-            graded=[{'player_id':p.get('player_id'),'player':p['player'],'pos':p['pos'],'team':p['team'],'score':score_candidate(p),'top3_position':str(p.get('player_id')) in ranked_ids,'scored_td':p.get('player_id') in scored} for p in record['players']]
-            (history/f'{SEASON}-week-{w}-results.json').write_text(json.dumps({'season':SEASON,'week':w,'graded_at':meta['generated_at'],'pregame_snapshot':bool(pregame_capture),'snapshot_captured_at':record.get('captured_at'),'accuracy_eligible':bool(pregame_capture),'graded_count':len(graded),'scored_count':sum(p['scored_td'] for p in graded),'grading_scope':'Rushing and receiving touchdowns only; excludes passing and return TDs','players':graded},indent=2))
+            challenger_eligible=bool(eligible) and all(challenger_score(p) is not None for p in eligible)
+            challenger_ids=set()
+            if challenger_eligible:
+                for position in ('RB','WR','TE','QB'):
+                    group=sorted((p for p in eligible if p.get('pos')==position),key=lambda p:(-challenger_score(p),str(p.get('player',''))))
+                    challenger_ids.update(str(p.get('player_id')) for p in group[:3])
+            graded=[{'player_id':p.get('player_id'),'player':p['player'],'pos':p['pos'],'team':p['team'],'score':score_candidate(p),'top3_position':str(p.get('player_id')) in ranked_ids,'challenger_score':challenger_score(p) if challenger_eligible else None,'challenger_top3_position':str(p.get('player_id')) in challenger_ids if challenger_eligible else None,'scored_td':p.get('player_id') in scored} for p in record['players']]
+            (history/f'{SEASON}-week-{w}-results.json').write_text(json.dumps({'season':SEASON,'week':w,'graded_at':meta['generated_at'],'pregame_snapshot':bool(pregame_capture),'snapshot_captured_at':record.get('captured_at'),'accuracy_eligible':bool(pregame_capture),'challenger_eligible':bool(pregame_capture and challenger_eligible),'challenger_policy':'80% original score + 12% recent red-zone chances + 8% inside-five chances; experimental research score, not calibrated probability','graded_count':len(graded),'scored_count':sum(p['scored_td'] for p in graded),'grading_scope':'Rushing and receiving touchdowns only; excludes passing and return TDs','players':graded},indent=2))
         except (ValueError,KeyError,TypeError,AttributeError) as exc:
             print(f'Unable to grade {prior.name}: {exc}',file=sys.stderr)
     # Atomic replacement after full successful validation. Never publish dummy data.
