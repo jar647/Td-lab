@@ -12,7 +12,7 @@ from pathlib import Path
 POSITIONS = ("QB", "RB", "WR", "TE")
 # ESPN player box score category names and their common column labels.
 COLUMNS = {
-    "passing": ("YDS", "ATT"),
+    "passing": ("YDS", "C/ATT"),
     "rushing": ("YDS", "CAR"),
     "receiving": ("YDS", "REC"),
 }
@@ -66,7 +66,16 @@ def derive(raw):
                     if len(stats) <= max(indices):
                         raise ValueError("Incomplete ESPN player row")
                     # Rushing/receiving column labels can differ by category.
-                    first, second = (number(stats[i]) for i in indices)
+                    first = number(stats[indices[0]])
+                    second_raw = stats[indices[1]]
+                    if category_name == "passing":
+                        # ESPN reports completions/attempts as e.g. "19/28".
+                        parts = str(second_raw).split("/")
+                        if len(parts) != 2:
+                            raise ValueError("Unexpected ESPN C/ATT value")
+                        second = number(parts[1])
+                    else:
+                        second = number(second_raw)
                     key = (defense, position)
                     if category_name == "passing" and position == "QB":
                         totals[key]["pass_yards_total"] += first
