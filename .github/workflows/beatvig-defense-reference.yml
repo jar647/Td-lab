@@ -1,0 +1,23 @@
+name: Independent Defense Table Import
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/import_beatvig_defense.py'
+      - '.github/workflows/beatvig-defense-reference.yml'
+permissions:
+  contents: read
+jobs:
+  import-reference:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Import last-five-games defensive tables
+        run: python scripts/import_beatvig_defense.py
+      - name: Upload sourced reference for comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beatvig-defense-reference
+          path: data/beatvig_defense_reference.json
+          if-no-files-found: warn

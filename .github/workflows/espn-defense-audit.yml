@@ -1,0 +1,46 @@
+name: ESPN defensive audit (experimental)
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/fetch_espn_game_audit.py'
+      - 'scripts/derive_espn_defense.py'
+      - 'scripts/compare_espn_defense.py'
+      - '.github/workflows/espn-defense-audit.yml'
+permissions:
+  contents: read
+jobs:
+  espn-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test ESPN defensive audit parsing and comparisons
+        run: python -m unittest discover -s tests -p "test_espn_defense.py"
+      - name: Fetch completed ESPN games for the primary audit window
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          d=json.load(open("data/defense_stats_audit.json"))
+          end=d["week"]-1
+          weeks=list(range(end-d["lookback_weeks"]+1,end+1))
+          if min(weeks)<1: raise SystemExit("Invalid comparison week window")
+          subprocess.run(["python","scripts/fetch_espn_game_audit.py","--season",str(d["season"]),"--weeks",*map(str,weeks)],check=True)
+          PY
+      - name: Derive ESPN defense-position box-score totals
+        run: python scripts/derive_espn_defense.py
+      - name: Compare ESPN with primary audit (unsupported stats remain unverified)
+        run: python scripts/compare_espn_defense.py
+      - name: Upload comparison evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: espn-defense-audit
+          path: |
+            data/espn_comparison.json
+            data/espn_partial_defense_audit.json
+          if-no-files-found: warn

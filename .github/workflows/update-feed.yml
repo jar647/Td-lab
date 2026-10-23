@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'build_feed.py'
+      - 'scripts/external_defense_verify.py'
       - 'scripts/calibrate_td.py'
       - 'scripts/grade_forward_bets.py'
       - 'scripts/audit_history.py'
@@ -38,6 +39,15 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_*.py'
       - name: Build verified feed
         run: python build_feed.py
+      - name: Independently verify defensive statistics when provider data is configured
+        env:
+          EXTERNAL_DEFENSE_SOURCE: ${{ vars.EXTERNAL_DEFENSE_SOURCE }}
+        run: |
+          if [ -z "$EXTERNAL_DEFENSE_SOURCE" ]; then
+            python -c 'import json,pathlib; pathlib.Path("data/external_defense_verification.json").write_text(json.dumps({"status":"BLOCKED","independent_external_source_verified":False,"discrepancies":["External provider not configured"]},indent=2)+chr(10))'
+          else
+            python scripts/external_defense_verify.py --primary data/defense_stats_audit.json --external data/external_defense_stats.json --report data/external_defense_verification.json --source "$EXTERNAL_DEFENSE_SOURCE"
+          fi
       - name: Audit frozen pregame history
         run: python scripts/audit_history.py
       - name: Calibrate touchdown probabilities from eligible graded weeks
@@ -51,7 +61,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/matchups.json data/defense_stats_audit.json data/status.json data/history/ data/probability_model.json data/history_audit.json data/forward/performance.json data/verification_status.json
+          git add data/external_defense_verification.json data/matchups.json data/defense_stats_audit.json data/status.json data/history/ data/probability_model.json data/history_audit.json data/forward/performance.json data/verification_status.json
           if ! git diff --cached --quiet; then
             git commit -m "Update verified NFL matchup feed"
             # A developer commit can land while the feed is building.

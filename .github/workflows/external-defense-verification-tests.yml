@@ -1,0 +1,27 @@
+name: Independent defense verification tests
+on:
+  push:
+    branches: [main, external-defense-verification-foundation]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verification-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run independent verification unit tests
+        run: python -m unittest discover -s tests -p 'test_external_defense_verify.py' -v
+      - name: Ensure absent external source fails closed
+        shell: bash
+        run: |
+          if python scripts/external_defense_verify.py --primary data/defense_stats_audit.json --external /tmp/nonexistent-independent-nfl.json --report /tmp/external-verification-report.json --source independent-provider; then
+            echo "ERROR: verification incorrectly passed without a provider"
+            exit 1
+          fi
+          python -c 'import json; x=json.load(open("/tmp/external-verification-report.json")); assert x["status"]=="BLOCKED" and x["independent_external_source_verified"] is False'
