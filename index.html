@@ -44,16 +44,17 @@ async function loadPerformance(){
   const metaRes=await fetch('data/status.json',{cache:'no-store'});
   if(!metaRes.ok)throw Error('Status unavailable');
   const meta=await metaRes.json(), season=Number(meta.season), week=Number(meta.week);
-  let weeks=0,players=0,scorers=0,top3=0,top3Scorers=0,scoredWithRank=0;
+  let weeks=0,players=0,scorers=0,top3=0,top3Scorers=0,scoredWithRank=0,excludedWeeks=0,legacyWeeks=0;
   for(let w=Math.max(1,week-18);w<week;w++){
    const res=await fetch('data/history/'+season+'-week-'+w+'-results.json',{cache:'no-store'});
    if(!res.ok)continue;
    const data=await res.json();
    if(data.season!==season||data.week!==w||!Array.isArray(data.players))continue;
+   if(data.accuracy_eligible!==true){if(data.accuracy_eligible===false)excludedWeeks++;else legacyWeeks++;continue}
    weeks++;players+=data.players.length;scorers+=data.players.filter(p=>p.scored_td===true).length;top3+=data.players.filter(p=>p.top3_position===true).length;top3Scorers+=data.players.filter(p=>p.top3_position===true&&p.scored_td===true).length;if(data.players.some(p=>p.top3_position!==undefined))scoredWithRank++;
   }
-  if(!weeks){el.textContent='No completed graded weeks yet. Week '+week+' snapshot is saved; results will appear after games finish and the feed grades them.';return}
-  el.innerHTML=(scoredWithRank?'<p><b>Top 3 by position:</b> '+top3Scorers+' / '+top3+' scored ('+(top3?(100*top3Scorers/top3).toFixed(1):'0')+'%) across '+scoredWithRank+' ranked weeks.</p>':'<p class="muted">Top-3 hit rate pending the first newly graded week.</p>')+'<div class="grid"><div class="stat"><strong>'+weeks+'</strong><small>GRADED WEEKS</small></div><div class="stat"><strong>'+players+'</strong><small>TRACKED CANDIDATES</small></div><div class="stat"><strong>'+scorers+'</strong><small>TD SCORERS</small></div><div class="stat"><strong>'+(players?((100*scorers/players).toFixed(1)+'%'):'—')+'</strong><small>OBSERVED TD RATE</small></div></div><p class="hint">Historical rushing/receiving TDs only. This is not a validated top-pick hit rate or a calibrated probability.</p>';
+  if(!weeks){el.textContent='No eligible pregame-graded weeks yet. '+excludedWeeks+' post-kickoff snapshot week(s) excluded; '+legacyWeeks+' legacy week(s) without verified capture timing excluded. Week '+week+' may still be in progress. No hit rate is reported until a properly timed snapshot is graded.';return}
+  el.innerHTML=(scoredWithRank?'<p><b>Top 3 by position:</b> '+top3Scorers+' / '+top3+' scored ('+(top3?(100*top3Scorers/top3).toFixed(1):'0')+'%) across '+scoredWithRank+' ranked weeks.</p>':'<p class="muted">Top-3 hit rate pending the first newly graded week.</p>')+'<p class="muted">Excluded from accuracy: '+excludedWeeks+' post-kickoff week(s), '+legacyWeeks+' unverified legacy week(s).</p><div class="grid"><div class="stat"><strong>'+weeks+'</strong><small>GRADED WEEKS</small></div><div class="stat"><strong>'+players+'</strong><small>TRACKED CANDIDATES</small></div><div class="stat"><strong>'+scorers+'</strong><small>TD SCORERS</small></div><div class="stat"><strong>'+(players?((100*scorers/players).toFixed(1)+'%'):'—')+'</strong><small>OBSERVED TD RATE</small></div></div><p class="hint">Historical rushing/receiving TDs only. This is not a validated top-pick hit rate or a calibrated probability.</p>';
  }catch(e){el.textContent='Performance data unavailable: '+e.message}
 }
 drawPositions();save();renderBoard();loadAutoFeed();loadPerformance();
