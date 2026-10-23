@@ -62,7 +62,7 @@ function availabilityBadge(r){const s=String(r.availability||'UNVERIFIED').toUpp
 
 // Match only unique initial+surname identities, and only when a fixture
 // independently resolves to exactly one NFL matchup from both teams.
-let hardRockMatched=new Map(),hardRockMatchCount=0;
+let hardRockMatched=new Map(),hardRockMatchCount=0,hardRockFeedFresh=false;
 function playerKey(name){
  const n=String(name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z, .'-]/g,'').trim();
  if(n.includes(',')){const [last,first]=n.split(',').map(x=>x.trim());return first&&last?first[0]+':'+last.replace(/[^a-z]/g,''):''}
@@ -161,7 +161,7 @@ function renderBestBets(){
  if(!status||!list)return;
  list.innerHTML='';
  const m=tdProbabilityModel;
- if(!m||m.status!=='validated'||!Array.isArray(m.probability_by_score_decile)||m.probability_by_score_decile.length!==10){
+ if(!hardRockFeedFresh||!m||m.status!=='validated'||!Array.isArray(m.probability_by_score_decile)||m.probability_by_score_decile.length!==10){
   status.textContent='NO VERIFIED BETS · Model probabilities have not passed independent calibration. No betting edge claimed.';
   return;
  }
@@ -192,10 +192,11 @@ async function loadHardRockStatus(){
   if(data.market_id!==14388||data.outcome_id!==14388||!Array.isArray(data.games)||!Number.isFinite(stamp.getTime()))throw Error('Feed validation failed');
   const count=data.games.reduce((n,g)=>n+(Array.isArray(g.selections)?g.selections.filter(p=>typeof p.player_name==='string'&&Number.isInteger(p.american_odds)&&Math.abs(p.american_odds)>=100).length:0),0);
   const age=Date.now()-stamp.getTime(),fresh=age>=0&&age<6*3600000;
-  if(fresh)applyHardRockMatches(data);else hardRockMatched=new Map();
+  hardRockFeedFresh=fresh;
+  if(fresh)applyHardRockMatches(data);else {hardRockMatched=new Map();hardRockMatchCount=0;}
   renderBoard();renderBestBets();
   el.textContent='Hard Rock Bet · '+hardRockMatchCount+' conservatively matched player prices · '+data.games.length+' NFL games · '+count+' active YES anytime-TD prices · updated '+stamp.toLocaleString()+(fresh?' · Feed current':' · Feed may be stale')+'. Only unique, matchup-verified prices appear on rankings; unmatched players show no automatic price.';
- }catch(e){el.textContent='Hard Rock odds feed unavailable: '+e.message+'. Rankings remain independent of sportsbook odds.'}
+ }catch(e){hardRockFeedFresh=false;hardRockMatched=new Map();hardRockMatchCount=0;renderBoard();renderBestBets();el.textContent='Hard Rock odds feed unavailable: '+e.message+'. Rankings remain independent of sportsbook odds.'}
 }
 drawPositions();save();renderBoard();loadAutoFeed();loadPerformance();loadProbabilityStatus();
 </script></body></html>
