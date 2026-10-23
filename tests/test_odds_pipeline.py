@@ -58,6 +58,26 @@ class OddsPipelineTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "Invalid American odds"):
                 exporter.main()
 
+    def test_publish_retains_documented_fixture_identity_fields(self):
+        fixture = {"tournamentId": 31, "fixtureId": "fixture", "hasOdds": True,
+                   "participant1Id": 10, "participant2Id": 20,
+                   "participant1Name": "Miami Dolphins", "participant2Name": "Buffalo Bills",
+                   "participant1Abbr": "MIA", "participant2Abbr": "BUF"}
+        prices = {"bookmakerOdds": {"hardrockbet": {"markets": {"14388": {
+            "outcomes": {"14388": {"players": {"1": {
+                "active": True, "playerName": "Test, Player", "priceAmerican": 200
+            }}}}
+        }}}}}
+        with tempfile.TemporaryDirectory() as folder:
+            destination = Path(folder) / "hardrock_anytime_td.json"
+            with patch.object(exporter, "get", side_effect=[[fixture], prices]), patch.object(exporter, "Path", return_value=destination):
+                exporter.main()
+            published = json.loads(destination.read_text())
+            metadata = published["games"][0]["fixture_metadata"]
+            self.assertEqual(metadata["participant1Id"], 10)
+            self.assertEqual(metadata["participant2Name"], "Buffalo Bills")
+            self.assertFalse(destination.with_suffix(".json.tmp").exists())
+
     def test_future_odds_are_rejected_before_model_checks(self):
         now = dt.datetime(2026, 10, 23, 16, tzinfo=dt.timezone.utc)
         odds = {"retrieved_at_utc": (now + dt.timedelta(minutes=1)).isoformat()}

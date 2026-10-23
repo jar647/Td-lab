@@ -50,7 +50,7 @@ def main():
                 raise RuntimeError("Invalid American odds; existing feed preserved")
             selections.append({"player_name": name, "american_odds": price})
         if selections:
-            games.append({"fixture_id": str(fixture["fixtureId"]), "fixture_metadata": {k: fixture.get(k) for k in ("homeTeam", "awayTeam", "homeTeamName", "awayTeamName", "home", "away", "startTime", "startDate", "date") if fixture.get(k) is not None}, "selections": sorted(selections, key=lambda p:p["player_name"])})
+            games.append({"fixture_id": str(fixture["fixtureId"]), "fixture_metadata": {k: fixture.get(k) for k in ("participant1Id", "participant2Id", "participant1Name", "participant2Name", "participant1Abbr", "participant2Abbr", "homeTeam", "awayTeam", "homeTeamName", "awayTeamName", "home", "away", "startTime", "startDate", "date") if fixture.get(k) is not None}, "selections": sorted(selections, key=lambda p:p["player_name"])})
     if not games:
         raise RuntimeError("No active Hard Rock anytime-TD prices; existing feed preserved")
     result = {"source": "OddsPapi / Hard Rock Bet", "market_id": 14388, "outcome_id": 14388, "retrieved_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(), "games": games}
