@@ -12,7 +12,15 @@ def evaluate(doc):
         raise ValueError("Insufficient historical weeks")
     def extract(items):
         return [(score_to_bucket(p["score"]), int(p["scored_td"])) for w in items for p in w["players"] if isinstance(p.get("scored_td"), bool)]
-    train, test = extract(weeks[:-4]), extract(weeks[-4:])
+    seasons = sorted({int(w["season"]) for w in weeks})
+    if len(seasons) < 2:
+        raise ValueError("Require at least two seasons for season-separated holdout")
+    held_out_season = seasons[-1]
+    training_weeks = [w for w in weeks if int(w["season"]) < held_out_season]
+    testing_weeks = [w for w in weeks if int(w["season"]) == held_out_season]
+    if len(training_weeks) < 8 or len(testing_weeks) < 8:
+        raise ValueError("Require at least 8 training and 8 held-out weeks")
+    train, test = extract(training_weeks), extract(testing_weeks)
     if len(train) < 500 or len(test) < 200:
         raise ValueError("Insufficient player observations")
     estimates = fit(train)
