@@ -1,6 +1,7 @@
 """Independent-source defensive audit gate. Never treat same-source reconciliation as external verification."""
 from __future__ import annotations
 import json
+import math
 from pathlib import Path
 
 METRICS = ("pass_yards", "pass_attempts", "rush_yards", "rush_attempts",
@@ -36,12 +37,13 @@ def verify(primary, external, *, source_name, tolerance=0):
     for key in sorted(set(a) & set(b)):
         if a[key].get("games") != b[key].get("games"):
             issues.append(f"{key}: games mismatch")
-        for metric in METRICS:
-            if metric not in a[key] and metric not in b[key]:
-                continue
+        for metric in (("pass_yards", "pass_attempts") if key[1] == "QB" else ("rush_yards", "rush_attempts", "rec_yards", "targets", "receptions", "redzone_targets")):
+            metric += "_total"
             x, y = a[key].get(metric), b[key].get(metric)
             if isinstance(x, bool) or isinstance(y, bool) or not isinstance(x, (int, float)) or not isinstance(y, (int, float)):
                 issues.append(f"{key}: {metric} missing or nonnumeric")
+            elif not math.isfinite(x) or not math.isfinite(y):
+                issues.append(f"{key}: {metric} nonfinite")
             elif abs(x-y) > tolerance:
                 issues.append(f"{key}: {metric} mismatch ({x} vs {y})")
     return {"independent_external_source_verified": not issues,
