@@ -60,7 +60,13 @@ def evaluate_year(season):
             past_weekly = weekly_rosters.copy()
             if 'week' in past_weekly.columns:
                 past_weekly = past_weekly[pd.to_numeric(past_weekly.week, errors='coerce') <= week]
-            players, _ = feed.build(pbp, schedules, past_rosters, now=kickoff_day.to_pydatetime(),
+            # Prefer each player's historical weekly roster state, rather than
+            # a season-end roster that can exclude players who changed teams.
+            if {'gsis_id', 'position', 'team', 'week'}.issubset(past_weekly.columns):
+                historical_rosters = past_weekly.sort_values('week').drop_duplicates('gsis_id', keep='last')
+            else:
+                historical_rosters = past_rosters
+            players, _ = feed.build(pbp, schedules, historical_rosters, now=kickoff_day.to_pydatetime(),
                                     injuries=injuries, weekly_rosters=past_weekly)
         except RuntimeError as exc:
             print("Skipping", season, week, exc)
@@ -91,8 +97,8 @@ def main():
     weeks = []
     for season in YEARS:
         weeks.extend(evaluate_year(season))
-    if not weeks:
-        raise RuntimeError("No complete historical weeks reconstructed")
+    if len(weeks) < 12:
+        raise RuntimeError(f"Only {len(weeks)} historical weeks reconstructed; at least 12 required. Refusing misleading success.")
     (OUT / "weekly.json").write_text(json.dumps({"status": "research_only",
         "warning": "Retrospective reconstruction is not prospective betting evidence. Historical roster and injury data may contain hindsight.",
         "weeks": weeks}, separators=(",", ":")) + "\n")
