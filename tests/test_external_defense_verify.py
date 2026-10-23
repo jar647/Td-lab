@@ -1,5 +1,8 @@
 import unittest
-from scripts.external_defense_verify import verify
+import tempfile
+import json
+from pathlib import Path
+from scripts.external_defense_verify import verify, verify_files
 
 class VerificationTests(unittest.TestCase):
     def records(self):
@@ -22,6 +25,14 @@ class VerificationTests(unittest.TestCase):
     def test_duplicate_blocks(self):
         x=self.records()
         with self.assertRaises(ValueError): verify(x,x+[x[0]],source_name="independent-provider")
+
+    def test_missing_external_provenance_fails_closed(self):
+        rows=self.records()
+        with tempfile.TemporaryDirectory() as d:
+            a,b,o=[Path(d)/name for name in ("primary.json","external.json","result.json")]
+            a.write_text(json.dumps({"season":2026,"week":7,"lookback_weeks":5,"rows":rows,"source":"nflverse PBP"}))
+            b.write_text(json.dumps({"season":2026,"week":7,"lookback_weeks":5,"rows":rows,"source":"other"}))
+            with self.assertRaises(ValueError): verify_files(a,b,o,"other")
 
     def test_same_source_rejected(self):
         x=self.records()
