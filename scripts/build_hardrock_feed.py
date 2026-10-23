@@ -4,7 +4,28 @@ import json
 import os
 import sys
 from pathlib import Path
-from probe_hardrock import get
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
+
+def get(endpoint, **params):
+    key = os.environ.get("ODDSPAPI_API_KEY")
+    if not key:
+        raise RuntimeError("Missing ODDSPAPI_API_KEY")
+    url = "https://api.oddspapi.io/v4/" + endpoint + "?" + urllib.parse.urlencode({"apiKey": key, **params})
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "TD-LAB-feed/1.0"}), timeout=30) as response:
+                return json.load(response)
+        except urllib.error.HTTPError as exc:
+            if exc.code != 429 or attempt == 2:
+                raise RuntimeError("Odds provider HTTP " + str(exc.code)) from None
+        except (urllib.error.URLError, TimeoutError):
+            if attempt == 2:
+                raise RuntimeError("Odds provider unavailable") from None
+        time.sleep(2 * (attempt + 1))
+    raise RuntimeError("Odds provider retry limit reached")
 
 def main():
     today = dt.datetime.now(dt.timezone.utc).date()
