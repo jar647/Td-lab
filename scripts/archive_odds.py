@@ -30,6 +30,11 @@ def main():
             odds = p.get("american_odds")
             if not p.get("player_name") or not isinstance(odds, int) or -100 < odds < 100:
                 raise ValueError("Malformed American odds selection")
+        if game.get("selections"):
+            pregame_games.append(game)
+    if not pregame_games:
+        raise ValueError("No verifiable pre-kickoff games; refusing snapshot")
+    feed = {**feed, "games": pregame_games, "archive_policy": "Only odds captured before fixture kickoff; not verified game-day availability"}
     day = stamp.strftime("%Y-%m-%d")
     dest = ROOT / day / (stamp.strftime("%Y%m%dT%H%M%S%fZ") + ".json")
     dest.parent.mkdir(parents=True, exist_ok=True)
