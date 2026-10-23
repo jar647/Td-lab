@@ -53,7 +53,18 @@ def verify(primary, external, *, source_name, tolerance=0):
 def verify_files(primary_path, external_path, output_path, source_name):
     primary = json.loads(Path(primary_path).read_text())
     external = json.loads(Path(external_path).read_text())
-    result = verify(primary, external, source_name=source_name)
+    if not isinstance(primary, dict) or not isinstance(external, dict):
+        raise ValueError("Both inputs require metadata and rows")
+    for field in ("season", "week", "lookback_weeks"):
+        if primary.get(field) is None or primary.get(field) != external.get(field):
+            raise ValueError(f"Source period mismatch or missing {field}")
+    if not isinstance(primary.get("rows"), list) or not isinstance(external.get("rows"), list):
+        raise ValueError("Missing defensive rows")
+    if external.get("source") != source_name or not external.get("source_url") or not external.get("retrieved_at"):
+        raise ValueError("Missing external source provenance")
+    if external.get("source") == primary.get("source") or external.get("derived_from_nflverse") is not False:
+        raise ValueError("External feed is not demonstrably independent")
+    result = verify(primary["rows"], external["rows"], source_name=source_name)
     Path(output_path).write_text(json.dumps(result, indent=2) + "\n")
     if result["status"] != "VERIFIED":
         raise SystemExit("Independent defensive verification failed closed")
