@@ -161,11 +161,11 @@ function renderBestBets(){
  if(!status||!list)return;
  list.innerHTML='';
  const m=tdProbabilityModel;
- if(!hardRockFeedFresh||!m||m.status!=='validated'||m.source!=='eligible frozen pregame snapshots with completed graded results'||m.train_weeks<4||m.test_weeks<2||m.train_players<250||m.test_players<100||!Number.isFinite(m.holdout_brier)||!Number.isFinite(m.holdout_baseline_brier)||m.holdout_brier>=m.holdout_baseline_brier||!Array.isArray(m.probability_by_score_decile)||m.probability_by_score_decile.length!==10){
+ if(!hardRockFeedFresh||!m||m.status!=='validated'||m.source!=='eligible frozen pregame snapshots with completed graded results'||m.train_weeks<4||m.test_weeks<2||m.train_players<250||m.test_players<100||!Number.isFinite(m.holdout_brier)||!Number.isFinite(m.holdout_baseline_brier)||m.holdout_brier>=m.holdout_baseline_brier||!Array.isArray(m.supported_score_deciles)||m.supported_score_deciles.length!==10||!Array.isArray(m.probability_by_score_decile)||m.probability_by_score_decile.length!==10){
   status.textContent='NO VERIFIED BETS · Model probabilities have not passed independent calibration. No betting edge claimed.';
   return;
  }
- const candidates=autoRecords.filter(r=>r.market==='ATD'&&r.availability==='ROSTER_ACTIVE'&&!manuallyInactive(r)&&r.player_id&&hardRockMatched.has(r.player_id)).map(r=>{
+ const candidates=autoRecords.filter(r=>r.market==='ATD'&&r.availability==='ROSTER_ACTIVE'&&!manuallyInactive(r)&&r.player_id&&hardRockMatched.has(r.player_id)&&m.supported_score_deciles[Math.min(9,Math.max(0,Math.floor(score(r)/10)))]===true).map(r=>{
   const odds=hardRockMatched.get(r.player_id),prob=m.probability_by_score_decile[Math.min(9,Math.max(0,Math.floor(score(r)/10)))],impliedProb=implied(odds)/100;
   return {r,odds,prob,impliedProb,edge:prob-impliedProb};
  }).filter(x=>Number.isFinite(x.prob)&&x.prob>0&&x.prob<1&&x.edge>=0.05).sort((a,b)=>b.edge-a.edge).slice(0,3);
