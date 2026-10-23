@@ -26,7 +26,7 @@ def report(now=None, root=ROOT):
     # Weekly roster status and injury reports are NOT game-day inactive confirmations.
     gates = {
         "model_calibrated": bool(calibrated),
-        "independent_defensive_stats_verified": bool(external.get("status") == "VERIFIED" and external.get("independent_external_source_verified") is True and defense_audit.get("independent_external_source_verified") is True),
+        "independent_defensive_stats_verified": bool(external.get("status") == "VERIFIED" and external.get("independent_external_source_verified") is True and defense_audit.get("independent_external_source_verified") is True and all(external.get(k) == defense_audit.get(k) for k in ("season", "week", "lookback_weeks"))),
         "odds_fresh": bool(fresh),
         "official_game_day_active_confirmed": False,
         "independent_fixture_player_identity_verified": (root/"verified_fixture_players.json").exists()
