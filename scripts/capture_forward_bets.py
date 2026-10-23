@@ -29,8 +29,8 @@ def rank(p):
 def capture(odds, model, players, status, links, now=None):
     now = now or dt.datetime.now(dt.timezone.utc)
     stamp = parse(odds["retrieved_at_utc"])
-    if abs((now - stamp).total_seconds()) > 900:
-        return [], "PASS: odds feed older than 15 minutes"
+    if not 0 <= (now - stamp).total_seconds() <= 900:
+        return [], "PASS: odds timestamp is future-dated or older than 15 minutes"
     if odds.get("market_id") != 14388 or odds.get("outcome_id") != 14388:
         return [], "PASS: wrong market"
     if model.get("status") != "validated" or model.get("source") != "eligible frozen pregame snapshots with completed graded results":

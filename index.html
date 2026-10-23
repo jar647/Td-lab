@@ -373,12 +373,13 @@ async function loadHardRockStatus(){
   const data=await response.json(),stamp=new Date(data.retrieved_at_utc);
   if(data.market_id!==14388||data.outcome_id!==14388||!Array.isArray(data.games)||!Number.isFinite(stamp.getTime()))throw Error('Feed validation failed');
   const count=data.games.reduce((n,g)=>n+(Array.isArray(g.selections)?g.selections.filter(p=>typeof p.player_name==='string'&&Number.isInteger(p.american_odds)&&Math.abs(p.american_odds)>=100).length:0),0);
-  const age=Date.now()-stamp.getTime(),fresh=age>=0&&age<6*3600000;
+  const age=Date.now()-stamp.getTime(),fresh=age>=0&&age<=15*60000;
   hardRockFeedFresh=fresh;
   if(fresh)applyHardRockMatches(data);else {hardRockMatched=new Map();hardRockMatchCount=0;}
   renderBoard();renderBestBets();
-  el.textContent='Hard Rock Bet · '+hardRockMatchCount+' conservatively matched player prices · '+data.games.length+' NFL games · '+count+' active YES anytime-TD prices · updated '+stamp.toLocaleString()+(fresh?' · Feed current':' · Feed may be stale')+'. Only unique, matchup-verified prices appear on rankings; unmatched players show no automatic price.';
+  el.textContent='Hard Rock Bet · '+hardRockMatchCount+' conservatively matched player prices · '+data.games.length+' NFL games · '+count+' active YES anytime-TD prices · updated '+stamp.toLocaleString()+(fresh?' · Fetched within 15 minutes':' · STALE: prices hidden after 15 minutes')+'. Only unique, matchup-verified prices appear on rankings; unmatched players show no automatic price.';
  }catch(e){hardRockFeedFresh=false;hardRockMatched=new Map();hardRockMatchCount=0;renderBoard();renderBestBets();el.textContent='Hard Rock odds feed unavailable: '+e.message+'. Rankings remain independent of sportsbook odds.'}
 }
 drawPositions();save();renderBoard();loadAutoFeed();loadPerformance();loadProbabilityStatus();
+setInterval(loadHardRockStatus,60000);
 </script></body></html>
