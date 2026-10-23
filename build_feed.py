@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""TD LAB 3.0: real nflverse PBP -> verified matchup feed.
+"""THE PROP VAULT: nflverse PBP -> audited matchup feed.
 No invented values: omit incomplete records; no bookmaker odds or TD probabilities.
 """
 import json, os, sys
@@ -114,17 +114,39 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     def_opp=events.groupby(['defense','pos']).size().to_dict()
     # Position-specific receiving production and target volume from valid pass attempts.
     # PBP does not measure snap participation; do not invent snap share.
-    receiving_available='receiving_yards' in plays.columns
+    # Fail closed if a required defensive-stat source field disappears.
+    # Otherwise missing columns can silently turn real allowances into zero.
+    required(plays,['receiving_yards','rushing_yards','passing_yards','complete_pass'],
+             'defensive-stat play-by-play')
+    receiving_available=True
     targets=plays[(pd.to_numeric(plays.pass_attempt,errors='coerce')==1)&plays.receiver_player_id.notna()].copy()
     targets['pid']=targets.receiver_player_id.astype(str)
     targets['pos']=targets.pid.map(pos_by_id)
     targets=targets[targets.pos.isin(['RB','WR','TE'])]
-    targets['yards']=pd.to_numeric(targets.receiving_yards,errors='coerce').fillna(0).clip(lower=0) if receiving_available else 0
+    targets['yards']=pd.to_numeric(targets.receiving_yards,errors='coerce')
+    # Negative completed-play yardage must count. Missing completed-play
+    # yardage is an error, not a zero-yard result.
+    completed=targets[pd.to_numeric(targets.complete_pass,errors='coerce')==1]
+    if completed.yards.isna().any():
+        raise RuntimeError('Completed receptions have missing receiving yards; refusing to publish')
+    targets['yards']=targets['yards'].fillna(0)
     targets['redzone']=pd.to_numeric(targets.yardline_100,errors='coerce').between(1,20).astype(int)
     player_targets=targets.groupby(['posteam','pid']).size().to_dict()
     team_targets=targets.groupby('posteam').size().to_dict()
     defense_position_targets=targets.groupby(['defteam','pos']).size().to_dict()
     defense_position_yards=targets.groupby(['defteam','pos']).yards.sum().to_dict()
+    # Independent aggregation cross-check, grouped per actual defense/game/position.
+    # Reject duplicate source play identifiers rather than double-counting.
+    if 'play_id' in plays.columns:
+        keyed=plays.dropna(subset=['play_id'])
+        if keyed.duplicated(['game_id','play_id']).any():
+            raise RuntimeError('Duplicate PBP game/play identifiers; refusing to publish')
+    per_game_position=targets.groupby(['defteam','game_id','pos'],dropna=False).yards.sum()
+    check_position=per_game_position.groupby(level=[0,2]).sum().to_dict()
+    for key,total in defense_position_yards.items():
+        if abs(float(total)-float(check_position.get(key,float('nan'))))>1e-8:
+            raise RuntimeError(f'Defensive receiving-yards reconciliation failed for {key}')
+
     defense_position_rz_targets=targets.groupby(['defteam','pos']).redzone.sum().to_dict()
     player_rz_targets=targets.groupby(['posteam','pid']).redzone.sum().to_dict()
     # Yardage/reception prop inputs: recorded plays only, with separate defensive
