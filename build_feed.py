@@ -94,7 +94,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None)
         if position not in ('QB','RB','WR','TE'): continue
         td = (pd.to_numeric(p.touchdown,errors='coerce')==1 and str(p.td_team)==str(p.posteam))
         rows.append({'game_id':str(p.game_id),'team':str(p.posteam),'defense':str(p.defteam),
-                     'player_id':str(pid),'player':str(name),'pos':position,'kind':kind,'td':int(td)})
+                     'player_id':str(pid),'player':str(name),'pos':position,'kind':kind,'td':int(td),'inside5':int(float(p.yardline_100)<=5)})
     events=pd.DataFrame(rows)
     if events.empty: raise RuntimeError('No position-verified red-zone opportunities')
     # Each team's sample denominator counts actual played games, not weeks on the calendar.
@@ -103,6 +103,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None)
     defense_games=played.groupby('defteam').game_id.nunique().to_dict()
     team_events=events.groupby('team').size().to_dict()
     player_events=events.groupby(['team','player_id']).size().to_dict()
+    player_inside5=events.groupby(['team','player_id']).inside5.sum().to_dict()
     player_td=events.groupby(['defense','pos']).td.sum().to_dict()
     def_opp=events.groupby(['defense','pos']).size().to_dict()
     # Use real opponent slate and only players whose latest roster team matches it.
@@ -166,8 +167,9 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None)
                     'games':games,'tdallowed':mean(player_td.get((opp,position),0)/dg),
                     'rzallowed':mean(def_opp[(opp,position)]/dg),
                     'rzshare':mean(share),'playerRz':mean(player_events[(team,pid)]/og),
+                    'goalLine5':mean(player_inside5.get((team,pid),0)/og),
                     'odds':'','prob':'','market':'ATD',
-                    'notes':f'Availability: {health} (ROSTER_ACTIVE means listed on active roster, NOT cleared for game day; UNVERIFIED does not mean active). nflverse play-by-play; {SEASON} weeks {max(1,week-WINDOW)}-{week-1}; red-zone rushes + intended targets; position verified by roster; no odds or calibrated TD probability. Player RZ share is share of recorded team red-zone rushes and intended targets (not all plays).'})
+                    'notes':f'Availability: {health} (ROSTER_ACTIVE means listed on active roster, NOT cleared for game day; UNVERIFIED does not mean active). nflverse play-by-play; {SEASON} weeks {max(1,week-WINDOW)}-{week-1}; red-zone rushes + intended targets; position verified by roster; no odds or calibrated TD probability. Player RZ share is share of recorded team red-zone rushes and intended targets (not all plays). Goal-line metric counts recorded rushes and intended targets from opponent 5 or closer per played team game; informational only, not part of the ranking score.'})
     if not result: raise RuntimeError('No matchup records passed source and sample validation')
     result.sort(key=lambda r:(r['team'],r['pos'],r['player']))
     return result, {'season':SEASON,'week':week,'generated_at':now.isoformat(),
