@@ -42,7 +42,7 @@ def availability(injuries, week):
             result[pid]=status
     return result
 
-def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None):
+def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None, snap_counts=None):
     now = now or datetime.now(timezone.utc)
     required(pbp, ['season','week','game_id','posteam','defteam','yardline_100','play_type',
                    'rush_attempt','pass_attempt','rusher_player_id','receiver_player_id',
@@ -127,6 +127,23 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None)
     defense_position_yards=targets.groupby(['defteam','pos']).yards.sum().to_dict()
     defense_position_rz_targets=targets.groupby(['defteam','pos']).redzone.sum().to_dict()
     player_rz_targets=targets.groupby(['posteam','pid']).redzone.sum().to_dict()
+    # PFR snap records identify players by PFR ID, not GSIS ID. Join only
+    # through an explicit roster PFR identifier; never fuzzy-match names.
+    snap_share_by_player={}
+    if snap_counts is not None and not snap_counts.empty and 'pfr_id' in roster.columns:
+        required(snap_counts,['season','week','team','pfr_player_id','offense_pct'],'snap counts')
+        snap=snap_counts.copy()
+        snap=snap[(pd.to_numeric(snap.season,errors='coerce')==SEASON)&
+                  pd.to_numeric(snap.week,errors='coerce').between(max(1,week-WINDOW),week-1)]
+        snap['offense_pct']=pd.to_numeric(snap.offense_pct,errors='coerce')
+        snap=snap[snap.offense_pct.between(0,100)]
+        mapping=roster[['gsis_id','pfr_id']].dropna().copy()
+        mapping['pfr_id']=mapping.pfr_id.astype(str)
+        mapping=mapping.drop_duplicates('pfr_id',keep=False)
+        snap=snap.merge(mapping,left_on='pfr_player_id',right_on='pfr_id',how='inner')
+        if not snap.empty:
+            snap_share_by_player={(str(t),str(pid)):mean(v) for (t,pid),v in
+                snap.groupby(['team','gsis_id']).offense_pct.mean().items()}
     # Use real opponent slate and only players whose latest roster team matches it.
     roster_team=dict(zip(roster.gsis_id.astype(str),roster.team.astype(str)))
     injury_status=availability(injuries,week)
@@ -194,6 +211,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None)
                     'playerTargets':mean(player_targets.get((team,pid),0)/og) if position!='QB' else None,
                     'playerTargetShare':mean(100*player_targets.get((team,pid),0)/team_targets[team]) if position!='QB' and team_targets.get(team,0)>0 else None,
                     'playerRzTargets':mean(player_rz_targets.get((team,pid),0)/og) if position!='QB' else None,
+                    'snapShare':snap_share_by_player.get((team,pid)),
                     'goalLine5':mean(player_inside5.get((team,pid),0)/og),
                     'recentRz2':mean(recent_player_events.get((team,pid),0)/recent_offense_games[team]) if recent_offense_games.get(team,0)>0 else None,
                     'recentRz2Games':int(recent_offense_games.get(team,0)),
@@ -222,7 +240,12 @@ def main():
     except Exception as exc:
         print(f'Weekly rosters unavailable: {exc}',file=sys.stderr)
         weekly_rosters=None
-    result,meta=build(pbp,schedules,rosters,injuries=injuries,weekly_rosters=weekly_rosters)
+    try:
+        snap_counts=frame(nfl.load_snap_counts([SEASON]))
+    except Exception as exc:
+        print(f'Snap counts unavailable; leaving snap share blank: {exc}',file=sys.stderr)
+        snap_counts=None
+    result,meta=build(pbp,schedules,rosters,injuries=injuries,weekly_rosters=weekly_rosters,snap_counts=snap_counts)
     print('AVAILABILITY DIAGNOSTICS: '+json.dumps(meta['availability_diagnostics']))
     # Freeze each week's first published candidate set for honest, forward-only grading.
     # Never replace snapshots as subsequent results become known.
