@@ -92,6 +92,11 @@ try:
                 print("Market catalog entries:", len(entries), "touchdown-labeled:", len(td))
                 for item in td[:12]:
                     print("Catalog touchdown match:", json.dumps(item, default=str)[:500])
+                player_props = [m for m in td if m.get("sportId") == 14 and m.get("playerProp") is True]
+                print("NFL touchdown player-prop definitions:", len(player_props))
+                for item in player_props[:15]:
+                    mid = str(item.get("marketId"))
+                    print("Player market:", mid, str(item.get("marketName"))[:90], "present in sampled game:", mid in markets)
         except RuntimeError as exc:
             print("Market catalog lookup unavailable:", str(exc))
     print("Read-only discovery only. No odds published to TD LAB.")
