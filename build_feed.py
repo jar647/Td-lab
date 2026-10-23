@@ -216,6 +216,22 @@ def main():
             print(f'Froze pregame snapshot for Week {meta["week"]}')
         else:
             print(f'Skipped Week {meta["week"]} snapshot: first game day already started or schedule missing',file=sys.stderr)
+    # Report snapshot readiness for the current week; never silently claim
+    # a post-kickoff capture is eligible for prediction accuracy.
+    slate=schedules[(pd.to_numeric(schedules.season,errors='coerce')==SEASON)&(pd.to_numeric(schedules.week,errors='coerce')==meta['week'])&(schedules.game_type.astype(str).str.upper()=='REG')]
+    first_day=pd.to_datetime(slate.gameday,errors='coerce',utc=True).min() if not slate.empty else pd.NaT
+    snapshot_state={'exists':snapshot.exists(),'accuracy_eligible':False,'captured_at':None,'candidate_count':0,'challenger_features_complete':False}
+    if snapshot.exists():
+        try:
+            frozen=json.loads(snapshot.read_text())
+            captured=pd.to_datetime(frozen.get('captured_at'),errors='coerce',utc=True)
+            frozen_players=frozen.get('players',[])
+            snapshot_state.update({'captured_at':frozen.get('captured_at'),'candidate_count':len(frozen_players),
+                'accuracy_eligible':bool(not pd.isna(first_day) and not pd.isna(captured) and captured<first_day),
+                'challenger_features_complete':bool(frozen_players and all(p.get('goalLine5') is not None and p.get('recentRz2') is not None for p in frozen_players if p.get('availability')=='ROSTER_ACTIVE'))})
+        except (ValueError,TypeError,KeyError) as exc:
+            print(f'Invalid frozen snapshot: {exc}',file=sys.stderr)
+    meta['snapshot_diagnostics']=snapshot_state
     # Snapshot capture must precede kickoff of every game being evaluated.
     # A snapshot taken after any kickoff is retained for transparency but not
     # eligible for honest pregame prediction accuracy calculations.
