@@ -54,6 +54,26 @@ try:
     markets = book.get("markets") or {}
     print("Hard Rock odds present for sampled fixture:", bool(markets))
     print("Hard Rock market count for sampled fixture:", len(markets))
-    print("Next: verify anytime-touchdown market IDs and player-name outcomes before publishing any prices.")
+    print("Market container type:", type(markets).__name__)
+    print("Market sample IDs:", [str(k)[:80] for k in list(markets)[:5]] if isinstance(markets, dict) else [])
+    matches = []
+    iterable = markets.items() if isinstance(markets, dict) else enumerate(markets)
+    for market_id, market in iterable:
+        if not isinstance(market, dict):
+            continue
+        label = " ".join(str(market.get(k, "")) for k in ("name", "marketName", "label", "description", "marketType", "marketId"))
+        if any(term in (str(market_id) + " " + label).lower() for term in ("touchdown", "anytime", "td scorer", "to score")):
+            matches.append((str(market_id), label[:140], market))
+    print("Touchdown-related market count:", len(matches))
+    for market_id, label, market in matches[:20]:
+        print("Candidate market:", market_id[:80], "|", label, "| keys:", sorted(market.keys()))
+        for field in ("outcomes", "selections", "runners", "prices"):
+            values = market.get(field)
+            if isinstance(values, (list, dict)):
+                sample = list(values.values())[:2] if isinstance(values, dict) else values[:2]
+                print(" ", field, "count:", len(values), "sample:", json.dumps(sample, ensure_ascii=True, default=str)[:450])
+    if not matches:
+        print("No named touchdown markets detected; inspect market keys/metadata before integrating.")
+    print("Read-only discovery only. No odds published to TD LAB.")
 except (RuntimeError, ValueError, TypeError, KeyError) as exc:
     sys.exit("Odds provider probe failed: " + str(exc))
