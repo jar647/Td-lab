@@ -39,5 +39,18 @@ jobs:
           git add data/matchups.json data/status.json data/history/
           if ! git diff --cached --quiet; then
             git commit -m "Update verified NFL matchup feed"
-            git push
+            # A developer commit can land while the feed is building.
+            # Replay only this data commit on the latest main before pushing.
+            # Fail visibly on a genuine data conflict instead of overwriting it.
+            for attempt in 1 2 3; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then
+                exit 0
+              fi
+              echo "Push raced with another update (attempt $attempt); retrying."
+              sleep 3
+            done
+            echo "Feed built, but could not publish after three push attempts." >&2
+            exit 1
           fi
