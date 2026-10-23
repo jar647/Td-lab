@@ -65,6 +65,9 @@ def verify_files(primary_path, external_path, output_path, source_name):
     if external.get("source") == primary.get("source") or external.get("derived_from_nflverse") is not False:
         raise ValueError("External feed is not demonstrably independent")
     result = verify(primary["rows"], external["rows"], source_name=source_name)
+    result["season"] = primary["season"]
+    result["week"] = primary["week"]
+    result["lookback_weeks"] = primary["lookback_weeks"]
     Path(output_path).write_text(json.dumps(result, indent=2) + "\n")
     if result["status"] != "VERIFIED":
         raise SystemExit("Independent defensive verification failed closed")
