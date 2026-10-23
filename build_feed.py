@@ -176,6 +176,49 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     player_pass_attempts=metric_group(passes,['posteam','pid'],'attempts')
     defense_pass_yards=metric_group(passes,['defteam'],'yards')
     defense_pass_attempts=metric_group(passes,['defteam'],'attempts')
+    # Defense-wide audit: include every club that has played, not just teams
+    # appearing in this week's player matchup cards.
+    audit_metrics={
+      'pass_yards':(passes,'yards',None),
+      'pass_attempts':(passes,'attempts',None),
+      'rush_yards':(rushes,'yards','pos'),
+      'rush_attempts':(rushes,'attempts','pos'),
+      'rec_yards':(targets,'yards','pos'),
+      'targets':(targets,None,'pos'),
+      'receptions':(targets,'receptions','pos'),
+      'redzone_targets':(targets,'redzone','pos')
+    }
+    audit_rows=[]
+    for defense,dg in sorted(defense_games.items()):
+        if dg<=0: continue
+        for position in ('QB','RB','WR','TE'):
+            record={'defense':defense,'position':position,'games':int(dg)}
+            for metric,(source,col,poscol) in audit_metrics.items():
+                if poscol is None and position!='QB': continue
+                if poscol is not None and position=='QB': continue
+                subset=source[source.defteam==defense]
+                if poscol is not None: subset=subset[subset[poscol]==position]
+                # Cross-check direct play totals against independently grouped
+                # game totals. Both use the same nflverse source, not an
+                # external NFL box-score provider.
+                if col is None:
+                    direct=int(len(subset))
+                    by_game=int(subset.groupby('game_id').size().sum())
+                else:
+                    direct=float(subset[col].sum())
+                    by_game=float(subset.groupby('game_id')[col].sum().sum())
+                if abs(direct-by_game)>1e-8:
+                    raise RuntimeError(f'Defense audit mismatch: {defense} {position} {metric}')
+                record[metric+'_total']=direct
+                record[metric+'_per_game']=mean(direct/dg)
+            audit_rows.append(record)
+    if len(defense_games)!=32 or len(audit_rows)!=128:
+        raise RuntimeError(f'Incomplete defense coverage: {len(defense_games)} teams / {len(audit_rows)} position records; refusing publication')
+    audit={'season':SEASON,'week':week,'lookback_weeks':WINDOW,
+           'source':'nflverse PBP','independent_external_source_verified':False,
+           'verification':'INTERNAL_RECONCILIATION_ONLY',
+           'definitions':'All defensive rates use defense games played in the rolling sample; positional receiving/rushing rates aggregate all players at the listed position.',
+           'rows':audit_rows}
     # Last-three-team-games usage, sourced from the same completed PBP.
     last_games=plays[['posteam','game_id','week']].drop_duplicates().sort_values('week').groupby('posteam').tail(3)
     last_ids=set(last_games.game_id.astype(str))
@@ -320,6 +363,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     'notes':f'Availability: {health} (ROSTER_ACTIVE means listed on active roster, NOT cleared for game day; UNVERIFIED does not mean active). nflverse play-by-play; {SEASON} weeks {max(1,week-WINDOW)}-{week-1}; red-zone rushes + intended targets; position verified by roster; no odds or calibrated TD probability. Player RZ share is share of recorded team red-zone rushes and intended targets (not all plays). Goal-line metric counts recorded rushes and intended targets from opponent 5 or closer per played team game; informational only, not part of the ranking score.'})
     if not result: raise RuntimeError('No matchup records passed source and sample validation')
     result.sort(key=lambda r:(r['team'],r['pos'],r['player']))
+    (OUT/'defense_stats_audit.json.tmp').write_text(json.dumps(audit,indent=2))
     return result, {'season':SEASON,'week':week,'generated_at':now.isoformat(),
                     'matchups':len(result),'source':'nflverse play-by-play and rosters',
                     'odds_source':None,'probability_model':None,
@@ -457,6 +501,7 @@ def main():
     (OUT/'status.json.tmp').write_text(json.dumps(meta,indent=2))
     (OUT/'matchups.json.tmp').replace(OUT/'matchups.json')
     (OUT/'status.json.tmp').replace(OUT/'status.json')
+    (OUT/'defense_stats_audit.json.tmp').replace(OUT/'defense_stats_audit.json')
     print(f'Published {len(result)} verified records for {SEASON} week {meta["week"]}')
 
 if __name__=='__main__':
