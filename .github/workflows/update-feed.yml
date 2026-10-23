@@ -6,6 +6,7 @@ on:
     paths:
       - 'build_feed.py'
       - 'scripts/calibrate_td.py'
+      - 'scripts/grade_forward_bets.py'
       - 'scripts/audit_history.py'
       - 'tests/**'
       - '.github/workflows/update-feed.yml'
@@ -40,12 +41,14 @@ jobs:
         run: python scripts/audit_history.py
       - name: Calibrate touchdown probabilities from eligible graded weeks
         run: python scripts/calibrate_td.py
+      - name: Grade frozen prospective decisions
+        run: python scripts/grade_forward_bets.py
       - name: Commit updated data
         if: github.event_name != 'pull_request'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/matchups.json data/status.json data/history/ data/probability_model.json data/history_audit.json
+          git add data/matchups.json data/status.json data/history/ data/probability_model.json data/history_audit.json data/forward/performance.json
           if ! git diff --cached --quiet; then
             git commit -m "Update verified NFL matchup feed"
             # A developer commit can land while the feed is building.
