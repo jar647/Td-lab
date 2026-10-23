@@ -12,6 +12,8 @@ def report(now=None, root=ROOT):
     model = read("probability_model.json", {})
     audit = read("history_audit.json", {})
     odds = read("hardrock_anytime_td.json", {})
+    external = read("external_defense_verification.json", {})
+    defense_audit = read("defense_stats_audit.json", {})
     try:
         stamp = dt.datetime.fromisoformat(odds["retrieved_at_utc"].replace("Z","+00:00"))
         fresh = stamp.tzinfo is not None and 0 <= (now-stamp).total_seconds() <= 900
@@ -24,6 +26,7 @@ def report(now=None, root=ROOT):
     # Weekly roster status and injury reports are NOT game-day inactive confirmations.
     gates = {
         "model_calibrated": bool(calibrated),
+        "independent_defensive_stats_verified": bool(external.get("status") == "VERIFIED" and external.get("independent_external_source_verified") is True and defense_audit.get("independent_external_source_verified") is True),
         "odds_fresh": bool(fresh),
         "official_game_day_active_confirmed": False,
         "independent_fixture_player_identity_verified": (root/"verified_fixture_players.json").exists()
