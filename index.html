@@ -129,7 +129,7 @@ function alignmentScore(r){
 function alignmentLabel(r){
  const defense=num(r.tdallowed)>=.65&&num(r.rzallowed)>=1.5;
  const offense=num(r.playerRz)>=1&&num(r.rzshare)>=15;
- return defense&&offense&&alignmentScore(r)>=65?'🔥 PRIME MATCHUP':alignmentScore(r)>=60&&num(r.playerRz)>=1?'STRONG MATCHUP':'LOW PRIORITY';
+ return defense&&offense&&alignmentScore(r)>=65?'🔥 PRIME MATCHUP':defense&&offense?'STRONG MATCHUP':num(r.playerRz)>=1&&alignmentScore(r)>=55?'LEAN':'LOW PRIORITY';
 }
 function renderSimpleMatchups(){
  const el=document.getElementById('simpleRankings');if(!el)return;
