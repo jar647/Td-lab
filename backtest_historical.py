@@ -59,15 +59,18 @@ def evaluate_year(season):
                 past_rosters = past_rosters[pd.to_numeric(past_rosters.week, errors='coerce') <= week]
             past_weekly = weekly_rosters.copy()
             if 'week' in past_weekly.columns:
-                past_weekly = past_weekly[pd.to_numeric(past_weekly.week, errors='coerce') <= week]
+                # Avoid using final game-week roster status to predict that same week.
+                past_weekly = past_weekly[pd.to_numeric(past_weekly.week, errors='coerce') < week]
             # Prefer each player's historical weekly roster state, rather than
             # a season-end roster that can exclude players who changed teams.
-            if {'gsis_id', 'position', 'team', 'week'}.issubset(past_weekly.columns):
+            if {'gsis_id', 'position', 'team', 'week'}.issubset(past_weekly.columns) and not past_weekly.empty:
                 historical_rosters = past_weekly.sort_values('week').drop_duplicates('gsis_id', keep='last')
             else:
-                historical_rosters = past_rosters
+                raise RuntimeError('No strictly prior-week roster snapshot available')
+            # Injury reports from the evaluated week can be revised after kickoff;
+            # exclude them rather than quietly introducing retrospective hindsight.
             players, _ = feed.build(pbp, schedules, historical_rosters, now=kickoff_day.to_pydatetime(),
-                                    injuries=injuries, weekly_rosters=past_weekly)
+                                    injuries=None, weekly_rosters=past_weekly)
         except RuntimeError as exc:
             print("Skipping", season, week, exc)
             continue
