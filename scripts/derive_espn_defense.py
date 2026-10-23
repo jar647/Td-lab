@@ -47,6 +47,8 @@ def derive(raw):
             if offense_id not in team_ids:
                 raise ValueError("Player group team not in game")
             defense = next(abbr for tid, abbr in team_ids.items() if tid != offense_id)
+            if defense in games_by_defense and event_id in games_by_defense[defense]:
+                raise ValueError("Duplicate offensive team player group")
             games_by_defense[defense].add(event_id)
             for category in group.get("statistics", []):
                 category_name = category.get("name", "").lower()
@@ -54,6 +56,8 @@ def derive(raw):
                     continue
                 labels = [str(label).upper() for label in category.get("labels", [])]
                 wanted = COLUMNS[category_name]
+                if category_name == "rushing" and "CAR" not in labels and "ATT" in labels:
+                    wanted = ("YDS", "ATT")
                 if not all(label in labels for label in wanted):
                     raise ValueError(f"ESPN {category_name} missing expected columns: {labels}")
                 indices = [labels.index(label) for label in wanted]
@@ -88,12 +92,16 @@ def derive(raw):
                         totals[key]["receptions_total"] += second
     if not seen:
         raise ValueError("No completed ESPN games")
+    if len(games_by_defense) != 32:
+        raise ValueError(f"Expected 32 defenses, found {len(games_by_defense)}")
     rows = []
     for defense in sorted(games_by_defense):
         for position in POSITIONS:
             row = {"defense": defense, "position": position,
                    "games": len(games_by_defense[defense])}
             row.update(totals[(defense, position)])
+            for metric in (("pass_yards_total", "pass_attempts_total") if position == "QB" else ("rush_yards_total", "rush_attempts_total", "rec_yards_total", "receptions_total")):
+                row.setdefault(metric, 0)
             rows.append(row)
     return {"source": "ESPN NFL game summary (unofficial)",
             "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary",
