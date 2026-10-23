@@ -159,9 +159,23 @@ let tdProbabilityModel=null;
 function playerDecision(r){
  if(r.market!=='ATD')return 'RESEARCH ONLY';
  if(r.availability!=='ROSTER_ACTIVE'||manuallyInactive(r))return 'PASS · AVAILABILITY';
- if(!hardRockFeedFresh||!r.player_id||!hardRockMatched.has(r.player_id))return 'PASS · NO VERIFIED PRICE';
- if(!tdProbabilityModel||tdProbabilityModel.status!=='validated')return 'PASS · MODEL NOT VALIDATED';
- return 'PASS · GAME-DAY STATUS UNVERIFIED';
+ if(!hardRockFeedFresh||!r.player_id||!hardRockMatched.has(r.player_id))return 'PASS · NO CURRENT PRICE';
+ const rank=score(r),odds=hardRockMatched.get(r.player_id);
+ if(!tdProbabilityModel||tdProbabilityModel.status!=='validated'){
+  return rank>=70&&num(r.games)>=3&&num(r.rzshare)>=20&&num(r.playerRz)>=1&&num(r.goalLine5)>=.2?'LEAN · UNVALIDATED':'PASS · INSUFFICIENT EVIDENCE';
+ }
+ const m=tdProbabilityModel,b=Math.min(9,Math.max(0,Math.floor(rank/10)));
+ if(!Array.isArray(m.supported_score_deciles)||m.supported_score_deciles[b]!==true||!Array.isArray(m.probability_by_score_decile))return 'PASS · UNSUPPORTED MODEL RANGE';
+ const prob=m.probability_by_score_decile[b];
+ if(!Number.isFinite(prob)||prob<=0||prob>=1)return 'PASS · NO VALID PROBABILITY';
+ if(prob-implied(odds)/100>=.05)return 'LEAN · VALUE SIGNAL; STATUS UNVERIFIED';
+ return 'PASS · PRICE NOT FAVORABLE';
+}
+function renderResearchLeans(list){
+ if(!hardRockFeedFresh)return;
+ const candidates=autoRecords.filter(r=>r.market==='ATD'&&playerDecision(r)==='LEAN · UNVALIDATED').map(r=>({r,odds:hardRockMatched.get(r.player_id),rank:score(r)})).sort((a,b)=>b.rank-a.rank||b.r.playerRz-a.r.playerRz).slice(0,3);
+ if(!candidates.length){list.innerHTML='<p class="muted">No research leans meet the usage, matchup, sample and current-price screens. PASS.</p>';return}
+ list.innerHTML='<div style="font-weight:900;color:#ffd27b;margin:14px 0 8px">🟡 TOP RESEARCH LEANS · NOT VERIFIED BETS</div>'+candidates.map(x=>'<div class="row" style="padding:12px 0;border-bottom:1px solid #294438"><div><b>'+escapeHTML(x.r.player)+'</b><div class="muted">'+escapeHTML(x.r.team)+' vs '+escapeHTML(x.r.opp)+' · Hard Rock '+(x.odds>0?'+':'')+escapeHTML(x.odds)+' · Score '+x.rank+'/100</div><div class="muted">Why: '+escapeHTML(x.r.rzshare)+'% red-zone share · '+escapeHTML(x.r.playerRz)+' red-zone opp/game · '+escapeHTML(x.r.goalLine5)+' inside-five opp/game</div><div class="muted">Not a validated value bet; official inactives unverified.</div></div><span class="pill">LEAN</span></div>').join('');
 }
 function renderBestBets(){
  const status=document.getElementById('bestBetsStatus'),list=document.getElementById('bestBetsList');
@@ -169,7 +183,7 @@ function renderBestBets(){
  list.innerHTML='';
  const m=tdProbabilityModel;
  if(!hardRockFeedFresh||!m||m.status!=='validated'||m.source!=='eligible frozen pregame snapshots with completed graded results'||m.train_weeks<4||m.test_weeks<2||m.train_players<250||m.test_players<100||!Number.isFinite(m.holdout_brier)||!Number.isFinite(m.holdout_baseline_brier)||m.holdout_brier>=m.holdout_baseline_brier||!Array.isArray(m.supported_score_deciles)||m.supported_score_deciles.length!==10||!Array.isArray(m.probability_by_score_decile)||m.probability_by_score_decile.length!==10){
-  status.innerHTML='<div style="font-size:30px;font-weight:950;color:#ffc27c">PASS · NO BETS TODAY</div><div style="margin-top:8px">Reason: '+(!hardRockFeedFresh?'Live sportsbook prices are missing or stale.':'The touchdown probability model has not passed independent calibration.')+' TD LAB will not label a high ranking as a profitable bet.</div>';
+  status.innerHTML='<div style="font-size:30px;font-weight:950;color:#ffc27c">NO VERIFIED BETS</div><div style="margin-top:8px">'+(!hardRockFeedFresh?'Sportsbook prices are missing or stale.':'Model calibration is incomplete. Showing research LEANS separately, not pretending they are proven value.')+'</div>';renderResearchLeans(list);
   return;
  }
  const candidates=autoRecords.filter(r=>r.market==='ATD'&&r.availability==='ROSTER_ACTIVE'&&!manuallyInactive(r)&&r.player_id&&hardRockMatched.has(r.player_id)&&m.supported_score_deciles[Math.min(9,Math.max(0,Math.floor(score(r)/10)))]===true).map(r=>{
