@@ -176,6 +176,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None)
                     'lookback_weeks':WINDOW,'availability_diagnostics':{'injuries':injury_diagnostics,'weekly_rosters':weekly_diagnostics,'excluded':excluded,'unverified_output':sum(r['availability']=='UNVERIFIED' for r in result)},'injury_policy':'Current-week OUT excluded; doubtful/questionable flagged; weekly RES/DEV/CUT/RET/EXE/TRD/TRT excluded. ROSTER_ACTIVE only confirms active roster membership, not game-day clearance; late inactives unverified.','status':'ready'}
 
 def main():
+    now = datetime.now(timezone.utc)
     import nflreadpy as nfl
     pbp=frame(nfl.load_pbp([SEASON]))
     schedules=frame(nfl.load_schedules([SEASON]))
@@ -214,9 +215,11 @@ def main():
                 continue
             # Require all scheduled regular-season games in that week to have PBP
             expected=schedules[(pd.to_numeric(schedules.season,errors='coerce')==SEASON)&(pd.to_numeric(schedules.week,errors='coerce')==w)&(schedules.game_type.astype(str).str.upper()=='REG')]
-            if len(set(game_rows.game_id.dropna()))<len(expected): continue
+            if expected.empty or not {'game_id','home_score','away_score'}.issubset(expected.columns): continue
+            if expected[['home_score','away_score']].isna().any().any(): continue
+            if not set(expected.game_id.dropna().astype(str)).issubset(set(game_rows.game_id.dropna().astype(str))): continue
             # Require games to have finished, not merely started.
-            if 'gameday' in expected.columns and pd.to_datetime(expected.gameday,errors='coerce',utc=True).max() >= pd.Timestamp(now)-pd.Timedelta(days=2):
+            if 'gameday' not in expected.columns or pd.to_datetime(expected.gameday,errors='coerce',utc=True).isna().any() or pd.to_datetime(expected.gameday,errors='coerce',utc=True).max() >= pd.Timestamp(now)-pd.Timedelta(days=2):
                 continue
             rush=game_rows.loc[pd.to_numeric(game_rows.rush_touchdown,errors='coerce')==1,'rusher_player_id'].dropna().astype(str)
             receiving=game_rows.loc[pd.to_numeric(game_rows.pass_touchdown,errors='coerce')==1,'receiver_player_id'].dropna().astype(str)
@@ -233,7 +236,7 @@ def main():
                 ranked_ids.update(str(p.get('player_id')) for p in group[:3])
             graded=[{'player_id':p.get('player_id'),'player':p['player'],'pos':p['pos'],'team':p['team'],'score':score_candidate(p),'top3_position':str(p.get('player_id')) in ranked_ids,'scored_td':p.get('player_id') in scored} for p in record['players']]
             (history/f'{SEASON}-week-{w}-results.json').write_text(json.dumps({'season':SEASON,'week':w,'graded_at':meta['generated_at'],'graded_count':len(graded),'scored_count':sum(p['scored_td'] for p in graded),'grading_scope':'Rushing and receiving touchdowns only; excludes passing and return TDs','players':graded},indent=2))
-        except (ValueError,KeyError,TypeError) as exc:
+        except (ValueError,KeyError,TypeError,AttributeError) as exc:
             print(f'Unable to grade {prior.name}: {exc}',file=sys.stderr)
     # Atomic replacement after full successful validation. Never publish dummy data.
     (OUT/'matchups.json.tmp').write_text(json.dumps(result,ensure_ascii=False,separators=(',',':')))
