@@ -200,6 +200,9 @@ def main():
     snapshot=history/f'{SEASON}-week-{meta["week"]}.json'
     if not snapshot.exists():
         snapshot.write_text(json.dumps({'season':SEASON,'week':meta['week'],'captured_at':meta['generated_at'],'players':result},indent=2))
+    # Snapshot capture must precede kickoff of every game being evaluated.
+    # A snapshot taken after any kickoff is retained for transparency but not
+    # eligible for honest pregame prediction accuracy calculations.
     # Grade previous frozen snapshots against completed PBP. TD scored is measured
     # using the scorer ID, not red-zone opportunities or the candidate's score.
     for prior in sorted(history.glob(f'{SEASON}-week-*.json')):
@@ -216,6 +219,13 @@ def main():
             # Require all scheduled regular-season games in that week to have PBP
             expected=schedules[(pd.to_numeric(schedules.season,errors='coerce')==SEASON)&(pd.to_numeric(schedules.week,errors='coerce')==w)&(schedules.game_type.astype(str).str.upper()=='REG')]
             if expected.empty or not {'game_id','home_score','away_score'}.issubset(expected.columns): continue
+            captured=pd.to_datetime(record.get('captured_at'),errors='coerce',utc=True)
+            if pd.isna(captured): continue
+            if 'gameday' not in expected.columns: continue
+            earliest_kickoff=pd.to_datetime(expected.gameday,errors='coerce',utc=True).min()
+            # gameday is a date, not kickoff time: conservatively require capture
+            # before the first calendar day of games to avoid hindsight leakage.
+            pregame_capture=not pd.isna(earliest_kickoff) and captured < earliest_kickoff
             if expected[['home_score','away_score']].isna().any().any(): continue
             if not set(expected.game_id.dropna().astype(str)).issubset(set(game_rows.game_id.dropna().astype(str))): continue
             # Require games to have finished, not merely started.
@@ -235,7 +245,7 @@ def main():
                 group=sorted((p for p in eligible if p.get('pos')==position),key=lambda p:(-score_candidate(p),str(p.get('player',''))))
                 ranked_ids.update(str(p.get('player_id')) for p in group[:3])
             graded=[{'player_id':p.get('player_id'),'player':p['player'],'pos':p['pos'],'team':p['team'],'score':score_candidate(p),'top3_position':str(p.get('player_id')) in ranked_ids,'scored_td':p.get('player_id') in scored} for p in record['players']]
-            (history/f'{SEASON}-week-{w}-results.json').write_text(json.dumps({'season':SEASON,'week':w,'graded_at':meta['generated_at'],'graded_count':len(graded),'scored_count':sum(p['scored_td'] for p in graded),'grading_scope':'Rushing and receiving touchdowns only; excludes passing and return TDs','players':graded},indent=2))
+            (history/f'{SEASON}-week-{w}-results.json').write_text(json.dumps({'season':SEASON,'week':w,'graded_at':meta['generated_at'],'pregame_snapshot':bool(pregame_capture),'snapshot_captured_at':record.get('captured_at'),'accuracy_eligible':bool(pregame_capture),'graded_count':len(graded),'scored_count':sum(p['scored_td'] for p in graded),'grading_scope':'Rushing and receiving touchdowns only; excludes passing and return TDs','players':graded},indent=2))
         except (ValueError,KeyError,TypeError,AttributeError) as exc:
             print(f'Unable to grade {prior.name}: {exc}',file=sys.stderr)
     # Atomic replacement after full successful validation. Never publish dummy data.
