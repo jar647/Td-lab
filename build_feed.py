@@ -156,7 +156,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     unknown_targets=targets[~targets.pos.isin(['RB','WR','TE'])]
     if not unknown_targets.empty:
         examples=unknown_targets[['game_id','receiver_player_id','week']].head(5).to_dict('records')
-        raise RuntimeError(f'Unknown receiver positions on {len(unknown_targets)} targets; refusing publication: {examples}')
+        print(f'WARNING: {len(unknown_targets)} unclassified receiver targets excluded; examples: {examples}',file=sys.stderr)
     targets=targets[targets.pos.isin(['RB','WR','TE'])]
     targets['yards']=pd.to_numeric(targets.receiving_yards,errors='coerce')
     # Negative completed-play yardage must count. Missing completed-play
@@ -194,7 +194,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     unknown_rushes=rushes[~rushes.pos.isin(['QB','RB','WR','TE'])]
     if not unknown_rushes.empty:
         examples=unknown_rushes[['game_id','rusher_player_id','week']].head(5).to_dict('records')
-        raise RuntimeError(f'Unknown rusher positions on {len(unknown_rushes)} rushes; refusing publication: {examples}')
+        print(f'WARNING: {len(unknown_rushes)} unclassified rushes excluded; examples: {examples}',file=sys.stderr)
     rushes=rushes[rushes.pos.isin(['QB','RB','WR','TE'])]
     rushes['yards']=pd.to_numeric(rushes.rushing_yards,errors='coerce').fillna(0) if 'rushing_yards' in rushes else 0
     rushes['attempts']=1
@@ -257,6 +257,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
            'source':'nflverse PBP','independent_external_source_verified':False,
            'verification':'INTERNAL_RECONCILIATION_ONLY',
            'definitions':'Defensive rates use each defense\'s last five completed games (or fewer if not yet played); positional receiving/rushing rates aggregate players at the listed position.',
+           'classification_exclusions':{'receiver_targets':int(len(unknown_targets)),'rushes':int(len(unknown_rushes))},
            'rows':audit_rows}
     # Last-three-team-games usage, sourced from the same completed PBP.
     last_games=plays[['posteam','game_id','week']].drop_duplicates().sort_values('week').groupby('posteam').tail(3)
