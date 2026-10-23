@@ -107,6 +107,23 @@ try:
                     print("Player market:", mid, str(item.get("marketName"))[:90], "present in sampled game:", mid in markets)
         except RuntimeError as exc:
             print("Market catalog lookup unavailable:", str(exc))
+    print("Checking target market 14388 across priced NFL fixtures (maximum 13 requests).")
+    found = 0
+    for fixture in priced[:13]:
+        fixture_odds = get("odds", fixtureId=fixture["fixtureId"], bookmakers="hardrockbet", oddsFormat="american")
+        fixture_markets = ((fixture_odds.get("bookmakerOdds") or {}).get("hardrockbet") or {}).get("markets") or {}
+        target = fixture_markets.get("14388")
+        if target:
+            found += 1
+            outcomes = target.get("outcomes") or {}
+            print("Target market available:", str(fixture.get("fixtureId"))[:30], "outcome count:", len(outcomes))
+            for outcome in list(outcomes.values())[:2]:
+                players = outcome.get("players", {}) if isinstance(outcome, dict) else {}
+                print("Target outcome player slots:", len(players))
+                for player in list(players.values())[:3]:
+                    if isinstance(player, dict):
+                        print("Target price sample:", "name:", str(player.get("playerName"))[:70], "american:", str(player.get("priceAmerican"))[:12], "active:", player.get("active"))
+    print("Fixtures containing target market 14388:", found)
     print("Read-only discovery only. No odds published to TD LAB.")
 except (RuntimeError, ValueError, TypeError, KeyError) as exc:
     sys.exit("Odds provider probe failed: " + str(exc))
