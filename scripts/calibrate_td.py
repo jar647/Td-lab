@@ -14,6 +14,7 @@ MIN_TRAIN_WEEKS = 4
 MIN_TEST_WEEKS = 2
 MIN_TRAIN_PLAYERS = 250
 MIN_TEST_PLAYERS = 100
+MIN_BUCKET_TRAIN_PLAYERS = 50
 
 def score_to_bucket(score):
     return min(9, max(0, int(float(score) // 10)))
@@ -66,10 +67,12 @@ def main():
         testing = [p for _,_,rows in test for p in rows]
         if len(training) >= MIN_TRAIN_PLAYERS and len(testing) >= MIN_TEST_PLAYERS:
             values = fit(training)
+            bucket_counts = [sum(1 for b, _ in training if b == i) for i in range(10)]
+            supported_buckets = [n >= MIN_BUCKET_TRAIN_PLAYERS for n in bucket_counts]
             brier = sum((values[b]-y)**2 for b,y in testing)/len(testing)
             baseline = sum(y for _,y in training)/len(training)
             baseline_brier = sum((baseline-y)**2 for _,y in testing)/len(testing)
-            output.update({"status": "validated" if brier < baseline_brier else "unavailable", "train_weeks":len(train), "test_weeks":len(test), "train_players":len(training), "test_players":len(testing), "holdout_brier":round(brier,5), "holdout_baseline_brier":round(baseline_brier,5), "probability_by_score_decile": [round(v,5) for v in values] if brier < baseline_brier else None, "reason": "Passed held-out Brier comparison; still no guarantee of profitability." if brier < baseline_brier else "Did not outperform constant-rate baseline on held-out weeks."})
+            output.update({"status": "validated" if brier < baseline_brier else "unavailable", "train_weeks":len(train), "test_weeks":len(test), "train_players":len(training), "test_players":len(testing), "holdout_brier":round(brier,5), "holdout_baseline_brier":round(baseline_brier,5), "probability_by_score_decile": [round(v,5) for v in values] if brier < baseline_brier else None, "train_count_by_score_decile": bucket_counts, "supported_score_deciles": supported_buckets, "reason": "Passed held-out Brier comparison; still no guarantee of profitability." if brier < baseline_brier else "Did not outperform constant-rate baseline on held-out weeks."})
     DEST.parent.mkdir(parents=True, exist_ok=True)
     DEST.write_text(json.dumps(output, indent=2)+"\n")
     print("TD probability model:", output["status"], "|", output["reason"])
