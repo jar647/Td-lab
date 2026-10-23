@@ -231,6 +231,11 @@ def main():
                 'challenger_features_complete':bool(frozen_players and all(p.get('goalLine5') is not None and p.get('recentRz2') is not None for p in frozen_players if p.get('availability')=='ROSTER_ACTIVE'))})
         except (ValueError,TypeError,KeyError) as exc:
             print(f'Invalid frozen snapshot: {exc}',file=sys.stderr)
+    snapshot_state['readiness']='ELIGIBLE' if snapshot_state['accuracy_eligible'] and snapshot_state['challenger_features_complete'] else ('BASELINE_ONLY' if snapshot_state['accuracy_eligible'] else 'NOT_ELIGIBLE')
+    if snapshot_state['readiness']=='ELIGIBLE':
+        print(f"MODEL BATTLE READY: Week {meta['week']} frozen before first game day with experimental features for all roster-active candidates")
+    else:
+        print(f"MODEL BATTLE NOT READY: Week {meta['week']} status={snapshot_state['readiness']}; capture={snapshot_state['captured_at']}; frozen_candidates={snapshot_state['candidate_count']}",file=sys.stderr)
     meta['snapshot_diagnostics']=snapshot_state
     # Snapshot capture must precede kickoff of every game being evaluated.
     # A snapshot taken after any kickoff is retained for transparency but not
