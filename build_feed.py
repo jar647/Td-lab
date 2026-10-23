@@ -154,6 +154,34 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     player_pass_attempts=metric_group(passes,['posteam','pid'],'attempts')
     defense_pass_yards=metric_group(passes,['defteam'],'yards')
     defense_pass_attempts=metric_group(passes,['defteam'],'attempts')
+    # Last-three-team-games usage, sourced from the same completed PBP.
+    last_games=plays[['posteam','game_id','week']].drop_duplicates().sort_values('week').groupby('posteam').tail(3)
+    last_ids=set(last_games.game_id.astype(str))
+    last_counts=last_games.groupby('posteam').game_id.nunique().to_dict()
+    last_targets=targets[targets.game_id.astype(str).isin(last_ids)]
+    last_rushes=rushes[rushes.game_id.astype(str).isin(last_ids)]
+    last_passes=passes[passes.game_id.astype(str).isin(last_ids)] if not passes.empty else passes
+    last_target_counts=last_targets.groupby(['posteam','pid']).size().to_dict()
+    last_carry_counts=last_rushes.groupby(['posteam','pid']).size().to_dict()
+    last_pass_counts=last_passes.groupby(['posteam','pid']).size().to_dict() if not last_passes.empty else {}
+    last_rec_yards=metric_group(last_targets,['posteam','pid'],'yards')
+    last_rush_yards=metric_group(last_rushes,['posteam','pid'],'yards')
+    last_pass_yards=metric_group(last_passes,['posteam','pid'],'yards')
+    last_catches=metric_group(last_targets,['posteam','pid'],'receptions')
+    # Context for strength of opponents faced; not a calibrated adjustment.
+    def faced_offenses(defense):
+        return plays.loc[plays.defteam==defense,'posteam'].dropna().astype(str).unique()
+    def opponent_baseline(defense,position,kind):
+        foes=faced_offenses(defense)
+        if len(foes)<2:return None
+        source={'PASS':passes,'RUSH':rushes,'REC':targets,'CATCH':targets}[kind]
+        if source.empty:return None
+        subset=source[source.posteam.isin(foes)]
+        if kind in ('RUSH','REC','CATCH'):subset=subset[subset.pos==position]
+        col='receptions' if kind=='CATCH' else 'yards'
+        sums=subset.groupby('posteam')[col].sum().to_dict()
+        values=[sums.get(t,0)/offense_games[t] for t in foes if offense_games.get(t)]
+        return mean(sum(values)/len(values)) if values else None
     # PFR snap records identify players by PFR ID, not GSIS ID. Join only
     # through an explicit roster PFR identifier; never fuzzy-match names.
     snap_share_by_player={}
@@ -250,6 +278,19 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     'playerRecYards':mean(player_rec_yards.get((team,pid),0)/og) if position!='QB' else None,
                     'playerReceptions':mean(player_receptions.get((team,pid),0)/og) if position!='QB' else None,
                     'defReceptionsAllowed':mean(defense_receptions.get((opp,position),0)/dg) if position!='QB' else None,
+                    'recent3Games':last_counts.get(team,0),
+                    'recent3Targets':mean(last_target_counts.get((team,pid),0)/last_counts[team]) if last_counts.get(team) else None,
+                    'recent3Carries':mean(last_carry_counts.get((team,pid),0)/last_counts[team]) if last_counts.get(team) else None,
+                    'recent3PassAttempts':mean(last_pass_counts.get((team,pid),0)/last_counts[team]) if last_counts.get(team) and position=='QB' else None,
+                    'recent3PassYards':mean(last_pass_yards.get((team,pid),0)/last_counts[team]) if last_counts.get(team) and position=='QB' else None,
+                    'recent3RushYards':mean(last_rush_yards.get((team,pid),0)/last_counts[team]) if last_counts.get(team) else None,
+                    'recent3RecYards':mean(last_rec_yards.get((team,pid),0)/last_counts[team]) if last_counts.get(team) and position!='QB' else None,
+                    'recent3Receptions':mean(last_catches.get((team,pid),0)/last_counts[team]) if last_counts.get(team) and position!='QB' else None,
+                    'opponentOffenseBaselinePass':opponent_baseline(opp,position,'PASS') if position=='QB' else None,
+                    'opponentOffenseBaselineRush':opponent_baseline(opp,position,'RUSH'),
+                    'opponentOffenseBaselineRec':opponent_baseline(opp,position,'REC') if position!='QB' else None,
+                    'opponentOffenseBaselineCatch':opponent_baseline(opp,position,'CATCH') if position!='QB' else None,
+                    'injuryReportStatus':injury_status.get(pid,'NOT_REPORTED'),
                     'goalLine5':mean(player_inside5.get((team,pid),0)/og),
                     'recentRz2':mean(recent_player_events.get((team,pid),0)/recent_offense_games[team]) if recent_offense_games.get(team,0)>0 else None,
                     'recentRz2Games':int(recent_offense_games.get(team,0)),
