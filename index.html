@@ -151,16 +151,25 @@ function renderPropMatchups(){
   const d=.6*cap(r[cfg.def],cfg.defCap)+.4*cap(r[cfg.volume],cfg.volumeCap);
   const o=.6*cap(r[cfg.player],cfg.playerCap)+.4*cap(r[cfg.usage],cfg.usageCap);
   const score=Math.round(100*(.5*d+.5*o));
-  const label=d>=.45&&o>=.45&&score>=65?'🔥 PRIME MATCHUP':d>=.45&&o>=.45?'STRONG MATCHUP':o>=.45?'LEAN':'LOW PRIORITY';
-  return {r,score,label};
+  // Trend adjustment is capped at six points; defense and usage gates still apply.
+  const trendKey={PASS:'recent3PassAttempts',RUSH:'recent3Carries',REC:'recent3Targets',CATCH:'recent3Targets'}[propCategory];
+  const trend=r[trendKey],base=r[cfg.usage];
+  const trendRatio=trend!=null&&base>0?trend/base:null;
+  const trendAdjustment=trendRatio==null?0:Math.max(-6,Math.min(6,Math.round((trendRatio-1)*20)));
+  const adjustedScore=Math.max(0,Math.min(100,score+trendAdjustment));
+  const adjustedLabel=d>=.45&&o>=.45&&adjustedScore>=65?'🔥 PRIME MATCHUP':d>=.45&&o>=.45?'STRONG MATCHUP':o>=.45?'LEAN':'LOW PRIORITY';
+  return {r,score:adjustedScore,label:adjustedLabel,trendRatio};
  }).sort((a,b)=>b.score-a.score);
+ const trendText=x=>x.trendRatio==null?'Trend unavailable':x.trendRatio>=1.15?'📈 Usage rising':x.trendRatio<=.85?'📉 Usage falling':'➡️ Usage stable';
+ const contextKey={PASS:'opponentOffenseBaselinePass',RUSH:'opponentOffenseBaselineRush',REC:'opponentOffenseBaselineRec',CATCH:'opponentOffenseBaselineCatch'}[propCategory];
+ const why=x=>'Why: opponent allows '+escapeHTML(x.r[cfg.def])+' '+cfg.unit+'/game; player averages '+escapeHTML(x.r[cfg.usage])+' opportunities/game. '+trendText(x)+(x.r[contextKey]!=null?'. Opponents faced average '+escapeHTML(x.r[contextKey])+' '+cfg.unit+'/game.':'')+(x.r.injuryReportStatus&&x.r.injuryReportStatus!=='NOT_REPORTED'?'. Injury report: '+escapeHTML(x.r.injuryReportStatus):'');
  const top=document.getElementById('propTopDawg');
  if(top){
   const winner=ranked.find(x=>x.label==='🔥 PRIME MATCHUP');
   const categoryNames={PASS:'PASSING YARDS',RUSH:'RUSHING YARDS',REC:'RECEIVING YARDS',CATCH:'RECEPTIONS'};
   top.innerHTML=winner?'<div style="border:1px solid #00c97a;background:#112b20;border-radius:13px;padding:14px"><div style="font-size:12px;font-weight:900;color:#6dffc2">🏆 '+categoryNames[propCategory]+' · TOP DAWG OF THE WEEK</div><div class="row" style="margin-top:8px"><div><h3 style="font-size:20px;color:white;margin:0">'+escapeHTML(winner.r.player)+'</h3><div class="muted">'+escapeHTML(winner.r.pos)+' · '+escapeHTML(winner.r.team)+' vs '+escapeHTML(winner.r.opp)+'</div></div><b class="score">'+winner.score+'/100</b></div><div style="font-weight:850;color:#00e28a;margin:9px 0">🔥 PRIME MATCHUP</div><div class="statsline">Defense: '+escapeHTML(winner.r[cfg.def])+' '+cfg.unit+'/game · '+escapeHTML(winner.r[cfg.volume])+' opportunities/game</div><div class="statsline">Player: '+escapeHTML(winner.r[cfg.player])+' '+cfg.unit+'/game · '+escapeHTML(winner.r[cfg.usage])+' opportunities/game</div></div>':'<div class="empty">🏆 No PRIME MATCHUP qualifies for '+categoryNames[propCategory]+' this week. No Top Dawg awarded.</div>';
  }
- el.innerHTML=ranked.length?ranked.slice(0,15).map(({r,score,label},i)=>'<div class="matchrow"><div class="row"><div style="flex:1"><b>'+(i+1)+'. '+escapeHTML(r.player)+'</b> <span class="pill">'+escapeHTML(r.pos)+'</span><div class="muted">'+escapeHTML(r.team)+' vs '+escapeHTML(r.opp)+'</div></div><b style="color:#6dffc2">'+score+'/100</b></div><div style="margin:6px 0;font-weight:800;color:#6dffc2">'+label+'</div><div class="statsline">Defense allows '+escapeHTML(r[cfg.def])+' '+cfg.unit+'/game · '+escapeHTML(r[cfg.volume])+' opportunities/game</div><div class="statsline">Player averages '+escapeHTML(r[cfg.player])+' '+cfg.unit+'/game · '+escapeHTML(r[cfg.usage])+' opportunities/game</div></div>').join(''):'<p class="muted">No eligible players with complete '+cfg.unit+' metrics in the current feed.</p>';
+ el.innerHTML=ranked.length?ranked.slice(0,15).map(({r,score,label},i)=>'<div class="matchrow"><div class="row"><div style="flex:1"><b>'+(i+1)+'. '+escapeHTML(r.player)+'</b> <span class="pill">'+escapeHTML(r.pos)+'</span><div class="muted">'+escapeHTML(r.team)+' vs '+escapeHTML(r.opp)+'</div></div><b style="color:#6dffc2">'+score+'/100</b></div><div style="margin:6px 0;font-weight:800;color:#6dffc2">'+label+'</div><div class="statsline">'+why({r,trendRatio:ranked[i].trendRatio})+'</div><div class="statsline">Defense allows '+escapeHTML(r[cfg.def])+' '+cfg.unit+'/game · '+escapeHTML(r[cfg.volume])+' opportunities/game</div><div class="statsline">Player averages '+escapeHTML(r[cfg.player])+' '+cfg.unit+'/game · '+escapeHTML(r[cfg.usage])+' opportunities/game</div></div>').join(''):'<p class="muted">No eligible players with complete '+cfg.unit+' metrics in the current feed.</p>';
 }
 function renderSimpleMatchups(){
  const el=document.getElementById('simpleRankings');if(!el)return;
