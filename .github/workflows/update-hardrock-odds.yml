@@ -21,11 +21,13 @@ jobs:
         env:
           ODDSPAPI_API_KEY: ${{ secrets.ODDSPAPI_API_KEY }}
         run: python scripts/build_hardrock_feed.py
+      - name: Archive timestamped prices for forward testing
+        run: python scripts/archive_odds.py
       - name: Commit feed if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/hardrock_anytime_td.json
+          git add data/hardrock_anytime_td.json data/odds_history/
           if ! git diff --cached --quiet; then
             git commit -m "Refresh verified Hard Rock anytime TD prices"
             git push
