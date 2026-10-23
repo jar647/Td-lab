@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - 'build_feed.py'
+      - 'scripts/calibrate_td.py'
+      - 'tests/**'
       - '.github/workflows/update-feed.yml'
   pull_request:
     branches: [main]
@@ -29,6 +31,8 @@ jobs:
           cache: pip
       - name: Install dependencies
         run: pip install -r requirements.txt
+      - name: Test touchdown probability calibration
+        run: python -m unittest discover -s tests -p 'test_*.py'
       - name: Build verified feed
         run: python build_feed.py
       - name: Calibrate touchdown probabilities from eligible graded weeks
