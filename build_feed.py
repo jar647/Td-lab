@@ -112,6 +112,21 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None)
     recent_player_events=recent_events.groupby(['team','player_id']).size().to_dict()
     player_td=events.groupby(['defense','pos']).td.sum().to_dict()
     def_opp=events.groupby(['defense','pos']).size().to_dict()
+    # Position-specific receiving production and target volume from valid pass attempts.
+    # PBP does not measure snap participation; do not invent snap share.
+    receiving_available='receiving_yards' in plays.columns
+    targets=plays[(pd.to_numeric(plays.pass_attempt,errors='coerce')==1)&plays.receiver_player_id.notna()].copy()
+    targets['pid']=targets.receiver_player_id.astype(str)
+    targets['pos']=targets.pid.map(pos_by_id)
+    targets=targets[targets.pos.isin(['RB','WR','TE'])]
+    targets['yards']=pd.to_numeric(targets.receiving_yards,errors='coerce').fillna(0).clip(lower=0) if receiving_available else 0
+    targets['redzone']=pd.to_numeric(targets.yardline_100,errors='coerce').between(1,20).astype(int)
+    player_targets=targets.groupby(['posteam','pid']).size().to_dict()
+    team_targets=targets.groupby('posteam').size().to_dict()
+    defense_position_targets=targets.groupby(['defteam','pos']).size().to_dict()
+    defense_position_yards=targets.groupby(['defteam','pos']).yards.sum().to_dict()
+    defense_position_rz_targets=targets.groupby(['defteam','pos']).redzone.sum().to_dict()
+    player_rz_targets=targets.groupby(['posteam','pid']).redzone.sum().to_dict()
     # Use real opponent slate and only players whose latest roster team matches it.
     roster_team=dict(zip(roster.gsis_id.astype(str),roster.team.astype(str)))
     injury_status=availability(injuries,week)
@@ -173,6 +188,12 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None)
                     'games':games,'tdallowed':mean(player_td.get((opp,position),0)/dg),
                     'rzallowed':mean(def_opp[(opp,position)]/dg),
                     'rzshare':mean(share),'playerRz':mean(player_events[(team,pid)]/og),
+                    'defRecYardsAllowed':mean(defense_position_yards.get((opp,position),0)/dg) if receiving_available and position!='QB' else None,
+                    'defTargetsAllowed':mean(defense_position_targets.get((opp,position),0)/dg) if position!='QB' else None,
+                    'defRzTargetsAllowed':mean(defense_position_rz_targets.get((opp,position),0)/dg) if position!='QB' else None,
+                    'playerTargets':mean(player_targets.get((team,pid),0)/og) if position!='QB' else None,
+                    'playerTargetShare':mean(100*player_targets.get((team,pid),0)/team_targets[team]) if position!='QB' and team_targets.get(team,0)>0 else None,
+                    'playerRzTargets':mean(player_rz_targets.get((team,pid),0)/og) if position!='QB' else None,
                     'goalLine5':mean(player_inside5.get((team,pid),0)/og),
                     'recentRz2':mean(recent_player_events.get((team,pid),0)/recent_offense_games[team]) if recent_offense_games.get(team,0)>0 else None,
                     'recentRz2Games':int(recent_offense_games.get(team,0)),
