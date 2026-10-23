@@ -58,16 +58,47 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     week = int(upcoming.iloc[0].week)
     slate = upcoming[upcoming.week == week]
     if slate.empty: raise RuntimeError('No games in upcoming week')
-    plays = pbp[(pd.to_numeric(pbp.season,errors='coerce') == SEASON) &
-                (pd.to_numeric(pbp.week,errors='coerce') < week) &
-                (pd.to_numeric(pbp.week,errors='coerce') >= max(1,week-WINDOW))].copy()
-    plays = plays[plays.posteam.notna() & plays.defteam.notna()]
+    # Select the last WINDOW completed games for each defense, including bye weeks.
+    # A game counts only if it has recorded nflverse play-by-play.
+    eligible = pbp[(pd.to_numeric(pbp.season,errors='coerce') == SEASON) &
+                   (pd.to_numeric(pbp.week,errors='coerce') < week)].copy()
+    eligible = eligible[eligible.posteam.notna() & eligible.defteam.notna()]
+    completed = eligible[['defteam','game_id','week']].drop_duplicates()
+    completed['week'] = pd.to_numeric(completed.week,errors='coerce')
+    completed = completed.dropna(subset=['week']).sort_values(['week','game_id'])
+    selected = completed.groupby('defteam',sort=False).tail(WINDOW)
+    # Every play is assigned to exactly one defense, so each defense's
+    # yardage, targets and opportunities use its own last five games.
+    game_keys = pd.MultiIndex.from_frame(selected[['defteam','game_id']])
+    play_keys = pd.MultiIndex.from_frame(eligible[['defteam','game_id']])
+    plays = eligible[play_keys.isin(game_keys)].copy()
+    if selected.groupby('defteam').game_id.nunique().lt(WINDOW).any():
+        missing=selected.groupby('defteam').game_id.nunique()
+        print(f'Note: fewer than {WINDOW} completed games for some defenses: {missing[missing < WINDOW].to_dict()}',file=sys.stderr)
     if plays.empty: raise RuntimeError('No current-season completed play-by-play in lookback window')
     roster = rosters.copy()
     if 'season' in roster: roster=roster[pd.to_numeric(roster.season,errors='coerce')==SEASON]
     if 'week' in roster: roster=roster.sort_values('week')
     roster=roster.dropna(subset=['gsis_id','position']).drop_duplicates('gsis_id',keep='last')
     pos_by_id=dict(zip(roster.gsis_id.astype(str),roster.position.astype(str)))
+    # Use each player's nflverse weekly roster position for the actual play week.
+    weekly_positions={}
+    if weekly_rosters is not None and not weekly_rosters.empty:
+        required(weekly_rosters,['gsis_id','week','position'],'weekly rosters')
+        wr=weekly_rosters.copy()
+        if 'season' in wr:
+            wr=wr[pd.to_numeric(wr.season,errors='coerce')==SEASON]
+        wr=wr.dropna(subset=['gsis_id','week','position'])
+        wr['week']=pd.to_numeric(wr.week,errors='coerce')
+        wr=wr.dropna(subset=['week'])
+        wr['position']=wr.position.astype(str).str.upper().str.strip()
+        wr=wr[wr.position.isin(('QB','RB','WR','TE'))]
+        weekly_positions={(str(r.gsis_id),int(r.week)):str(r.position)
+                          for r in wr.drop_duplicates(['gsis_id','week'],keep='last').itertuples()}
+    def play_position(pid, play_week):
+        if pd.isna(pid): return None
+        return weekly_positions.get((str(pid),int(play_week))) or pos_by_id.get(str(pid))
+
     # Explicit inactive roster designations are stronger than missing injury reports.
     # Unknown or undocumented roster statuses are not assumed active.
     roster_status={}
@@ -90,7 +121,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
             pid=p.receiver_player_id; name=p.receiver_player_name; kind='REC'
         else: continue
         if pd.isna(pid) or pd.isna(name): continue
-        position=pos_by_id.get(str(pid),'')
+        position=play_position(pid,p.week) or ''
         if position not in ('QB','RB','WR','TE'): continue
         td = (pd.to_numeric(p.touchdown,errors='coerce')==1 and str(p.td_team)==str(p.posteam))
         rows.append({'week':int(p.week),'game_id':str(p.game_id),'team':str(p.posteam),'defense':str(p.defteam),
@@ -121,7 +152,11 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     receiving_available=True
     targets=plays[(pd.to_numeric(plays.pass_attempt,errors='coerce')==1)&plays.receiver_player_id.notna()].copy()
     targets['pid']=targets.receiver_player_id.astype(str)
-    targets['pos']=targets.pid.map(pos_by_id)
+    targets['pos']=[play_position(pid,w) for pid,w in zip(targets.pid,targets.week)]
+    unknown_targets=targets[~targets.pos.isin(['RB','WR','TE'])]
+    if not unknown_targets.empty:
+        examples=unknown_targets[['game_id','receiver_player_id','week']].head(5).to_dict('records')
+        print(f'WARNING: {len(unknown_targets)} unclassified receiver targets excluded; examples: {examples}',file=sys.stderr)
     targets=targets[targets.pos.isin(['RB','WR','TE'])]
     targets['yards']=pd.to_numeric(targets.receiving_yards,errors='coerce')
     # Negative completed-play yardage must count. Missing completed-play
@@ -155,7 +190,11 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
         return data.groupby(keys)[col].sum().to_dict() if not data.empty else {}
     rushes=plays[(pd.to_numeric(plays.rush_attempt,errors='coerce')==1)&plays.rusher_player_id.notna()].copy()
     rushes['pid']=rushes.rusher_player_id.astype(str)
-    rushes['pos']=rushes.pid.map(pos_by_id)
+    rushes['pos']=[play_position(pid,w) for pid,w in zip(rushes.pid,rushes.week)]
+    unknown_rushes=rushes[~rushes.pos.isin(['QB','RB','WR','TE'])]
+    if not unknown_rushes.empty:
+        examples=unknown_rushes[['game_id','rusher_player_id','week']].head(5).to_dict('records')
+        print(f'WARNING: {len(unknown_rushes)} unclassified rushes excluded; examples: {examples}',file=sys.stderr)
     rushes=rushes[rushes.pos.isin(['QB','RB','WR','TE'])]
     rushes['yards']=pd.to_numeric(rushes.rushing_yards,errors='coerce').fillna(0) if 'rushing_yards' in rushes else 0
     rushes['attempts']=1
@@ -214,10 +253,11 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
             audit_rows.append(record)
     if len(defense_games)!=32 or len(audit_rows)!=128:
         raise RuntimeError(f'Incomplete defense coverage: {len(defense_games)} teams / {len(audit_rows)} position records; refusing publication')
-    audit={'season':SEASON,'week':week,'lookback_weeks':WINDOW,
+    audit={'season':SEASON,'week':week,'lookback_games':WINDOW,
            'source':'nflverse PBP','independent_external_source_verified':False,
            'verification':'INTERNAL_RECONCILIATION_ONLY',
-           'definitions':'All defensive rates use defense games played in the rolling sample; positional receiving/rushing rates aggregate all players at the listed position.',
+           'definitions':'Defensive rates use each defense\'s last five completed games (or fewer if not yet played); positional receiving/rushing rates aggregate players at the listed position.',
+           'classification_exclusions':{'receiver_targets':int(len(unknown_targets)),'rushes':int(len(unknown_rushes))},
            'rows':audit_rows}
     # Last-three-team-games usage, sourced from the same completed PBP.
     last_games=plays[['posteam','game_id','week']].drop_duplicates().sort_values('week').groupby('posteam').tail(3)
@@ -367,7 +407,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     return result, {'season':SEASON,'week':week,'generated_at':now.isoformat(),
                     'matchups':len(result),'source':'nflverse play-by-play and rosters',
                     'odds_source':None,'probability_model':None,
-                    'lookback_weeks':WINDOW,'availability_diagnostics':{'injuries':injury_diagnostics,'weekly_rosters':weekly_diagnostics,'excluded':excluded,'unverified_output':sum(r['availability']=='UNVERIFIED' for r in result)},'injury_policy':'Current-week OUT excluded; doubtful/questionable flagged; weekly RES/DEV/CUT/RET/EXE/TRD/TRT excluded. ROSTER_ACTIVE only confirms active roster membership, not game-day clearance; late inactives unverified.','status':'ready'}
+                    'lookback_games':WINDOW,'availability_diagnostics':{'injuries':injury_diagnostics,'weekly_rosters':weekly_diagnostics,'excluded':excluded,'unverified_output':sum(r['availability']=='UNVERIFIED' for r in result)},'injury_policy':'Current-week OUT excluded; doubtful/questionable flagged; weekly RES/DEV/CUT/RET/EXE/TRD/TRT excluded. ROSTER_ACTIVE only confirms active roster membership, not game-day clearance; late inactives unverified.','status':'ready'}
 
 def main():
     now = datetime.now(timezone.utc)
