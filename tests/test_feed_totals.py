@@ -8,7 +8,9 @@ class FeedTotalsTests(unittest.TestCase):
            'pass_attempts_total':30,'pass_attempts_per_game':30,
            'rush_yards_total':12,'rush_yards_per_game':12,
            'rush_attempts_total':3,'rush_attempts_per_game':3}
-        p={'player_id':'p1','player':'QB','team':'DAL','opp':'PHI','pos':'QB','games':1,
+        p={'seasonGamesPlayed':1,'last5GamesPlayed':1,'playerAppearancesVerified':True,
+           'seasonAverages':{'passYards':250,'passAttempts':30,'rushYards':12,'rushAttempts':3},
+           'player_id':'p1','player':'QB','team':'DAL','opp':'PHI','pos':'QB','games':1,
            'playerPassYards':250,'playerPassAttempts':30,'playerRushYards':12,
            'playerCarries':3,'playerRz':1,'defPassYardsAllowed':250,
            'defPassAttemptsAllowed':30,'defRushYardsAllowed':12,
@@ -28,6 +30,6 @@ class FeedTotalsTests(unittest.TestCase):
         p,d=self.fixture();p['defPassYardsAllowed']=260
         with self.assertRaises(RuntimeError):audit([p],{'rows':[d]})
     def test_missing_game_blocks(self):
-        p,d=self.fixture();p['last5GameStats']=[]
+        p,d=self.fixture();p['seasonGamesPlayed']=0
         with self.assertRaises(RuntimeError):audit([p],{'rows':[d]})
 if __name__=='__main__':unittest.main()
