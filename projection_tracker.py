@@ -37,6 +37,12 @@ def main():
         pbp=frame(nflreadpy.load_pbp([season]))
         sch=frame(nflreadpy.load_schedules([season]))
         snaps=frame(nflreadpy.load_snap_counts([season]))
+        rosters=frame(nflreadpy.load_rosters([season]))
+        if 'season' in rosters:rosters=rosters[rosters.season==season]
+        roster_map=rosters[['gsis_id','pfr_id']].dropna().drop_duplicates('pfr_id',keep=False) if {'gsis_id','pfr_id'}.issubset(rosters.columns) else pd.DataFrame(columns=['gsis_id','pfr_id'])
+        if {'pfr_player_id','offense_pct','team'}.issubset(snaps.columns):
+            snaps=snaps.merge(roster_map,left_on='pfr_player_id',right_on='pfr_id',how='inner')
+            snaps=snaps[pd.to_numeric(snaps.offense_pct,errors='coerce')>0]
         if 'season_type' in pbp:pbp=pbp[pbp.season_type.astype(str)=='REG']
         if 'no_play' in pbp:pbp=pbp[pd.to_numeric(pbp.no_play,errors='coerce').fillna(0)==0]
         if 'season' in snaps:snaps=snaps[snaps.season==season]
@@ -60,7 +66,7 @@ def main():
                 gameid=str(g.game_id)
                 completed=pd.notna(g.get('home_score')) and pd.notna(g.get('away_score')) and gameid in set(weekplays.game_id.astype(str))
                 # Snap counts confirm an appearance, including zero-stat games.
-                appeared=bool(completed and not snaps[(snaps.week==week)&(snaps.game_id.astype(str)==gameid)&(snaps.player.astype(str)==pid)].empty) if {'week','game_id','player'}.issubset(snaps.columns) else False
+                appeared=bool(completed and not snaps[(snaps.week==week)&(snaps.team.astype(str)==team)&(snaps.gsis_id.astype(str)==pid)].empty) if {'week','team','gsis_id'}.issubset(snaps.columns) else False
                 plays=weekplays[weekplays.game_id.astype(str)==gameid]
                 for market,(_,_,_,key) in MARKETS.items():
                     if market=='PASS' and r.get('pos')!='QB':continue
