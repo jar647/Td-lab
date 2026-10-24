@@ -1,0 +1,54 @@
+name: Verify defensive metrics
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'build_feed.py'
+      - 'index.html'
+      - '.github/workflows/verify-defense.yml'
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install feed dependencies
+        run: pip install -r requirements.txt
+      - name: Validate Python and metric fields
+        run: |
+          python -m py_compile build_feed.py
+          python - <<'PY'
+          from pathlib import Path
+          src=Path('build_feed.py').read_text()
+          ui=Path('index.html').read_text()
+          fields=['defenseRecent5','defenseOpponentRatio','defenseYardsPerAttempt','defenseYardsPerTarget']
+          for field in fields:
+              assert field in src, f'Missing feed field: {field}'
+              assert field in ui, f'Missing UI field: {field}'
+          assert 'not yet used in projection' in ui
+          print('PASS: metric fields, display, and projection isolation')
+          PY
+      - name: Rebuild NFL data with defensive metrics
+        run: python build_feed.py
+      - name: Verify generated data
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          rows=json.loads(Path('data/matchups.json').read_text())
+          assert rows, 'No player records'
+          fields=['defenseRecent5','defenseOpponentRatio','defenseYardsPerAttempt','defenseYardsPerTarget']
+          for field in fields:
+              assert all(field in row for row in rows), f'Missing field: {field}'
+          for market in ['PASS','RUSH','REC','CATCH']:
+              available=[row['defenseRecent5'][market] for row in rows if row['defenseRecent5'].get(market) is not None]
+              assert available, f'No recent defensive values for {market}'
+              assert all(v>=0 for v in available), f'Negative defensive allowance: {market}'
+              print(market,'recent values:',len(available),'min/max:',min(available),max(available))
+          print('PASS: rebuilt',len(rows),'player records with defensive metrics')
+          PY
