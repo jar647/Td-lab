@@ -355,6 +355,8 @@ function renderGameSGP(){
  ];
  for(const r of autoRecords){
   if(gameKey(r)!==selected||r.market!=='ATD'||r.availability!=='ROSTER_ACTIVE'||r.playerAppearancesVerified===false||manuallyInactive(r)||Number(r.games)<3)continue;
+  // Avoid projecting teammate volume from an injury-depleted sample without review.
+  if(Array.isArray(r.possibleReturningTeammates)&&r.possibleReturningTeammates.length)continue;
   if(!r.player||/^00-\\d+$/.test(String(r.player)))continue;
   for(const d of defs){
    if(!d.pos.includes(r.pos))continue;
@@ -396,6 +398,13 @@ function renderGameSGP(){
  const label=filter.options[filter.selectedIndex]?.textContent||'Selected matchup';
  panel.replaceChildren();
  const heading=document.createElement('h2');heading.textContent='🎟️ SGP RESEARCH CARD · '+label;panel.appendChild(heading);
+ const impacted=autoRecords.filter(r=>gameKey(r)===selected&&Array.isArray(r.possibleReturningTeammates)&&r.possibleReturningTeammates.length);
+ if(impacted.length){
+  const names=[...new Set(impacted.flatMap(r=>r.possibleReturningTeammates.map(p=>p.player+' ('+p.position+')')))];
+  const warning=document.createElement('p');warning.className='status';
+  warning.textContent='⚠️ POSSIBLE RETURNING PLAYERS: '+names.join(', ')+'. Return not confirmed. Teammate props withheld pending game-day availability and workload review.';
+  panel.appendChild(warning);
+ }
  const note=document.createElement('p');note.className='muted';note.textContent='Matchup-first legs: opponent allowance must support the player average, with the proposed line hit in at least 60% of up to five actual games. Up to two different prop markets per player, with distinct players preferred. Same-player legs may be correlated; no forced QB or payout-driven picks. Sportsbook availability unverified.';panel.appendChild(note);
  if(chosen.length<2){
   const p=document.createElement('p');p.className='status';p.textContent='PASS: Not enough eligible players with complete data for a 2-leg SGP. No invented picks.';panel.appendChild(p);return;
