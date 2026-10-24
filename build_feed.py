@@ -342,6 +342,40 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
         sums=subset.groupby('posteam')[col].sum().to_dict()
         values=[sums.get(t,0)/offense_games[t] for t in foes if offense_games.get(t)]
         return mean(sum(values)/len(values)) if values else None
+    # Experimental defensive context. Uses only games already in the feed's
+    # completed-game window; do not apply as a live projection weight yet.
+    defense_recent={}
+    defense_efficiency={}
+    defense_opponent_adjusted={}
+    for kind,source,col in [('PASS',passes,'yards'),('RUSH',rushes,'yards'),('REC',targets,'yards'),('CATCH',targets,'receptions')]:
+        if source.empty:continue
+        keys=['defteam','game_id']+(['pos'] if kind!='PASS' else [])
+        grouped=source.groupby(keys,dropna=False)[col].sum().reset_index()
+        # Include zero-output games in denominators by starting with the
+        # defense's verified completed games, not only games with events.
+        for defense,defgames in played.groupby('defteam'):
+            game_ids=set(defgames.game_id.astype(str))
+            positions=['QB'] if kind=='PASS' else ['QB','RB','WR','TE']
+            for position in positions:
+                sub=grouped[grouped.defteam==defense]
+                if kind!='PASS':sub=sub[sub.pos==position]
+                sums=dict(zip(sub.game_id.astype(str),sub[col].astype(float)))
+                ordered=plays[(plays.defteam==defense)&(plays.game_id.astype(str).isin(game_ids))][['game_id','week']].drop_duplicates().sort_values(['week','game_id'])
+                vals=[sums.get(str(gid),0.0) for gid in ordered.game_id]
+                if not vals:continue
+                k=(str(defense),position,kind)
+                defense_recent[k]=round(sum(vals[-5:])/len(vals[-5:]),3)
+                season_allowed=sum(vals)/len(vals)
+                # Opponent baseline is contextual, not a schedule-adjusted
+                # prediction. Do not divide by zero or imply calibration.
+                opponent=opponent_baseline(defense,position,kind)
+                defense_opponent_adjusted[k]=round(season_allowed/opponent,3) if opponent is not None and opponent>0 else None
+                if kind=='PASS':
+                    attempts=float(defense_pass_attempts.get(str(defense),0))
+                    defense_efficiency[k]=round(float(defense_pass_yards.get(str(defense),0))/attempts,3) if attempts>0 else None
+                elif kind=='REC':
+                    attempts=float(defense_position_targets.get((str(defense),position),0))
+                    defense_efficiency[k]=round(float(defense_position_yards.get((str(defense),position),0))/attempts,3) if attempts>0 else None
     # PFR snap records identify players by PFR ID, not GSIS ID. Join only
     # through an explicit roster PFR identifier; never fuzzy-match names.
     snap_share_by_player={}
@@ -552,6 +586,10 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     'recent3RushYards':mean(last_rush_yards.get((team,pid),0)/last_counts[team]) if last_counts.get(team) else None,
                     'recent3RecYards':mean(last_rec_yards.get((team,pid),0)/last_counts[team]) if last_counts.get(team) and position!='QB' else None,
                     'recent3Receptions':mean(last_catches.get((team,pid),0)/last_counts[team]) if last_counts.get(team) and position!='QB' else None,
+                    'defenseRecent5':{kind:defense_recent.get((opp,position,kind)) for kind in ('PASS','RUSH','REC','CATCH')},
+                    'defenseOpponentRatio':{kind:defense_opponent_adjusted.get((opp,position,kind)) for kind in ('PASS','RUSH','REC','CATCH')},
+                    'defenseYardsPerAttempt':defense_efficiency.get((opp,position,'PASS')) if position=='QB' else None,
+                    'defenseYardsPerTarget':defense_efficiency.get((opp,position,'REC')) if position!='QB' else None,
                     'opponentOffenseBaselinePass':opponent_baseline(opp,position,'PASS') if position=='QB' else None,
                     'opponentOffenseBaselineRush':opponent_baseline(opp,position,'RUSH'),
                     'opponentOffenseBaselineRec':opponent_baseline(opp,position,'REC') if position!='QB' else None,
