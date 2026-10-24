@@ -384,7 +384,7 @@ function renderGameSGP(){
   const key=x.r.player_id||x.r.player;
   if(used.has(key))continue;
   used.add(key);chosen.push(x);
-  if(chosen.length===3)break;
+  if(chosen.length===5)break;
  }
  const label=filter.options[filter.selectedIndex]?.textContent||'Selected matchup';
  panel.replaceChildren();
