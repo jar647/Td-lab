@@ -360,12 +360,22 @@ function renderGameSGP(){
    if(!d.pos.includes(r.pos))continue;
    const avg=Number(r[d.field]),allowed=Number(r[d.def]);
    if(r[d.field]==null||r[d.def]==null||!Number.isFinite(avg)||!Number.isFinite(allowed)||avg<=0||allowed<=0)continue;
-   // A conservative research ALT must sit below both the player's rate and defense allowance.
-   const limit=Math.min(avg*(d.key==='CATCH'?.90:.85),allowed*.9);
-   const line=d.thresholds.filter(v=>v<=limit).pop();
+   // Never raise a threshold to chase payout; require favorable opponent production.
+   if(allowed<avg*.9)continue;
+   const logField={PASS:'passYards',RUSH:'rushYards',REC:'recYards',CATCH:'receptions'}[d.key];
+   const logs=Array.isArray(r.last5GameStats)?r.last5GameStats.slice(-5):[];
+   const actual=logs.map(g=>g[logField]).filter(v=>v!=null&&Number.isFinite(Number(v))).map(Number);
+   if(actual.length<3)continue;
+   const eligibleLines=d.thresholds.filter(line=>{
+    if(line>avg*1.05||line>allowed*1.05)return false;
+    const hits=actual.filter(v=>v>=line).length;
+    return hits>=Math.ceil(actual.length*.6);
+   });
+   const line=eligibleLines.pop();
    if(!line)continue;
-   const quality=Math.min(avg/line,1.7)+Math.min(allowed/Math.max(avg,1),1.4)*.25+Math.min(line/Math.max(avg,1),1)*.3;
-   candidates.push({r,d,line,quality});
+   const hitRate=actual.filter(v=>v>=line).length/actual.length;
+   const quality=hitRate*.65+Math.min(allowed/avg,1.5)*.2+Math.min(line/avg,1)*.15;
+   candidates.push({r,d,line,quality,hitRate,logCount:actual.length});
   }
  }
  candidates.sort((a,b)=>b.quality-a.quality||String(a.r.player).localeCompare(String(b.r.player)));
@@ -379,7 +389,7 @@ function renderGameSGP(){
  const label=filter.options[filter.selectedIndex]?.textContent||'Selected matchup';
  panel.replaceChildren();
  const heading=document.createElement('h2');heading.textContent='🎟️ SGP RESEARCH CARD · '+label;panel.appendChild(heading);
- const note=document.createElement('p');note.className='muted';note.textContent='Suggested practical ALT targets using season averages and opponent allowances. Receptions start at 3+. These are not verified sportsbook offerings or a proven profitable parlay.';panel.appendChild(note);
+ const note=document.createElement('p');note.className='muted';note.textContent='Matchup-first legs: opponent allowance must support the player average, with the proposed line hit in at least 60% of up to five actual games. No forced QB or payout-driven picks. Sportsbook availability unverified.';panel.appendChild(note);
  if(chosen.length<2){
   const p=document.createElement('p');p.className='status';p.textContent='PASS: Not enough eligible players with complete data for a 2-leg SGP. No invented picks.';panel.appendChild(p);return;
  }
@@ -387,7 +397,7 @@ function renderGameSGP(){
  for(const x of chosen){
   const li=document.createElement('li');li.style.margin='10px 0';
   const strong=document.createElement('strong');strong.textContent=x.r.player+' · '+x.line+'+ '+x.d.unit;li.appendChild(strong);
-  const why=document.createElement('div');why.className='muted';why.textContent='Season average '+Number(x.r[x.d.field]).toFixed(1)+' · Opponent allows '+Number(x.r[x.d.def]).toFixed(1)+' per game to position';li.appendChild(why);list.appendChild(li);
+  const why=document.createElement('div');why.className='muted';why.textContent='Season average '+Number(x.r[x.d.field]).toFixed(1)+' · Opponent allows '+Number(x.r[x.d.def]).toFixed(1)+' per game to position · '+Math.round(x.hitRate*100)+'% hit rate ('+x.logCount+' games checked)';li.appendChild(why);list.appendChild(li);
  }
  panel.appendChild(list);
  const target=document.createElement('p');target.className='status';target.textContent='🎯 Target SGP payout: +400 (preferred range +350 to +500). Actual sportsbook odds are not available in this feed.';
