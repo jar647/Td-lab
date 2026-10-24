@@ -443,7 +443,10 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                 share=100*player_events[(team,pid)]/team_events[team]
                 health=injury_status.get(pid,'ROSTER_ACTIVE' if weekly_roster_codes.get(pid)=='ACT' else 'UNVERIFIED')
                 result.append({'player_id':pid,'availability':health,'player':p.player,'jersey_number':jersey_by_player.get(pid),'pos':position,'team':team,'opp':opp,
-                    'games':pg,'teamGames':og,'playerAppearancesVerified':snap_verified,'tdallowed':mean(player_td.get((opp,position),0)/dg),
+                    'games':pg,'teamGames':og,'playerAppearancesVerified':snap_verified,
+                    'teamTargetsTotal':int(team_targets.get(team,0)),
+                    'teamRzChancesTotal':int(team_events.get(team,0)),
+                    'tdallowed':mean(player_td.get((opp,position),0)/dg),
                     'rzallowed':mean(def_opp[(opp,position)]/dg),
                     'rzshare':mean(share),'playerRz':mean(player_events[(team,pid)]/pg),
                     'defRecYardsAllowed':mean(defense_position_yards.get((opp,position),0)/dg) if receiving_available and position!='QB' else None,
