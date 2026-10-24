@@ -22,9 +22,7 @@ def audit(records, defense):
         "playerPassAttempts":"passAttempts",
         "playerCarries":"rushAttempts",
         "playerTargets":"targets",
-        "playerRzTargets":"rzTargets",
-        "playerRz":"rzChances",
-    }
+      }
     defense_metrics={
         "defPassYardsAllowed":"pass_yards",
         "defPassAttemptsAllowed":"pass_attempts",
