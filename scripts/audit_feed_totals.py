@@ -39,6 +39,14 @@ def audit(records, defense):
         who=f'{p["team"]}/{p["player_id"]}'
         games=p.get("last5GameStats") or []
         denom=int(p["games"])
+        if p.get("last5GamesPlayed") != denom or not p.get("playerAppearancesVerified"):
+            errors.append(f"{who}: player appearances not verified")
+        if not 1<=int(p.get("seasonGamesPlayed",0))<=17:
+            errors.append(f"{who}: invalid season games played")
+        for field,metric in player_metrics.items():
+            if field in ("playerRz","playerRzTargets"):continue
+            if p.get(field) is not None and not close(p[field],p.get("last5Averages",{}).get(metric)):
+                errors.append(f"{who}: {field} differs from last-five appearance average")
         if not 1<=denom<=5: errors.append(f"{who}: invalid sample denominator")
         if len(games)!=denom: errors.append(f"{who}: {len(games)} chart games != {denom} team games")
         if len({g["gameId"] for g in games})!=len(games):
@@ -73,7 +81,7 @@ def audit(records, defense):
     if errors:raise RuntimeError("Feed audit failed ("+str(len(errors))+"): "+"; ".join(errors[:25]))
     return {"players_checked":len(records),"defensive_rows_checked":len(rows),
             "player_average_definition":"last five TEAM games, not confirmed player appearances",
-            "participation_verified":False,"external_boxscore_verified":False,
+            "participation_verified":True,"external_boxscore_verified":False,
             "status":"INTERNAL_TOTALS_RECONCILED"}
 def main():
     result=audit(json.loads((DATA/"matchups.json").read_text()),
