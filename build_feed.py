@@ -365,7 +365,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                 positive.groupby(['team','gsis_id']).offense_pct.mean().items()}
     # Actual appearances: positive offensive snaps, including zero-yard games.
     appearance_games={}
-    if snap_counts is not None and not snap_counts.empty and 'pfr_id' in roster.columns:
+    if snap_counts is not None and not snap_counts.empty and 'pfr_id' in roster.columns and {'season','week','offense_pct','team','pfr_player_id'}.issubset(snap_counts.columns):
         all_snaps=snap_counts.copy()
         all_snaps=all_snaps[(pd.to_numeric(all_snaps.season,errors='coerce')==SEASON)&
             (pd.to_numeric(all_snaps.week,errors='coerce')<week)]
