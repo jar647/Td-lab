@@ -53,7 +53,8 @@ def main():
             captured=pd.to_datetime(frozen.get('captured_at'),utc=True,errors='coerce')
             games=sch[(sch.week==week)&(sch.game_type.astype(str).str.upper()=='REG')]
             first=pd.to_datetime(games.gameday,utc=True,errors='coerce').min()
-            if pd.isna(captured) or pd.isna(first) or captured>=first:continue
+            if pd.isna(captured):continue
+            if 'game_id' not in frozen and (pd.isna(first) or captured>=first):continue
             weekplays=pbp[pbp.week==week]
             for r in frozen.get('players',[]):
                 if r.get('availability')!='ROSTER_ACTIVE' or not r.get('player_id'):continue
@@ -64,6 +65,10 @@ def main():
                 if len(game)!=1:continue
                 g=game.iloc[0]
                 gameid=str(g.game_id)
+                if frozen.get('game_id') is not None and str(frozen['game_id'])!=gameid:continue
+                if frozen.get('game_id') is not None:
+                    kickoff_day=pd.to_datetime(g.gameday,utc=True,errors='coerce')
+                    if pd.isna(kickoff_day) or captured>=kickoff_day:continue
                 completed=pd.notna(g.get('home_score')) and pd.notna(g.get('away_score')) and gameid in set(weekplays.game_id.astype(str))
                 # Snap counts confirm an appearance, including zero-stat games.
                 appeared=bool(completed and not snaps[(snaps.week==week)&(snaps.team.astype(str)==team)&(snaps.gsis_id.astype(str)==pid)].empty) if {'week','team','gsis_id'}.issubset(snaps.columns) else False
