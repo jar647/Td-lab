@@ -251,7 +251,10 @@ function renderPropMatchups(){
   const matchupSupportsStrong=Number.isFinite(playerRate)&&playerRate>0&&Number.isFinite(defenseRate)&&defenseRate>=playerRate*.9;
   const adjustedLabel=d>=.45&&o>=.45&&adjustedScore>=65&&matchupSupportsPrime?'🔥 PRIME MATCHUP':d>=.45&&o>=.45&&matchupSupportsStrong?'STRONG MATCHUP':o>=.45?'LEAN':'LOW PRIORITY';
   return {r,score:adjustedScore,label:adjustedLabel,trendRatio};
- }).sort((a,b)=>b.score-a.score);
+ }).sort((a,b)=>{
+  const priority=label=>label==='🔥 PRIME MATCHUP'?3:label==='STRONG MATCHUP'?2:label==='LEAN'?1:0;
+  return priority(b.label)-priority(a.label)||b.score-a.score||a.r.player.localeCompare(b.r.player);
+ });
  const trendText=x=>x.trendRatio==null?'Trend unavailable':x.trendRatio>=1.15?'📈 Usage rising':x.trendRatio<=.85?'📉 Usage falling':'➡️ Usage stable';
  const contextKey={PASS:'opponentOffenseBaselinePass',RUSH:'opponentOffenseBaselineRush',REC:'opponentOffenseBaselineRec',CATCH:'opponentOffenseBaselineCatch'}[propCategory];
  const defenseContext=x=>{
