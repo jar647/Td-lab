@@ -151,7 +151,7 @@ function propDecision(x,cfg,category){
  if(strong&&avgMargin>=1.12&&defMargin>=1.08&&recentSupports)
   return {label:'✅ PLAY OVER '+line,detail:'Posted OVER qualifies: player average '+avg.toFixed(1)+', defense allows '+def.toFixed(1)+(recent==null?'':', last-three average '+recent.toFixed(1))+'.'};
  if(strong&&alt&&alt.line<line)
-  return {label:'⚠️ CAUTION · ALT '+alt.line+'+',detail:'The posted OVER '+line+' does not clear every screen. Prefer researching '+alt.line+'+ instead. Alternate availability and price unverified.'};
+  return {label:'⚠️ CAUTION · ALT '+alt.line+'+',detail:'The posted OVER '+line+' lacks enough support from '+[avg<line*1.12?'season production':null,def<line*1.08?'opponent allowance':null,recent!=null&&recent<line*1.05?'recent form':null].filter(Boolean).join(', ')+'. Research '+alt.line+'+ as a closer alternative; sportsbook availability and price unverified.'};
  return {label:'🛑 PASS',detail:strong?'Posted OVER is not sufficiently supported and no lower qualifying ALT is available.':'Matchup does not qualify for an OVER or alternate recommendation.'};
 }
 // Conservative research ladders. Suggested ATL thresholds are not sportsbook quotes.
@@ -162,9 +162,14 @@ function suggestAltLine(x,cfg,category){
  const recent=r[recentField]==null?null:Number(r[recentField]);
  if(!Number.isFinite(def)||!Number.isFinite(avg)||def<=0||avg<=0)return null;
  // A strong defense-allowed average alone never establishes a player ATL.
- const floor=Math.min(def,avg,recent!=null&&Number.isFinite(recent)?recent:avg)*.80;
+ // Move 60% of the distance from the season average toward the entered
+ // sportsbook line. Never suggest an ALT above the player's season average
+ // when that player is already under the posted line.
+ const posted=Number(propLines[propLineKey(r,category)]);
+ const hasPosted=Number.isFinite(posted)&&posted>0;
+ const floor=hasPosted?Math.min(posted-0.5,avg+.60*(posted-avg)):Math.min(avg,def,recent!=null&&Number.isFinite(recent)?recent:avg)*.95;
  const ladders={
-  PASS:[125,150,175,200,225,250,275,300,325,350],
+  PASS:[150,175,200,225,250,275,300,325,350],
   RUSH:[10,15,20,25,30,40,50,60,70,80,90,100,125,150],
   REC:[10,15,20,25,30,40,50,60,70,80,90,100,125,150],
   CATCH:[1,2,3,4,5,6,7,8,9,10]
@@ -240,7 +245,7 @@ function renderPropMatchups(){
  const propLineUI=x=>{
   const key=propLineKey(x.r,propCategory),line=propLines[key],suggestion=suggestAltLine(x,cfg,propCategory),decision=propDecision(x,cfg,propCategory);
   const unit=propCategory==='CATCH'?'receptions':'yards';
-  const recommendation=suggestion?'<div style="font-size:16px;font-weight:850;color:#6dffc2">🎯 Research ALT: '+suggestion.line+'+ '+unit+'</div><div class="muted">Calculated from 80% of the lowest of defense allowed ('+escapeHTML(suggestion.def)+'/game), player average ('+escapeHTML(suggestion.avg)+'/game)'+(suggestion.recent!=null?', last-three average ('+escapeHTML(suggestion.recent)+'/game)':'')+'. This is not a verified sportsbook offering.</div>':'<div class="muted">No qualifying research ALT from available metrics.</div>';
+  const recommendation=suggestion?'<div style="font-size:16px;font-weight:850;color:#6dffc2">🎯 Research ALT: '+suggestion.line+'+ '+unit+'</div><div class="muted">Calculated from the entered sportsbook line and season average, moving 60% toward the posted line. Defense allows ('+escapeHTML(suggestion.def)+'/game), player average ('+escapeHTML(suggestion.avg)+'/game)'+(suggestion.recent!=null?', last-three average ('+escapeHTML(suggestion.recent)+'/game)':'')+'. This is not a verified sportsbook offering.</div>':'<div class="muted">No qualifying research ALT from available metrics.</div>';
   return '<div style="margin-top:10px;padding:10px;border:1px solid #315145;border-radius:9px"><label>ENTER CURRENT SPORTSBOOK LINE</label><input type="number" min="0" max="9999" step="0.5" style="max-width:180px" value="'+(line==null?'':escapeHTML(line))+'" placeholder="e.g. 286.5" onchange="setPropLine('+JSON.stringify(key).replace(/"/g,'&quot;')+',this.value)"><div style="font-size:17px;font-weight:900;margin:12px 0 5px">'+decision.label+'</div><div class="muted" style="margin-bottom:10px">'+decision.detail+'</div>'+recommendation+'</div>';
  };
  const top=document.getElementById('propTopDawg');
