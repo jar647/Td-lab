@@ -312,11 +312,15 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
            'rows':audit_rows}
     # Last-three-team-games usage, sourced from the same completed PBP.
     last_games=plays[['posteam','game_id','week']].drop_duplicates().sort_values('week').groupby('posteam').tail(3)
-    last_ids=set(last_games.game_id.astype(str))
+    last_keys=pd.MultiIndex.from_frame(last_games[['posteam','game_id']])
     last_counts=last_games.groupby('posteam').game_id.nunique().to_dict()
-    last_targets=targets[targets.game_id.astype(str).isin(last_ids)]
-    last_rushes=rushes[rushes.game_id.astype(str).isin(last_ids)]
-    last_passes=passes[passes.game_id.astype(str).isin(last_ids)] if not passes.empty else passes
+    def last_three_team_games(source):
+        if source.empty:return source
+        keys=pd.MultiIndex.from_frame(source[['posteam','game_id']])
+        return source[keys.isin(last_keys)].copy()
+    last_targets=last_three_team_games(targets)
+    last_rushes=last_three_team_games(rushes)
+    last_passes=last_three_team_games(passes)
     last_target_counts=last_targets.groupby(['posteam','pid']).size().to_dict()
     last_carry_counts=last_rushes.groupby(['posteam','pid']).size().to_dict()
     last_pass_counts=last_passes.groupby(['posteam','pid']).size().to_dict() if not last_passes.empty else {}
