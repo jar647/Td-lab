@@ -215,6 +215,29 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     player_pass_attempts=metric_group(passes,['posteam','pid'],'attempts')
     defense_pass_yards=metric_group(passes,['defteam'],'yards')
     defense_pass_attempts=metric_group(passes,['defteam'],'attempts')
+    # Last-five observed player games. Source: the same nflverse PBP as the averages.
+    # Never manufacture game bars from rolling averages.
+    per_game = {}
+    for source, field, metric in ((passes, 'passYards', 'yards'),
+                                  (rushes, 'rushYards', 'yards'),
+                                  (targets, 'recYards', 'yards'),
+                                  (targets, 'receptions', 'receptions')):
+        if source.empty:
+            continue
+        grouped = source.groupby(['posteam', 'pid', 'game_id'])[metric].sum()
+        for (tm, player_id, gid), value in grouped.items():
+            key = (str(tm), str(player_id), str(gid))
+            per_game.setdefault(key, {'passYards': 0, 'rushYards': 0,
+                                       'recYards': 0, 'receptions': 0})[field] = int(value)
+    game_weeks = (plays[['game_id', 'week']].drop_duplicates('game_id')
+                  .set_index('game_id')['week'].to_dict())
+    player_game_series = {}
+    for (tm, player_id, gid), metrics in per_game.items():
+        player_game_series.setdefault((tm, player_id), []).append({
+            'week': int(game_weeks[gid]), 'gameId': gid, **metrics})
+    for key, games_list in player_game_series.items():
+        games_list.sort(key=lambda g: (g['week'], g['gameId']))
+        player_game_series[key] = games_list[-WINDOW:]
     # Defense-wide audit: include every club that has played, not just teams
     # appearing in this week's player matchup cards.
     audit_metrics={
@@ -385,6 +408,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     'playerTargetShare':mean(100*player_targets.get((team,pid),0)/team_targets[team]) if position!='QB' and team_targets.get(team,0)>0 else None,
                     'playerRzTargets':mean(player_rz_targets.get((team,pid),0)/og) if position!='QB' else None,
                     'snapShare':snap_share_by_player.get((team,pid)),
+                    'last5GameStats':player_game_series.get((team,pid), []),
                     'playerPassYards':mean(player_pass_yards.get((team,pid),0)/og) if position=='QB' else None,
                     'playerPassAttempts':mean(player_pass_attempts.get((team,pid),0)/og) if position=='QB' else None,
                     'defPassYardsAllowed':mean(defense_pass_yards.get(opp,0)/dg) if position=='QB' else None,
