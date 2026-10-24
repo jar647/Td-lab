@@ -15,7 +15,22 @@ jobs:
           python-version: '3.11'
           cache: pip
       - run: pip install -r requirements.txt
-      - run: python projection_tracker.py
+      - name: Check tracker syntax
+        run: python -m py_compile projection_tracker.py build_feed.py
+      - name: Grade frozen projections
+        run: python projection_tracker.py
+      - name: Verify tracker output
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('data/projection_tracker.json')
+          report=json.loads(p.read_text())
+          assert all(k in report for k in ('snapshots_found','eligible_snapshots','pending','summary','records'))
+          print('Tracker verified: snapshots=',report['snapshots_found'],'eligible=',report['eligible_snapshots'],'predictions=',len(report['records']))
+          if report['eligible_snapshots']==0:
+              print('WARNING: No eligible pregame snapshot yet; waiting for next week')
+          PY
       - name: Publish ledger
         run: |
           git config user.name "github-actions[bot]"
