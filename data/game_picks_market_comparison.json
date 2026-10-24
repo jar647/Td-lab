@@ -1,6 +1,6 @@
 {
   "status": "HISTORICAL_RESEARCH_ONLY",
-  "method": "2024-26 prior-week walk-forward projections compared to historical schedule market totals. Historical lines may reflect closing prices. No time-stamped executable odds, vig-adjusted profitability, or calibrated confidence. ATS requires explicit home_spread sign; otherwise not scored.",
+  "method": "2024-26 prior-week walk-forward projections compared to historical schedule market totals. Historical lines may reflect closing prices. Moneyline returns use historical schedule prices and 1-unit flat stakes; these are NOT verified pregame executable odds. No calibrated confidence. ATS requires explicit home_spread sign; otherwise not scored.",
   "coverage": {
     "games": 446,
     "total_lines": 446,
@@ -21,6 +21,31 @@
         "pushes": 1,
         "hit_rate": 0.6477
       },
+      "moneyline_flat_stake": {
+        "bets": 441,
+        "wins": 285,
+        "losses": 155,
+        "pushes": 1,
+        "net_units": -8.71,
+        "roi": -0.0197,
+        "by_season": {
+          "2024": {
+            "bets": 206,
+            "profit_units": 8.22,
+            "roi": 0.0399
+          },
+          "2025": {
+            "bets": 205,
+            "profit_units": -6.87,
+            "roi": -0.0335
+          },
+          "2026": {
+            "bets": 30,
+            "profit_units": -10.05,
+            "roi": -0.335
+          }
+        }
+      },
       "ats": {
         "wins": 0,
         "losses": 0,
@@ -40,6 +65,31 @@
         "losses": 161,
         "pushes": 1,
         "hit_rate": 0.6349
+      },
+      "moneyline_flat_stake": {
+        "bets": 442,
+        "wins": 280,
+        "losses": 161,
+        "pushes": 1,
+        "net_units": -20.44,
+        "roi": -0.0462,
+        "by_season": {
+          "2024": {
+            "bets": 207,
+            "profit_units": 5.91,
+            "roi": 0.0286
+          },
+          "2025": {
+            "bets": 205,
+            "profit_units": -25.5,
+            "roi": -0.1244
+          },
+          "2026": {
+            "bets": 30,
+            "profit_units": -0.85,
+            "roi": -0.0283
+          }
+        }
       },
       "ats": {
         "wins": 0,
