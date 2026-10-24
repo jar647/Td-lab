@@ -262,7 +262,7 @@ function renderPropMatchups(){
   const midpoint=blend*(.75+.25*matchup);
   const lower=Math.max(0,midpoint*.8),upper=midpoint*1.2;
   const fmt=n=>propCategory==='CATCH'?n.toFixed(1):Math.round(n);
-  return '<div class="statsline">Research range: <b>'+fmt(lower)+'–'+fmt(upper)+'</b> '+(propCategory==='CATCH'?'receptions':'yards')+' <span class="muted">(season + recent form + matchup; uncalibrated)</span></div>';
+  return '<div style="padding:11px;margin:10px 0;background:#113127;border:1px solid #36775b;border-radius:10px"><div style="font-size:11px;color:#a3cdbb">MODEL PROJECTION · '+(propCategory==='CATCH'?'RECEPTIONS':'YARDS')+'</div><div style="font-size:25px;font-weight:950;color:#6dffc2">🎯 '+fmt(midpoint)+'</div><div class="muted">Research range: '+fmt(lower)+'–'+fmt(upper)+' · uncalibrated</div></div>';
  };
  const propLineUI=x=>{
   const key=propLineKey(x.r,propCategory),line=propLines[key],suggestion=suggestAltLine(x,cfg,propCategory),decision=propDecision(x,cfg,propCategory);
