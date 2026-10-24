@@ -470,6 +470,10 @@ async function loadHardRockStatus(){
   el.textContent='Hard Rock Bet · '+hardRockMatchCount+' conservatively matched player prices · '+data.games.length+' NFL games · '+count+' active YES anytime-TD prices · updated '+stamp.toLocaleString()+(fresh?' · Fetched within 15 minutes':' · STALE: prices hidden after 15 minutes')+'. Only unique, matchup-verified prices appear on rankings; unmatched players show no automatic price.';
  }catch(e){hardRockFeedFresh=false;hardRockMatched=new Map();hardRockMatchCount=0;renderBoard();renderBestBets();el.textContent='Hard Rock odds feed unavailable: '+e.message+'. Rankings remain independent of sportsbook odds.'}
 }
+function gameInput(label,value,step){
+ const wrap=document.createElement('label');wrap.className='muted';wrap.style.display='block';wrap.style.flex='1';wrap.style.minWidth='90px';wrap.textContent=label;
+ const input=document.createElement('input');input.type='number';input.step=step;input.placeholder='Enter line';input.value=value??'';input.style.marginTop='5px';wrap.appendChild(input);return {wrap,input};
+}
 async function loadGamePicks(){
  const list=document.getElementById('gamePicksList'),status=document.getElementById('gamePicksStatus');
  if(!list||!status)return;
@@ -478,24 +482,42 @@ async function loadGamePicks(){
   if(!response.ok)throw Error('Game feed not published');
   const feed=await response.json();
   if(!Array.isArray(feed.games))throw Error('Invalid game feed');
-  status.textContent='Week '+feed.week+' · '+feed.games.length+' games · '+(feed.model_status==='RESEARCH_ONLY'?'RESEARCH ONLY: confidence not calibrated':'Model status: '+feed.model_status);
+  status.textContent='Week '+feed.week+' · '+feed.games.length+' games · Research projections, not calibrated betting probabilities. Enter sportsbook lines to compare.';
   list.replaceChildren();
   for(const game of feed.games){
    const card=document.createElement('div');card.className='panel';card.style.marginTop='10px';
    const title=document.createElement('h3');title.textContent=game.away+' @ '+game.home;card.appendChild(title);
-   const line=document.createElement('div');line.className='muted';
-   line.textContent='ML: '+(game.ml?.pick||'PASS')+' · ATS: '+(game.ats?.pick||'PASS')+' · TOTAL: '+(game.total?.pick||'PASS');
-   card.appendChild(line);
-   if(Number.isFinite(game.projected_home_points)&&Number.isFinite(game.projected_away_points)){
-    const projected=document.createElement('div');projected.className='status';projected.style.marginTop='8px';
-    projected.textContent='Projected score: '+game.away+' '+game.projected_away_points+' · '+game.home+' '+game.projected_home_points+' | Total '+game.projected_total+' | Home margin '+game.projected_margin_home;
-    card.appendChild(projected);
+   const projected=document.createElement('div');projected.className='status';projected.style.marginTop='8px';
+   projected.textContent='Projected score: '+game.away+' '+game.projected_away_points+' · '+game.home+' '+game.projected_home_points+' | Total '+game.projected_total;
+   card.appendChild(projected);
+   const ml=document.createElement('p');ml.className='muted';
+   const margin=Number(game.projected_margin_home);
+   ml.textContent='ML model lean: '+(margin>0?game.home:margin<0?game.away:'No edge')+' · Projected margin '+(margin>0?'+':'')+margin+' for '+game.home+' · Confidence: uncalibrated';
+   card.appendChild(ml);
+   const controls=document.createElement('div');controls.className='filters';
+   const spread=gameInput(game.home+' spread',null,'0.5');
+   const total=gameInput('Sportsbook total',null,'0.5');
+   controls.appendChild(spread.wrap);controls.appendChild(total.wrap);card.appendChild(controls);
+   const ats=document.createElement('p');ats.className='muted';card.appendChild(ats);
+   const ou=document.createElement('p');ou.className='muted';card.appendChild(ou);
+   function update(){
+    const spreadText=spread.input.value.trim(),totalText=total.input.value.trim();
+    if(spreadText!==''){
+     const line=Number(spreadText),edge=margin+line;
+     ats.textContent='ATS: '+(Math.abs(edge)<0.05?'PASS (no projected edge)':edge>0?game.home+' '+line:game.away+' '+(-line))+' · Margin edge '+Math.abs(edge).toFixed(1)+' pts · Confidence uncalibrated';
+    }else ats.textContent='ATS: Enter the home-team spread to compare.';
+    if(totalText!==''){
+     const line=Number(totalText),edge=Number(game.projected_total)-line;
+     ou.textContent='Total: '+(Math.abs(edge)<0.05?'PASS':edge>0?'OVER '+line:'UNDER '+line)+' · Projected difference '+Math.abs(edge).toFixed(1)+' pts · Confidence uncalibrated';
+    }else ou.textContent='Total: Enter the sportsbook total to compare.';
    }
-   const note=document.createElement('p');note.className='hint';note.textContent=game.reason||'No verified edge available';card.appendChild(note);
+   spread.input.addEventListener('input',update);total.input.addEventListener('input',update);update();
+   const note=document.createElement('p');note.className='hint';note.textContent='Research leans only. No validated confidence rating, live sportsbook odds, or verified game-day injuries. Lines are entered manually and are not saved.';card.appendChild(note);
    list.appendChild(card);
   }
  }catch(e){status.textContent='Game picks unavailable: '+e.message;list.replaceChildren()}
 }
+
 drawPositions();save();renderBoard();loadGamePicks();loadAutoFeed();loadPerformance();loadProjectionTracker();loadProbabilityStatus();
 setInterval(loadHardRockStatus,60000);
 </script></body></html>
