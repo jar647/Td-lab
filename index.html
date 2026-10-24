@@ -249,7 +249,16 @@ function renderPropMatchups(){
  }).sort((a,b)=>b.score-a.score);
  const trendText=x=>x.trendRatio==null?'Trend unavailable':x.trendRatio>=1.15?'📈 Usage rising':x.trendRatio<=.85?'📉 Usage falling':'➡️ Usage stable';
  const contextKey={PASS:'opponentOffenseBaselinePass',RUSH:'opponentOffenseBaselineRush',REC:'opponentOffenseBaselineRec',CATCH:'opponentOffenseBaselineCatch'}[propCategory];
- const why=x=>'Why: opponent allows '+escapeHTML(x.r[cfg.def])+' '+cfg.unit+'/game; player averages '+escapeHTML(x.r[cfg.usage])+' opportunities/game. '+trendText(x)+(x.r[contextKey]!=null?'. Opponents faced average '+escapeHTML(x.r[contextKey])+' '+cfg.unit+'/game.':'')+(x.r.injuryReportStatus&&x.r.injuryReportStatus!=='NOT_REPORTED'?'. Injury report: '+escapeHTML(x.r.injuryReportStatus):'');
+ const defenseContext=x=>{
+  const r=x.r,kind=propCategory,recent=r.defenseRecent5?.[kind],ratio=r.defenseOpponentRatio?.[kind];
+  const efficiency=kind==='PASS'?r.defenseYardsPerAttempt:kind==='REC'?r.defenseYardsPerTarget:null;
+  return '<div class="statsline"><b>Experimental defense breakdown (not yet used in projection)</b>'
+   +(recent!=null?'<div>Last 5 games allowed: '+escapeHTML(recent)+' '+cfg.unit+'/game</div>':'')
+   +(ratio!=null?'<div>Allowed / opponents’ usual production: '+escapeHTML(ratio)+'×</div>':'')
+   +(efficiency!=null?'<div>'+(kind==='PASS'?'Yards allowed per pass attempt: ':'Yards allowed per target: ')+escapeHTML(efficiency)+'</div>':'')
+   +'</div>';
+ };
+ const why=x=>defenseContext(x)+'Why: opponent allows '+escapeHTML(x.r[cfg.def])+' '+cfg.unit+'/game; player averages '+escapeHTML(x.r[cfg.usage])+' opportunities/game. '+trendText(x)+(x.r[contextKey]!=null?'. Opponents faced average '+escapeHTML(x.r[contextKey])+' '+cfg.unit+'/game.':'')+(x.r.injuryReportStatus&&x.r.injuryReportStatus!=='NOT_REPORTED'?'. Injury report: '+escapeHTML(x.r.injuryReportStatus):'');
  // Phase 3: transparent research range, not a calibrated prediction or sportsbook quote.
  const projection=x=>{
   const r=x.r,season=Number(r[cfg.player]);
