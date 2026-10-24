@@ -453,7 +453,15 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
             og=offense_games.get(team,0); dg=defense_games.get(opp,0)
             games=og
             if games<3 or not team_events.get(team): continue
-            players=events[events.team==team].drop_duplicates('player_id')
+            # Candidate pool must include snap-verified quarterbacks even with zero red-zone events.
+            players=events[events.team==team].drop_duplicates('player_id').copy()
+            existing_ids=set(players.player_id.astype(str))
+            qb_ids=[pid for (tm,pid),weeks_played in appearance_games.items()
+                    if tm==team and weeks_played and pos_by_id.get(pid)=='QB'
+                    and roster_team.get(pid)==team and pid not in existing_ids]
+            if qb_ids:
+                extra=pd.DataFrame([{'player_id':pid,'player':str(roster.loc[roster.gsis_id.astype(str)==pid,'player_name'].iloc[0]) if 'player_name' in roster.columns and (roster.gsis_id.astype(str)==pid).any() else pid,'pos':'QB'} for pid in qb_ids])
+                players=pd.concat([players,extra],ignore_index=True)
             for _,p in players.iterrows():
                 pid=p.player_id;position=p.pos
                 if roster_team.get(pid)!=team: continue
@@ -486,7 +494,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                 def avg(key,series):
                     return mean(sum(float(g[key]) for g in series)/len(series))
                 pg=len(season_series)
-                share=100*player_events[(team,pid)]/team_events[team]
+                share=100*player_events.get((team,pid),0)/team_events[team]
                 health=injury_status.get(pid,'ROSTER_ACTIVE' if weekly_roster_codes.get(pid)=='ACT' else 'UNVERIFIED')
                 result.append({'player_id':pid,'availability':health,'player':p.player,'jersey_number':jersey_by_player.get(pid),'pos':position,'team':team,'opp':opp,
                     'games':pg,'teamGames':og,'playerAppearancesVerified':True,
@@ -494,7 +502,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     'teamRzChancesTotal':int(team_events.get(team,0)),
                     'tdallowed':mean(player_td.get((opp,position),0)/dg),
                     'rzallowed':mean(def_opp[(opp,position)]/dg),
-                    'rzshare':mean(share),'playerRz':mean(player_events[(team,pid)]/og),
+                    'rzshare':mean(share),'playerRz':mean(player_events.get((team,pid),0)/og),
                     'defRecYardsAllowed':mean(defense_position_yards.get((opp,position),0)/dg) if receiving_available and position!='QB' else None,
                     'defTargetsAllowed':mean(defense_position_targets.get((opp,position),0)/dg) if position!='QB' else None,
                     'defRzTargetsAllowed':mean(defense_position_rz_targets.get((opp,position),0)/dg) if position!='QB' else None,
