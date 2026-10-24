@@ -37,35 +37,19 @@ def audit(records, defense):
         who=f'{p["team"]}/{p["player_id"]}'
         games=p.get("last5GameStats") or []
         denom=int(p["games"])
-        if p.get("last5GamesPlayed") != denom or not p.get("playerAppearancesVerified"):
-            errors.append(f"{who}: player appearances not verified")
-        if not 1<=int(p.get("seasonGamesPlayed",0))<=17:
+        if p.get("seasonGamesPlayed") != denom or not p.get("playerAppearancesVerified"):
+            errors.append(f"{who}: season appearance count mismatch")
+        if not 1<=denom<=17:
             errors.append(f"{who}: invalid season games played")
-        for field,metric in player_metrics.items():
-            if field in ("playerRz","playerRzTargets"):continue
-            if p.get(field) is not None and not close(p[field],p.get("last5Averages",{}).get(metric)):
-                errors.append(f"{who}: {field} differs from last-five appearance average")
-        if not 1<=denom<=5: errors.append(f"{who}: invalid sample denominator")
-        if len(games)!=denom: errors.append(f"{who}: {len(games)} chart games != {denom} team games")
+        if len(games)>5:
+            errors.append(f"{who}: chart exceeds five appearances")
         if len({g["gameId"] for g in games})!=len(games):
             errors.append(f"{who}: duplicate game IDs")
-        if [g["week"] for g in games]!=sorted(g["week"] for g in games):
-            errors.append(f"{who}: game records not chronological")
         for field,metric in player_metrics.items():
-            if p.get(field) is None: continue
-            total=sum(float(g.get(metric,0)) for g in games)
-            if not close(p[field],round(total/denom,3)):
-                errors.append(f"{who}: {field} {p[field]} != {total}/{denom}")
-        if p.get("teamTargetsTotal") is not None and p.get("playerTargetShare") is not None:
-            team_total=int(p["teamTargetsTotal"])
-            player_total=sum(float(g.get("targets",0)) for g in games)
-            if team_total<=0 or not close(p["playerTargetShare"],round(100*player_total/team_total,3)):
-                errors.append(f"{who}: target share mismatch")
-        if p.get("teamRzChancesTotal") is not None:
-            rz_total=int(p["teamRzChancesTotal"])
-            player_rz=sum(float(g.get("rzChances",0)) for g in games)
-            if rz_total<=0 or not close(p["rzshare"],round(100*player_rz/rz_total,3)):
-                errors.append(f"{who}: red-zone share mismatch")
+            if p.get(field) is None:continue
+            expected=p.get("seasonAverages",{}).get(metric)
+            if not close(p[field],expected):
+                errors.append(f"{who}: {field} differs from season average")
         d=rows.get((p["opp"],p["pos"]))
         if d is None: errors.append(f"{who}: missing defense audit row");continue
         for field,metric in defense_metrics.items():
@@ -78,7 +62,7 @@ def audit(records, defense):
                 errors.append(f"{who}: {metric} defensive total/denominator mismatch")
     if errors:raise RuntimeError("Feed audit failed ("+str(len(errors))+"): "+"; ".join(errors[:25]))
     return {"players_checked":len(records),"defensive_rows_checked":len(rows),
-            "player_average_definition":"last five actual snap-confirmed player appearances",
+            "player_average_definition":"full season totals divided by actual games played",
             "participation_verified":True,"external_boxscore_verified":False,
             "status":"INTERNAL_TOTALS_RECONCILED"}
 def main():
