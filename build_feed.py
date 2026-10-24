@@ -375,6 +375,30 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
         all_snaps=all_snaps.merge(id_map,left_on='pfr_player_id',right_on='pfr_id',how='inner')
         for (tm,pid),group in all_snaps.groupby(['team','gsis_id']):
             appearance_games[(str(tm),str(pid))]=set(int(w) for w in group.week)
+    # Independently aggregate all completed season games for player statistics.
+    season_plays=eligible.copy()
+    if 'play' in season_plays:
+        season_plays=season_plays[pd.to_numeric(season_plays.play,errors='coerce').fillna(1)==1]
+    if 'no_play' in season_plays:
+        season_plays=season_plays[pd.to_numeric(season_plays.no_play,errors='coerce').fillna(0)==0]
+    season_player_stats={}
+    for pid_col,flag,yards_col,yards_key,attempt_key in (
+        ('passer_player_id','pass_attempt','passing_yards','passYards','passAttempts'),
+        ('rusher_player_id','rush_attempt','rushing_yards','rushYards','rushAttempts'),
+        ('receiver_player_id','pass_attempt','receiving_yards','recYards','targets')):
+        required(season_plays,[pid_col,flag,yards_col],'season player statistics')
+        sub=season_plays[(pd.to_numeric(season_plays[flag],errors='coerce')==1)&season_plays[pid_col].notna()].copy()
+        sub['pid']=sub[pid_col].astype(str)
+        sub['yards']=pd.to_numeric(sub[yards_col],errors='coerce').fillna(0)
+        sub['attempts']=1
+        sub['receptions']=pd.to_numeric(sub.complete_pass,errors='coerce').fillna(0).clip(0,1) if attempt_key=='targets' else 0
+        for (tm,pid,w),g in sub.groupby(['posteam','pid','week']):
+            entry=season_player_stats.setdefault((str(tm),str(pid),int(w)),{})
+            entry[yards_key]=float(g.yards.sum())
+            entry[attempt_key]=int(len(g))
+            if attempt_key=='targets':entry['receptions']=int(g.receptions.sum())
+    game_lookup={(str(row.posteam),int(row.week)):str(row.game_id)
+        for row in season_plays[['posteam','week','game_id']].drop_duplicates().itertuples(index=False)}
     # Use real opponent slate and only players whose latest roster team matches it.
     roster_team=dict(zip(roster.gsis_id.astype(str),roster.team.astype(str)))
     injury_status=availability(injuries,week)
