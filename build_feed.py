@@ -58,8 +58,9 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     week = int(upcoming.iloc[0].week)
     slate = upcoming[upcoming.week == week]
     if slate.empty: raise RuntimeError('No games in upcoming week')
-    # Select the last WINDOW completed games for each defense, including bye weeks.
-    # A game counts only if it has recorded nflverse play-by-play.
+    # One shared, complete-game selection: use only games in BOTH clubs'
+    # most recent WINDOW games. This prevents offensive totals including
+    # games outside the window used for their game-by-game charts.
     eligible = pbp[(pd.to_numeric(pbp.season,errors='coerce') == SEASON) &
                    (pd.to_numeric(pbp.week,errors='coerce') < week)].copy()
     eligible = eligible[eligible.posteam.notna() & eligible.defteam.notna()]
@@ -67,15 +68,17 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     completed['week'] = pd.to_numeric(completed.week,errors='coerce')
     completed = completed.dropna(subset=['week']).sort_values(['week','game_id'])
     selected = completed.groupby('defteam',sort=False).tail(WINDOW)
-    # Every play is assigned to exactly one defense, so each defense's
-    # yardage, targets and opportunities use its own last five games.
-    game_keys = pd.MultiIndex.from_frame(selected[['defteam','game_id']])
-    play_keys = pd.MultiIndex.from_frame(eligible[['defteam','game_id']])
-    plays = eligible[play_keys.isin(game_keys)].copy()
-    if selected.groupby('defteam').game_id.nunique().lt(WINDOW).any():
-        missing=selected.groupby('defteam').game_id.nunique()
-        print(f'Note: fewer than {WINDOW} completed games for some defenses: {missing[missing < WINDOW].to_dict()}',file=sys.stderr)
-    if plays.empty: raise RuntimeError('No current-season completed play-by-play in lookback window')
+    # For any game, both teams must include it in their last-five windows.
+    selected_pairs = set(zip(selected.defteam.astype(str),selected.game_id.astype(str)))
+    matchup_teams = eligible[['game_id','posteam','defteam']].drop_duplicates()
+    complete_games = set(matchup_teams.loc[
+        matchup_teams.apply(lambda row:
+            (str(row.defteam),str(row.game_id)) in selected_pairs and
+            (str(row.posteam),str(row.game_id)) in selected_pairs,axis=1),
+        'game_id'].astype(str))
+    plays = eligible[eligible.game_id.astype(str).isin(complete_games)].copy()
+    if plays.empty: raise RuntimeError('No jointly complete games in five-game window')
+    # A game contributes to both sides or neither; no asymmetric windows.
     roster = rosters.copy()
     if 'season' in roster: roster=roster[pd.to_numeric(roster.season,errors='coerce')==SEASON]
     if 'week' in roster: roster=roster.sort_values('week')
