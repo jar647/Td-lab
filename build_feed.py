@@ -397,6 +397,12 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
             entry[yards_key]=float(g.yards.sum())
             entry[attempt_key]=int(len(g))
             if attempt_key=='targets':entry['receptions']=int(g.receptions.sum())
+    # Passing attempts prove QB participation even when PFR snap IDs do not
+    # reconcile with nflverse GSIS roster IDs. Do not infer appearances
+    # from team games or zero-production bye/inactive weeks.
+    for (tm,pid,w),stats in season_player_stats.items():
+        if stats.get('passAttempts',0)>0 and pos_by_id.get(pid)=='QB':
+            appearance_games.setdefault((tm,pid),set()).add(w)
     game_lookup={(str(row.posteam),int(row.week)):str(row.game_id)
         for row in season_plays[['posteam','week','game_id']].drop_duplicates().itertuples(index=False)}
     # Use real opponent slate and only players whose latest roster team matches it.
