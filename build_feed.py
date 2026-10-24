@@ -83,6 +83,14 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     if 'season' in roster: roster=roster[pd.to_numeric(roster.season,errors='coerce')==SEASON]
     if 'week' in roster: roster=roster.sort_values('week')
     roster=roster.dropna(subset=['gsis_id','position']).drop_duplicates('gsis_id',keep='last')
+    # Resolve GSIS IDs to actual roster names; PBP may contain IDs or abbreviated labels.
+    roster_name_column=next((col for col in ('player_name','full_name','display_name') if col in roster.columns),None)
+    roster_names={}
+    if roster_name_column:
+        for _,person in roster.iterrows():
+            name=person.get(roster_name_column)
+            if pd.notna(name) and str(name).strip() and str(name).strip()!=str(person.gsis_id):
+                roster_names[str(person.gsis_id)]=str(name).strip()
     pos_by_id=dict(zip(roster.gsis_id.astype(str),roster.position.astype(str)))
     # Use each player's nflverse weekly roster position for the actual play week.
     weekly_positions={}
@@ -545,7 +553,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                 pg=len(season_series)
                 share=100*player_events.get((team,pid),0)/team_events[team]
                 health=injury_status.get(pid,'ROSTER_ACTIVE' if weekly_roster_codes.get(pid)=='ACT' else 'UNVERIFIED')
-                result.append({'player_id':pid,'availability':health,'player':p.player,'jersey_number':jersey_by_player.get(pid),'pos':position,'team':team,'opp':opp,
+                result.append({'player_id':pid,'availability':health,'player':roster_names.get(str(pid),str(p.player)),'jersey_number':jersey_by_player.get(pid),'pos':position,'team':team,'opp':opp,
                     'games':pg,'teamGames':og,'playerAppearancesVerified':True,
                     'teamTargetsTotal':int(team_targets.get(team,0)),
                     'teamRzChancesTotal':int(team_events.get(team,0)),
