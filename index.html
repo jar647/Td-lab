@@ -225,7 +225,13 @@ function renderPropMatchups(){
   const trendRatio=trend!=null&&base>0?trend/base:null;
   const trendAdjustment=trendRatio==null?0:Math.max(-6,Math.min(6,Math.round((trendRatio-1)*20)));
   const adjustedScore=Math.max(0,Math.min(100,score+trendAdjustment));
-  const adjustedLabel=d>=.45&&o>=.45&&adjustedScore>=65?'🔥 PRIME MATCHUP':d>=.45&&o>=.45?'STRONG MATCHUP':o>=.45?'LEAN':'LOW PRIORITY';
+  // Never mark an unfavorable defensive yardage matchup as prime.
+  // A defense allowing materially less than the player's season rate is a caution,
+  // regardless of volume, trends or the composite ranking score.
+  const playerRate=Number(r[cfg.player]),defenseRate=Number(r[cfg.def]);
+  const matchupSupportsPrime=Number.isFinite(playerRate)&&playerRate>0&&Number.isFinite(defenseRate)&&defenseRate>=playerRate;
+  const matchupSupportsStrong=Number.isFinite(playerRate)&&playerRate>0&&Number.isFinite(defenseRate)&&defenseRate>=playerRate*.9;
+  const adjustedLabel=d>=.45&&o>=.45&&adjustedScore>=65&&matchupSupportsPrime?'🔥 PRIME MATCHUP':d>=.45&&o>=.45&&matchupSupportsStrong?'STRONG MATCHUP':o>=.45?'LEAN':'LOW PRIORITY';
   return {r,score:adjustedScore,label:adjustedLabel,trendRatio};
  }).sort((a,b)=>b.score-a.score);
  const trendText=x=>x.trendRatio==null?'Trend unavailable':x.trendRatio>=1.15?'📈 Usage rising':x.trendRatio<=.85?'📉 Usage falling':'➡️ Usage stable';
