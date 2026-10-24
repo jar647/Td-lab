@@ -397,6 +397,15 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
             entry[yards_key]=float(g.yards.sum())
             entry[attempt_key]=int(len(g))
             if attempt_key=='targets':entry['receptions']=int(g.receptions.sum())
+    # Optional nflverse air-yards signal: target-level air yards, not routes run.
+    # Missing columns remain unavailable instead of being filled with invented zeroes.
+    air_by_player={}
+    if 'air_yards' in season_plays.columns:
+        air=season_plays[(pd.to_numeric(season_plays.pass_attempt,errors='coerce')==1)&season_plays.receiver_player_id.notna()].copy()
+        air['air_yards']=pd.to_numeric(air.air_yards,errors='coerce')
+        air=air.dropna(subset=['air_yards'])
+        if not air.empty:
+            air_by_player={(str(tm),str(pid)):float(g.air_yards.sum()) for (tm,pid),g in air.groupby(['posteam','receiver_player_id'])}
     # Passing attempts prove QB participation even when PFR snap IDs do not
     # reconcile with nflverse GSIS roster IDs. Do not infer appearances
     # from team games or zero-production bye/inactive weeks.
@@ -516,6 +525,9 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     'playerTargetShare':mean(100*player_targets.get((team,pid),0)/team_targets[team]) if position!='QB' and team_targets.get(team,0)>0 else None,
                     'playerRzTargets':mean(player_rz_targets.get((team,pid),0)/og) if position!='QB' else None,
                     'snapShare':snap_share_by_player.get((team,pid)),
+                    'airYardsPerGame':mean(air_by_player[(team,pid)]/pg) if position!='QB' and (team,pid) in air_by_player else None,
+                    'routeParticipation':None,  # Not available in current PBP + roster inputs.
+
                     'last5GameStats':last_series,
                     'seasonGamesPlayed':len(season_series),'last5GamesPlayed':len(last_series),
                     'seasonAverages':{k:avg(k,season_series) for k in ('passYards','passAttempts','rushYards','rushAttempts','recYards','receptions','targets')},
