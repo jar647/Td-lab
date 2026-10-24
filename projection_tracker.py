@@ -31,7 +31,7 @@ def projection(r,market):
     return round(blend*(.75+.25*factor),2)
 def main():
     records=[]
-    snapshots=sorted(HISTORY.glob('*-week-*.json'))
+    snapshots=sorted(p for p in HISTORY.glob('*-week-*.json') if '-results' not in p.name)
     seasons=sorted({int(p.name.split('-')[0]) for p in snapshots if '-results' not in p.name})
     for season in seasons:
         pbp=frame(nflreadpy.load_pbp([season]))
@@ -71,7 +71,8 @@ def main():
                 for market,(_,_,_,key) in MARKETS.items():
                     if market=='PASS' and r.get('pos')!='QB':continue
                     if market in ('REC','CATCH') and r.get('pos')=='QB':continue
-                    pred=projection(r,market)
+                    frozen_values=r.get('frozen_projections')
+                    pred=frozen_values.get(market) if isinstance(frozen_values,dict) else projection(r,market)
                     if pred is None:continue
                     actual=None
                     if appeared:
@@ -87,7 +88,7 @@ def main():
     for market in MARKETS:
         subset=[r for r in graded if r['market']==market]
         summary[market]={'graded':len(subset),'green':sum(r['status']=='GREEN' for r in subset),'red':sum(r['status']=='RED' for r in subset),'mae':round(sum(abs(r['error']) for r in subset)/len(subset),2) if subset else None}
-    out={'method':'Frozen pregame projections only; snap-verified appearances; green means actual >= projection, NOT sportsbook profit. Red means below projection. Missing/inactive games remain pending.','summary':summary,'records':records}
+    out={'method':'Frozen pregame projections only; snap-verified appearances; green means actual >= projection, NOT sportsbook profit. Red means below projection. Missing/inactive games remain pending.', 'snapshots_found':len(snapshots), 'eligible_snapshots':len(set((r['season'],r['week']) for r in records)), 'pending':sum(r['status']=='PENDING' for r in records), 'summary':summary,'records':records}
     target=ROOT/'data'/'projection_tracker.json'
     target.parent.mkdir(exist_ok=True)
     target.write_text(json.dumps(out,indent=2))
