@@ -486,6 +486,11 @@ async function loadGamePicks(){
    const line=document.createElement('div');line.className='muted';
    line.textContent='ML: '+(game.ml?.pick||'PASS')+' · ATS: '+(game.ats?.pick||'PASS')+' · TOTAL: '+(game.total?.pick||'PASS');
    card.appendChild(line);
+   if(Number.isFinite(game.projected_home_points)&&Number.isFinite(game.projected_away_points)){
+    const projected=document.createElement('div');projected.className='status';projected.style.marginTop='8px';
+    projected.textContent='Projected score: '+game.away+' '+game.projected_away_points+' · '+game.home+' '+game.projected_home_points+' | Total '+game.projected_total+' | Home margin '+game.projected_margin_home;
+    card.appendChild(projected);
+   }
    const note=document.createElement('p');note.className='hint';note.textContent=game.reason||'No verified edge available';card.appendChild(note);
    list.appendChild(card);
   }
