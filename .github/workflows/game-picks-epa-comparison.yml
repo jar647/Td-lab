@@ -1,0 +1,36 @@
+name: Compare EPA Game Picks Model
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'game_picks_epa_backtest.py'
+      - '.github/workflows/game-picks-epa-comparison.yml'
+permissions:
+  contents: write
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Compare prior-week EPA and success-rate challenger
+        run: python game_picks_epa_backtest.py
+      - name: Publish comparison
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/game_picks_epa_comparison.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish EPA game picks model comparison"
+            for attempt in 1 2 3; do
+              git fetch origin main
+              git rebase -X theirs origin/main
+              if git push origin HEAD:main; then exit 0; fi
+              sleep 3
+            done
+            exit 1
+          fi
