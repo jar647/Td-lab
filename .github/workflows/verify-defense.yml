@@ -39,6 +39,7 @@ jobs:
         run: |
           python - <<'PY'
           import json
+          import math
           from pathlib import Path
           rows=json.loads(Path('data/matchups.json').read_text())
           assert rows, 'No player records'
@@ -48,7 +49,10 @@ jobs:
           for market in ['PASS','RUSH','REC','CATCH']:
               available=[row['defenseRecent5'][market] for row in rows if row['defenseRecent5'].get(market) is not None]
               assert available, f'No recent defensive values for {market}'
-              assert all(v>=0 for v in available), f'Negative defensive allowance: {market}'
+              assert all(isinstance(v,(int,float)) and math.isfinite(v) for v in available), f'Invalid defensive allowance: {market}'
+              if market in ('PASS','REC','CATCH'):
+                  assert all(v>=0 for v in available), f'Negative defensive allowance: {market}'
+              # Net rushing yards can legitimately be negative after tackles for loss.
               print(market,'recent values:',len(available),'min/max:',min(available),max(available))
           print('PASS: rebuilt',len(rows),'player records with defensive metrics')
           PY
