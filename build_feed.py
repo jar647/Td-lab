@@ -484,6 +484,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                 weeks=sorted(w for w in appearance_games.get((team,pid),set())
                              if (team,w) in game_lookup)
                 if not weeks:continue
+                if len(weeks)>17:continue
                 if any(t==team and player==pid and w not in weeks
                        for t,player,w in season_player_stats):continue
                 def game_record(w):
