@@ -241,6 +241,20 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     for key, games_list in player_game_series.items():
         games_list.sort(key=lambda g: (g['week'], g['gameId']))
         player_game_series[key] = games_list[-WINDOW:]
+    # Include zero-production TEAM games in the chart only as team-game
+    # observations, not proof the player took the field. Keep this distinction
+    # explicit until verified per-player snap participation is available.
+    team_game_index={}
+    for row in plays[['posteam','game_id','week']].drop_duplicates().itertuples(index=False):
+        team_game_index.setdefault(str(row.posteam),[]).append((int(row.week),str(row.game_id)))
+    for tm in team_game_index:
+        team_game_index[tm]=sorted(team_game_index[tm])[-WINDOW:]
+    for (tm,pid),games_list in list(player_game_series.items()):
+        observed={g['gameId']:g for g in games_list}
+        player_game_series[(tm,pid)]=[
+            observed.get(gid,{'week':w,'gameId':gid,'passYards':0,
+                              'rushYards':0,'recYards':0,'receptions':0})
+            for w,gid in team_game_index.get(tm,[])]
     # Defense-wide audit: include every club that has played, not just teams
     # appearing in this week's player matchup cards.
     audit_metrics={
@@ -382,7 +396,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
         for team,opp in [(game.home_team,game.away_team),(game.away_team,game.home_team)]:
             team=str(team);opp=str(opp)
             og=offense_games.get(team,0); dg=defense_games.get(opp,0)
-            games=min(og,dg)
+            games=og
             if games<3 or not team_events.get(team): continue
             players=events[events.team==team].drop_duplicates('player_id')
             for _,p in players.iterrows():
@@ -412,6 +426,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     'playerRzTargets':mean(player_rz_targets.get((team,pid),0)/og) if position!='QB' else None,
                     'snapShare':snap_share_by_player.get((team,pid)),
                     'last5GameStats':player_game_series.get((team,pid), []),
+                    'gameSampleDefinition':'team_games; zero production does not confirm participation',
                     'playerPassYards':mean(player_pass_yards.get((team,pid),0)/og) if position=='QB' else None,
                     'playerPassAttempts':mean(player_pass_attempts.get((team,pid),0)/og) if position=='QB' else None,
                     'defPassYardsAllowed':mean(defense_pass_yards.get(opp,0)/dg) if position=='QB' else None,
