@@ -640,7 +640,28 @@ def main():
         slate=schedules[(pd.to_numeric(schedules.season,errors='coerce')==SEASON)&(pd.to_numeric(schedules.week,errors='coerce')==meta['week'])&(schedules.game_type.astype(str).str.upper()=='REG')]
         first_day=pd.to_datetime(slate.gameday,errors='coerce',utc=True).min() if not slate.empty else pd.NaT
         if not pd.isna(first_day) and pd.Timestamp(now)<first_day:
-            snapshot.write_text(json.dumps({'season':SEASON,'week':meta['week'],'captured_at':meta['generated_at'],'players':result,'capture_policy':'before first scheduled game day (UTC)'},indent=2))
+            # Freeze the exact displayed rounded projections, not a future
+            # recomputation with potentially changed model code.
+            markets={'PASS':('playerPassYards','recent3PassYards','defPassYardsAllowed'),
+                     'RUSH':('playerRushYards','recent3RushYards','defRushYardsAllowed'),
+                     'REC':('playerRecYards','recent3RecYards','defRecYardsAllowed'),
+                     'CATCH':('playerReceptions','recent3Receptions','defReceptionsAllowed')}
+            def frozen_projection(row,kind):
+                a,b,d=(row.get(key) for key in markets[kind])
+                if a is None or float(a)<=0:return None
+                a=float(a)
+                blend=.7*a+.3*float(b) if b is not None else a
+                factor=max(.85,min(1.15,float(d)/a)) if d is not None and float(d)>0 else 1
+                return int(blend*(.75+.25*factor)+.5)
+            frozen_players=[]
+            for player in result:
+                entry=dict(player)
+                entry['frozen_projections']={kind:frozen_projection(entry,kind) for kind in markets
+                    if not (kind=='PASS' and entry.get('pos')!='QB') and not (kind in ('REC','CATCH') and entry.get('pos')=='QB')}
+                frozen_players.append(entry)
+            snapshot.write_text(json.dumps({'season':SEASON,'week':meta['week'],'captured_at':meta['generated_at'],
+                'players':frozen_players,'projection_model_version':'original-70-30-defense-v1',
+                'capture_policy':'before first scheduled game day (UTC)'},indent=2))
             print(f'Froze pregame snapshot for Week {meta["week"]}')
         else:
             print(f'Skipped Week {meta["week"]} snapshot: first game day already started or schedule missing',file=sys.stderr)
