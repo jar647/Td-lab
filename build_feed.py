@@ -168,6 +168,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     if completed.yards.isna().any():
         raise RuntimeError('Completed receptions have missing receiving yards; refusing to publish')
     targets['yards']=targets['yards'].fillna(0)
+    targets['attempts']=1
     targets['redzone']=pd.to_numeric(targets.yardline_100,errors='coerce').between(1,20).astype(int)
     player_targets=targets.groupby(['posteam','pid']).size().to_dict()
     team_targets=targets.groupby('posteam').size().to_dict()
