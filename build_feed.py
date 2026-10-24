@@ -480,7 +480,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                 if weekly_roster_codes.get(pid) in nonactive_codes:
                     excluded['nonactive_weekly_roster']+=1
                     continue
-                if (opp,position) not in def_opp: continue
+                if dg<1: continue  # No opponent position red-zone events is zero, not missing player eligibility
                 # Season and last five ACTUAL player appearances, not team games.
                 weeks=sorted(w for w in appearance_games.get((team,pid),set())
                              if (team,w) in game_lookup)
@@ -507,7 +507,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     'teamTargetsTotal':int(team_targets.get(team,0)),
                     'teamRzChancesTotal':int(team_events.get(team,0)),
                     'tdallowed':mean(player_td.get((opp,position),0)/dg),
-                    'rzallowed':mean(def_opp[(opp,position)]/dg),
+                    'rzallowed':mean(def_opp.get((opp,position),0)/dg),
                     'rzshare':mean(share),'playerRz':mean(player_events.get((team,pid),0)/og),
                     'defRecYardsAllowed':mean(defense_position_yards.get((opp,position),0)/dg) if receiving_available and position!='QB' else None,
                     'defTargetsAllowed':mean(defense_position_targets.get((opp,position),0)/dg) if position!='QB' else None,
