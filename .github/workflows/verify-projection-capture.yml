@@ -1,0 +1,46 @@
+name: Verify Week 7 projection capture
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/verify-projection-capture.yml'
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit committed pregame projections
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from datetime import datetime,timezone
+          history=Path('data/history')
+          files=sorted(history.glob('2026-week-7-game-*.json'))
+          print('Week 7 individual game snapshots:',len(files))
+          valid_games=0
+          projected=0
+          seen=set()
+          for path in files:
+              snap=json.loads(path.read_text())
+              assert snap.get('game_id'),f'Missing game ID: {path}'
+              assert snap.get('captured_at'),f'Missing timestamp: {path}'
+              assert snap.get('projection_model_version'),f'Missing model version: {path}'
+              players=snap.get('players',[])
+              count=0
+              for p in players:
+                  for market,value in p.get('frozen_projections',{}).items():
+                      assert market in ('PASS','RUSH','REC','CATCH')
+                      assert isinstance(value,(int,float)) and value>=0
+                      key=(snap['game_id'],p.get('player_id'),market)
+                      assert key not in seen,f'Duplicate projection: {key}'
+                      seen.add(key)
+                      count+=1
+              print(path.name,'players:',len(players),'locked predictions:',count,'captured:',snap['captured_at'])
+              if count:valid_games+=1
+              projected+=count
+          print('RESULT: valid games:',valid_games,'frozen predictions:',projected)
+          assert valid_games>0 and projected>0,'FAIL: no Week 7 player projections have been locked. Check team/opponent matching, schedule cutoff, and feed commit.'
+          PY
