@@ -362,7 +362,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
             snap_weeks_by_player={(str(t),str(pid)):set(int(w) for w in group.week)
                 for (t,pid),group in positive.groupby(['team','gsis_id'])}
             snap_share_by_player={(str(t),str(pid)):mean(v) for (t,pid),v in
-                snap.groupby(['team','gsis_id']).offense_pct.mean().items()}
+                positive.groupby(['team','gsis_id']).offense_pct.mean().items()}
     # Use real opponent slate and only players whose latest roster team matches it.
     roster_team=dict(zip(roster.gsis_id.astype(str),roster.team.astype(str)))
     injury_status=availability(injuries,week)
