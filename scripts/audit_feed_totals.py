@@ -19,6 +19,11 @@ def audit(records, defense):
         "playerRushYards":"rushYards",
         "playerRecYards":"recYards",
         "playerReceptions":"receptions",
+        "playerPassAttempts":"passAttempts",
+        "playerCarries":"rushAttempts",
+        "playerTargets":"targets",
+        "playerRzTargets":"rzTargets",
+        "playerRz":"rzChances",
     }
     defense_metrics={
         "defPassYardsAllowed":"pass_yards",
@@ -35,14 +40,14 @@ def audit(records, defense):
         games=p.get("last5GameStats") or []
         denom=int(p["games"])
         if not 1<=denom<=5: errors.append(f"{who}: invalid sample denominator")
-        if len(games)>denom: errors.append(f"{who}: too many recorded games")
+        if len(games)!=denom: errors.append(f"{who}: {len(games)} chart games != {denom} team games")
         if len({g["gameId"] for g in games})!=len(games):
             errors.append(f"{who}: duplicate game IDs")
         if [g["week"] for g in games]!=sorted(g["week"] for g in games):
             errors.append(f"{who}: game records not chronological")
         for field,metric in player_metrics.items():
             if p.get(field) is None: continue
-            total=sum(float(g[metric]) for g in games)
+            total=sum(float(g.get(metric,0)) for g in games)
             if not close(p[field],round(total/denom,3)):
                 errors.append(f"{who}: {field} {p[field]} != {total}/{denom}")
         d=rows.get((p["opp"],p["pos"]))
