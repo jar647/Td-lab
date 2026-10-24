@@ -263,7 +263,7 @@ function lastFiveChart(r,category,target,defenseAverage){
  }).join('');
  const targetLabel=validTarget?'Research target '+escapeHTML(threshold)+'+ · '+hits+'/'+games.length+' hits ('+Math.round(100*hits/games.length)+'%)':'No verified or suggested target available · neutral bars';
  const defense=defenseAverage==null?'Unavailable':escapeHTML(defenseAverage)+'/game';
- return '<div style="margin-top:12px"><div class="muted" style="font-weight:800">LAST '+games.length+' ACTUAL GAMES</div><div style="display:flex;gap:8px;align-items:end;margin-top:8px">'+bars+'</div><div class="muted" style="margin-top:8px">'+targetLabel+'</div><div class="muted">Last '+games.length+' average: '+average+' · Opposing defense allowed: '+defense+'</div><div class="muted">Green = met research target · Red = below target · Gray = no target. Research targets are not sportsbook lines.</div></div>';
+ return '<div style="margin-top:12px"><div class="muted" style="font-weight:800">LAST '+games.length+' ACTUAL GAMES</div><div style="display:flex;gap:8px;align-items:end;margin-top:8px">'+bars+'</div><div class="muted" style="margin-top:8px">'+targetLabel+'</div><div class="muted">Last '+games.length+' average: '+average+' · Opposing defense allowed: '+defense+'</div><div class="muted">Green = met research target · Red = below target · Gray = no target. Zero production may mean no recorded touches, not confirmed participation. Team-game window, not verified player appearances. Research targets are not sportsbook lines.</div></div>';
 }
 function renderSimpleMatchups(){
  const el=document.getElementById('simpleRankings');if(!el)return;
