@@ -379,17 +379,24 @@ function renderGameSGP(){
   }
  }
  candidates.sort((a,b)=>b.quality-a.quality||String(a.r.player).localeCompare(String(b.r.player)));
- const chosen=[],used=new Set();
- for(const x of candidates){
-  const key=x.r.player_id||x.r.player;
-  if(used.has(key))continue;
-  used.add(key);chosen.push(x);
+ const chosen=[],usedMarkets=new Set(),playerCounts=new Map();
+ // Prefer distinct players first; then consider a second, different market for a player.
+ // Never duplicate a player/market or allow more than two legs on one player.
+ for(const pass of [1,2]){
+  for(const x of candidates){
+   const key=String(x.r.player_id||x.r.player);
+   const marketKey=key+'|'+x.d.key;
+   const count=playerCounts.get(key)||0;
+   if(usedMarkets.has(marketKey)||count!==pass-1)continue;
+   chosen.push(x);usedMarkets.add(marketKey);playerCounts.set(key,count+1);
+   if(chosen.length===5)break;
+  }
   if(chosen.length===5)break;
  }
  const label=filter.options[filter.selectedIndex]?.textContent||'Selected matchup';
  panel.replaceChildren();
  const heading=document.createElement('h2');heading.textContent='🎟️ SGP RESEARCH CARD · '+label;panel.appendChild(heading);
- const note=document.createElement('p');note.className='muted';note.textContent='Matchup-first legs: opponent allowance must support the player average, with the proposed line hit in at least 60% of up to five actual games. No forced QB or payout-driven picks. Sportsbook availability unverified.';panel.appendChild(note);
+ const note=document.createElement('p');note.className='muted';note.textContent='Matchup-first legs: opponent allowance must support the player average, with the proposed line hit in at least 60% of up to five actual games. Up to two different prop markets per player, with distinct players preferred. Same-player legs may be correlated; no forced QB or payout-driven picks. Sportsbook availability unverified.';panel.appendChild(note);
  if(chosen.length<2){
   const p=document.createElement('p');p.className='status';p.textContent='PASS: Not enough eligible players with complete data for a 2-leg SGP. No invented picks.';panel.appendChild(p);return;
  }
