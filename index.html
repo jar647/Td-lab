@@ -229,7 +229,16 @@ function renderPropMatchups(){
   const trend=r[trendKey],base=r[cfg.usage];
   const trendRatio=trend!=null&&base>0?trend/base:null;
   const trendAdjustment=trendRatio==null?0:Math.max(-6,Math.min(6,Math.round((trendRatio-1)*20)));
-  const adjustedScore=Math.max(0,Math.min(100,score+trendAdjustment));
+  // Phase 1: modest, capped role signals; never override the defensive matchup gates.
+  const snap=Number(r.snapShare),target=Number(r.playerTargetShare);
+  const snapPct=Number.isFinite(snap)?(snap<=1?snap*100:snap):null;
+  const roleBonus=(snapPct!=null?Math.max(-3,Math.min(3,(snapPct-65)/12)):0)
+    +((propCategory==='REC'||propCategory==='CATCH')&&Number.isFinite(target)?Math.max(-3,Math.min(3,(target-20)/7)):0);
+  // Phase 2: air-yards signal only for receiving yards, with a conservative cap.
+  const air=Number(r.airYardsPerGame);
+  const airBonus=propCategory==='REC'&&r.airYardsPerGame!=null&&Number.isFinite(air)&&air>0
+    ?Math.max(-2,Math.min(2,(air-55)/35)):0;
+  const adjustedScore=Math.max(0,Math.min(100,Math.round(score+trendAdjustment+roleBonus+airBonus)));
   // Never mark an unfavorable defensive yardage matchup as prime.
   // A defense allowing materially less than the player's season rate is a caution,
   // regardless of volume, trends or the composite ranking score.
@@ -242,6 +251,20 @@ function renderPropMatchups(){
  const trendText=x=>x.trendRatio==null?'Trend unavailable':x.trendRatio>=1.15?'📈 Usage rising':x.trendRatio<=.85?'📉 Usage falling':'➡️ Usage stable';
  const contextKey={PASS:'opponentOffenseBaselinePass',RUSH:'opponentOffenseBaselineRush',REC:'opponentOffenseBaselineRec',CATCH:'opponentOffenseBaselineCatch'}[propCategory];
  const why=x=>'Why: opponent allows '+escapeHTML(x.r[cfg.def])+' '+cfg.unit+'/game; player averages '+escapeHTML(x.r[cfg.usage])+' opportunities/game. '+trendText(x)+(x.r[contextKey]!=null?'. Opponents faced average '+escapeHTML(x.r[contextKey])+' '+cfg.unit+'/game.':'')+(x.r.injuryReportStatus&&x.r.injuryReportStatus!=='NOT_REPORTED'?'. Injury report: '+escapeHTML(x.r.injuryReportStatus):'');
+ // Phase 3: transparent research range, not a calibrated prediction or sportsbook quote.
+ const projection=x=>{
+  const r=x.r,season=Number(r[cfg.player]);
+  const recentKey={PASS:'recent3PassYards',RUSH:'recent3RushYards',REC:'recent3RecYards',CATCH:'recent3Receptions'}[propCategory];
+  const recent=r[recentKey]==null?null:Number(r[recentKey]);
+  if(!Number.isFinite(season)||season<=0)return '';
+  const blend=recent!=null&&Number.isFinite(recent)?season*.7+recent*.3:season;
+  const def=Number(r[cfg.def]);
+  const matchup=Number.isFinite(def)&&def>0?Math.max(.85,Math.min(1.15,def/Math.max(season,1))):1;
+  const midpoint=blend*(.75+.25*matchup);
+  const lower=Math.max(0,midpoint*.8),upper=midpoint*1.2;
+  const fmt=n=>propCategory==='CATCH'?n.toFixed(1):Math.round(n);
+  return '<div class="statsline">Research range: <b>'+fmt(lower)+'–'+fmt(upper)+'</b> '+(propCategory==='CATCH'?'receptions':'yards')+' <span class="muted">(season + recent form + matchup; uncalibrated)</span></div>';
+ };
  const propLineUI=x=>{
   const key=propLineKey(x.r,propCategory),line=propLines[key],suggestion=suggestAltLine(x,cfg,propCategory),decision=propDecision(x,cfg,propCategory);
   const unit=propCategory==='CATCH'?'receptions':'yards';
@@ -252,9 +275,9 @@ function renderPropMatchups(){
  if(top){
   const winner=ranked.find(x=>x.label==='🔥 PRIME MATCHUP');
   const categoryNames={PASS:'PASSING YARDS',RUSH:'RUSHING YARDS',REC:'RECEIVING YARDS',CATCH:'RECEPTIONS'};
-  top.innerHTML=winner?'<div style="border:1px solid #00c97a;background:#112b20;border-radius:13px;padding:14px"><div style="font-size:12px;font-weight:900;color:#6dffc2">🏆 '+categoryNames[propCategory]+' · TOP DAWG OF THE WEEK</div><div class="row" style="margin-top:8px"><div><h3 style="font-size:20px;color:white;margin:0">'+escapeHTML(winner.r.player)+'</h3><div class="muted">'+escapeHTML(winner.r.pos)+' · '+escapeHTML(winner.r.team)+' vs '+escapeHTML(winner.r.opp)+'</div></div><b class="score">'+winner.score+'/100</b></div><div style="font-weight:850;color:#00e28a;margin:9px 0">🔥 PRIME MATCHUP</div>'+propLineUI(winner)+'<div class="statsline">Season avg: '+escapeHTML(winner.r[cfg.player])+' · Defense allows: '+escapeHTML(winner.r[cfg.def])+' '+cfg.unit+'/game</div><details style="margin-top:10px"><summary class="muted">More stats</summary><div class="statsline">Player opportunities: '+escapeHTML(winner.r[cfg.usage])+'/game · Defense opportunities allowed: '+escapeHTML(winner.r[cfg.volume])+'/game</div><div class="muted">'+why(winner)+'</div></details></div>':'<div class="empty">🏆 No PRIME MATCHUP qualifies for '+categoryNames[propCategory]+' this week. No Top Dawg awarded.</div>';
+  top.innerHTML=winner?'<div style="border:1px solid #00c97a;background:#112b20;border-radius:13px;padding:14px"><div style="font-size:12px;font-weight:900;color:#6dffc2">🏆 '+categoryNames[propCategory]+' · TOP DAWG OF THE WEEK</div><div class="row" style="margin-top:8px"><div><h3 style="font-size:20px;color:white;margin:0">'+escapeHTML(winner.r.player)+'</h3><div class="muted">'+escapeHTML(winner.r.pos)+' · '+escapeHTML(winner.r.team)+' vs '+escapeHTML(winner.r.opp)+'</div></div><b class="score">'+winner.score+'/100</b></div><div style="font-weight:850;color:#00e28a;margin:9px 0">🔥 PRIME MATCHUP</div>'+propLineUI(winner)+projection(winner)+'<div class="statsline">Season avg: '+escapeHTML(winner.r[cfg.player])+' · Defense allows: '+escapeHTML(winner.r[cfg.def])+' '+cfg.unit+'/game</div><details style="margin-top:10px"><summary class="muted">More stats</summary><div class="statsline">Player opportunities: '+escapeHTML(winner.r[cfg.usage])+'/game · Defense opportunities allowed: '+escapeHTML(winner.r[cfg.volume])+'/game</div><div class="muted">'+why(winner)+'</div></details></div>':'<div class="empty">🏆 No PRIME MATCHUP qualifies for '+categoryNames[propCategory]+' this week. No Top Dawg awarded.</div>';
  }
- el.innerHTML=ranked.length?ranked.slice(0,15).map(({r,score,label},i)=>'<div class="matchrow"><div class="row"><div style="flex:1"><b>'+(i+1)+'. '+playerDisplay(r)+'</b> <span class="pill">'+escapeHTML(r.pos)+'</span><div class="muted">'+escapeHTML(r.team)+' vs '+escapeHTML(r.opp)+'</div></div><b style="color:#6dffc2">'+score+'/100</b></div><div style="margin:6px 0;font-weight:800;color:#6dffc2">'+label+'</div>'+propLineUI(ranked[i])+'<div class="statsline">Season avg: '+escapeHTML(r[cfg.player])+' · Defense allows: '+escapeHTML(r[cfg.def])+' '+cfg.unit+'/game</div><details style="margin:10px 0"><summary class="muted">More defensive & usage stats</summary><div class="muted">'+why({r,trendRatio:ranked[i].trendRatio})+'</div><div class="statsline">Defense opportunities allowed: '+escapeHTML(r[cfg.volume])+'/game · Player opportunities: '+escapeHTML(r[cfg.usage])+'/game</div></details>'+lastFiveChart(r,propCategory,(propLines[propLineKey(r,propCategory)]!=null&&Number(propLines[propLineKey(r,propCategory)])>0?Number(propLines[propLineKey(r,propCategory)]):suggestAltLine(ranked[i],cfg,propCategory)?.line),r[cfg.def])+'</div></div>').join(''):'<p class="muted">No eligible players with complete '+cfg.unit+' metrics in the current feed.</p>';
+ el.innerHTML=ranked.length?ranked.slice(0,15).map(({r,score,label},i)=>'<div class="matchrow"><div class="row"><div style="flex:1"><b>'+(i+1)+'. '+playerDisplay(r)+'</b> <span class="pill">'+escapeHTML(r.pos)+'</span><div class="muted">'+escapeHTML(r.team)+' vs '+escapeHTML(r.opp)+'</div></div><b style="color:#6dffc2">'+score+'/100</b></div><div style="margin:6px 0;font-weight:800;color:#6dffc2">'+label+'</div>'+propLineUI(ranked[i])+projection(ranked[i])+'<div class="statsline">Season avg: '+escapeHTML(r[cfg.player])+' · Defense allows: '+escapeHTML(r[cfg.def])+' '+cfg.unit+'/game</div><details style="margin:10px 0"><summary class="muted">More defensive & usage stats</summary><div class="muted">'+why({r,trendRatio:ranked[i].trendRatio})+'</div><div class="statsline">Defense opportunities allowed: '+escapeHTML(r[cfg.volume])+'/game · Player opportunities: '+escapeHTML(r[cfg.usage])+'/game</div></details>'+lastFiveChart(r,propCategory,(propLines[propLineKey(r,propCategory)]!=null&&Number(propLines[propLineKey(r,propCategory)])>0?Number(propLines[propLineKey(r,propCategory)]):suggestAltLine(ranked[i],cfg,propCategory)?.line),r[cfg.def])+'</div></div>').join(''):'<p class="muted">No eligible players with complete '+cfg.unit+' metrics in the current feed.</p>';
 }
 function lastFiveChart(r,category,target,defenseAverage){
  const field={PASS:'passYards',RUSH:'rushYards',REC:'recYards',CATCH:'receptions'}[category];
