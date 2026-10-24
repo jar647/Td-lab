@@ -224,20 +224,29 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     for source, field, metric in ((passes, 'passYards', 'yards'),
                                   (rushes, 'rushYards', 'yards'),
                                   (targets, 'recYards', 'yards'),
-                                  (targets, 'receptions', 'receptions')):
+                                  (targets, 'receptions', 'receptions'),
+                                  (passes, 'passAttempts', 'attempts'),
+                                  (rushes, 'rushAttempts', 'attempts'),
+                                  (targets, 'targets', 'attempts'),
+                                  (targets, 'rzTargets', 'redzone')):
         if source.empty:
             continue
         grouped = source.groupby(['posteam', 'pid', 'game_id'])[metric].sum()
         for (tm, player_id, gid), value in grouped.items():
             key = (str(tm), str(player_id), str(gid))
-            per_game.setdefault(key, {'passYards': 0, 'rushYards': 0,
-                                       'recYards': 0, 'receptions': 0})[field] = int(value)
+            per_game.setdefault(key, {})[field] = int(value)
+    if not events.empty:
+        for (tm, player_id, gid), count in events.groupby(['team','player_id','game_id']).size().items():
+            key=(str(tm),str(player_id),str(gid))
+            per_game.setdefault(key,{})['rzChances']=int(count)
     game_weeks = (plays[['game_id', 'week']].drop_duplicates('game_id')
                   .set_index('game_id')['week'].to_dict())
     player_game_series = {}
     for (tm, player_id, gid), metrics in per_game.items():
         player_game_series.setdefault((tm, player_id), []).append({
-            'week': int(game_weeks[gid]), 'gameId': gid, **metrics})
+            'week': int(game_weeks[gid]), 'gameId': gid,
+            **{field:metrics.get(field,0) for field in ('passYards','rushYards','recYards',
+               'receptions','passAttempts','rushAttempts','targets','rzTargets','rzChances')}})
     for key, games_list in player_game_series.items():
         games_list.sort(key=lambda g: (g['week'], g['gameId']))
         player_game_series[key] = games_list[-WINDOW:]
@@ -253,7 +262,8 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
         observed={g['gameId']:g for g in games_list}
         player_game_series[(tm,pid)]=[
             observed.get(gid,{'week':w,'gameId':gid,'passYards':0,
-                              'rushYards':0,'recYards':0,'receptions':0})
+                              'rushYards':0,'recYards':0,'receptions':0,
+                              'passAttempts':0,'rushAttempts':0,'targets':0,'rzTargets':0,'rzChances':0})
             for w,gid in team_game_index.get(tm,[])]
     # Defense-wide audit: include every club that has played, not just teams
     # appearing in this week's player matchup cards.
