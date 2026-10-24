@@ -1,0 +1,28 @@
+name: Compare defensive projection models
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'defense_model_backtest.py'
+      - '.github/workflows/compare-defense-models.yml'
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Check model syntax
+        run: python -m py_compile defense_model_backtest.py
+      - name: Compare models using historical games
+        run: python defense_model_backtest.py
+      - name: Save comparison report
+        uses: actions/upload-artifact@v4
+        with:
+          name: defense-model-comparison
+          path: data/defense_model_comparison.json
