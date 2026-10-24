@@ -665,6 +665,39 @@ def main():
             print(f'Froze pregame snapshot for Week {meta["week"]}')
         else:
             print(f'Skipped Week {meta["week"]} snapshot: first game day already started or schedule missing',file=sys.stderr)
+    # Capture remaining games individually, even if the weekly snapshot was
+    # created after Thursday. UTC game-day cutoff is deliberately conservative.
+    # A separate immutable file is created for each eligible matchup.
+    slate=schedules[(pd.to_numeric(schedules.season,errors='coerce')==SEASON)&(pd.to_numeric(schedules.week,errors='coerce')==meta['week'])&(schedules.game_type.astype(str).str.upper()=='REG')]
+    for _,scheduled in slate.iterrows():
+        game_day=pd.to_datetime(scheduled.gameday,errors='coerce',utc=True)
+        if pd.isna(game_day) or pd.Timestamp(now)>=game_day:continue
+        home,away=str(scheduled.home_team),str(scheduled.away_team)
+        game_id=str(scheduled.game_id)
+        path=history/f'{SEASON}-week-{meta["week"]}-game-{game_id}.json'
+        if path.exists():continue
+        candidates=[dict(p) for p in result if (p.get('team')==home and p.get('opp')==away) or (p.get('team')==away and p.get('opp')==home)]
+        if not candidates:continue
+        for player in candidates:
+            frozen={}
+            for kind,keys in {'PASS':('playerPassYards','recent3PassYards','defPassYardsAllowed'),
+                              'RUSH':('playerRushYards','recent3RushYards','defRushYardsAllowed'),
+                              'REC':('playerRecYards','recent3RecYards','defRecYardsAllowed'),
+                              'CATCH':('playerReceptions','recent3Receptions','defReceptionsAllowed')}.items():
+                if kind=='PASS' and player.get('pos')!='QB':continue
+                if kind in ('REC','CATCH') and player.get('pos')=='QB':continue
+                a,b,d=(player.get(key) for key in keys)
+                if a is None or float(a)<=0:continue
+                a=float(a)
+                blend=.7*a+.3*float(b) if b is not None else a
+                factor=max(.85,min(1.15,float(d)/a)) if d is not None and float(d)>0 else 1
+                frozen[kind]=int(blend*(.75+.25*factor)+.5)
+            player['frozen_projections']=frozen
+        path.write_text(json.dumps({'season':SEASON,'week':meta['week'],'game_id':game_id,
+            'captured_at':meta['generated_at'],'players':candidates,
+            'projection_model_version':'original-70-30-defense-v1',
+            'capture_policy':'before scheduled game day (UTC)'},indent=2))
+        print(f'Froze {len(candidates)} player records for game {game_id}')
     # Report snapshot readiness for the current week; never silently claim
     # a post-kickoff capture is eligible for prediction accuracy.
     slate=schedules[(pd.to_numeric(schedules.season,errors='coerce')==SEASON)&(pd.to_numeric(schedules.week,errors='coerce')==meta['week'])&(schedules.game_type.astype(str).str.upper()=='REG')]
