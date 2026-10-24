@@ -363,6 +363,18 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                 for (t,pid),group in positive.groupby(['team','gsis_id'])}
             snap_share_by_player={(str(t),str(pid)):mean(v) for (t,pid),v in
                 positive.groupby(['team','gsis_id']).offense_pct.mean().items()}
+    # Actual appearances: positive offensive snaps, including zero-yard games.
+    appearance_games={}
+    if snap_counts is not None and not snap_counts.empty and 'pfr_id' in roster.columns:
+        all_snaps=snap_counts.copy()
+        all_snaps=all_snaps[(pd.to_numeric(all_snaps.season,errors='coerce')==SEASON)&
+            (pd.to_numeric(all_snaps.week,errors='coerce')<week)]
+        all_snaps['offense_pct']=pd.to_numeric(all_snaps.offense_pct,errors='coerce')
+        all_snaps=all_snaps[all_snaps.offense_pct>0]
+        id_map=roster[['gsis_id','pfr_id']].dropna().drop_duplicates('pfr_id',keep=False)
+        all_snaps=all_snaps.merge(id_map,left_on='pfr_player_id',right_on='pfr_id',how='inner')
+        for (tm,pid),group in all_snaps.groupby(['team','gsis_id']):
+            appearance_games[(str(tm),str(pid))]=set(int(w) for w in group.week)
     # Use real opponent slate and only players whose latest roster team matches it.
     roster_team=dict(zip(roster.gsis_id.astype(str),roster.team.astype(str)))
     injury_status=availability(injuries,week)
