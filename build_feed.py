@@ -285,7 +285,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
             record={'defense':defense,'position':position,'games':int(dg)}
             for metric,(source,col,poscol) in audit_metrics.items():
                 if poscol is None and position!='QB': continue
-                if poscol is not None and position=='QB': continue
+                if poscol is not None and position=='QB' and metric not in ('rush_yards','rush_attempts'): continue
                 subset=source[source.defteam==defense]
                 if poscol is not None: subset=subset[subset[poscol]==position]
                 # Cross-check direct play totals against independently grouped
