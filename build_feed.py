@@ -346,7 +346,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     # through an explicit roster PFR identifier; never fuzzy-match names.
     snap_share_by_player={}
     snap_weeks_by_player={}
-    if snap_counts is not None and not snap_counts.empty and 'pfr_id' in roster.columns and 'pfr_player_id' in snap_counts.columns:
+    if snap_counts is not None and not snap_counts.empty and 'pfr_id' in roster.columns and 'pfr_player_id' in snap_counts.columns and {'season','week','offense_pct','team'}.issubset(snap_counts.columns):
         required(snap_counts,['season','week','team','pfr_player_id','offense_pct'],'snap counts')
         snap=snap_counts.copy()
         snap=snap[(pd.to_numeric(snap.season,errors='coerce')==SEASON)&
