@@ -502,6 +502,22 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
             except (ValueError,TypeError,OverflowError):
                 pass
     nonactive_codes={'RES','DEV','CUT','RET','EXE','TRD','TRT'}
+    # Possible returnees: previously snap-verified skill players absent from the
+    # latest completed team game. Active roster is NOT confirmation of game-day play.
+    possible_returnees={}
+    for (tm,pid), played_weeks in appearance_games.items():
+        if pos_by_id.get(pid) not in ('RB','WR','TE') or roster_team.get(pid)!=tm:
+            continue
+        team_weeks=sorted(w for (team_code,w) in game_lookup if team_code==tm and w<week)
+        if not team_weeks or team_weeks[-1] in played_weeks:
+            continue
+        if len([w for w in played_weeks if w<team_weeks[-1]])<2:
+            continue
+        if injury_status.get(pid)=='OUT' or roster_status.get(pid,'') in unavailable_roster or weekly_roster_codes.get(pid) in nonactive_codes:
+            continue
+        possible_returnees.setdefault(tm,[]).append({'player':roster_names.get(str(pid),str(pid)),
+            'position':pos_by_id[pid],'lastPlayedWeek':max(w for w in played_weeks if w<team_weeks[-1]),
+            'status':'POSSIBLE_RETURN_NOT_CONFIRMED'})
     result=[]
     excluded={'out_report':0,'unavailable_roster':0,'nonactive_weekly_roster':0}
     for _,game in slate.iterrows():
@@ -555,6 +571,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                 health=injury_status.get(pid,'ROSTER_ACTIVE' if weekly_roster_codes.get(pid)=='ACT' else 'UNVERIFIED')
                 result.append({'player_id':pid,'availability':health,'player':roster_names.get(str(pid),str(p.player)),'jersey_number':jersey_by_player.get(pid),'pos':position,'team':team,'opp':opp,
                     'games':pg,'teamGames':og,'playerAppearancesVerified':True,
+                    'possibleReturningTeammates':[x for x in possible_returnees.get(team,[]) if x['player']!=roster_names.get(str(pid),str(p.player))],
                     'teamTargetsTotal':int(team_targets.get(team,0)),
                     'teamRzChancesTotal':int(team_events.get(team,0)),
                     'tdallowed':mean(player_td.get((opp,position),0)/dg),
