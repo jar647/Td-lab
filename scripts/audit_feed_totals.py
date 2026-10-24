@@ -78,7 +78,7 @@ def audit(records, defense):
                 errors.append(f"{who}: {metric} defensive total/denominator mismatch")
     if errors:raise RuntimeError("Feed audit failed ("+str(len(errors))+"): "+"; ".join(errors[:25]))
     return {"players_checked":len(records),"defensive_rows_checked":len(rows),
-            "player_average_definition":"last five TEAM games, not confirmed player appearances",
+            "player_average_definition":"last five actual snap-confirmed player appearances",
             "participation_verified":True,"external_boxscore_verified":False,
             "status":"INTERNAL_TOTALS_RECONCILED"}
 def main():
