@@ -78,5 +78,6 @@ def audit(records, defense):
 def main():
     result=audit(json.loads((DATA/"matchups.json").read_text()),
                  json.loads((DATA/"defense_stats_audit.json").read_text()))
+    (DATA/"feed_audit.json").write_text(json.dumps(result,indent=2))
     print(json.dumps(result,indent=2))
 if __name__=="__main__":main()
