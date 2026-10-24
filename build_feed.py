@@ -480,10 +480,27 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                 player_series=[g for g in team_series if g['week'] in snap_weeks] if snap_verified else team_series
                 pg=len(player_series) if snap_verified else og
                 if pg<1: continue
+                # Season and last five ACTUAL player appearances, not team games.
+                weeks=sorted(w for w in appearance_games.get((team,pid),set())
+                             if (team,w) in game_lookup)
+                if not weeks:continue
+                if any(t==team and player==pid and w not in weeks
+                       for t,player,w in season_player_stats):continue
+                def game_record(w):
+                    metrics=season_player_stats.get((team,pid,w),{})
+                    return {'week':w,'gameId':game_lookup[(team,w)],
+                            **{k:metrics.get(k,0) for k in
+                            ('passYards','passAttempts','rushYards','rushAttempts',
+                             'recYards','receptions','targets')}}
+                season_series=[game_record(w) for w in weeks]
+                last_series=season_series[-WINDOW:]
+                def avg(key,series):
+                    return mean(sum(float(g[key]) for g in series)/len(series))
+                pg=len(last_series)
                 share=100*player_events[(team,pid)]/team_events[team]
                 health=injury_status.get(pid,'ROSTER_ACTIVE' if weekly_roster_codes.get(pid)=='ACT' else 'UNVERIFIED')
                 result.append({'player_id':pid,'availability':health,'player':p.player,'jersey_number':jersey_by_player.get(pid),'pos':position,'team':team,'opp':opp,
-                    'games':pg,'teamGames':og,'playerAppearancesVerified':snap_verified,
+                    'games':pg,'teamGames':og,'playerAppearancesVerified':True,
                     'teamTargetsTotal':int(team_targets.get(team,0)),
                     'teamRzChancesTotal':int(team_events.get(team,0)),
                     'tdallowed':mean(player_td.get((opp,position),0)/dg),
@@ -492,22 +509,25 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     'defRecYardsAllowed':mean(defense_position_yards.get((opp,position),0)/dg) if receiving_available and position!='QB' else None,
                     'defTargetsAllowed':mean(defense_position_targets.get((opp,position),0)/dg) if position!='QB' else None,
                     'defRzTargetsAllowed':mean(defense_position_rz_targets.get((opp,position),0)/dg) if position!='QB' else None,
-                    'playerTargets':mean(player_targets.get((team,pid),0)/pg) if position!='QB' else None,
+                    'playerTargets':avg('targets',last_series),0)/pg) if position!='QB' else None,
                     'playerTargetShare':mean(100*player_targets.get((team,pid),0)/team_targets[team]) if position!='QB' and team_targets.get(team,0)>0 else None,
                     'playerRzTargets':mean(player_rz_targets.get((team,pid),0)/pg) if position!='QB' else None,
                     'snapShare':snap_share_by_player.get((team,pid)),
-                    'last5GameStats':player_series,
-                    'gameSampleDefinition':'snap_verified_appearances' if snap_verified else 'team_games; participation unverified',
-                    'playerPassYards':mean(player_pass_yards.get((team,pid),0)/pg) if position=='QB' else None,
-                    'playerPassAttempts':mean(player_pass_attempts.get((team,pid),0)/pg) if position=='QB' else None,
+                    'last5GameStats':last_series,
+                    'seasonGamesPlayed':len(season_series),'last5GamesPlayed':len(last_series),
+                    'seasonAverages':{k:avg(k,season_series) for k in ('passYards','passAttempts','rushYards','rushAttempts','recYards','receptions','targets')},
+                    'last5Averages':{k:avg(k,last_series) for k in ('passYards','passAttempts','rushYards','rushAttempts','recYards','receptions','targets')},
+                    'gameSampleDefinition':'snap_verified_player_appearances',
+                    'playerPassYards':avg('passYards',last_series),0)/pg) if position=='QB' else None,
+                    'playerPassAttempts':avg('passAttempts',last_series),0)/pg) if position=='QB' else None,
                     'defPassYardsAllowed':mean(defense_pass_yards.get(opp,0)/dg) if position=='QB' else None,
                     'defPassAttemptsAllowed':mean(defense_pass_attempts.get(opp,0)/dg) if position=='QB' else None,
-                    'playerRushYards':mean(player_rush_yards.get((team,pid),0)/pg),
-                    'playerCarries':mean(player_carries.get((team,pid),0)/pg),
+                    'playerRushYards':avg('rushYards',last_series),0)/pg),
+                    'playerCarries':avg('rushAttempts',last_series),0)/pg),
                     'defRushYardsAllowed':mean(defense_rush_yards.get((opp,position),0)/dg),
                     'defRushAttemptsAllowed':mean(defense_rush_attempts.get((opp,position),0)/dg),
-                    'playerRecYards':mean(player_rec_yards.get((team,pid),0)/pg) if position!='QB' else None,
-                    'playerReceptions':mean(player_receptions.get((team,pid),0)/pg) if position!='QB' else None,
+                    'playerRecYards':avg('recYards',last_series),0)/pg) if position!='QB' else None,
+                    'playerReceptions':avg('receptions',last_series),0)/pg) if position!='QB' else None,
                     'defReceptionsAllowed':mean(defense_receptions.get((opp,position),0)/dg) if position!='QB' else None,
                     'recent3Games':last_counts.get(team,0),
                     'recent3Targets':mean(last_target_counts.get((team,pid),0)/last_counts[team]) if last_counts.get(team) else None,
