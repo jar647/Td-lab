@@ -358,6 +358,7 @@ function renderGameSGP(){
   return;
  }
  const candidates=[];
+ const audit={players:0,returning:0,missingLogs:0,missingMetrics:0,noSupportedLine:0,conservativeFallbacks:0};
  const defs=[
   {key:'PASS',pos:['QB'],field:'playerPassYards',def:'defPassYardsAllowed',thresholds:[175,200,225,250],unit:'passing yards'},
   {key:'RUSH',pos:['RB','QB'],field:'playerRushYards',def:'defRushYardsAllowed',thresholds:[25,40,50,60,75],unit:'rushing yards'},
@@ -366,25 +367,29 @@ function renderGameSGP(){
  ];
  for(const r of autoRecords){
   if(gameKey(r)!==selected||r.market!=='ATD'||r.availability!=='ROSTER_ACTIVE'||r.playerAppearancesVerified===false||manuallyInactive(r)||Number(r.games)<3)continue;
+  audit.players++;
   // Avoid projecting teammate volume from an injury-depleted sample without review.
-  if(Array.isArray(r.possibleReturningTeammates)&&r.possibleReturningTeammates.length)continue;
+  if(Array.isArray(r.possibleReturningTeammates)&&r.possibleReturningTeammates.length){audit.returning++;continue;}
   if(!r.player||/^00-\\d+$/.test(String(r.player)))continue;
   for(const d of defs){
    if(!d.pos.includes(r.pos))continue;
    const avg=Number(r[d.field]),allowed=Number(r[d.def]);
-   if(r[d.field]==null||r[d.def]==null||!Number.isFinite(avg)||!Number.isFinite(allowed)||avg<=0||allowed<=0)continue;
+   if(r[d.field]==null||r[d.def]==null||!Number.isFinite(avg)||!Number.isFinite(allowed)||avg<=0||allowed<=0){audit.missingMetrics++;continue;}
    // Shared weighted research handles opponent allowance without a hard cap.
    const logField={PASS:'passYards',RUSH:'rushYards',REC:'recYards',CATCH:'receptions'}[d.key];
    const logs=Array.isArray(r.last5GameStats)?r.last5GameStats.slice(-5):[];
    const actual=logs.map(g=>g[logField]).filter(v=>v!=null&&Number.isFinite(Number(v))).map(Number);
-   if(actual.length<3)continue;
+   if(actual.length<3){audit.missingLogs++;continue;}
    const usageField={PASS:'playerPassAttempts',RUSH:'playerCarries',REC:'playerTargets',CATCH:'playerTargets'}[d.key];
    const research=propResearch(r,d.key,d.field,d.def,usageField,null,d.thresholds);
-   if(!research||!research.tiers||!research.tiers.balanced)continue;
-   const chosenLine=research.tiers.balanced,line=chosenLine.line;
+   if(!research||!research.tiers){audit.noSupportedLine++;continue;}
+   const tier=research.tiers.balanced?'Balanced':research.tiers.conservative?'Conservative':null;
+   if(!tier){audit.noSupportedLine++;continue;}
+   if(tier==='Conservative')audit.conservativeFallbacks++;
+   const chosenLine=research.tiers[tier.toLowerCase()],line=chosenLine.line;
    const hitRate=chosenLine.hits/chosenLine.total;
    const quality=hitRate*.65+Math.min(research.projection/Math.max(avg,1),1.5)*.2+Math.min(line/avg,1)*.15;
-   candidates.push({r,d,line,quality,hitRate,logCount:actual.length});
+   candidates.push({r,d,line,quality,hitRate,logCount:actual.length,tier});
   }
  }
  candidates.sort((a,b)=>b.quality-a.quality||String(a.r.player).localeCompare(String(b.r.player)));
@@ -412,14 +417,15 @@ function renderGameSGP(){
   warning.textContent='⚠️ POSSIBLE RETURNING PLAYERS: '+names.join(', ')+'. Return not confirmed. Teammate props withheld pending game-day availability and workload review.';
   panel.appendChild(warning);
  }
- const note=document.createElement('p');note.className='muted';note.textContent='Matchup-first legs: opponent allowance must support the player average, with the proposed line hit in at least 60% of up to five actual games. Up to two different prop markets per player, with distinct players preferred. Same-player legs may be correlated; no forced QB or payout-driven picks. Sportsbook availability unverified.';panel.appendChild(note);
+ const note=document.createElement('p');note.className='muted';note.textContent='SGP research uses the weighted projection and actual recent game logs. Balanced legs require 3/5 or better when five logs exist; Conservative fallback requires 4/5. Distinct players preferred, maximum two markets per player. Sportsbook availability and odds unverified.';panel.appendChild(note);
+ const diagnostics=document.createElement('p');diagnostics.className='muted';diagnostics.textContent='Eligibility check: '+audit.players+' active player records · '+candidates.length+' qualifying prop legs · '+audit.returning+' players withheld for possible teammate returns · '+audit.missingLogs+' markets lacking 3 game logs · '+audit.missingMetrics+' markets missing metrics · '+audit.noSupportedLine+' markets without supported ALT.';panel.appendChild(diagnostics);
  if(chosen.length<2){
   const p=document.createElement('p');p.className='status';p.textContent='PASS: Not enough eligible players with complete data for a 2-leg SGP. No invented picks.';panel.appendChild(p);return;
  }
  const list=document.createElement('ol');list.style.paddingLeft='22px';
  for(const x of chosen){
   const li=document.createElement('li');li.style.margin='10px 0';
-  const strong=document.createElement('strong');strong.textContent=x.r.player+' · '+x.line+'+ '+x.d.unit;li.appendChild(strong);
+  const strong=document.createElement('strong');strong.textContent=x.r.player+' · '+x.line+'+ '+x.d.unit+' ('+x.tier+')';li.appendChild(strong);
   const why=document.createElement('div');why.className='muted';why.textContent='Season average '+Number(x.r[x.d.field]).toFixed(1)+' · Opponent allows '+Number(x.r[x.d.def]).toFixed(1)+' per game to position · '+Math.round(x.hitRate*100)+'% hit rate ('+x.logCount+' games checked)';li.appendChild(why);list.appendChild(li);
  }
  panel.appendChild(list);
