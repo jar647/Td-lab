@@ -368,6 +368,30 @@ function renderSGPMarketResearch(panel,selected){
   const wrap=document.createElement('label');wrap.style.cssText='display:inline-flex;flex-direction:column;gap:4px;margin:6px 12px 6px 0';wrap.textContent=label;
   const input=document.createElement('input');input.type='number';input.step='.5';input.placeholder='Current line';input.style.maxWidth='165px';input.value=saved[key]??'';wrap.appendChild(input);section.appendChild(wrap);fields[key]=input;
  }
+ const angles=document.createElement('section');angles.style.cssText='margin-top:12px;padding:12px;border:1px solid #426d5b;border-radius:12px';
+ const angleHeading=document.createElement('h4');angleHeading.textContent='🔍 FULL MARKET ANGLE SCAN';angles.appendChild(angleHeading);
+ const angleList=document.createElement('div');angles.appendChild(angleList);
+ const addAngle=(name,reason,status='RESEARCH')=>{const p=document.createElement('p');p.style.margin='8px 0';p.textContent='• '+name+' · '+status+' · '+reason;angleList.appendChild(p);};
+ const scan=()=>{
+  angleList.replaceChildren();
+  if(fields.spread.value===''||fields.total.value===''){addAngle('ATS / totals / ML / team totals / first-half','Enter current spread and total to unlock scenario-based research');return;}
+  const spread=Number(fields.spread.value),bookTotal=Number(fields.total.value);
+  if(!Number.isFinite(spread)||!Number.isFinite(bookTotal)||bookTotal<=0)return;
+  const homeImplied=(bookTotal-spread)/2,awayImplied=(bookTotal+spread)/2;
+  const homeProj=Number(game.projected_home_points),awayProj=Number(game.projected_away_points);
+  const marginEdge=Number(game.projected_margin_home)+spread,totalEdge=Number(game.projected_total)-bookTotal;
+  addAngle('ATS: '+(marginEdge>=0?game.home+' '+(spread>0?'+':'')+spread:game.away+' '+(-spread>0?'+':'')+(-spread)),'Projected margin differs by '+Math.abs(marginEdge).toFixed(1)+' points',Math.abs(marginEdge)>=1.5?'MODEL LEAN':'SMALL EDGE / PASS');
+  addAngle('Game total: '+(totalEdge>=0?'OVER ':'UNDER ')+bookTotal,'Projected total differs by '+Math.abs(totalEdge).toFixed(1)+' points',Math.abs(totalEdge)>=2?'MODEL LEAN':'SMALL EDGE / PASS');
+  for(const [team,proj,implied] of [[game.home,homeProj,homeImplied],[game.away,awayProj,awayImplied]]){
+   const edge=proj-implied;
+   addAngle(team+' team total '+(edge>=0?'OVER':'UNDER'),'Sportsbook-implied '+implied.toFixed(1)+' vs model '+proj.toFixed(1)+'; actual team-total line and odds NOT verified',Math.abs(edge)>=2?'INVESTIGATE':'LOW DIFFERENCE');
+  }
+  addAngle('Moneyline: '+(Number(game.projected_margin_home)>=0?game.home:game.away),'Model favorite only; ML odds and win probability unavailable','PRICE REQUIRED');
+  addAngle('First half / first quarter / alternative spreads','No verified period-specific projections or live lines; review sportsbook options','DATA REQUIRED');
+  addAngle('Player overs AND unders','Existing player research covers selected ALT overs only; unders and additional markets need verified inputs','PARTIAL COVERAGE');
+  const correlation=document.createElement('p');correlation.className='muted';correlation.textContent='Correlation ideas to investigate: '+(Number(game.projected_total)>=48?'high passing volume + receiver receptions + higher game total':Number(game.projected_total)<=41?'lower game total + conservative yardage unders':'team scoring + opponent game script')+'. These are hypotheses, NOT measured correlations. A playable SGP requires actual combined odds and a reliable joint probability estimate.';angleList.appendChild(correlation);
+ };
+ fields.spread.addEventListener('input',scan);fields.total.addEventListener('input',scan);scan();section.appendChild(angles);
  const script=document.createElement('div');script.className='status';script.style.marginTop='12px';section.appendChild(script);
  const explanation=document.createElement('p');explanation.className='muted';section.appendChild(explanation);
  const update=()=>{
@@ -500,7 +524,7 @@ function renderGameSGP(){
   const msg=document.createElement('p');msg.textContent='Only '+green.length+' GREEN-rated leg(s) found. The remaining candidates have CAUTION flags. No validated joint probability or combined sportsbook price is available, so this app cannot responsibly recommend an SGP for this matchup.';warning.appendChild(msg);
   const detail=document.createElement('p');detail.className='muted';detail.textContent='Research candidates to investigate manually: '+chosen.map(x=>x.r.player+' '+x.line+'+ '+x.d.unit+' ('+x.verdict+')').join(' · ')+'. Check current lines, injury status and odds in Hard Rock Bet. Do not mistake these for approved picks.';warning.appendChild(detail);
   panel.appendChild(warning);
-  return;
+  const sub=document.createElement('p');sub.className='muted';sub.textContent='Continue reviewing the full market scan above and individual prop research below. No bet is automatically endorsed.';panel.appendChild(sub);
  }
  if(chosen.length<2){
   const p=document.createElement('p');p.className='status';p.textContent='PASS: Not enough eligible players with complete data for a 2-leg SGP. No invented picks.';panel.appendChild(p);return;
