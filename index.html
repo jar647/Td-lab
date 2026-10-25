@@ -436,7 +436,9 @@ function renderGameSGP(){
  if(!(window.propVaultSlip instanceof Map))window.propVaultSlip=new Map();
  const slip=window.propVaultSlip;
  const keyFor=x=>String(x.r.player_id||x.r.player)+'|'+x.d.key+'|'+x.line;
- const display=x=>x.r.player+' · '+x.line+'+ '+x.d.unit+(x.returnWarning?' ⚠️ return-risk caution':'');
+ const verdict=x=>x.hitRate<.6?'PASS':x.returnWarning||x.hitRate<.8?'CAUTION':'GREEN';
+ const verdictColor=x=>verdict(x)==='GREEN'?'#4ade80':verdict(x)==='CAUTION'?'#fbbf24':'#f87171';
+ const display=x=>x.r.player+' · '+x.line+'+ '+x.d.unit+' · '+verdict(x);
  const slipBox=document.createElement('section');slipBox.className='panel';slipBox.style.marginTop='16px';
  const slipHeading=document.createElement('h3');slipHeading.textContent='🧾 MY CUSTOM SGP SLIP';slipBox.appendChild(slipHeading);
  const slipItems=document.createElement('div');slipBox.appendChild(slipItems);
@@ -459,7 +461,7 @@ function renderGameSGP(){
   copySlip.disabled=!slip.size;clearSlip.disabled=!slip.size;
  };
  const addButtons=[];
- const refreshAddButtons=()=>{for(const [button,key] of addButtons){const added=slip.has(key);button.textContent=added?'✓ ADDED':'+ ADD';button.setAttribute('aria-pressed',String(added));}};
+ const refreshAddButtons=()=>{for(const [button,key] of addButtons){if(button.disabled){button.textContent='PASS';continue;}const added=slip.has(key);button.textContent=added?'✓ ADDED':'+ ADD';button.setAttribute('aria-pressed',String(added));}};
  copySlip.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(slipText());copySlip.textContent='✅ COPIED';}catch(e){const ta=document.createElement('textarea');ta.value=slipText();ta.style.width='100%';slipBox.appendChild(ta);ta.focus();ta.select();}});
  clearSlip.addEventListener('click',()=>{slip.clear();refreshSlip();refreshAddButtons();});
  panel.appendChild(slipBox);
@@ -468,8 +470,8 @@ function renderGameSGP(){
  for(const x of candidates.slice(0,30)){
   const li=document.createElement('li');li.style.margin='10px 0';
   const top=document.createElement('div');top.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:8px';
-  const strong=document.createElement('strong');strong.textContent=display(x)+' ('+x.tier+')';top.appendChild(strong);
-  const add=document.createElement('button');add.type='button';add.className='chip';add.style.flexShrink='0';
+  const strong=document.createElement('strong');strong.textContent=x.r.player+' · '+x.line+'+ '+x.d.unit+' ('+x.tier+')';top.appendChild(strong);const verdictBadge=document.createElement('span');verdictBadge.textContent='● '+verdict(x);verdictBadge.style.cssText='font-weight:900;color:'+verdictColor(x)+';display:block;margin-top:4px';strong.appendChild(verdictBadge);
+  const add=document.createElement('button');add.type='button';add.className='chip';add.style.flexShrink='0';if(verdict(x)==='PASS'){add.disabled=true;add.title='PASS: not recommended for the slip';}
   const key=keyFor(x);addButtons.push([add,key]);
   add.addEventListener('click',()=>{
    if(slip.has(key))slip.delete(key);
