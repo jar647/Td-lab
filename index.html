@@ -355,35 +355,40 @@ function renderSimpleMatchups(){
 }
 
 let propVaultGameFeed=null;
+const propVaultMarketLines={};
 function renderSGPMarketResearch(panel,selected){
  const game=propVaultGameFeed?.games?.find(g=>[String(g.home),String(g.away)].sort().join('|')===selected);
  const section=document.createElement('section');section.className='panel';section.style.margin='12px 0';
- const heading=document.createElement('h3');heading.textContent='🏈 FULL GAME BETTING BOARD · ML / ATS / TOTALS / HALVES';section.appendChild(heading);
- const note=document.createElement('p');note.className='muted';note.textContent='The app must compare real sportsbook lines and prices before recommending non-player legs. First-half, first-quarter and team-total models are not yet validated. No fabricated picks or odds.';section.appendChild(note);
- if(game){
-  const score=document.createElement('p');score.textContent='Model baseline: '+game.away+' '+game.projected_away_points+' · '+game.home+' '+game.projected_home_points+' · Total '+game.projected_total;section.appendChild(score);
-  const entries=[['Home spread (e.g. -3.5)','spread'],['Full-game total','total']];
-  const fields={};
-  for(const [label,key] of entries){
-   const wrap=document.createElement('label');wrap.style.cssText='display:inline-flex;flex-direction:column;gap:4px;margin:6px 12px 6px 0';wrap.textContent=label;
-   const input=document.createElement('input');input.type='number';input.step='.5';input.placeholder='Sportsbook line';input.style.maxWidth='160px';wrap.appendChild(input);section.appendChild(wrap);fields[key]=input;
+ const heading=document.createElement('h3');heading.textContent='🏈 SGP GAME SCRIPT · SPREAD + TOTAL FIRST';section.appendChild(heading);
+ if(!game){const p=document.createElement('p');p.className='status';p.textContent='No published game projection. Cannot establish a game script.';section.appendChild(p);panel.appendChild(section);return;}
+ const margin=Number(game.projected_margin_home),total=Number(game.projected_total);
+ const score=document.createElement('p');score.textContent='Uncalibrated model baseline: '+game.away+' '+game.projected_away_points+' · '+game.home+' '+game.projected_home_points+' · Total '+total;section.appendChild(score);
+ const fields={};const saved=propVaultMarketLines[selected]||{};
+ for(const [label,key] of [['Sportsbook HOME spread (e.g. -3.5)','spread'],['Sportsbook full-game total','total']]){
+  const wrap=document.createElement('label');wrap.style.cssText='display:inline-flex;flex-direction:column;gap:4px;margin:6px 12px 6px 0';wrap.textContent=label;
+  const input=document.createElement('input');input.type='number';input.step='.5';input.placeholder='Current line';input.style.maxWidth='165px';input.value=saved[key]??'';wrap.appendChild(input);section.appendChild(wrap);fields[key]=input;
+ }
+ const script=document.createElement('div');script.className='status';script.style.marginTop='12px';section.appendChild(script);
+ const explanation=document.createElement('p');explanation.className='muted';section.appendChild(explanation);
+ const update=()=>{
+  propVaultMarketLines[selected]={spread:fields.spread.value,total:fields.total.value};
+  if(fields.spread.value===''||fields.total.value===''){
+   script.textContent='⚠️ Enter BOTH current sportsbook lines to build the ATS + total game script.';
+   explanation.textContent='No automatic ATS, total, or player-leg correlation claims without current lines. Player props below are preliminary research candidates, not a priced SGP.';
+   return;
   }
-  const result=document.createElement('p');result.className='status';section.appendChild(result);
-  const update=()=>{
-   const notes=[];
-   if(fields.spread.value!==''){
-    const line=Number(fields.spread.value),edge=Number(game.projected_margin_home)+line;
-    notes.push(Math.abs(edge)<1.5?'ATS: PASS (small model difference)':'ATS model lean: '+(edge>0?game.home+' '+(line>0?'+':'')+line:game.away+' '+(-line>0?'+':'')+(-line))+' · '+Math.abs(edge).toFixed(1)+' point model difference');
-   }
-   if(fields.total.value!==''){
-    const line=Number(fields.total.value),edge=Number(game.projected_total)-line;
-    notes.push(Math.abs(edge)<2?'TOTAL: PASS (small model difference)':'TOTAL model lean: '+(edge>0?'OVER ':'UNDER ')+line+' · '+Math.abs(edge).toFixed(1)+' point model difference');
-   }
-   result.textContent=notes.length?notes.join(' | '):'Enter current sportsbook lines to evaluate spread and total model differences. ML, halves, quarters and team totals require verified market data.';
-  };
-  fields.spread.addEventListener('input',update);fields.total.addEventListener('input',update);update();
- }else{const p=document.createElement('p');p.className='status';p.textContent='Game projection unavailable. No non-player selections can be verified.';section.appendChild(p);}
- panel.appendChild(section);
+  const line=Number(fields.spread.value),marketTotal=Number(fields.total.value);
+  if(!Number.isFinite(line)||!Number.isFinite(marketTotal)||marketTotal<=0){script.textContent='Invalid sportsbook lines';return;}
+  const atsEdge=margin+line,totalEdge=total-marketTotal;
+  const ats=Math.abs(atsEdge)<1.5?'ATS PASS (difference below 1.5 pts)':(atsEdge>0?game.home+' '+(line>0?'+':'')+line:game.away+' '+(-line>0?'+':'')+(-line))+' ATS model lean';
+  const totals=Math.abs(totalEdge)<2?'TOTAL PASS (difference below 2 pts)':(totalEdge>0?'OVER ':'UNDER ')+marketTotal+' model lean';
+  const favorite=margin>=0?game.home:game.away;
+  const scriptType=total>=48?'higher-scoring':total<=41?'lower-scoring':'moderate-scoring';
+  const competitiveness=Math.abs(margin)<=4?'competitive':Math.abs(margin)>=9?'potentially one-sided':'moderately competitive';
+  script.textContent='📊 '+ats+' · '+totals+' | '+scriptType+', '+competitiveness+' game · Model favorite '+favorite;
+  explanation.textContent='Game script is based on projected spread '+Math.abs(margin).toFixed(1)+' and total '+total.toFixed(1)+'. Model vs book: ATS '+Math.abs(atsEdge).toFixed(1)+' pts; total '+Math.abs(totalEdge).toFixed(1)+' pts. This is NOT a calibrated win probability or validated correlation model. Do not assume the leans are profitable; actual SGP odds and joint probabilities remain unavailable.';
+ };
+ fields.spread.addEventListener('input',update);fields.total.addEventListener('input',update);update();panel.appendChild(section);
 }
 function renderGameSGP(){
  const panel=document.getElementById('sgpPanel'),filter=document.getElementById('gameFilter');
