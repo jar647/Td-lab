@@ -491,6 +491,14 @@ function renderGameSGP(){
   x.robustScore=factors.length?factors.reduce((v,z,i)=>v+z.score*scripts[i].weight,0)-x.scenarioRange*.35:base;
  }
  candidates.sort((a,b)=>b.robustScore-a.robustScore||String(a.r.player).localeCompare(String(b.r.player)));
+ // Game-first ranking: start with a likely scoring script, then diversify player and market exposure.
+ const scriptBias=x=>{
+  if(!scriptAvailable)return 1;
+  if(modelTotal>=47)return x.d.key==='PASS'||x.d.key==='REC'||x.d.key==='CATCH'?1.09:.96;
+  if(modelTotal<=41)return x.d.key==='RUSH'?1.09:x.d.key==='PASS'?0.95:1;
+  return 1;
+ };
+ candidates.sort((a,b)=>b.robustScore*scriptBias(b)-a.robustScore*scriptBias(a));
  const chosen=[],usedMarkets=new Set(),playerCounts=new Map();
  // Select a compact research combination; never pretend an unpriced slip is +EV.
  // Diversify player exposure and cap correlated passing/receiving volume assumptions.
@@ -507,7 +515,27 @@ function renderGameSGP(){
  const label=filter.options[filter.selectedIndex]?.textContent||'Selected matchup';
  panel.replaceChildren();
  renderSGPMarketResearch(panel,selected);
- const heading=document.createElement('h2');heading.textContent='🎟️ SGP RESEARCH CARD · '+label;panel.appendChild(heading);
+ const heading=document.createElement('h2');heading.textContent='🏈 MATCHUP-FIRST SGP ANALYZER · '+label;panel.appendChild(heading);
+ const analysis=document.createElement('section');analysis.className='panel';analysis.style.cssText='margin:12px 0;padding:14px;border:1px solid #45a27a';
+ const analysisTitle=document.createElement('h3');analysisTitle.textContent='1 · GAME SCRIPT → 2 · PROP ANGLES → 3 · SGP BUILD';analysis.appendChild(analysisTitle);
+ const gameContext=scriptAvailable?(game.away+' at '+game.home+' · projected '+Number(modelTotal).toFixed(1)+' total · '+(modelMargin>=0?game.home:game.away)+' favored by '+Math.abs(modelMargin).toFixed(1)+' (uncalibrated baseline)'):'No verified game projection available';
+ const context=document.createElement('p');context.textContent=gameContext;analysis.appendChild(context);
+ const ordered=candidates.filter(x=>x.verdict!=='PASS');
+ const byFamily={PASS:ordered.filter(x=>x.d.key==='PASS'),RUSH:ordered.filter(x=>x.d.key==='RUSH'),REC:ordered.filter(x=>x.d.key==='REC'),CATCH:ordered.filter(x=>x.d.key==='CATCH')};
+ const highScoring=scriptAvailable&&modelTotal>=47,lowScoring=scriptAvailable&&modelTotal<=41;
+ const angles=[
+  {name:'Passing volume',items:byFamily.PASS,why:highScoring?'Higher projected scoring supports checking QB volume':'Review QB volume against pressure and expected pace'},
+  {name:'Receiving production',items:byFamily.REC,why:highScoring?'Higher scoring can create receiver opportunities':'Check target share and game script'},
+  {name:'Receptions',items:byFamily.CATCH,why:'Check short-target volume and passing distribution'},
+  {name:'Rushing production',items:byFamily.RUSH,why:lowScoring?'Lower-scoring script supports checking run volume':'Review expected rushing workload'}
+ ];
+ for(const angle of angles){
+  const p=document.createElement('p');const best=angle.items[0];
+  p.textContent=(best?'🟢 ':'⚪ ')+angle.name+': '+(best?best.r.player+' '+best.line+'+ '+best.d.unit+' ('+best.verdict+')':'No eligible player')+' · '+angle.why;
+  analysis.appendChild(p);
+ }
+ const warningText=document.createElement('p');warningText.className='muted';warningText.textContent='Game-script analysis uses the existing uncalibrated projection. Props are ranked from available game logs and usage, not live Hard Rock lines. Standard lines, alternate prices, injuries and final SGP price still require verification.';analysis.appendChild(warningText);
+ panel.appendChild(analysis);
  const impacted=autoRecords.filter(r=>gameKey(r)===selected&&Array.isArray(r.possibleReturningTeammates)&&r.possibleReturningTeammates.length);
  if(impacted.length){
   const names=[...new Set(impacted.flatMap(r=>r.possibleReturningTeammates.map(p=>p.player+' ('+p.position+')')))];
@@ -521,7 +549,7 @@ function renderGameSGP(){
  const green=chosen.filter(x=>x.verdict==='GREEN');
  if(green.length<2){
   const warning=document.createElement('section');warning.className='panel';warning.style.cssText='margin:14px 0;border:1px solid #fbbf24;padding:14px';
-  const title=document.createElement('h3');title.textContent='🛑 NO VERIFIED SGP RECOMMENDATION';warning.appendChild(title);
+  const title=document.createElement('h3');title.textContent='⚠️ RESEARCH-ONLY SGP · LIMITED STRONG LEGS';warning.appendChild(title);
   const msg=document.createElement('p');msg.textContent='Only '+green.length+' GREEN-rated leg(s) found. The remaining candidates have CAUTION flags. No validated joint probability or combined sportsbook price is available, so this app cannot responsibly recommend an SGP for this matchup.';warning.appendChild(msg);
   const detail=document.createElement('p');detail.className='muted';detail.textContent='Research candidates to investigate manually: '+chosen.map(x=>x.r.player+' '+x.line+'+ '+x.d.unit+' ('+x.verdict+')').join(' · ')+'. Check current lines, injury status and odds in Hard Rock Bet. Do not mistake these for approved picks.';warning.appendChild(detail);
   panel.appendChild(warning);
@@ -532,7 +560,7 @@ function renderGameSGP(){
  }
 
  const recommended=document.createElement('section');recommended.className='panel';recommended.style.cssText='margin:14px 0;border:1px solid #00db86';
- const recTitle=document.createElement('h3');recTitle.textContent='🔎 THE PROP VAULT · '+chosen.length+'-LEG RESEARCH SHORTLIST';recommended.appendChild(recTitle);
+ const recTitle=document.createElement('h3');recTitle.textContent='🎟️ MATCHUP-DRIVEN · '+chosen.length+'-LEG RESEARCH BUILD';recommended.appendChild(recTitle);
  const recNote=document.createElement('p');recNote.className='muted';recNote.textContent='Scenario-screened research shortlist for '+label+'. Not an optimized or proven-value SGP: actual individual and combined sportsbook odds, calibrated joint probabilities and historical backtesting are unavailable. Check lines and prices before betting.';recommended.appendChild(recNote);
  const recList=document.createElement('ol');recList.style.paddingLeft='22px';
  for(const x of chosen){
@@ -544,7 +572,7 @@ function renderGameSGP(){
  recommended.appendChild(recList);
  const recActions=document.createElement('div');recActions.style.cssText='display:flex;flex-wrap:wrap;gap:9px;margin-top:12px';
  const recCopy=document.createElement('button');recCopy.type='button';recCopy.className='chip';recCopy.textContent='📋 COPY RESEARCH SHORTLIST';
- recCopy.addEventListener('click',async()=>{const text='THE PROP VAULT · SUGGESTED SGP · '+label+'\n'+chosen.map((x,i)=>(i+1)+'. '+x.r.player+' '+x.line+'+ '+x.d.unit).join('\n');try{await navigator.clipboard.writeText(text);recCopy.textContent='✅ COPIED';}catch(e){const area=document.createElement('textarea');area.value=text;area.style.width='100%';recommended.appendChild(area);area.focus();area.select();}});
+ recCopy.addEventListener('click',async()=>{const text='THE PROP VAULT · RESEARCH BUILD · '+label+'\n'+chosen.map((x,i)=>(i+1)+'. '+x.r.player+' '+x.line+'+ '+x.d.unit).join('\n');try{await navigator.clipboard.writeText(text);recCopy.textContent='✅ COPIED';}catch(e){const area=document.createElement('textarea');area.value=text;area.style.width='100%';recommended.appendChild(area);area.focus();area.select();}});
  const recUse=document.createElement('button');recUse.type='button';recUse.className='chip';recUse.textContent='➕ LOAD RESEARCH INTO MY SLIP';
  recActions.append(recCopy,recUse);recommended.appendChild(recActions);panel.appendChild(recommended);
  // Custom SGP slip: selections stay in this matchup and are never submitted to a sportsbook.
