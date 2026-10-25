@@ -169,9 +169,10 @@ function propResearch(r,category,avgField,defField,usageField,posted,thresholds)
  if(logs.length<3)return {projection,lines:[],logs:logs.length,missing:true};
  const max=Number.isFinite(Number(posted))&&Number(posted)>0?Number(posted)-.5:Infinity;
  const lines=thresholds.filter(line=>line<=max&&line<=projection*1.08).map(line=>({line,hits:logs.filter(v=>v>=line).length,total:logs.length}));
- const conservative=lines.filter(v=>v.hits/v.total>=.8&&v.line<=projection*.85).at(-1)||null;
+ // Select genuinely distinct tiers; never relabel the same threshold as a different risk.
  const balanced=lines.filter(v=>v.hits/v.total>=.6&&v.line<=projection).at(-1)||null;
- const aggressive=lines.filter(v=>v.hits/v.total>=.4&&v.line<=projection*1.08).at(-1)||null;
+ const conservative=lines.filter(v=>v.hits/v.total>=.8&&v.line<=projection*.85&&(!balanced||v.line<balanced.line)).at(-1)||null;
+ const aggressive=lines.filter(v=>v.hits/v.total>=.4&&v.line<=projection*1.08&&(!balanced||v.line>balanced.line)).at(-1)||null;
  return {projection,lines,tiers:{conservative,balanced,aggressive},logs:logs.length,missing:false,usageRatio};
 }
 function suggestAltLine(x,cfg,category){
