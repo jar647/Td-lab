@@ -498,35 +498,50 @@ function renderGameSGP(){
   return 1;
  };
  candidates.sort((a,b)=>b.robustScore*scriptBias(b)-a.robustScore*scriptBias(a));
- const chosen=[],usedMarkets=new Set(),playerCounts=new Map();
- // Build a matchup-led 3–5-leg research ticket, balancing different roles and game scripts.
- const familyCount={pass:0,rush:0},marketCount={};
+ // Exactly five supported targets, selected together around the expected game script.
+ // Prefer different players and market types, then fill remaining slots with distinct
+ // player/market combinations. Never invent missing data or use duplicate legs.
+ const chosen=[],usedMarkets=new Set(),playerCounts=new Map(),marketCount={};
  const eligible=candidates.filter(x=>x.verdict!=='PASS');
- const targetCount=Math.min(5,Math.max(3,eligible.length));
- for(const x of eligible){
-  const player=String(x.r.player_id||x.r.player),marketKey=player+'|'+x.d.key;
-  const family=x.d.key==='RUSH'?'rush':'pass';
-  if(usedMarkets.has(marketKey)||(playerCounts.get(player)||0)>=1)continue;
-  if(familyCount[family]>=3||((marketCount[x.d.key]||0)>=2))continue;
-  chosen.push(x);usedMarkets.add(marketKey);playerCounts.set(player,1);
-  familyCount[family]++;marketCount[x.d.key]=(marketCount[x.d.key]||0)+1;
-  if(chosen.length>=targetCount)break;
+ const ranked=eligible.map(x=>{
+  const passing=['PASS','REC','CATCH'].includes(x.d.key);
+  const scriptFit=!scriptAvailable?1:modelTotal>=47?(passing?1.12:.94):modelTotal<=41?(x.d.key==='RUSH'?1.12:passing?.94:1):1;
+  const caution=x.verdict==='CAUTION'?.88:1;
+  return {...x,sgpFit:x.robustScore*scriptFit*caution};
+ }).sort((x,y)=>y.sgpFit-x.sgpFit);
+ const add=x=>{
+  const player=String(x.r.player_id||x.r.player),key=player+'|'+x.d.key;
+  if(usedMarkets.has(key))return false;
+  chosen.push(x);usedMarkets.add(key);playerCounts.set(player,(playerCounts.get(player)||0)+1);
+  marketCount[x.d.key]=(marketCount[x.d.key]||0)+1;return true;
+ };
+ // First pass: one selection per player and no more than two per market.
+ for(const x of ranked){
+  if(chosen.length===5)break;
+  const player=String(x.r.player_id||x.r.player);
+  if(playerCounts.has(player)||(marketCount[x.d.key]||0)>=2)continue;
+  add(x);
  }
- // If too few distinct players exist, allow a second market on one player with clear labeling.
- if(chosen.length<3)for(const x of eligible){
-  const player=String(x.r.player_id||x.r.player),marketKey=player+'|'+x.d.key;
-  if(usedMarkets.has(marketKey)||(playerCounts.get(player)||0)>=2)continue;
-  chosen.push(x);usedMarkets.add(marketKey);playerCounts.set(player,(playerCounts.get(player)||0)+1);
-  if(chosen.length>=Math.min(3,eligible.length))break;
+ // Second pass: new players even if a market category already has two selections.
+ for(const x of ranked){
+  if(chosen.length===5)break;
+  if(playerCounts.has(String(x.r.player_id||x.r.player)))continue;
+  add(x);
+ }
+ // Third pass: allow a different prop for a player already selected.
+ for(const x of ranked){
+  if(chosen.length===5)break;
+  if((playerCounts.get(String(x.r.player_id||x.r.player))||0)>=2)continue;
+  add(x);
  }
  const label=filter.options[filter.selectedIndex]?.textContent||'Selected matchup';
  panel.replaceChildren();
- const title=document.createElement('h2');title.textContent='🎟️ YOUR SGP · '+label;panel.appendChild(title);
+ const title=document.createElement('h2');title.textContent='🎟️ YOUR AUTOMATIC 5-LEG SGP · '+label;panel.appendChild(title);
  const context=document.createElement('p');context.className='muted';
  context.textContent=scriptAvailable?'Game outlook: '+(modelTotal>=47?'higher-scoring passing opportunities':modelTotal<=41?'lower-scoring, potentially run-oriented':'balanced scoring environment')+' · projected total '+modelTotal.toFixed(1)+' (unvalidated model baseline)':'Built from available player logs, usage and opponent defensive allowances.';
  panel.appendChild(context);
- if(chosen.length<2){
-  const missing=document.createElement('p');missing.className='status';missing.textContent='Not enough supported player data to build this matchup’s SGP. No fabricated legs.';panel.appendChild(missing);return;
+ if(chosen.length!==5){
+  const missing=document.createElement('p');missing.className='status';missing.textContent='Only '+chosen.length+' supported selections found for this matchup. A complete five-leg SGP needs five supported targets; no fabricated legs.';panel.appendChild(missing);return;
  }
  const list=document.createElement('ol');list.style.cssText='padding-left:24px;margin:14px 0';
  for(const x of chosen){
@@ -534,7 +549,8 @@ function renderGameSGP(){
   const name=document.createElement('strong');name.textContent=x.r.player+' · '+x.line+'+ '+x.d.unit;li.appendChild(name);
   const why=document.createElement('p');why.style.margin='5px 0';
   const hit=Math.round(x.hitRate*100);
-  why.textContent='Why: '+hit+'% recent-game hit rate ('+x.logCount+' logs), projected '+Math.round(x.projectionRatio*100-100)+'% cushion, '+(x.matchupRatio>=1?'opponent allowance supports this angle':'tougher opponent allowance')+'.'+(x.reasons.length?' Watch: '+x.reasons.join('; ')+'.':'');
+  const gameFit=scriptAvailable?(modelTotal>=47?(['PASS','REC','CATCH'].includes(x.d.key)?'The higher-scoring game script supports passing volume. ':'This provides a rushing angle alongside the expected passing volume. '):modelTotal<=41?(x.d.key==='RUSH'?'The lower-scoring script favors rushing opportunities. ':'This adds a complementary passing angle to a slower game. '):'The balanced game script supports mixing production categories. '):'';
+  why.textContent='Why: '+gameFit+'Hit in '+hit+'% of '+x.logCount+' recent games; model projects '+Math.round(x.projectionRatio*100-100)+'% above this target. '+(x.matchupRatio>=1?'Opponent allowance is favorable.':'Opponent allowance is less favorable.')+(x.reasons.length?' Watch: '+x.reasons.join('; ')+'.':'');
   li.appendChild(why);list.appendChild(li);
  }
  panel.appendChild(list);
