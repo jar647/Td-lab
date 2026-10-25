@@ -492,12 +492,22 @@ function renderGameSGP(){
  }
  const note=document.createElement('p');note.className='muted';note.textContent='Research shortlist ranks performance across baseline, pass-heavy, run-heavy and lower-scoring sensitivity scenarios, then limits player and market-family concentration. GREEN requires 80%+ across five recent logs, at least 15% projected line cushion, stable usage, no unfavorable defensive allowance or teammate-return flag. CAUTION means at least one risk; PASS excludes major risks. These are heuristic research labels, NOT calibrated probabilities. Distinct players preferred, maximum two markets per player. Sportsbook availability, current injuries, matchup defensive comparability and odds remain unverified.';panel.appendChild(note);
  const diagnostics=document.createElement('p');diagnostics.className='muted';diagnostics.textContent='Eligibility check: '+audit.players+' active player records · '+candidates.length+' qualifying prop legs · '+audit.returning+' player records flagged for possible teammate returns · '+audit.missingLogs+' markets lacking 3 game logs · '+audit.missingMetrics+' markets missing metrics · '+audit.noSupportedLine+' markets without supported ALT.';panel.appendChild(diagnostics);
+ // Safety gate: do not present a CAUTION-only or unpriced shortlist as a suggested wager.
+ const green=chosen.filter(x=>x.verdict==='GREEN');
+ if(green.length<2){
+  const warning=document.createElement('section');warning.className='panel';warning.style.cssText='margin:14px 0;border:1px solid #fbbf24;padding:14px';
+  const title=document.createElement('h3');title.textContent='🛑 NO VERIFIED SGP RECOMMENDATION';warning.appendChild(title);
+  const msg=document.createElement('p');msg.textContent='Only '+green.length+' GREEN-rated leg(s) found. The remaining candidates have CAUTION flags. No validated joint probability or combined sportsbook price is available, so this app cannot responsibly recommend an SGP for this matchup.';warning.appendChild(msg);
+  const detail=document.createElement('p');detail.className='muted';detail.textContent='Research candidates to investigate manually: '+chosen.map(x=>x.r.player+' '+x.line+'+ '+x.d.unit+' ('+x.verdict+')').join(' · ')+'. Check current lines, injury status and odds in Hard Rock Bet. Do not mistake these for approved picks.';warning.appendChild(detail);
+  panel.appendChild(warning);
+  return;
+ }
  if(chosen.length<2){
   const p=document.createElement('p');p.className='status';p.textContent='PASS: Not enough eligible players with complete data for a 2-leg SGP. No invented picks.';panel.appendChild(p);return;
  }
 
  const recommended=document.createElement('section');recommended.className='panel';recommended.style.cssText='margin:14px 0;border:1px solid #00db86';
- const recTitle=document.createElement('h3');recTitle.textContent='🎟️ THE PROP VAULT · '+chosen.length+'-LEG RESEARCH SHORTLIST';recommended.appendChild(recTitle);
+ const recTitle=document.createElement('h3');recTitle.textContent='🔎 THE PROP VAULT · '+chosen.length+'-LEG RESEARCH SHORTLIST';recommended.appendChild(recTitle);
  const recNote=document.createElement('p');recNote.className='muted';recNote.textContent='Scenario-screened research shortlist for '+label+'. Not an optimized or proven-value SGP: actual individual and combined sportsbook odds, calibrated joint probabilities and historical backtesting are unavailable. Check lines and prices before betting.';recommended.appendChild(recNote);
  const recList=document.createElement('ol');recList.style.paddingLeft='22px';
  for(const x of chosen){
@@ -508,9 +518,9 @@ function renderGameSGP(){
  }
  recommended.appendChild(recList);
  const recActions=document.createElement('div');recActions.style.cssText='display:flex;flex-wrap:wrap;gap:9px;margin-top:12px';
- const recCopy=document.createElement('button');recCopy.type='button';recCopy.className='chip';recCopy.textContent='📋 COPY SUGGESTED SGP';
+ const recCopy=document.createElement('button');recCopy.type='button';recCopy.className='chip';recCopy.textContent='📋 COPY RESEARCH SHORTLIST';
  recCopy.addEventListener('click',async()=>{const text='THE PROP VAULT · SUGGESTED SGP · '+label+'\n'+chosen.map((x,i)=>(i+1)+'. '+x.r.player+' '+x.line+'+ '+x.d.unit).join('\n');try{await navigator.clipboard.writeText(text);recCopy.textContent='✅ COPIED';}catch(e){const area=document.createElement('textarea');area.value=text;area.style.width='100%';recommended.appendChild(area);area.focus();area.select();}});
- const recUse=document.createElement('button');recUse.type='button';recUse.className='chip';recUse.textContent='➕ LOAD SUGGESTED INTO MY SLIP';
+ const recUse=document.createElement('button');recUse.type='button';recUse.className='chip';recUse.textContent='➕ LOAD RESEARCH INTO MY SLIP';
  recActions.append(recCopy,recUse);recommended.appendChild(recActions);panel.appendChild(recommended);
  // Custom SGP slip: selections stay in this matchup and are never submitted to a sportsbook.
  if(window.propVaultSlipGame!==selected){window.propVaultSlipGame=selected;window.propVaultSlip=new Map();}
