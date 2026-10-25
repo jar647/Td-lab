@@ -687,6 +687,7 @@ async function loadGamePicks(){
    const total=gameInput('Sportsbook total',null,'0.5');
    controls.appendChild(spread.wrap);controls.appendChild(total.wrap);card.appendChild(controls);
    const intelligence=document.createElement('div');intelligence.className='status';intelligence.style.margin='12px 0';intelligence.style.padding='12px';card.appendChild(intelligence);
+   const atsPick=document.createElement('div');atsPick.className='status';atsPick.style.cssText='margin:10px 0;padding:12px;font-weight:800';atsPick.textContent='🏈 ATS PICK: Enter sportsbook spread · Confidence pending';card.appendChild(atsPick);
    const ats=document.createElement('p');ats.className='muted';card.appendChild(ats);
    const ou=document.createElement('p');ou.className='muted';card.appendChild(ou);
    const details=document.createElement('details');details.style.marginTop='10px';
@@ -700,8 +701,11 @@ async function loadGamePicks(){
      const side=edge>0?game.home+' '+(line>0?'+':'')+line:game.away+' '+(-line>0?'+':'')+(-line);
      const verdict=abs<1.5?'🛑 PASS':abs<3?'⚠️ SMALL MODEL EDGE':'📊 MODEL LEAN';
      spreadSummary='ATS: '+verdict+' · '+(abs<1.5?'No meaningful difference':side)+' · '+abs.toFixed(1)+' pts';
-     ats.textContent=spreadSummary+'. Projection difference only; no validated win probability.';
-    }else ats.textContent='ATS: Enter the home-team spread to compare.';
+     const stars=abs<1.5?1:abs<3?2:abs<5?3:abs<7?4:5;
+     const emoji=stars===1?'🛑':stars===2?'⚠️':stars===3?'🟡':stars===4?'🟢':'🔥';
+     atsPick.textContent=emoji+' ATS PICK: '+(abs<1.5?'PASS':side)+' · Confidence '+stars+'/5'+(abs<1.5?' (no meaningful edge)':' (model spread edge '+abs.toFixed(1)+' pts)');
+     ats.textContent=spreadSummary+'. Projection difference only; confidence is a model-edge tier, not a validated win probability.';
+    }else {ats.textContent='ATS: Enter the home-team spread to compare.';atsPick.textContent='🏈 ATS PICK: Enter sportsbook spread · Confidence pending';}
     if(totalText!==''){
      const line=Number(totalText),edge=Number(game.projected_total)-line,abs=Math.abs(edge);
      const verdict=abs<2?'🛑 PASS':abs<4?'⚠️ SMALL MODEL EDGE':'📊 MODEL LEAN';
@@ -711,7 +715,7 @@ async function loadGamePicks(){
     intelligence.textContent='🏈 '+(margin>0?game.home:margin<0?game.away:'Tied')+' projected winner · '+spreadSummary+' · '+totalSummary;
    }
    spread.input.addEventListener('input',update);total.input.addEventListener('input',update);update();
-   const note=document.createElement('p');note.className='hint';note.textContent='Research leans only. No validated confidence rating, live sportsbook odds, or verified game-day injuries. Lines are entered manually and are not saved.';card.appendChild(note);
+   const note=document.createElement('p');note.className='hint';note.textContent='Research leans only. ATS confidence 1–5 ranks model spread differences, not actual cover probabilities. No live sportsbook odds or verified game-day injuries. Lines are entered manually and are not saved.';card.appendChild(note);
    list.appendChild(card);
   }
  }catch(e){status.textContent='Game picks unavailable: '+e.message;list.replaceChildren()}
