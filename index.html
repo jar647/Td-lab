@@ -613,18 +613,29 @@ async function loadGamePicks(){
    const spread=gameInput(game.home+' spread',null,'0.5');
    const total=gameInput('Sportsbook total',null,'0.5');
    controls.appendChild(spread.wrap);controls.appendChild(total.wrap);card.appendChild(controls);
+   const intelligence=document.createElement('div');intelligence.className='status';intelligence.style.margin='12px 0';intelligence.style.padding='12px';card.appendChild(intelligence);
    const ats=document.createElement('p');ats.className='muted';card.appendChild(ats);
    const ou=document.createElement('p');ou.className='muted';card.appendChild(ou);
+   const details=document.createElement('details');details.style.marginTop='10px';
+   const summary=document.createElement('summary');summary.textContent='📊 Projection details & data limitations';summary.style.cursor='pointer';details.appendChild(summary);
+   const detail=document.createElement('p');detail.className='muted';detail.textContent='Model score: '+game.away+' '+game.projected_away_points+' / '+game.home+' '+game.projected_home_points+'. Model confidence uncalibrated. Injury adjustments, weather and sportsbook price are not verified here.';details.appendChild(detail);card.appendChild(details);
    function update(){
     const spreadText=spread.input.value.trim(),totalText=total.input.value.trim();
+    let spreadSummary='ATS: Enter line',totalSummary='TOTAL: Enter line';
     if(spreadText!==''){
-     const line=Number(spreadText),edge=margin+line;
-     ats.textContent='ATS: '+(Math.abs(edge)<0.05?'PASS (no projected edge)':edge>0?game.home+' '+line:game.away+' '+(-line))+' · Margin edge '+Math.abs(edge).toFixed(1)+' pts · Confidence uncalibrated';
+     const line=Number(spreadText),edge=margin+line,abs=Math.abs(edge);
+     const side=edge>0?game.home+' '+(line>0?'+':'')+line:game.away+' '+(-line>0?'+':'')+(-line);
+     const verdict=abs<1.5?'🛑 PASS':abs<3?'⚠️ SMALL MODEL EDGE':'📊 MODEL LEAN';
+     spreadSummary='ATS: '+verdict+' · '+(abs<1.5?'No meaningful difference':side)+' · '+abs.toFixed(1)+' pts';
+     ats.textContent=spreadSummary+'. Projection difference only; no validated win probability.';
     }else ats.textContent='ATS: Enter the home-team spread to compare.';
     if(totalText!==''){
-     const line=Number(totalText),edge=Number(game.projected_total)-line;
-     ou.textContent='Total: '+(Math.abs(edge)<0.05?'PASS':edge>0?'OVER '+line:'UNDER '+line)+' · Projected difference '+Math.abs(edge).toFixed(1)+' pts · Confidence uncalibrated';
+     const line=Number(totalText),edge=Number(game.projected_total)-line,abs=Math.abs(edge);
+     const verdict=abs<2?'🛑 PASS':abs<4?'⚠️ SMALL MODEL EDGE':'📊 MODEL LEAN';
+     totalSummary='TOTAL: '+verdict+' · '+(abs<2?'No meaningful difference':edge>0?'OVER '+line:'UNDER '+line)+' · '+abs.toFixed(1)+' pts';
+     ou.textContent=totalSummary+'. Projection difference only; no validated win probability.';
     }else ou.textContent='Total: Enter the sportsbook total to compare.';
+    intelligence.textContent='🏈 '+(margin>0?game.home:margin<0?game.away:'Tied')+' projected winner · '+spreadSummary+' · '+totalSummary;
    }
    spread.input.addEventListener('input',update);total.input.addEventListener('input',update);update();
    const note=document.createElement('p');note.className='hint';note.textContent='Research leans only. No validated confidence rating, live sportsbook odds, or verified game-day injuries. Lines are entered manually and are not saved.';card.appendChild(note);
