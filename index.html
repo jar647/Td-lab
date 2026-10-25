@@ -423,7 +423,6 @@ function renderGameSGP(){
   panel.innerHTML='<h2>🎟️ SAME GAME PARLAY BUILDER</h2><p class="muted">Select a specific matchup using the 🏈 This Week\'s Games filter above to build a research-based SGP. All games is currently selected.</p>';
   return;
  }
- const standardLines=window.propVaultStandardLines||(window.propVaultStandardLines={});
  const candidates=[];
  const audit={players:0,returning:0,missingLogs:0,missingMetrics:0,noSupportedLine:0,conservativeFallbacks:0};
  const defs=[
@@ -561,7 +560,7 @@ function renderGameSGP(){
 
  const recommended=document.createElement('section');recommended.className='panel';recommended.style.cssText='margin:14px 0;border:1px solid #00db86';
  const recTitle=document.createElement('h3');recTitle.textContent='🎟️ MATCHUP-DRIVEN · '+chosen.length+'-LEG RESEARCH BUILD';recommended.appendChild(recTitle);
- const recNote=document.createElement('p');recNote.className='muted';recNote.textContent='Scenario-screened research shortlist for '+label+'. Not an optimized or proven-value SGP: actual individual and combined sportsbook odds, calibrated joint probabilities and historical backtesting are unavailable. Check lines and prices before betting.';recommended.appendChild(recNote);
+ const recNote=document.createElement('p');recNote.className='muted';recNote.textContent='Projected statistical targets for '+label+', selected from matchup, recent game logs, usage and game-script research. These are research thresholds, not sportsbook lines. Check which targets are available in Hard Rock.';recommended.appendChild(recNote);
  const recList=document.createElement('ol');recList.style.paddingLeft='22px';
  for(const x of chosen){
   const item=document.createElement('li');item.style.margin='9px 0';
@@ -610,44 +609,10 @@ function renderGameSGP(){
  copySlip.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(slipText());copySlip.textContent='✅ COPIED';}catch(e){const ta=document.createElement('textarea');ta.value=slipText();ta.style.width='100%';slipBox.appendChild(ta);ta.focus();ta.select();}});
  clearSlip.addEventListener('click',()=>{slip.clear();refreshSlip();refreshAddButtons();});
  panel.appendChild(slipBox);
- const listHeading=document.createElement('h3');listHeading.textContent='PLAYER PROP RESEARCH · ENTER STANDARD LINE OR CHOOSE ALT';panel.appendChild(listHeading);
+ const listHeading=document.createElement('h3');listHeading.textContent='PLAYER TARGETS · TAP + ADD TO BUILD YOUR SGP';panel.appendChild(listHeading);
  const list=document.createElement('ol');list.style.paddingLeft='22px';
  for(const x of candidates.slice(0,30)){
   const li=document.createElement('li');li.style.margin='10px 0';
-  const standardKey=selected+'|'+String(x.r.player_id||x.r.player)+'|'+x.d.key;
-  const controls=document.createElement('div');controls.style.cssText='display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0';
-  const stdLabel=document.createElement('label');stdLabel.textContent='Hard Rock standard line: ';
-  const stdInput=document.createElement('input');stdInput.type='number';stdInput.min='0.5';stdInput.step='0.5';stdInput.placeholder='e.g. 65.5';stdInput.style.cssText='width:92px;max-width:100%';stdInput.value=standardLines[standardKey]??'';
-  stdLabel.appendChild(stdInput);controls.appendChild(stdLabel);
-  const direction=document.createElement('select');for(const [value,label] of [['OVER','OVER'],['UNDER','UNDER']]){const opt=document.createElement('option');opt.value=value;opt.textContent=label;direction.appendChild(opt);}controls.appendChild(direction);
-  const threshold=document.createElement('select');controls.appendChild(threshold);
-  const insight=document.createElement('span');insight.className='muted';controls.appendChild(insight);
-  const rebuild=()=>{
-   threshold.replaceChildren();
-   const standard=Number(stdInput.value),hasStandard=stdInput.value!==''&&Number.isFinite(standard)&&standard>0;
-   if(!hasStandard){insight.textContent='Enter the current standard line to compare standard vs alt.';return;}
-   standardLines[standardKey]=standard;
-   const choices=[{value:standard,label:'Standard '+(direction.value==='OVER'?'O ':'U ')+standard,kind:'STANDARD'}];
-   if(direction.value==='OVER'){
-    const step=x.d.key==='CATCH'?1:5;
-    for(let n=1;n<=2;n++){const alt=Math.floor(standard/step)*step-(n-1)*step;if(alt>0&&alt<standard)choices.push({value:alt,label:'ALT '+alt+'+',kind:'ALT'});}
-   }
-   for(const option of choices){const o=document.createElement('option');o.value=option.value;o.textContent=option.label;threshold.appendChild(o);}
-   const edge=Number(x.r[x.d.field])-standard;
-   insight.textContent='Season avg '+Number(x.r[x.d.field]).toFixed(1)+' vs standard '+standard+' ('+(edge>=0?'+':'')+edge.toFixed(1)+'). No live odds or probability verification.';
-  };
-  stdInput.addEventListener('input',()=>{if(stdInput.value==='')delete standardLines[standardKey];rebuild();});
-  direction.addEventListener('change',rebuild);rebuild();
-  const customAdd=document.createElement('button');customAdd.type='button';customAdd.className='chip';customAdd.textContent='+ ADD SELECTED LINE';
-  customAdd.addEventListener('click',()=>{
-   const standard=Number(stdInput.value);if(!stdInput.value||!Number.isFinite(standard)||standard<=0){insight.textContent='Enter a valid standard line first.';return;}
-   const picked=Number(threshold.value),isAlt=direction.value==='OVER'&&picked<standard;
-   const copy={...x,line:picked,d:{...x.d,unit:direction.value==='UNDER'?'UNDER '+x.d.unit:x.d.unit},tier:isAlt?'Manual ALT':'Manual standard',verdict:'CAUTION',reasons:['Manually entered line; price and model probability not verified']};
-   const key=keyFor(copy)+'|'+direction.value;
-   if(slip.size>=10&&!slip.has(key)){insight.textContent='Slip limit is 10 legs.';return;}
-   slip.set(key,copy);refreshSlip();refreshAddButtons();insight.textContent='Added '+direction.value+' '+picked+(isAlt?' (ALT)':' (standard)')+' to research slip.';
-  });
-  controls.appendChild(customAdd);li.appendChild(controls);
   const top=document.createElement('div');top.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:8px';
   const strong=document.createElement('strong');strong.textContent=x.r.player+' · '+x.line+'+ '+x.d.unit+' ('+x.tier+')';top.appendChild(strong);const verdictBadge=document.createElement('span');verdictBadge.textContent='● '+verdict(x);verdictBadge.style.cssText='font-weight:900;color:'+verdictColor(x)+';display:block;margin-top:4px';strong.appendChild(verdictBadge);
   const add=document.createElement('button');add.type='button';add.className='chip';add.style.flexShrink='0';if(verdict(x)==='PASS'){add.disabled=true;add.title='PASS: not recommended for the slip';}
