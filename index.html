@@ -558,7 +558,7 @@ function renderGameSGP(){
   const standard=document.createElement('input');standard.type='number';standard.step='0.5';standard.min='0';standard.placeholder='Line, e.g. 85.5';standard.setAttribute('aria-label',x.r.player+' sportsbook standard line');standard.style.cssText='width:155px;max-width:100%;padding:9px';
   const odds=document.createElement('input');odds.type='number';odds.step='1';odds.placeholder='Odds, e.g. -110';odds.setAttribute('aria-label',x.r.player+' over American odds');odds.style.cssText='width:155px;max-width:100%;padding:9px';
   fields.append(standard,odds);entry.appendChild(fields);
-  const decision=document.createElement('p');decision.style.cssText='font-weight:700;margin:9px 0 3px';decision.textContent='Enter the standard line to evaluate OVER or PASS.';
+  const decision=document.createElement('p');decision.style.cssText='font-weight:700;margin:9px 0 3px';decision.textContent='Enter the standard line to choose STANDARD or ALT.';
   const alt=document.createElement('p');alt.className='muted';alt.style.margin='3px 0';alt.textContent='ALT target will appear here.';
   entry.append(decision,alt);
   const update=()=>{
@@ -576,13 +576,13 @@ function renderGameSGP(){
    const observed=actual.length?overHits/actual.length:0;
    const support=cushion>=1.08&&observed>=.6&&x.usageRatio>=.85&&x.matchupRatio>=.8&&!x.returnWarning;
    const priced=hasOdds&&observed>=implied+.05;
-   const approved=support&&(!hasOdds||priced);
-   decision.textContent=(approved?'🟢 OVER':'🔴 PASS')+' '+line+' '+x.d.unit+' · recent hit '+overHits+'/'+actual.length+' · projection '+Math.round(projection)+(hasOdds?' · implied '+Math.round(implied*100)+'%':'');
+   const standardPreferred=support&&(!hasOdds||priced);
+   decision.textContent=(standardPreferred?'🟢 PLAY STANDARD: ':'🟡 TAKE ALT INSTEAD OF STANDARD: ')+line+' '+x.d.unit+' · recent hit '+overHits+'/'+actual.length+' · projection '+Math.round(projection)+(hasOdds?' · implied '+Math.round(implied*100)+'%':'');
    const drop=x.d.key==='PASS'?Math.min(25,Math.max(15,Math.round(line*.09/5)*5)):x.d.key==='REC'?Math.min(15,Math.max(10,Math.round(line*.15/5)*5)):x.d.key==='RUSH'?Math.min(10,Math.max(5,Math.round(line*.14/5)*5)):1;
    const altLine=x.d.key==='CATCH'?Math.max(1,Math.floor(line)-1):Math.max(5,Math.floor((line-drop)/5)*5);
    const altHits=actual.filter(v=>v>=altLine).length;
    const altSupport=projection>=altLine*1.08&&altHits>=Math.ceil(actual.length*.6)&&x.usageRatio>=.85&&!x.returnWarning;
-   alt.textContent=(altSupport?'🟡 SUGGESTED ALT: ':'⚪ ALT TO REVIEW: ')+altLine+'+ '+x.d.unit+' ('+altHits+'/'+actual.length+' recent hits)'+(approved?' · modest step down from the standard line':' · standard OVER not supported; ALT requires its own price check');
+   alt.textContent=(standardPreferred?'Optional modest ALT: ':'Suggested ALT: ')+altLine+'+ '+x.d.unit+' ('+altHits+'/'+actual.length+' recent hits)'+(altSupport?' · supported by recent results':' · lower confidence; check price and availability');
    if(odds.value.trim()&&!hasOdds)decision.textContent='Enter valid American odds (e.g. -110 or +120).';
   };
   standard.addEventListener('input',update);odds.addEventListener('input',update);
