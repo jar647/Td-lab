@@ -431,11 +431,28 @@ function renderGameSGP(){
   const p=document.createElement('p');p.className='status';p.textContent='PASS: Not enough eligible players with complete data for a 2-leg SGP. No invented picks.';panel.appendChild(p);return;
  }
 
+ const recommended=document.createElement('section');recommended.className='panel';recommended.style.cssText='margin:14px 0;border:1px solid #00db86';
+ const recTitle=document.createElement('h3');recTitle.textContent='🎟️ THE PROP VAULT · SUGGESTED '+chosen.length+'-LEG SGP';recommended.appendChild(recTitle);
+ const recNote=document.createElement('p');recNote.className='muted';recNote.textContent='Ready-made research combination for '+label+'. Check available ALT lines and prices in Hard Rock Bet before placing any wager.';recommended.appendChild(recNote);
+ const recList=document.createElement('ol');recList.style.paddingLeft='22px';
+ for(const x of chosen){
+  const item=document.createElement('li');item.style.margin='9px 0';
+  const tier=x.returnWarning?'🟡 CAUTION':x.hitRate>=.8?'🟢 GREEN':'🟡 CAUTION';
+  item.textContent=x.r.player+' · '+x.line+'+ '+x.d.unit+' · '+tier;
+  recList.appendChild(item);
+ }
+ recommended.appendChild(recList);
+ const recActions=document.createElement('div');recActions.style.cssText='display:flex;flex-wrap:wrap;gap:9px;margin-top:12px';
+ const recCopy=document.createElement('button');recCopy.type='button';recCopy.className='chip';recCopy.textContent='📋 COPY SUGGESTED SGP';
+ recCopy.addEventListener('click',async()=>{const text='THE PROP VAULT · SUGGESTED SGP · '+label+'\n'+chosen.map((x,i)=>(i+1)+'. '+x.r.player+' '+x.line+'+ '+x.d.unit).join('\n');try{await navigator.clipboard.writeText(text);recCopy.textContent='✅ COPIED';}catch(e){const area=document.createElement('textarea');area.value=text;area.style.width='100%';recommended.appendChild(area);area.focus();area.select();}});
+ const recUse=document.createElement('button');recUse.type='button';recUse.className='chip';recUse.textContent='➕ LOAD SUGGESTED INTO MY SLIP';
+ recActions.append(recCopy,recUse);recommended.appendChild(recActions);panel.appendChild(recommended);
  // Custom SGP slip: selections stay in this matchup and are never submitted to a sportsbook.
  if(window.propVaultSlipGame!==selected){window.propVaultSlipGame=selected;window.propVaultSlip=new Map();}
  if(!(window.propVaultSlip instanceof Map))window.propVaultSlip=new Map();
  const slip=window.propVaultSlip;
  const keyFor=x=>String(x.r.player_id||x.r.player)+'|'+x.d.key+'|'+x.line;
+ recUse.addEventListener('click',()=>{slip.clear();for(const x of chosen)slip.set(keyFor(x),x);refreshSlip();refreshAddButtons();});
  const verdict=x=>x.hitRate<.6?'PASS':x.returnWarning||x.hitRate<.8?'CAUTION':'GREEN';
  const verdictColor=x=>verdict(x)==='GREEN'?'#4ade80':verdict(x)==='CAUTION'?'#fbbf24':'#f87171';
  const display=x=>x.r.player+' · '+x.line+'+ '+x.d.unit+' · '+verdict(x);
