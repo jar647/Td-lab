@@ -437,6 +437,16 @@ function renderGameSGP(){
   const why=document.createElement('div');why.className='muted';why.textContent='Season average '+Number(x.r[x.d.field]).toFixed(1)+' · Opponent allows '+Number(x.r[x.d.def]).toFixed(1)+' per game to position · '+Math.round(x.hitRate*100)+'% hit rate ('+x.logCount+' games checked)';li.appendChild(why);list.appendChild(li);
  }
  panel.appendChild(list);
+ const ticketText='THE PROP VAULT · '+label+'\\n'+chosen.map((x,i)=>(i+1)+'. '+x.r.player+' · '+x.line+'+ '+x.d.unit+' ('+x.tier+(x.returnWarning?', injury caution':'')+')').join('\\n')+'\\nVerify all selections and current odds in Hard Rock Bet.';
+ const actions=document.createElement('div');actions.style.cssText='display:flex;flex-wrap:wrap;gap:10px;margin:16px 0';
+ const copy=document.createElement('button');copy.type='button';copy.className='chip';copy.textContent='📋 COPY SGP PICKS';
+ copy.addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText(ticketText);copy.textContent='✅ PICKS COPIED';}
+  catch(e){const box=document.createElement('textarea');box.value=ticketText;box.style.cssText='width:100%;min-height:140px';panel.appendChild(box);box.focus();box.select();copy.textContent='SELECT TEXT TO COPY';}
+ });
+ const openBet=document.createElement('a');openBet.href='https://app.hardrock.bet/';openBet.target='_blank';openBet.rel='noopener noreferrer';openBet.className='chip';openBet.style.cssText='display:inline-flex;align-items:center;text-decoration:none;background:#47c985;color:#07100e;font-weight:800';openBet.textContent='🎟️ OPEN HARD ROCK BET';
+ actions.append(copy,openBet);panel.appendChild(actions);
+ const linkNote=document.createElement('p');linkNote.className='muted';linkNote.textContent='Copy the research picks, then open Hard Rock Bet to find and review each market. This does NOT prefill or place a wager; sportsbook selection IDs are not available.';panel.appendChild(linkNote);
  const target=document.createElement('p');target.className='status';target.textContent='🎯 Target SGP payout: +400 (preferred range +350 to +500). Actual sportsbook odds are not available in this feed.';
  panel.appendChild(target);
  const oddsInput=document.createElement('input');oddsInput.type='number';oddsInput.placeholder='Enter SGP price, e.g. +400';oddsInput.setAttribute('aria-label','Combined SGP American odds');panel.appendChild(oddsInput);
