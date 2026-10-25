@@ -430,23 +430,58 @@ function renderGameSGP(){
  if(chosen.length<2){
   const p=document.createElement('p');p.className='status';p.textContent='PASS: Not enough eligible players with complete data for a 2-leg SGP. No invented picks.';panel.appendChild(p);return;
  }
+
+ // Custom SGP slip: selections stay in this matchup and are never submitted to a sportsbook.
+ if(window.propVaultSlipGame!==selected){window.propVaultSlipGame=selected;window.propVaultSlip=new Map();}
+ if(!(window.propVaultSlip instanceof Map))window.propVaultSlip=new Map();
+ const slip=window.propVaultSlip;
+ const keyFor=x=>String(x.r.player_id||x.r.player)+'|'+x.d.key+'|'+x.line;
+ const display=x=>x.r.player+' · '+x.line+'+ '+x.d.unit+(x.returnWarning?' ⚠️ return-risk caution':'');
+ const slipBox=document.createElement('section');slipBox.className='panel';slipBox.style.marginTop='16px';
+ const slipHeading=document.createElement('h3');slipHeading.textContent='🧾 MY CUSTOM SGP SLIP';slipBox.appendChild(slipHeading);
+ const slipItems=document.createElement('div');slipBox.appendChild(slipItems);
+ const slipActions=document.createElement('div');slipActions.style.cssText='display:flex;flex-wrap:wrap;gap:9px;margin:12px 0';slipBox.appendChild(slipActions);
+ const copySlip=document.createElement('button');copySlip.type='button';copySlip.className='chip';copySlip.textContent='📋 COPY MY SLIP';
+ const clearSlip=document.createElement('button');clearSlip.type='button';clearSlip.className='chip';clearSlip.textContent='CLEAR SLIP';
+ const hardRock=document.createElement('a');hardRock.href='https://app.hardrock.bet/';hardRock.target='_blank';hardRock.rel='noopener noreferrer';hardRock.className='chip';hardRock.textContent='🎟️ OPEN HARD ROCK BET';hardRock.style.cssText='display:inline-flex;align-items:center;text-decoration:none;background:#47c985;color:#07100e;font-weight:800';
+ slipActions.append(copySlip,clearSlip,hardRock);
+ const slipNote=document.createElement('p');slipNote.className='muted';slipNote.textContent='Custom slip is research-only. Hard Rock Bet does not receive these selections automatically. Verify markets, lines, injury status and odds in the sportsbook.';slipBox.appendChild(slipNote);
+ const slipText=()=> 'THE PROP VAULT · '+label+'\n'+[...slip.values()].map((x,i)=>(i+1)+'. '+display(x)).join('\n')+'\nVerify availability and odds in Hard Rock Bet.';
+ const refreshSlip=()=>{
+  slipItems.replaceChildren();
+  const count=document.createElement('p');count.className='muted';count.textContent=slip.size+' selected leg'+(slip.size===1?'':'s')+' · same matchup only';slipItems.appendChild(count);
+  if(!slip.size){const empty=document.createElement('p');empty.textContent='Tap + ADD beside any eligible player prop below to build your slip.';slipItems.appendChild(empty);}
+  for(const [key,x] of slip){
+   const row=document.createElement('div');row.style.cssText='display:flex;justify-content:space-between;align-items:center;gap:8px;margin:8px 0';
+   const name=document.createElement('span');name.textContent=display(x);row.appendChild(name);
+   const remove=document.createElement('button');remove.type='button';remove.className='chip';remove.textContent='REMOVE';remove.addEventListener('click',()=>{slip.delete(key);refreshSlip();refreshAddButtons();});row.appendChild(remove);slipItems.appendChild(row);
+  }
+  copySlip.disabled=!slip.size;clearSlip.disabled=!slip.size;
+ };
+ const addButtons=[];
+ const refreshAddButtons=()=>{for(const [button,key] of addButtons){const added=slip.has(key);button.textContent=added?'✓ ADDED':'+ ADD';button.setAttribute('aria-pressed',String(added));}};
+ copySlip.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(slipText());copySlip.textContent='✅ COPIED';}catch(e){const ta=document.createElement('textarea');ta.value=slipText();ta.style.width='100%';slipBox.appendChild(ta);ta.focus();ta.select();}});
+ clearSlip.addEventListener('click',()=>{slip.clear();refreshSlip();refreshAddButtons();});
+ panel.appendChild(slipBox);
+ const listHeading=document.createElement('h3');listHeading.textContent='RECOMMENDED LEGS · TAP + ADD TO BUILD YOUR OWN';panel.appendChild(listHeading);
  const list=document.createElement('ol');list.style.paddingLeft='22px';
- for(const x of chosen){
+ for(const x of candidates.slice(0,30)){
   const li=document.createElement('li');li.style.margin='10px 0';
-  const strong=document.createElement('strong');strong.textContent=x.r.player+' · '+x.line+'+ '+x.d.unit+' ('+x.tier+(x.returnWarning?', ⚠️ return-risk caution':'')+')';li.appendChild(strong);
+  const top=document.createElement('div');top.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:8px';
+  const strong=document.createElement('strong');strong.textContent=display(x)+' ('+x.tier+')';top.appendChild(strong);
+  const add=document.createElement('button');add.type='button';add.className='chip';add.style.flexShrink='0';
+  const key=keyFor(x);addButtons.push([add,key]);
+  add.addEventListener('click',()=>{
+   if(slip.has(key))slip.delete(key);
+   else if(slip.size>=10){alert('Custom slip limit: 10 legs. Remove a leg first.');return;}
+   else slip.set(key,x);
+   refreshSlip();refreshAddButtons();
+  });
+  top.appendChild(add);li.appendChild(top);
   const why=document.createElement('div');why.className='muted';why.textContent='Season average '+Number(x.r[x.d.field]).toFixed(1)+' · Opponent allows '+Number(x.r[x.d.def]).toFixed(1)+' per game to position · '+Math.round(x.hitRate*100)+'% hit rate ('+x.logCount+' games checked)';li.appendChild(why);list.appendChild(li);
  }
  panel.appendChild(list);
- const ticketText='THE PROP VAULT · '+label+'\\n'+chosen.map((x,i)=>(i+1)+'. '+x.r.player+' · '+x.line+'+ '+x.d.unit+' ('+x.tier+(x.returnWarning?', injury caution':'')+')').join('\\n')+'\\nVerify all selections and current odds in Hard Rock Bet.';
- const actions=document.createElement('div');actions.style.cssText='display:flex;flex-wrap:wrap;gap:10px;margin:16px 0';
- const copy=document.createElement('button');copy.type='button';copy.className='chip';copy.textContent='📋 COPY SGP PICKS';
- copy.addEventListener('click',async()=>{
-  try{await navigator.clipboard.writeText(ticketText);copy.textContent='✅ PICKS COPIED';}
-  catch(e){const box=document.createElement('textarea');box.value=ticketText;box.style.cssText='width:100%;min-height:140px';panel.appendChild(box);box.focus();box.select();copy.textContent='SELECT TEXT TO COPY';}
- });
- const openBet=document.createElement('a');openBet.href='https://app.hardrock.bet/';openBet.target='_blank';openBet.rel='noopener noreferrer';openBet.className='chip';openBet.style.cssText='display:inline-flex;align-items:center;text-decoration:none;background:#47c985;color:#07100e;font-weight:800';openBet.textContent='🎟️ OPEN HARD ROCK BET';
- actions.append(copy,openBet);panel.appendChild(actions);
- const linkNote=document.createElement('p');linkNote.className='muted';linkNote.textContent='Copy the research picks, then open Hard Rock Bet to find and review each market. This does NOT prefill or place a wager; sportsbook selection IDs are not available.';panel.appendChild(linkNote);
+ refreshSlip();refreshAddButtons();
  const target=document.createElement('p');target.className='status';target.textContent='🎯 Target SGP payout: +400 (preferred range +350 to +500). Actual sportsbook odds are not available in this feed.';
  panel.appendChild(target);
  const oddsInput=document.createElement('input');oddsInput.type='number';oddsInput.placeholder='Enter SGP price, e.g. +400';oddsInput.setAttribute('aria-label','Combined SGP American odds');panel.appendChild(oddsInput);
