@@ -499,17 +499,25 @@ function renderGameSGP(){
  };
  candidates.sort((a,b)=>b.robustScore*scriptBias(b)-a.robustScore*scriptBias(a));
  const chosen=[],usedMarkets=new Set(),playerCounts=new Map();
- // Select a compact research combination; never pretend an unpriced slip is +EV.
- // Diversify player exposure and cap correlated passing/receiving volume assumptions.
- const familyCount={pass:0,rush:0};
- for(const x of candidates){
-  if(x.verdict==='PASS')continue;
-  const key=String(x.r.player_id||x.r.player);
-  const marketKey=key+'|'+x.d.key;
+ // Build a matchup-led 3–5-leg research ticket, balancing different roles and game scripts.
+ const familyCount={pass:0,rush:0},marketCount={};
+ const eligible=candidates.filter(x=>x.verdict!=='PASS');
+ const targetCount=Math.min(5,Math.max(3,eligible.length));
+ for(const x of eligible){
+  const player=String(x.r.player_id||x.r.player),marketKey=player+'|'+x.d.key;
   const family=x.d.key==='RUSH'?'rush':'pass';
-  if(usedMarkets.has(marketKey)||(playerCounts.get(key)||0)>=1||familyCount[family]>=2)continue;
-  chosen.push(x);usedMarkets.add(marketKey);playerCounts.set(key,1);familyCount[family]++;
-  if(chosen.length>=3)break;
+  if(usedMarkets.has(marketKey)||(playerCounts.get(player)||0)>=1)continue;
+  if(familyCount[family]>=3||((marketCount[x.d.key]||0)>=2))continue;
+  chosen.push(x);usedMarkets.add(marketKey);playerCounts.set(player,1);
+  familyCount[family]++;marketCount[x.d.key]=(marketCount[x.d.key]||0)+1;
+  if(chosen.length>=targetCount)break;
+ }
+ // If too few distinct players exist, allow a second market on one player with clear labeling.
+ if(chosen.length<3)for(const x of eligible){
+  const player=String(x.r.player_id||x.r.player),marketKey=player+'|'+x.d.key;
+  if(usedMarkets.has(marketKey)||(playerCounts.get(player)||0)>=2)continue;
+  chosen.push(x);usedMarkets.add(marketKey);playerCounts.set(player,(playerCounts.get(player)||0)+1);
+  if(chosen.length>=Math.min(3,eligible.length))break;
  }
  const label=filter.options[filter.selectedIndex]?.textContent||'Selected matchup';
  panel.replaceChildren();
@@ -545,22 +553,18 @@ function renderGameSGP(){
  const note=document.createElement('p');note.className='muted';note.textContent='Research shortlist ranks performance across baseline, pass-heavy, run-heavy and lower-scoring sensitivity scenarios, then limits player and market-family concentration. GREEN requires 80%+ across five recent logs, at least 15% projected line cushion, stable usage, no unfavorable defensive allowance or teammate-return flag. CAUTION means at least one risk; PASS excludes major risks. These are heuristic research labels, NOT calibrated probabilities. Distinct players preferred, maximum two markets per player. Sportsbook availability, current injuries, matchup defensive comparability and odds remain unverified.';panel.appendChild(note);
  const diagnostics=document.createElement('p');diagnostics.className='muted';diagnostics.textContent='Eligibility check: '+audit.players+' active player records · '+candidates.length+' qualifying prop legs · '+audit.returning+' player records flagged for possible teammate returns · '+audit.missingLogs+' markets lacking 3 game logs · '+audit.missingMetrics+' markets missing metrics · '+audit.noSupportedLine+' markets without supported ALT.';panel.appendChild(diagnostics);
  // Safety gate: do not present a CAUTION-only or unpriced shortlist as a suggested wager.
- const green=chosen.filter(x=>x.verdict==='GREEN');
- if(green.length<2){
-  const warning=document.createElement('section');warning.className='panel';warning.style.cssText='margin:14px 0;border:1px solid #fbbf24;padding:14px';
-  const title=document.createElement('h3');title.textContent='⚠️ RESEARCH-ONLY SGP · LIMITED STRONG LEGS';warning.appendChild(title);
-  const msg=document.createElement('p');msg.textContent='Only '+green.length+' GREEN-rated leg(s) found. The remaining candidates have CAUTION flags. No validated joint probability or combined sportsbook price is available, so this app cannot responsibly recommend an SGP for this matchup.';warning.appendChild(msg);
-  const detail=document.createElement('p');detail.className='muted';detail.textContent='Research candidates to investigate manually: '+chosen.map(x=>x.r.player+' '+x.line+'+ '+x.d.unit+' ('+x.verdict+')').join(' · ')+'. Check current lines, injury status and odds in Hard Rock Bet. Do not mistake these for approved picks.';warning.appendChild(detail);
-  panel.appendChild(warning);
-  const sub=document.createElement('p');sub.className='muted';sub.textContent='Continue reviewing the full market scan above and individual prop research below. No bet is automatically endorsed.';panel.appendChild(sub);
- }
  if(chosen.length<2){
-  const p=document.createElement('p');p.className='status';p.textContent='PASS: Not enough eligible players with complete data for a 2-leg SGP. No invented picks.';panel.appendChild(p);return;
+  const p=document.createElement('p');p.className='status';p.textContent='Insufficient verified player game logs to construct a multi-leg ticket for this matchup.';panel.appendChild(p);return;
  }
-
+ const cautions=chosen.filter(x=>x.verdict==='CAUTION').length;
+ if(cautions){
+  const notice=document.createElement('p');notice.className='status';
+  notice.textContent='Research ticket: '+chosen.length+' legs, including '+cautions+' CAUTION selection(s). Review each player explanation below.';
+  panel.appendChild(notice);
+ }
  const recommended=document.createElement('section');recommended.className='panel';recommended.style.cssText='margin:14px 0;border:1px solid #00db86';
- const recTitle=document.createElement('h3');recTitle.textContent='🎟️ MATCHUP-DRIVEN · '+chosen.length+'-LEG RESEARCH BUILD';recommended.appendChild(recTitle);
- const recNote=document.createElement('p');recNote.className='muted';recNote.textContent='Projected statistical targets for '+label+', selected from matchup, recent game logs, usage and game-script research. These are research thresholds, not sportsbook lines. Check which targets are available in Hard Rock.';recommended.appendChild(recNote);
+ const recTitle=document.createElement('h3');recTitle.textContent='🎟️ MATCHUP-DRIVEN · '+chosen.length+'-LEG SGP BUILD';recommended.appendChild(recTitle);
+ const recNote=document.createElement('p');recNote.className='muted';recNote.textContent='Built from the matchup scoring script, player game logs, usage and opponent allowance. Statistical thresholds are research targets, not sportsbook lines. Different players and prop categories are preferred; each selection is explained below.';recommended.appendChild(recNote);
  const recList=document.createElement('ol');recList.style.paddingLeft='22px';
  for(const x of chosen){
   const item=document.createElement('li');item.style.margin='9px 0';
