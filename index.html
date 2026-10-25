@@ -138,42 +138,37 @@ function setPropLine(key,value){const v=String(value).trim();if(v==='')delete pr
 function propDecision(x,cfg,category){
  const line=propLines[propLineKey(x.r,category)];
  const alt=suggestAltLine(x,cfg,category);
- if(line==null)return {label:'⚪ ENTER POSTED LINE',detail:'Enter the main sportsbook line to compare an OVER with a conservative ALT.'};
+ if(line==null)return {label:'⚪ ENTER POSTED LINE',detail:'Enter the current sportsbook line to compare the OVER and conservative alternate research lines.'};
  const avg=Number(x.r[cfg.player]),def=Number(x.r[cfg.def]);
- const field={PASS:'recent3PassYards',RUSH:'recent3RushYards',REC:'recent3RecYards',CATCH:'recent3Receptions'}[category];
- const recent=x.r[field]==null?null:Number(x.r[field]);
+ const recentField={PASS:'recent3PassYards',RUSH:'recent3RushYards',REC:'recent3RecYards',CATCH:'recent3Receptions'}[category];
+ const recent=x.r[recentField]==null?null:Number(x.r[recentField]);
  const strong=['🔥 PRIME MATCHUP','STRONG MATCHUP'].includes(x.label);
  if(!Number.isFinite(avg)||avg<=0||!Number.isFinite(def)||def<=0)return {label:'🛑 PASS',detail:'Production or defensive data insufficient.'};
- const avgMargin=avg/Math.max(line,1),defMargin=def/Math.max(line,1);
  const recentSupports=recent==null||recent>=line*1.05;
- // Posted OVER needs independent support from player production, opponent
- // allowance and recent form. Matchup score alone cannot override the line.
- if(strong&&avgMargin>=1.12&&defMargin>=1.08&&recentSupports)
+ if(strong&&avg>=line*1.12&&def>=line*1.08&&recentSupports)
   return {label:'✅ PLAY OVER '+line,detail:'Posted OVER qualifies: player average '+avg.toFixed(1)+', defense allows '+def.toFixed(1)+(recent==null?'':', last-three average '+recent.toFixed(1))+'.'};
- if(strong&&alt&&alt.line<line)
-  return {label:'⚠️ CAUTION · ALT '+alt.line+'+',detail:'The posted OVER '+line+' lacks enough support from '+[avg<line*1.12?'season production':null,def<line*1.08?'opponent allowance':null,recent!=null&&recent<line*1.05?'recent form':null].filter(Boolean).join(', ')+'. Research '+alt.line+'+ as a closer alternative; sportsbook availability and price unverified.'};
- return {label:'🛑 PASS',detail:strong?'Posted OVER is not sufficiently supported and no lower qualifying ALT is available.':'Matchup does not qualify for an OVER or alternate recommendation.'};
+ if(alt&&alt.line<line)
+  return {label:'⚠️ RESEARCH ALT '+alt.line+'+',detail:'Conservative alternate supported by player average, opponent allowance and available recent form. '+(strong?'Posted OVER lacks sufficient support.':'Matchup is '+x.label+'; this is NOT a strong-matchup endorsement. ')+'Sportsbook availability, odds and injury impact unverified.'};
+ return {label:'🛑 PASS',detail:'No qualifying posted OVER or conservative alternate based on production, defensive allowance and recent form.'};
 }
-// Conservative research ladders. Suggested ATL thresholds are not sportsbook quotes.
+// Research thresholds, not sportsbook prices or calibrated probabilities.
 function suggestAltLine(x,cfg,category){
- if(!['🔥 PRIME MATCHUP','STRONG MATCHUP'].includes(x.label))return null;
  const r=x.r,def=Number(r[cfg.def]),avg=Number(r[cfg.player]);
  const recentField={PASS:'recent3PassYards',RUSH:'recent3RushYards',REC:'recent3RecYards',CATCH:'recent3Receptions'}[category];
  const recent=r[recentField]==null?null:Number(r[recentField]);
  if(!Number.isFinite(def)||!Number.isFinite(avg)||def<=0||avg<=0)return null;
- // A strong defense-allowed average alone never establishes a player ATL.
- // Move 60% of the distance from the season average toward the entered
- // sportsbook line. This is a research threshold, not a probability estimate.
  const posted=Number(propLines[propLineKey(r,category)]);
- const hasPosted=Number.isFinite(posted)&&posted>0;
- const floor=hasPosted?Math.min(posted-0.5,avg+.60*(posted-avg)):Math.min(avg,def,recent!=null&&Number.isFinite(recent)?recent:avg)*.95;
+ if(!Number.isFinite(posted)||posted<=0)return null;
+ // Alternate lines are limited by ALL observed benchmarks, including defense.
+ // Never let a high player average alone overrule a difficult opponent.
+ const ceiling=Math.min(posted-0.5,avg*.9,def*.9,recent!=null&&Number.isFinite(recent)?recent*.9:Infinity);
  const ladders={
   PASS:[150,175,200,225,250,275,300,325,350],
   RUSH:[10,15,20,25,30,40,50,60,70,80,90,100,125,150],
   REC:[10,15,20,25,30,40,50,60,70,80,90,100,125,150],
   CATCH:[1,2,3,4,5,6,7,8,9,10]
  };
- const choices=ladders[category].filter(v=>v<=floor);
+ const choices=ladders[category].filter(v=>v<=ceiling);
  if(!choices.length)return null;
  return {line:choices[choices.length-1],def,avg,recent};
 }
