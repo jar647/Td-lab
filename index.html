@@ -448,20 +448,36 @@ function renderGameSGP(){
   }
  }
  candidates.sort((a,b)=>b.quality-a.quality||String(a.r.player).localeCompare(String(b.r.player)));
+ // Scenario-aware shortlist. These are sensitivity heuristics, not probabilities or priced value.
+ const game=propVaultGameFeed?.games?.find(g=>[String(g.home),String(g.away)].sort().join('|')===selected);
+ const modelMargin=Number(game?.projected_margin_home),modelTotal=Number(game?.projected_total);
+ const scriptAvailable=Number.isFinite(modelMargin)&&Number.isFinite(modelTotal)&&!!game;
+ const scripts=scriptAvailable?[
+  {name:'baseline',weight:0.4,pass:1,rush:1},
+  {name:'pass-heavy / shootout',weight:0.2,pass:1.15,rush:.9},
+  {name:'run-heavy / clock control',weight:0.2,pass:.88,rush:1.12},
+  {name:'lower-scoring',weight:0.2,pass:.87,rush:.91}
+ ]:[];
+ for(const x of candidates){
+  const base=x.quality;
+  const factors=scripts.map(sc=>({name:sc.name,score:base*(x.d.key==='PASS'||x.d.key==='REC'||x.d.key==='CATCH'?sc.pass:sc.rush)}));
+  x.scenarioFloor=factors.length?Math.min(...factors.map(z=>z.score)):base;
+  x.scenarioRange=factors.length?Math.max(...factors.map(z=>z.score))-x.scenarioFloor:0;
+  x.robustScore=factors.length?factors.reduce((v,z,i)=>v+z.score*scripts[i].weight,0)-x.scenarioRange*.35:base;
+ }
+ candidates.sort((a,b)=>b.robustScore-a.robustScore||String(a.r.player).localeCompare(String(b.r.player)));
  const chosen=[],usedMarkets=new Set(),playerCounts=new Map();
- // Prefer distinct players first; then consider a second, different market for a player.
- // Never duplicate a player/market or allow more than two legs on one player.
- for(const pass of [1,2]){
-  for(const x of candidates){
-   if(x.verdict==='PASS')continue;
-   const key=String(x.r.player_id||x.r.player);
-   const marketKey=key+'|'+x.d.key;
-   const count=playerCounts.get(key)||0;
-   if(usedMarkets.has(marketKey)||count!==pass-1)continue;
-   chosen.push(x);usedMarkets.add(marketKey);playerCounts.set(key,count+1);
-   if(chosen.length===5)break;
-  }
-  if(chosen.length===5)break;
+ // Select a compact research combination; never pretend an unpriced slip is +EV.
+ // Diversify player exposure and cap correlated passing/receiving volume assumptions.
+ const familyCount={pass:0,rush:0};
+ for(const x of candidates){
+  if(x.verdict==='PASS')continue;
+  const key=String(x.r.player_id||x.r.player);
+  const marketKey=key+'|'+x.d.key;
+  const family=x.d.key==='RUSH'?'rush':'pass';
+  if(usedMarkets.has(marketKey)||(playerCounts.get(key)||0)>=1||familyCount[family]>=2)continue;
+  chosen.push(x);usedMarkets.add(marketKey);playerCounts.set(key,1);familyCount[family]++;
+  if(chosen.length>=3)break;
  }
  const label=filter.options[filter.selectedIndex]?.textContent||'Selected matchup';
  panel.replaceChildren();
@@ -474,15 +490,15 @@ function renderGameSGP(){
   warning.textContent='⚠️ POSSIBLE RETURNING PLAYERS: '+names.join(', ')+'. Return not confirmed. Affected props are flagged as caution and ranked lower; verify game-day availability and workloads before betting.';
   panel.appendChild(warning);
  }
- const note=document.createElement('p');note.className='muted';note.textContent='GREEN requires 80%+ across five recent logs, at least 15% projected line cushion, stable usage, no unfavorable defensive allowance or teammate-return flag. CAUTION means at least one risk; PASS excludes major risks. These are heuristic research labels, NOT calibrated probabilities. Distinct players preferred, maximum two markets per player. Sportsbook availability, current injuries, matchup defensive comparability and odds remain unverified.';panel.appendChild(note);
+ const note=document.createElement('p');note.className='muted';note.textContent='Research shortlist ranks performance across baseline, pass-heavy, run-heavy and lower-scoring sensitivity scenarios, then limits player and market-family concentration. GREEN requires 80%+ across five recent logs, at least 15% projected line cushion, stable usage, no unfavorable defensive allowance or teammate-return flag. CAUTION means at least one risk; PASS excludes major risks. These are heuristic research labels, NOT calibrated probabilities. Distinct players preferred, maximum two markets per player. Sportsbook availability, current injuries, matchup defensive comparability and odds remain unverified.';panel.appendChild(note);
  const diagnostics=document.createElement('p');diagnostics.className='muted';diagnostics.textContent='Eligibility check: '+audit.players+' active player records · '+candidates.length+' qualifying prop legs · '+audit.returning+' player records flagged for possible teammate returns · '+audit.missingLogs+' markets lacking 3 game logs · '+audit.missingMetrics+' markets missing metrics · '+audit.noSupportedLine+' markets without supported ALT.';panel.appendChild(diagnostics);
  if(chosen.length<2){
   const p=document.createElement('p');p.className='status';p.textContent='PASS: Not enough eligible players with complete data for a 2-leg SGP. No invented picks.';panel.appendChild(p);return;
  }
 
  const recommended=document.createElement('section');recommended.className='panel';recommended.style.cssText='margin:14px 0;border:1px solid #00db86';
- const recTitle=document.createElement('h3');recTitle.textContent='🎟️ THE PROP VAULT · SUGGESTED '+chosen.length+'-LEG SGP';recommended.appendChild(recTitle);
- const recNote=document.createElement('p');recNote.className='muted';recNote.textContent='Ready-made research combination for '+label+'. Check available ALT lines and prices in Hard Rock Bet before placing any wager.';recommended.appendChild(recNote);
+ const recTitle=document.createElement('h3');recTitle.textContent='🎟️ THE PROP VAULT · '+chosen.length+'-LEG RESEARCH SHORTLIST';recommended.appendChild(recTitle);
+ const recNote=document.createElement('p');recNote.className='muted';recNote.textContent='Scenario-screened research shortlist for '+label+'. Not an optimized or proven-value SGP: actual individual and combined sportsbook odds, calibrated joint probabilities and historical backtesting are unavailable. Check lines and prices before betting.';recommended.appendChild(recNote);
  const recList=document.createElement('ol');recList.style.paddingLeft='22px';
  for(const x of chosen){
   const item=document.createElement('li');item.style.margin='9px 0';
@@ -550,7 +566,7 @@ function renderGameSGP(){
  }
  panel.appendChild(list);
  refreshSlip();refreshAddButtons();
- const target=document.createElement('p');target.className='status';target.textContent='🎯 Target SGP payout: +400 (preferred range +350 to +500). Actual sportsbook odds are not available in this feed.';
+ const target=document.createElement('p');target.className='status';target.textContent='⚠️ No value verdict without actual SGP payout and a calibrated joint probability. Do not add legs just to reach a target payout.';
  panel.appendChild(target);
  const oddsInput=document.createElement('input');oddsInput.type='number';oddsInput.placeholder='Enter SGP price, e.g. +400';oddsInput.setAttribute('aria-label','Combined SGP American odds');panel.appendChild(oddsInput);
  const oddsResult=document.createElement('p');oddsResult.className='muted';panel.appendChild(oddsResult);
