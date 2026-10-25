@@ -354,6 +354,37 @@ function renderSimpleMatchups(){
  el.innerHTML=filtered.slice(0,40).map((r,i)=>'<div class="matchrow"><div class="row" style="align-items:center;gap:12px"><span class="ranknum">'+(i+1)+'</span><div style="flex:1"><b>'+playerDisplay(r)+'</b> <span class="pill">'+escapeHTML(r.pos)+'</span><div class="muted">'+escapeHTML(r.team)+' vs '+escapeHTML(r.opp)+' · '+escapeHTML(r.games)+' games sampled</div></div><span style="font-weight:900;color:#6dffc2">'+alignmentScore(r)+'/100</span></div><div style="font-weight:850;color:'+(alignmentLabel(r).includes('PRIME')?'#00e28a':'#e2d6a6')+';margin-top:7px">'+alignmentLabel(r)+'</div><div class="statsline"><b>Defense vs '+escapeHTML(r.pos)+':</b> '+stat(r.tdallowed)+' TD/G · '+stat(r.rzallowed)+' RZ chances/G · '+stat(r.defRecYardsAllowed)+' receiving yards/G · '+stat(r.defRzTargetsAllowed)+' RZ targets/G</div><div class="statsline"><b>Player usage:</b> '+stat(r.snapShare==null?null:(num(r.snapShare)<=1?Math.round(num(r.snapShare)*1000)/10:r.snapShare),'%')+' offensive snaps · '+stat(r.playerTargets)+' targets/G · '+stat(r.playerTargetShare,'%')+' target share · '+stat(r.playerRzTargets)+' RZ targets/G · '+stat(r.playerRz)+' total RZ chances/G · '+stat(r.goalLine5)+' inside-five chances/G</div></div>').join('');
 }
 
+let propVaultGameFeed=null;
+function renderSGPMarketResearch(panel,selected){
+ const game=propVaultGameFeed?.games?.find(g=>[String(g.home),String(g.away)].sort().join('|')===selected);
+ const section=document.createElement('section');section.className='panel';section.style.margin='12px 0';
+ const heading=document.createElement('h3');heading.textContent='🏈 FULL GAME BETTING BOARD · ML / ATS / TOTALS / HALVES';section.appendChild(heading);
+ const note=document.createElement('p');note.className='muted';note.textContent='The app must compare real sportsbook lines and prices before recommending non-player legs. First-half, first-quarter and team-total models are not yet validated. No fabricated picks or odds.';section.appendChild(note);
+ if(game){
+  const score=document.createElement('p');score.textContent='Model baseline: '+game.away+' '+game.projected_away_points+' · '+game.home+' '+game.projected_home_points+' · Total '+game.projected_total;section.appendChild(score);
+  const entries=[['Home spread (e.g. -3.5)','spread'],['Full-game total','total']];
+  const fields={};
+  for(const [label,key] of entries){
+   const wrap=document.createElement('label');wrap.style.cssText='display:inline-flex;flex-direction:column;gap:4px;margin:6px 12px 6px 0';wrap.textContent=label;
+   const input=document.createElement('input');input.type='number';input.step='.5';input.placeholder='Sportsbook line';input.style.maxWidth='160px';wrap.appendChild(input);section.appendChild(wrap);fields[key]=input;
+  }
+  const result=document.createElement('p');result.className='status';section.appendChild(result);
+  const update=()=>{
+   const notes=[];
+   if(fields.spread.value!==''){
+    const line=Number(fields.spread.value),edge=Number(game.projected_margin_home)+line;
+    notes.push(Math.abs(edge)<1.5?'ATS: PASS (small model difference)':'ATS model lean: '+(edge>0?game.home+' '+(line>0?'+':'')+line:game.away+' '+(-line>0?'+':'')+(-line))+' · '+Math.abs(edge).toFixed(1)+' point model difference');
+   }
+   if(fields.total.value!==''){
+    const line=Number(fields.total.value),edge=Number(game.projected_total)-line;
+    notes.push(Math.abs(edge)<2?'TOTAL: PASS (small model difference)':'TOTAL model lean: '+(edge>0?'OVER ':'UNDER ')+line+' · '+Math.abs(edge).toFixed(1)+' point model difference');
+   }
+   result.textContent=notes.length?notes.join(' | '):'Enter current sportsbook lines to evaluate spread and total model differences. ML, halves, quarters and team totals require verified market data.';
+  };
+  fields.spread.addEventListener('input',update);fields.total.addEventListener('input',update);update();
+ }else{const p=document.createElement('p');p.className='status';p.textContent='Game projection unavailable. No non-player selections can be verified.';section.appendChild(p);}
+ panel.appendChild(section);
+}
 function renderGameSGP(){
  const panel=document.getElementById('sgpPanel'),filter=document.getElementById('gameFilter');
  if(!panel||!filter)return;
@@ -429,6 +460,7 @@ function renderGameSGP(){
  }
  const label=filter.options[filter.selectedIndex]?.textContent||'Selected matchup';
  panel.replaceChildren();
+ renderSGPMarketResearch(panel,selected);
  const heading=document.createElement('h2');heading.textContent='🎟️ SGP RESEARCH CARD · '+label;panel.appendChild(heading);
  const impacted=autoRecords.filter(r=>gameKey(r)===selected&&Array.isArray(r.possibleReturningTeammates)&&r.possibleReturningTeammates.length);
  if(impacted.length){
@@ -718,6 +750,7 @@ async function loadGamePicks(){
   if(!response.ok)throw Error('Game feed not published');
   const feed=await response.json();
   if(!Array.isArray(feed.games))throw Error('Invalid game feed');
+  propVaultGameFeed=feed;
   status.textContent='Week '+feed.week+' · '+feed.games.length+' games · Research projections, not calibrated betting probabilities. Enter sportsbook lines to compare.';
   list.replaceChildren();
   for(const game of feed.games){
