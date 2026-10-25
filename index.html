@@ -168,17 +168,21 @@ function propResearch(r,category,avgField,defField,usageField,posted,thresholds)
  const logs=(Array.isArray(r.last5GameStats)?r.last5GameStats.slice(-5):[]).map(g=>g[logKey]).filter(v=>v!=null&&Number.isFinite(Number(v))).map(Number);
  if(logs.length<3)return {projection,lines:[],logs:logs.length,missing:true};
  const max=Number.isFinite(Number(posted))&&Number(posted)>0?Number(posted)-.5:Infinity;
- const lines=thresholds.filter(line=>line<=max&&line<=projection&&logs.filter(v=>v>=line).length>=Math.ceil(logs.length*.6)).map(line=>({line,hits:logs.filter(v=>v>=line).length,total:logs.length}));
- return {projection,lines,logs:logs.length,missing:false,usageRatio};
+ const lines=thresholds.filter(line=>line<=max&&line<=projection*1.08).map(line=>({line,hits:logs.filter(v=>v>=line).length,total:logs.length}));
+ const conservative=lines.filter(v=>v.hits/v.total>=.8&&v.line<=projection*.85).at(-1)||null;
+ const balanced=lines.filter(v=>v.hits/v.total>=.6&&v.line<=projection).at(-1)||null;
+ const aggressive=lines.filter(v=>v.hits/v.total>=.4&&v.line<=projection*1.08).at(-1)||null;
+ return {projection,lines,tiers:{conservative,balanced,aggressive},logs:logs.length,missing:false,usageRatio};
 }
 function suggestAltLine(x,cfg,category){
  const ladders={PASS:[150,175,200,225,250,275,300,325,350],RUSH:[10,15,20,25,30,40,50,60,70,80,90,100,125,150],REC:[10,15,20,25,30,40,50,60,70,80,90,100,125,150],CATCH:[1,2,3,4,5,6,7,8,9,10]};
  const posted=propLines[propLineKey(x.r,category)];
  if(posted==null||Number(posted)<=0)return null;
  const research=propResearch(x.r,category,cfg.player,cfg.def,cfg.usage,posted,ladders[category]);
- if(!research||!research.lines.length)return null;
- const selected=research.lines[research.lines.length-1];
- return {...selected,projection:research.projection,def:Number(x.r[cfg.def]),avg:Number(x.r[cfg.player]),recent:x.r[{PASS:'recent3PassYards',RUSH:'recent3RushYards',REC:'recent3RecYards',CATCH:'recent3Receptions'}[category]]};
+ if(!research||!research.tiers)return null;
+ const selected=research.tiers.balanced||research.tiers.conservative;
+ if(!selected)return null;
+ return {...selected,tiers:research.tiers,projection:research.projection,def:Number(x.r[cfg.def]),avg:Number(x.r[cfg.player]),recent:x.r[{PASS:'recent3PassYards',RUSH:'recent3RushYards',REC:'recent3RecYards',CATCH:'recent3Receptions'}[category]]};
 }
 function playerDisplay(r){return escapeHTML(r.player)+(Number.isInteger(r.jersey_number)&&r.jersey_number>=0&&r.jersey_number<=99?' <span class="pill">#'+r.jersey_number+'</span>':'')}
 function gameKey(r){return [String(r.team||''),String(r.opp||'')].sort().join('|')}
@@ -287,7 +291,7 @@ function renderPropMatchups(){
  const propLineUI=x=>{
   const key=propLineKey(x.r,propCategory),line=propLines[key],suggestion=suggestAltLine(x,cfg,propCategory),decision=propDecision(x,cfg,propCategory);
   const unit=propCategory==='CATCH'?'receptions':'yards';
-  const recommendation=suggestion?'<div style="font-size:16px;font-weight:850;color:#6dffc2">🎯 Research ALT: '+suggestion.line+'+ '+unit+'</div><div class="muted">Experimental weighted research: 30% season, 30% last-three, 20% opponent allowance, 20% usage-adjusted production. Weighted estimate '+suggestion.projection.toFixed(1)+'; last '+suggestion.total+' appearances: '+suggestion.hits+'/'+suggestion.total+' reached this ALT. Opponent allowance '+escapeHTML(suggestion.def)+'. Not a verified sportsbook offering or calibrated probability.</div>':'<div class="muted">No qualifying research ALT from available metrics.</div>';
+  const recommendation=suggestion?'<div style="font-size:16px;font-weight:850;color:#6dffc2">🎯 Balanced research ALT: '+suggestion.line+'+ '+unit+'</div><div class="muted">Weighted estimate '+suggestion.projection.toFixed(1)+' · 30% season / 30% recent / 20% defense / 20% usage. Actual last-five appearance sample shown below; not calibrated probabilities.</div><div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:9px">'+[['conservative','🛡️ Conservative'],['balanced','⚖️ Balanced'],['aggressive','🚀 Aggressive']].map(([k,label])=>{const t=suggestion.tiers[k];return '<div style="flex:1;min-width:120px;padding:9px;border:1px solid #36775b;border-radius:9px"><b>'+label+'</b><div>'+(t?t.line+'+ '+unit:'No qualifying line')+'</div><small>'+(t?t.hits+'/'+t.total+' recent hits':'Insufficient support')+'</small></div>'}).join('')+'</div><div class="hint">Higher alternatives can have weaker recent hit rates. Sportsbook availability, prices and injury effects are not verified.</div>':'<div class="muted">No balanced research ALT supported by at least three verified game logs. Enter a posted line to evaluate alternatives.</div>';
   return '<div style="margin-top:10px;padding:10px;border:1px solid #315145;border-radius:9px"><label>ENTER CURRENT SPORTSBOOK LINE</label><input type="number" min="0" max="9999" step="0.5" style="max-width:180px" value="'+(line==null?'':escapeHTML(line))+'" placeholder="e.g. 286.5" onchange="setPropLine('+JSON.stringify(key).replace(/"/g,'&quot;')+',this.value)"><div style="font-size:17px;font-weight:900;margin:12px 0 5px">'+decision.label+'</div><div class="muted" style="margin-bottom:10px">'+decision.detail+'</div>'+recommendation+'</div>';
  };
  const top=document.getElementById('propTopDawg');
@@ -372,8 +376,8 @@ function renderGameSGP(){
    if(actual.length<3)continue;
    const usageField={PASS:'playerPassAttempts',RUSH:'playerCarries',REC:'playerTargets',CATCH:'playerTargets'}[d.key];
    const research=propResearch(r,d.key,d.field,d.def,usageField,null,d.thresholds);
-   if(!research||!research.lines.length)continue;
-   const chosenLine=research.lines[research.lines.length-1],line=chosenLine.line;
+   if(!research||!research.tiers||!research.tiers.balanced)continue;
+   const chosenLine=research.tiers.balanced,line=chosenLine.line;
    const hitRate=chosenLine.hits/chosenLine.total;
    const quality=hitRate*.65+Math.min(research.projection/Math.max(avg,1),1.5)*.2+Math.min(line/avg,1)*.15;
    candidates.push({r,d,line,quality,hitRate,logCount:actual.length});
