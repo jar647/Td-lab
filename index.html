@@ -705,7 +705,8 @@ function renderGameSGP(){
     const id=x.gameLeg?'GAME:'+x.key:String(x.r.player_id||x.r.player);
     if(state.used.has(id)||x.gameLeg&&state.picks.some(y=>y.gameLeg))continue;
     const team=x.gameLeg?'':teamOf(x);
-    // Evaluate teammate combinations through whole-ticket scoring, not bans.\n    const picks=[...state.picks,x],score=ticketScore(picks);
+    // Evaluate teammate combinations through whole-ticket scoring, not bans.
+    const picks=[...state.picks,x],score=ticketScore(picks);
     if(score-state.score<.38)continue;
     next.push({picks,used:new Set([...state.used,id]),score});
    }
