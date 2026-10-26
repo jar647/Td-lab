@@ -971,7 +971,7 @@ async function loadGamePicks(){
     if(totalText!==''){
      const line=Number(totalText),edge=Number(game.projected_total)-line,abs=Math.abs(edge);
      const verdict=abs<2?'🛑 PASS':abs<4?'⚠️ SMALL MODEL EDGE':'📊 MODEL LEAN';
-     totalSummary='TOTAL: '+verdict+' · '+(abs<2?'No meaningful difference':edge>0?'OVER '+line:'UNDER '+line)+' · '+abs.toFixed(1)+' pts';
+     totalSummary='TOTAL: RESEARCH ONLY · '+(edge>0?'Model leans OVER ': 'Model leans UNDER ')+line+' · '+abs.toFixed(1)+' pts · Historical totals test underperformed';
      ou.textContent=totalSummary+'. Projection difference only; no validated win probability.';
     }else ou.textContent='Total: Enter the sportsbook total to compare.';
     // Compare only markets with grounded model inputs. Never fabricate a moneyline price.
@@ -1006,10 +1006,7 @@ async function loadGamePicks(){
      const edge=margin+Number(spreadText);
      if(Math.abs(edge)>=5)options.push({score:.78+Math.min(Math.abs(edge),12)*.012,play:edge>0?game.home+' '+(Number(spreadText)>0?'+':'')+Number(spreadText):game.away+' '+(-Number(spreadText)>0?'+':'')+(-Number(spreadText)),reason:'Projected spread advantage '+Math.abs(edge).toFixed(1)+' points against entered sportsbook spread.',type:'ATS'});
     }
-    if(totalText!==''&&Number.isFinite(Number(totalText))){
-     const edge=Number(game.projected_total)-Number(totalText);
-     if(Math.abs(edge)>=7)options.push({score:.77+Math.min(Math.abs(edge),15)*.01,play:(edge>0?'OVER ':'UNDER ')+Number(totalText),reason:'Projected total '+game.projected_total+' differs by '+Math.abs(edge).toFixed(1)+' points from entered sportsbook total.',type:'Game total'});
-    }
+    // Total recommendations disabled until held-out evidence supports the market edge.
     options.sort((a,b)=>b.score-a.score);
     const pick=options[0];
     best.replaceChildren();
