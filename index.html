@@ -821,6 +821,18 @@ async function loadBacktestLab(){
   for(const [year,row] of Object.entries(a.by_season||{})){const item=document.createElement('div');item.className='pv-backtest-row';item.textContent=year+' · '+row.games+' games · winner accuracy '+percent(row.winner_accuracy)+' · total error '+row.total_mae+' pts';seasons.appendChild(item);}
   calibration.replaceChildren();const title=document.createElement('h3');title.textContent='Monte Carlo validation';calibration.appendChild(title);
   const note=document.createElement('p');note.className='muted';note.textContent='Probability calibration and Brier scores are not yet published for this simulator. These historical score-model results do not validate the simulator’s win/cover probabilities.';calibration.appendChild(note);
+  try{
+   const response=await fetch('data/game_picks_simulator_audit.json',{cache:'no-store'});
+   if(!response.ok)throw Error('Audit not yet published');
+   const audit=await response.json(),h=audit.holdout||{};
+   const auditHeading=document.createElement('h3');auditHeading.textContent='Out-of-sample simulator assumption audit';calibration.appendChild(auditHeading);
+   const description=document.createElement('p');description.className='muted';description.textContent=(audit.method||'Historical holdout audit')+' · '+(h.games||0)+' held-out games.';calibration.appendChild(description);
+   for(const [name,key] of [['Moneyline / home-win probability','home_win'],['Game total / OVER probability','over_total'],['ATS / home-cover probability','home_cover']]){
+    const row=h[key]||{};const line=document.createElement('div');line.className='pv-backtest-row';
+    line.textContent=name+' · '+(row.games||0)+' games · Brier score '+(row.brier==null?'Not available':row.brier)+' · directional accuracy '+(row.accuracy==null?'Not available':percent(row.accuracy));calibration.appendChild(line);
+   }
+   const ref=document.createElement('p');ref.className='muted';ref.textContent='2024 observed score residual SD: margin '+(audit.reference_2024?.observed_margin_residual_sd??'—')+'; total '+(audit.reference_2024?.observed_total_residual_sd??'—')+'. Simulator assumptions: margin 13, total 13.5. Lower Brier scores are better. These are model diagnostics, not guaranteed betting edges.';calibration.appendChild(ref);
+  }catch(e){const pending=document.createElement('p');pending.className='muted';pending.textContent='Simulator holdout audit is pending publication. Existing historical model results remain available.';calibration.appendChild(pending);}
   status.textContent='Historical results loaded · '+(a.method||'Prior-week walk-forward model')+'.';
  }catch(err){status.textContent='Historical backtest files unavailable: '+err.message;summary.replaceChildren();seasons.replaceChildren();calibration.replaceChildren();}
 }
