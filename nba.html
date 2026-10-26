@@ -47,16 +47,16 @@ $('buildsgp').onclick=()=>{
  const i=$('games').value;if(i===''){ $('sgp').textContent='Select a game first.';return}
  const g=games[Number(i)];
  if(g.status!=='STATUS_SCHEDULED'){$('sgp').textContent='Select a scheduled pregame matchup.';return}
- const legs=[];const used=new Set();
+ const legs=[];const used=new Set();const usedTeams={};
  const ranked=[...currentProjections].filter(p=>p.total>=3&&p.hits/p.total>=.6&&p.defenseGames>=2).sort((a,b)=>b.score-a.score);
  for(const p of ranked){
-  if(used.has(p.name))continue;
+  if(used.has(p.name)||((usedTeams[p.team]||0)>=2))continue;
   const choices=p.options.filter(o=>o.line<=p.adjusted&&o.hits/p.total>=.6);
   if(!choices.length)continue;
-  const line=choices.at(-1);legs.push({...p,selected:line});used.add(p.name);
+  const line=choices.at(-1);legs.push({...p,selected:line});used.add(p.name);usedTeams[p.team]=(usedTeams[p.team]||0)+1;
   if(legs.length===3)break;
  }
- $('sgp').innerHTML=legs.length?'<p class="muted">Up to three different players. Candidate selection is based on recent hit counts, not independent or joint probability. Correlation and betting value are not validated.</p>'+legs.map((p,i)=>'<div class="player"><strong>Leg '+(i+1)+': '+esc(p.name)+' '+p.selected.line+'+ '+esc(p.label)+'</strong><p class="muted">Recent '+p.selected.hits+'/'+p.total+' · adjusted mean '+p.adjusted.toFixed(1)+' · opponent '+esc(p.opponent)+'</p></div>').join(''):'<p class="warn">Insufficient validated historical data for a research slip. No picks forced.</p>';
+ $('sgp').innerHTML=legs.length?'<p class="muted">Up to three different players. Candidate selection uses recent hit counts, distinct players, and at most two legs per team. Same-game correlation, injury risk, and betting value are not validated.</p>'+legs.map((p,i)=>'<div class="player"><strong>Leg '+(i+1)+': '+esc(p.name)+' '+p.selected.line+'+ '+esc(p.label)+'</strong><p class="muted">Recent '+p.selected.hits+'/'+p.total+' · adjusted mean '+p.adjusted.toFixed(1)+' · opponent '+esc(p.opponent)+'</p></div>').join(''):'<p class="warn">Insufficient validated historical data for a research slip. No picks forced.</p>';
 };
 async function audit(){
  try{const r=await fetch('./data/nba_projection_tracker.json',{cache:'no-store'});if(!r.ok)throw Error('Tracking feed not published');const d=await r.json();const snapshots=d.snapshots||[];const ps=snapshots.flatMap(s=>s.projections||[]);const graded=ps.filter(p=>p.result==='within_20pct'||p.result==='outside_20pct');const hits=graded.filter(p=>p.result==='within_20pct');$('audit').innerHTML='<p>Locked games: <strong>'+snapshots.length+'</strong> · projections: <strong>'+ps.length+'</strong> · graded: <strong>'+graded.length+'</strong></p><p class="muted">Within tolerance: '+hits.length+'/'+graded.length+' (max of 2 units or 20% of projection). This is prediction accuracy, not betting win rate. Snapshots must be locked before tipoff.</p>'}catch(e){$('audit').textContent='Tracking not verified yet: '+e.message}
