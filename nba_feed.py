@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """NBA data feed: ESPN public scoreboard and summary. No API keys required."""
-import json,urllib.request,datetime,pathlib,time
+import json,urllib.request,datetime,pathlib,time,sys
 ROOT=pathlib.Path(__file__).resolve().parent
 OUT=ROOT/"data"/"nba_games.json"
 def get(url):
@@ -8,10 +8,12 @@ def get(url):
  with urllib.request.urlopen(req,timeout=25) as r:return json.load(r)
 today=datetime.datetime.now(datetime.timezone.utc).date()
 games=[]
+scoreboards_ok=0
 for delta in range(-14,4):
  date=(today+datetime.timedelta(days=delta)).strftime("%Y%m%d")
  try: board=get("https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates="+date)
  except Exception as e: print("scoreboard",date,str(e));continue
+ scoreboards_ok+=1
  for event in board.get("events",[]):
   competition=(event.get("competitions") or [{}])[0]
   teams=competition.get("competitors",[])
@@ -31,6 +33,9 @@ for delta in range(-14,4):
   except ValueError:pass
   except Exception as e:print("summary",event["id"],str(e))
   games.append(game)
+if scoreboards_ok==0 or not games:
+ print("NBA feed failure: no valid scoreboards or games; refusing to publish empty feed",file=sys.stderr)
+ sys.exit(1)
 OUT.parent.mkdir(parents=True,exist_ok=True)
 OUT.write_text(json.dumps({"generated_at":datetime.datetime.now(datetime.timezone.utc).isoformat(),"source":"ESPN public NBA scoreboard/summary","games":games},indent=2))
 print("Wrote",len(games),"games",sum(len(g["players"]) for g in games),"player records")
