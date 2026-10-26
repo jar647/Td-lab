@@ -8,6 +8,9 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '15 */3 * * *'
+concurrency:
+  group: nba-feed-writer
+  cancel-in-progress: false
 permissions:
   contents: write
 jobs:
@@ -18,6 +21,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - run: git pull --ff-only origin main
       - run: python nba_feed.py
       - run: python nba_tracker.py
       - name: Commit NBA data
@@ -27,6 +31,5 @@ jobs:
           git add data/nba_games.json data/nba_projection_tracker.json
           if ! git diff --cached --quiet; then
             git commit -m "Refresh NBA game data"
-            git pull --rebase origin main
             git push origin HEAD:main
           fi
