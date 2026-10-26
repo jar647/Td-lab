@@ -750,7 +750,7 @@ function renderGameSGP(){
   autoCopy.disabled=!displayed.length;
   renderRefinements();
  }
- countSelect.addEventListener('change',refreshAuto);marketCheck.addEventListener('change',refreshAuto);for(const field of Object.values(marketFields))field.addEventListener('input',refreshAuto);refreshAuto();
+ countSelect.addEventListener('change',refreshAuto);marketCheck.addEventListener('change',refreshAuto);for(const field of Object.values(marketFields))field.addEventListener('input',refreshAuto);
  autoCopy.addEventListener('click',async()=>{
   const t='THE PROP VAULT · '+displayed.length+'-LEG AUTO SGP · '+label+'\\n'+displayed.map((x,i)=>(i+1)+'. '+(x.gameLeg?x.name+' ('+(x.price>0?'+':'')+x.price+')':x.r.player+' '+(x.ticketPick?.target||x.line+'+ '+x.d.unit))).join('\\n');
   try{await navigator.clipboard.writeText(t);autoCopy.textContent='✅ COPIED';}
@@ -820,6 +820,7 @@ function renderGameSGP(){
  refinePanel.appendChild(list);
   refinePanel.open=wasOpen;
  }
+ refreshAuto();
  const book=document.createElement('a');book.href='https://app.hardrock.bet/';book.target='_blank';book.rel='noopener noreferrer';book.className='chip';book.textContent='OPEN HARD ROCK BET';book.style.marginLeft='8px';panel.appendChild(book);
  const foot=document.createElement('p');foot.className='muted';foot.textContent='Automatically generated research ticket. Check player availability and whether Hard Rock offers these targets. Enter one Vegas line per leg. Alternate recommendations are unpriced research targets; verify the price and skip anything worse than -200.';panel.appendChild(foot);
 }
