@@ -1,0 +1,49 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>THE PROP VAULT | Game Analyst</title><style>:root{font-family:system-ui;background:#07120f;color:#e9fff3}*{box-sizing:border-box}body{margin:0}header{padding:22px 16px;background:#0d2119;border-bottom:1px solid #285440}main{max-width:800px;margin:auto;padding:18px}h1{margin:0;font-size:25px}h1 span{color:#27e59a}.sub{color:#a1b9ad;font-size:13px;line-height:1.5}.panel{border:1px solid #2b5342;background:#10241b;border-radius:15px;padding:17px;margin:13px 0}select,button{width:100%;padding:14px;background:#0a1912;color:white;border:1px solid #39634c;border-radius:10px;font-size:16px}button{background:#16d98a;color:#062017;font-weight:850;margin-top:12px;cursor:pointer}.leg{border-top:1px solid #31523e;padding:15px 0}.pick{color:#48f3ab;font-size:21px;font-weight:800}.small{font-size:12px;color:#b2cabc}.warning{color:#ffd083}.reason{line-height:1.55;font-size:14px}a{color:#4be9a6}.status{padding:10px 0;color:#b8d0c1}</style></head><body><header><h1>THE PROP <span>VAULT</span></h1><div class="sub">GAME ANALYST · Evidence-led player props · No sportsbook odds needed</div></header><main><a href="./">← Main app</a><section class="panel"><h2>Build my game slip</h2><p class="sub">Choose a matchup. The analyst evaluates recent production, usage, opponent tendencies, and injury uncertainty before selecting alternate lines. You make the final betting decision.</p><select id="game"><option value="">Loading matchups…</option></select><button id="build">Analyze game & recommend props</button><div id="status" class="status"></div></section><section id="results"></section><p class="sub">Research tool, not a guarantee. Historical performance is not a calibrated probability. Data source: existing PROP VAULT matchup feed. Verify official active/inactive lists before placing a bet.</p></main><script>
+const $=id=>document.getElementById(id);let players=[];
+const n=v=>Number.isFinite(Number(v))?Number(v):null;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const defs=[
+{key:'rushYards',season:'playerRushYards',recent:'recent3RushYards',volume:'playerCarries',volumeLabel:'carries/game',def:'defRushYardsAllowed',ratio:'RUSH',label:'rushing yards',positions:['RB','QB'],steps:[25,40,50,60,70,80,100]},
+{key:'recYards',season:'playerRecYards',recent:'recent3RecYards',volume:'playerTargets',volumeLabel:'targets/game',def:'defRecYardsAllowed',ratio:'REC',label:'receiving yards',positions:['WR','TE','RB'],steps:[20,25,30,40,50,60,70,80,100]},
+{key:'receptions',season:'playerReceptions',recent:'recent3Receptions',volume:'playerTargets',volumeLabel:'targets/game',def:'defReceptionsAllowed',ratio:'CATCH',label:'receptions',positions:['WR','TE','RB'],steps:[2,3,4,5,6,7,8]},
+{key:'passYards',season:'playerPassYards',recent:'recent3PassYards',volume:'playerPassAttempts',volumeLabel:'attempts/game',def:'defPassYardsAllowed',ratio:'PASS',label:'passing yards',positions:['QB'],steps:[150,175,200,225,250,275,300]}];
+function choose(p,d){
+if(!d.positions.includes(p.pos)||p.playerAppearancesVerified===false)return null;
+const sample=n(p.last5GamesPlayed)||0;if(sample<3)return null;
+const season=n(p[d.season]),recent=n(p[d.recent]),volume=n(p[d.volume]);if(season===null||season<=0||recent===null)return null;
+if(d.key==='rushYards'&&volume<5)return null;
+if(d.key==='passYards'&&volume<20)return null;
+if((d.key==='recYards'||d.key==='receptions')&&volume<3)return null;
+const last=(p.last5GameStats||[]).map(g=>n(g[d.key])).filter(v=>v!==null);
+if(last.length<3)return null;
+const ratio=n(p.defenseOpponentRatio?.[d.ratio]);const matchup=ratio!==null?Math.max(.85,Math.min(1.12,ratio)):1;
+const projected=(season*.5+recent*.5)*matchup;
+const viable=d.steps.filter(line=>line<=projected*.83);
+if(!viable.length)return null;
+let line=viable[viable.length-1];let hits=last.filter(v=>v>=line).length;
+while(hits/last.length<.6&&viable.indexOf(line)>0){line=viable[viable.indexOf(line)-1];hits=last.filter(v=>v>=line).length}
+if(hits/last.length<.6)return null;
+const status=String(p.injuryReportStatus||'NOT_REPORTED').toUpperCase();
+const availability=String(p.availability||'UNVERIFIED').toUpperCase();
+if(/OUT|IR|PUP|SUSPENDED|INACTIVE/.test(status+' '+availability))return null;
+const injuryFlag=/QUESTIONABLE|DOUBTFUL|LIMITED|UNVERIFIED|NOT_REPORTED/.test(status+' '+availability);
+const consistency=hits/last.length;
+const score=consistency*45+Math.min(1,projected/line-1)*75+Math.min(1,sample/5)*10+(ratio!==null?(matchup-1)*35:0)-(injuryFlag?8:0);
+const reasons=[`Recent form: ${recent.toFixed(d.key==='receptions'?1:0)} ${d.label}/game over the latest three recorded games versus ${season.toFixed(d.key==='receptions'?1:0)} season average.`,`Cleared ${line}+ in ${hits} of the last ${last.length} recorded games.`,`Workload: ${volume.toFixed(1)} ${d.volumeLabel}.`];
+if(ratio!==null)reasons.push(`Opponent matchup factor: ${ratio.toFixed(2)}× its opponents' baseline in this category (${ratio>1.04?'favorable':ratio<.96?'challenging':'roughly neutral'}).`);
+else reasons.push('Opponent-adjusted category data unavailable; selection relies on production and workload.');
+const risks=[];if(injuryFlag)risks.push(`Game-day status not confirmed (${status}; roster: ${availability}).`);
+if(p.pos==='RB'&&Array.isArray(p.possibleReturningTeammates)&&p.possibleReturningTeammates.length)risks.push('Potential returning teammates could alter workload.');
+if(last.length<5)risks.push('Limited recent sample.');
+return {p,d,line,score,reasons,risks,hits,sample,injuryFlag};
+}
+function render(g){
+const candidates=players.filter(p=>p.team+'-'+p.opp===g||p.opp+'-'+p.team===g).flatMap(p=>defs.map(d=>choose(p,d)).filter(Boolean)).sort((a,b)=>b.score-a.score);
+const used=new Set(),teamCounts={};const selected=[];
+for(const c of candidates){const id=c.p.player_id||c.p.player;if(used.has(id))continue;if((teamCounts[c.p.team]||0)>=3)continue;selected.push(c);used.add(id);teamCounts[c.p.team]=(teamCounts[c.p.team]||0)+1;if(selected.length===5)break;}
+const el=$('results');if(!selected.length){el.innerHTML='<div class="panel"><h2>NO BET</h2><p>Not enough supported player props in the current feed. No invented selections.</p></div>';return;}
+el.innerHTML='<div class="panel"><h2>Analyst recommendations · '+selected.length+' legs</h2><p class="sub">Selections chosen automatically, without odds. The evidence below is from the current matchup dataset, not an AI-generated scouting report. A single game may not support six independent props.</p>'+selected.map((c,i)=>'<article class="leg"><div class="small">LEG '+(i+1)+' · '+esc(c.p.team)+' vs '+esc(c.p.opp)+'</div><div class="pick">'+esc(c.p.player)+' · '+c.line+'+ '+esc(c.d.label)+'</div><p class="reason">'+c.reasons.map(esc).join(' ')+'</p>'+(c.risks.length?'<p class="warning">⚠ '+c.risks.map(esc).join(' ')+'</p>':'')+'</article>').join('')+'</div>';
+}
+async function init(){try{const r=await fetch('./data/matchups.json',{cache:'no-store'});if(!r.ok)throw Error('Feed HTTP '+r.status);players=await r.json();const groups=[...new Set(players.filter(p=>p.team&&p.opp).map(p=>[p.team,p.opp].sort().join('-')))].sort();$('game').innerHTML='<option value="">Select a matchup</option>'+groups.map(g=>'<option value="'+esc(g)+'">'+esc(g.replace('-',' vs '))+'</option>').join('');$('status').textContent='Loaded '+players.length+' player matchup records. Injury statuses may lag official game-day reports.';}catch(e){$('status').textContent='Unable to load matchup data: '+e.message;}}
+$('build').onclick=()=>{const g=$('game').value;if(!g){$('status').textContent='Choose a game first.';return}render(g);$('results').scrollIntoView({behavior:'smooth'});};init();
+</script></body></html>
