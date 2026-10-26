@@ -29,6 +29,7 @@ finals=sorted((g for g in games if g["status"]=="STATUS_FINAL"),key=dt)
 for g in games:
  if g["id"] in seen or g["status"]!="STATUS_SCHEDULED":continue
  if not now<dt(g):continue
+ if (dt(g)-now).total_seconds()>48*3600:continue
  history=[h for h in finals if dt(h)<now and dt(h)<dt(g)]
  byid={}
  for h in reversed(history):
@@ -41,7 +42,7 @@ for g in games:
  projections=[]
  for pid,rows in byid.items():
   if len(rows)<3:continue
-  for market,key in (("points","PTS"),("rebounds","REB"),("assists","AST")):
+  for market,key in (("points","PTS"),("rebounds","REB"),("assists","AST"),("threes","3PM")):
    vals=[value(p,key) for p in rows]
    if any(v is None for v in vals):continue
    projections.append({"player_id":pid,"player":rows[0]["name"],"team":rows[0]["team"],"market":market,"projection":round(statistics.mean(vals),2),"sample":len(vals),"actual":None,"result":"pending"})
@@ -54,11 +55,12 @@ for s in snapshots:
  players={str(p.get("id")):p for p in match["players"]}
  for p in s["projections"]:
   if p["result"]!="pending":continue
-  actual=value(players.get(p["player_id"],{}),{"points":"PTS","rebounds":"REB","assists":"AST"}[p["market"]])
+  actual=value(players.get(p["player_id"],{}),{"points":"PTS","rebounds":"REB","assists":"AST","threes":"3PM"}[p["market"]])
   if actual is None:
    p["result"]="ungraded"
   else:
    p["actual"]=actual
    p["result"]="within_20pct" if abs(actual-p["projection"])<=max(2,p["projection"]*.2) else "outside_20pct"
+out.parent.mkdir(parents=True,exist_ok=True)
 out.write_text(json.dumps({"updated_at":now.isoformat(),"methodology":"Predictions frozen before tipoff; grade by absolute error tolerance max(2,20% of projection). Not betting hit rate.","snapshots":snapshots},separators=(",",":")))
 print("NBA frozen snapshots",len(snapshots),"graded projections",sum(p["result"]!="pending" for s in snapshots for p in s["projections"]))
