@@ -1,65 +1,64 @@
 #!/usr/bin/env python3
-"""Fetch ESPN's public NBA injury feed. Missing data is unknown, never healthy."""
-import datetime,json,pathlib,urllib.request,sys,time
+"""NBA injury collector. ESPN first, Yahoo Sports HTML fallback; never assume missing=healthy."""
+import datetime,json,pathlib,urllib.request,sys,re
+from html.parser import HTMLParser
 ROOT=pathlib.Path(__file__).resolve().parent
-URL="https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries"
-def normalize(payload):
- if not isinstance(payload,dict) or not isinstance(payload.get("injuries"),list):
-  raise ValueError("ESPN injury response missing injuries list")
- rows=[]
- for item in payload["injuries"]:
-  if not isinstance(item,dict):continue
-  # ESPN league-wide endpoint has historically used both team-grouped and flat entries.
-  group=item.get("injuries") if isinstance(item.get("injuries"),list) else [item]
-  team=item.get("team") or {}
-  for injury in group:
-   if not isinstance(injury,dict):continue
-   athlete=injury.get("athlete") or item.get("athlete") or {}
-   if not isinstance(athlete,dict):continue
-   status=injury.get("status") or item.get("status") or ""
-   if isinstance(status,dict):status=status.get("displayName") or status.get("name") or status.get("description") or ""
-   detail=injury.get("details") or {}
-   rows.append({"player_id":str(athlete.get("id") or ""),"player":athlete.get("displayName") or athlete.get("fullName") or "","team":(team.get("displayName") if isinstance(team,dict) else str(team)) or "","status":str(status),"date":injury.get("date") or "","note":str(detail.get("shortComment") or injury.get("shortComment") or "")[:300]})
- return [x for x in rows if x["player_id"] and x["player"]]
+ESPN="https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries"
+YAHOO="https://sports.yahoo.com/nba/injuries/"
 def fetch(url):
- req=urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0 (compatible; PropVault/1.0)","Accept":"application/json"})
- with urllib.request.urlopen(req,timeout=20) as response:return json.load(response)
-def team_fallback():
- teams=fetch("https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams").get("sports",[])
- entries=[]
- for sport in teams:
-  for league in sport.get("leagues",[]):entries.extend(league.get("teams",[]))
- if len(entries)<20:raise ValueError("NBA team directory incomplete")
- rows=[];successful=0
- for entry in entries:
-  team=entry.get("team",entry);tid=team.get("id")
-  if not tid:continue
-  try:
-   payload=fetch("https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/"+str(tid)+"/injuries")
-   successful+=1
-   for row in normalize(payload):
-    if not row["team"]:row["team"]=team.get("displayName","")
-    rows.append(row)
-  except Exception as exc:print("Team injury source",tid,str(exc),file=sys.stderr)
-  time.sleep(.15)
- if successful<20:raise ValueError("Too few team injury responses: "+str(successful))
- return rows,successful
+ req=urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0","Accept":"text/html,application/json"})
+ with urllib.request.urlopen(req,timeout=25) as r:return r.read().decode("utf-8","replace")
+def espn(data):
+ rows=[]
+ for team in data.get("injuries",[]):
+  if not isinstance(team,dict):continue
+  t=team.get("team",{})
+  for item in team.get("injuries",[]) if isinstance(team.get("injuries"),list) else [team]:
+   athlete=item.get("athlete",{})
+   if not isinstance(athlete,dict):continue
+   name=athlete.get("displayName") or athlete.get("fullName")
+   if name:rows.append({"player_id":str(athlete.get("id") or ""),"player":name,"team":t.get("displayName","") if isinstance(t,dict) else "","status":str(item.get("status","")),"note":""})
+ return rows
+class InjuryHTML(HTMLParser):
+ def __init__(self):
+  super().__init__();self.tagstack=[];self.incell=False;self.cell=[];self.row=[];self.rows=[];self.team="";self.head=[];self.heading=False
+ def handle_starttag(self,tag,attrs):
+  if tag in ("h2","h3","h4"):self.heading=True;self.head=[]
+  if tag=="tr":self.row=[]
+  if tag in ("td","th"):self.incell=True;self.cell=[]
+ def handle_data(self,data):
+  if self.incell:self.cell.append(data)
+  if self.heading:self.head.append(data)
+ def handle_endtag(self,tag):
+  if tag in ("h2","h3","h4") and self.heading:
+   name=" ".join(" ".join(self.head).split())
+   if name:self.team=name
+   self.heading=False
+  if tag in ("td","th") and self.incell:
+   self.row.append(" ".join(" ".join(self.cell).split()));self.incell=False
+  if tag=="tr" and self.row:self.rows.append((self.team,self.row))
+def yahoo(html):
+ parser=InjuryHTML();parser.feed(html);rows=[]
+ for team,cells in parser.rows:
+  if len(cells)<3 or cells[0].lower() in ("player","name"):continue
+  name=cells[0];status=" ".join(cells[1:])
+  m=re.search(r"\b(out|questionable|doubtful|probable|day.to.day|game.time.decision|suspended)\b",status,re.I)
+  if not m or len(name)>90:continue
+  rows.append({"player_id":"","player":name,"team":team,"status":m.group(1).upper(),"note":status[:250]})
+ return rows
 def main():
+ errors=[];rows=[];source=""
  try:
-  rows=[];method="league";teams_checked=0
-  try:rows=normalize(fetch(URL))
-  except Exception as exc:print("League injury source:",exc,file=sys.stderr)
-  if not rows:
-   rows,teams_checked=team_fallback()
-   method="teams"
-  if not rows:raise ValueError("No usable injury records across sources; refusing to publish")
-  rows=list({(row["player_id"],row["status"]):row for row in rows}.values())
-  output={"generated_at":datetime.datetime.now(datetime.timezone.utc).isoformat(),"source":"ESPN NBA injuries (unofficial, not NBA official injury report)","status":"ok","method":method,"teams_checked":teams_checked,"injuries":rows}
-  path=ROOT/"data/nba_injuries.json";path.parent.mkdir(exist_ok=True)
-  path.write_text(json.dumps(output,separators=(",",":")))
-  print("Wrote",len(rows),"NBA injury reports")
- except Exception as exc:
-  # Retain prior file for audit; UI must reject stale timestamps.
-  print("NBA injury refresh failed:",exc,file=sys.stderr)
-  sys.exit(1)
+  rows=espn(json.loads(fetch(ESPN)));source="ESPN"
+ except Exception as e:errors.append("ESPN: "+str(e))
+ if not rows:
+  try:rows=yahoo(fetch(YAHOO));source="Yahoo Sports"
+  except Exception as e:errors.append("Yahoo: "+str(e))
+ if len(rows)<5:
+  print("NBA injury refresh rejected: "+str(len(rows))+" records; "+"; ".join(errors),file=sys.stderr);sys.exit(1)
+ now=datetime.datetime.now(datetime.timezone.utc).isoformat()
+ payload={"generated_at":now,"source":source,"status":"ok","injuries":rows}
+ path=ROOT/"data/nba_injuries.json";path.parent.mkdir(exist_ok=True)
+ path.write_text(json.dumps(payload,separators=(",",":")))
+ print("NBA injuries:",len(rows),"source:",source)
 if __name__=="__main__":main()
