@@ -57,10 +57,10 @@ for s in snapshots:
  for p in s["projections"]:
   if p["result"]!="pending":continue
   actual=value(players.get(p["player_id"],{}),{"points":"PTS","rebounds":"REB","assists":"AST","threes":"3PM"}[p["market"]])
-  if actual is None:
-   p["result"]="ungraded"
-  elif players.get(p["player_id"],{}).get("didNotPlay") or mins(players.get(p["player_id"],{}))<1:
+  if players.get(p["player_id"],{}).get("didNotPlay") or (p["player_id"] in players and mins(players[p["player_id"]])<1):
    p["result"]="dnp"
+  elif actual is None:
+   p["result"]="ungraded"
   else:
    p["actual"]=actual
    p["result"]="within_20pct" if abs(actual-p["projection"])<=max(2,p["projection"]*.2) else "outside_20pct"
