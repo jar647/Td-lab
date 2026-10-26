@@ -57,9 +57,36 @@ const scouting=teamNames.map(team=>{
 // Different markets for the same player can both qualify.
 const selected=candidates.slice(0,5);
 const omitted=candidates.length-selected.length;
+const teamCounts=selected.reduce((a,c)=>(a[c.p.team]=(a[c.p.team]||0)+1,a),{});
+const playerCounts=selected.reduce((a,c)=>(a[c.p.player]=(a[c.p.player]||0)+1,a),{});
+const duplicatePlayers=Object.entries(playerCounts).filter(([_,count])=>count>1);
+const dominant=Object.entries(teamCounts).sort((a,b)=>b[1]-a[1])[0];
+const sameTeam=dominant&&dominant[1]===selected.length&&selected.length>1;
+const qbLegs=selected.filter(c=>c.d.key==='passYards');
+const passCatch=selected.filter(c=>['recYards','receptions'].includes(c.d.key));
+const rushLegs=selected.filter(c=>c.d.key==='rushYards');
+const passTeamCounts=passCatch.reduce((a,c)=>(a[c.p.team]=(a[c.p.team]||0)+1,a),{});
+const scriptText=passCatch.length>rushLegs.length
+ ?'Ticket leans toward sustained passing volume and completed passes.'
+ :rushLegs.length>passCatch.length?'Ticket leans toward rushing workload and opportunities.'
+ :'Ticket combines rushing and passing outcomes; neither game script is clearly dominant.';
+const passDependencies=Object.entries(passTeamCounts).filter(([team,count])=>count>=2).map(([team,count])=>esc(team)+' has '+count+' pass-catching legs relying on successful passing volume.');
+const playerDependencies=duplicatePlayers.map(([name,count])=>esc(name)+' appears in '+count+' markets; an injury, snap reduction or poor individual game can affect multiple legs.');
+const riskNotes=[
+ ...(sameTeam?['All '+selected.length+' legs are from '+esc(dominant[0])+'. This is not automatically wrong, but the ticket has concentrated team/game-script exposure.']:[]),
+ ...passDependencies,...playerDependencies,
+ ...(qbLegs.length&&passCatch.length?['Quarterback passing yards and receiving props may rise or fall together; this is a dependency, not a measured correlation.']:[]),
+ ...(!selected.some(c=>c.p.team!==dominant?.[0])?['No opposing-team props qualified under current screening. This does NOT prove that the opposing team has no worthwhile opportunities.']:[]),
+ 'Joint hit probability and sportsbook price are unavailable. Individual recent hit rates cannot be multiplied as though legs were independent.'
+];
+const ticketReview='<div class="panel"><h2>Whole-ticket game script & dependencies</h2><p class="reason">'+esc(scriptText)+'</p><p class="reason">Team exposure: '+Object.entries(teamCounts).map(([team,count])=>esc(team)+' '+count+' leg'+(count===1?'':'s')).join('; ')+'. Passing/receiving legs: '+(passCatch.length+qbLegs.length)+'. Rushing legs: '+rushLegs.length+'.</p>'+riskNotes.map(t=>'<p class="warning">⚠ '+t+'</p>').join('')+'</div>';
+const coverageCounts=gamePlayers.reduce((a,p)=>(a[p.team]=(a[p.team]||0)+1,a),{});
+const shortSamples=gamePlayers.filter(p=>(n(p.last5GamesPlayed)||0)<3).map(p=>p.player);
+const coverageReview='<div class="panel"><h2>Data coverage & missing opportunities</h2><p class="reason">Feed includes '+gamePlayers.length+' player records: '+Object.entries(coverageCounts).map(([team,count])=>esc(team)+' '+count).join(', ')+'. '+candidates.length+' player-market candidates qualified.</p>'+(shortSamples.length?'<p class="warning">Short samples: '+shortSamples.map(esc).join(', ')+'. Some markets are excluded by the current evidence requirements.</p>':'')+'<p class="warning">The feed may omit players, and this page cannot independently verify complete rosters, injuries, weather, or defensive schemes. Missing players cannot be scored.</p></div>';
+
 const overview='<div class="panel"><h2>Game-first scouting</h2><p class="sub">Team-level interpretation from player matchup records. This is not a verified coaching, weather, coverage or live-injury report; missing evidence stays missing.</p>'+scouting.map(t=>'<div class="leg"><strong>'+esc(t.team)+' offense</strong><p class="reason">Passing: '+esc(t.passRead)+'. Rushing: '+esc(t.rushRead)+'. '+(t.qb?'QB workload: '+esc(t.qb.player)+' ('+(n(t.qb.playerPassAttempts)||0).toFixed(1)+' attempts/game). ':'')+(t.rb?'Lead observed rushing workload: '+esc(t.rb.player)+' ('+(n(t.rb.playerCarries)||0).toFixed(1)+' carries/game). ':'')+(t.wr?'Most-targeted listed WR/TE: '+esc(t.wr.player)+' ('+(n(t.wr.playerTargets)||0).toFixed(1)+' targets/game).':'')+'</p></div>').join('')+'</div>';
-const el=$('results');if(!selected.length){el.innerHTML=overview+'<div class="panel"><h2>NO BET</h2><p>Not enough supported player props in the current feed. No invented selections.</p></div>';return;}
-el.innerHTML=overview+'<div class="panel"><h2>Analyst recommendations · '+selected.length+' legs</h2><p class="sub">Five highest-ranked qualifying markets, without player or team quotas. Multiple picks may depend on the same game script; joint probabilities are not modeled. Dataset-based screening, not a full live scouting report.</p>'+'<p class="sub">Selection audit: '+candidates.length+' qualifying markets, '+selected.length+' included, '+omitted+' omitted due to five-leg ticket size.</p>'+selected.map((c,i)=>'<article class="leg"><div class="small">LEG '+(i+1)+' · '+esc(c.p.team)+' vs '+esc(c.p.opp)+'</div><div class="pick">'+esc(c.p.player)+' · '+c.line+'+ '+esc(c.d.label)+'</div><p class="reason">'+c.reasons.map(esc).join(' ')+'</p>'+(c.risks.length?'<p class="warning">⚠ '+c.risks.map(esc).join(' ')+'</p>':'')+'</article>').join('')+'</div>';
+const el=$('results');if(!selected.length){el.innerHTML=overview+coverageReview+'<div class="panel"><h2>NO BET</h2><p>Not enough supported player props in the current feed. No invented selections.</p></div>';return;}
+el.innerHTML=overview+coverageReview+ticketReview+'<div class="panel"><h2>Analyst recommendations · '+selected.length+' legs</h2><p class="sub">Five highest-ranked qualifying markets, without player or team quotas. Multiple picks may depend on the same game script; joint probabilities are not modeled. Dataset-based screening, not a full live scouting report.</p>'+'<p class="sub">Selection audit: '+candidates.length+' qualifying markets, '+selected.length+' included, '+omitted+' omitted due to five-leg ticket size.</p>'+selected.map((c,i)=>'<article class="leg"><div class="small">LEG '+(i+1)+' · '+esc(c.p.team)+' vs '+esc(c.p.opp)+'</div><div class="pick">'+esc(c.p.player)+' · '+c.line+'+ '+esc(c.d.label)+'</div><p class="reason">'+c.reasons.map(esc).join(' ')+'</p>'+(c.risks.length?'<p class="warning">⚠ '+c.risks.map(esc).join(' ')+'</p>':'')+'</article>').join('')+'</div>';
 }
 async function init(){try{const r=await fetch('./data/matchups.json',{cache:'no-store'});if(!r.ok)throw Error('Feed HTTP '+r.status);players=await r.json();const groups=[...new Set(players.filter(p=>p.team&&p.opp).map(p=>[p.team,p.opp].sort().join('-')))].sort();$('game').innerHTML='<option value="">Select a matchup</option>'+groups.map(g=>'<option value="'+esc(g)+'">'+esc(g.replace('-',' vs '))+'</option>').join('');$('status').textContent='Loaded '+players.length+' player matchup records. Injury statuses may lag official game-day reports.';}catch(e){$('status').textContent='Unable to load matchup data: '+e.message;}}
 $('build').onclick=()=>{const g=$('game').value;if(!g){$('status').textContent='Choose a game first.';return}render(g);$('results').scrollIntoView({behavior:'smooth'});};init();
