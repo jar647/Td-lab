@@ -679,6 +679,23 @@ function renderGameSGP(){
   }
   return picks;
  }
+ // Ticket-level structural audit: warnings, not invented hit probabilities.
+ function ticketAudit(picks){
+  const notes=[],props=picks.filter(x=>!x.gameLeg),games=picks.filter(x=>x.gameLeg);
+  const pass=props.filter(x=>passing(x)),rush=props.filter(x=>x.d.key==='RUSH');
+  const teams={};
+  for(const x of props){const t=teamOf(x);if(t)teams[t]=(teams[t]||0)+1;}
+  const concentrated=Object.entries(teams).filter(([t,n])=>n>=3);
+  if(concentrated.length)notes.push('Concentrated exposure: '+concentrated.map(([t,n])=>n+' '+t+' player legs').join(', '));
+  if(pass.length>=3)notes.push('Multiple passing-related overs depend on sustained passing volume');
+  if(rush.length>=2&&pass.length>=2)notes.push('Mixed rushing/passing scripts: confirm both can coexist');
+  if(games.some(x=>x.key==='TOTAL'&&x.edge<0)&&pass.length>=2)notes.push('Total under may conflict with passing overs');
+  if(games.some(x=>x.key==='TOTAL'&&x.edge>0)&&rush.length>=2)notes.push('Total over with multiple rushing legs needs game-script review');
+  if(props.some(x=>x.returnWarning))notes.push('Possible returning teammate changes opportunity');
+  if(props.some(x=>x.logCount<5))notes.push('Some projections rely on fewer than five verified recent logs');
+  if(picks.length>=5)notes.push('Five legs compound failure risk even when each leg looks reasonable');
+  return notes;
+ }
  function refreshAuto(){
   const requested=Number(countSelect.value);
   displayed=selectAutoLegs(requested);
@@ -690,8 +707,11 @@ function renderGameSGP(){
    detail.textContent=x.gameLeg?'Model vs market discrepancy: '+Math.abs(x.edge).toFixed(1)+' points · price entered by you, not live-verified.':('Projects '+Math.round(x.projectionRatio*x.line)+' · '+(x.usageRatio>=1?'steady/rising usage':'usage below baseline')+' · '+(x.matchupRatio>=1?'favorable matchup':'matchup caution')+(x.returnWarning?' · teammate return risk':'')+'.');
    item.appendChild(detail);autoList.appendChild(item);
   }
-  autoNotice.textContent=displayed.length<requested?'Only '+displayed.length+' of '+requested+' legs passed current selection standards. No filler legs added. ':'Showing '+displayed.length+' best-ranked complementary legs. ';
-  autoNotice.textContent+='Research targets only. Game lines and prices are user-entered, not live-verified. ML excluded pending calibrated probabilities. Verify injuries, prices and SGP eligibility; joint value is not validated.';marketStatus.textContent=qualifiedGameLegs().length?'Qualified game-market candidates: '+qualifiedGameLegs().map(x=>x.name).join(' / '):'No qualified ATS/total candidates. Enter current lines and odds, or keep a player-only ticket. ML requires validated win probabilities.';
+  const issues=ticketAudit(displayed);
+  autoNotice.textContent=(displayed.length<requested?'Only '+displayed.length+' of '+requested+' legs passed the filters; no filler added. ':'Showing '+displayed.length+' screened candidates. ')+
+   (issues.length?'TICKET RISK CHECK: '+issues.join(' · ')+'. ':'No major structural concentration flags detected; this does NOT establish positive expected value. ')+
+   'Game-market inputs are manual. ML excluded. Confirm injuries, prices, market availability and SGP payout. No calibrated joint probability or verified edge.';
+  marketStatus.textContent=qualifiedGameLegs().length?'Qualified game-market candidates: '+qualifiedGameLegs().map(x=>x.name).join(' / '):'No qualified ATS/total candidates. Enter current lines and odds, or keep a player-only ticket. ML requires validated win probabilities.';
   autoCopy.disabled=!displayed.length;
  }
  countSelect.addEventListener('change',refreshAuto);marketCheck.addEventListener('change',refreshAuto);for(const field of Object.values(marketFields))field.addEventListener('input',refreshAuto);refreshAuto();
