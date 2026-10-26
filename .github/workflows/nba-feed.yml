@@ -4,6 +4,7 @@ on:
     paths:
       - 'nba_feed.py'
       - 'nba_tracker.py'
+      - 'nba_injuries.py'
       - 'test_nba_contracts.py'
       - '.github/workflows/nba-feed.yml'
   workflow_dispatch:
@@ -30,9 +31,11 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             python nba_feed.py
+            python nba_injuries.py || echo 'Injury source unavailable; existing file retained, UI will reject stale records'
             python nba_tracker.py
             python -m unittest -v test_nba_contracts.py
             git add data/nba_games.json data/nba_projection_tracker.json
+            if test -f data/nba_injuries.json; then git add data/nba_injuries.json; fi
             if git diff --cached --quiet; then exit 0; fi
             git commit -m "Refresh NBA game data and locked projections"
             if git push origin HEAD:main; then exit 0; fi
