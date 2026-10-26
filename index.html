@@ -478,10 +478,11 @@ function renderGameSGP(){
   {key:'CATCH',pos:['WR','TE','RB'],field:'playerReceptions',def:'defReceptionsAllowed',thresholds:[3,4,5,6,7],unit:'receptions'}
  ];
  for(const r of autoRecords){
-  if(gameKey(r)!==selected||r.market!=='ATD'||r.availability!=='ROSTER_ACTIVE'||r.playerAppearancesVerified===false||manuallyInactive(r)||Number(r.games)<3)continue;
+  if(gameKey(r)!==selected||r.market!=='ATD'||!['ROSTER_ACTIVE','QUESTIONABLE'].includes(String(r.availability).toUpperCase())||r.playerAppearancesVerified===false||manuallyInactive(r)||Number(r.games)<3)continue;
   audit.players++;
   // Avoid projecting teammate volume from an injury-depleted sample without review.
   // Unconfirmed teammate returns are caution flags, not automatic exclusions.
+  const injuryWarning=String(r.availability).toUpperCase()==='QUESTIONABLE';
   const returnWarning=Array.isArray(r.possibleReturningTeammates)&&r.possibleReturningTeammates.length>0;
   if(returnWarning)audit.returning++;
   if(!r.player||/^00-\\d+$/.test(String(r.player)))continue;
@@ -511,16 +512,17 @@ function renderGameSGP(){
    if(usageRatio<.85)reasons.push('recent usage declining');
    if(matchupRatio<.85)reasons.push('challenging defensive matchup');
    if(returnWarning)reasons.push('possible teammate return');
+   if(injuryWarning)reasons.push('QUESTIONABLE: game-day active status not confirmed');
    if(actual.length<5)reasons.push('limited verified game logs');
    // Rankings are heuristic research scores, not predicted hit probabilities.
    const edgeScore=Math.max(0,Math.min(1,(projectionRatio-1)/.40));
    const matchupScore=Math.max(0,Math.min(1,matchupRatio/1.2));
    const volumeScore=Math.max(0,Math.min(1,usageRatio/1.1));
    const consistencyScore=(chosenLine.hits+1)/(chosenLine.total+2); // small-sample smoothing
-   const stabilityScore=(returnWarning?.35:1)*(actual.length<4?.75:1);
+   const stabilityScore=(injuryWarning?.65:1)*(returnWarning?.35:1)*(actual.length<4?.75:1);
    const quality=edgeScore*.30+matchupScore*.25+volumeScore*.20+consistencyScore*.15+stabilityScore*.10;
    const verdict=projectionRatio<1.02||usageRatio<.7||matchupRatio<.65?'PASS':quality>=.70?'GREEN':'CAUTION';
-   candidates.push({r,d,line,quality,hitRate,logCount:actual.length,tier,returnWarning,verdict,reasons,projectionRatio,usageRatio,matchupRatio,research});
+   candidates.push({r,d,line,injuryWarning,quality,hitRate,logCount:actual.length,tier,returnWarning,verdict,reasons,projectionRatio,usageRatio,matchupRatio,research});
 
   }
  }
@@ -619,13 +621,14 @@ function renderGameSGP(){
  firstTdControls.appendChild(firstTdCount);
  firstTdCard.appendChild(firstTdControls);
  const firstTdList=document.createElement('ol');firstTdList.style.cssText='padding-left:24px;margin:12px 0';firstTdCard.appendChild(firstTdList);
- const firstTdFoot=document.createElement('p');firstTdFoot.className='muted';firstTdFoot.textContent='First-TD odds, opening-drive usage, team first-score likelihood and live injury updates are not available here. Confirm these before betting. First-TD legs are not automatically inserted into SGPs because sportsbook combination rules vary.';firstTdCard.appendChild(firstTdFoot);
- const firstTdCandidates=autoRecords.filter(r=>gameKey(r)===selected&&r.market==='ATD'&&r.availability==='ROSTER_ACTIVE'&&r.playerAppearancesVerified!==false&&!manuallyInactive(r)&&Number(r.games)>=3&&['RB','WR','TE','QB'].includes(r.pos)&&Number.isFinite(Number(r.playerRz))&&Number.isFinite(Number(r.rzshare))&&Number.isFinite(Number(r.tdallowed))).map(r=>{
+ const firstTdFoot=document.createElement('p');firstTdFoot.className='muted';firstTdFoot.textContent='Questionable players are shown with an injury warning, not assumed active. First-TD odds, opening-drive usage, team first-score likelihood and live injury updates are not available here. Confirm these before betting. First-TD legs are not automatically inserted into SGPs because sportsbook combination rules vary.';firstTdCard.appendChild(firstTdFoot);
+ const firstTdCandidates=autoRecords.filter(r=>gameKey(r)===selected&&r.market==='ATD'&&['ROSTER_ACTIVE','QUESTIONABLE'].includes(String(r.availability).toUpperCase())&&r.playerAppearancesVerified!==false&&!manuallyInactive(r)&&Number(r.games)>=3&&['RB','WR','TE','QB'].includes(r.pos)&&Number.isFinite(Number(r.playerRz))&&Number.isFinite(Number(r.rzshare))&&Number.isFinite(Number(r.tdallowed))).map(r=>{
   const goal=Number.isFinite(Number(r.goalLine5))?Math.max(0,Number(r.goalLine5)):null;
   const recent=Number.isFinite(Number(r.recentRz2))?Math.max(0,Number(r.recentRz2)):null;
   const base=.36*Math.min(1,Math.max(0,Number(r.playerRz))/2.5)+.23*Math.min(1,Math.max(0,Number(r.rzshare))/50)+.17*Math.min(1,Math.max(0,Number(r.tdallowed))/1.5)+.14*(goal===null?0:Math.min(1,goal/1.5))+.10*(recent===null?0:Math.min(1,recent/2));
+  const injuryWarning=String(r.availability).toUpperCase()==='QUESTIONABLE';
   const warning=Array.isArray(r.possibleReturningTeammates)&&r.possibleReturningTeammates.length>0;
-  return {r,goal,recent,warning,rank:base-(warning?.07:0)-(goal===null?.04:0)};
+  return {r,goal,recent,warning,injuryWarning,rank:base-(injuryWarning?.08:0)-(warning?.07:0)-(goal===null?.04:0)};
  }).sort((a,b)=>b.rank-a.rank);
  function renderFirstTd(){
   firstTdList.replaceChildren();
@@ -635,7 +638,7 @@ function renderGameSGP(){
    const li=document.createElement('li');li.style.margin='0 0 12px';
    const name=document.createElement('strong');name.textContent=x.r.player+' · '+x.r.pos+' · '+x.r.team;li.appendChild(name);
    const detail=document.createElement('div');detail.className='muted';
-   detail.textContent='Goal-line chances/game: '+(x.goal===null?'unavailable':x.goal.toFixed(2))+' · Red-zone chances/game: '+Number(x.r.playerRz).toFixed(2)+' · Team red-zone share: '+Number(x.r.rzshare).toFixed(1)+'% · Opponent TDs allowed to position/game: '+Number(x.r.tdallowed).toFixed(2)+(x.warning?' · CAUTION: possible returning teammate':'');
+   detail.textContent='Goal-line chances/game: '+(x.goal===null?'unavailable':x.goal.toFixed(2))+' · Red-zone chances/game: '+Number(x.r.playerRz).toFixed(2)+' · Team red-zone share: '+Number(x.r.rzshare).toFixed(1)+'% · Opponent TDs allowed to position/game: '+Number(x.r.tdallowed).toFixed(2)+(x.warning?' · CAUTION: possible returning teammate':'')+(x.injuryWarning?' · QUESTIONABLE: verify official game-day active status':'');
    li.appendChild(detail);
    const verdict=document.createElement('div');verdict.className='muted';verdict.textContent=x.goal===null?'Research only: missing goal-line usage.':'Research option: check first-TD sportsbook price and opening-drive role before selecting.';li.appendChild(verdict);
    firstTdList.appendChild(li);
@@ -696,7 +699,7 @@ function renderGameSGP(){
  let displayed=[];
  function analystScore(x){
   if(x.gameLeg)return x.quality-.06;
-  return x.robustScore*scriptFit(x)-(x.returnWarning?.16:0)-(x.logCount<5?.045:0)-(x.usageRatio<.9?.055:0)-(x.matchupRatio<.9?.045:0)-(x.projectionRatio<1.15?.035:0)-(x.hitRate<.6?.035:0);
+  return x.robustScore*scriptFit(x)-(x.injuryWarning?.12:0)-(x.returnWarning?.16:0)-(x.logCount<5?.045:0)-(x.usageRatio<.9?.055:0)-(x.matchupRatio<.9?.045:0)-(x.projectionRatio<1.15?.035:0)-(x.hitRate<.6?.035:0);
  }
  function ticketScore(picks){
   let score=picks.reduce((v,x)=>v+analystScore(x),0);
@@ -749,6 +752,7 @@ function renderGameSGP(){
   if(rush.length>=2&&pass.length>=2)notes.push('Mixed rushing/passing scripts: confirm both can coexist');
   if(games.some(x=>x.key==='TOTAL'&&x.edge<0)&&pass.length>=2)notes.push('Total under may conflict with passing overs');
   if(games.some(x=>x.key==='TOTAL'&&x.edge>0)&&rush.length>=2)notes.push('Total over with multiple rushing legs needs game-script review');
+  if(props.some(x=>x.injuryWarning))notes.push('QUESTIONABLE player included: verify official active status before betting');
   if(props.some(x=>x.returnWarning))notes.push('Possible returning teammate changes opportunity');
   if(props.some(x=>x.logCount<5))notes.push('Some projections rely on fewer than five verified recent logs');
   if(picks.length>=5)notes.push('Five legs compound failure risk even when each leg looks reasonable');
@@ -762,8 +766,8 @@ function renderGameSGP(){
    const item=document.createElement('li');item.style.margin='0 0 12px';
    const headline=document.createElement('strong');headline.textContent=x.gameLeg?x.name+' · '+(x.price>0?'+':'')+x.price:x.r.player+' · '+x.line+'+ '+x.d.unit;item.appendChild(headline);
    const detail=document.createElement('div');detail.className='muted';detail.style.fontSize='13px';
-   detail.textContent=x.gameLeg?'Model vs market discrepancy: '+Math.abs(x.edge).toFixed(1)+' points · price entered by you, not live-verified.':('Projects '+Math.round(x.projectionRatio*x.line)+' · '+(x.usageRatio>=1?'steady/rising usage':'usage below baseline')+' · '+(x.matchupRatio>=1?'favorable matchup':'matchup caution')+(x.returnWarning?' · teammate return risk':'')+'.');
-   item.appendChild(detail);if(!x.gameLeg){const flags=[x.returnWarning?'Possible teammate return':null,x.logCount<5?'Limited game logs':null,x.usageRatio<.9?'Declining usage':null,x.matchupRatio<.9?'Difficult matchup':null,x.projectionRatio<1.15?'Narrow projection cushion':null].filter(Boolean);const challenge=document.createElement('div');challenge.className='muted';challenge.style.fontSize='12px';challenge.textContent='Analyst challenge: '+(flags.join(' · ')||'No major data flags; confirm lineup and sportsbook price');item.appendChild(challenge);}autoList.appendChild(item);
+   detail.textContent=x.gameLeg?'Model vs market discrepancy: '+Math.abs(x.edge).toFixed(1)+' points · price entered by you, not live-verified.':('Projects '+Math.round(x.projectionRatio*x.line)+' · '+(x.usageRatio>=1?'steady/rising usage':'usage below baseline')+' · '+(x.matchupRatio>=1?'favorable matchup':'matchup caution')+(x.returnWarning?' · teammate return risk':'')+(x.injuryWarning?' · QUESTIONABLE, verify active status':'')+'.');
+   item.appendChild(detail);if(!x.gameLeg){const flags=[x.injuryWarning?'QUESTIONABLE: verify official active status':null,x.returnWarning?'Possible teammate return':null,x.logCount<5?'Limited game logs':null,x.usageRatio<.9?'Declining usage':null,x.matchupRatio<.9?'Difficult matchup':null,x.projectionRatio<1.15?'Narrow projection cushion':null].filter(Boolean);const challenge=document.createElement('div');challenge.className='muted';challenge.style.fontSize='12px';challenge.textContent='Analyst challenge: '+(flags.join(' · ')||'No major data flags; confirm lineup and sportsbook price');item.appendChild(challenge);}autoList.appendChild(item);
   }
   const issues=ticketAudit(displayed);
   autoNotice.textContent=(displayed.length<requested?'Only '+displayed.length+' of '+requested+' legs passed the filters; no filler added. ':'Showing '+displayed.length+' screened candidates. ')+
