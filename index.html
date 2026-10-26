@@ -237,7 +237,7 @@ function renderPropMatchups(){
   CATCH:{pos:['RB','WR','TE'],def:'defReceptionsAllowed',volume:'defTargetsAllowed',player:'playerReceptions',usage:'playerTargets',defCap:9,volumeCap:13,playerCap:8,usageCap:10,unit:'receptions'}
  };
  const cfg=specs[propCategory],cap=(v,m)=>Math.min(1,Math.max(0,num(v)/m));
- const eligible=autoRecords.filter(r=>gameMatches(r)&&r.market==='ATD'&&r.availability==='ROSTER_ACTIVE'&&r.playerAppearancesVerified!==false&&!manuallyInactive(r)&&cfg.pos.includes(r.pos)&&num(r.games)>=3&&r[cfg.def]!=null&&r[cfg.player]!=null&&r[cfg.usage]!=null);
+ const eligible=autoRecords.filter(r=>gameMatches(r)&&r.market==='ATD'&&r.availability==='ROSTER_ACTIVE'&&r.playerAppearancesVerified!==false&&!manuallyInactive(r)&&cfg.pos.includes(r.pos)&&num(r.games)>=(propCategory==='PASS'?1:3)&&r[cfg.def]!=null&&r[cfg.player]!=null&&r[cfg.usage]!=null);
  const ranked=eligible.map(r=>{
   const d=.6*cap(r[cfg.def],cfg.defCap)+.4*cap(r[cfg.volume],cfg.volumeCap);
   const o=.6*cap(r[cfg.player],cfg.playerCap)+.4*cap(r[cfg.usage],cfg.usageCap);
@@ -308,6 +308,11 @@ function renderPropMatchups(){
   top.innerHTML=winner?'<div style="border:1px solid #00c97a;background:#112b20;border-radius:13px;padding:14px"><div style="font-size:12px;font-weight:900;color:#6dffc2">🏆 '+categoryNames[propCategory]+' · TOP DAWG OF THE WEEK</div><div class="row" style="margin-top:8px"><div><h3 style="font-size:20px;color:white;margin:0">'+escapeHTML(winner.r.player)+'</h3><div class="muted">'+escapeHTML(winner.r.pos)+' · '+escapeHTML(winner.r.team)+' vs '+escapeHTML(winner.r.opp)+'</div></div><b class="score">'+winner.score+'/100</b></div><div style="font-weight:850;color:#00e28a;margin:9px 0">🔥 PRIME MATCHUP</div>'+propLineUI(winner)+projection(winner)+'<div class="statsline">Season avg: '+escapeHTML(winner.r[cfg.player])+' · Defense allows: '+escapeHTML(winner.r[cfg.def])+' '+cfg.unit+'/game</div><details style="margin-top:10px"><summary class="muted">More stats</summary><div class="statsline">Player opportunities: '+escapeHTML(winner.r[cfg.usage])+'/game · Defense opportunities allowed: '+escapeHTML(winner.r[cfg.volume])+'/game</div><div class="muted">'+why(winner)+'</div></details></div>':'<div class="empty">🏆 No PRIME MATCHUP qualifies for '+categoryNames[propCategory]+' this week. No Top Dawg awarded.</div>';
  }
  el.innerHTML=ranked.length?ranked.slice(0,15).map(({r,score,label},i)=>'<div class="matchrow"><div class="row"><div style="flex:1"><b>'+(i+1)+'. '+playerDisplay(r)+'</b> <span class="pill">'+escapeHTML(r.pos)+'</span><div class="muted">'+escapeHTML(r.team)+' vs '+escapeHTML(r.opp)+'</div></div><b style="color:#6dffc2">'+score+'/100</b></div><div style="margin:6px 0;font-weight:800;color:#6dffc2">'+label+'</div>'+propLineUI(ranked[i])+projection(ranked[i])+'<div class="statsline">Season avg: '+escapeHTML(r[cfg.player])+' · Defense allows: '+escapeHTML(r[cfg.def])+' '+cfg.unit+'/game</div><details style="margin:10px 0"><summary class="muted">More defensive & usage stats</summary><div class="muted">'+why({r,trendRatio:ranked[i].trendRatio})+'</div><div class="statsline">Defense opportunities allowed: '+escapeHTML(r[cfg.volume])+'/game · Player opportunities: '+escapeHTML(r[cfg.usage])+'/game</div></details>'+lastFiveChart(r,propCategory,(propLines[propLineKey(r,propCategory)]!=null&&Number(propLines[propLineKey(r,propCategory)])>0?Number(propLines[propLineKey(r,propCategory)]):suggestAltLine(ranked[i],cfg,propCategory)?.line),r[cfg.def])+'</div></div>').join(''):'<p class="muted">No eligible players with complete '+cfg.unit+' metrics in the current feed.</p>';
+ if(propCategory==='PASS'&&document.getElementById('gameFilter')?.value==='DAL|PHI'){
+  const banner=document.createElement('div');banner.className='matchrow';
+  banner.innerHTML='<b>🏈 PHI STARTING QB · TANNER McKEE</b><div class="muted">Confirmed starter vs Dallas on Oct 26. Jalen Hurts is on IR. Limited 2026 sample: do not treat McKee as a multi-game statistical qualifier. If his record is missing from the published feed, this verified starter notice remains visible.</div>';
+  el.prepend(banner);
+ }
 }
 function lastFiveChart(r,category,target,defenseAverage){
  const field={PASS:'passYards',RUSH:'rushYards',REC:'recYards',CATCH:'receptions'}[category];
@@ -540,6 +545,11 @@ function renderGameSGP(){
  const context=document.createElement('p');context.className='muted';
  context.textContent=scriptAvailable?'Game outlook: '+(modelTotal>=47?'higher-scoring passing opportunities':modelTotal<=41?'lower-scoring, potentially run-oriented':'balanced scoring environment')+' · projected total '+modelTotal.toFixed(1)+' (unvalidated model baseline)':'Built from available player logs, usage and opponent defensive allowances.';
  panel.appendChild(context);
+ if(selected==='DAL|PHI'){
+  const starter=document.createElement('p');starter.className='status';
+  starter.textContent='PHI QB UPDATE: Tanner McKee starts tonight; Jalen Hurts is on IR. McKee has a limited current-season sample and may not qualify for an automatic QB prop. The SGP should not substitute Hurts.';
+  panel.appendChild(starter);
+ }
  if(chosen.length!==5){
   const missing=document.createElement('p');missing.className='status';missing.textContent='Only '+chosen.length+' supported selections found for this matchup. A complete five-leg SGP needs five supported targets; no fabricated legs.';panel.appendChild(missing);return;
  }
