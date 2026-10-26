@@ -534,14 +534,20 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
             og=offense_games.get(team,0); dg=defense_games.get(opp,0)
             games=og
             if games<3 or not team_events.get(team): continue
-            # Candidate pool must include snap-verified quarterbacks even with zero red-zone events.
+            # Candidate pool must cover every snap-verified skill player,
+            # not just players with red-zone events. The old RZ-only pool
+            # silently dropped receivers and tight ends with no RZ touches.
             players=events[events.team==team].drop_duplicates('player_id').copy()
             existing_ids=set(players.player_id.astype(str))
-            qb_ids=[pid for (tm,pid),weeks_played in appearance_games.items()
-                    if tm==team and weeks_played and pos_by_id.get(pid)=='QB'
-                    and roster_team.get(pid)==team and pid not in existing_ids]
-            if qb_ids:
-                extra=pd.DataFrame([{'player_id':pid,'player':str(roster.loc[roster.gsis_id.astype(str)==pid,'player_name'].iloc[0]) if 'player_name' in roster.columns and (roster.gsis_id.astype(str)==pid).any() else pid,'pos':'QB'} for pid in qb_ids])
+            extra_ids=[pid for (tm,pid),weeks_played in appearance_games.items()
+                       if tm==team and weeks_played
+                       and pos_by_id.get(pid) in ('QB','RB','WR','TE')
+                       and roster_team.get(pid)==team and pid not in existing_ids]
+            if extra_ids:
+                extra=pd.DataFrame([{
+                    'player_id':pid,
+                    'player':roster_names.get(str(pid),str(pid)),
+                    'pos':pos_by_id[pid]} for pid in extra_ids])
                 players=pd.concat([players,extra],ignore_index=True)
             for _,p in players.iterrows():
                 pid=p.player_id;position=p.pos
