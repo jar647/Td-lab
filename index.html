@@ -654,30 +654,48 @@ function renderGameSGP(){
  const autoNotice=document.createElement('p');autoNotice.className='muted';autoCard.appendChild(autoNotice);
  const autoCopy=document.createElement('button');autoCopy.type='button';autoCopy.className='chip';autoCopy.textContent='📋 COPY AUTO SGP';autoCard.appendChild(autoCopy);
  let displayed=[];
+ function analystScore(x){
+  if(x.gameLeg)return x.quality-.06;
+  return x.robustScore*scriptFit(x)-(x.returnWarning?.16:0)-(x.logCount<5?.045:0)-(x.usageRatio<.9?.055:0)-(x.matchupRatio<.9?.045:0)-(x.projectionRatio<1.15?.035:0)-(x.hitRate<.6?.035:0);
+ }
+ function ticketScore(picks){
+  let score=picks.reduce((v,x)=>v+analystScore(x),0);
+  const props=picks.filter(x=>!x.gameLeg),games=picks.filter(x=>x.gameLeg),teams={};
+  for(const x of props){const t=teamOf(x);if(t)teams[t]=(teams[t]||0)+1;}
+  for(const n of Object.values(teams))if(n>2)score-=.16*(n-2);
+  const passingCount=props.filter(passing).length;
+  if(passingCount>2)score-=.075*(passingCount-2);
+  if(props.filter(x=>x.d.key==='RUSH').length>=2&&passingCount>=2)score-=.065;
+  if(games.some(x=>x.key==='TOTAL'&&x.edge<0)&&passingCount>=2)score-=.22;
+  if(games.some(x=>x.key==='TOTAL'&&x.edge>0)&&modelTotal<=41)score-=.18;
+  return score;
+ }
  function selectAutoLegs(n){
-  const pool=eligible.slice(),picks=[],used=new Set();
-  // Compare eligible game markets against player props, but cap game legs
-  // at one because spread/total correlation is not yet jointly calibrated.
+  const pool=eligible.filter(x=>analystScore(x)>=.49).slice(0,22);
   pool.push(...qualifiedGameLegs());
-  while(picks.length<n&&pool.length){
-   pool.sort((a,b)=>(b.gameLeg?b.quality:incrementalScore(b,picks.filter(y=>!y.gameLeg)))-(a.gameLeg?a.quality:incrementalScore(a,picks.filter(y=>!y.gameLeg))));
-   const x=pool.shift();
-   if(x.gameLeg){
-    if(picks.some(y=>y.gameLeg))continue;
-    // Do not attach a total under to an overtly pass-heavy group, or
-    // a total over to a rush-heavy low-scoring script.
-    const passingCount=picks.filter(y=>!y.gameLeg&&passing(y)).length;
-    if(x.key==='TOTAL'&&((x.edge<0&&passingCount>=2&&modelTotal>=47)||(x.edge>0&&modelTotal<=41)))continue;
-    picks.push(x);continue;
+  let beams=[{picks:[],used:new Set(),score:0}],best=beams[0];
+  for(let depth=0;depth<n;depth++){
+   const next=[];
+   for(const state of beams)for(const x of pool){
+    const id=x.gameLeg?'GAME:'+x.key:String(x.r.player_id||x.r.player);
+    if(state.used.has(id)||x.gameLeg&&state.picks.some(y=>y.gameLeg))continue;
+    const team=x.gameLeg?'':teamOf(x);
+    if(!x.gameLeg&&['REC','CATCH'].includes(x.d.key)&&state.picks.filter(y=>!y.gameLeg&&team&&teamOf(y)===team&&['REC','CATCH'].includes(y.d.key)).length>=2)continue;
+    const picks=[...state.picks,x],score=ticketScore(picks);
+    if(score-state.score<.38)continue;
+    next.push({picks,used:new Set([...state.used,id]),score});
    }
-   const id=String(x.r.player_id||x.r.player),team=teamOf(x);
-   if(used.has(id))continue;
-   const receivers=picks.filter(y=>!y.gameLeg&&team&&teamOf(y)===team&&['REC','CATCH'].includes(y.d.key)).length;
-   if(['REC','CATCH'].includes(x.d.key)&&receivers>=2)continue;
-   if(incrementalScore(x,picks.filter(y=>!y.gameLeg))<.49)continue;
-   picks.push(x);used.add(id);
+   if(!next.length)break;
+   next.sort((a,b)=>b.score-a.score);
+   const seen=new Set(),dedup=[];
+   for(const state of next){
+    const key=state.picks.map(x=>x.gameLeg?'G'+x.key:String(x.r.player_id||x.r.player)).sort().join('|');
+    if(seen.has(key))continue;seen.add(key);dedup.push(state);
+    if(dedup.length>=45)break;
+   }
+   beams=dedup;best=beams[0];
   }
-  return picks;
+  return best.picks;
  }
  // Ticket-level structural audit: warnings, not invented hit probabilities.
  function ticketAudit(picks){
@@ -705,7 +723,7 @@ function renderGameSGP(){
    const headline=document.createElement('strong');headline.textContent=x.gameLeg?x.name+' · '+(x.price>0?'+':'')+x.price:x.r.player+' · '+x.line+'+ '+x.d.unit;item.appendChild(headline);
    const detail=document.createElement('div');detail.className='muted';detail.style.fontSize='13px';
    detail.textContent=x.gameLeg?'Model vs market discrepancy: '+Math.abs(x.edge).toFixed(1)+' points · price entered by you, not live-verified.':('Projects '+Math.round(x.projectionRatio*x.line)+' · '+(x.usageRatio>=1?'steady/rising usage':'usage below baseline')+' · '+(x.matchupRatio>=1?'favorable matchup':'matchup caution')+(x.returnWarning?' · teammate return risk':'')+'.');
-   item.appendChild(detail);autoList.appendChild(item);
+   item.appendChild(detail);if(!x.gameLeg){const flags=[x.returnWarning?'Possible teammate return':null,x.logCount<5?'Limited game logs':null,x.usageRatio<.9?'Declining usage':null,x.matchupRatio<.9?'Difficult matchup':null,x.projectionRatio<1.15?'Narrow projection cushion':null].filter(Boolean);const challenge=document.createElement('div');challenge.className='muted';challenge.style.fontSize='12px';challenge.textContent='Analyst challenge: '+(flags.join(' · ')||'No major data flags; confirm lineup and sportsbook price');item.appendChild(challenge);}autoList.appendChild(item);
   }
   const issues=ticketAudit(displayed);
   autoNotice.textContent=(displayed.length<requested?'Only '+displayed.length+' of '+requested+' legs passed the filters; no filler added. ':'Showing '+displayed.length+' screened candidates. ')+
