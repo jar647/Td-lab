@@ -555,7 +555,6 @@ function renderGameSGP(){
  candidates.sort((a,b)=>b.robustScore*scriptBias(b)-a.robustScore*scriptBias(a));
  // Quality-gated portfolio selection: no mandatory fifth leg and no double
  // counting one player's correlated receiving yards/receptions as independent.
- const chosen=[],usedPlayers=new Set(),marketCount={};
  const eligible=candidates.filter(x=>
   x.verdict!=='PASS'&&x.logCount>=3&&
   x.projectionRatio>=1.08&&x.usageRatio>=.78&&x.matchupRatio>=.72&&
@@ -566,34 +565,9 @@ function renderGameSGP(){
  // Score the whole ticket at each step, penalizing same-team receiver exposure.
  // These are research heuristics, not empirically calibrated correlations.
  function teamOf(x){return String(x.r.team||x.r.teamAbbr||x.r.team_abbr||'');}
- function incrementalScore(x,group){
-  let penalty=0;
-  for(const y of group){
-   if(teamOf(x)&&teamOf(x)===teamOf(y)){
-    if(['REC','CATCH'].includes(x.d.key)&&['REC','CATCH'].includes(y.d.key))penalty+=.13;
-    else if(passing(x)&&passing(y))penalty+=.035;
-   }
-   if(x.d.key===y.d.key)penalty+=.025;
-  }
-  return x.robustScore*scriptFit(x)-penalty;
- }
- const remaining=eligible.slice();
- while(chosen.length<5&&remaining.length){
-  remaining.sort((a,b)=>incrementalScore(b,chosen)-incrementalScore(a,chosen));
-  const x=remaining.shift(),player=String(x.r.player_id||x.r.player);
-  if(usedPlayers.has(player))continue;
-  // Three receiving-related selections from one team is not supported
-  // without a validated joint-distribution model.
-  const team=teamOf(x);
-  const receiverExposure=chosen.filter(y=>team&&teamOf(y)===team&&['REC','CATCH'].includes(y.d.key)).length;
-  if(['REC','CATCH'].includes(x.d.key)&&receiverExposure>=2)continue;
-  // A weak incremental candidate should not be forced into a five-leg ticket.
-  if(incrementalScore(x,chosen)<.49)continue;
-  chosen.push(x);usedPlayers.add(player);marketCount[x.d.key]=(marketCount[x.d.key]||0)+1;
- }
  const label=filter.options[filter.selectedIndex]?.textContent||'Selected matchup';
  panel.replaceChildren();
- const title=document.createElement('h2');title.textContent='🎟️ MODEL-BUILT SGP · '+label;panel.appendChild(title);
+ const title=document.createElement('h2');title.textContent='🎟️ ONE RECOMMENDED SGP · '+label;panel.appendChild(title);
  const context=document.createElement('p');context.className='muted';
  context.textContent=scriptAvailable?'Game outlook: '+(modelTotal>=47?'higher-scoring passing opportunities':modelTotal<=41?'lower-scoring, potentially run-oriented':'balanced scoring environment')+' · projected total '+modelTotal.toFixed(1)+' (unvalidated model baseline)':'Built from available player logs, usage and opponent defensive allowances.';
  panel.appendChild(context);
@@ -602,8 +576,6 @@ function renderGameSGP(){
   starter.textContent='PHI QB UPDATE: Tanner McKee starts tonight; Jalen Hurts is on IR. McKee has a limited current-season sample and may not qualify for an automatic QB prop. The SGP should not substitute Hurts.';
   panel.appendChild(starter);
  }
- const summary=document.createElement('p');summary.className='status';summary.textContent=chosen.length+' model-selected legs · '+(chosen.length<5?'Not forcing extra selections. ':'Five candidates found. ')+(candidates.length-eligible.length)+' candidates filtered for weak projection, usage, or matchup. Recent hit rate influences ranking but is not a requirement. Verify sportsbook availability and prices before betting.';panel.appendChild(summary);
- if(!chosen.length){const empty=document.createElement('p');empty.textContent='No legs meet the current quality gate. Check other matchups or wait for more verified game logs.';panel.appendChild(empty);return;}
  // New one-tap recommendation card. Keep the detailed Vegas-line workflow below.
  // First-touchdown scorer research is a separate market, not an anytime-TD probability.
  const firstTdCard=document.createElement('section');
@@ -647,7 +619,7 @@ function renderGameSGP(){
  firstTdFilter.addEventListener('change',renderFirstTd);firstTdCount.addEventListener('change',renderFirstTd);renderFirstTd();panel.appendChild(firstTdCard);
  // Matchup research remains in candidate scoring and ticket selection; no redundant scout report.
  const autoCard=document.createElement('section');autoCard.style.cssText='padding:16px;margin:14px 0;border:1px solid #47786c;border-radius:12px;background:rgba(24,80,69,.13)';
- const autoHeading=document.createElement('h3');autoHeading.textContent='⚡ GAME-SCOUTED SGP · READY TO REVIEW';autoHeading.style.margin='0 0 7px';autoCard.appendChild(autoHeading);
+ const autoHeading=document.createElement('h3');autoHeading.textContent='🎯 RECOMMENDED SGP · READY TO REVIEW';autoHeading.style.margin='0 0 7px';autoCard.appendChild(autoHeading);
  const autoIntro=document.createElement('p');autoIntro.className='muted';autoIntro.textContent='Built after matchup scouting, weighing usage, defensive allowance, game scripts, uncertainty and ticket interactions. Same-team players are evaluated, not automatically banned. Suggested targets are NOT verified sportsbook lines or priced bets.';autoCard.appendChild(autoIntro);
  // Optional game markets. A projection alone is never a bet: require entered
  // sportsbook line AND valid odds, with conservative discrepancy gates.
@@ -761,6 +733,7 @@ function renderGameSGP(){
  function refreshAuto(){
   const requested=Number(countSelect.value);
   displayed=selectAutoLegs(requested);
+  for(const x of displayed)if(!x.gameLeg&&!x.ticketPick)x.ticketPick={target:x.line+'+ '+x.d.unit};
   autoList.replaceChildren();
   for(const x of displayed){
    const item=document.createElement('li');item.style.margin='0 0 12px';
@@ -775,17 +748,22 @@ function renderGameSGP(){
    'Game-market inputs are manual. ML excluded. Confirm injuries, prices, market availability and SGP payout. No calibrated joint probability or verified edge.';
   marketStatus.textContent=qualifiedGameLegs().length?'Qualified game-market candidates: '+qualifiedGameLegs().map(x=>x.name).join(' / '):'No qualified ATS/total candidates. Enter current lines and odds, or keep a player-only ticket. ML requires validated win probabilities.';
   autoCopy.disabled=!displayed.length;
+  renderRefinements();
  }
  countSelect.addEventListener('change',refreshAuto);marketCheck.addEventListener('change',refreshAuto);for(const field of Object.values(marketFields))field.addEventListener('input',refreshAuto);refreshAuto();
  autoCopy.addEventListener('click',async()=>{
-  const t='THE PROP VAULT · '+displayed.length+'-LEG AUTO SGP · '+label+'\\n'+displayed.map((x,i)=>(i+1)+'. '+(x.gameLeg?x.name+' ('+(x.price>0?'+':'')+x.price+')':x.r.player+' '+x.line+'+ '+x.d.unit)).join('\\n');
+  const t='THE PROP VAULT · '+displayed.length+'-LEG AUTO SGP · '+label+'\\n'+displayed.map((x,i)=>(i+1)+'. '+(x.gameLeg?x.name+' ('+(x.price>0?'+':'')+x.price+')':x.r.player+' '+(x.ticketPick?.target||x.line+'+ '+x.d.unit))).join('\\n');
   try{await navigator.clipboard.writeText(t);autoCopy.textContent='✅ COPIED';}
   catch(e){const area=document.createElement('textarea');area.value=t;autoCard.appendChild(area);area.select();}
  });
  panel.appendChild(autoCard);
- const detailHeading=document.createElement('h3');detailHeading.textContent='🔬 REFINE PICKS · VEGAS LINE TO ALT';panel.appendChild(detailHeading);
+ const refinePanel=document.createElement('details');refinePanel.style.cssText='margin:12px 0;padding:12px;border:1px solid #334155;border-radius:10px';
+ const refineToggle=document.createElement('summary');refineToggle.textContent='🔬 OPTIONAL: REFINE THIS TICKET WITH VEGAS LINES';refinePanel.appendChild(refineToggle);panel.appendChild(refinePanel);
+ function renderRefinements(){
+  const wasOpen=refinePanel.open;refinePanel.replaceChildren();refinePanel.appendChild(refineToggle);
+ const detailHeading=document.createElement('h3');detailHeading.textContent='🔬 REFINE PICKS · VEGAS LINE TO ALT';refinePanel.appendChild(detailHeading);
  const list=document.createElement('ol');list.style.cssText='padding-left:24px;margin:14px 0';
- for(const x of chosen){
+ for(const x of displayed.filter(x=>!x.gameLeg)){
   const li=document.createElement('li');li.style.cssText='margin:0 0 16px;padding:0 0 12px;border-bottom:1px solid #334155';
   const name=document.createElement('strong');name.textContent=x.r.player+' · '+x.line+'+ '+x.d.unit;li.appendChild(name);
   const why=document.createElement('p');why.style.margin='5px 0';
@@ -799,7 +777,7 @@ function renderGameSGP(){
   const decision=document.createElement('p');decision.style.cssText='font-weight:700;margin:9px 0 3px';decision.textContent='Enter one Vegas line for an automatic recommendation.';
   const alt=document.createElement('p');alt.className='muted';alt.style.margin='3px 0';alt.textContent='No alternate lines or odds required.';
   entry.append(decision,alt);
-  x.ticketPick={target:x.line+'+ '+x.d.unit};
+  if(!x.ticketPick)x.ticketPick={target:x.line+'+ '+x.d.unit};
   const update=()=>{
    const line=Number(standard.value);
    if(!standard.value||!Number.isFinite(line)||line<=0){decision.textContent='Enter a valid Vegas line.';alt.textContent='No alternate lines or odds required.';x.ticketPick.target=x.line+'+ '+x.d.unit;return;}
@@ -839,10 +817,9 @@ function renderGameSGP(){
   standard.addEventListener('input',update);
   li.appendChild(entry);list.appendChild(li);
  }
- panel.appendChild(list);
- const copy=document.createElement('button');copy.type='button';copy.className='chip';copy.textContent='📋 COPY MY SGP';
- copy.addEventListener('click',async()=>{const ticket='THE PROP VAULT · '+label+'\n'+chosen.map((x,i)=>(i+1)+'. '+x.r.player+' '+(x.ticketPick?.target||x.line+'+ '+x.d.unit)).join('\n');try{await navigator.clipboard.writeText(ticket);copy.textContent='✅ COPIED';}catch(e){const area=document.createElement('textarea');area.value=ticket;area.style.width='100%';panel.appendChild(area);area.select();}});
- panel.appendChild(copy);
+ refinePanel.appendChild(list);
+  refinePanel.open=wasOpen;
+ }
  const book=document.createElement('a');book.href='https://app.hardrock.bet/';book.target='_blank';book.rel='noopener noreferrer';book.className='chip';book.textContent='OPEN HARD ROCK BET';book.style.marginLeft='8px';panel.appendChild(book);
  const foot=document.createElement('p');foot.className='muted';foot.textContent='Automatically generated research ticket. Check player availability and whether Hard Rock offers these targets. Enter one Vegas line per leg. Alternate recommendations are unpriced research targets; verify the price and skip anything worse than -200.';panel.appendChild(foot);
 }
