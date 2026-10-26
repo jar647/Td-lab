@@ -21,15 +21,20 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: git pull --ff-only origin main
-      - run: python nba_feed.py
-      - run: python nba_tracker.py
-      - name: Commit NBA data
+      - name: Refresh and publish NBA records
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/nba_games.json data/nba_projection_tracker.json
-          if ! git diff --cached --quiet; then
-            git commit -m "Refresh NBA game data"
-            git push origin HEAD:main
-          fi
+          for attempt in 1 2 3 4; do
+            git fetch origin main
+            git reset --hard origin/main
+            python nba_feed.py
+            python nba_tracker.py
+            git add data/nba_games.json data/nba_projection_tracker.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "Refresh NBA game data and locked projections"
+            if git push origin HEAD:main; then exit 0; fi
+            echo "Concurrent update detected; retrying from latest main"
+            sleep 3
+          done
+          exit 1
