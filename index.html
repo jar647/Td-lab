@@ -159,8 +159,8 @@ function propResearch(r,category,avgField,defField,usageField,posted,thresholds)
  const recentKey={PASS:'recent3PassYards',RUSH:'recent3RushYards',REC:'recent3RecYards',CATCH:'recent3Receptions'}[category];
  const usageKey={PASS:'recent3PassAttempts',RUSH:'recent3Carries',REC:'recent3Targets',CATCH:'recent3Targets'}[category];
  const logKey={PASS:'passYards',RUSH:'rushYards',REC:'recYards',CATCH:'receptions'}[category];
- const recent=r[recentKey]==null?NaN:Number(r[recentKey]);
- const usage=usageField?Number(r[usageField]):NaN,usageRecent=r[usageKey]==null?NaN:Number(r[usageKey]);
+ const recent=Number(r.games)<3?NaN:(r[recentKey]==null?NaN:Number(r[recentKey]));
+ const usage=usageField?Number(r[usageField]):NaN,usageRecent=Number(r.games)<3?NaN:(r[usageKey]==null?NaN:Number(r[usageKey]));
  if(r[avgField]==null||r[defField]==null||!Number.isFinite(avg)||!Number.isFinite(def)||avg<=0||def<=0)return null;
  const usageRatio=Number.isFinite(usage)&&usage>0&&Number.isFinite(usageRecent)?Math.max(.75,Math.min(1.25,usageRecent/usage)):1;
  const recentValue=Number.isFinite(recent)?recent:avg;
@@ -285,7 +285,7 @@ function renderPropMatchups(){
  const projection=x=>{
   const r=x.r,season=Number(r[cfg.player]);
   const recentKey={PASS:'recent3PassYards',RUSH:'recent3RushYards',REC:'recent3RecYards',CATCH:'recent3Receptions'}[propCategory];
-  const recent=r[recentKey]==null?null:Number(r[recentKey]);
+  const recent=Number(r.games)<3?null:(r[recentKey]==null?null:Number(r[recentKey]));
   if(!Number.isFinite(season)||season<=0)return '';
   const blend=recent!=null&&Number.isFinite(recent)?season*.7+recent*.3:season;
   const def=Number(r[cfg.def]);
