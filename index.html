@@ -807,6 +807,8 @@ async function loadGamePicks(){
    const margin=Number(game.projected_margin_home);
    ml.textContent='ML model lean: '+(margin>0?game.home:margin<0?game.away:'No edge')+' · Projected margin '+(margin>0?'+':'')+margin+' for '+game.home+' · Confidence: uncalibrated';
    card.appendChild(ml);
+   const best=document.createElement('section');best.className='status';best.style.cssText='margin:12px 0;padding:14px;border:1px solid #34d399;border-radius:10px';
+   card.appendChild(best);
    const controls=document.createElement('div');controls.className='filters';
    const spread=gameInput(game.home+' spread',null,'0.5');
    const total=gameInput('Sportsbook total',null,'0.5');
@@ -837,6 +839,49 @@ async function loadGamePicks(){
      totalSummary='TOTAL: '+verdict+' · '+(abs<2?'No meaningful difference':edge>0?'OVER '+line:'UNDER '+line)+' · '+abs.toFixed(1)+' pts';
      ou.textContent=totalSummary+'. Projection difference only; no validated win probability.';
     }else ou.textContent='Total: Enter the sportsbook total to compare.';
+    // Compare only markets with grounded model inputs. Never fabricate a moneyline price.
+    const options=[];
+    const matchup=card.dataset.matchup;
+    const defs=[
+     {key:'PASS',pos:['QB'],field:'playerPassYards',def:'defPassYardsAllowed',usage:'playerPassAttempts',unit:'passing yards',thresholds:[175,200,225,250]},
+     {key:'RUSH',pos:['RB','QB'],field:'playerRushYards',def:'defRushYardsAllowed',usage:'playerCarries',unit:'rushing yards',thresholds:[25,40,50,60,75]},
+     {key:'REC',pos:['WR','TE','RB'],field:'playerRecYards',def:'defRecYardsAllowed',usage:'playerTargets',unit:'receiving yards',thresholds:[25,40,50,60,75]},
+     {key:'CATCH',pos:['WR','TE','RB'],field:'playerReceptions',def:'defReceptionsAllowed',usage:'playerTargets',unit:'receptions',thresholds:[3,4,5,6,7]}
+    ];
+    for(const r of autoRecords){
+     if(gameKey(r)!==matchup||r.market!=='ATD'||r.availability!=='ROSTER_ACTIVE'||r.playerAppearancesVerified===false||manuallyInactive(r)||Number(r.games)<3)continue;
+     if(Array.isArray(r.possibleReturningTeammates)&&r.possibleReturningTeammates.length)continue;
+     for(const d of defs){
+      if(!d.pos.includes(r.pos))continue;
+      const logs=Array.isArray(r.last5GameStats)?r.last5GameStats.slice(-5):[];
+      const stat={PASS:'passYards',RUSH:'rushYards',REC:'recYards',CATCH:'receptions'}[d.key];
+      const values=logs.map(g=>g[stat]).filter(v=>v!=null&&Number.isFinite(Number(v))).map(Number);
+      if(values.length<3)continue;
+      const research=propResearch(r,d.key,d.field,d.def,d.usage,null,d.thresholds);
+      const target=research?.tiers?.balanced||research?.tiers?.conservative;
+      if(!target||!Number.isFinite(research.projection)||!Number.isFinite(target.line))continue;
+      const hits=values.filter(v=>v>=target.line).length,rate=hits/values.length;
+      const cushion=research.projection/target.line;
+      if(rate<.8||cushion<1.1||research.usageRatio<.9)continue;
+      const score=rate*.5+Math.min(cushion/1.3,1)*.3+Math.min(research.usageRatio,1)*.2;
+      options.push({score,play:r.player+' '+target.line+'+ '+d.unit,reason:hits+'/'+values.length+' recent games reached target; projected '+Math.round(research.projection)+' '+d.unit+'; usage ratio '+research.usageRatio.toFixed(2)+'.',type:'Player prop'});
+     }
+    }
+    if(spreadText!==''&&Number.isFinite(Number(spreadText))){
+     const edge=margin+Number(spreadText);
+     if(Math.abs(edge)>=5)options.push({score:.78+Math.min(Math.abs(edge),12)*.012,play:edge>0?game.home+' '+(Number(spreadText)>0?'+':'')+Number(spreadText):game.away+' '+(-Number(spreadText)>0?'+':'')+(-Number(spreadText)),reason:'Projected spread advantage '+Math.abs(edge).toFixed(1)+' points against entered sportsbook spread.',type:'ATS'});
+    }
+    if(totalText!==''&&Number.isFinite(Number(totalText))){
+     const edge=Number(game.projected_total)-Number(totalText);
+     if(Math.abs(edge)>=7)options.push({score:.77+Math.min(Math.abs(edge),15)*.01,play:(edge>0?'OVER ':'UNDER ')+Number(totalText),reason:'Projected total '+game.projected_total+' differs by '+Math.abs(edge).toFixed(1)+' points from entered sportsbook total.',type:'Game total'});
+    }
+    options.sort((a,b)=>b.score-a.score);
+    const pick=options[0];
+    best.replaceChildren();
+    const headline=document.createElement('strong');headline.textContent=pick?'⭐ BEST AVAILABLE MODEL ANGLE · '+pick.type:'⭐ BEST BET · DATA PENDING';best.appendChild(headline);
+    const play=document.createElement('p');play.style.cssText='font-size:1.15rem;font-weight:800;margin:7px 0';play.textContent=pick?pick.play:'No supported selection yet';best.appendChild(play);
+    const why=document.createElement('p');why.className='muted';why.textContent=pick?pick.reason+' Compare the actual sportsbook price before playing.':'Waiting for verified player logs or entered spread/total. No unsupported pick will be invented.';best.appendChild(why);
+    const limits=document.createElement('p');limits.className='muted';limits.style.fontSize='.8rem';limits.textContent='Compares supported player targets, ATS and totals when lines are supplied. ML excluded without current odds; no pick above -200 is endorsed. Rankings are heuristic, not proven value.';best.appendChild(limits);
     intelligence.textContent='🏈 '+(margin>0?game.home:margin<0?game.away:'Tied')+' projected winner · '+spreadSummary+' · '+totalSummary;
    }
    spread.input.addEventListener('input',update);total.input.addEventListener('input',update);update();
