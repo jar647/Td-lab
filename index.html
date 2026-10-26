@@ -602,6 +602,25 @@ function renderGameSGP(){
  }
  const summary=document.createElement('p');summary.className='status';summary.textContent=chosen.length+' model-selected legs · '+(chosen.length<5?'Not forcing extra selections. ':'Five candidates found. ')+(candidates.length-eligible.length)+' candidates filtered for weak projection, usage, or matchup. Recent hit rate influences ranking but is not a requirement. Verify sportsbook availability and prices before betting.';panel.appendChild(summary);
  if(!chosen.length){const empty=document.createElement('p');empty.textContent='No legs meet the current quality gate. Check other matchups or wait for more verified game logs.';panel.appendChild(empty);return;}
+ // New one-tap recommendation card. Keep the detailed Vegas-line workflow below.
+ const autoCard=document.createElement('section');autoCard.style.cssText='padding:16px;margin:14px 0;border:1px solid #47786c;border-radius:12px;background:rgba(24,80,69,.13)';
+ const autoHeading=document.createElement('h3');autoHeading.textContent='⚡ AUTO SGP · READY TO REVIEW';autoHeading.style.margin='0 0 7px';autoCard.appendChild(autoHeading);
+ const autoIntro=document.createElement('p');autoIntro.className='muted';autoIntro.textContent='One-tap model shortlist using projection, usage, opponent allowance and game-script context. No Vegas inputs needed. Suggested targets are NOT verified Hard Rock lines or priced bets.';autoCard.appendChild(autoIntro);
+ const autoList=document.createElement('ol');autoList.style.cssText='padding-left:22px;margin:10px 0';
+ for(const x of chosen){
+  const item=document.createElement('li');item.style.margin='0 0 12px';
+  const headline=document.createElement('strong');headline.textContent=x.r.player+' · '+x.line+'+ '+x.d.unit;item.appendChild(headline);
+  const detail=document.createElement('div');detail.className='muted';detail.style.fontSize='13px';
+  const projection=Math.round(x.projectionRatio*x.line);
+  const opportunity=x.usageRatio>=1?'steady or rising usage':'usage below baseline';
+  const matchup=x.matchupRatio>=1?'favorable opponent allowance':'tougher opponent allowance';
+  detail.textContent='Projects '+projection+' · '+opportunity+' · '+matchup+(x.returnWarning?' · teammate return risk':'')+'.';item.appendChild(detail);autoList.appendChild(item);
+ }
+ autoCard.appendChild(autoList);
+ const autoNotice=document.createElement('p');autoNotice.className='muted';autoNotice.textContent='Research-only ticket. Check current starters, injury reports, market availability and actual prices. Avoid legs worse than -200; no joint hit probability or verified SGP value is claimed.';autoCard.appendChild(autoNotice);
+ const autoCopy=document.createElement('button');autoCopy.type='button';autoCopy.className='chip';autoCopy.textContent='📋 COPY AUTO SGP';autoCopy.addEventListener('click',async()=>{const t='THE PROP VAULT · AUTO SGP · '+label+'\\n'+chosen.map((x,i)=>(i+1)+'. '+x.r.player+' '+x.line+'+ '+x.d.unit).join('\\n');try{await navigator.clipboard.writeText(t);autoCopy.textContent='✅ COPIED';}catch(e){const area=document.createElement('textarea');area.value=t;autoCard.appendChild(area);area.select();}});autoCard.appendChild(autoCopy);
+ panel.appendChild(autoCard);
+ const detailHeading=document.createElement('h3');detailHeading.textContent='🔬 REFINE PICKS · VEGAS LINE TO ALT';panel.appendChild(detailHeading);
  const list=document.createElement('ol');list.style.cssText='padding-left:24px;margin:14px 0';
  for(const x of chosen){
   const li=document.createElement('li');li.style.cssText='margin:0 0 16px;padding:0 0 12px;border-bottom:1px solid #334155';
