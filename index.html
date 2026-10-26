@@ -231,7 +231,7 @@ function setMainCategory(category,button){
  document.getElementById('tdDawgsSection').hidden=!td;
  document.querySelectorAll('#mainMarketNav button').forEach(b=>b.classList.toggle('active',b===button));
  if(!td){
-  const labels={PASS:'PASSING YARDS',PTD:'PASSING TOUCHDOWNS',RUSH:'RUSHING YARDS',REC:'RECEIVING YARDS',CATCH:'RECEPTIONS'};
+  const labels={PTD:'PASSING TOUCHDOWNS',PASS:'PASSING YARDS',PTD:'PASSING TOUCHDOWNS',RUSH:'RUSHING YARDS',REC:'RECEIVING YARDS',CATCH:'RECEPTIONS'};
   document.getElementById('yardageHeading').textContent='📊 '+labels[category]+' MATCHUPS';
   const sub=document.querySelector('#propFilters button[onclick*="'+category+'"]');
   setPropCategory(category,sub);
@@ -273,7 +273,7 @@ function renderPropMatchups(){
   const o=.6*cap(r[cfg.player],cfg.playerCap)+.4*cap(r[cfg.usage],cfg.usageCap);
   const score=Math.round(100*(.5*d+.5*o));
   // Trend adjustment is capped at six points; defense and usage gates still apply.
-  const trendKey={PASS:'recent3PassAttempts',RUSH:'recent3Carries',REC:'recent3Targets',CATCH:'recent3Targets'}[propCategory];
+  const trendKey={PTD:'recent3PassAttempts',PASS:'recent3PassAttempts',RUSH:'recent3Carries',REC:'recent3Targets',CATCH:'recent3Targets'}[propCategory];
   const trend=r[trendKey],base=r[cfg.usage];
   const trendRatio=trend!=null&&base>0?trend/base:null;
   const trendAdjustment=trendRatio==null?0:Math.max(-6,Math.min(6,Math.round((trendRatio-1)*20)));
@@ -314,7 +314,7 @@ function renderPropMatchups(){
  // Phase 3: transparent research range, not a calibrated prediction or sportsbook quote.
  const projection=x=>{
   const r=x.r,season=Number(r[cfg.player]);
-  const recentKey={PASS:'recent3PassYards',RUSH:'recent3RushYards',REC:'recent3RecYards',CATCH:'recent3Receptions'}[propCategory];
+  const recentKey={PTD:'recent3PassTDs',PASS:'recent3PassYards',RUSH:'recent3RushYards',REC:'recent3RecYards',CATCH:'recent3Receptions'}[propCategory];
   const recent=Number(r.games)<3?null:(r[recentKey]==null?null:Number(r[recentKey]));
   if(!Number.isFinite(season)||season<=0)return '';
   const blend=recent!=null&&Number.isFinite(recent)?season*.7+recent*.3:season;
@@ -327,17 +327,17 @@ function renderPropMatchups(){
  };
  const propLineUI=x=>{
   const key=propLineKey(x.r,propCategory),line=propLines[key],decision=propDecision(x,cfg,propCategory);
-  const avg=Number(x.r[cfg.player]),recentKey={PASS:'recent3PassYards',RUSH:'recent3RushYards',REC:'recent3RecYards',CATCH:'recent3Receptions'}[propCategory];
+  const avg=Number(x.r[cfg.player]),recentKey={PTD:'recent3PassTDs',PASS:'recent3PassYards',RUSH:'recent3RushYards',REC:'recent3RecYards',CATCH:'recent3Receptions'}[propCategory];
   const recent=Number(x.r.games)<3?null:(x.r[recentKey]==null?null:Number(x.r[recentKey]));
   const blend=recent!=null&&Number.isFinite(recent)?avg*.7+recent*.3:avg;
-  const def=Number(x.r[cfg.def]),matchup=Number.isFinite(def)&&def>0?Math.max(.85,Math.min(1.15,def/Math.max(avg,1))):1;
+  const def=Number(x.r[cfg.def]),matchup=Number.isFinite(def)&&def>0?Math.max(.85,Math.min(1.15,def/Math.max(avg,.1))):1;
   const projected=blend*(.75+.25*matchup),valid=Number.isFinite(projected)&&projected>0;
   const posted=line!=null&&Number(line)>0?Number(line):null;
   const edge=valid&&posted!=null?projected-posted:null;
   const fmt=n=>n==null?'—':['CATCH','PTD'].includes(propCategory)?n.toFixed(2).replace(/0+$/,'').replace(/\\.$/,''):Math.round(n).toString();
   const edgeText=edge==null?'—':(edge>0?'+':'')+edge.toFixed(propCategory==='PTD'?2:1);
   const tone=decision.label.includes('OVER')?'positive':decision.label.includes('PASS')?'negative':'caution';
-  return '<div class="pv-verdict '+tone+'"><div class="pv-eyebrow">'+escapeHTML(propCategory==='CATCH'?'RECEPTIONS':'YARDS')+' · MODEL VERDICT</div>'
+  return '<div class="pv-verdict '+tone+'"><div class="pv-eyebrow">'+escapeHTML(propCategory==='CATCH'?'RECEPTIONS':propCategory==='PTD'?'PASSING TOUCHDOWNS':'YARDS')+' · MODEL VERDICT</div>'
    +'<div class="pv-decision">'+escapeHTML(decision.label)+'</div>'
    +'<div class="pv-metrics"><div><span>Projection</span><strong>'+fmt(valid?projected:null)+'</strong></div>'
    +'<div><label for="pv-'+escapeHTML(key).replace(/[^a-zA-Z0-9_-]/g,'-')+'">Vegas line</label><input id="pv-'+escapeHTML(key).replace(/[^a-zA-Z0-9_-]/g,'-')+'" aria-label="Vegas line for '+escapeHTML(x.r.player)+'" type="number" min="0" max="9999" step="0.5" placeholder="Enter line" value="'+(posted==null?'':posted)+'" onchange="setPropLine('+JSON.stringify(key).replace(/"/g,'&quot;')+',this.value)"></div>'
