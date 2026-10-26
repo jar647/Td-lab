@@ -39,10 +39,25 @@ return {p,d,line,score,reasons,risks,hits,sample,injuryFlag};
 }
 function render(g){
 const candidates=players.filter(p=>p.team+'-'+p.opp===g||p.opp+'-'+p.team===g).flatMap(p=>defs.map(d=>choose(p,d)).filter(Boolean)).sort((a,b)=>b.score-a.score);
+const gamePlayers=players.filter(p=>p.team+'-'+p.opp===g||p.opp+'-'+p.team===g);
+const teamNames=[...new Set(gamePlayers.map(p=>p.team))];
+const scouting=teamNames.map(team=>{
+ const members=gamePlayers.filter(p=>p.team===team);
+ const qbs=members.filter(p=>p.pos==='QB').sort((a,b)=>(n(b.playerPassAttempts)||0)-(n(a.playerPassAttempts)||0));
+ const backs=members.filter(p=>p.pos==='RB').sort((a,b)=>(n(b.playerCarries)||0)-(n(a.playerCarries)||0));
+ const receivers=members.filter(p=>['WR','TE'].includes(p.pos)).sort((a,b)=>(n(b.playerTargets)||0)-(n(a.playerTargets)||0));
+ const qb=qbs[0],rb=backs[0],wr=receivers[0];
+ const passRatio=qb?n(qb.defenseOpponentRatio?.PASS):null;
+ const rushRatio=rb?n(rb.defenseOpponentRatio?.RUSH):null;
+ const passRead=passRatio===null?'passing matchup unverified':passRatio>1.05?'opponent has allowed above-baseline QB passing production':passRatio<.95?'opponent has limited QB passing production':'passing matchup roughly neutral';
+ const rushRead=rushRatio===null?'rushing matchup unverified':rushRatio>1.05?'opponent has allowed above-baseline RB rushing production':rushRatio<.95?'opponent has limited RB rushing production':'rushing matchup roughly neutral';
+ return {team,qb,rb,wr,passRead,rushRead,passRatio,rushRatio};
+});
 const used=new Set(),teamCounts={};const selected=[];
 for(const c of candidates){const id=c.p.player_id||c.p.player;if(used.has(id))continue;if((teamCounts[c.p.team]||0)>=3)continue;selected.push(c);used.add(id);teamCounts[c.p.team]=(teamCounts[c.p.team]||0)+1;if(selected.length===5)break;}
-const el=$('results');if(!selected.length){el.innerHTML='<div class="panel"><h2>NO BET</h2><p>Not enough supported player props in the current feed. No invented selections.</p></div>';return;}
-el.innerHTML='<div class="panel"><h2>Analyst recommendations · '+selected.length+' legs</h2><p class="sub">Selections chosen automatically, without odds. The evidence below is from the current matchup dataset, not an AI-generated scouting report. A single game may not support six independent props.</p>'+selected.map((c,i)=>'<article class="leg"><div class="small">LEG '+(i+1)+' · '+esc(c.p.team)+' vs '+esc(c.p.opp)+'</div><div class="pick">'+esc(c.p.player)+' · '+c.line+'+ '+esc(c.d.label)+'</div><p class="reason">'+c.reasons.map(esc).join(' ')+'</p>'+(c.risks.length?'<p class="warning">⚠ '+c.risks.map(esc).join(' ')+'</p>':'')+'</article>').join('')+'</div>';
+const overview='<div class="panel"><h2>Game-first scouting</h2><p class="sub">Team-level interpretation from player matchup records. This is not a verified coaching, weather, coverage or live-injury report; missing evidence stays missing.</p>'+scouting.map(t=>'<div class="leg"><strong>'+esc(t.team)+' offense</strong><p class="reason">Passing: '+esc(t.passRead)+'. Rushing: '+esc(t.rushRead)+'. '+(t.qb?'QB workload: '+esc(t.qb.player)+' ('+(n(t.qb.playerPassAttempts)||0).toFixed(1)+' attempts/game). ':'')+(t.rb?'Lead observed rushing workload: '+esc(t.rb.player)+' ('+(n(t.rb.playerCarries)||0).toFixed(1)+' carries/game). ':'')+(t.wr?'Most-targeted listed WR/TE: '+esc(t.wr.player)+' ('+(n(t.wr.playerTargets)||0).toFixed(1)+' targets/game).':'')+'</p></div>').join('')+'</div>';
+const el=$('results');if(!selected.length){el.innerHTML=overview+'<div class="panel"><h2>NO BET</h2><p>Not enough supported player props in the current feed. No invented selections.</p></div>';return;}
+el.innerHTML=overview+'<div class="panel"><h2>Analyst recommendations · '+selected.length+' legs</h2><p class="sub">Selections chosen automatically, without odds. The evidence below is from the current matchup dataset, not an AI-generated scouting report. A single game may not support six independent props.</p>'+selected.map((c,i)=>'<article class="leg"><div class="small">LEG '+(i+1)+' · '+esc(c.p.team)+' vs '+esc(c.p.opp)+'</div><div class="pick">'+esc(c.p.player)+' · '+c.line+'+ '+esc(c.d.label)+'</div><p class="reason">'+c.reasons.map(esc).join(' ')+'</p>'+(c.risks.length?'<p class="warning">⚠ '+c.risks.map(esc).join(' ')+'</p>':'')+'</article>').join('')+'</div>';
 }
 async function init(){try{const r=await fetch('./data/matchups.json',{cache:'no-store'});if(!r.ok)throw Error('Feed HTTP '+r.status);players=await r.json();const groups=[...new Set(players.filter(p=>p.team&&p.opp).map(p=>[p.team,p.opp].sort().join('-')))].sort();$('game').innerHTML='<option value="">Select a matchup</option>'+groups.map(g=>'<option value="'+esc(g)+'">'+esc(g.replace('-',' vs '))+'</option>').join('');$('status').textContent='Loaded '+players.length+' player matchup records. Injury statuses may lag official game-day reports.';}catch(e){$('status').textContent='Unable to load matchup data: '+e.message;}}
 $('build').onclick=()=>{const g=$('game').value;if(!g){$('status').textContent='Choose a game first.';return}render(g);$('results').scrollIntoView({behavior:'smooth'});};init();
