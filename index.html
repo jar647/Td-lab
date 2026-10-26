@@ -603,6 +603,45 @@ function renderGameSGP(){
  const summary=document.createElement('p');summary.className='status';summary.textContent=chosen.length+' model-selected legs · '+(chosen.length<5?'Not forcing extra selections. ':'Five candidates found. ')+(candidates.length-eligible.length)+' candidates filtered for weak projection, usage, or matchup. Recent hit rate influences ranking but is not a requirement. Verify sportsbook availability and prices before betting.';panel.appendChild(summary);
  if(!chosen.length){const empty=document.createElement('p');empty.textContent='No legs meet the current quality gate. Check other matchups or wait for more verified game logs.';panel.appendChild(empty);return;}
  // New one-tap recommendation card. Keep the detailed Vegas-line workflow below.
+ // First-touchdown scorer research is a separate market, not an anytime-TD probability.
+ const firstTdCard=document.createElement('section');
+ firstTdCard.style.cssText='padding:16px;margin:14px 0;border:1px solid #806e45;border-radius:12px;background:rgba(105,78,28,.14)';
+ const firstTdHeading=document.createElement('h3');firstTdHeading.textContent='🏈 FIRST TOUCHDOWN SCORER · PLAYER OPTIONS';firstTdCard.appendChild(firstTdHeading);
+ const firstTdHelp=document.createElement('p');firstTdHelp.className='muted';
+ firstTdHelp.textContent='First TD is a different market from anytime TD. Rankings below use verified active players, goal-line involvement, red-zone opportunity and defensive matchup. They are research leads, NOT first-TD probabilities or verified sportsbook bets.';
+ firstTdCard.appendChild(firstTdHelp);
+ const firstTdControls=document.createElement('div');firstTdControls.style.cssText='display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0';
+ const firstTdFilter=document.createElement('select');firstTdFilter.setAttribute('aria-label','First touchdown scorer position');
+ for(const [value,label] of [['ALL','All positions'],['RB','Running backs'],['WR','Wide receivers'],['TE','Tight ends'],['QB','Quarterbacks']]){const o=document.createElement('option');o.value=value;o.textContent=label;firstTdFilter.appendChild(o);}
+ firstTdControls.appendChild(firstTdFilter);
+ const firstTdCount=document.createElement('select');firstTdCount.setAttribute('aria-label','First touchdown scorer number of options');
+ for(const n of [3,5,8]){const o=document.createElement('option');o.value=String(n);o.textContent='Top '+n;if(n===5)o.selected=true;firstTdCount.appendChild(o);}
+ firstTdControls.appendChild(firstTdCount);
+ firstTdCard.appendChild(firstTdControls);
+ const firstTdList=document.createElement('ol');firstTdList.style.cssText='padding-left:24px;margin:12px 0';firstTdCard.appendChild(firstTdList);
+ const firstTdFoot=document.createElement('p');firstTdFoot.className='muted';firstTdFoot.textContent='First-TD odds, opening-drive usage, team first-score likelihood and live injury updates are not available here. Confirm these before betting. First-TD legs are not automatically inserted into SGPs because sportsbook combination rules vary.';firstTdCard.appendChild(firstTdFoot);
+ const firstTdCandidates=autoRecords.filter(r=>gameKey(r)===selected&&r.market==='ATD'&&r.availability==='ROSTER_ACTIVE'&&r.playerAppearancesVerified!==false&&!manuallyInactive(r)&&Number(r.games)>=3&&['RB','WR','TE','QB'].includes(r.pos)&&Number.isFinite(Number(r.playerRz))&&Number.isFinite(Number(r.rzshare))&&Number.isFinite(Number(r.tdallowed))).map(r=>{
+  const goal=Number.isFinite(Number(r.goalLine5))?Math.max(0,Number(r.goalLine5)):null;
+  const recent=Number.isFinite(Number(r.recentRz2))?Math.max(0,Number(r.recentRz2)):null;
+  const base=.36*Math.min(1,Math.max(0,Number(r.playerRz))/2.5)+.23*Math.min(1,Math.max(0,Number(r.rzshare))/50)+.17*Math.min(1,Math.max(0,Number(r.tdallowed))/1.5)+.14*(goal===null?0:Math.min(1,goal/1.5))+.10*(recent===null?0:Math.min(1,recent/2));
+  const warning=Array.isArray(r.possibleReturningTeammates)&&r.possibleReturningTeammates.length>0;
+  return {r,goal,recent,warning,rank:base-(warning?.07:0)-(goal===null?.04:0)};
+ }).sort((a,b)=>b.rank-a.rank);
+ function renderFirstTd(){
+  firstTdList.replaceChildren();
+  const filtered=firstTdCandidates.filter(x=>firstTdFilter.value==='ALL'||x.r.pos===firstTdFilter.value).slice(0,Number(firstTdCount.value));
+  if(!filtered.length){const li=document.createElement('li');li.textContent='No eligible first-TD candidates with verified usage data for this position.';firstTdList.appendChild(li);return;}
+  for(const x of filtered){
+   const li=document.createElement('li');li.style.margin='0 0 12px';
+   const name=document.createElement('strong');name.textContent=x.r.player+' · '+x.r.pos+' · '+x.r.team;li.appendChild(name);
+   const detail=document.createElement('div');detail.className='muted';
+   detail.textContent='Goal-line chances/game: '+(x.goal===null?'unavailable':x.goal.toFixed(2))+' · Red-zone chances/game: '+Number(x.r.playerRz).toFixed(2)+' · Team red-zone share: '+Number(x.r.rzshare).toFixed(1)+'% · Opponent TDs allowed to position/game: '+Number(x.r.tdallowed).toFixed(2)+(x.warning?' · CAUTION: possible returning teammate':'');
+   li.appendChild(detail);
+   const verdict=document.createElement('div');verdict.className='muted';verdict.textContent=x.goal===null?'Research only: missing goal-line usage.':'Research option: check first-TD sportsbook price and opening-drive role before selecting.';li.appendChild(verdict);
+   firstTdList.appendChild(li);
+  }
+ }
+ firstTdFilter.addEventListener('change',renderFirstTd);firstTdCount.addEventListener('change',renderFirstTd);renderFirstTd();panel.appendChild(firstTdCard);
  // Matchup research remains in candidate scoring and ticket selection; no redundant scout report.
  const autoCard=document.createElement('section');autoCard.style.cssText='padding:16px;margin:14px 0;border:1px solid #47786c;border-radius:12px;background:rgba(24,80,69,.13)';
  const autoHeading=document.createElement('h3');autoHeading.textContent='⚡ GAME-SCOUTED SGP · READY TO REVIEW';autoHeading.style.margin='0 0 7px';autoCard.appendChild(autoHeading);
