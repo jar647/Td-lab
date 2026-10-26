@@ -10,6 +10,7 @@ now=datetime.datetime.now(datetime.timezone.utc)
 out=root/"data"/"nba_projection_tracker.json"
 existing=json.loads(out.read_text()) if out.exists() else {"snapshots":[]}
 snapshots=existing["snapshots"]
+# Preserve all prior locks; never recalculate a game that already has a snapshot.
 seen={s["game_id"] for s in snapshots}
 def value(p,k):
  try:
@@ -51,6 +52,7 @@ for g in games:
   snapshots.append({"game_id":g["id"],"game":g["away"]+" @ "+g["home"],"tipoff":g["date"],"locked_at":now.isoformat(),"model":"last-five-mean-v1","projections":projections})
   seen.add(g["id"])
 for s in snapshots:
+ # Only games with a final ESPN result may be graded.
  match=next((g for g in games if g["id"]==s["game_id"] and g["status"]=="STATUS_FINAL"),None)
  if not match:continue
  players={str(p.get("id")):p for p in match["players"]}
@@ -66,4 +68,4 @@ for s in snapshots:
    p["result"]="within_20pct" if abs(actual-p["projection"])<=max(2,p["projection"]*.2) else "outside_20pct"
 out.parent.mkdir(parents=True,exist_ok=True)
 out.write_text(json.dumps({"updated_at":now.isoformat(),"methodology":"Predictions frozen before tipoff; grade by absolute error tolerance max(2,20% of projection). Not betting hit rate.","snapshots":snapshots},separators=(",",":")))
-print("NBA frozen snapshots",len(snapshots),"graded projections",sum(p["result"]!="pending" for s in snapshots for p in s["projections"]))
+print("NBA frozen snapshots",len(snapshots),"graded projections",sum(p["result"] in ("within_20pct","outside_20pct") for s in snapshots for p in s["projections"]))
