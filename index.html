@@ -671,7 +671,7 @@ function renderGameSGP(){
   return score;
  }
  function selectAutoLegs(n){
-  const pool=eligible.filter(x=>analystScore(x)>=.49).slice(0,22);
+  const pool=eligible.filter(x=>!x.returnWarning&&x.logCount>=4&&x.usageRatio>=.9&&x.projectionRatio>=1.12&&analystScore(x)>=.49).slice(0,22);
   pool.push(...qualifiedGameLegs());
   let beams=[{picks:[],used:new Set(),score:0}],best=beams[0];
   for(let depth=0;depth<n;depth++){
@@ -680,7 +680,10 @@ function renderGameSGP(){
     const id=x.gameLeg?'GAME:'+x.key:String(x.r.player_id||x.r.player);
     if(state.used.has(id)||x.gameLeg&&state.picks.some(y=>y.gameLeg))continue;
     const team=x.gameLeg?'':teamOf(x);
-    if(!x.gameLeg&&['REC','CATCH'].includes(x.d.key)&&state.picks.filter(y=>!y.gameLeg&&team&&teamOf(y)===team&&['REC','CATCH'].includes(y.d.key)).length>=2)continue;
+    // Enforce exposure constraints BEFORE accepting a leg.
+    if(!x.gameLeg&&team&&state.picks.filter(y=>!y.gameLeg&&teamOf(y)===team).length>=2)continue;
+    if(!x.gameLeg&&passing(x)&&state.picks.filter(y=>!y.gameLeg&&passing(y)).length>=2)continue;
+    if(!x.gameLeg&&['REC','CATCH'].includes(x.d.key)&&state.picks.some(y=>!y.gameLeg&&team&&teamOf(y)===team&&['REC','CATCH'].includes(y.d.key)))continue;
     const picks=[...state.picks,x],score=ticketScore(picks);
     if(score-state.score<.38)continue;
     next.push({picks,used:new Set([...state.used,id]),score});
