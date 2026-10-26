@@ -506,15 +506,22 @@ function renderGameSGP(){
    const usageRatio=research.usageRatio;
    const matchupRatio=allowed/avg;
    const reasons=[];
-   if(hitRate<.8)reasons.push('recent hit rate below 80%');
-   if(projectionRatio<1.15)reasons.push('projected margin below 15%');
-   if(usageRatio<.95)reasons.push('recent usage declining');
-   if(matchupRatio<.9)reasons.push('defensive allowance below player average');
+   if(hitRate<.6)reasons.push('limited recent consistency');
+   if(projectionRatio<1.10)reasons.push('narrow projection cushion');
+   if(usageRatio<.85)reasons.push('recent usage declining');
+   if(matchupRatio<.85)reasons.push('challenging defensive matchup');
    if(returnWarning)reasons.push('possible teammate return');
-   if(actual.length<5)reasons.push('fewer than five verified game logs');
-   const verdict=reasons.length===0?'GREEN':hitRate<.6||projectionRatio<1.02||usageRatio<.8||matchupRatio<.65?'PASS':'CAUTION';
-   const quality=hitRate*.45+Math.min(projectionRatio/1.25,1)*.25+Math.min(usageRatio,1)*.15+Math.min(matchupRatio,1)*.15;
-   candidates.push({r,d,line,quality:quality-(returnWarning?.12:0),hitRate,logCount:actual.length,tier,returnWarning,verdict,reasons,projectionRatio,usageRatio,matchupRatio});
+   if(actual.length<5)reasons.push('limited verified game logs');
+   // Rankings are heuristic research scores, not predicted hit probabilities.
+   const edgeScore=Math.max(0,Math.min(1,(projectionRatio-1)/.40));
+   const matchupScore=Math.max(0,Math.min(1,matchupRatio/1.2));
+   const volumeScore=Math.max(0,Math.min(1,usageRatio/1.1));
+   const consistencyScore=(chosenLine.hits+1)/(chosenLine.total+2); // small-sample smoothing
+   const stabilityScore=(returnWarning?.35:1)*(actual.length<4?.75:1);
+   const quality=edgeScore*.30+matchupScore*.25+volumeScore*.20+consistencyScore*.15+stabilityScore*.10;
+   const verdict=projectionRatio<1.02||usageRatio<.7||matchupRatio<.65?'PASS':quality>=.70?'GREEN':'CAUTION';
+   candidates.push({r,d,line,quality,hitRate,logCount:actual.length,tier,returnWarning,verdict,reasons,projectionRatio,usageRatio,matchupRatio,research});
+
   }
  }
  candidates.sort((a,b)=>b.quality-a.quality||String(a.r.player).localeCompare(String(b.r.player)));
@@ -548,9 +555,10 @@ function renderGameSGP(){
  // counting one player's correlated receiving yards/receptions as independent.
  const chosen=[],usedPlayers=new Set(),marketCount={};
  const eligible=candidates.filter(x=>
-  x.verdict!=='PASS'&&x.hitRate>=.8&&x.logCount>=4&&
-  x.projectionRatio>=1.10&&x.usageRatio>=.90&&x.matchupRatio>=.80&&
-  !x.returnWarning&&x.quality>=.76);
+  x.verdict!=='PASS'&&x.logCount>=3&&
+  x.projectionRatio>=1.08&&x.usageRatio>=.78&&x.matchupRatio>=.72&&
+  x.quality>=.53);
+
  const passing=x=>['PASS','REC','CATCH'].includes(x.d.key);
  const scriptFit=x=>!scriptAvailable?1:modelTotal>=47?(passing(x)?1.08:.96):modelTotal<=41?(x.d.key==='RUSH'?1.08:passing(x)?.95:1):1;
  // Score the whole ticket at each step, penalizing same-team receiver exposure.
@@ -578,12 +586,12 @@ function renderGameSGP(){
   const receiverExposure=chosen.filter(y=>team&&teamOf(y)===team&&['REC','CATCH'].includes(y.d.key)).length;
   if(['REC','CATCH'].includes(x.d.key)&&receiverExposure>=2)continue;
   // A weak incremental candidate should not be forced into a five-leg ticket.
-  if(incrementalScore(x,chosen)<.68)continue;
+  if(incrementalScore(x,chosen)<.49)continue;
   chosen.push(x);usedPlayers.add(player);marketCount[x.d.key]=(marketCount[x.d.key]||0)+1;
  }
  const label=filter.options[filter.selectedIndex]?.textContent||'Selected matchup';
  panel.replaceChildren();
- const title=document.createElement('h2');title.textContent='🎟️ QUALITY-CHECKED SGP · '+label;panel.appendChild(title);
+ const title=document.createElement('h2');title.textContent='🎟️ MODEL-BUILT SGP · '+label;panel.appendChild(title);
  const context=document.createElement('p');context.className='muted';
  context.textContent=scriptAvailable?'Game outlook: '+(modelTotal>=47?'higher-scoring passing opportunities':modelTotal<=41?'lower-scoring, potentially run-oriented':'balanced scoring environment')+' · projected total '+modelTotal.toFixed(1)+' (unvalidated model baseline)':'Built from available player logs, usage and opponent defensive allowances.';
  panel.appendChild(context);
@@ -592,7 +600,7 @@ function renderGameSGP(){
   starter.textContent='PHI QB UPDATE: Tanner McKee starts tonight; Jalen Hurts is on IR. McKee has a limited current-season sample and may not qualify for an automatic QB prop. The SGP should not substitute Hurts.';
   panel.appendChild(starter);
  }
- const summary=document.createElement('p');summary.className='status';summary.textContent=chosen.length+' quality-qualified legs · '+(chosen.length<5?'Not forcing extra selections. ':'Five supported candidates found. ')+(candidates.length-eligible.length)+' candidates rejected by minimum standards. Correlation penalties are heuristic, not backtested.';panel.appendChild(summary);
+ const summary=document.createElement('p');summary.className='status';summary.textContent=chosen.length+' model-selected legs · '+(chosen.length<5?'Not forcing extra selections. ':'Five candidates found. ')+(candidates.length-eligible.length)+' candidates filtered for weak projection, usage, or matchup. Recent hit rate influences ranking but is not a requirement. Verify sportsbook availability and prices before betting.';panel.appendChild(summary);
  if(!chosen.length){const empty=document.createElement('p');empty.textContent='No legs meet the current quality gate. Check other matchups or wait for more verified game logs.';panel.appendChild(empty);return;}
  const list=document.createElement('ol');list.style.cssText='padding-left:24px;margin:14px 0';
  for(const x of chosen){
@@ -601,7 +609,7 @@ function renderGameSGP(){
   const why=document.createElement('p');why.style.margin='5px 0';
   const hit=Math.round(x.hitRate*100);
   const gameFit=scriptAvailable?(modelTotal>=47?(['PASS','REC','CATCH'].includes(x.d.key)?'The higher-scoring game script supports passing volume. ':'This provides a rushing angle alongside the expected passing volume. '):modelTotal<=41?(x.d.key==='RUSH'?'The lower-scoring script favors rushing opportunities. ':'This adds a complementary passing angle to a slower game. '):'The balanced game script supports mixing production categories. '):'';
-  why.textContent='Why: '+gameFit+'Hit in '+hit+'% of '+x.logCount+' recent games; model projects '+Math.round(x.projectionRatio*100-100)+'% above this target. '+(x.matchupRatio>=1?'Opponent allowance is favorable.':'Opponent allowance is less favorable.')+(x.reasons.length?' Watch: '+x.reasons.join('; ')+'.':'');
+  why.textContent='Why: '+gameFit+'Model projects '+Math.round(x.projectionRatio*100-100)+'% above this target; recent hit rate '+hit+'% across '+x.logCount+' games. '+(x.matchupRatio>=1?'Opponent allowance is favorable.':'Opponent allowance is less favorable.')+(x.reasons.length?' Watch: '+x.reasons.join('; ')+'.':'');
   li.appendChild(why);
   const entry=document.createElement('div');entry.style.cssText='margin:10px 0;padding:12px;border:1px solid #3b5363;border-radius:9px';
   const prompt=document.createElement('p');prompt.className='muted';prompt.textContent='ENTER HARD ROCK STANDARD LINE + OVER ODDS';prompt.style.margin='0 0 8px';entry.appendChild(prompt);
@@ -625,14 +633,14 @@ function renderGameSGP(){
    const hasOdds=odds.value.trim()!==''&&Number.isFinite(price)&&(price<=-100||price>=100);
    const implied=hasOdds?(price<0?-price/(-price+100):100/(price+100)):null;
    const observed=actual.length?overHits/actual.length:0;
-   const support=cushion>=1.08&&observed>=.8&&actual.length>=4&&x.usageRatio>=.9&&x.matchupRatio>=.8&&!x.returnWarning;
+   const support=cushion>=1.10&&observed>=.6&&actual.length>=3&&x.usageRatio>=.82&&x.matchupRatio>=.75&&!x.returnWarning;
    const priced=hasOdds&&observed>=implied+.08;
    const standardPreferred=support&&(!hasOdds||priced);
    decision.textContent=(standardPreferred?'🟢 PLAY STANDARD: ':'🟡 TAKE ALT INSTEAD OF STANDARD: ')+line+' '+x.d.unit+' · recent hit '+overHits+'/'+actual.length+' · projection '+Math.round(projection)+(hasOdds?' · implied '+Math.round(implied*100)+'%':'');
    const drop=x.d.key==='PASS'?Math.min(25,Math.max(15,Math.round(line*.09/5)*5)):x.d.key==='REC'?Math.min(15,Math.max(10,Math.round(line*.15/5)*5)):x.d.key==='RUSH'?Math.min(10,Math.max(5,Math.round(line*.14/5)*5)):1;
    const altLine=x.d.key==='CATCH'?Math.max(1,Math.floor(line)-1):Math.max(5,Math.floor((line-drop)/5)*5);
    const altHits=actual.filter(v=>v>=altLine).length;
-   const altSupport=projection>=altLine*1.08&&altHits>=Math.ceil(actual.length*.8)&&x.usageRatio>=.9&&!x.returnWarning;
+   const altSupport=projection>=altLine*1.10&&altHits>=Math.ceil(actual.length*.6)&&x.usageRatio>=.82&&!x.returnWarning;
    alt.textContent=(standardPreferred?'Optional modest ALT: ':'Suggested ALT: ')+altLine+'+ '+x.d.unit+' ('+altHits+'/'+actual.length+' recent hits)'+(altSupport?' · supported by recent results':' · lower confidence; check price and availability');
    if(odds.value.trim()&&!hasOdds)decision.textContent='Enter valid American odds (e.g. -110 or +120).';
   };
