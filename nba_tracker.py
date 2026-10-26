@@ -44,12 +44,17 @@ for g in games:
  for pid,rows in byid.items():
   if len(rows)<3:continue
   if statistics.mean(mins(p) for p in rows)<15:continue
+  avg_minutes=statistics.mean(mins(p) for p in rows)
+  recent_minutes=statistics.mean(mins(p) for p in rows[:3])
+  minute_factor=max(.8,min(1.2,recent_minutes/max(1,avg_minutes)))
   for market,key in (("points","PTS"),("rebounds","REB"),("assists","AST"),("threes","3PM")):
    vals=[value(p,key) for p in rows]
    if any(v is None for v in vals):continue
-   projections.append({"player_id":pid,"player":rows[0]["name"],"team":rows[0]["team"],"market":market,"projection":round(statistics.mean(vals),2),"sample":len(vals),"actual":None,"result":"pending"})
+   baseline=statistics.mean(vals)
+   projection=round(baseline*minute_factor,2)
+   projections.append({"player_id":pid,"player":rows[0]["name"],"team":rows[0]["team"],"market":market,"projection":projection,"baseline":round(baseline,2),"minute_factor":round(minute_factor,3),"sample":len(vals),"actual":None,"result":"pending"})
  if projections:
-  snapshots.append({"game_id":g["id"],"game":g["away"]+" @ "+g["home"],"tipoff":g["date"],"locked_at":now.isoformat(),"model":"last-five-mean-v1","projections":projections})
+  snapshots.append({"game_id":g["id"],"game":g["away"]+" @ "+g["home"],"tipoff":g["date"],"locked_at":now.isoformat(),"model":"last-five-minutes-adjusted-v2","projections":projections})
   seen.add(g["id"])
 for s in snapshots:
  # Only games with a final ESPN result may be graded.
