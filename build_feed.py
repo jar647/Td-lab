@@ -439,6 +439,14 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
             entry[yards_key]=float(g.yards.sum())
             entry[attempt_key]=int(len(g))
             if attempt_key=='targets':entry['receptions']=int(g.receptions.sum())
+    # Passing touchdowns: one credited to the passer on each actual TD pass.
+    required(season_plays,['pass_touchdown','passer_player_id'],'passing touchdown statistics')
+    td_plays=season_plays[(pd.to_numeric(season_plays.pass_touchdown,errors='coerce')==1)&season_plays.passer_player_id.notna()].copy()
+    td_plays['pid']=td_plays.passer_player_id.astype(str)
+    for (tm,pid,w),g in td_plays.groupby(['posteam','pid','week']):
+        entry=season_player_stats.setdefault((str(tm),str(pid),int(w)),{})
+        entry['passTDs']=int(len(g))
+    defense_pass_tds=td_plays.groupby('defteam').size().to_dict()
     # Optional nflverse air-yards signal: target-level air yards, not routes run.
     # Missing columns remain unavailable instead of being filled with invented zeroes.
     air_by_player={}
@@ -561,7 +569,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     return {'week':w,'gameId':game_lookup[(team,w)],
                             **{k:metrics.get(k,0) for k in
                             ('passYards','passAttempts','rushYards','rushAttempts',
-                             'recYards','receptions','targets')}}
+                             'recYards','receptions','targets','passTDs')}}
                 season_series=[game_record(w) for w in weeks]
                 last_series=season_series[-WINDOW:]
                 def avg(key,series):
@@ -589,9 +597,12 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
 
                     'last5GameStats':last_series,
                     'seasonGamesPlayed':len(season_series),'last5GamesPlayed':len(last_series),
-                    'seasonAverages':{k:avg(k,season_series) for k in ('passYards','passAttempts','rushYards','rushAttempts','recYards','receptions','targets')},
+                    'seasonAverages':{k:avg(k,season_series) for k in ('passYards','passAttempts','rushYards','rushAttempts','recYards','receptions','targets','passTDs')},
                     'last5Averages':{k:avg(k,last_series) for k in ('passYards','passAttempts','rushYards','rushAttempts','recYards','receptions','targets')},
                     'gameSampleDefinition':'snap_verified_player_appearances',
+                    'playerPassTDs':avg('passTDs',season_series) if position=='QB' else None,
+                    'defPassTDsAllowed':mean(defense_pass_tds.get(opp,0)/dg) if position=='QB' else None,
+                    'recent3PassTDs':avg('passTDs',last_series[-3:]) if position=='QB' else None,
                     'playerPassYards':avg('passYards',season_series) if position=='QB' else None,
                     'playerPassAttempts':avg('passAttempts',season_series) if position=='QB' else None,
                     'defPassYardsAllowed':mean(defense_pass_yards.get(opp,0)/dg) if position=='QB' else None,
