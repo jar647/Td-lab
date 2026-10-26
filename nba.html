@@ -20,25 +20,30 @@ if(recent.some(x=>x[key]===null))continue;const expected=avg(key)*minuteFactor;c
 projections.sort((a,b)=>b.score-a.score);
 // Opponent allowance relative to the league sample, with strong shrinkage for small samples.
 const allowed={};
-for(const h of history){
- const sides=[h.home,h.away];
- for(const defense of sides){
-  const offense=sides.find(t=>t!==defense);
-  const pts=(h.players||[]).filter(p=>p.team===offense&&!p.didNotPlay).reduce((sum,p)=>sum+(stat(p,['PTS'])||0),0);
-  if(pts<60)continue;
-  (allowed[defense]??=[]).push(pts);
+for(const h of history)for(const defense of [h.home,h.away]){
+ const offense=defense===h.home?h.away:h.home;
+ const totals={points:0,rebounds:0,assists:0,threes:0};
+ for(const x of (h.players||[]).filter(x=>x.team===offense&&!x.didNotPlay)){
+  for(const [key,labels] of Object.entries({points:['PTS'],rebounds:['REB'],assists:['AST'],threes:['3PM','3PTM','3PT']}))
+   totals[key]+=stat(x,labels)||0;
  }
+ if(totals.points>=65)(allowed[defense]??=[]).push(totals);
 }
-const allAllowed=Object.values(allowed).flat();
-const baseline=allAllowed.length?allAllowed.reduce((a,b)=>a+b,0)/allAllowed.length:110;
+const league={};
+for(const key of ['points','rebounds','assists','threes']){
+ const vals=Object.values(allowed).flat().map(x=>x[key]);
+ league[key]=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:1;
+}
 for(const p of projections){
  const opponent=p.team===g.home?g.away:g.home;
  const sample=allowed[opponent]||[];
- const ratio=sample.length?sample.reduce((a,b)=>a+b,0)/sample.length/baseline:1;
- const shrink=Math.min(.25,sample.length/(sample.length+10)*.25);
- p.opponent=opponent;
- p.adjusted=p.expected*(1+Math.max(-.2,Math.min(.2,ratio-1))*shrink);
- p.defenseGames=sample.length;p.defenseDelta=Math.max(-.2,Math.min(.2,ratio-1))*shrink;
+ const avg=sample.length?sample.reduce((a,b)=>a+b[p.key],0)/sample.length:league[p.key];
+ const ratio=league[p.key]?avg/league[p.key]:1;
+ const shrink=sample.length/(sample.length+12);
+ p.opponent=opponent;p.defenseGames=sample.length;
+ p.defenseDelta=Math.max(-.2,Math.min(.2,ratio-1))*shrink;
+ p.adjusted=p.expected*(1+p.defenseDelta);
+ p.matchupReason=opponent+' allows '+avg.toFixed(1)+' team '+p.label+'/game versus league '+league[p.key].toFixed(1)+' across '+sample.length+' games.';
 }
 // Injury-aware opportunity adjustment: conservative, explicitly heuristic and bounded.
 const unavailable=new Set((injuryData?.injuries||[]).filter(x=>/OUT|DOUBTFUL|SUSPENDED|INACTIVE/.test(String(x.status||'').toUpperCase())).map(x=>String(x.player||'').toLowerCase()));
@@ -89,7 +94,7 @@ $('buildsgp').onclick=()=>{
  const american=combined===null?null:(combined>=2?Math.round((combined-1)*100):-Math.round(100/(combined-1)));
  const payout=combined===null?'':('<p class="muted">Illustrative payout using manually entered prices: <strong>'+(american>0?'+':'')+american+'</strong> · $10 stake returns $'+(combined*10).toFixed(2)+' including stake. Not a sportsbook quote or calibrated probability.</p>');
  const warning=$('injurycheck').value==='verified'?'User confirms a manual injury and lineup check; the app does not verify starters.':'Starting lineups have not been manually verified.';
- $('sgp').innerHTML=legs.length?'<p class="warn">'+warning+'</p>'+payout+'<p class="muted">Candidate research only. Maximum three legs per team and two per market; these are exposure limits, not a measured correlation model. Shared pace, injuries, blowout risk and correlated outcomes may cause multiple legs to fail together. Not a guaranteed valid sportsbook combination.</p>'+legs.map((p,i)=>'<div class="player"><strong>Leg '+(i+1)+': '+esc(p.name)+' '+(p.selected.odds!==undefined?'Over '+p.selected.line:p.selected.line+'+')+' '+esc(p.label)+'</strong><p class="muted">Recent '+p.selected.hits+'/'+p.total+(p.selected.odds!==undefined?' · entered odds '+(p.selected.odds>0?'+':'')+p.selected.odds:'')+' · adjusted '+p.adjusted.toFixed(1)+' · injury '+esc(injuryFor(p).status)+' · opponent sample '+p.defenseGames+' games · projection cushion '+Math.round((p.adjusted/(p.selected.line+(p.selected.odds!==undefined?.5:0))-1)*100)+'% · absent teammates '+esc(p.absentTeammates.join(', ')||'none identified')+'</p></div>').join(''):'<p class="warn">No qualified legs: requires five recent games, at least 4/5 hits, three opponent samples, a favorable defensive matchup, meaningful market thresholds, and a 15% projection cushion. No picks forced.</p>';
+ $('sgp').innerHTML=legs.length?'<p class="warn">'+warning+'</p>'+payout+'<p class="muted">Candidate research only. Maximum three legs per team and two per market; these are exposure limits, not a measured correlation model. Shared pace, injuries, blowout risk and correlated outcomes may cause multiple legs to fail together. Not a guaranteed valid sportsbook combination.</p>'+legs.map((p,i)=>'<div class="player"><strong>Leg '+(i+1)+': '+esc(p.name)+' '+(p.selected.odds!==undefined?'Over '+p.selected.line:p.selected.line+'+')+' '+esc(p.label)+'</strong><p class="muted">Recent '+p.selected.hits+'/'+p.total+(p.selected.odds!==undefined?' · entered odds '+(p.selected.odds>0?'+':'')+p.selected.odds:'')+' · adjusted '+p.adjusted.toFixed(1)+' · injury '+esc(injuryFor(p).status)+' · '+esc(p.matchupReason)+' · projection cushion '+Math.round((p.adjusted/(p.selected.line+(p.selected.odds!==undefined?.5:0))-1)*100)+'% · absent teammates '+esc(p.absentTeammates.join(', ')||'none identified')+'</p></div>').join(''):'<p class="warn">No qualified legs: requires five recent games, at least 4/5 hits, three opponent samples, a favorable defensive matchup, meaningful market thresholds, and a 15% projection cushion. No picks forced.</p>';
 };
 async function audit(){
  try{const r=await fetch('./data/nba_projection_tracker.json',{cache:'no-store'});if(!r.ok)throw Error('Tracking feed not published');const d=await r.json();const snapshots=d.snapshots||[];const ps=snapshots.flatMap(s=>s.projections||[]);const graded=ps.filter(p=>p.result==='within_20pct'||p.result==='outside_20pct');const dnps=ps.filter(p=>p.result==='dnp');const hits=graded.filter(p=>p.result==='within_20pct');$('audit').innerHTML='<p>Locked games: <strong>'+snapshots.length+'</strong> · projections: <strong>'+ps.length+'</strong> · graded: <strong>'+graded.length+'</strong> · DNP: <strong>'+dnps.length+'</strong></p><p class="muted">Within tolerance: '+hits.length+'/'+graded.length+' (max of 2 units or 20% of projection). This is prediction accuracy, not betting win rate. Snapshots must be locked before tipoff.</p>'}catch(e){$('audit').textContent='Tracking not verified yet: '+e.message}
