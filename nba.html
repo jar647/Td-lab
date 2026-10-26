@@ -12,7 +12,7 @@ const tip=new Date(g.date).getTime();
 if(!Number.isFinite(tip)){el.textContent='Game date unavailable.';return}
 const history=games.filter(h=>new Date(h.date).getTime()<tip&&h.status==='STATUS_FINAL').sort((a,b)=>new Date(b.date)-new Date(a.date));
 const byPlayer=new Map();
-for(const h of history)for(const p of h.players||[]){if(!p.id||p.didNotPlay||![g.home,g.away].includes(p.team))continue;const m=minutes(p.stats?.MIN);if(m===null||m<5)continue;const key=String(p.id);if(!byPlayer.has(key))byPlayer.set(key,{name:p.name,team:p.team,rows:[]});const o=byPlayer.get(key);if(o.rows.length<10)o.rows.push({date:h.date,minutes:m,points:stat(p,['PTS']),rebounds:stat(p,['REB']),assists:stat(p,['AST']),threes:stat(p,['3PM','3PTM'])})}
+for(const h of history)for(const p of h.players||[]){if(!p.id||p.didNotPlay||![g.home,g.away].includes(p.team))continue;const m=minutes(p.stats?.MIN);if(m===null||m<5)continue;const key=String(p.id);if(!byPlayer.has(key))byPlayer.set(key,{name:p.name,team:p.team,rows:[]});const o=byPlayer.get(key);if(o.rows.length<10)o.rows.push({date:h.date,minutes:m,points:stat(p,['PTS']),rebounds:stat(p,['REB']),assists:stat(p,['AST']),threes:stat(p,['3PM','3PTM','3PT'])})}
 const projections=[];
 for(const p of byPlayer.values()){if(p.rows.length<3)continue;const recent=p.rows.slice(0,5);const avg=k=>recent.reduce((a,r)=>a+(r[k]||0),0)/recent.length;const mins=avg('minutes');if(mins<15)continue;
 for(const [key,label,steps] of [['points','points',[10,15,20,25,30,35]],['rebounds','rebounds',[4,6,8,10,12,15]],['assists','assists',[3,5,7,9,11]],['threes','made threes',[1,2,3,4,5]]]){
