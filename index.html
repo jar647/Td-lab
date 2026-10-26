@@ -603,33 +603,49 @@ function renderGameSGP(){
  const summary=document.createElement('p');summary.className='status';summary.textContent=chosen.length+' model-selected legs · '+(chosen.length<5?'Not forcing extra selections. ':'Five candidates found. ')+(candidates.length-eligible.length)+' candidates filtered for weak projection, usage, or matchup. Recent hit rate influences ranking but is not a requirement. Verify sportsbook availability and prices before betting.';panel.appendChild(summary);
  if(!chosen.length){const empty=document.createElement('p');empty.textContent='No legs meet the current quality gate. Check other matchups or wait for more verified game logs.';panel.appendChild(empty);return;}
  // New one-tap recommendation card. Keep the detailed Vegas-line workflow below.
- // Game-first scouting: derive matchup opportunities from the selected game's
- // player-level defensive allowances, usage and scenario projections.
+ // Turn matchup research into decisions, not a wall of ratios.
  const scoutCard=document.createElement('section');
  scoutCard.style.cssText='padding:16px;margin:14px 0;border:1px solid #527d98;border-radius:12px;background:rgba(33,69,91,.2)';
- const scoutTitle=document.createElement('h3');scoutTitle.textContent='🔎 FULL-GAME MATCHUP SCOUT';scoutCard.appendChild(scoutTitle);
- const scoutIntro=document.createElement('p');scoutIntro.className='muted';
- scoutIntro.textContent='Game-first research from available player usage, opponent allowances and model game script. These are matchup signals, not verified betting edges.';
- scoutCard.appendChild(scoutIntro);
- const scoutSummary=document.createElement('p');
- scoutSummary.textContent=scriptAvailable
-  ?'Model game outlook: '+game.away+' at '+game.home+' · projected total '+modelTotal.toFixed(1)+' · home margin '+modelMargin.toFixed(1)+'. '+(modelTotal>=47?'Higher-scoring script: investigate passing volume and receiving roles.':modelTotal<=41?'Lower-scoring script: investigate rushing workload, pace and scoring constraints.':'Balanced script: assess both rushing and passing opportunities.')
-  :'No verified game-level margin/total projection available. Matchup conclusions are limited to player-level data.';
- scoutCard.appendChild(scoutSummary);
- const scoutGroups=[{key:'RUSH',name:'Ground game',angle:'Opponent rushing allowance and projected workload'},{key:'REC',name:'Receiving yards',angle:'Opponent receiving allowance and target opportunity'},{key:'CATCH',name:'Receptions',angle:'Volume and catch opportunity'},{key:'PASS',name:'Passing game',angle:'Opponent passing allowance and quarterback volume'}];
- for(const group of scoutGroups){
-  const relevant=candidates.filter(x=>x.d.key===group.key&&Number.isFinite(x.matchupRatio)&&Number.isFinite(x.usageRatio))
-   .sort((a,b)=>(b.matchupRatio*b.usageRatio)-(a.matchupRatio*a.usageRatio)).slice(0,3);
-  const line=document.createElement('div');line.style.cssText='margin:10px 0;padding:10px;border-top:1px solid #3d6274';
-  const heading=document.createElement('strong');heading.textContent=group.name+' · '+group.angle;line.appendChild(heading);
-  const body=document.createElement('p');body.className='muted';body.style.margin='5px 0';
-  body.textContent=relevant.length?relevant.map(x=>x.r.player+': matchup '+x.matchupRatio.toFixed(2)+'×, usage '+x.usageRatio.toFixed(2)+'×'+(x.returnWarning?' (teammate-return uncertainty)':'')).join(' · '):'Insufficient player-level data to establish a matchup advantage.';
-  line.appendChild(body);scoutCard.appendChild(line);
+ const title=document.createElement('h3');title.textContent='🧠 GAME ANALYSIS · WHAT MATTERS';scoutCard.appendChild(title);
+ const outlook=document.createElement('p');
+ outlook.textContent=scriptAvailable
+  ?game.away+' at '+game.home+' | Projected total '+modelTotal.toFixed(1)+', home margin '+modelMargin.toFixed(1)+'. '+(modelTotal>=47?'Higher-scoring environment: receiving volume deserves attention.':modelTotal<=41?'Lower-scoring environment: examine rushing workload and reduced passing opportunities.':'Competitive, balanced projection: examine both rushing and passing, without assuming either dominates.')
+  :'Game-level projection unavailable; conclusions rely on limited player-level evidence.';
+ scoutCard.appendChild(outlook);
+ const markets=[{key:'RUSH',label:'Rushing opportunity'},{key:'REC',label:'Receiving yards opportunity'},{key:'CATCH',label:'Receptions opportunity'},{key:'PASS',label:'Passing opportunity'}];
+ const explain=x=>{
+  const positives=[],risks=[];
+  if(x.matchupRatio>=1.12)positives.push('opponent allowance suggests a favorable matchup');
+  else if(x.matchupRatio<.9)risks.push('opponent allowance suggests a tougher matchup');
+  if(x.usageRatio>=1.05)positives.push('recent opportunity is rising');
+  else if(x.usageRatio<.9)risks.push('recent opportunity has declined');
+  if(x.projectionRatio>=1.3)positives.push('projection clears the proposed alternate threshold');
+  else if(x.projectionRatio<1.15)risks.push('projection cushion is narrow');
+  if(x.returnWarning)risks.push('teammate-return role uncertainty');
+  if(x.logCount<5)risks.push('small recent-game sample');
+  return {positives,risks};
+ };
+ for(const market of markets){
+  const ranked=candidates.filter(x=>x.d.key===market.key).sort((x,y)=>analystOpportunity(y)-analystOpportunity(x));
+  const top=ranked[0];const card=document.createElement('div');card.style.cssText='padding:12px 0;border-top:1px solid #416476';
+  const h=document.createElement('strong');h.textContent=market.label;card.appendChild(h);
+  const p=document.createElement('p');p.style.margin='6px 0';
+  if(!top)p.textContent='No supported opportunity: insufficient verified player data.';
+  else{
+   const e=explain(top),risk=e.risks.length?e.risks.join('; '):'lineup and sportsbook price remain unverified';
+   p.textContent=top.r.player+' · Investigate '+top.line+'+ '+top.d.unit+'. Why: '+(e.positives.join('; ')||'player-level evidence is mixed')+'. Challenge: '+risk+'. Decision: '+(e.risks.length>=2?'HOLD for further verification.':'REVIEW actual book line and odds before considering a bet.');
+  }
+  card.appendChild(p);scoutCard.appendChild(card);
  }
- const scoutFooter=document.createElement('p');scoutFooter.className='muted';scoutFooter.textContent='Scout limitations: opponent allowance is not a full defensive efficiency model; offensive-line health, coverage assignments, live injury news, and sportsbook prices are not independently verified here.';scoutCard.appendChild(scoutFooter);
- panel.appendChild(scoutCard);
+ const footer=document.createElement('p');footer.className='muted';
+ footer.textContent='These are scouting leads, NOT approved wagers. Extreme opponent-allowance ratios are not treated as proof of an edge. Actual odds, injury status, role changes and line availability must be verified.';
+ scoutCard.appendChild(footer);panel.appendChild(scoutCard);
+ function analystOpportunity(x){
+  const matchup=Math.max(.75,Math.min(1.25,x.matchupRatio));
+  return x.robustScore*matchup-(x.returnWarning?.12:0)-(x.usageRatio<.9?.08:0)-(x.logCount<5?.05:0);
+ }
  const autoCard=document.createElement('section');autoCard.style.cssText='padding:16px;margin:14px 0;border:1px solid #47786c;border-radius:12px;background:rgba(24,80,69,.13)';
- const autoHeading=document.createElement('h3');autoHeading.textContent='⚡ GAME-SCOUTED SGP · READY TO REVIEW';autoHeading.style.margin='0 0 7px';autoCard.appendChild(autoHeading);
+ const autoHeading=document.createElement('h3');autoHeading.textContent='🎟️ GAME-SCOUTED TICKET · VERIFY BEFORE BETTING';autoHeading.style.margin='0 0 7px';autoCard.appendChild(autoHeading);
  const autoIntro=document.createElement('p');autoIntro.className='muted';autoIntro.textContent='Built after matchup scouting, weighing usage, defensive allowance, game scripts, uncertainty and ticket interactions. Same-team players are evaluated, not automatically banned. Suggested targets are NOT verified sportsbook lines or priced bets.';autoCard.appendChild(autoIntro);
  // Optional game markets. A projection alone is never a bet: require entered
  // sportsbook line AND valid odds, with conservative discrepancy gates.
@@ -696,7 +712,7 @@ function renderGameSGP(){
   return score;
  }
  function selectAutoLegs(n){
-  const pool=eligible.filter(x=>analystScore(x)>=.49).sort((a,b)=>analystScore(b)-analystScore(a)).slice(0,22);
+  const pool=eligible.filter(x=>analystScore(x)>=.49).sort((a,b)=>(analystScore(b)+analystOpportunity(b)*.25)-(analystScore(a)+analystOpportunity(a)*.25)).slice(0,22);
   pool.push(...qualifiedGameLegs());
   let beams=[{picks:[],used:new Set(),score:0}],best=beams[0];
   for(let depth=0;depth<n;depth++){
