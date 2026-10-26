@@ -606,6 +606,45 @@ function renderGameSGP(){
  const autoCard=document.createElement('section');autoCard.style.cssText='padding:16px;margin:14px 0;border:1px solid #47786c;border-radius:12px;background:rgba(24,80,69,.13)';
  const autoHeading=document.createElement('h3');autoHeading.textContent='⚡ AUTO SGP · READY TO REVIEW';autoHeading.style.margin='0 0 7px';autoCard.appendChild(autoHeading);
  const autoIntro=document.createElement('p');autoIntro.className='muted';autoIntro.textContent='One-tap model shortlist using projection, usage, opponent allowance and game-script context. No Vegas inputs needed. Suggested targets are NOT verified Hard Rock lines or priced bets.';autoCard.appendChild(autoIntro);
+ // Optional game markets. A projection alone is never a bet: require entered
+ // sportsbook line AND valid odds, with conservative discrepancy gates.
+ const marketBox=document.createElement('div');marketBox.style.cssText='margin:12px 0;padding:12px;border:1px solid #36576a;border-radius:10px';
+ const marketTitle=document.createElement('strong');marketTitle.textContent='🏈 OPTIONAL GAME LEGS · ATS / TOTAL / ML';marketBox.appendChild(marketTitle);
+ const marketHelp=document.createElement('p');marketHelp.className='muted';marketHelp.textContent='Game legs compete with player props only when a current line and price support them. Moneyline stays research-only until calibrated win probabilities exist. No forced game leg.';marketBox.appendChild(marketHelp);
+ const marketToggle=document.createElement('label');marketToggle.style.cssText='display:flex;align-items:center;gap:8px;margin:8px 0';
+ const marketCheck=document.createElement('input');marketCheck.type='checkbox';marketCheck.checked=true;marketToggle.append(marketCheck,document.createTextNode('Consider qualified game picks'));marketBox.appendChild(marketToggle);
+ const marketInputs=document.createElement('div');marketInputs.style.cssText='display:flex;gap:8px;flex-wrap:wrap';
+ const marketFields={};
+ for(const [key,placeholder] of [['spread','Home spread, e.g. -3.5'],['spreadOdds','ATS odds, e.g. -110'],['total','Game total, e.g. 46.5'],['totalOdds','Total odds, e.g. -110']]){
+  const input=document.createElement('input');input.type='number';input.step=key.endsWith('Odds')?'1':'.5';input.placeholder=placeholder;input.setAttribute('aria-label',placeholder);input.style.cssText='width:165px;max-width:100%;padding:8px';marketInputs.appendChild(input);marketFields[key]=input;
+ }
+ const existing=propVaultMarketLines[selected]||{};
+ marketFields.spread.value=existing.spread??'';marketFields.total.value=existing.total??'';
+ marketBox.appendChild(marketInputs);
+ const marketStatus=document.createElement('p');marketStatus.className='muted';marketBox.appendChild(marketStatus);
+ autoCard.appendChild(marketBox);
+ const validPrice=v=>v.trim()!==''&&Number.isFinite(Number(v))&&(Number(v)<=-100||Number(v)>=100)&&Number(v)>-200;
+ function qualifiedGameLegs(){
+  const result=[];
+  if(!marketCheck.checked||!scriptAvailable)return result;
+  const spreadRaw=marketFields.spread.value,totalRaw=marketFields.total.value;
+  const spread=Number(spreadRaw),totalLine=Number(totalRaw);
+  const make=(key,name,edge,minimum,price,conflict)=>{
+   if(!validPrice(price)||Math.abs(edge)<minimum)return;
+   // Conservative uncertainty haircut, not a calibrated probability or EV estimate.
+   const quality=Math.min(.76,.52+Math.abs(edge)*.025);
+   result.push({gameLeg:true,key,name,quality,robustScore:quality,edge,conflict,price:Number(price),d:{key},r:{player:name},line:0});
+  };
+  if(spreadRaw!==''&&Number.isFinite(spread)){
+   const edge=modelMargin+spread;
+   make('ATS',edge>0?game.home+' '+(spread>0?'+':'')+spread:game.away+' '+(-spread>0?'+':'')+(-spread),edge,3.5,marketFields.spreadOdds.value,'spread');
+  }
+  if(totalRaw!==''&&Number.isFinite(totalLine)&&totalLine>0){
+   const edge=modelTotal-totalLine;
+   make('TOTAL',(edge>0?'OVER ':'UNDER ')+totalLine,edge,4.5,marketFields.totalOdds.value,'total');
+  }
+  return result;
+ }
  const controls=document.createElement('div');controls.style.cssText='display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0';
  const countLabel=document.createElement('label');countLabel.textContent='Number of legs';countLabel.htmlFor='autoSgpLegCount';
  const countSelect=document.createElement('select');countSelect.id='autoSgpLegCount';countSelect.style.cssText='padding:9px;border-radius:8px';
@@ -617,13 +656,25 @@ function renderGameSGP(){
  let displayed=[];
  function selectAutoLegs(n){
   const pool=eligible.slice(),picks=[],used=new Set();
+  // Compare eligible game markets against player props, but cap game legs
+  // at one because spread/total correlation is not yet jointly calibrated.
+  pool.push(...qualifiedGameLegs());
   while(picks.length<n&&pool.length){
-   pool.sort((a,b)=>incrementalScore(b,picks)-incrementalScore(a,picks));
-   const x=pool.shift(),id=String(x.r.player_id||x.r.player),team=teamOf(x);
+   pool.sort((a,b)=>(b.gameLeg?b.quality:incrementalScore(b,picks.filter(y=>!y.gameLeg)))-(a.gameLeg?a.quality:incrementalScore(a,picks.filter(y=>!y.gameLeg))));
+   const x=pool.shift();
+   if(x.gameLeg){
+    if(picks.some(y=>y.gameLeg))continue;
+    // Do not attach a total under to an overtly pass-heavy group, or
+    // a total over to a rush-heavy low-scoring script.
+    const passingCount=picks.filter(y=>!y.gameLeg&&passing(y)).length;
+    if(x.key==='TOTAL'&&((x.edge<0&&passingCount>=2&&modelTotal>=47)||(x.edge>0&&modelTotal<=41)))continue;
+    picks.push(x);continue;
+   }
+   const id=String(x.r.player_id||x.r.player),team=teamOf(x);
    if(used.has(id))continue;
-   const receivers=picks.filter(y=>team&&teamOf(y)===team&&['REC','CATCH'].includes(y.d.key)).length;
+   const receivers=picks.filter(y=>!y.gameLeg&&team&&teamOf(y)===team&&['REC','CATCH'].includes(y.d.key)).length;
    if(['REC','CATCH'].includes(x.d.key)&&receivers>=2)continue;
-   if(incrementalScore(x,picks)<.49)continue;
+   if(incrementalScore(x,picks.filter(y=>!y.gameLeg))<.49)continue;
    picks.push(x);used.add(id);
   }
   return picks;
@@ -634,18 +685,18 @@ function renderGameSGP(){
   autoList.replaceChildren();
   for(const x of displayed){
    const item=document.createElement('li');item.style.margin='0 0 12px';
-   const headline=document.createElement('strong');headline.textContent=x.r.player+' · '+x.line+'+ '+x.d.unit;item.appendChild(headline);
+   const headline=document.createElement('strong');headline.textContent=x.gameLeg?x.name+' · '+(x.price>0?'+':'')+x.price:x.r.player+' · '+x.line+'+ '+x.d.unit;item.appendChild(headline);
    const detail=document.createElement('div');detail.className='muted';detail.style.fontSize='13px';
-   detail.textContent='Projects '+Math.round(x.projectionRatio*x.line)+' · '+(x.usageRatio>=1?'steady/rising usage':'usage below baseline')+' · '+(x.matchupRatio>=1?'favorable matchup':'matchup caution')+(x.returnWarning?' · teammate return risk':'')+'.';
+   detail.textContent=x.gameLeg?'Model vs market discrepancy: '+Math.abs(x.edge).toFixed(1)+' points · price entered by you, not live-verified.':('Projects '+Math.round(x.projectionRatio*x.line)+' · '+(x.usageRatio>=1?'steady/rising usage':'usage below baseline')+' · '+(x.matchupRatio>=1?'favorable matchup':'matchup caution')+(x.returnWarning?' · teammate return risk':'')+'.');
    item.appendChild(detail);autoList.appendChild(item);
   }
   autoNotice.textContent=displayed.length<requested?'Only '+displayed.length+' of '+requested+' legs passed current selection standards. No filler legs added. ':'Showing '+displayed.length+' best-ranked complementary legs. ';
-  autoNotice.textContent+='Research targets only: verify current injuries, market availability and actual odds. Skip prices worse than -200. Correlation and value are not validated.';
+  autoNotice.textContent+='Research targets only. Game lines and prices are user-entered, not live-verified. ML excluded pending calibrated probabilities. Verify injuries, prices and SGP eligibility; joint value is not validated.';marketStatus.textContent=qualifiedGameLegs().length?'Qualified game-market candidates: '+qualifiedGameLegs().map(x=>x.name).join(' / '):'No qualified ATS/total candidates. Enter current lines and odds, or keep a player-only ticket. ML requires validated win probabilities.';
   autoCopy.disabled=!displayed.length;
  }
- countSelect.addEventListener('change',refreshAuto);refreshAuto();
+ countSelect.addEventListener('change',refreshAuto);marketCheck.addEventListener('change',refreshAuto);for(const field of Object.values(marketFields))field.addEventListener('input',refreshAuto);refreshAuto();
  autoCopy.addEventListener('click',async()=>{
-  const t='THE PROP VAULT · '+displayed.length+'-LEG AUTO SGP · '+label+'\\n'+displayed.map((x,i)=>(i+1)+'. '+x.r.player+' '+x.line+'+ '+x.d.unit).join('\\n');
+  const t='THE PROP VAULT · '+displayed.length+'-LEG AUTO SGP · '+label+'\\n'+displayed.map((x,i)=>(i+1)+'. '+(x.gameLeg?x.name+' ('+(x.price>0?'+':'')+x.price+')':x.r.player+' '+x.line+'+ '+x.d.unit)).join('\\n');
   try{await navigator.clipboard.writeText(t);autoCopy.textContent='✅ COPIED';}
   catch(e){const area=document.createElement('textarea');area.value=t;autoCard.appendChild(area);area.select();}
  });
