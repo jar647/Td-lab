@@ -8,7 +8,7 @@ def get(url):
  with urllib.request.urlopen(req,timeout=25) as r:return json.load(r)
 today=datetime.datetime.now(datetime.timezone.utc).date()
 games=[]
-for delta in range(-2,4):
+for delta in range(-14,4):
  date=(today+datetime.timedelta(days=delta)).strftime("%Y%m%d")
  try: board=get("https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates="+date)
  except Exception as e: print("scoreboard",date,str(e));continue
@@ -19,6 +19,7 @@ for delta in range(-2,4):
   status=event.get("status",{}).get("type",{}).get("name","")
   game={"id":event["id"],"date":event.get("date"),"status":status,"home":next((x["team"]["displayName"] for x in teams if x.get("homeAway")=="home"),""),"away":next((x["team"]["displayName"] for x in teams if x.get("homeAway")=="away"),""),"players":[]}
   try:
+   if status not in ("STATUS_FINAL","STATUS_IN_PROGRESS"): raise ValueError("pregame box score unavailable")
    detail=get("https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event="+event["id"])
    for team in detail.get("boxscore",{}).get("players",[]):
     teamname=team.get("team",{}).get("displayName","")
@@ -27,6 +28,7 @@ for delta in range(-2,4):
      for athlete in group.get("athletes",[]):
       stats=dict(zip(labels,athlete.get("stats",[])))
       game["players"].append({"id":athlete.get("athlete",{}).get("id"),"name":athlete.get("athlete",{}).get("displayName"),"team":teamname,"stats":stats,"starter":athlete.get("starter",False),"didNotPlay":athlete.get("didNotPlay",False)})
+  except ValueError:pass
   except Exception as e:print("summary",event["id"],str(e))
   games.append(game)
 OUT.parent.mkdir(parents=True,exist_ok=True)
