@@ -243,6 +243,15 @@ function setPropCategory(category,button){
  document.querySelectorAll('#propFilters button').forEach(b=>b.classList.toggle('active',b===button));
  renderPropMatchups();
 }
+function matchupGrade(score){
+ const n=Number(score);
+ if(n>=90)return {label:'🔥 ELITE MATCHUP',color:'#ff9e57'};
+ if(n>=80)return {label:'🟢 PRIME MATCHUP',color:'#52e99e'};
+ if(n>=70)return {label:'🟢 STRONG MATCHUP',color:'#70e6b0'};
+ if(n>=60)return {label:'🟡 FAVORABLE MATCHUP',color:'#f0cf67'};
+ if(n>=50)return {label:'⚪ NEUTRAL MATCHUP',color:'#bfc9c4'};
+ return {label:'🔴 UNFAVORABLE MATCHUP',color:'#ed8c83'};
+}
 function renderPropMatchups(){
  const el=document.getElementById('propRankings');if(!el)return;
  const specs={
@@ -331,7 +340,7 @@ function renderPropMatchups(){
  };
  const top=document.getElementById('propTopDawg');
  if(top){
-  const winner=ranked.find(x=>x.label==='🔥 PRIME MATCHUP');
+  const winner=ranked.find(x=>x.score>=80);
   const categoryNames={PASS:'PASSING YARDS',RUSH:'RUSHING YARDS',REC:'RECEIVING YARDS',CATCH:'RECEPTIONS'};
   top.innerHTML=winner?'<div style="border:1px solid #00c97a;background:#112b20;border-radius:13px;padding:14px"><div style="font-size:12px;font-weight:900;color:#6dffc2">🏆 '+categoryNames[propCategory]+' · TOP DAWG OF THE WEEK</div><div class="row" style="margin-top:8px"><div><h3 style="font-size:20px;color:white;margin:0">'+escapeHTML(winner.r.player)+'</h3><div class="muted">'+escapeHTML(winner.r.pos)+' · '+escapeHTML(winner.r.team)+' vs '+escapeHTML(winner.r.opp)+'</div></div><b class="score">'+winner.score+'/100</b></div><div style="font-weight:850;color:#00e28a;margin:9px 0">🔥 PRIME MATCHUP</div>'+propLineUI(winner)+'<div class="statsline">Season avg: '+escapeHTML(winner.r[cfg.player])+' · Defense allows: '+escapeHTML(winner.r[cfg.def])+' '+cfg.unit+'/game</div><details style="margin-top:10px"><summary class="muted">More stats</summary><div class="statsline">Player opportunities: '+escapeHTML(winner.r[cfg.usage])+'/game · Defense opportunities allowed: '+escapeHTML(winner.r[cfg.volume])+'/game</div><div class="muted">'+why(winner)+'</div></details></div>':'<div class="empty">🏆 No PRIME MATCHUP qualifies for '+categoryNames[propCategory]+' this week. No Top Dawg awarded.</div>';
  }
