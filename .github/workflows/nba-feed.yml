@@ -1,5 +1,9 @@
 name: NBA data refresh
 on:
+  push:
+    paths:
+      - 'nba_feed.py'
+      - '.github/workflows/nba-feed.yml'
   workflow_dispatch:
   schedule:
     - cron: '15 */3 * * *'
