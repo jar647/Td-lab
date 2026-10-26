@@ -46,6 +46,7 @@ el.innerHTML='<p class="muted">Historical games in feed: '+history.length+'. Pro
 $('buildsgp').onclick=()=>{
  const i=$('games').value;if(i===''){ $('sgp').textContent='Select a game first.';return}
  const g=games[Number(i)];
+ if(!currentProjections.length){$('sgp').textContent='Run Analyze available records first to calculate this matchup.';return}
  if(g.status!=='STATUS_SCHEDULED'){$('sgp').textContent='Select a scheduled pregame matchup.';return}
  const legs=[];const used=new Set();const usedTeams={};
  const ranked=[...currentProjections].filter(p=>p.total>=3&&p.hits/p.total>=.6&&p.defenseGames>=2).sort((a,b)=>b.score-a.score);
