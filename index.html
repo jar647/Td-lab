@@ -606,19 +606,49 @@ function renderGameSGP(){
  const autoCard=document.createElement('section');autoCard.style.cssText='padding:16px;margin:14px 0;border:1px solid #47786c;border-radius:12px;background:rgba(24,80,69,.13)';
  const autoHeading=document.createElement('h3');autoHeading.textContent='⚡ AUTO SGP · READY TO REVIEW';autoHeading.style.margin='0 0 7px';autoCard.appendChild(autoHeading);
  const autoIntro=document.createElement('p');autoIntro.className='muted';autoIntro.textContent='One-tap model shortlist using projection, usage, opponent allowance and game-script context. No Vegas inputs needed. Suggested targets are NOT verified Hard Rock lines or priced bets.';autoCard.appendChild(autoIntro);
- const autoList=document.createElement('ol');autoList.style.cssText='padding-left:22px;margin:10px 0';
- for(const x of chosen){
-  const item=document.createElement('li');item.style.margin='0 0 12px';
-  const headline=document.createElement('strong');headline.textContent=x.r.player+' · '+x.line+'+ '+x.d.unit;item.appendChild(headline);
-  const detail=document.createElement('div');detail.className='muted';detail.style.fontSize='13px';
-  const projection=Math.round(x.projectionRatio*x.line);
-  const opportunity=x.usageRatio>=1?'steady or rising usage':'usage below baseline';
-  const matchup=x.matchupRatio>=1?'favorable opponent allowance':'tougher opponent allowance';
-  detail.textContent='Projects '+projection+' · '+opportunity+' · '+matchup+(x.returnWarning?' · teammate return risk':'')+'.';item.appendChild(detail);autoList.appendChild(item);
+ const controls=document.createElement('div');controls.style.cssText='display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0';
+ const countLabel=document.createElement('label');countLabel.textContent='Number of legs';countLabel.htmlFor='autoSgpLegCount';
+ const countSelect=document.createElement('select');countSelect.id='autoSgpLegCount';countSelect.style.cssText='padding:9px;border-radius:8px';
+ for(const n of [2,3,4,5]){const opt=document.createElement('option');opt.value=String(n);opt.textContent=n+' legs';if(n===5)opt.selected=true;countSelect.appendChild(opt);}
+ controls.append(countLabel,countSelect);autoCard.appendChild(controls);
+ const autoList=document.createElement('ol');autoList.style.cssText='padding-left:22px;margin:10px 0';autoCard.appendChild(autoList);
+ const autoNotice=document.createElement('p');autoNotice.className='muted';autoCard.appendChild(autoNotice);
+ const autoCopy=document.createElement('button');autoCopy.type='button';autoCopy.className='chip';autoCopy.textContent='📋 COPY AUTO SGP';autoCard.appendChild(autoCopy);
+ let displayed=[];
+ function selectAutoLegs(n){
+  const pool=eligible.slice(),picks=[],used=new Set();
+  while(picks.length<n&&pool.length){
+   pool.sort((a,b)=>incrementalScore(b,picks)-incrementalScore(a,picks));
+   const x=pool.shift(),id=String(x.r.player_id||x.r.player),team=teamOf(x);
+   if(used.has(id))continue;
+   const receivers=picks.filter(y=>team&&teamOf(y)===team&&['REC','CATCH'].includes(y.d.key)).length;
+   if(['REC','CATCH'].includes(x.d.key)&&receivers>=2)continue;
+   if(incrementalScore(x,picks)<.49)continue;
+   picks.push(x);used.add(id);
+  }
+  return picks;
  }
- autoCard.appendChild(autoList);
- const autoNotice=document.createElement('p');autoNotice.className='muted';autoNotice.textContent='Research-only ticket. Check current starters, injury reports, market availability and actual prices. Avoid legs worse than -200; no joint hit probability or verified SGP value is claimed.';autoCard.appendChild(autoNotice);
- const autoCopy=document.createElement('button');autoCopy.type='button';autoCopy.className='chip';autoCopy.textContent='📋 COPY AUTO SGP';autoCopy.addEventListener('click',async()=>{const t='THE PROP VAULT · AUTO SGP · '+label+'\\n'+chosen.map((x,i)=>(i+1)+'. '+x.r.player+' '+x.line+'+ '+x.d.unit).join('\\n');try{await navigator.clipboard.writeText(t);autoCopy.textContent='✅ COPIED';}catch(e){const area=document.createElement('textarea');area.value=t;autoCard.appendChild(area);area.select();}});autoCard.appendChild(autoCopy);
+ function refreshAuto(){
+  const requested=Number(countSelect.value);
+  displayed=selectAutoLegs(requested);
+  autoList.replaceChildren();
+  for(const x of displayed){
+   const item=document.createElement('li');item.style.margin='0 0 12px';
+   const headline=document.createElement('strong');headline.textContent=x.r.player+' · '+x.line+'+ '+x.d.unit;item.appendChild(headline);
+   const detail=document.createElement('div');detail.className='muted';detail.style.fontSize='13px';
+   detail.textContent='Projects '+Math.round(x.projectionRatio*x.line)+' · '+(x.usageRatio>=1?'steady/rising usage':'usage below baseline')+' · '+(x.matchupRatio>=1?'favorable matchup':'matchup caution')+(x.returnWarning?' · teammate return risk':'')+'.';
+   item.appendChild(detail);autoList.appendChild(item);
+  }
+  autoNotice.textContent=displayed.length<requested?'Only '+displayed.length+' of '+requested+' legs passed current selection standards. No filler legs added. ':'Showing '+displayed.length+' best-ranked complementary legs. ';
+  autoNotice.textContent+='Research targets only: verify current injuries, market availability and actual odds. Skip prices worse than -200. Correlation and value are not validated.';
+  autoCopy.disabled=!displayed.length;
+ }
+ countSelect.addEventListener('change',refreshAuto);refreshAuto();
+ autoCopy.addEventListener('click',async()=>{
+  const t='THE PROP VAULT · '+displayed.length+'-LEG AUTO SGP · '+label+'\\n'+displayed.map((x,i)=>(i+1)+'. '+x.r.player+' '+x.line+'+ '+x.d.unit).join('\\n');
+  try{await navigator.clipboard.writeText(t);autoCopy.textContent='✅ COPIED';}
+  catch(e){const area=document.createElement('textarea');area.value=t;autoCard.appendChild(area);area.select();}
+ });
  panel.appendChild(autoCard);
  const detailHeading=document.createElement('h3');detailHeading.textContent='🔬 REFINE PICKS · VEGAS LINE TO ALT';panel.appendChild(detailHeading);
  const list=document.createElement('ol');list.style.cssText='padding-left:24px;margin:14px 0';
