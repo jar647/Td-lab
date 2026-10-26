@@ -8,6 +8,7 @@ def get(url):
  with urllib.request.urlopen(req,timeout=25) as r:return json.load(r)
 today=datetime.datetime.now(datetime.timezone.utc).date()
 games=[]
+seen_events=set()
 scoreboards_ok=0
 for delta in range(-14,4):
  date=(today+datetime.timedelta(days=delta)).strftime("%Y%m%d")
@@ -15,6 +16,8 @@ for delta in range(-14,4):
  except Exception as e: print("scoreboard",date,str(e));continue
  scoreboards_ok+=1
  for event in board.get("events",[]):
+  if event.get("id") in seen_events:continue
+  seen_events.add(event.get("id"))
   competition=(event.get("competitions") or [{}])[0]
   teams=competition.get("competitors",[])
   if len(teams)!=2:continue
@@ -29,6 +32,11 @@ for delta in range(-14,4):
      labels=group.get("labels",[])
      for athlete in group.get("athletes",[]):
       stats=dict(zip(labels,athlete.get("stats",[])))
+      for label in ("3PT","3PT FG","3PT FG"):
+       raw=stats.get(label)
+       if isinstance(raw,str) and "-" in raw:
+        try:stats["3PM"]=int(raw.split("-")[0])
+        except ValueError:pass
       game["players"].append({"id":athlete.get("athlete",{}).get("id"),"name":athlete.get("athlete",{}).get("displayName"),"team":teamname,"stats":stats,"starter":athlete.get("starter",False),"didNotPlay":athlete.get("didNotPlay",False)})
   except ValueError:pass
   except Exception as e:print("summary",event["id"],str(e))
