@@ -53,7 +53,7 @@ $('buildsgp').onclick=()=>{
  if(!Number.isFinite(feedAge)||feedAge>6||feedAge<-.25){$('sgp').textContent='NBA feed stale or invalid. Research slip blocked until refreshed.';return}
  if(new Date(g.date).getTime()<=Date.now()){$('sgp').textContent='Tipoff has passed. Pregame slip disabled.';return}
  const legs=[];const used=new Set();const usedTeams={};
- const entered=$('bookline').value.trim().split(/\n/).map(row=>row.split('|').map(v=>v.trim())).filter(v=>v.length===4);
+ const entered=$('bookline').value.trim()?$('bookline').value.trim().split(/\n/).map(row=>row.split('|').map(v=>v.trim())):[];
  const book=entered.map(([name,market,line,odds])=>({name,market:market.toLowerCase(),line:Number(line),odds:Number(odds)})).filter(x=>Number.isFinite(x.line)&&Number.isInteger(x.odds)&&x.odds!==0&&Math.abs(x.odds)>=100);
  const bookMap=new Map(book.map(x=>[x.name.toLowerCase()+'|'+x.market,x]));
  if(entered.length&&book.length!==entered.length){$('sgp').textContent='Invalid sportsbook input. Format each line: Player | points/rebounds/assists/threes | 19.5 | -115';return}
@@ -61,9 +61,9 @@ $('buildsgp').onclick=()=>{
  for(const p of ranked){
   if(used.has(p.name)||((usedTeams[p.team]||0)>=2))continue;
   const choices=p.options.filter(o=>o.line<=p.adjusted&&o.hits/p.total>=.6);
-  if(!choices.length)continue;
+  if(!choices.length&&!entered.length)continue;
   const actualBook=bookMap.get(p.name.toLowerCase()+'|'+p.key);
-  if(entered.length&&(!actualBook||actualBook.line>p.adjusted||recentHitRate(p,actualBook.line)<.6))continue;
+  if(entered.length&&(!actualBook||actualBook.line>=p.adjusted||recentHitRate(p,actualBook.line)<.6))continue;
   const line=actualBook?{line:actualBook.line,hits:Math.round(recentHitRate(p,actualBook.line)*p.total),odds:actualBook.odds}:choices.at(-1);
   const samePlayerConflict=legs.some(q=>q.name===p.name);if(samePlayerConflict)continue;legs.push({...p,selected:line});used.add(p.name);usedTeams[p.team]=(usedTeams[p.team]||0)+1;
   if(legs.length===3)break;
