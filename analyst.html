@@ -18,23 +18,36 @@ const last=(p.last5GameStats||[]).map(g=>n(g[d.key])).filter(v=>v!==null);
 if(last.length<3)return null;
 const ratio=n(p.defenseOpponentRatio?.[d.ratio]);const matchup=ratio!==null?Math.max(.85,Math.min(1.12,ratio)):1;
 const projected=(season*.5+recent*.5)*matchup;
-const viable=d.steps.filter(line=>line<=projected*.83);
+// Pick a meaningful line that the observed data can support. Do not
+// automatically walk down to a near-free alternate just to force a leg.
+const viable=d.steps.map(line=>({line,hits:last.filter(v=>v>=line).length}))
+ .filter(x=>x.line<=projected*.96&&x.hits/last.length>=.6);
 if(!viable.length)return null;
-let line=viable[viable.length-1];let hits=last.filter(v=>v>=line).length;
-while(hits/last.length<.6&&viable.indexOf(line)>0){line=viable[viable.indexOf(line)-1];hits=last.filter(v=>v>=line).length}
-if(hits/last.length<.6)return null;
+const floor={receptions:3,recYards:30,rushYards:40,passYards:200}[d.key];
+// A low line is not banned, but it must have unusually strong support
+// and cannot outrank meaningful lines merely for being easy to hit.
+const ranked=viable.map(x=>{
+ const rate=x.hits/last.length;
+ const low=x.line<floor;
+ const proximity=x.line/projected;
+ return {...x,utility:rate*35+proximity*50+(x.line>=floor?12:0)-(low?30:0)};
+}).sort((x,y)=>y.utility-x.utility||y.line-x.line);
+const best=ranked[0];
+if(best.line<floor&&best.utility<38)return null;
+const line=best.line,hits=best.hits;
 const status=String(p.injuryReportStatus||'NOT_REPORTED').toUpperCase();
 const availability=String(p.availability||'UNVERIFIED').toUpperCase();
 if(/OUT|IR|PUP|SUSPENDED|INACTIVE/.test(status+' '+availability))return null;
 const injuryFlag=/QUESTIONABLE|DOUBTFUL|LIMITED|UNVERIFIED|NOT_REPORTED/.test(status+' '+availability);
 const consistency=hits/last.length;
-const score=consistency*45+Math.min(1,projected/line-1)*75+Math.min(1,sample/5)*10+(ratio!==null?(matchup-1)*35:0)-(injuryFlag?8:0);
+const score=best.utility+consistency*20+Math.min(1,sample/5)*10+(ratio!==null?(matchup-1)*35:0)-(injuryFlag?8:0);
 const reasons=[`Recent form: ${recent.toFixed(d.key==='receptions'?1:0)} ${d.label}/game over the latest three recorded games versus ${season.toFixed(d.key==='receptions'?1:0)} season average.`,`Cleared ${line}+ in ${hits} of the last ${last.length} recorded games.`,`Workload: ${volume.toFixed(1)} ${d.volumeLabel}.`];
 if(ratio!==null)reasons.push(`Opponent matchup factor: ${ratio.toFixed(2)}× its opponents' baseline in this category (${ratio>1.04?'favorable':ratio<.96?'challenging':'roughly neutral'}).`);
 else reasons.push('Opponent-adjusted category data unavailable; selection relies on production and workload.');
 const risks=[];if(injuryFlag)risks.push(`Game-day status not confirmed (${status}; roster: ${availability}).`);
 if(p.pos==='RB'&&Array.isArray(p.possibleReturningTeammates)&&p.possibleReturningTeammates.length)risks.push('Potential returning teammates could alter workload.');
 if(last.length<5)risks.push('Limited recent sample.');
+if(line<floor)risks.push('Very conservative alternate line. Book availability and price are unverified; omit it if payout contribution is negligible.');
 return {p,d,line,score,reasons,risks,hits,sample,injuryFlag};
 }
 function render(g){
