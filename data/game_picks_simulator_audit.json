@@ -105,5 +105,27 @@
     "No historical sportsbook execution is implied",
     "Normal CDF approximates, but is not identical to, rounded-score Monte Carlo",
     "No parameter fitting was performed on the holdout"
-  ]
+  ],
+  "total_market_comparison": {
+    "market_only": {
+      "games": 238,
+      "brier": 0.25,
+      "direction_accuracy": 0.5294,
+      "total_mae": 10.08
+    },
+    "model_only": {
+      "games": 238,
+      "brier": 0.2661,
+      "direction_accuracy": 0.458,
+      "total_mae": 10.696
+    },
+    "market_anchored_25pct_model": {
+      "games": 238,
+      "brier": 0.2522,
+      "direction_accuracy": 0.458,
+      "total_mae": 10.144
+    },
+    "note": "The market-only over probability is 50% at the line, not a profitable selection rule. Compare Brier and MAE; directional accuracy alone is not sufficient."
+  },
+  "total_recommendation_enabled": false
 }
