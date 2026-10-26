@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'nba_feed.py'
+      - 'nba_tracker.py'
       - '.github/workflows/nba-feed.yml'
   workflow_dispatch:
   schedule:
@@ -18,11 +19,12 @@ jobs:
         with:
           python-version: '3.12'
       - run: python nba_feed.py
+      - run: python nba_tracker.py
       - name: Commit NBA data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/nba_games.json
+          git add data/nba_games.json data/nba_projection_tracker.json
           if ! git diff --cached --quiet; then
             git commit -m "Refresh NBA game data"
             git pull --rebase origin main
