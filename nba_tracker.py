@@ -42,6 +42,7 @@ for g in games:
  projections=[]
  for pid,rows in byid.items():
   if len(rows)<3:continue
+  if statistics.mean(mins(p) for p in rows)<15:continue
   for market,key in (("points","PTS"),("rebounds","REB"),("assists","AST"),("threes","3PM")):
    vals=[value(p,key) for p in rows]
    if any(v is None for v in vals):continue
@@ -58,6 +59,8 @@ for s in snapshots:
   actual=value(players.get(p["player_id"],{}),{"points":"PTS","rebounds":"REB","assists":"AST","threes":"3PM"}[p["market"]])
   if actual is None:
    p["result"]="ungraded"
+  elif players.get(p["player_id"],{}).get("didNotPlay") or mins(players.get(p["player_id"],{}))<1:
+   p["result"]="dnp"
   else:
    p["actual"]=actual
    p["result"]="within_20pct" if abs(actual-p["projection"])<=max(2,p["projection"]*.2) else "outside_20pct"
