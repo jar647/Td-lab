@@ -55,6 +55,39 @@ output={
  'holdout':{'games':len(holdout),**assess(holdout)},
  'limits':['Historical schedule lines may be closing-line proxies','Missing ATS home-spread signs are excluded','No historical sportsbook execution is implied','Normal CDF approximates, but is not identical to, rounded-score Monte Carlo','No parameter fitting was performed on the holdout']
 }
+# Evaluate a conservative market-anchored total forecast on untouched holdout.
+# The market is the reference; blending is NOT proof of a betting advantage.
+def total_test(sub,weight):
+    brier=0.0;correct=0;n=0; mae=0.0
+    for r in sub:
+        m=markets.get(str(r['game_id']),{})
+        line=m.get('market_total')
+        if line is None:continue
+        line=float(line);actual=float(r['actual_total'])
+        if actual==line:continue
+        projection=float(r['projected_total'])
+        adjusted=weight*projection+(1-weight)*line
+        p=cdf((adjusted-line)/13.5)
+        y=int(actual>line)
+        brier+=(p-y)**2
+        correct+=(p>=.5)==bool(y)
+        mae+=abs(adjusted-actual)
+        n+=1
+    return {'games':n,'brier':round(brier/n,4) if n else None,
+            'direction_accuracy':round(correct/n,4) if n else None,
+            'total_mae':round(mae/n,3) if n else None}
+output['total_market_comparison']={
+ 'market_only':total_test(holdout,0),
+ 'model_only':total_test(holdout,1),
+ 'market_anchored_25pct_model':total_test(holdout,.25),
+ 'note':'The market-only over probability is 50% at the line, not a profitable selection rule. Compare Brier and MAE; directional accuracy alone is not sufficient.'
+}
+# The app should not recommend totals until a held-out improvement is demonstrated.
+a=output['total_market_comparison']
+output['total_recommendation_enabled']=bool(
+ a['market_anchored_25pct_model']['brier']<a['market_only']['brier'] and
+ a['market_anchored_25pct_model']['total_mae']<a['market_only']['total_mae']
+)
 path=ROOT/'data/game_picks_simulator_audit.json'
 path.write_text(json.dumps(output,indent=2)+'\n')
 print(json.dumps({k:v for k,v in output.items() if k!='holdout'},indent=2))
