@@ -544,45 +544,46 @@ function renderGameSGP(){
   return 1;
  };
  candidates.sort((a,b)=>b.robustScore*scriptBias(b)-a.robustScore*scriptBias(a));
- // Exactly five supported targets, selected together around the expected game script.
- // Prefer different players and market types, then fill remaining slots with distinct
- // player/market combinations. Never invent missing data or use duplicate legs.
- const chosen=[],usedMarkets=new Set(),playerCounts=new Map(),marketCount={};
- const eligible=candidates.filter(x=>x.verdict!=='PASS');
- const ranked=eligible.map(x=>{
-  const passing=['PASS','REC','CATCH'].includes(x.d.key);
-  const scriptFit=!scriptAvailable?1:modelTotal>=47?(passing?1.12:.94):modelTotal<=41?(x.d.key==='RUSH'?1.12:passing?.94:1):1;
-  const caution=x.verdict==='CAUTION'?.88:1;
-  return {...x,sgpFit:x.robustScore*scriptFit*caution};
- }).sort((x,y)=>y.sgpFit-x.sgpFit);
- const add=x=>{
-  const player=String(x.r.player_id||x.r.player),key=player+'|'+x.d.key;
-  if(usedMarkets.has(key))return false;
-  chosen.push(x);usedMarkets.add(key);playerCounts.set(player,(playerCounts.get(player)||0)+1);
-  marketCount[x.d.key]=(marketCount[x.d.key]||0)+1;return true;
- };
- // First pass: one selection per player and no more than two per market.
- for(const x of ranked){
-  if(chosen.length===5)break;
-  const player=String(x.r.player_id||x.r.player);
-  if(playerCounts.has(player)||(marketCount[x.d.key]||0)>=2)continue;
-  add(x);
+ // Quality-gated portfolio selection: no mandatory fifth leg and no double
+ // counting one player's correlated receiving yards/receptions as independent.
+ const chosen=[],usedPlayers=new Set(),marketCount={};
+ const eligible=candidates.filter(x=>
+  x.verdict!=='PASS'&&x.hitRate>=.8&&x.logCount>=4&&
+  x.projectionRatio>=1.10&&x.usageRatio>=.90&&x.matchupRatio>=.80&&
+  !x.returnWarning&&x.quality>=.76);
+ const passing=x=>['PASS','REC','CATCH'].includes(x.d.key);
+ const scriptFit=x=>!scriptAvailable?1:modelTotal>=47?(passing(x)?1.08:.96):modelTotal<=41?(x.d.key==='RUSH'?1.08:passing(x)?.95:1):1;
+ // Score the whole ticket at each step, penalizing same-team receiver exposure.
+ // These are research heuristics, not empirically calibrated correlations.
+ function teamOf(x){return String(x.r.team||x.r.teamAbbr||x.r.team_abbr||'');}
+ function incrementalScore(x,group){
+  let penalty=0;
+  for(const y of group){
+   if(teamOf(x)&&teamOf(x)===teamOf(y)){
+    if(['REC','CATCH'].includes(x.d.key)&&['REC','CATCH'].includes(y.d.key))penalty+=.13;
+    else if(passing(x)&&passing(y))penalty+=.035;
+   }
+   if(x.d.key===y.d.key)penalty+=.025;
+  }
+  return x.robustScore*scriptFit(x)-penalty;
  }
- // Second pass: new players even if a market category already has two selections.
- for(const x of ranked){
-  if(chosen.length===5)break;
-  if(playerCounts.has(String(x.r.player_id||x.r.player)))continue;
-  add(x);
- }
- // Third pass: allow a different prop for a player already selected.
- for(const x of ranked){
-  if(chosen.length===5)break;
-  if((playerCounts.get(String(x.r.player_id||x.r.player))||0)>=2)continue;
-  add(x);
+ const remaining=eligible.slice();
+ while(chosen.length<5&&remaining.length){
+  remaining.sort((a,b)=>incrementalScore(b,chosen)-incrementalScore(a,chosen));
+  const x=remaining.shift(),player=String(x.r.player_id||x.r.player);
+  if(usedPlayers.has(player))continue;
+  // Three receiving-related selections from one team is not supported
+  // without a validated joint-distribution model.
+  const team=teamOf(x);
+  const receiverExposure=chosen.filter(y=>team&&teamOf(y)===team&&['REC','CATCH'].includes(y.d.key)).length;
+  if(['REC','CATCH'].includes(x.d.key)&&receiverExposure>=2)continue;
+  // A weak incremental candidate should not be forced into a five-leg ticket.
+  if(incrementalScore(x,chosen)<.68)continue;
+  chosen.push(x);usedPlayers.add(player);marketCount[x.d.key]=(marketCount[x.d.key]||0)+1;
  }
  const label=filter.options[filter.selectedIndex]?.textContent||'Selected matchup';
  panel.replaceChildren();
- const title=document.createElement('h2');title.textContent='🎟️ YOUR AUTOMATIC 5-LEG SGP · '+label;panel.appendChild(title);
+ const title=document.createElement('h2');title.textContent='🎟️ QUALITY-CHECKED SGP · '+label;panel.appendChild(title);
  const context=document.createElement('p');context.className='muted';
  context.textContent=scriptAvailable?'Game outlook: '+(modelTotal>=47?'higher-scoring passing opportunities':modelTotal<=41?'lower-scoring, potentially run-oriented':'balanced scoring environment')+' · projected total '+modelTotal.toFixed(1)+' (unvalidated model baseline)':'Built from available player logs, usage and opponent defensive allowances.';
  panel.appendChild(context);
@@ -591,9 +592,8 @@ function renderGameSGP(){
   starter.textContent='PHI QB UPDATE: Tanner McKee starts tonight; Jalen Hurts is on IR. McKee has a limited current-season sample and may not qualify for an automatic QB prop. The SGP should not substitute Hurts.';
   panel.appendChild(starter);
  }
- if(chosen.length!==5){
-  const missing=document.createElement('p');missing.className='status';missing.textContent='Only '+chosen.length+' supported selections found for this matchup. A complete five-leg SGP needs five supported targets; no fabricated legs.';panel.appendChild(missing);return;
- }
+ const summary=document.createElement('p');summary.className='status';summary.textContent=chosen.length+' quality-qualified legs · '+(chosen.length<5?'Not forcing extra selections. ':'Five supported candidates found. ')+(candidates.length-eligible.length)+' candidates rejected by minimum standards. Correlation penalties are heuristic, not backtested.';panel.appendChild(summary);
+ if(!chosen.length){const empty=document.createElement('p');empty.textContent='No legs meet the current quality gate. Check other matchups or wait for more verified game logs.';panel.appendChild(empty);return;}
  const list=document.createElement('ol');list.style.cssText='padding-left:24px;margin:14px 0';
  for(const x of chosen){
   const li=document.createElement('li');li.style.cssText='margin:0 0 16px;padding:0 0 12px;border-bottom:1px solid #334155';
@@ -625,14 +625,14 @@ function renderGameSGP(){
    const hasOdds=odds.value.trim()!==''&&Number.isFinite(price)&&(price<=-100||price>=100);
    const implied=hasOdds?(price<0?-price/(-price+100):100/(price+100)):null;
    const observed=actual.length?overHits/actual.length:0;
-   const support=cushion>=1.08&&observed>=.6&&x.usageRatio>=.85&&x.matchupRatio>=.8&&!x.returnWarning;
-   const priced=hasOdds&&observed>=implied+.05;
+   const support=cushion>=1.08&&observed>=.8&&actual.length>=4&&x.usageRatio>=.9&&x.matchupRatio>=.8&&!x.returnWarning;
+   const priced=hasOdds&&observed>=implied+.08;
    const standardPreferred=support&&(!hasOdds||priced);
    decision.textContent=(standardPreferred?'🟢 PLAY STANDARD: ':'🟡 TAKE ALT INSTEAD OF STANDARD: ')+line+' '+x.d.unit+' · recent hit '+overHits+'/'+actual.length+' · projection '+Math.round(projection)+(hasOdds?' · implied '+Math.round(implied*100)+'%':'');
    const drop=x.d.key==='PASS'?Math.min(25,Math.max(15,Math.round(line*.09/5)*5)):x.d.key==='REC'?Math.min(15,Math.max(10,Math.round(line*.15/5)*5)):x.d.key==='RUSH'?Math.min(10,Math.max(5,Math.round(line*.14/5)*5)):1;
    const altLine=x.d.key==='CATCH'?Math.max(1,Math.floor(line)-1):Math.max(5,Math.floor((line-drop)/5)*5);
    const altHits=actual.filter(v=>v>=altLine).length;
-   const altSupport=projection>=altLine*1.08&&altHits>=Math.ceil(actual.length*.6)&&x.usageRatio>=.85&&!x.returnWarning;
+   const altSupport=projection>=altLine*1.08&&altHits>=Math.ceil(actual.length*.8)&&x.usageRatio>=.9&&!x.returnWarning;
    alt.textContent=(standardPreferred?'Optional modest ALT: ':'Suggested ALT: ')+altLine+'+ '+x.d.unit+' ('+altHits+'/'+actual.length+' recent hits)'+(altSupport?' · supported by recent results':' · lower confidence; check price and availability');
    if(odds.value.trim()&&!hasOdds)decision.textContent='Enter valid American odds (e.g. -110 or +120).';
   };
