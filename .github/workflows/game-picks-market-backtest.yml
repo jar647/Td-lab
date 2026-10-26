@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'game_picks_market_backtest.py'
+      - 'game_picks_simulator_audit.py'
       - '.github/workflows/game-picks-market-backtest.yml'
 permissions:
   contents: write
@@ -19,11 +20,13 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Compare historical scores against available market lines
         run: python game_picks_market_backtest.py
+      - name: Audit Monte Carlo score assumptions on held-out games
+        run: python game_picks_simulator_audit.py
       - name: Publish results
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/game_picks_market_comparison.json
+          git add data/game_picks_market_comparison.json data/game_picks_simulator_audit.json
           if ! git diff --cached --quiet; then
             git commit -m "Publish historical game picks market comparison"
             for attempt in 1 2 3; do
