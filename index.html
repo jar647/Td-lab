@@ -612,47 +612,57 @@ function renderGameSGP(){
   why.textContent='Why: '+gameFit+'Model projects '+Math.round(x.projectionRatio*100-100)+'% above this target; recent hit rate '+hit+'% across '+x.logCount+' games. '+(x.matchupRatio>=1?'Opponent allowance is favorable.':'Opponent allowance is less favorable.')+(x.reasons.length?' Watch: '+x.reasons.join('; ')+'.':'');
   li.appendChild(why);
   const entry=document.createElement('div');entry.style.cssText='margin:10px 0;padding:12px;border:1px solid #3b5363;border-radius:9px';
-  const prompt=document.createElement('p');prompt.className='muted';prompt.textContent='ENTER HARD ROCK STANDARD LINE + OVER ODDS';prompt.style.margin='0 0 8px';entry.appendChild(prompt);
-  const fields=document.createElement('div');fields.style.cssText='display:flex;gap:8px;flex-wrap:wrap';
-  const standard=document.createElement('input');standard.type='number';standard.step='0.5';standard.min='0';standard.placeholder='Line, e.g. 85.5';standard.setAttribute('aria-label',x.r.player+' sportsbook standard line');standard.style.cssText='width:155px;max-width:100%;padding:9px';
-  const odds=document.createElement('input');odds.type='number';odds.step='1';odds.placeholder='Odds, e.g. -110';odds.setAttribute('aria-label',x.r.player+' over American odds');odds.style.cssText='width:155px;max-width:100%;padding:9px';
-  fields.append(standard,odds);entry.appendChild(fields);
-  const decision=document.createElement('p');decision.style.cssText='font-weight:700;margin:9px 0 3px';decision.textContent='Enter the standard line to choose STANDARD or ALT.';
-  const alt=document.createElement('p');alt.className='muted';alt.style.margin='3px 0';alt.textContent='ALT target will appear here.';
+  const prompt=document.createElement('p');prompt.className='muted';prompt.textContent='VEGAS STANDARD LINE · WE FIND THE SWEET SPOT';prompt.style.margin='0 0 8px';entry.appendChild(prompt);
+  const standard=document.createElement('input');standard.type='number';standard.step='0.5';standard.min='0';standard.placeholder='Vegas line, e.g. 79.5';standard.setAttribute('aria-label',x.r.player+' Vegas standard line');standard.style.cssText='width:190px;max-width:100%;padding:9px';entry.appendChild(standard);
+  const decision=document.createElement('p');decision.style.cssText='font-weight:700;margin:9px 0 3px';decision.textContent='Enter one Vegas line for an automatic recommendation.';
+  const alt=document.createElement('p');alt.className='muted';alt.style.margin='3px 0';alt.textContent='No alternate lines or odds required.';
   entry.append(decision,alt);
+  x.ticketPick={target:x.line+'+ '+x.d.unit};
   const update=()=>{
-   const line=Number(standard.value),price=Number(odds.value);
-   if(!standard.value||!Number.isFinite(line)||line<=0){decision.textContent='Enter a valid standard line.';alt.textContent='ALT target will appear here.';return;}
+   const line=Number(standard.value);
+   if(!standard.value||!Number.isFinite(line)||line<=0){decision.textContent='Enter a valid Vegas line.';alt.textContent='No alternate lines or odds required.';x.ticketPick.target=x.line+'+ '+x.d.unit;return;}
    const projection=Number(x.projectionRatio)*Number(x.line);
    const logs=Array.isArray(x.r.last5GameStats)?x.r.last5GameStats.slice(-5):[];
    const statKey={PASS:'passYards',RUSH:'rushYards',REC:'recYards',CATCH:'receptions'}[x.d.key];
-   const actual=logs.map(g=>Number(g[statKey])).filter(v=>Number.isFinite(v)&&v>=0);
-   const overHits=actual.filter(v=>v>line).length;
-   const hitPct=actual.length?Math.round(100*overHits/actual.length):0;
-   const cushion=projection/line;
-   const hasOdds=odds.value.trim()!==''&&Number.isFinite(price)&&(price<=-100||price>=100);
-   const implied=hasOdds?(price<0?-price/(-price+100):100/(price+100)):null;
-   const observed=actual.length?overHits/actual.length:0;
-   const support=cushion>=1.10&&observed>=.6&&actual.length>=3&&x.usageRatio>=.82&&x.matchupRatio>=.75&&!x.returnWarning;
-   const priced=hasOdds&&observed>=implied+.08;
-   const standardPreferred=support&&(!hasOdds||priced);
-   decision.textContent=(standardPreferred?'🟢 PLAY STANDARD: ':'🟡 TAKE ALT INSTEAD OF STANDARD: ')+line+' '+x.d.unit+' · recent hit '+overHits+'/'+actual.length+' · projection '+Math.round(projection)+(hasOdds?' · implied '+Math.round(implied*100)+'%':'');
-   const drop=x.d.key==='PASS'?Math.min(25,Math.max(15,Math.round(line*.09/5)*5)):x.d.key==='REC'?Math.min(15,Math.max(10,Math.round(line*.15/5)*5)):x.d.key==='RUSH'?Math.min(10,Math.max(5,Math.round(line*.14/5)*5)):1;
-   const altLine=x.d.key==='CATCH'?Math.max(1,Math.floor(line)-1):Math.max(5,Math.floor((line-drop)/5)*5);
-   const altHits=actual.filter(v=>v>=altLine).length;
-   const altSupport=projection>=altLine*1.10&&altHits>=Math.ceil(actual.length*.6)&&x.usageRatio>=.82&&!x.returnWarning;
-   alt.textContent=(standardPreferred?'Optional modest ALT: ':'Suggested ALT: ')+altLine+'+ '+x.d.unit+' ('+altHits+'/'+actual.length+' recent hits)'+(altSupport?' · supported by recent results':' · lower confidence; check price and availability');
-   if(odds.value.trim()&&!hasOdds)decision.textContent='Enter valid American odds (e.g. -110 or +120).';
+   const actual=logs.map(g=>g[statKey]).filter(v=>v!=null&&Number.isFinite(Number(v))).map(Number);
+   const step=x.d.key==='CATCH'?1:5;
+   const upper=Math.floor(line/step)*step;
+   // Do not suggest extreme low-price alternates. Consider only nearby targets.
+   const lower=Math.max(step,Math.ceil(line*.85/step)*step);
+   const mean=actual.reduce((a,b)=>a+b,0)/Math.max(actual.length,1);
+   const variance=actual.reduce((a,b)=>a+(b-mean)**2,0)/Math.max(actual.length-1,1);
+   const sd=Math.sqrt(Math.max(variance,(projection*.16)**2));
+   const options=[];
+   for(let target=lower;target<=upper;target+=step){
+    const cushion=(projection-target)/Math.max(sd,1);
+    const hits=actual.filter(v=>v>=target).length;
+    const smoothed=(hits+1)/(actual.length+2);
+    const targetDrop=(line-target)/line;
+    const matchup=Math.max(.7,Math.min(1.2,x.matchupRatio));
+    const opportunity=Math.max(.7,Math.min(1.2,x.usageRatio));
+    // Rank credible, market-nearby targets by projected cushion, observed
+    // consistency, matchup and opportunity; penalize excessive line drops.
+    const score=Math.max(-1,Math.min(2,cushion))*.35+smoothed*.20+
+     (matchup-1)*.20+(opportunity-1)*.20-targetDrop*1.8-
+     (x.returnWarning?.12:0);
+    if(projection>=target*1.05&&smoothed>=.38)options.push({target,hits,score,cushion});
+   }
+   options.sort((a,b)=>b.score-a.score||b.target-a.target);
+   const best=options[0];
+   if(!best){decision.textContent='⚠️ SKIP: No well-supported target near the Vegas line.';alt.textContent='The model will not force a low-value safety leg.';x.ticketPick.target='SKIP';return;}
+   x.ticketPick.target=best.target+'+ '+x.d.unit;
+   decision.textContent='🎯 '+x.ticketPick.target+' · projection '+Math.round(projection)+' · Vegas '+line;
+   alt.textContent='Why: '+(x.matchupRatio>=1?'favorable matchup':'matchup requires caution')+', '+(x.usageRatio>=1?'stable/rising usage':'usage risk')+', '+best.hits+'/'+actual.length+' recent clears. Target stays near Vegas line. Verify Hard Rock price; do not play worse than -200. Odds/value cannot be confirmed without a price.';
   };
-  standard.addEventListener('input',update);odds.addEventListener('input',update);
+  standard.addEventListener('input',update);
   li.appendChild(entry);list.appendChild(li);
  }
  panel.appendChild(list);
  const copy=document.createElement('button');copy.type='button';copy.className='chip';copy.textContent='📋 COPY MY SGP';
- copy.addEventListener('click',async()=>{const ticket='THE PROP VAULT · '+label+'\n'+chosen.map((x,i)=>(i+1)+'. '+x.r.player+' '+x.line+'+ '+x.d.unit).join('\n');try{await navigator.clipboard.writeText(ticket);copy.textContent='✅ COPIED';}catch(e){const area=document.createElement('textarea');area.value=ticket;area.style.width='100%';panel.appendChild(area);area.select();}});
+ copy.addEventListener('click',async()=>{const ticket='THE PROP VAULT · '+label+'\n'+chosen.map((x,i)=>(i+1)+'. '+x.r.player+' '+(x.ticketPick?.target||x.line+'+ '+x.d.unit)).join('\n');try{await navigator.clipboard.writeText(ticket);copy.textContent='✅ COPIED';}catch(e){const area=document.createElement('textarea');area.value=ticket;area.style.width='100%';panel.appendChild(area);area.select();}});
  panel.appendChild(copy);
  const book=document.createElement('a');book.href='https://app.hardrock.bet/';book.target='_blank';book.rel='noopener noreferrer';book.className='chip';book.textContent='OPEN HARD ROCK BET';book.style.marginLeft='8px';panel.appendChild(book);
- const foot=document.createElement('p');foot.className='muted';foot.textContent='Automatically generated research ticket. Check player availability and whether Hard Rock offers these targets. No live odds required.';panel.appendChild(foot);
+ const foot=document.createElement('p');foot.className='muted';foot.textContent='Automatically generated research ticket. Check player availability and whether Hard Rock offers these targets. Enter one Vegas line per leg. Alternate recommendations are unpriced research targets; verify the price and skip anything worse than -200.';panel.appendChild(foot);
 }
 
 function openSearchedPlayer(id){
