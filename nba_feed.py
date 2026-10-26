@@ -37,5 +37,5 @@ if scoreboards_ok==0 or not games:
  print("NBA feed failure: no valid scoreboards or games; refusing to publish empty feed",file=sys.stderr)
  sys.exit(1)
 OUT.parent.mkdir(parents=True,exist_ok=True)
-OUT.write_text(json.dumps({"generated_at":datetime.datetime.now(datetime.timezone.utc).isoformat(),"source":"ESPN public NBA scoreboard/summary","games":games},indent=2))
+OUT.write_text(json.dumps({"generated_at":datetime.datetime.now(datetime.timezone.utc).isoformat(),"source":"ESPN public NBA scoreboard/summary","games":games},separators=(",",":")))
 print("Wrote",len(games),"games",sum(len(g["players"]) for g in games),"player records")
