@@ -137,19 +137,34 @@ function propLineKey(r,category){return [r.player_id||r.player,r.team,r.opp,cate
 function setPropLine(key,value){const v=String(value).trim();if(v==='')delete propLines[key];else if(Number.isFinite(Number(v))&&Number(v)>=0&&Number(v)<=9999)propLines[key]=Number(v);else return;localStorage.setItem(PROP_LINES_KEY,JSON.stringify(propLines));renderPropMatchups();}
 function propDecision(x,cfg,category){
  const line=propLines[propLineKey(x.r,category)];
- const alt=suggestAltLine(x,cfg,category);
- if(line==null)return {label:'⚪ ENTER POSTED LINE',detail:'Enter the current sportsbook line to compare the OVER and conservative alternate research lines.'};
- const avg=Number(x.r[cfg.player]),def=Number(x.r[cfg.def]);
+ if(line==null)return {label:'⚪ ENTER POSTED LINE',detail:'Enter the current sportsbook line to compare against the matchup projection.'};
+ const avg=Number(x.r[cfg.player]),def=Number(x.r[cfg.def]),posted=Number(line);
+ const games=Number(x.r.games)||0;
  const recentField={PASS:'recent3PassYards',RUSH:'recent3RushYards',REC:'recent3RecYards',CATCH:'recent3Receptions'}[category];
- const recent=x.r[recentField]==null?null:Number(x.r[recentField]);
- const strong=['🔥 PRIME MATCHUP','STRONG MATCHUP'].includes(x.label);
- if(!Number.isFinite(avg)||avg<=0||!Number.isFinite(def)||def<=0)return {label:'🛑 PASS',detail:'Production or defensive data insufficient.'};
- const recentSupports=recent==null||recent>=line*1.05;
- if(strong&&avg>=line*1.12&&def>=line*1.08&&recentSupports)
-  return {label:'✅ PLAY OVER '+line,detail:'Posted OVER qualifies: player average '+avg.toFixed(1)+', defense allows '+def.toFixed(1)+(recent==null?'':', last-three average '+recent.toFixed(1))+'.'};
- if(alt&&alt.line<line)
-  return {label:'⚠️ RESEARCH ALT '+alt.line+'+',detail:'Conservative alternate supported by player average, opponent allowance and available recent form. '+(strong?'Posted OVER lacks sufficient support.':'Matchup is '+x.label+'; this is NOT a strong-matchup endorsement. ')+'Sportsbook availability, odds and injury impact unverified.'};
- return {label:'🛑 PASS',detail:'No qualifying posted OVER or conservative alternate based on production, defensive allowance and recent form.'};
+ // Team-window recent averages dilute backup players who missed team games.
+ const recent=games<3||x.r[recentField]==null?null:Number(x.r[recentField]);
+ if(!Number.isFinite(avg)||avg<=0||!Number.isFinite(def)||def<=0||!Number.isFinite(posted)||posted<=0)
+  return {label:'🛑 INSUFFICIENT DATA',detail:'Player average, defensive allowance or sportsbook line is invalid.'};
+ // Match the projection displayed on the card, so the verdict cannot contradict it.
+ const blend=recent!=null&&Number.isFinite(recent)?avg*.7+recent*.3:avg;
+ const matchup=Math.max(.85,Math.min(1.15,def/avg));
+ const projection=blend*(.75+.25*matchup);
+ const edge=projection-posted,edgePct=edge/posted;
+ const sampleNote=games<3?' Limited sample: '+games+' verified appearance'+(games===1?'':'s')+'; this is a provisional model lean, not a measured hit probability.':'';
+ const detail='Model projection '+projection.toFixed(1)+' vs sportsbook '+posted.toFixed(1)+'; edge '+(edge>=0?'+':'')+edge.toFixed(1)+' ('+(edgePct*100).toFixed(1)+'%).'+sampleNote+' Sportsbook odds not included.';
+ if(edge>=10&&edgePct>=.08)
+  return {label:games<3?'⚠️ LIMITED-SAMPLE OVER LEAN '+posted:'✅ MODEL OVER LEAN '+posted,detail};
+ if(edge>=5&&edgePct>=.04)
+  return {label:'⚠️ SMALL OVER LEAN '+posted,detail};
+ const alt=suggestAltLine(x,cfg,category);
+ if(alt&&alt.line<posted)
+  return {label:'⚠️ RESEARCH ALT '+alt.line+'+',detail:detail+' Posted OVER lacks sufficient projection cushion; alternate has recent-log support.'};
+ if(games>0&&games<3&&category==='PASS'){
+  const candidates=[125,150,175,200,225,250,275,300].filter(v=>v<posted&&v<=projection*.9&&v<=avg*.9);
+  const target=candidates.at(-1);
+  if(target)return {label:'⚠️ LIMITED-SAMPLE ALT '+target+'+',detail:detail+' Provisional alternate, not verified against three game logs.'};
+ }
+ return {label:'🛑 PASS',detail:detail+' No qualifying over edge or supported alternate.'};
 }
 // Research thresholds, not sportsbook prices or calibrated probabilities.
 // Shared research engine for PASS, RUSH, REC, CATCH and the SGP builder.
