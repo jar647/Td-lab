@@ -1,0 +1,109 @@
+{
+  "status": "ASSUMPTION_AUDIT_NOT_CALIBRATED",
+  "method": "2024 reference period; 2025-2026 out-of-sample audit. Normal-score CDF approximates simulator score uncertainty; exact rounded-score Monte Carlo tie rates are not replicated.",
+  "production_assumptions": {
+    "margin_sd": 13,
+    "total_sd": 13.5
+  },
+  "reference_2024": {
+    "games": 208,
+    "observed_margin_residual_sd": 13.31,
+    "observed_total_residual_sd": 13.09
+  },
+  "holdout": {
+    "games": 238,
+    "home_win": {
+      "games": 237,
+      "brier": 0.2306,
+      "accuracy": 0.6076,
+      "bins": [
+        {
+          "range": "30-40%",
+          "n": 20,
+          "predicted": 0.369,
+          "actual": 0.35
+        },
+        {
+          "range": "40-50%",
+          "n": 53,
+          "predicted": 0.466,
+          "actual": 0.321
+        },
+        {
+          "range": "50-60%",
+          "n": 103,
+          "predicted": 0.545,
+          "actual": 0.505
+        },
+        {
+          "range": "60-70%",
+          "n": 51,
+          "predicted": 0.644,
+          "actual": 0.647
+        },
+        {
+          "range": "70-80%",
+          "n": 10,
+          "predicted": 0.728,
+          "actual": 1.0
+        }
+      ]
+    },
+    "over_total": {
+      "games": 238,
+      "brier": 0.2661,
+      "accuracy": 0.458,
+      "bins": [
+        {
+          "range": "20-30%",
+          "n": 2,
+          "predicted": 0.277,
+          "actual": 0.5
+        },
+        {
+          "range": "30-40%",
+          "n": 19,
+          "predicted": 0.362,
+          "actual": 0.526
+        },
+        {
+          "range": "40-50%",
+          "n": 80,
+          "predicted": 0.45,
+          "actual": 0.6
+        },
+        {
+          "range": "50-60%",
+          "n": 84,
+          "predicted": 0.545,
+          "actual": 0.488
+        },
+        {
+          "range": "60-70%",
+          "n": 45,
+          "predicted": 0.643,
+          "actual": 0.444
+        },
+        {
+          "range": "70-80%",
+          "n": 8,
+          "predicted": 0.723,
+          "actual": 0.75
+        }
+      ]
+    },
+    "home_cover": {
+      "games": 0,
+      "brier": null,
+      "accuracy": null,
+      "bins": []
+    }
+  },
+  "limits": [
+    "Historical schedule lines may be closing-line proxies",
+    "Missing ATS home-spread signs are excluded",
+    "No historical sportsbook execution is implied",
+    "Normal CDF approximates, but is not identical to, rounded-score Monte Carlo",
+    "No parameter fitting was performed on the holdout"
+  ]
+}
