@@ -2,7 +2,7 @@
 const $=id=>document.getElementById(id);let games=[];let historicalGames=[];let generatedAt='';let currentProjections=[];let injuryData=null;let rosterData=null;let seasonData=null;
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 async function init(){try{fetch('./data/nba_season_stats.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d=>{seasonData=d;if($('games').value!=='')$('show').click()}).catch(()=>{});fetch('./data/nba_rosters.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d=>{rosterData=d;const i=$('games').value;if(i!=='')$('show').click()}).catch(()=>{});fetch('./data/nba_injuries.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d=>{injuryData=d;const i=$('games').value;if(i!=='')$('show').click()}).catch(()=>{});const r=await fetch('./data/nba_games.json',{cache:'no-store'});if(!r.ok)throw Error('NBA feed not published yet');const data=await r.json();const dayFmt=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'});const easternDay=date=>{const parts=Object.fromEntries(dayFmt.formatToParts(new Date(date)).map(x=>[x.type,x.value]));return parts.year+'-'+parts.month+'-'+parts.day};const today=easternDay(new Date());historicalGames=data.games||[];games=historicalGames.filter(g=>g.date&&Number.isFinite(new Date(g.date).getTime())&&easternDay(g.date)===today).sort((a,b)=>new Date(a.date)-new Date(b.date));generatedAt=data.generated_at||'';$('games').innerHTML='<option value="">Select NBA game</option>'+games.map((g,i)=>'<option value="'+i+'">'+(g.status==='STATUS_SCHEDULED'?'UPCOMING · ':'FINAL / LIVE · ')+esc(g.away)+' @ '+esc(g.home)+' · '+esc(easternDay(g.date))+'</option>').join('');$('status').textContent='Feed updated: '+data.generated_at+' · '+games.length+' games today (Eastern Time). Historical records remain available to the projection engine.';const next=games.findIndex(g=>g.status==='STATUS_SCHEDULED'&&new Date(g.date)>new Date());if(next>=0){$('games').value=String(next);$('show').click()}else if(games.length){$('games').value='0';$('show').click()}else if(!games.length){$('status').textContent='No NBA matchups scheduled today (Eastern Time). Check back on the next game day.';$('output').innerHTML='<div class="panel"><h2>No NBA games today</h2><p class="muted">Only today’s matchups appear here. Projections will return on the next game day.</p></div>';$('projections').textContent='No player projections available because there are no NBA games today.'}}catch(e){$('status').textContent='Feed pending: '+e.message;$('games').innerHTML='<option>NBA feed pending</option>'}}
-$('show').onclick=()=>{const i=$('games').value;if(i===''){$('status').textContent='Choose a matchup first.';return}currentProjections=[];const g=games[Number(i)];if(!g){$('projections').textContent='Select a valid NBA game.';return}$('output').innerHTML='<div class="panel"><h2>'+esc(g.away)+' @ '+esc(g.home)+'</h2><p class="muted">'+esc(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(new Date(g.date)))+' · '+esc(g.status)+'</p></div>';try{renderProjections(g);$('output').innerHTML+='<div class="panel">'+$('projections').innerHTML+'</div>';$('projections').innerHTML='Projections appear directly under the selected matchup above.';$('status').textContent='Analysis loaded for '+g.away+' @ '+g.home+'. Scroll below to see player projections.';$('output').scrollIntoView?.({behavior:'smooth',block:'start'})}catch(e){$('status').textContent='Analysis error: '+e.message;$('output').innerHTML+='<p class="warn">Unable to render projections: '+esc(e.message)+'</p>';console.error(e)}};
+$('show').onclick=()=>{const i=$('games').value;if(i===''){$('status').textContent='Choose a matchup first.';return}currentProjections=[];const g=games[Number(i)];if(!g){$('projections').textContent='Select a valid NBA game.';return}$('output').innerHTML='<div class="panel"><h2>'+esc(g.away)+' @ '+esc(g.home)+'</h2><p class="muted">'+esc(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(new Date(g.date)))+' · '+esc(g.status)+'</p></div>';try{renderGamePick(g);renderProjections(g);$('output').innerHTML+='<div class="panel">'+$('projections').innerHTML+'</div>';$('projections').innerHTML='Projections appear directly under the selected matchup above.';$('status').textContent='Analysis loaded for '+g.away+' @ '+g.home+'. Scroll below to see player projections.';$('output').scrollIntoView?.({behavior:'smooth',block:'start'})}catch(e){$('status').textContent='Analysis error: '+e.message;$('output').innerHTML+='<p class="warn">Unable to render projections: '+esc(e.message)+'</p>';console.error(e)}};
 function num(v){if(v===null||v===undefined||v==='')return null;const x=Number(v);return Number.isFinite(x)?x:null}
 function minutes(v){const t=String(v||'');if(t.includes(':')){const [m,s]=t.split(':').map(Number);return m+s/60}return num(t)}
 function stat(p,keys){for(const k of keys){if(p.stats&&p.stats[k]!==undefined){const v=p.stats[k];if(k==='3PT'&&typeof v==='string'&&v.includes('-')){const made=Number(v.split('-')[0]);return Number.isFinite(made)?made:null}return num(v)}}return null}
@@ -232,8 +232,46 @@ watchHtml+comboHtml+'<p class="muted">Projected, NOT confirmed. Based on recent 
 [g.away,g.home].map(team=>'<h3>'+esc(team)+' · projected five</h3>'+(starters[team].length?starters[team].map(card).join(''):'<p class="warn">Insufficient lineup evidence.</p>')+(starters[team].length<5?'<p class="warn">Fewer than five eligible players with sufficient recent records. No names invented.</p>':'')).join('');
 
 }
+// A descriptive winner lean based on observed completed games; not a betting model.
+function renderGamePick(g){
+ const box='<div class="panel"><h2>Game picks</h2>';
+ const finish=html=>{$('output').innerHTML+=box+html+'</div>'};
+ const tip=Date.parse(g.date),now=Date.now(), feedTime=Date.parse(generatedAt);
+ if(g.status!=='STATUS_SCHEDULED'||!Number.isFinite(tip)||tip<=now){finish('<p class="warn">No pregame pick: this game has started or finished.</p>');return}
+ if(!Number.isFinite(feedTime)||now-feedTime>12*3600000||feedTime>now+300000){finish('<p class="warn">No pick: the game feed is missing or more than 12 hours old.</p>');return}
+ const injuryTime=Date.parse(injuryData?.generated_at||'');
+ if(!Number.isFinite(injuryTime)||now-injuryTime>12*3600000||injuryTime>now+300000){finish('<p class="warn">No pick: the injury report is missing or stale. Check back after the feed refreshes.</p>');return}
+ const seasonStart=Date.UTC(new Date(tip).getUTCMonth()>=9?new Date(tip).getUTCFullYear():new Date(tip).getUTCFullYear()-1,9,1);
+ const rows=[];
+ for(const h of historicalGames){
+  const t=Date.parse(h.date);if(h.status!=='STATUS_FINAL'||!Number.isFinite(t)||t>=tip||t<seasonStart)continue;
+  const scores={};let valid=true;
+  for(const team of [h.home,h.away]){
+   const participants=(h.players||[]).filter(p=>p.team===team&&!p.didNotPlay);
+   const vals=participants.map(p=>num(p.stats?.PTS));
+   if(participants.length<5||vals.some(v=>v===null)){valid=false;break}
+   scores[team]=vals.reduce((a,b)=>a+b,0);
+   if(scores[team]<70||scores[team]>170){valid=false;break}
+  }
+  if(valid)rows.push({h,t,scores});
+ }
+ const teamRows=team=>rows.filter(r=>r.h.home===team||r.h.away===team).sort((a,b)=>b.t-a.t).slice(0,10);
+ const away=teamRows(g.away),home=teamRows(g.home);
+ if(away.length<3||home.length<3){finish('<p class="warn">No pick yet: each team needs at least 3 completed games with usable box scores this season. '+esc(g.away)+': '+away.length+' · '+esc(g.home)+': '+home.length+'.</p>');return}
+ const teamStats=(team,list)=>({scored:list.reduce((s,r)=>s+r.scores[team],0)/list.length,allowed:list.reduce((s,r)=>s+r.scores[r.h.home===team?r.h.away:r.h.home],0)/list.length});
+ const a=teamStats(g.away,away),h=teamStats(g.home,home);
+ // Match each team's scoring with its opponent's points allowed; no assumed odds or probabilities.
+ const awayScore=(a.scored+h.allowed)/2,homeScore=(h.scored+a.allowed)/2;
+ const affected=[];const known=new Map();
+ for(const r of [...away,...home])for(const p of r.h.players||[])if([g.away,g.home].includes(p.team))known.set(String(p.name||'').trim().toLowerCase(),p.team);
+ for(const x of injuryData.injuries||[]){const team=known.get(String(x.player||x.name||'').trim().toLowerCase());if(team&&/OUT|DOUBTFUL|QUESTIONABLE|DAY.TO.DAY|SUSPEND|INACTIVE/i.test(String(x.status||'')))affected.push({team,name:x.player||x.name,status:x.status})}
+ const margin=Math.abs(homeScore-awayScore);const lean=margin<3?'No clear winner lean':(homeScore>awayScore?g.home:g.away)+' to win';
+ const injuries=affected.length?affected.slice(0,8).map(x=>esc(x.name)+' ('+esc(x.team)+': '+esc(x.status)+')').join('; '):'No listed absences matched to these teams’ recent box scores.';
+ finish('<p><strong>Winner lean: '+esc(lean)+'</strong></p><p class="muted">Recent scoring baseline: '+esc(g.away)+' '+awayScore.toFixed(1)+' · '+esc(g.home)+' '+homeScore.toFixed(1)+'. This combines each team’s points scored with its opponent’s points allowed over up to 10 completed games. '+esc(g.away)+' sample: '+away.length+'; '+esc(g.home)+' sample: '+home.length+'.</p><p class="muted">Injury watch: '+injuries+(affected.length>8?'; plus '+(affected.length-8)+' more':'')+'. Report: '+esc(injuryData.generated_at)+'. Injury effects, confirmed lineups, rest and opponent strength are not modeled; team matching can miss players.</p><p class="warn">Research lean only, not a sportsbook recommendation. No verified moneyline, spread, total or win probability is available. Check current odds and availability before betting.</p>');
+}
 async function audit(){
  try{const r=await fetch('./data/nba_projection_tracker.json',{cache:'no-store'});if(!r.ok)throw Error('Tracking feed not published');const d=await r.json();const snapshots=d.snapshots||[];const ps=snapshots.flatMap(s=>s.projections||[]);const graded=ps.filter(p=>p.result==='within_20pct'||p.result==='outside_20pct');const dnps=ps.filter(p=>p.result==='dnp');const hits=graded.filter(p=>p.result==='within_20pct');$('audit').innerHTML='<p>Locked games: <strong>'+snapshots.length+'</strong> · projections: <strong>'+ps.length+'</strong> · graded: <strong>'+graded.length+'</strong> · DNP: <strong>'+dnps.length+'</strong></p><p class="muted">Within tolerance: '+hits.length+'/'+graded.length+' (max of 2 units or 20% of projection). This is prediction accuracy, not betting win rate. Snapshots must be locked before tipoff.</p>'}catch(e){$('audit').textContent='Tracking not verified yet: '+e.message}
 }
 init();audit();
 </script></html>
+
