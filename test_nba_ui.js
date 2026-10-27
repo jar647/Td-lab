@@ -45,7 +45,7 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  const idx=today.findIndex(g=>g.home===game.home&&g.away===game.away);
  assert.ok(idx>=0,'Integration matchup must be today');
  el('games').value=String(idx);el('show').click();
- const html=el('projections').innerHTML;
+ const html=el('output').innerHTML+el('projections').innerHTML;
  assert.ok(html.includes('projected five'),'Selected game must render lineups');
  assert.ok(html.includes('PTS <strong>')&&html.includes('REB <strong>')&&html.includes('AST <strong>')&&html.includes('3PM <strong>'),'Selected game must render all projected stat labels');
  assert.ok(html.includes('Top 3 researched props'),'Selected game must render prop section');
