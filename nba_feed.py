@@ -47,3 +47,26 @@ if scoreboards_ok==0 or not games:
 OUT.parent.mkdir(parents=True,exist_ok=True)
 OUT.write_text(json.dumps({"generated_at":datetime.datetime.now(datetime.timezone.utc).isoformat(),"source":"ESPN public NBA scoreboard/summary","games":games},separators=(",",":")))
 print("Wrote",len(games),"games",sum(len(g["players"]) for g in games),"player records")
+# Pregame season averages, pulled directly from ESPN's public athlete overview.
+# Limit requests to athletes present in today's matchups to avoid rate limits.
+import concurrent.futures
+today_teams={t for g in games if g.get("status")=="STATUS_SCHEDULED" for t in (g["home"],g["away"])}
+ids={str(p["id"]) for g in games if g["home"] in today_teams or g["away"] in today_teams for p in g["players"] if p.get("id")}
+season=today.year+int(today.month>=10)
+def season_stats(pid):
+ try:
+  url="https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/"+pid+"/overview?season="+str(season)
+  d=get(url)
+  st=d.get("statistics") or {}
+  names=st.get("names") or st.get("labels") or []
+  values=st.get("values") or []
+  return pid,{str(k):v for k,v in zip(names,values) if isinstance(v,(int,float))}
+ except Exception:return pid,{}
+if ids:
+ with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
+  season_players={k:v for k,v in pool.map(season_stats,sorted(ids)) if v}
+ if len(season_players)>=10:
+  (ROOT/"data"/"nba_season_stats.json").write_text(json.dumps({"generated_at":datetime.datetime.now(datetime.timezone.utc).isoformat(),"season":season,"source":"ESPN NBA athlete overview","players":season_players},separators=(",",":")))
+  print("Published ESPN season averages for",len(season_players),"players")
+ else:print("ESPN season averages insufficient; retaining previous feed")
+
