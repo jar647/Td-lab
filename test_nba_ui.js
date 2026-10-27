@@ -35,7 +35,7 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  assert.ok(game,'Integration test needs an Oct 26 matchup with prior games');
  const dom=new Map();
  const el=id=>{if(!dom.has(id))dom.set(id,{value:'',textContent:'',innerHTML:'',onclick:null,click(){this.onclick?.()}});return dom.get(id)};
- const fixtureTime=new Date(game.date).getTime()-60000;
+ const fixtureTime=new Date(easternDay(game.date)+'T17:00:00Z').getTime();
  const FixedDate=class extends Date{constructor(...args){super(...(args.length?args:[fixtureTime]))}static now(){return fixtureTime}};
  const context={document:{getElementById:el},fetch:async url=>({ok:true,json:async()=>url.includes('nba_games')?data:url.includes('nba_injuries')?{generated_at:new Date().toISOString(),injuries:[]}:{snapshots:[]}}),console,Date:FixedDate,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl};
  vm.createContext(context);vm.runInContext(match[1],context,{timeout:2000});
