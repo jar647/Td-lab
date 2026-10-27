@@ -8,6 +8,7 @@ on:
       - 'nba_rosters.py'
       - 'test_nba_contracts.py'
       - 'test_nba_ui.js'
+      - 'test_nba_simulator.js'
       - 'nba.html'
       - '.github/workflows/nba-feed.yml'
   workflow_dispatch:
@@ -39,6 +40,7 @@ jobs:
             python nba_tracker.py
             python -m unittest -v test_nba_contracts.py
             node test_nba_ui.js
+            node test_nba_simulator.js
             git add data/nba_games.json data/nba_projection_tracker.json
             if test -f data/nba_season_stats.json; then git add data/nba_season_stats.json; fi
             if test -f data/nba_rosters.json; then git add data/nba_rosters.json; fi
