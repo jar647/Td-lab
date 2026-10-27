@@ -68,7 +68,8 @@ for(const p of projections){
 }
 currentProjections=projections;
 const fresh=!!injuryData?.generated_at&&Math.abs(Date.now()-new Date(injuryData.generated_at).getTime())<12*3600000;
-const blocked=/OUT|DOUBTFUL|SUSPENDED|INACTIVE|QUESTIONABLE|DAY.TO.DAY|GAME.TIME.DECISION/;
+const blocked=/OUT|DOUBTFUL|SUSPENDED|INACTIVE/;
+const uncertain=/QUESTIONABLE|DAY.TO.DAY|GAME.TIME.DECISION/;
 const players=[...byPlayer.values()].filter(p=>p.rows.length>=1&&p.rows[0].team===p.team);
 const perPlayer=new Map();
 for(const p of projections){if(!perPlayer.has(String(p.id)))perPlayer.set(String(p.id),{});perPlayer.get(String(p.id))[p.key]=p}
@@ -79,14 +80,14 @@ for(const team of [g.away,g.home]){
   const recentStarts=p.rows.slice(0,3).filter(r=>r.starter).length;
   const mins=recent.reduce((sum,r)=>sum+r.minutes,0)/recent.length;
   const injury=injuryFor(p);
-  return {...p,starts,recentStarts,mins,injury,rank:recentStarts*8+starts*4+mins*.4};
+  return {...p,starts,recentStarts,mins,injury,rank:recentStarts*8+starts*4+mins*.4-(uncertain.test(injury.status)?12:0)};
  }).filter(p=>!blocked.test(p.injury.status)).sort((a,b)=>b.rank-a.rank);
  starters[team]=candidates.slice(0,5);
 }
 const line=(p,key)=>{const x=perPlayer.get(String(p.id))?.[key];return x?x.adjusted.toFixed(1):'N/A'};
-const card=p=>'<div class="player"><strong>'+esc(p.name)+'</strong> <span class="muted">· projected starter · '+p.starts+'/'+Math.min(5,p.rows.length)+' recent starts · projected '+p.mins.toFixed(1)+' MIN · injury '+esc(p.injury.status)+'</span><p>PTS <strong>'+line(p,'points')+'</strong> · REB <strong>'+line(p,'rebounds')+'</strong> · AST <strong>'+line(p,'assists')+'</strong> · 3PM <strong>'+line(p,'threes')+'</strong></p></div>';
+const card=p=>'<div class="player"><strong>'+esc(p.name)+'</strong> <span class="muted">· projected starter · '+p.starts+'/'+Math.min(5,p.rows.length)+' recent starts · projected '+p.mins.toFixed(1)+' MIN · injury '+esc(p.injury.status)+(uncertain.test(p.injury.status)?' (availability uncertain)':'')+'</span><p>PTS <strong>'+line(p,'points')+'</strong> · REB <strong>'+line(p,'rebounds')+'</strong> · AST <strong>'+line(p,'assists')+'</strong> · 3PM <strong>'+line(p,'threes')+'</strong></p></div>';
 const floors={points:15,rebounds:6,assists:4,threes:2};
-const top=projections.filter(p=>p.total>=3&&p.defenseGames>=1&&fresh&&!blocked.test(injuryFor(p).status))
+const top=projections.filter(p=>p.total>=3&&p.defenseGames>=1&&fresh&&!blocked.test(injuryFor(p).status)&&!uncertain.test(injuryFor(p).status))
  .flatMap(p=>p.options.filter(o=>o.line>=floors[p.key]&&o.hits/p.total>=.67&&p.adjusted>=o.line*1.1).map(o=>({...p,pick:o,quality:o.hits/p.total*55+Math.min(25,(p.adjusted/o.line-1)*100)+Math.min(15,p.defenseGames*3)+Math.min(5,p.minutes/8)})))
  .sort((a,b)=>b.quality-a.quality);
 const chosen=[];const seen=new Set();
