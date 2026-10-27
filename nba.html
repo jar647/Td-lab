@@ -6,6 +6,14 @@ $('show').onclick=()=>{const i=$('games').value;if(i===''){$('status').textConte
 function num(v){if(v===null||v===undefined||v==='')return null;const x=Number(v);return Number.isFinite(x)?x:null}
 function minutes(v){const t=String(v||'');if(t.includes(':')){const [m,s]=t.split(':').map(Number);return m+s/60}return num(t)}
 function stat(p,keys){for(const k of keys){if(p.stats&&p.stats[k]!==undefined){const v=p.stats[k];if(k==='3PT'&&typeof v==='string'&&v.includes('-')){const made=Number(v.split('-')[0]);return Number.isFinite(made)?made:null}return num(v)}}return null}
+function injuryFor(p){
+ const stamp=Date.parse(injuryData?.generated_at||'');
+ if(!Number.isFinite(stamp)||Math.abs(Date.now()-stamp)>12*3600000)return {status:'UNVERIFIED'};
+ const match=(injuryData?.injuries||[]).find(x=>
+  (x.id!=null&&String(x.id)===String(p.id))||
+  String(x.player||x.name||'').trim().toLowerCase()===String(p.name||'').trim().toLowerCase());
+ return {status:String(match?.status||'NOT LISTED').toUpperCase()};
+}
 function renderProjections(g){
 const el=$('projections');
 const tip=new Date(g.date).getTime();
