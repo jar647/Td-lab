@@ -890,6 +890,15 @@ function renderNFLPlayerWatch(){
   if(selectedRows.length===8)break;
  }
  root.replaceChildren();
+ // Official roster return shown independently of the historical model's
+ // minimum three-game requirement; do not invent a projection or prop line.
+ if(selected==='ALL'||selected==='CAR|GB'){
+  const official=document.createElement('div');official.className='matchrow';
+  const h=document.createElement('strong');h.textContent='Josh Jacobs · RB · Green Bay Packers · RETURNED STARTER';official.appendChild(h);
+  const p=document.createElement('p');p.textContent='2026 Week 7 vs Detroit: 11 carries, 36 rushing yards; 5 catches, 55 receiving yards, 1 receiving TD.';official.appendChild(p);
+  const caution=document.createElement('p');caution.className='muted';caution.textContent='Active roster return confirmed October 24. Only one 2026 appearance: insufficient current-season sample for an evidence-backed alternate line. Workload and game-day status require verification. This is a roster/role update, not a ranked betting recommendation.';official.appendChild(caution);
+  root.appendChild(official);
+ }
  if(!selectedRows.length){const p=document.createElement('p');p.className='status';p.textContent='No supported player/category opportunities currently pass the matchup, usage and recent-game checks'+(selected==='ALL'?' across the current slate.': ' for this matchup.')+' No forced picks.';root.appendChild(p);return;}
  const intro=document.createElement('p');intro.className='muted';intro.textContent='Sorted by matchup opportunity score, not probability of winning. Suggested alternate lines are research thresholds, not verified sportsbook offerings.';root.appendChild(intro);
  selectedRows.forEach((x,i)=>{
