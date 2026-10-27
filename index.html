@@ -837,6 +837,17 @@ function openSearchedPlayer(id){
  const msg=document.getElementById('playerQuickResults');
  if(msg)msg.insertAdjacentHTML('beforeend','<p class="muted">Player found: '+escapeHTML(r.player)+'. Not in the top 15 '+escapeHTML(category)+' rankings; select another category to explore.</p>');
 }
+// Verified return context: Jacobs reclaimed Green Bay's backfield in Week 7.
+// Temporary conservative override until the automated feed tracks current-week
+// backfield depth and game-day inactive status reliably.
+function nflReturningStarterContext(r){
+ const team=String(r.team||'').toUpperCase();
+ const name=String(r.player||'').toLowerCase();
+ if(team==='GB'&&r.pos==='RB'&&name!=='josh jacobs'){
+  return 'Josh Jacobs returned in Week 7 and handled the lead-back workload; backup RB opportunity is not verified.';
+ }
+ return '';
+}
 function renderNFLPlayerWatch(){
  const root=document.getElementById('nflPlayerWatchList');if(!root)return;
  const selected=document.getElementById('gameFilter')?.value||'ALL';
@@ -850,6 +861,7 @@ function renderNFLPlayerWatch(){
  for(const r of autoRecords){
   if(r.market!=='ATD'||!r.player||!r.team||!r.opp||!specs.some(d=>d.pos.includes(r.pos))||selected!=='ALL'&&gameKey(r)!==selected)continue;
   if(manuallyInactive(r)||r.availability==='OUT'||r.availability==='IR'||r.playerAppearancesVerified===false||Number(r.games)<3)continue;
+  if(nflReturningStarterContext(r))continue;
   for(const d of specs){
    if(!d.pos.includes(r.pos))continue;
    const model=propResearch(r,d.key,d.field,d.def,d.usage,null,d.thresholds);
