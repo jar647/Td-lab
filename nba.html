@@ -91,7 +91,7 @@ const evidence=p=>'<p class="muted">Pregame averages (PTS / REB / AST / 3PM / MI
 const card=p=>'<div class="player"><strong>'+esc(p.name)+'</strong> <span class="muted">· projected starter · '+p.starts+'/'+Math.min(5,p.rows.length)+' recent starts · projected '+p.mins.toFixed(1)+' MIN · '+(p.sampleGames>=5?'moderate':p.sampleGames>=3?'limited':'very limited')+' sample ('+p.sampleGames+' games) · injury '+esc(p.injury.status)+(uncertain.test(p.injury.status)?' (availability uncertain)':'')+'</span><p>PTS <strong>'+line(p,'points')+'</strong> · REB <strong>'+line(p,'rebounds')+'</strong> · AST <strong>'+line(p,'assists')+'</strong> · 3PM <strong>'+line(p,'threes')+'</strong></p></div>';
 const floors={points:15,rebounds:6,assists:4,threes:2};
 const top=projections.filter(p=>(!rosterFresh||!rosterFor(p.team)||rosterFor(p.team).includes(String(p.id)))&&p.total>=4&&p.defenseGames>=2&&fresh&&!blocked.test(injuryFor(p).status)&&!uncertain.test(injuryFor(p).status))
- .flatMap(p=>p.options.filter(o=>o.line>=floors[p.key]&&o.hits/p.total>=.67&&p.adjusted>=o.line*1.1).map(o=>({...p,pick:o,quality:o.hits/p.total*55+Math.min(25,(p.adjusted/o.line-1)*100)+Math.min(15,p.defenseGames*3)+Math.min(5,p.minutes/8)})))
+ .flatMap(p=>p.options.filter(o=>o.line>=floors[p.key]&&o.hits/p.total>=.67&&p.adjusted>=o.line*1.05).map(o=>({...p,pick:o,quality:o.hits/p.total*55+Math.min(25,(p.adjusted/o.line-1)*100)+Math.min(15,p.defenseGames*3)+Math.min(5,p.minutes/8)})))
  .sort((a,b)=>b.quality-a.quality);
 const chosen=[];const seen=new Set();
 for(const p of top){if(seen.has(p.id))continue;chosen.push(p);seen.add(p.id);if(chosen.length===3)break}
