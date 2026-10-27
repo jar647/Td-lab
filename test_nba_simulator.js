@@ -9,6 +9,7 @@ vm.runInContext(`simulatorStats={home:${JSON.stringify(rows(10))},away:${JSON.st
 element('sim-count').value='1000';element('sim-spread').value='-3.5';element('sim-total').value='220.5';element('sim-home-ml').value='-150';element('sim-away-ml').value='130';element('sim-home-spread-odds').value='-110';element('sim-away-spread-odds').value='-110';element('sim-over-odds').value='-110';element('sim-under-odds').value='-110';
 vm.runInContext('runNBASimulation()',context);
 let result=element('sim-results').innerHTML;
+const kpiHome=Number(result.match(/Boston Celtics win<\/span><strong>([0-9.]+)%/)[1]);const marketHome=Number(result.match(/Boston Celtics ML<\/td><td>([0-9.]+)%/)[1]);assert.equal(marketHome,kpiHome,'moneyline table should use the same simulated home win probability as the summary');
 for(const text of ['1,000 runs','Boston Celtics ML','New York Knicks ML','Boston Celtics -3.5 spread','Over 220.5','Fair','Edge','Kelly*','Score Differential Distribution','MODEL LEAN','not calibrated forecasts'])assert.ok(result.includes(text),'Missing simulation output: '+text);
 vm.runInContext("setOddsFormat('decimal')",context);assert.equal(element('sim-home-ml').value,'1.67');assert.equal(element('sim-away-ml').value,'2.30');
 vm.runInContext("setOddsFormat('american')",context);assert.equal(element('sim-home-ml').value,'-149');assert.equal(element('sim-away-ml').value,'130');
