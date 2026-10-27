@@ -65,6 +65,7 @@ for(const p of projections){
  // No speculative full usage transfer: cap at +6% for one absence and +10% overall.
  p.opportunityFactor=1+Math.min(.10,absent.length*.04);
  p.adjusted*=p.opportunityFactor;
+}
 
 const scoutHtml = '<h3>Game matchup breakdown</h3>' +
 [g.away, g.home].map(team => {
