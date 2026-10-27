@@ -856,7 +856,10 @@ function renderNFLPlayerWatch(){
    if(!model||model.missing||!model.tiers||!Number.isFinite(model.projection))continue;
    const baseline=Number(r[d.field]),allowed=Number(r[d.def]);
    if(!Number.isFinite(baseline)||baseline<=0||!Number.isFinite(allowed)||allowed<=0)continue;
-   const matchup=(allowed/baseline-1);
+   const peerDef=autoRecords.filter(x=>x.market==='ATD'&&x.pos===r.pos&&Number.isFinite(Number(x[d.def]))&&Number(x[d.def])>0).map(x=>Number(x[d.def]));
+   const leagueDef=peerDef.length>=8?peerDef.reduce((a,b)=>a+b,0)/peerDef.length:NaN;
+   if(!Number.isFinite(leagueDef)||leagueDef<=0)continue;
+   const matchup=(allowed/leagueDef-1);
    if(matchup<.05)continue;
    const line=model.tiers.balanced||model.tiers.conservative;
    if(!line||model.projection<line.line*1.05)continue;
@@ -881,7 +884,7 @@ function renderNFLPlayerWatch(){
   const card=document.createElement('div');card.className='matchrow';
   const head=document.createElement('strong');head.textContent='#'+(i+1)+' · '+x.r.player+' · '+x.d.unit.toUpperCase();card.appendChild(head);
   const target=document.createElement('p');target.style.fontWeight='800';target.textContent='Look at '+x.line.line+'+ '+x.d.unit+' · projected '+x.model.projection.toFixed(1);card.appendChild(target);
-  const detail=document.createElement('p');detail.className='muted';detail.textContent='Vs '+x.r.opp+': opponent allows '+Number(x.r[x.d.def]).toFixed(1)+' '+x.d.unit+' (reference '+Number(x.r[x.d.field]).toFixed(1)+', '+(x.matchup>=0?'+':'')+(x.matchup*100).toFixed(0)+'%). Recent clears '+x.line.hits+'/'+x.line.total+' · usage factor '+x.model.usageRatio.toFixed(2)+' · '+x.r.games+' player games.'+(x.warning?' CAUTION: availability or returning teammate requires verification.':'')+' Verify sportsbook line, player role and game-day actives.';card.appendChild(detail);
+  const detail=document.createElement('p');detail.className='muted';detail.textContent='Vs '+x.r.opp+': opponent allows '+Number(x.r[x.d.def]).toFixed(1)+' '+x.d.unit+' ('+(x.matchup>=0?'+':'')+(x.matchup*100).toFixed(0)+'%). Recent clears '+x.line.hits+'/'+x.line.total+' · usage factor '+x.model.usageRatio.toFixed(2)+' · '+x.r.games+' player games.'+(x.warning?' CAUTION: availability or returning teammate requires verification.':'')+' Verify sportsbook line, player role and game-day actives.';card.appendChild(detail);
   root.appendChild(card);
  });
 }
