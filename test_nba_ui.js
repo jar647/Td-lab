@@ -33,13 +33,14 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  assert.ok(game,'Integration test needs an Oct 26 matchup with prior games');
  const dom=new Map();
  const el=id=>{if(!dom.has(id))dom.set(id,{value:'',textContent:'',innerHTML:'',onclick:null,click(){this.onclick?.()}});return dom.get(id)};
- const context={document:{getElementById:el},fetch:async url=>({ok:true,json:async()=>url.includes('nba_games')?data:url.includes('nba_injuries')?{generated_at:new Date().toISOString(),injuries:[]}:{snapshots:[]}}),console,Date,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl};
+ const FixedDate=class extends Date{constructor(...args){super(...(args.length?args:['2026-10-26T23:00:00Z']))}static now(){return new Date('2026-10-26T23:00:00Z').getTime()}};
+ const context={document:{getElementById:el},fetch:async url=>({ok:true,json:async()=>url.includes('nba_games')?data:url.includes('nba_injuries')?{generated_at:new Date().toISOString(),injuries:[]}:{snapshots:[]}}),console,Date:FixedDate,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl};
  vm.createContext(context);vm.runInContext(match[1],context,{timeout:2000});
  await new Promise(resolve=>setTimeout(resolve,50));
  assert.ok(el('games').innerHTML.includes(game.home),'Today-game selector must contain real matchup');
  // Simulate the real game selection using the same Eastern calendar-day matching as the app.
  const day=x=>{const p=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(x)).map(v=>[v.type,v.value]));return p.year+'-'+p.month+'-'+p.day};
- const today=data.games.filter(g=>g.date&&day(g.date)===day(new Date()));
+ const today=data.games.filter(g=>g.date&&day(g.date)===day(new Date('2026-10-26T23:00:00Z')));
  const idx=today.findIndex(g=>g.home===game.home&&g.away===game.away);
  assert.ok(idx>=0,'Integration matchup must be today');
  el('games').value=String(idx);el('show').click();
