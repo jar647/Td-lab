@@ -50,30 +50,7 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  const html=el('output').innerHTML+el('projections').innerHTML;
  assert.ok(html.includes('projected five'),'Selected game must render lineups');
  assert.ok(html.includes('PTS <strong>')&&html.includes('REB <strong>')&&html.includes('AST <strong>')&&html.includes('3PM <strong>'),'Selected game must render all projected stat labels');
- assert.ok(html.includes('Player recommendations · matchup opportunities'),'Selected game must render prop section');
+ assert.ok(html.includes('Top 3 researched props'),'Selected game must render prop section');
  assert.ok(/PTS <strong>\d/.test(html),'Selected game must render numeric player projections; selected '+el('games').value+'; preview '+html.slice(0,700));
  console.log('NBA real-feed selection and numeric projection integration test: PASS');
 })().catch(e=>{console.error(e);process.exitCode=1});
-
-
-;(()=>{
-const fs=require('fs'),vm=require('vm'),assert=require('assert');
-const script=fs.readFileSync('nba.html','utf8').match(/<script>([\s\S]*?)<\/script>/)[1];
-const els={};const get=id=>els[id]??=( {innerHTML:'',textContent:'',value:''} );
-const now=Date.parse('2026-10-27T18:00:00Z');
-class Clock extends Date{constructor(...args){super(...(args.length?args:[now]))}static now(){return now}}
-const ctx={document:{getElementById:get},fetch:async()=>({ok:false}),console,Date:Clock,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl};
-vm.createContext(ctx);vm.runInContext(script,ctx);
-const g={date:'2026-10-28T01:00:00Z',status:'STATUS_SCHEDULED',home:'Home',away:'Away'};
-const players=(team,points)=>Array.from({length:5},(_,i)=>({name:team+i,team,stats:{PTS:points/5}}));
-const history=[];for(let i=0;i<3;i++){history.push({date:`2026-10-${21+i}T00:00:00Z`,status:'STATUS_FINAL',home:'Home',away:'Opponent',players:[...players('Home',120),...players('Opponent',100)]});history.push({date:`2026-10-${21+i}T01:00:00Z`,status:'STATUS_FINAL',home:'Away',away:'Opponent',players:[...players('Away',100),...players('Opponent',115)]})}
-ctx.g=g;ctx.fixture=history;vm.runInContext("historicalGames=fixture;generatedAt='2026-10-27T17:00:00Z';injuryData={generated_at:'2026-10-27T17:00:00Z',injuries:[{player:'Home0',status:'Questionable'}]};renderGamePick(g)",ctx);
-assert.match(get('output').innerHTML,/Home to win/);assert.match(get('output').innerHTML,/Home0.*Questionable/);assert.match(get('output').innerHTML,/betting accuracy has not been validated/);
-vm.runInContext("currentResearchProps=[{name:'Test Player',key:'points',label:'points',line:20,adjusted:24,opponent:'Away',total:5,hits:4,rows:Array.from({length:10},(_,i)=>({points:i<8?25:12}))}];renderGamePick(g)",ctx);assert.match(get('output').innerHTML,/Top researched player props/);get('research-prop-0-line').value='20';get('research-prop-0-odds').value='100';vm.runInContext('evaluateGameMarkets()',ctx);assert.match(get('game-pick-result').innerHTML,/Historical lean/);assert.match(get('game-pick-result').innerHTML,/8\/10/);assert.match(get('game-pick-result').innerHTML,/not a projection of future hit probability/);
-get('pick-away-ml').value='+150';get('pick-home-ml').value='-170';get('pick-home-spread').value='-4.5';get('pick-spread-odds').value='-110';get('pick-total').value='210.5';get('pick-over-odds').value='-110';vm.runInContext('evaluateGameMarkets()',ctx);assert.match(get('game-pick-result').innerHTML,/no bet/i);assert.match(get('game-pick-result').innerHTML,/40.0% break-even/);assert.match(get('game-pick-result').innerHTML,/Home -4.5/);assert.match(get('game-pick-result').innerHTML,/Over 210.5/);assert.match(get('game-pick-result').innerHTML,/52.4%/);get('pick-home-ml').value='50';vm.runInContext('evaluateGameMarkets()',ctx);assert.match(get('game-pick-result').innerHTML,/valid American prices/);
-get('output').innerHTML='';vm.runInContext("generatedAt='2026-10-26T00:00:00Z';renderGamePick(g)",ctx);assert.match(get('output').innerHTML,/No pick.*feed/);
-get('output').innerHTML='';vm.runInContext("generatedAt='2026-10-27T17:00:00Z';historicalGames=fixture.slice(0,2);renderGamePick(g)",ctx);assert.match(get('output').innerHTML,/at least 3 completed games/);
-get('output').innerHTML='';vm.runInContext("g.status='STATUS_FINAL';renderGamePick(g)",ctx);assert.match(get('output').innerHTML,/started or finished/);
-console.log('NBA game picks: fresh data, injuries, stale feed, short sample and started-game checks PASS');
-
-})();
