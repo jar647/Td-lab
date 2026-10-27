@@ -156,8 +156,22 @@ const watch=projections.filter(p=>p.total>=2&&p.defenseGames>=2&&p.minutes>=15&&
   return {...p,oppAvg,edge,recentAvg,direction,quality};
  }).filter(p=>p.edge>=.05&&p.adjusted>=({points:9,rebounds:3,assists:2,threes:.9}[p.key]))
  .sort((a,b)=>b.quality-a.quality);
-const recommendations=[];const countByPlayer=new Map();
-for(const p of watch){const n=countByPlayer.get(String(p.id))||0;if(n>=2)continue;recommendations.push(p);countByPlayer.set(String(p.id),n+1);if(recommendations.length>=8)break}
+// Diversify the watchlist: small three-point allowance samples should not dominate.
+const recommendations=[];const countByPlayer=new Map(),countByMarket=new Map();
+const marketCaps={points:3,rebounds:3,assists:3,threes:2};
+for(const p of watch){
+ const n=countByPlayer.get(String(p.id))||0;
+ if(n>=2||(countByMarket.get(p.key)||0)>=marketCaps[p.key])continue;
+ if(p.key==='threes'){
+  const recent=p.rows.slice(0,5);
+  const makes=recent.map(r=>r.threes).filter(Number.isFinite);
+  if(makes.length<3||makes.filter(x=>x>=1).length/makes.length<.6||p.adjusted<1.3)continue;
+ }
+ recommendations.push(p);
+ countByPlayer.set(String(p.id),n+1);
+ countByMarket.set(p.key,(countByMarket.get(p.key)||0)+1);
+ if(recommendations.length>=8)break;
+}
 const watchHtml='<h3>Player recommendations · matchup opportunities</h3><p class="muted">Markets to investigate, not bets. Ranked by opponent defensive weakness, projected playing time and available evidence. No sportsbook lines or odds are assumed. '+(fresh?'Injury report recently refreshed.':'Injury report may be stale: verify every player before betting.')+'</p>'+
 (recommendations.length?recommendations.map((p,i)=>{
  const pct=Math.round(p.edge*100);
