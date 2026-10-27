@@ -12,7 +12,7 @@ assert.ok(match[1].includes("fetch('./data/nba_injuries.json'"),'Injury feed mis
 assert.ok(match[1].includes("fetch('./data/nba_games.json'"),'Game feed missing');
 assert.ok(match[1].includes('projected five'),'Starting lineup rendering missing');
 assert.ok(match[1].includes('function injuryFor(p)'),'Injury helper required by projection rendering');
-assert.ok(match[1].includes('Top 3 researched props'),'Top props rendering missing');
+assert.ok(match[1].includes('Player recommendations · matchup opportunities'),'Top props rendering missing');
 const elements=new Map();
 function element(id){if(!elements.has(id))elements.set(id,{value:'',textContent:'',innerHTML:'',onclick:null});return elements.get(id)}
 const sandbox={document:{getElementById:element},fetch:async()=>({ok:false}),console,Date,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl};
@@ -50,7 +50,28 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  const html=el('output').innerHTML+el('projections').innerHTML;
  assert.ok(html.includes('projected five'),'Selected game must render lineups');
  assert.ok(html.includes('PTS <strong>')&&html.includes('REB <strong>')&&html.includes('AST <strong>')&&html.includes('3PM <strong>'),'Selected game must render all projected stat labels');
- assert.ok(html.includes('Top 3 researched props'),'Selected game must render prop section');
+ assert.ok(html.includes('Player recommendations · matchup opportunities'),'Selected game must render prop section');
  assert.ok(/PTS <strong>\d/.test(html),'Selected game must render numeric player projections; selected '+el('games').value+'; preview '+html.slice(0,700));
  console.log('NBA real-feed selection and numeric projection integration test: PASS');
 })().catch(e=>{console.error(e);process.exitCode=1});
+
+
+;(()=>{
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const script=fs.readFileSync('nba.html','utf8').match(/<script>([\s\S]*?)<\/script>/)[1];
+const els={};const get=id=>els[id]??=( {innerHTML:'',textContent:'',value:''} );
+const now=Date.parse('2026-10-27T18:00:00Z');
+class Clock extends Date{constructor(...args){super(...(args.length?args:[now]))}static now(){return now}}
+const ctx={document:{getElementById:get},fetch:async()=>({ok:false}),console,Date:Clock,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl};
+vm.createContext(ctx);vm.runInContext(script,ctx);
+const g={date:'2026-10-28T01:00:00Z',status:'STATUS_SCHEDULED',home:'Home',away:'Away'};
+const players=(team,points)=>Array.from({length:5},(_,i)=>({name:team+i,team,stats:{PTS:points/5}}));
+const history=[];for(let i=0;i<3;i++){history.push({date:`2026-10-${21+i}T00:00:00Z`,status:'STATUS_FINAL',home:'Home',away:'Opponent',players:[...players('Home',120),...players('Opponent',100)]});history.push({date:`2026-10-${21+i}T01:00:00Z`,status:'STATUS_FINAL',home:'Away',away:'Opponent',players:[...players('Away',100),...players('Opponent',115)]})}
+ctx.g=g;ctx.fixture=history;vm.runInContext("historicalGames=fixture;generatedAt='2026-10-27T17:00:00Z';injuryData={generated_at:'2026-10-27T17:00:00Z',injuries:[{player:'Home0',status:'Questionable'}]};renderGamePick(g)",ctx);
+assert.match(get('output').innerHTML,/Home to win/);assert.match(get('output').innerHTML,/Home0.*Questionable/);assert.match(get('output').innerHTML,/not a sportsbook recommendation/);
+get('output').innerHTML='';vm.runInContext("generatedAt='2026-10-26T00:00:00Z';renderGamePick(g)",ctx);assert.match(get('output').innerHTML,/No pick.*feed/);
+get('output').innerHTML='';vm.runInContext("generatedAt='2026-10-27T17:00:00Z';historicalGames=fixture.slice(0,2);renderGamePick(g)",ctx);assert.match(get('output').innerHTML,/at least 3 completed games/);
+get('output').innerHTML='';vm.runInContext("g.status='STATUS_FINAL';renderGamePick(g)",ctx);assert.match(get('output').innerHTML,/started or finished/);
+console.log('NBA game picks: fresh data, injuries, stale feed, short sample and started-game checks PASS');
+
+})();
