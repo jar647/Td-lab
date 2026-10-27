@@ -49,9 +49,16 @@ for(const p of projections){
  const ratio=league[p.key]?avg/league[p.key]:1;
  const shrink=sample.length/(sample.length+12);
  p.opponent=opponent;p.defenseGames=sample.length;
- p.defenseDelta=Math.max(-.2,Math.min(.2,ratio-1))*shrink;
- p.adjusted=p.expected*(1+p.defenseDelta);
- p.matchupReason=opponent+' allows '+avg.toFixed(1)+' team '+p.label+'/game versus league '+league[p.key].toFixed(1)+' across '+sample.length+' games.';
+ // Nightly opponent-specific forecast: shrink sparse defensive data toward neutral.
+ p.defenseDelta=Math.max(-.25,Math.min(.25,ratio-1))*shrink;
+ const ownGames=history.filter(h=>h.home===p.team||h.away===p.team).slice(0,8);
+ const gameTotals=ownGames.map(h=>{const opp=h.home===p.team?h.away:h.home;const opponentPoints=(h.players||[]).filter(x=>x.team===opp&&!x.didNotPlay).reduce((sum,x)=>sum+(stat(x,['PTS'])||0),0);const teamPoints=(h.players||[]).filter(x=>x.team===p.team&&!x.didNotPlay).reduce((sum,x)=>sum+(stat(x,['PTS'])||0),0);return teamPoints+opponentPoints}).filter(x=>x>=130);
+ const leagueGameTotal=Object.values(allowed).flat().reduce((sum,x,_,arr)=>sum+x.points/Math.max(1,arr.length),0)*2;
+ const recentTotal=gameTotals.length?gameTotals.reduce((a,b)=>a+b,0)/gameTotals.length:leagueGameTotal;
+ const paceDelta=leagueGameTotal?Math.max(-.06,Math.min(.06,(recentTotal/leagueGameTotal-1)*.35)):0;
+ p.paceDelta=paceDelta;
+ p.adjusted=p.expected*(1+p.defenseDelta)*(1+p.paceDelta);
+ p.matchupReason=opponent+' allowed '+avg.toFixed(1)+' team '+p.label+'/game vs '+league[p.key].toFixed(1)+' sample baseline ('+sample.length+' games). Defensive adjustment '+(p.defenseDelta>=0?'+':'')+(p.defenseDelta*100).toFixed(1)+'%; scoring environment '+(p.paceDelta>=0?'+':'')+(p.paceDelta*100).toFixed(1)+'%.';
 }
 // Injury-aware opportunity adjustment: conservative, explicitly heuristic and bounded.
 const unavailable=new Set((injuryData?.injuries||[]).filter(x=>/OUT|DOUBTFUL|SUSPENDED|INACTIVE/.test(String(x.status||'').toUpperCase())).map(x=>String(x.player||'').toLowerCase()));
@@ -129,10 +136,11 @@ for(const team of [g.away,g.home]){
  starters[team]=candidates.slice(0,5);
 }
 const line=(p,key)=>{const x=perPlayer.get(String(p.id))?.[key];return x?x.adjusted.toFixed(1):'N/A'};
+const forecastNote=(p)=>{const x=perPlayer.get(String(p.id))?.points;if(!x)return '';const base=x.expected,final=x.adjusted;const diff=final-base;return '<p class="muted">Tonight vs '+esc(x.opponent)+': baseline '+base.toFixed(1)+' PTS → matchup forecast '+final.toFixed(1)+' ('+(diff>=0?'+':'')+diff.toFixed(1)+'). '+esc(x.matchupReason)+(x.absentTeammates?.length?' Out teammates: '+esc(x.absentTeammates.join(', '))+'.':'')+' Forecast based on available team samples, not confirmed lineups.</p>'};
 const statSummary=(p,key,n)=>{const rows=p.rows.slice(0,n).map(r=>r[key]).filter(Number.isFinite);return rows.length?(rows.reduce((a,b)=>a+b,0)/rows.length).toFixed(1):'N/A'};
 const seasonLine=p=>{const st=seasonData?.players?.[String(p.id)];if(!st)return '';const keys=['avgPoints','avgRebounds','avgAssists','avgThreePointFieldGoalsMade','avgMinutes'];return '<br>ESPN season: '+keys.map(k=>st[k]===undefined?'N/A':Number(st[k]).toFixed(1)).join(' / ')};
 const evidence=p=>'<p class="muted">Pregame averages (PTS / REB / AST / 3PM / MIN) · season sample '+p.rows.length+' games<br>'+[['Last 5',5],['Last 10',10],['Season sample',p.rows.length]].map(([label,n])=>esc(label)+' ('+Math.min(n,p.rows.length)+' games): '+['points','rebounds','assists','threes','minutes'].map(k=>statSummary(p,k,n)).join(' / ')) .join('<br>')+seasonLine(p)+'</p>';
-const card=p=>'<div class="player"><strong>'+esc(p.name)+'</strong> <span class="muted">· projected starter · '+p.starts+'/'+Math.min(5,p.rows.length)+' recent starts · projected '+p.mins.toFixed(1)+' MIN · '+(p.sampleGames>=5?'moderate':p.sampleGames>=3?'limited':'very limited')+' sample ('+p.sampleGames+' games) · injury '+esc(p.injury.status)+(uncertain.test(p.injury.status)?' (availability uncertain)':'')+'</span><p>PTS <strong>'+line(p,'points')+'</strong> · REB <strong>'+line(p,'rebounds')+'</strong> · AST <strong>'+line(p,'assists')+'</strong> · 3PM <strong>'+line(p,'threes')+'</strong></p></div>';
+const card=p=>'<div class="player"><strong>'+esc(p.name)+'</strong> <span class="muted">· projected starter · '+p.starts+'/'+Math.min(5,p.rows.length)+' recent starts · projected '+p.mins.toFixed(1)+' MIN · '+(p.sampleGames>=5?'moderate':p.sampleGames>=3?'limited':'very limited')+' sample ('+p.sampleGames+' games) · injury '+esc(p.injury.status)+(uncertain.test(p.injury.status)?' (availability uncertain)':'')+'</span><p>PTS <strong>'+line(p,'points')+'</strong> · REB <strong>'+line(p,'rebounds')+'</strong> · AST <strong>'+line(p,'assists')+'</strong> · 3PM <strong>'+line(p,'threes')+'</strong></p>'+forecastNote(p)+'</div>';
 const floors={points:15,rebounds:6,assists:4,threes:2};
 const top=projections.filter(p=>(!rosterFresh||!rosterFor(p.team)||rosterFor(p.team).includes(String(p.id)))&&p.total>=4&&p.defenseGames>=2&&fresh&&!blocked.test(injuryFor(p).status)&&!uncertain.test(injuryFor(p).status))
  .flatMap(p=>p.options.filter(o=>o.line>=floors[p.key]&&o.hits/p.total>=.67&&p.adjusted>=o.line*1.05).map(o=>({...p,pick:o,quality:o.hits/p.total*55+Math.min(25,(p.adjusted/o.line-1)*100)+Math.min(15,p.defenseGames*3)+Math.min(5,p.minutes/8)})))
