@@ -43,7 +43,7 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  assert.ok(el('games').innerHTML.includes(game.home),'Today-game selector must contain real matchup: '+el('status').textContent);
  // Simulate the real game selection using the same Eastern calendar-day matching as the app.
  const day=easternDay;
- const today=data.games.filter(g=>g.date&&day(g.date)===day(new Date(fixtureTime)));
+ const today=data.games.filter(g=>g.date&&day(g.date)===day(new Date(fixtureTime))).sort((a,b)=>new Date(a.date)-new Date(b.date));
  const idx=today.findIndex(g=>g.home===game.home&&g.away===game.away);
  assert.ok(idx>=0,'Integration matchup must be today');
  el('games').value=String(idx);el('show').click();
@@ -51,6 +51,6 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  assert.ok(html.includes('projected five'),'Selected game must render lineups');
  assert.ok(html.includes('PTS <strong>')&&html.includes('REB <strong>')&&html.includes('AST <strong>')&&html.includes('3PM <strong>'),'Selected game must render all projected stat labels');
  assert.ok(html.includes('Top 3 researched props'),'Selected game must render prop section');
- assert.ok(/PTS <strong>\\d/.test(html),'Selected game must render numeric player projections');
+ assert.ok(/PTS <strong>\\d/.test(html),'Selected game must render numeric player projections; selected '+el('games').value+'; preview '+html.slice(0,700));
  console.log('NBA real-feed selection and numeric projection integration test: PASS');
 })().catch(e=>{console.error(e);process.exitCode=1});
