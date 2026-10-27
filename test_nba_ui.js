@@ -11,6 +11,7 @@ for(const removed of ['injurycheck','bookline','buildsgp','sgp'])
 assert.ok(match[1].includes("fetch('./data/nba_injuries.json'"),'Injury feed missing');
 assert.ok(match[1].includes("fetch('./data/nba_games.json'"),'Game feed missing');
 assert.ok(match[1].includes('projected five'),'Starting lineup rendering missing');
+assert.ok(match[1].includes('function injuryFor(p)'),'Injury helper required by projection rendering');
 assert.ok(match[1].includes('Top 3 researched props'),'Top props rendering missing');
 const elements=new Map();
 function element(id){if(!elements.has(id))elements.set(id,{value:'',textContent:'',innerHTML:'',onclick:null});return elements.get(id)}
