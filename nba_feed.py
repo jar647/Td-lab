@@ -41,6 +41,21 @@ for delta in range(-35,4):
   except ValueError:pass
   except Exception as e:print("summary",event["id"],str(e))
   games.append(game)
+# ESPN can intermittently omit a future date from the scoreboard. Preserve previously
+# published scheduled events for the next four days rather than erase the slate.
+if OUT.exists():
+ try:
+  previous=json.loads(OUT.read_text()).get("games",[])
+  now=datetime.datetime.now(datetime.timezone.utc)
+  for old in previous:
+   if old.get("id") in seen_events or old.get("status")!="STATUS_SCHEDULED":continue
+   try:tip=datetime.datetime.fromisoformat(old["date"].replace("Z","+00:00"))
+   except (ValueError,KeyError,AttributeError):continue
+   if now<=tip<=now+datetime.timedelta(days=4):
+    games.append(old)
+    seen_events.add(old["id"])
+    print("Preserved missing scheduled event",old["id"],old.get("away"),"@",old.get("home"))
+ except (OSError,ValueError,TypeError) as e:print("previous feed fallback unavailable",str(e))
 if scoreboards_ok==0 or not games:
  print("NBA feed failure: no valid scoreboards or games; refusing to publish empty feed",file=sys.stderr)
  sys.exit(1)
