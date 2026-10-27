@@ -55,5 +55,17 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  assert.ok(html.includes('PTS <strong>')&&html.includes('REB <strong>')&&html.includes('AST <strong>')&&html.includes('3PM <strong>'),'Selected game must render all projected stat labels');
  assert.ok(html.includes('Player recommendations · matchup opportunities'),'Selected game must render prop section');
  assert.ok(/PTS <strong>\d/.test(html),'Selected game must render numeric player projections; selected '+el('games').value+'; preview '+html.slice(0,700));
+ // Portland has only two regular-season box scores before its Oct 27 game. Show the simulator, but keep the existing small-sample gate on any market lean.
+ const blazersGame=data.games.find(g=>g.status==='STATUS_SCHEDULED'&&g.away==='Portland Trail Blazers'&&g.home==='Los Angeles Lakers');
+ assert.ok(blazersGame,'Integration test needs the Portland–Lakers matchup');
+ vm.runInContext("generatedAt='"+new Date(fixtureTime-60000).toISOString()+"'",context);
+ el('output').innerHTML='';
+ vm.runInContext('renderGameSimulator('+JSON.stringify(blazersGame)+')',context,{timeout:2000});
+ assert.ok(el('output').innerHTML.includes('Simulation Controls'),'Portland–Lakers should show simulator controls with a two-game sample');
+ assert.ok(el('output').innerHTML.includes('Portland Trail Blazers sample 2 games'),'Portland sample size should be visible');
+ for(const id of ['sim-count','sim-spread','sim-total','sim-home-ml','sim-away-ml','sim-home-spread-odds','sim-away-spread-odds','sim-over-odds','sim-under-odds'])el(id).value=id==='sim-count'?'1000':id==='sim-spread'?'-3.5':id==='sim-total'?'220.5':id==='sim-home-ml'?'-150':id==='sim-away-ml'?'130':'-110';
+ vm.runInContext('simulatorStats.injuryFresh=true;simulatorStats.injuries=[];runNBASimulation()',context,{timeout:2000});
+ assert.ok(el('sim-results').innerHTML.includes('No qualified model lean'),'Two-game samples must not produce a model lean');
+ assert.ok(el('sim-results').innerHTML.includes('HOLD · limited game sample'),'Two-game samples must remain blocked from edge signals');
  console.log('NBA real-feed selection and numeric projection integration test: PASS');
 })().catch(e=>{console.error(e);process.exitCode=1});
