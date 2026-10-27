@@ -14,7 +14,7 @@ function renderGameSimulator(g){
  const away=teamGames(g.away),home=teamGames(g.home);
  if(g.status!=='STATUS_SCHEDULED'||tip<=now){box.innerHTML='<h2>NBA Game Simulator</h2><p class="warn">Pregame simulation is unavailable after tipoff.</p>';root.append(box);return}
  if(!Number.isFinite(stamp)||now-stamp>12*3600000||stamp>now+300000){box.innerHTML='<h2>NBA Game Simulator</h2><p class="warn">The game feed is missing or stale. Refresh when the data updates.</p>';root.append(box);return}
- if(away.length<3||home.length<3){box.innerHTML='<h2>NBA Game Simulator</h2><p class="warn">At least 3 completed games with usable box scores per team are required. '+esc(g.away)+': '+away.length+' · '+esc(g.home)+': '+home.length+'.</p>';root.append(box);return}
+ if(away.length<2||home.length<2){box.innerHTML='<h2>NBA Game Simulator</h2><p class="warn">At least 2 completed games with usable box scores per team are required. '+esc(g.away)+': '+away.length+' · '+esc(g.home)+': '+home.length+'.</p>';root.append(box);return}
  const avg=(xs,key)=>xs.reduce((sum,x)=>sum+x[key],0)/xs.length;
  const meanSd=xs=>{const m=avg(xs,'scored');return Math.sqrt(xs.reduce((s,x)=>s+(x.scored-m)**2,0)/Math.max(1,xs.length-1))};
  const weighted=(xs,key)=>{const recent=xs.slice(0,5),base=avg(xs,key);return .65*avg(recent,key)+.35*base};
