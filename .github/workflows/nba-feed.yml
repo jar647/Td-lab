@@ -33,11 +33,11 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             python nba_feed.py
-            python nba_injuries.py || echo 'Injury source unavailable; existing file retained, UI will reject stale records'
+            python nba_rosters.py || echo 'Roster source unavailable; existing file retained'\n          python nba_injuries.py || echo 'Injury source unavailable; existing file retained, UI will reject stale records'
             python nba_tracker.py
             python -m unittest -v test_nba_contracts.py
             node test_nba_ui.js
-            git add data/nba_games.json data/nba_projection_tracker.json
+            git add data/nba_games.json data/nba_projection_tracker.json\n          if test -f data/nba_rosters.json; then git add data/nba_rosters.json; fi
             if test -f data/nba_injuries.json; then git add data/nba_injuries.json; fi
             if git diff --cached --quiet; then exit 0; fi
             git commit -m "Refresh NBA game data and locked projections"
