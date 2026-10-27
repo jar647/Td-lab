@@ -27,7 +27,8 @@ console.log('NBA lineup/projections UI smoke test: PASS');
 // Integration smoke test against the published game-feed file, not just script syntax.
 (async()=>{
  const data=JSON.parse(fs.readFileSync('data/nba_games.json','utf8'));
- const game=data.games.find(g=>g.status==='STATUS_FINAL'&&g.date?.startsWith('2026-10-26')&&
+ const easternDay=x=>{const p=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(x)).map(v=>[v.type,v.value]));return p.year+'-'+p.month+'-'+p.day};
+ const game=data.games.find(g=>g.status==='STATUS_FINAL'&&easternDay(g.date)==='2026-10-26'&&
   data.games.some(h=>h.status==='STATUS_FINAL'&&new Date(h.date)<new Date(g.date)&&h.players?.some(p=>p.team===g.home))&&
   data.games.some(h=>h.status==='STATUS_FINAL'&&new Date(h.date)<new Date(g.date)&&h.players?.some(p=>p.team===g.away)));
  assert.ok(game,'Integration test needs an Oct 26 matchup with prior games');
@@ -39,7 +40,7 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  await new Promise(resolve=>setTimeout(resolve,50));
  assert.ok(el('games').innerHTML.includes(game.home),'Today-game selector must contain real matchup');
  // Simulate the real game selection using the same Eastern calendar-day matching as the app.
- const day=x=>{const p=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(x)).map(v=>[v.type,v.value]));return p.year+'-'+p.month+'-'+p.day};
+ const day=easternDay;
  const today=data.games.filter(g=>g.date&&day(g.date)===day(new Date('2026-10-26T23:00:00Z')));
  const idx=today.findIndex(g=>g.home===game.home&&g.away===game.away);
  assert.ok(idx>=0,'Integration matchup must be today');
