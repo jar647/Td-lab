@@ -22,7 +22,8 @@ for delta in range(-35,4):
   teams=competition.get("competitors",[])
   if len(teams)!=2:continue
   status=event.get("status",{}).get("type",{}).get("name","")
-  game={"id":event["id"],"date":event.get("date"),"status":status,"home":next((x["team"]["displayName"] for x in teams if x.get("homeAway")=="home"),""),"away":next((x["team"]["displayName"] for x in teams if x.get("homeAway")=="away"),""),"players":[]}
+  season_type=(event.get("season") or {}).get("type")
+  game={"id":event["id"],"date":event.get("date"),"status":status,"season_type":season_type,"home":next((x["team"]["displayName"] for x in teams if x.get("homeAway")=="home"),""),"away":next((x["team"]["displayName"] for x in teams if x.get("homeAway")=="away"),""),"players":[]}
   try:
    if status not in ("STATUS_FINAL","STATUS_IN_PROGRESS"): raise ValueError("pregame box score unavailable")
    detail=get("https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event="+event["id"])
