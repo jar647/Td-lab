@@ -51,6 +51,6 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  assert.ok(html.includes('projected five'),'Selected game must render lineups');
  assert.ok(html.includes('PTS <strong>')&&html.includes('REB <strong>')&&html.includes('AST <strong>')&&html.includes('3PM <strong>'),'Selected game must render all projected stat labels');
  assert.ok(html.includes('Top 3 researched props'),'Selected game must render prop section');
- assert.ok(/PTS <strong>\\d/.test(html),'Selected game must render numeric player projections; selected '+el('games').value+'; preview '+html.slice(0,700));
+ assert.ok(/PTS <strong>\d/.test(html),'Selected game must render numeric player projections; selected '+el('games').value+'; preview '+html.slice(0,700));
  console.log('NBA real-feed selection and numeric projection integration test: PASS');
 })().catch(e=>{console.error(e);process.exitCode=1});
