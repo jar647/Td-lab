@@ -27,11 +27,15 @@ def mins(p):
  except (ValueError,TypeError):return 0
 def dt(g):return datetime.datetime.fromisoformat(g["date"].replace("Z","+00:00"))
 finals=sorted((g for g in games if g["status"]=="STATUS_FINAL"),key=dt)
+injury_file=root/"data"/"nba_injuries.json"
+injury_data=json.loads(injury_file.read_text()) if injury_file.exists() else {}
+unavailable={str(x.get("player","")).lower() for x in injury_data.get("injuries",[]) if any(z in str(x.get("status","")).upper() for z in ("OUT","DOUBTFUL","SUSPENDED","INACTIVE"))}
+market_keys={"points":"PTS","rebounds":"REB","assists":"AST","threes":"3PM"}
 for g in games:
  if g["id"] in seen or g["status"]!="STATUS_SCHEDULED":continue
  if not now<dt(g):continue
  if (dt(g)-now).total_seconds()>48*3600:continue
- history=[h for h in finals if dt(h)<now and dt(h)<dt(g)]
+ history=[h for h in finals if dt(h)<dt(g) and dt(h)>=datetime.datetime(2026,10,20,tzinfo=datetime.timezone.utc)]
  byid={}
  for h in reversed(history):
   for p in h["players"]:
@@ -40,6 +44,16 @@ for g in games:
    if not pid:continue
    arr=byid.setdefault(pid,[])
    if len(arr)<10:arr.append(p)
+ allowed={}
+ for h in history:
+  for defense,offense in ((h["home"],h["away"]),(h["away"],h["home"])):
+   totals={market:sum(value(p,key) or 0 for p in h["players"] if p["team"]==offense and not p.get("didNotPlay")) for market,key in market_keys.items()}
+   if totals["points"]>=65:allowed.setdefault(defense,[]).append(totals)
+ league={market:statistics.mean(t[market] for group in allowed.values() for t in group) if allowed else 1 for market in market_keys}
+ missing={}
+ for pid,rows in byid.items():
+  if rows[0]["name"].lower() in unavailable and len(rows)>=3 and statistics.mean(mins(p) for p in rows[:5])>=20:
+   missing.setdefault(rows[0]["team"],set()).add(pid)
  projections=[]
  for pid,rows in byid.items():
   if len(rows)<1:continue
@@ -54,11 +68,17 @@ for g in games:
    weights=list(range(len(valid),0,-1))
    weighted=sum(v*w for v,w in zip(valid,weights))/sum(weights)
    baseline=.7*weighted+.3*statistics.mean(vals)
-   projection=round(baseline*minute_factor,2)
+   opponent=g["away"] if rows[0]["team"]==g["home"] else g["home"]
+   sample=allowed.get(opponent,[])
+   defense_avg=statistics.mean(t[market] for t in sample) if sample else league[market]
+   ratio=defense_avg/league[market] if league[market] else 1
+   defense_delta=max(-.2,min(.2,ratio-1))*len(sample)/(len(sample)+12)
+   opportunity=1+min(.10,.04*len(missing.get(rows[0]["team"],set())-{pid}))
+   projection=round(baseline*minute_factor*(1+defense_delta)*opportunity,2)
    projections.append({"player_id":pid,"player":rows[0]["name"],"team":rows[0]["team"],"market":market,"projection":projection,"baseline":round(baseline,2),"minute_factor":round(minute_factor,3),"sample":len(vals),"actual":None,"result":"pending"})
   projections.append({"player_id":pid,"player":rows[0]["name"],"team":rows[0]["team"],"market":"minutes","projection":round(avg_minutes,2),"sample":len(rows[:5]),"actual":None,"result":"pending"})
  if projections:
-  snapshots.append({"game_id":g["id"],"game":g["away"]+" @ "+g["home"],"tipoff":g["date"],"locked_at":now.isoformat(),"model":"nba-weighted-baseline-v3","projections":projections})
+  snapshots.append({"game_id":g["id"],"game":g["away"]+" @ "+g["home"],"tipoff":g["date"],"locked_at":now.isoformat(),"model":"nba-ui-weighted-matchup-v4","projections":projections})
   seen.add(g["id"])
 for s in snapshots:
  # Only games with a final ESPN result may be graded.
