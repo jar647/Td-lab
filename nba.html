@@ -14,9 +14,9 @@ const history=historicalGames.filter(h=>new Date(h.date).getTime()<Math.min(tip,
 const byPlayer=new Map();
 for(const h of history)for(const p of h.players||[]){if(!p.id||p.didNotPlay||![g.home,g.away].includes(p.team))continue;const m=minutes(p.stats?.MIN);if(m===null||m<5)continue;const key=String(p.id);if(!byPlayer.has(key))byPlayer.set(key,{id:p.id,name:p.name,team:p.team,rows:[]});const o=byPlayer.get(key);if(o.rows.length<10)o.rows.push({date:h.date,starter:!!p.starter,team:p.team,minutes:m,points:stat(p,['PTS']),rebounds:stat(p,['REB']),assists:stat(p,['AST']),threes:stat(p,['3PM','3PTM','3PT'])})}
 const projections=[];
-for(const p of byPlayer.values()){if(p.rows.length<2)continue;const recent=p.rows.slice(0,5);const avg=k=>recent.reduce((a,r)=>a+(r[k]||0),0)/recent.length;const mins=avg('minutes');if(mins<15)continue;const lastThree=p.rows.slice(0,3).reduce((a,r)=>a+r.minutes,0)/3;const minuteFactor=Math.max(.8,Math.min(1.2,lastThree/Math.max(1,mins)));
+for(const p of byPlayer.values()){if(p.rows.length<1)continue;const recent=p.rows.slice(0,5);const avg=k=>recent.reduce((a,r)=>a+(r[k]||0),0)/recent.length;const mins=avg('minutes');if(mins<5)continue;const lastThree=p.rows.slice(0,3).reduce((a,r)=>a+r.minutes,0)/3;const minuteFactor=Math.max(.8,Math.min(1.2,lastThree/Math.max(1,mins)));
 for(const [key,label,steps] of [['points','points',[10,15,20,25,30,35]],['rebounds','rebounds',[4,6,8,10,12,15]],['assists','assists',[3,5,7,9,11]],['threes','made threes',[1,2,3,4,5]]]){
-if(recent.some(x=>x[key]===null))continue;const expected=avg(key)*minuteFactor;const options=steps.map(line=>({line,hits:recent.filter(x=>x[key]>=line).length})).filter(x=>x.line<=expected*1.05&&x.hits/recent.length>=.6);if(!options.length)continue;const choice=options.at(-1);projections.push({...p,key,label,expected,minutes:mins,minuteFactor,line:choice.line,hits:choice.hits,total:recent.length,options,score:choice.line/Math.max(1,expected)*30+choice.hits/recent.length*40})}}
+if(recent.some(x=>x[key]===null))continue;const expected=avg(key)*minuteFactor;const options=steps.map(line=>({line,hits:recent.filter(x=>x[key]>=line).length}));const choice=options.filter(x=>x.line<=expected*1.05&&x.hits/recent.length>=.6).at(-1)||options[0];projections.push({...p,key,label,expected,minutes:mins,minuteFactor,line:choice.line,hits:choice.hits,total:recent.length,options,score:choice.line/Math.max(1,expected)*30+choice.hits/recent.length*40})}}
 projections.sort((a,b)=>b.score-a.score);
 // Opponent allowance relative to the league sample, with strong shrinkage for small samples.
 const allowed={};
@@ -61,7 +61,7 @@ for(const p of projections){
 currentProjections=projections;
 const fresh=!!injuryData?.generated_at&&Math.abs(Date.now()-new Date(injuryData.generated_at).getTime())<12*3600000;
 const blocked=/OUT|DOUBTFUL|SUSPENDED|INACTIVE|QUESTIONABLE|DAY.TO.DAY|GAME.TIME.DECISION/;
-const players=[...byPlayer.values()].filter(p=>p.rows.length>=2&&p.rows[0].team===p.team);
+const players=[...byPlayer.values()].filter(p=>p.rows.length>=1&&p.rows[0].team===p.team);
 const perPlayer=new Map();
 for(const p of projections){if(!perPlayer.has(String(p.id)))perPlayer.set(String(p.id),{});perPlayer.get(String(p.id))[p.key]=p}
 const starters={};
@@ -76,14 +76,14 @@ for(const team of [g.away,g.home]){
  starters[team]=candidates.slice(0,5);
 }
 const line=(p,key)=>{const x=perPlayer.get(String(p.id))?.[key];return x?x.adjusted.toFixed(1):'N/A'};
-const card=p=>'<div class="player"><strong>'+esc(p.name)+'</strong> <span class="muted">· projected starter · '+p.starts+'/'+Math.min(5,p.rows.length)+' recent starts · '+p.mins.toFixed(1)+' min · injury '+esc(p.injury.status)+'</span><p>PTS <strong>'+line(p,'points')+'</strong> · REB <strong>'+line(p,'rebounds')+'</strong> · AST <strong>'+line(p,'assists')+'</strong> · 3PM <strong>'+line(p,'threes')+'</strong></p></div>';
+const card=p=>'<div class="player"><strong>'+esc(p.name)+'</strong> <span class="muted">· projected starter · '+p.starts+'/'+Math.min(5,p.rows.length)+' recent starts · projected '+p.mins.toFixed(1)+' MIN · injury '+esc(p.injury.status)+'</span><p>PTS <strong>'+line(p,'points')+'</strong> · REB <strong>'+line(p,'rebounds')+'</strong> · AST <strong>'+line(p,'assists')+'</strong> · 3PM <strong>'+line(p,'threes')+'</strong></p></div>';
 const floors={points:15,rebounds:6,assists:4,threes:2};
 const top=projections.filter(p=>p.total>=3&&p.defenseGames>=1&&fresh&&!blocked.test(injuryFor(p).status))
  .flatMap(p=>p.options.filter(o=>o.line>=floors[p.key]&&o.hits/p.total>=.67&&p.adjusted>=o.line*1.1).map(o=>({...p,pick:o,quality:o.hits/p.total*55+Math.min(25,(p.adjusted/o.line-1)*100)+Math.min(15,p.defenseGames*3)+Math.min(5,p.minutes/8)})))
  .sort((a,b)=>b.quality-a.quality);
 const chosen=[];const seen=new Set();
 for(const p of top){if(seen.has(p.id))continue;chosen.push(p);seen.add(p.id);if(chosen.length===3)break}
-el.innerHTML='<p class="muted">Projected, NOT confirmed. Based on recent starts, playing time and available injury reports. No current-roster verification or official starting-five feed; recent team assignments are used. Stats are estimates from recent form and opponent market allowances, not sportsbook lines. '+(fresh?'Injury feed is recent.':'Injury feed is stale or missing; prop rankings withheld.')+'</p>'+
+el.innerHTML='<p class="muted">Projected, NOT confirmed. Based on recent starts, playing time and available injury reports. No current-roster verification or official starting-five feed; recent team assignments are used. One-game estimates are preliminary and less reliable. Stats are estimates from recent form and opponent market allowances, not sportsbook lines. '+(fresh?'Injury feed is recent.':'Injury feed is stale or missing; prop rankings withheld.')+'</p>'+
 [g.away,g.home].map(team=>'<h3>'+esc(team)+' · projected five</h3>'+(starters[team].length?starters[team].map(card).join(''):'<p class="warn">Insufficient lineup evidence.</p>')+(starters[team].length<5?'<p class="warn">Fewer than five eligible players with sufficient recent records. No names invented.</p>':'')).join('')+
 '<h3>Top 3 researched props for this game</h3>'+(chosen.length?chosen.map((p,i)=>'<div class="player"><strong>#'+(i+1)+' · '+esc(p.name)+' · '+p.pick.line+'+ '+esc(p.label)+'</strong><p class="muted">Recent clears '+p.pick.hits+'/'+p.total+' · estimated '+p.adjusted.toFixed(1)+' · '+esc(p.matchupReason)+' Injury: '+esc(injuryFor(p).status)+'.</p></div>').join(''):'<p class="warn">No props currently meet the minimum evidence and injury-data checks. No forced picks.</p>');
 
