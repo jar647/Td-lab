@@ -232,8 +232,10 @@ watchHtml+comboHtml+'<p class="muted">Projected, NOT confirmed. Based on recent 
 [g.away,g.home].map(team=>'<h3>'+esc(team)+' · projected five</h3>'+(starters[team].length?starters[team].map(card).join(''):'<p class="warn">Insufficient lineup evidence.</p>')+(starters[team].length<5?'<p class="warn">Fewer than five eligible players with sufficient recent records. No names invented.</p>':'')).join('');
 
 }
-// A descriptive winner lean based on observed completed games; not a betting model.
+// Descriptive scoring analysis. Price comparisons are research leans, not validated betting edges.
+let pickContext=null;
 function renderGamePick(g){
+ pickContext=null;
  const box='<div class="panel"><h2>Game picks</h2>';
  const finish=html=>{$('output').innerHTML+=box+html+'</div>'};
  const tip=Date.parse(g.date),now=Date.now(), feedTime=Date.parse(generatedAt);
@@ -266,8 +268,34 @@ function renderGamePick(g){
  for(const r of [...away,...home])for(const p of r.h.players||[])if([g.away,g.home].includes(p.team))known.set(String(p.name||'').trim().toLowerCase(),p.team);
  for(const x of injuryData.injuries||[]){const team=known.get(String(x.player||x.name||'').trim().toLowerCase());if(team&&/OUT|DOUBTFUL|QUESTIONABLE|DAY.TO.DAY|SUSPEND|INACTIVE/i.test(String(x.status||'')))affected.push({team,name:x.player||x.name,status:x.status})}
  const margin=Math.abs(homeScore-awayScore);const lean=margin<3?'No clear winner lean':(homeScore>awayScore?g.home:g.away)+' to win';
- const injuries=affected.length?affected.slice(0,8).map(x=>esc(x.name)+' ('+esc(x.team)+': '+esc(x.status)+')').join('; '):'No listed absences matched to these teams’ recent box scores.';
- finish('<p><strong>Winner lean: '+esc(lean)+'</strong></p><p class="muted">Recent scoring baseline: '+esc(g.away)+' '+awayScore.toFixed(1)+' · '+esc(g.home)+' '+homeScore.toFixed(1)+'. This combines each team’s points scored with its opponent’s points allowed over up to 10 completed games. '+esc(g.away)+' sample: '+away.length+'; '+esc(g.home)+' sample: '+home.length+'.</p><p class="muted">Injury watch: '+injuries+(affected.length>8?'; plus '+(affected.length-8)+' more':'')+'. Report: '+esc(injuryData.generated_at)+'. Injury effects, confirmed lineups, rest and opponent strength are not modeled; team matching can miss players.</p><p class="warn">Research lean only, not a sportsbook recommendation. No verified moneyline, spread, total or win probability is available. Check current odds and availability before betting.</p>');
+ const injuries=affected.length?affected.slice(0,8).map(x=>esc(x.name)+' ('+esc(x.team)+': '+esc(x.status)+')').join('; '):'No listed absences matched to recent box scores; unlisted does not mean healthy.';
+ const record=(team,list)=>{const wins=list.filter(r=>r.scores[team]>r.scores[r.h.home===team?r.h.away:r.h.home]).length;return wins+'–'+(list.length-wins)};
+ const rest=(list)=>{const days=Math.floor((tip-list[0].t)/86400000);return days<2?'played within the previous 48 hours':days+' days since previous game'};
+ pickContext={game:g,tip,feedTime,injuryTime,homeScore,awayScore,affected:affected.length};
+ const input=(id,label,placeholder)=>'<label class="muted" for="'+id+'">'+esc(label)+'</label><input id="'+id+'" type="number" step="any" placeholder="'+esc(placeholder)+'" style="width:100%;padding:12px;margin:6px 0 12px;background:#0b1c13;color:white;border:1px solid #426951;border-radius:9px;font-size:16px">';
+ finish('<p><strong>Winner lean: '+esc(lean)+'</strong></p><h3>Matchup breakdown</h3><p>'+esc(g.away)+': '+a.scored.toFixed(1)+' points scored, '+a.allowed.toFixed(1)+' allowed; '+record(g.away,away)+' over '+away.length+' games; '+rest(away)+'.</p><p>'+esc(g.home)+': '+h.scored.toFixed(1)+' points scored, '+h.allowed.toFixed(1)+' allowed; '+record(g.home,home)+' over '+home.length+' games; '+rest(home)+'.</p><p class="muted">Recent scoring baseline: '+esc(g.away)+' '+awayScore.toFixed(1)+' · '+esc(g.home)+' '+homeScore.toFixed(1)+'. Each combines that team’s points scored with its opponent’s points allowed. It is a simple baseline, not a validated final-score prediction.</p><p class="muted">Injury watch: '+injuries+(affected.length>8?'; plus '+(affected.length-8)+' more':'')+'. Report: '+esc(injuryData.generated_at)+'. The feed can miss players and does not quantify injury effects.</p><h3>Enter current sportsbook lines</h3><p class="muted">Enter any markets you want to compare. American odds use + or − (for example, +150 or -110). Spread is the home team’s line: -4.5 means the home team is favored by 4.5.</p>'+input('pick-away-ml',g.away+' moneyline','+150')+input('pick-home-ml',g.home+' moneyline','-170')+input('pick-home-spread',g.home+' spread','-4.5')+input('pick-spread-odds','Spread price (optional)','-110')+input('pick-total','Game total','225.5')+input('pick-over-odds','Over price (optional)','-110')+input('pick-under-odds','Under price (optional)','-110')+'<button type="button" onclick="evaluateGameMarkets()">Analyze my lines</button><div id="game-pick-result" aria-live="polite"></div><p class="muted">This baseline does not model confirmed lineups, injury impacts, pace, opponent strength, or home advantage. Its betting accuracy has not been validated.</p>');
+}
+function evaluateGameMarkets(){
+ const out=$('game-pick-result'),c=pickContext,now=Date.now();if(!out||!c)return;
+ if(now>=c.tip||now-c.feedTime>12*3600000||now-c.injuryTime>12*3600000){out.innerHTML='<p class="warn">No pick: the game has started or the data has become stale. Refresh the page.</p>';return}
+ const read=id=>{const raw=String($(id)?.value??'').trim();return raw===''?null:Number(raw)};
+ const ids=['pick-away-ml','pick-home-ml','pick-spread-odds','pick-over-odds','pick-under-odds'];
+ if(ids.some(id=>{const v=read(id);return v!==null&&(!Number.isFinite(v)||Math.abs(v)<100||Math.abs(v)>100000)})){out.innerHTML='<p class="warn">Use valid American prices such as +150 or -110; leave unavailable prices blank.</p>';return}
+ const spread=read('pick-home-spread'),total=read('pick-total');
+ if((spread!==null&&(!Number.isFinite(spread)||Math.abs(spread)>100))||(total!==null&&(!Number.isFinite(total)||total<100||total>400))){out.innerHTML='<p class="warn">Check the spread and game total. Enter the home spread and a plausible game total.</p>';return}
+ const am=read('pick-away-ml'),hm=read('pick-home-ml'),sp=read('pick-spread-odds'),op=read('pick-over-odds'),up=read('pick-under-odds'),margin=c.homeScore-c.awayScore,combined=c.homeScore+c.awayScore;
+ if([am,hm,spread,total].every(x=>x===null)){out.innerHTML='<p class="warn">Enter at least one moneyline, home spread, or game total.</p>';return}
+ const implied=v=>v>0?100/(v+100):(-v)/((-v)+100);
+ let result='<h3>Line comparison</h3><p><strong>Betting recommendation: no bet.</strong> The scoring baseline has not been calibrated or backtested, so it cannot establish a reliable edge at these prices.</p>';
+ if(am!==null||hm!==null){
+  const winner=Math.abs(margin)<3?'No clear winner lean':(margin>0?c.game.home:c.game.away)+' to win';
+  result+='<p><strong>Moneyline: '+esc(winner)+'.</strong> '+(am!==null?esc(c.game.away)+' '+(implied(am)*100).toFixed(1)+'% break-even at '+esc(am>0?'+'+am:am)+'. ':'')+(hm!==null?esc(c.game.home)+' '+(implied(hm)*100).toFixed(1)+'% break-even at '+esc(hm>0?'+'+hm:hm)+'. ':'')+'These are price break-even rates, not predicted win chances.</p>';
+ }
+ if(spread!==null){const diff=margin+spread;const side=Math.abs(diff)<2?'No clear side':(diff>0?c.game.home+' '+(spread>0?'+':'')+spread:c.game.away+' '+(-spread>0?'+':'')+(-spread));result+='<p><strong>Spread: '+esc(side)+'.</strong> Scoring baseline margin '+(margin>=0?'+':'')+margin.toFixed(1)+' for '+esc(c.game.home)+'; compared with home spread '+(spread>=0?'+':'')+spread+'. This is a raw comparison, not a cover probability or proven edge.'+(sp!==null?' Price break-even: '+(implied(sp)*100).toFixed(1)+'%.':'')+'</p>'}
+ if(total!==null){const diff=combined-total;const side=Math.abs(diff)<3?'No clear total lean':(diff>0?'Over ':'Under ')+total;result+='<p><strong>Total: '+esc(side)+'.</strong> Scoring baseline '+combined.toFixed(1)+' versus your '+total+' line; this is not a calibrated total projection.'+(op!==null?' Over price break-even: '+(implied(op)*100).toFixed(1)+'%.':'')+(up!==null?' Under price break-even: '+(implied(up)*100).toFixed(1)+'%.':'')+'</p>'}
+ if(c.affected)result+='<p class="warn">Injury concerns are listed above but their impact is not included in these comparisons.</p>';
+ out.innerHTML=result;
+
 }
 async function audit(){
  try{const r=await fetch('./data/nba_projection_tracker.json',{cache:'no-store'});if(!r.ok)throw Error('Tracking feed not published');const d=await r.json();const snapshots=d.snapshots||[];const ps=snapshots.flatMap(s=>s.projections||[]);const graded=ps.filter(p=>p.result==='within_20pct'||p.result==='outside_20pct');const dnps=ps.filter(p=>p.result==='dnp');const hits=graded.filter(p=>p.result==='within_20pct');$('audit').innerHTML='<p>Locked games: <strong>'+snapshots.length+'</strong> · projections: <strong>'+ps.length+'</strong> · graded: <strong>'+graded.length+'</strong> · DNP: <strong>'+dnps.length+'</strong></p><p class="muted">Within tolerance: '+hits.length+'/'+graded.length+' (max of 2 units or 20% of projection). This is prediction accuracy, not betting win rate. Snapshots must be locked before tipoff.</p>'}catch(e){$('audit').textContent='Tracking not verified yet: '+e.message}
