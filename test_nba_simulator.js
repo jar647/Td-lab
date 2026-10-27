@@ -1,0 +1,17 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const source=fs.readFileSync('nba.html','utf8').match(/<script>([\s\S]*?)<\/script>/)[1];
+const elements=new Map();
+const element=id=>{if(!elements.has(id))elements.set(id,{value:'',innerHTML:'',textContent:'',classList:{toggle(){}}});return elements.get(id)};
+const context={document:{getElementById:element},fetch:async()=>({ok:false}),console,Date,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl};
+vm.createContext(context);vm.runInContext(source,context,{timeout:2000});
+const now=Date.now();const rows=n=>Array.from({length:n},(_,i)=>({scored:110+(i%5),allowed:103+(i%4),date:now-(i+2)*86400000,home:i%2===0}));
+vm.runInContext(`simulatorStats={home:${JSON.stringify(rows(10))},away:${JSON.stringify(rows(10))},homeMean:112,awayMean:106,homeOff:112,homeDef:103,awayOff:112,awayDef:103,homeSd:5,awaySd:6,homeAdv:1,leagueHomeGames:12,homeName:'Boston Celtics',awayName:'New York Knicks',injuries:[],injuryFresh:true,feedAt:${now},tip:${now+3600000}};`,context);
+element('sim-count').value='1000';element('sim-spread').value='-3.5';element('sim-total').value='220.5';element('sim-home-ml').value='-150';element('sim-away-ml').value='130';element('sim-home-spread-odds').value='-110';element('sim-away-spread-odds').value='-110';element('sim-over-odds').value='-110';element('sim-under-odds').value='-110';
+vm.runInContext('runNBASimulation()',context);
+let result=element('sim-results').innerHTML;
+for(const text of ['1,000 runs','Boston Celtics ML','New York Knicks ML','Boston Celtics -3.5 spread','Over 220.5','Fair','Edge','Kelly*','Score Differential Distribution','MODEL LEAN','not calibrated forecasts'])assert.ok(result.includes(text),'Missing simulation output: '+text);
+vm.runInContext("setOddsFormat('decimal')",context);assert.equal(element('sim-home-ml').value,'1.67');assert.equal(element('sim-away-ml').value,'2.30');
+vm.runInContext("setOddsFormat('american')",context);assert.equal(element('sim-home-ml').value,'-149');assert.equal(element('sim-away-ml').value,'130');
+vm.runInContext(`simulatorStats.injuryFresh=true;simulatorStats.injuries=[{rotation:true}];runNBASimulation()`,context);result=element('sim-results').innerHTML;assert.match(result,/HOLD · key rotation availability unresolved/);assert.match(result,/OUT\/DOUBTFUL\/QUESTIONABLE/);vm.runInContext(`simulatorStats.injuries=[];simulatorStats.injuryFresh=false;runNBASimulation()`,context);assert.match(element('sim-results').innerHTML,/HOLD · injury feed missing\/stale/);
+vm.runInContext(`simulatorStats.feedAt=${now-13*3600000};runNBASimulation()`,context);assert.match(element('sim-results').innerHTML,/stale/);
+console.log('NBA Monte Carlo market, odds conversion, injury gate, and stale-feed tests: PASS');
