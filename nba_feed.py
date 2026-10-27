@@ -10,7 +10,7 @@ today=datetime.datetime.now(datetime.timezone.utc).date()
 games=[]
 seen_events=set()
 scoreboards_ok=0
-for delta in range(-14,4):
+for delta in range(-35,4):
  date=(today+datetime.timedelta(days=delta)).strftime("%Y%m%d")
  try: board=get("https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates="+date)
  except Exception as e: print("scoreboard",date,str(e));continue
