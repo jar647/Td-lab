@@ -43,7 +43,7 @@ for g in games:
    pid=str(p.get("id") or "")
    if not pid:continue
    arr=byid.setdefault(pid,[])
-   if len(arr)<10:arr.append(p)
+   if len(arr)<82:arr.append(p)
  allowed={}
  for h in history:
   for defense,offense in ((h["home"],h["away"]),(h["away"],h["home"])):
@@ -67,7 +67,8 @@ for g in games:
    valid=[value(p,key) for p in rows if value(p,key) is not None][:10]
    weights=list(range(len(valid),0,-1))
    weighted=sum(v*w for v,w in zip(valid,weights))/sum(weights)
-   baseline=.7*weighted+.3*statistics.mean(vals)
+   season_values=[value(p,key) for p in rows if value(p,key) is not None]
+   baseline=.35*weighted+.25*statistics.mean(vals)+.20*statistics.mean(valid)+.20*statistics.mean(season_values)
    opponent=g["away"] if rows[0]["team"]==g["home"] else g["home"]
    sample=allowed.get(opponent,[])
    defense_avg=statistics.mean(t[market] for t in sample) if sample else league[market]
@@ -78,7 +79,7 @@ for g in games:
    projections.append({"player_id":pid,"player":rows[0]["name"],"team":rows[0]["team"],"market":market,"projection":projection,"baseline":round(baseline,2),"minute_factor":round(minute_factor,3),"sample":len(vals),"actual":None,"result":"pending"})
   projections.append({"player_id":pid,"player":rows[0]["name"],"team":rows[0]["team"],"market":"minutes","projection":round(avg_minutes,2),"sample":len(rows[:5]),"actual":None,"result":"pending"})
  if projections:
-  snapshots.append({"game_id":g["id"],"game":g["away"]+" @ "+g["home"],"tipoff":g["date"],"locked_at":now.isoformat(),"model":"nba-ui-weighted-matchup-v4","projections":projections})
+  snapshots.append({"game_id":g["id"],"game":g["away"]+" @ "+g["home"],"tipoff":g["date"],"locked_at":now.isoformat(),"model":"nba-ui-season-recent-matchup-v5","projections":projections})
   seen.add(g["id"])
 for s in snapshots:
  # Only games with a final ESPN result may be graded.
