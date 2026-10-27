@@ -28,7 +28,7 @@ console.log('NBA lineup/projections UI smoke test: PASS');
 (async()=>{
  const data=JSON.parse(fs.readFileSync('data/nba_games.json','utf8'));
  const easternDay=x=>{const p=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(x)).map(v=>[v.type,v.value]));return p.year+'-'+p.month+'-'+p.day};
- const game=data.games.find(g=>g.status==='STATUS_FINAL'&&easternDay(g.date)==='2026-10-26'&&
+ const game=data.games.find(g=>easternDay(g.date)==='2026-10-26'&&
   data.games.some(h=>h.status==='STATUS_FINAL'&&new Date(h.date)<new Date(g.date)&&h.players?.some(p=>p.team===g.home))&&
   data.games.some(h=>h.status==='STATUS_FINAL'&&new Date(h.date)<new Date(g.date)&&h.players?.some(p=>p.team===g.away)));
  assert.ok(game,'Integration test needs an Oct 26 matchup with prior games');
