@@ -28,16 +28,18 @@ console.log('NBA lineup/projections UI smoke test: PASS');
 // Integration smoke test against the published game-feed file, not just script syntax.
 (async()=>{
  const data=JSON.parse(fs.readFileSync('data/nba_games.json','utf8'));
+ // Older checked-in feeds predate the season_type field; the integration fixture is constrained to the 2026 regular-season window.
+ for(const g of data.games){if(g.status==='STATUS_FINAL')g.season_type=new Date(g.date)>=new Date('2026-10-21T00:00:00Z')?2:1;}
  const easternDay=x=>{const p=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(x)).map(v=>[v.type,v.value]));return p.year+'-'+p.month+'-'+p.day};
  const game=data.games.find(g=>easternDay(g.date)==='2026-10-26'&&
   data.games.some(h=>h.status==='STATUS_FINAL'&&new Date(h.date)<new Date(g.date)&&h.players?.some(p=>p.team===g.home))&&
   data.games.some(h=>h.status==='STATUS_FINAL'&&new Date(h.date)<new Date(g.date)&&h.players?.some(p=>p.team===g.away)));
  assert.ok(game,'Integration test needs an Oct 26 matchup with prior games');
  const dom=new Map();
- const el=id=>{if(!dom.has(id))dom.set(id,{value:'',textContent:'',innerHTML:'',onclick:null,click(){this.onclick?.()}});return dom.get(id)};
+ const el=id=>{if(!dom.has(id))dom.set(id,{value:'',textContent:'',innerHTML:'',onclick:null,append(child){this.innerHTML+=child.innerHTML},click(){this.onclick?.()}});return dom.get(id)};
  const fixtureTime=new Date(easternDay(game.date)+'T17:00:00Z').getTime();
  const FixedDate=class extends Date{constructor(...args){super(...(args.length?args:[fixtureTime]))}static now(){return fixtureTime}};
- const context={document:{getElementById:el},fetch:async url=>({ok:true,json:async()=>url.includes('nba_games')?data:url.includes('nba_injuries')?{generated_at:new Date().toISOString(),injuries:[]}:{snapshots:[]}}),console,Date:FixedDate,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl};
+ const context={document:{getElementById:el,createElement:()=>({className:'',id:'',innerHTML:'',append(){el('output').innerHTML+=this.innerHTML}})},fetch:async url=>({ok:true,json:async()=>url.includes('nba_games')?data:url.includes('nba_injuries')?{generated_at:new Date().toISOString(),injuries:[]}:{snapshots:[]}}),console,Date:FixedDate,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl};
  vm.createContext(context);vm.runInContext(match[1],context,{timeout:2000});
  await new Promise(resolve=>setTimeout(resolve,50));
  assert.ok(el('games').innerHTML.includes(game.home),'Today-game selector must contain real matchup: '+el('status').textContent);
@@ -49,8 +51,9 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  el('games').value=String(idx);el('show').click();
  const html=el('output').innerHTML+el('projections').innerHTML;
  assert.ok(html.includes('projected five'),'Selected game must render lineups');
+ assert.ok(html.includes('NBA Game Simulator'),'Selected NBA game must render simulator');
  assert.ok(html.includes('PTS <strong>')&&html.includes('REB <strong>')&&html.includes('AST <strong>')&&html.includes('3PM <strong>'),'Selected game must render all projected stat labels');
- assert.ok(html.includes('Top 3 researched props'),'Selected game must render prop section');
+ assert.ok(html.includes('Player recommendations · matchup opportunities'),'Selected game must render prop section');
  assert.ok(/PTS <strong>\d/.test(html),'Selected game must render numeric player projections; selected '+el('games').value+'; preview '+html.slice(0,700));
  console.log('NBA real-feed selection and numeric projection integration test: PASS');
 })().catch(e=>{console.error(e);process.exitCode=1});
