@@ -47,26 +47,37 @@ if scoreboards_ok==0 or not games:
 OUT.parent.mkdir(parents=True,exist_ok=True)
 OUT.write_text(json.dumps({"generated_at":datetime.datetime.now(datetime.timezone.utc).isoformat(),"source":"ESPN public NBA scoreboard/summary","games":games},separators=(",",":")))
 print("Wrote",len(games),"games",sum(len(g["players"]) for g in games),"player records")
-# Pregame season averages, pulled directly from ESPN's public athlete overview.
-# Limit requests to athletes present in today's matchups to avoid rate limits.
-import concurrent.futures
-today_teams={t for g in games if g.get("status")=="STATUS_SCHEDULED" for t in (g["home"],g["away"])}
-ids={str(p["id"]) for g in games if g["home"] in today_teams or g["away"] in today_teams for p in g["players"] if p.get("id")}
-season=today.year+int(today.month>=10)
-def season_stats(pid):
- try:
-  url="https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/"+pid+"/overview?season="+str(season)
-  d=get(url)
-  st=d.get("statistics") or {}
-  names=st.get("names") or st.get("labels") or []
-  values=st.get("values") or []
-  return pid,{str(k):v for k,v in zip(names,values) if isinstance(v,(int,float))}
- except Exception:return pid,{}
-if ids:
- with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
-  season_players={k:v for k,v in pool.map(season_stats,sorted(ids)) if v}
- if len(season_players)>=10:
-  (ROOT/"data"/"nba_season_stats.json").write_text(json.dumps({"generated_at":datetime.datetime.now(datetime.timezone.utc).isoformat(),"season":season,"source":"ESPN NBA athlete overview","players":season_players},separators=(",",":")))
-  print("Published ESPN season averages for",len(season_players),"players")
- else:print("ESPN season averages insufficient; retaining previous feed")
-
+# Season-to-date pregame averages from completed ESPN box scores.
+# Avoid unverified athlete endpoint shapes and publish only observed stats.
+season_start=datetime.datetime(today.year-(today.month<10),10,1,tzinfo=datetime.timezone.utc)
+season_rows={}
+for game in games:
+ if game["status"]!="STATUS_FINAL":continue
+ try:game_date=datetime.datetime.fromisoformat(game["date"].replace("Z","+00:00"))
+ except (ValueError,AttributeError):continue
+ if game_date<season_start:continue
+ for player in game["players"]:
+  if player.get("didNotPlay") or not player.get("id"):continue
+  stats=player.get("stats") or {}
+  values={}
+  for key,source in (("avgPoints","PTS"),("avgRebounds","REB"),("avgAssists","AST"),("avgMinutes","MIN")):
+   raw=stats.get(source)
+   try:
+    if source=="MIN" and ":" in str(raw):
+     mm,ss=str(raw).split(":",1)
+     values[key]=float(mm)+float(ss)/60
+    else:values[key]=float(raw)
+   except (TypeError,ValueError):pass
+  raw=stats.get("3PM",stats.get("3PT"))
+  try:values["avgThreePointFieldGoalsMade"]=float(str(raw).split("-")[0])
+  except (TypeError,ValueError):pass
+  if len(values)<4:continue
+  season_rows.setdefault(str(player["id"]),[]).append(values)
+season_players={}
+for pid,rows in season_rows.items():
+ season_players[pid]={k:round(sum(r[k] for r in rows if k in r)/sum(k in r for r in rows),2) for k in rows[0] if any(k in r for r in rows)}
+ season_players[pid]["games"]=len(rows)
+if season_players:
+ (ROOT/"data"/"nba_season_stats.json").write_text(json.dumps({"generated_at":datetime.datetime.now(datetime.timezone.utc).isoformat(),"season":season_start.year+1,"source":"ESPN final box scores; observed season-to-date sample","players":season_players},separators=(",",":")))
+ print("Published observed season averages for",len(season_players),"players")
+else:print("No completed season box scores; retaining existing season stats")
