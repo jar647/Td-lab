@@ -12,6 +12,8 @@ class NBAContracts(unittest.TestCase):
    self.assertNotIn(game["id"],ids,"duplicate NBA game")
    ids.add(game["id"])
    self.assertTrue(game["home"] and game["away"] and game["home"]!=game["away"])
+   if game["status"]=="STATUS_FINAL" and game.get("season_type") is not None:
+    self.assertIn(game.get("season_type"),(1,2,3),"season type must identify preseason, regular season, or postseason")
    for player in game["players"]:
     self.assertIn(player["team"],(game["home"],game["away"]))
     made=player.get("stats",{}).get("3PM")
