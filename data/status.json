@@ -1,17 +1,17 @@
 {
   "season": 2026,
-  "week": 7,
-  "generated_at": "2026-10-26T23:35:34.850529+00:00",
-  "matchups": 21,
+  "week": 8,
+  "generated_at": "2026-10-27T00:49:56.465444+00:00",
+  "matchups": 400,
   "source": "nflverse play-by-play and rosters",
   "odds_source": null,
   "probability_model": null,
   "lookback_games": 5,
   "availability_diagnostics": {
     "injuries": {
-      "rows_for_week": 350,
+      "rows_for_week": 0,
       "source_rows": 2139,
-      "matched_ids": 153,
+      "matched_ids": 0,
       "columns": [
         "season",
         "season_type",
@@ -30,12 +30,7 @@
         "practice_secondary_injury",
         "practice_status"
       ],
-      "report_status_counts": {
-        "MISSING": 197,
-        "Questionable": 77,
-        "Out": 72,
-        "Doubtful": 4
-      }
+      "report_status_counts": {}
     },
     "weekly_rosters": {
       "source_rows": 2279,
@@ -53,22 +48,22 @@
       }
     },
     "excluded": {
-      "out_report": 3,
+      "out_report": 0,
       "unavailable_roster": 0,
-      "nonactive_weekly_roster": 6
+      "nonactive_weekly_roster": 56
     },
-    "unverified_output": 0
+    "unverified_output": 33
   },
   "injury_policy": "Current-week OUT excluded; doubtful/questionable flagged; weekly RES/DEV/CUT/RET/EXE/TRD/TRT excluded. ROSTER_ACTIVE only confirms active roster membership, not game-day clearance; late inactives unverified.",
   "status": "ready",
   "snapshot_diagnostics": {
     "exists": true,
-    "accuracy_eligible": false,
-    "captured_at": "2026-10-22T21:59:51.667088+00:00",
-    "candidate_count": 251,
-    "challenger_features_complete": false,
-    "readiness": "NOT_ELIGIBLE",
-    "first_game_day_utc": "2026-10-22T00:00:00+00:00",
-    "next_action": "WAIT_FOR_NEXT_WEEK"
+    "accuracy_eligible": true,
+    "captured_at": "2026-10-27T00:49:56.465444+00:00",
+    "candidate_count": 400,
+    "challenger_features_complete": true,
+    "readiness": "ELIGIBLE",
+    "first_game_day_utc": "2026-10-29T00:00:00+00:00",
+    "next_action": "READY_FOR_GRADING"
   }
 }
