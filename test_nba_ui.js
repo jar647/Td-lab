@@ -17,4 +17,8 @@ function element(id){if(!elements.has(id))elements.set(id,{value:'',textContent:
 const sandbox={document:{getElementById:element},fetch:async()=>({ok:false}),console,Date,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl};
 vm.createContext(sandbox);vm.runInContext(match[1],sandbox,{timeout:2000});
 assert.equal(typeof element('show').onclick,'function','Analyze must be wired');
+assert.ok(match[1].includes('formatToParts'),'Eastern day comparison must use stable date parts');
+assert.ok(match[1].includes('No player projections available because there are no NBA games today.'),'Empty day must be explained');
+assert.ok(match[1].includes('if(!g)'),'Invalid selection must be handled');
+assert.ok(match[1].includes('retrospective?'),'Retrospective warning must survive rendering');
 console.log('NBA lineup/projections UI smoke test: PASS');
