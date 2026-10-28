@@ -17,7 +17,10 @@ from opportunity_prop_model import opportunity_probability
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data"
 SNAPSHOTS = DATA / "forward" / "prop_snapshots"
-VERSION = "opportunity-empirical-v1"
+VERSION = "opportunity-2024-trained-blend-v1"
+# Training-only 2024 blend weights from player_prop_probability_backtest.py.
+# Frozen here before prospective evaluations; never tune on future test weeks.
+OPPORTUNITY_WEIGHTS = {"PASS": 0.25, "RUSH": 0.75, "REC": 0.75, "CATCH": 0.5}
 MARKETS = {
     "PASS": ("passYards", "passAttempts", "QB", (149.5, 199.5, 249.5, 299.5)),
     "RUSH": ("rushYards", "rushAttempts", "RB,QB", (24.5, 49.5, 74.5, 99.5)),
@@ -49,8 +52,10 @@ def pregame_rows(players):
                 if any(not 0 <= x < 10000 for x in values+usage):
                     continue
                 for threshold in lines:
-                    probability = opportunity_probability(values, usage, threshold)
+                    candidate = opportunity_probability(values, usage, threshold)
                     baseline = (1 + sum(v > threshold for v in values))/(len(values)+2)
+                    weight = OPPORTUNITY_WEIGHTS[market]
+                    probability = (1-weight)*baseline + weight*candidate
                     frozen.append({
                         "player_id": str(player["player_id"]),
                         "player": player.get("player"),
@@ -58,6 +63,7 @@ def pregame_rows(players):
                         "position": pos, "market": market, "threshold": threshold,
                         "model_probability": round(probability, 8),
                         "baseline_probability": round(baseline, 8),
+                        "opportunity_weight_2024": weight,
                         "sample_games": len(values),
                         "availability_at_capture": str(player.get("availability", "UNVERIFIED")),
                         "injury_report_at_capture": str(player.get("injuryReportStatus", "NOT_REPORTED")),
