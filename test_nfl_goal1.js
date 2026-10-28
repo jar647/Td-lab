@@ -39,6 +39,13 @@ const info=app.script({teams:[
  {team:'B',estimatedPlays:62,estimatedPassAttempts:31,estimatedRushAttempts:31,passingShare:50}
 ]}, {home:'A',away:'B',projected_home_points:23,projected_away_points:20});
 assert(info.lines.join(' ').includes('Projected total 43.0'));
+const fallbackInfo=app.script({teams:[
+ {team:'A',estimatedPlays:60,estimatedPassAttempts:34,estimatedRushAttempts:26,passingShare:57,
+ warning:'QB individual history is insufficient; team pass volume derived from completed PBP. No QB props are projected.'},
+ {team:'B',estimatedPlays:62,estimatedPassAttempts:32,estimatedRushAttempts:30,passingShare:52}
+]});
+assert(fallbackInfo.lines.join(' ').includes('QB individual history is insufficient'),
+ 'Unverified quarterback fallback must be disclosed');
 const sim={markets:[
  {id:'a',market:'recYards',line:30,scenarioRate:.89},
  {id:'a',market:'recYards',line:40,scenarioRate:.68},

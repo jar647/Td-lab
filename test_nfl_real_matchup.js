@@ -79,6 +79,9 @@ vm.runInContext(js,context);
    for(const t of missing)assert(rebuilt.players.filter(p=>p.team===t.team&&p.pos==='QB')
     .every(p=>p.pass<12));
   }
+  const scenarioInfo=goal1.script({teams:rebuilt.teams.map(x=>x.outlook)});
+  if(missing.length)assert(scenarioInfo.lines.join(' ').includes('QB individual history is insufficient'),
+   'Real matchup script must show the QB-history fallback warning');
   console.log('PHI/WAS confirmed: historical team passing fallback where QB history is missing.');
   }
  }
