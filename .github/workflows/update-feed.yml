@@ -18,6 +18,8 @@ on:
       - 'scripts/verification_report.py'
       - 'tests/**'
       - 'nfl_game_engine.js'
+      - 'nfl_goal1.js'
+      - 'test_nfl_goal1.js'
       - 'nfl_game_worker.js'
       - 'test_nfl_game_engine.js'
       - 'test_nfl_analyst_ui.js'
@@ -53,6 +55,8 @@ jobs:
         run: python -m compileall -q injury_readiness.py build_feed.py capture_prop_probabilities.py grade_prop_probabilities.py historical_participation.py opportunity_prop_model.py player_prop_probability_backtest.py tests
       - name: Test game-first NFL Monte Carlo engine
         run: node test_nfl_game_engine.js
+      - name: Test Goal 1 decision and odds engine
+        run: node test_nfl_goal1.js
       - name: Test NFL analyst browser-controller flow
         run: node test_nfl_analyst_ui.js
       - name: Test game-first pregame forecast immutability

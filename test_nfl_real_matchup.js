@@ -4,11 +4,13 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const vm=require('node:vm');
 const engine=require('./nfl_game_engine.js');
+const goal1=require('./nfl_goal1.js');
 const html=fs.readFileSync('analyst.html','utf8');
 const js=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(x=>x[1]).find(Boolean);
 assert(js,'analyst script missing');
 const players=JSON.parse(fs.readFileSync('data/matchups.json','utf8'));
 const status=JSON.parse(fs.readFileSync('data/status.json','utf8'));
+const scores=JSON.parse(fs.readFileSync('data/game_picks.json','utf8'));
 const elMap=new Map();
 function el(id){
  if(!elMap.has(id))elMap.set(id,{innerHTML:'',textContent:'',value:id==='simCount'?'10000':'',
@@ -24,12 +26,13 @@ class LocalWorker{
  terminate(){}
 }
 const ok=x=>({ok:true,json:async()=>x});
-const context={document:{getElementById:el},Worker:LocalWorker,setTimeout,console,Date,
+const context={document:{getElementById:el},Worker:LocalWorker,PropVaultGoal1:goal1,setTimeout,console,Date,
  fetch:async url=>{
   if(url.includes('matchups.json'))return ok(players);
   if(url.includes('status.json'))return ok(status);
   if(url.includes('game_first_capture_status'))return ok({fixtures:14,frozen_game_snapshots:13});
   if(url.includes('prop_probability_performance'))return ok({game_first_graded:0,current_model_graded:0,distinct_graded_weeks:0});
+  if(url.includes('game_picks.json'))return ok(scores);
   return ok({bet_recommendations_enabled:false,gates:{model_calibrated:false}});
  }};
 vm.createContext(context);
@@ -45,6 +48,9 @@ vm.runInContext(js,context);
  const output=el('results').innerHTML;
  assert(output.includes('Game-first Monte Carlo'),'Real matchup should initialize simulator: '+output.slice(0,600));
  assert(output.includes('Game-first research candidates'),'Real matchup should produce a research ticket or expose why not: '+output.slice(0,900));
+ assert(output.includes('Top 3 player recommendations'),'Real matchup should show top three player research choices');
+ assert(output.includes('Best single bet for this game'),'Real matchup should show top single candidate');
+ assert(output.includes('Projected game script'),'Real matchup should show game script');
  await new Promise(resolve=>setTimeout(resolve,10));
  assert(el('simResult').innerHTML.includes('Simulated'),'Joint simulation should finish');
  console.log('Actual NFL feed matchup passed game-first UI research flow:',target);

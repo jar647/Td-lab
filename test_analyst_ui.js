@@ -7,6 +7,7 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 const assert=require('node:assert/strict');
 const engine=require('./nfl_game_engine.js');
+const goal1=require('./nfl_goal1.js');
 const html=fs.readFileSync('analyst.html','utf8');
 assert.match(html,/<script src="\.\/nfl_game_engine\.js"><\/script>/,
   'The analyst must load the current game-first simulator');
@@ -24,7 +25,7 @@ const document={getElementById(id){
  return elements.get(id);
 }};
 const context=vm.createContext({
- document,console,setTimeout,Date,
+ document,console,setTimeout,Date,PropVaultGoal1:goal1,
  fetch:async url=>({ok:true,json:async()=>
   url.includes('matchups.json')?[]:
   url.includes('prop_probability_performance.json')?{graded:0,distinct_graded_weeks:0}:
