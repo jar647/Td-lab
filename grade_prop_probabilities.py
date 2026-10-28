@@ -122,9 +122,6 @@ def evaluate(snapshots, schedules, appearances):
         "skipped": dict(skipped), "records": graded,
         "warning": "Only independently frozen current-version forecasts count toward review. Older model versions are shown separately. Fixed hypothetical thresholds; no sportsbook lines or betting claims."
     }
-ent rows per player-game, no bookmaker lines. Research calibration only."
-    }
-
 def main():
     files = sorted(DIR.glob("*.json"))
     snapshots = [json.loads(path.read_text(encoding="utf-8")) for path in files]
