@@ -14,6 +14,7 @@ from pathlib import Path
 
 import nflreadpy
 import pandas as pd
+from opportunity_prop_model import MARKET_OPPORTUNITY, opportunity_probability
 
 ROOT = Path(__file__).resolve().parent
 SEASONS = (2024, 2025)
@@ -45,6 +46,7 @@ def observations(weekly):
     required = {"player_id", "position", "season", "week", "game_id", "season_type"}
     for stat, _, _ in MARKETS.values():
         required.add(stat)
+        required.add(MARKET_OPPORTUNITY[next(k for k, v in MARKETS.items() if v[0] == stat)])
     missing = required - set(weekly.columns)
     if missing:
         raise RuntimeError(f"Weekly player-stat columns missing: {sorted(missing)}")
@@ -53,12 +55,15 @@ def observations(weekly):
     keys = ["season", "player_id", "position", "week", "game_id"]
     output = []
     for market, (stat, positions, thresholds) in MARKETS.items():
-        subset = weekly.loc[weekly["position"].isin(positions), keys + [stat]].copy()
+        volume_key = MARKET_OPPORTUNITY[market]
+        subset = weekly.loc[weekly["position"].isin(positions), keys + [stat, volume_key]].copy()
         subset[stat] = pd.to_numeric(subset[stat], errors="coerce").fillna(0).clip(lower=0)
-        games = (subset.groupby(keys, as_index=False)[stat].sum()
+        subset[volume_key] = pd.to_numeric(subset[volume_key], errors="coerce").fillna(0).clip(lower=0)
+        games = (subset.groupby(keys, as_index=False)[[stat, volume_key]].sum()
                  .sort_values(["season", "player_id", "week", "game_id"]))
         for (_, player), g in games.groupby(["season", "player_id"], sort=False):
             vals = g[stat].astype(float).tolist()
+            opportunities = g[volume_key].astype(float).tolist()
             weeks = g["week"].tolist()
             for i in range(MIN_HISTORY, len(vals)):
                 prior = vals[:i]
@@ -68,11 +73,13 @@ def observations(weekly):
                     recent_hits = sum(v > threshold for v in recent)
                     baseline = (historical_hits + 1) / (len(prior) + 2)
                     latest = (recent_hits + 1) / (len(recent) + 2)
+                    candidate = opportunity_probability(prior, opportunities[:i], threshold)
                     output.append({
                         "season": int(g["season"].iloc[i]), "week": int(weeks[i]),
                         "player_id": str(player), "market": market,
                         "threshold": threshold, "hit": int(vals[i] > threshold),
                         "baseline": baseline, "recent": latest,
+                        "opportunity_candidate": candidate,
                     })
     return output
 
@@ -120,13 +127,22 @@ def main():
             by_market[market] = {"status": "INSUFFICIENT_HISTORY", "train": len(t), "holdout": len(h)}
             continue
         weight = calibrate(t)
+        # Blend with the usage-based candidate. Tune only on 2024 training rows.
+        candidates = [0, .25, .5, .75, 1]
+        opp_weight = min(candidates, key=lambda w: sum(
+            ((1-w)*r["baseline"] + w*r["opportunity_candidate"] - r["hit"])**2 for r in t))
+        enriched = [{**r, "recent": r["opportunity_candidate"]} for r in h]
+        metrics = evaluate(enriched, opp_weight)
         by_market[market] = {"status": "RESEARCH_ONLY", "train": len(t), "holdout": len(h),
-                             "weight_recent": weight, **evaluate(h, weight)}
+                             "prior_research_weight_recent": weight,
+                             "weight_opportunity": opp_weight,
+                             "research_candidate": "bounded opportunity-adjusted historical distribution",
+                             **metrics}
     output = {
         "status": "RESEARCH_ONLY_NOT_BET_READY", "seasons": {"train": 2024, "holdout": 2025},
         "threshold_type": "fixed hypothetical thresholds, not sportsbook lines",
         "selection_bias": "Weekly box-score rows include many zero-market games, but completely absent active players and full snap eligibility are not proven.",
-        "method": "Weekly nflverse player box scores, walk-forward per-player prior-game hit frequencies; blend weight chosen only on 2024, evaluated on 2025.",
+        "method": "Weekly nflverse player box scores, walk-forward prior-game hit frequencies vs opportunity-adjusted historical outcomes; blend weight chosen on 2024, evaluated on 2025.",
         "limitations": ["Does not evaluate the live app's probability model", "No opponent adjustment",
                          "No injury-as-of verification", "No sportsbook pricing or SGP correlations",
                          "Not representative of every rostered player-game; weekly box-score appearance is not a pregame availability signal"],
