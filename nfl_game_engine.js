@@ -95,7 +95,8 @@ function build(records){
     untrackedCarryShare:Math.round(carryPool.items[carryPool.items.length-1].weight/carryPool.sum*100)}
   };
  });
- if(league.some(t=>t.roster.length<4))throw Error('Not enough position-verified players for complete matchup');
+ if(league.some(t=>t.roster.length<(t.outlook.quarterbackPlayerPropsAvailable?4:3)))
+  throw Error('Not enough position-verified offensive players for complete matchup');
  return {teams:league,players:entries};
 }
 function simulate(records,count=10000,seed=1307,selected=[]){
