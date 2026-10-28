@@ -15,7 +15,8 @@ class ForwardPropResearchTests(unittest.TestCase):
         games=[{"rushYards":60,"rushAttempts":15,"recYards":0,"targets":0,"receptions":0}] * 5
         self.players=[{"player_id":"id1","player":"Example RB","pos":"RB",
                        "team":"GB","opp":"CHI","playerAppearancesVerified":True,
-                       "availability":"ROSTER_ACTIVE","last5GameStats":games}]
+                       "availability":"ROSTER_ACTIVE","last5GameStats":games,
+                       "seasonGameStats":games}]
         self.schedules=pd.DataFrame([{**self.fixture,"game_type":"REG",
                                       "home_score":24,"away_score":17}])
         self.appearances=pd.DataFrame([
@@ -53,6 +54,18 @@ class ForwardPropResearchTests(unittest.TestCase):
             self.assertGreater(len(rush),0)
             self.assertTrue(all(r["hit"]==0 for r in rush))
             self.assertFalse(result["bet_ready"])
+
+    def test_old_and_new_versions_not_combined(self):
+        with tempfile.TemporaryDirectory() as root:
+            doc=self.capture(Path(root))
+            legacy=json.loads(json.dumps(doc))
+            legacy["model_version"]="opportunity-2024-trained-blend-v1"
+            legacy["game_id"]="other-game"
+            # Keep same fixture when constructing evaluation and override the
+            # older record's version, then evaluate separately.
+            legacy["game_id"]="g9"
+            with self.assertRaises(RuntimeError):
+                evaluate([doc,legacy],self.schedules,self.appearances)
 
     def test_missing_player_not_mislabeled_zero(self):
         with tempfile.TemporaryDirectory() as root:
