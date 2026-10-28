@@ -4,6 +4,8 @@ on:
     paths:
       - 'player_prop_probability_backtest.py'
       - 'opportunity_prop_model.py'
+      - 'historical_participation.py'
+      - 'tests/test_historical_participation.py'
       - 'test_player_prop_probability.py'
       - '.github/workflows/player-prop-probability.yml'
   workflow_dispatch:
@@ -20,6 +22,7 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - run: python -m unittest test_player_prop_probability.py
+      - run: python -m unittest discover -s tests -p 'test_historical_participation.py'
       - run: python player_prop_probability_backtest.py
       - uses: actions/upload-artifact@v4
         if: always()
