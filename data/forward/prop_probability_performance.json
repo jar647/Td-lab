@@ -1,0 +1,44 @@
+{
+  "status": "RESEARCH_ONLY_NOT_BET_READY",
+  "bet_ready": false,
+  "model_version": "opportunity-2024-trained-blend-v1",
+  "graded": 0,
+  "distinct_graded_weeks": 0,
+  "min_forward_weeks_for_review": 8,
+  "eligible_for_research_review": false,
+  "markets": {
+    "PASS": {
+      "n": 0,
+      "model_brier": null,
+      "baseline_brier": null,
+      "distinct_weeks": 0,
+      "beats_baseline": false
+    },
+    "RUSH": {
+      "n": 0,
+      "model_brier": null,
+      "baseline_brier": null,
+      "distinct_weeks": 0,
+      "beats_baseline": false
+    },
+    "REC": {
+      "n": 0,
+      "model_brier": null,
+      "baseline_brier": null,
+      "distinct_weeks": 0,
+      "beats_baseline": false
+    },
+    "CATCH": {
+      "n": 0,
+      "model_brier": null,
+      "baseline_brier": null,
+      "distinct_weeks": 0,
+      "beats_baseline": false
+    }
+  },
+  "skipped": {
+    "GAME_NOT_FINAL": 14
+  },
+  "records": [],
+  "warning": "Frozen BEFORE game day, graded AFTER on positive offensive snaps. Fixed hypothetical thresholds, dependent rows per player-game, no bookmaker lines. Research calibration only."
+}
