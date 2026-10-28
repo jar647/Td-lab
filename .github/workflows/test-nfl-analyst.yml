@@ -1,0 +1,20 @@
+name: NFL analyst regression tests
+on:
+  push:
+    paths:
+      - 'analyst.html'
+      - 'test_analyst_ui.js'
+      - '.github/workflows/test-nfl-analyst.yml'
+  workflow_dispatch:
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check test_analyst_ui.js
+      - run: node test_analyst_ui.js
