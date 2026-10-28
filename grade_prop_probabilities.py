@@ -14,6 +14,7 @@ from historical_participation import snap_verified_weekly
 
 ROOT = Path(__file__).resolve().parent
 DIR = ROOT / "data" / "forward" / "prop_snapshots"
+GAME_DIR = ROOT / "data" / "forward" / "game_first_snapshots"
 OUT = ROOT / "data" / "forward" / "prop_probability_performance.json"
 
 def frame(obj):
@@ -82,16 +83,17 @@ def evaluate(snapshots, schedules, appearances):
                 "model_probability": prob, "baseline_probability": base, "hit": hit,
             })
     # Duplicate forecasts must not artificially increase sample size.
-    keys = [(r["game_id"], r["player_id"], r["market"], r["threshold"]) for r in graded]
+    keys = [(r["model_version"], r["game_id"], r["player_id"], r["market"], r["threshold"]) for r in graded]
     if len(keys) != len(set(keys)):
         raise RuntimeError("Duplicate frozen forecasts for a player-game market threshold")
     # Never pool different frozen model versions and call the result a new
     # independent validation set. Legacy exploratory snapshots remain auditable.
     current_version = "opportunity-2024-trained-eligible-fullseason-v2"
+    game_first_version = "game-first-volume-v1"
     by_version = {}
     for version in sorted({r["model_version"] for r in graded} | {
         str(doc.get("model_version", "UNKNOWN")) for doc in snapshots
-    } | {current_version}):
+    } | {current_version, game_first_version}):
         subset = [r for r in graded if r["model_version"] == version]
         by_market = {}
         for market in ("PASS", "RUSH", "REC", "CATCH"):
@@ -112,20 +114,26 @@ def evaluate(snapshots, schedules, appearances):
             "markets": by_market,
         }
     current = by_version[current_version]
+    game_first = by_version[game_first_version]
     weeks = current["distinct_weeks"]
     return {
         "status": "RESEARCH_ONLY_NOT_BET_READY", "bet_ready": False,
         "model_version": current_version,
         "graded": len(graded), "current_model_graded": current["graded"],
+        "game_first_model_version": game_first_version,
+        "game_first_graded": game_first["graded"],
+        "game_first_distinct_weeks": game_first["distinct_weeks"],
+        "game_first_research_review_ready": game_first["distinct_weeks"] >= 8 and game_first["graded"] >= 500,
+        "game_first_markets": game_first["markets"],
         "distinct_graded_weeks": weeks,
         "min_forward_weeks_for_review": 8,
         "eligible_for_research_review": weeks >= 8 and current["graded"] >= 500,
         "markets": current["markets"], "version_reports": by_version,
         "skipped": dict(skipped), "records": graded,
-        "warning": "Only independently frozen current-version forecasts count toward review. Older model versions are shown separately. Fixed hypothetical thresholds; no sportsbook lines or betting claims."
+        "warning": "Only pregame-frozen forecasts count. Opportunity and game-first model versions are scored separately against their frozen baselines. Fixed hypothetical thresholds; no sportsbook lines or betting claims."
     }
 def main():
-    files = sorted(DIR.glob("*.json"))
+    files = sorted(DIR.glob("*.json")) + sorted(GAME_DIR.glob("*.json"))
     snapshots = [json.loads(path.read_text(encoding="utf-8")) for path in files]
     seasons = sorted({int(s["season"]) for s in snapshots})
     schedules_list, appearances_list = [], []
