@@ -81,16 +81,31 @@ function main(){
  const players=JSON.parse(fs.readFileSync(path.join(data,'matchups.json'),'utf8'));
  const outputDir=path.join(data,'forward','game_first_snapshots');
  let made=0;
+ const results=[];
  for(const fixture of games.games||[]){
   const game={...fixture,season:Number(status.season),week:Number(status.week)};
   const basename=status.season+'-week-'+status.week+'-game-'+fixture.game_id+'.json';
   const priorPath=path.join(data,'forward','prop_snapshots',basename);
   const prior=fs.existsSync(priorPath)?JSON.parse(fs.readFileSync(priorPath,'utf8')):null;
   const result=freezeGame(game,players,prior,new Date(),outputDir);
+  results.push({game_id:fixture.game_id,home:fixture.home,away:fixture.away,
+                status:result.status,reason:result.reason||null,
+                new_forecasts:result.predictions||0});
   console.log(fixture.game_id,result.status,result.predictions||'',result.reason||'');
   if(result.status==='FROZEN')made++;
  }
- console.log('Frozen new game-first pregame snapshots:',made);
+ fs.mkdirSync(outputDir,{recursive:true});
+ const prefix=status.season+'-week-'+status.week+'-game-';
+ const frozen=fs.readdirSync(outputDir).filter(name=>name.startsWith(prefix)&&name.endsWith('.json'));
+ const summary={status:'RESEARCH_ONLY_UNCALIBRATED',bet_ready:false,
+  model_version:MODEL_VERSION,generated_at_utc:new Date().toISOString(),
+  season:Number(status.season),week:Number(status.week),fixtures:(games.games||[]).length,
+  frozen_game_snapshots:frozen.length,newly_frozen:made,results,
+  note:'Pregame Monte Carlo forecasts stored immutably. Success is data capture, not calibrated probability or betting approval.'};
+ const reportPath=path.join(data,'forward','game_first_capture_status.json');
+ fs.writeFileSync(reportPath,JSON.stringify(summary,null,2)+'\n');
+ console.log('Game-first prospective captures:',frozen.length,'of',summary.fixtures,'fixtures');
+
 }
 if(require.main===module)main();
 module.exports={freezeGame,MODEL_VERSION};
