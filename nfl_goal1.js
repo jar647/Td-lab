@@ -22,7 +22,7 @@ function rankPlayers(candidates,max=3){
  return result;
 }
 function buildTicket(candidates,count=4){
- const maximum=Math.max(2,Math.min(5,Math.trunc(count)||4));
+ const maximum=Math.max(1,Math.min(5,Math.trunc(count)||4));
  const pool=[...candidates].sort((a,b)=>b.score-a.score);
  const chosen=[];
  while(pool.length&&chosen.length<maximum){
