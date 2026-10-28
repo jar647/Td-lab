@@ -218,7 +218,21 @@ async function init(){
    else if(age>30)errors.push('Feed is '+Math.round(age)+' hours old; verify current rosters and game status.');
   }
   const injury=feedMeta?.availability_diagnostics?.injuries;
-  if(!injury||!injury.matched_ids)errors.push('No current-week OUT/QUESTIONABLE/DOUBTFUL designations matched from the injury report. This does NOT mean players are healthy. Check official game-day statuses.');
+  if(!injury)errors.push('Injury feed unavailable. Game-day actives and injury status are UNVERIFIED.');
+  else {
+   const stage=String(injury.report_stage||'UNKNOWN');
+   const flags=Number(injury.practice_flags||0);
+   if(stage==='PRACTICE_ONLY_NO_GAME_DESIGNATIONS')
+    errors.push('Practice-only injury update: '+flags+' player practice flags; no final game designations yet. This does NOT mean healthy or cleared.');
+   else if(stage==='GAME_DESIGNATIONS_PARTIAL')
+    errors.push('Partial game designations: '+Number(injury.matched_ids||0)+' identified players; other players and game-day inactives remain UNVERIFIED.');
+   else errors.push('Current-week injury designations unavailable ('+stage+'). Missing information is NOT a healthy/active confirmation.');
+   const missing=injury.teams_without_injury_rows||[];
+   if(missing.length)errors.push('Teams without current-week injury records: '+missing.join(', ')+'.');
+   if(injury.stale_team_or_unmatched_id_rows>0)errors.push(
+    injury.stale_team_or_unmatched_id_rows+' injury records excluded due to unresolved player/team identity.');
+  }
+  errors.push('Official game-day inactives are NOT confirmed by the nflverse roster or practice feed.');
   $('feedHealth').textContent=errors.join(' ');
   const forward=responses[2]?.ok?await responses[2].json():null;
   $('validationStatus').textContent=forward

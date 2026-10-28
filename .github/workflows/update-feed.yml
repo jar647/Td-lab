@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'build_feed.py'
+      - 'injury_readiness.py'
       - 'capture_prop_probabilities.py'
       - 'grade_prop_probabilities.py'
       - 'historical_participation.py'
@@ -49,7 +50,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Verify NFL engine Python syntax
-        run: python -m compileall -q build_feed.py capture_prop_probabilities.py grade_prop_probabilities.py historical_participation.py opportunity_prop_model.py player_prop_probability_backtest.py tests
+        run: python -m compileall -q injury_readiness.py build_feed.py capture_prop_probabilities.py grade_prop_probabilities.py historical_participation.py opportunity_prop_model.py player_prop_probability_backtest.py tests
       - name: Test game-first NFL Monte Carlo engine
         run: node test_nfl_game_engine.js
       - name: Test NFL analyst browser-controller flow

@@ -6,6 +6,7 @@ import json, os, sys
 from datetime import datetime, timezone
 from pathlib import Path
 import pandas as pd
+from injury_readiness import diagnose_injury_feed, trusted_injury_rows
 
 SEASON = int(os.getenv('TDLAB_SEASON', datetime.now(timezone.utc).year))
 WINDOW = int(os.getenv('TDLAB_WINDOW', '5'))
@@ -491,14 +492,13 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
         for row in season_plays[['posteam','week','game_id']].drop_duplicates().itertuples(index=False)}
     # Use real opponent slate and only players whose latest roster team matches it.
     roster_team=dict(zip(roster.gsis_id.astype(str),roster.team.astype(str)))
-    injury_status=availability(injuries,week)
-    practice_status=practice_flags(injuries,week)
-    injury_diagnostics={'rows_for_week':0,'source_rows':0,'matched_ids':len(injury_status),
-                        'practice_flags':len(practice_status)}
-    if injuries is not None and not injuries.empty:
-        injury_diagnostics['source_rows']=len(injuries)
-        if 'week' in injuries.columns:
-            injury_diagnostics['rows_for_week']=int((pd.to_numeric(injuries.week,errors='coerce')==week).sum())
+    slate_teams=set(slate.home_team.astype(str)) | set(slate.away_team.astype(str))
+    injury_diagnostics=diagnose_injury_feed(injuries,SEASON,week,slate_teams,roster_team)
+    # Never apply a practice or designation from a former team or an unknown
+    # GSIS identity. Missing records mean UNKNOWN, not cleared/active.
+    injury_records=trusted_injury_rows(injuries,SEASON,week,roster_team)
+    injury_status=availability(injury_records,week)
+    practice_status=practice_flags(injury_records,week)
     weekly_diagnostics={'source_rows':0,'latest_week':None,'status_column':False}
     if weekly_rosters is not None and not weekly_rosters.empty and {'gsis_id','week'}.issubset(weekly_rosters.columns):
         wr=weekly_rosters.copy()
@@ -511,8 +511,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
             weekly_diagnostics={'source_rows':len(wr),'latest_week':latest_week,'status_column':'status' in wr.columns,'status_counts':wr.status.fillna('MISSING').astype(str).value_counts().head(30).to_dict() if 'status' in wr.columns else {}}
             if 'status' in wr.columns:
                 roster_status.update(dict(zip(wr.gsis_id.astype(str),wr.status.fillna('').astype(str).str.upper().str.strip())))
-    injury_diagnostics['columns']=list(injuries.columns) if injuries is not None else []
-    injury_diagnostics['report_status_counts']=injuries.loc[pd.to_numeric(injuries.week,errors='coerce')==week,'report_status'].fillna('MISSING').astype(str).value_counts().head(20).to_dict() if injuries is not None and {'week','report_status'}.issubset(injuries.columns) else {}
+    injury_diagnostics['report_status_counts']=injury_diagnostics['current_week_report_status_counts']
     # NFL weekly roster codes: ACT active roster, RES reserve, DEV practice squad.
     # ACT is roster membership only, not game-day clearance.
     weekly_roster_codes={}
@@ -665,6 +664,8 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     'opponentOffenseBaselineRec':opponent_baseline(opp,position,'REC') if position!='QB' else None,
                     'opponentOffenseBaselineCatch':opponent_baseline(opp,position,'CATCH') if position!='QB' else None,
                     'injuryReportStatus':injury_status.get(pid,'NOT_REPORTED'),
+                    'injuryReportStage':injury_diagnostics['report_stage'],
+                    'gameDayAvailability':'UNVERIFIED',
                     'injuryPracticeStatus':practice_status.get(pid,'NOT_REPORTED'),
                     'goalLine5':mean(player_inside5.get((team,pid),0)/pg),
                     'recentRz2':mean(recent_player_events.get((team,pid),0)/recent_offense_games[team]) if recent_offense_games.get(team,0)>0 else None,
@@ -677,7 +678,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     return result, {'season':SEASON,'week':week,'generated_at':now.isoformat(),
                     'matchups':len(result),'source':'nflverse play-by-play and rosters',
                     'odds_source':None,'probability_model':None,
-                    'lookback_games':WINDOW,'availability_diagnostics':{'injuries':injury_diagnostics,'weekly_rosters':weekly_diagnostics,'excluded':excluded,'unverified_output':sum(r['availability']=='UNVERIFIED' for r in result)},'injury_policy':'Current-week OUT excluded; doubtful/questionable and practice LIMITED/DNP flagged separately (practice DNP is not game OUT); weekly RES/DEV/CUT/RET/EXE/TRD/TRT excluded. ROSTER_ACTIVE only confirms active roster membership, not game-day clearance; late inactives unverified.','status':'ready'}
+                    'lookback_games':WINDOW,'availability_diagnostics':{'injuries':injury_diagnostics,'weekly_rosters':weekly_diagnostics,'excluded':excluded,'unverified_output':sum(r['availability']=='UNVERIFIED' for r in result)},'injury_policy':'Exact GSIS ID and current team required; official OUT excluded; questionable/doubtful and practice LIMITED/DNP flagged separately. No game designation can mean report not yet published. Weekly ACT is roster membership only, never game-day clearance. Official inactives are unverified.','status':'ready'}
 
 def main():
     now = datetime.now(timezone.utc)
