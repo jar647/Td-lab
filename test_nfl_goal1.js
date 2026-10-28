@@ -12,7 +12,7 @@ assert.deepEqual(app.rankPlayers(pool,3).map(x=>x.p.player_id),['a','b','c']);
 for(const n of [2,3,4,5]){
  const slip=app.buildTicket(pool,n);
  assert.equal(slip.length,n);
- assert.equal(new Set(slip.map(x=>app.identity(x))).size,n,'diverse players should be preferred');
+ assert.equal(new Set(slip.map(x=>app.identity(x))).size,Math.min(n,4),'prefer unique players until the pool is exhausted');
 }
 assert.equal(app.americanDecimal('+400'),5);
 assert.equal(app.americanDecimal('-125'),1.8);
