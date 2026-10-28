@@ -240,33 +240,37 @@ function renderNFLGameMatchupBreakdown(){
   {title:'Rushing',metrics:[['Rushing yards','defRushYardsAllowed'],['Rush attempts','defRushAttemptsAllowed']]},
   {title:'Receiving',metrics:[['Receiving yards','defRecYardsAllowed'],['Receptions','defReceptionsAllowed'],['Targets','defTargetsAllowed']]}
  ];
- const metricFields=groups.flatMap(g=>g.metrics.map(x=>x[1]));
+ const positionsFor=field=>field.startsWith('defPass')?['QB']:['QB','RB','WR','TE'];
  const validMetric=v=>v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v))?Number(v):null;
- const defenseRows=new Map();
- for(const r of autoRecords){if(!r.opp)continue;const key=String(r.opp),values=defenseRows.get(key)||{};for(const field of metricFields){const value=validMetric(r[field]);if(values[field]===undefined&&value!==null)values[field]=value}defenseRows.set(key,values)}
+ const aggregate=(rows,field)=>{
+  const byPosition=new Map();
+  for(const r of rows){const pos=String(r.pos||'').toUpperCase();if(!positionsFor(field).includes(pos)||byPosition.has(pos))continue;const value=validMetric(r[field]);if(value!==null)byPosition.set(pos,value)}
+  const positions=positionsFor(field);
+  return positions.every(pos=>byPosition.has(pos))?positions.reduce((sum,pos)=>sum+byPosition.get(pos),0):null;
+ };
+ const sampleRows=new Map();
+ for(const r of autoRecords){if(r.market!=='ATD'||!r.opp)continue;const defense=String(r.opp);if(!sampleRows.has(defense))sampleRows.set(defense,[]);sampleRows.get(defense).push(r)}
  const sampleAverage=field=>{
-  const vals=[...defenseRows.values()].map(r=>r[field]).filter(Number.isFinite);
+  const vals=[...sampleRows.values()].map(rows=>aggregate(rows,field)).filter(Number.isFinite);
   return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null;
  };
  const fmt=n=>Number(n).toFixed(1);
- root.innerHTML='<section class="panel"><h2>🏈 Game matchup breakdown</h2><p class="muted">Team-level defensive rates per game. Percentages compare each defense with the current feed sample; this is matchup context, not a player projection.</p>'+teams.map(defense=>{
+ root.innerHTML='<section class="panel"><h2>🏈 Game matchup breakdown</h2><p class="muted">Team defensive rates per game. Rushing and receiving totals combine QB, RB, WR and TE position rates; passing uses the QB team rate. Comparisons use complete team totals from the current feed sample. This is matchup context, not a player projection.</p>'+teams.map(defense=>{
   const offense=teams.find(t=>t!==defense);
-  const row=gameRows.find(r=>String(r.opp)===defense&&String(r.team)===offense&&metricFields.some(field=>validMetric(r[field])!==null));
-  if(!row)return '<article class="matchrow"><h3>'+escapeHTML(defense)+' defense vs '+escapeHTML(offense)+' offense</h3><p class="muted">Defensive stats are missing for this side of the matchup.</p></article>';
-  const countRows=autoRecords.filter(r=>String(r.team)===defense);
-  const gameCounts=countRows.map(r=>Number(r.seasonGamesPlayed??r.games)).filter(n=>Number.isFinite(n)&&n>0);
+  const sideRows=gameRows.filter(r=>String(r.opp)===defense&&String(r.team)===offense);
+  if(!sideRows.length)return '<article class="matchrow"><h3>'+escapeHTML(defense)+' defense vs '+escapeHTML(offense)+' offense</h3><p class="muted">Defensive stats are missing for this side of the matchup.</p></article>';
+  const gameCounts=autoRecords.filter(r=>String(r.team)===defense).map(r=>Number(r.games)).filter(n=>Number.isFinite(n)&&n>0);
   const sampleGames=gameCounts.length?Math.max(...gameCounts):null;
   const detail=groups.map(group=>'<div class="statsline"><b>'+group.title+'</b>'+group.metrics.map(([label,field])=>{
-   const value=validMetric(row[field]);if(value===null)return '<div>'+label+': unavailable in feed</div>';
+   const value=aggregate(sideRows,field);if(value===null)return '<div>'+label+': unavailable in feed (one or more position groups are missing)</div>';
    const baseline=sampleAverage(field),delta=baseline>0?value/baseline-1:null;
    const comparison=delta===null?' · feed comparison unavailable':' ('+(delta>=0?'+':'')+(delta*100).toFixed(0)+'% vs sample)';
    const context=delta===null?'':delta>=.08?' · Potential opposing prop opportunity':delta<=-.08?' · Tougher defensive matchup':' · Near sample average';
    return '<div>'+label+': '+fmt(value)+' allowed/game'+comparison+context+'</div>';
   }).join('')+'</div>').join('');
   return '<article class="matchrow"><h3>'+escapeHTML(defense)+' defense vs '+escapeHTML(offense)+' offense</h3><p class="muted">'+(sampleGames===null?'Game count unavailable.':'Based on '+sampleGames+' completed team games.')+'</p>'+detail+'</article>';
- }).join('')+'<p class="muted">Team-level stats only. Position-specific coverage and individual player usage still need separate review.</p></section>';
+ }).join('')+'<p class="muted">Team rates are summed from position-level feed values; comparisons include only defenses with complete position coverage. Individual player usage still needs separate review.</p></section>';
 }
-
 let propCategory='PASS';
 function setMainCategory(category,button){
  const isGame=category==='GAME';
