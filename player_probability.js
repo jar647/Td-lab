@@ -167,7 +167,7 @@
   const context=r.valid?' Inputs: workload '+(r.usageRatio===null?'missing':(r.usageRatio*100).toFixed(0)+'% of baseline')+
    '; opponent adjustment '+(r.defenseRatio===null?'missing':(r.matchupEffect>=0?'+':'')+r.matchupEffect.toFixed(1)+'%')+
    '; availability '+(r.injuryStatus||'UNVERIFIED')+'. ' :'';
-  const sampleGate=r.requiredSample?'; evidence minimum '+r.requiredSample+'/8'+(r.availableGames!==null&&r.availableGames<8?' based on '+r.availableGames+' available team games'):'');
+  const sampleGate=r.requiredSample?'; evidence minimum '+r.requiredSample+'/8'+(r.availableGames!==null&&r.availableGames<8?' based on '+r.availableGames+' available team games':''):'';
   const model=r.valid?'UNCALIBRATED model Over '+percent(r.over)+', Under '+percent(r.under)+
    (r.push>.001?', Push '+percent(r.push):'')+' ('+r.sample+' recorded games'+sampleGate+'). ':
    'Model probability unavailable ('+r.sample+' recorded games). ';
