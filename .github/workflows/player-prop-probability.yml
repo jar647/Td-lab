@@ -2,7 +2,7 @@ name: NFL player prop probability holdout
 on:
   push:
     paths:
-      - 'player_prop_probability_backtest.py'
+      - 'player_prop_probability_backtest.py'\n      - 'test_player_prop_probability.py'
       - '.github/workflows/player-prop-probability.yml'
   workflow_dispatch:
 jobs:
@@ -17,7 +17,7 @@ jobs:
           python-version: '3.11'
           cache: pip
       - run: pip install -r requirements.txt
-      - run: python player_prop_probability_backtest.py
+      - run: python -m unittest test_player_prop_probability.py\n      - run: python player_prop_probability_backtest.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
