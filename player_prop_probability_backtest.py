@@ -15,6 +15,7 @@ from pathlib import Path
 import nflreadpy
 import pandas as pd
 from opportunity_prop_model import MARKET_OPPORTUNITY, opportunity_probability
+from historical_participation import snap_verified_weekly
 
 ROOT = Path(__file__).resolve().parent
 SEASONS = (2024, 2025)
@@ -112,9 +113,16 @@ def main():
     all_rows = []
     for season in SEASONS:
         weekly = frame(nflreadpy.load_player_stats(seasons=[season], summary_level="week"))
-        if weekly.empty:
-            raise RuntimeError(f"No weekly player stats available for {season}")
-        all_rows.extend(observations(weekly))
+        rosters = frame(nflreadpy.load_rosters([season]))
+        snaps = frame(nflreadpy.load_snap_counts([season]))
+        schedules = frame(nflreadpy.load_schedules([season]))
+        if any(frame.empty for frame in (weekly, rosters, snaps, schedules)):
+            raise RuntimeError(f"Missing historical participation inputs for {season}")
+        eligible = snap_verified_weekly(weekly, rosters, snaps, schedules, season)
+        unmatched = int((~eligible["boxscore_row_present"]).sum())
+        print(f"{season}: {len(eligible)} snap-verified offensive player-games, "
+              f"{unmatched} with independently verified snaps but no box-score row")
+        all_rows.extend(observations(eligible))
     train = [r for r in all_rows if r["season"] == 2024]
     holdout = [r for r in all_rows if r["season"] == 2025]
     if len(train) < 500 or len(holdout) < 500:
@@ -141,11 +149,11 @@ def main():
     output = {
         "status": "RESEARCH_ONLY_NOT_BET_READY", "seasons": {"train": 2024, "holdout": 2025},
         "threshold_type": "fixed hypothetical thresholds, not sportsbook lines",
-        "selection_bias": "Weekly box-score rows include many zero-market games, but completely absent active players and full snap eligibility are not proven.",
-        "method": "Weekly nflverse player box scores, walk-forward prior-game hit frequencies vs opportunity-adjusted historical outcomes; blend weight chosen on 2024, evaluated on 2025.",
+        "selection_bias": "Offensive participation verified by prior-season historical snaps and an exact PFR-to-GSIS identity join. Postgame snaps are used only as outcome eligibility, never as pregame features. Position/team mapping gaps may still omit valid appearances.",
+        "method": "nflverse weekly stats plus verified positive offensive snap game appearances; walk-forward probability comparison with 2024 fit and 2025 historical evaluation.",
         "limitations": ["Does not evaluate the live app's probability model", "No opponent adjustment",
                          "No injury-as-of verification", "No sportsbook pricing or SGP correlations",
-                         "Not representative of every rostered player-game; weekly box-score appearance is not a pregame availability signal"],
+                         "Not representative of every rostered player-game; historically verified participation must never be used to predict future player availability"],
         "bet_ready": False, "markets": by_market,
     }
     path = ROOT / "data/player_prop_probability_backtest.json"
