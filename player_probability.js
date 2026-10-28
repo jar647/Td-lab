@@ -67,9 +67,24 @@
   const whole=Number.isInteger(posted);
   const highBound=Math.floor(posted)+.5;
   const lowBound=whole?posted-.5:highBound;
-  const over=clamp(1-normalCDF((highBound-center)/sd),0,1);
-  const under=clamp(normalCDF((lowBound-center)/sd),0,1);
-  const push=clamp(1-over-under,0,1);
+  const normalOver=clamp(1-normalCDF((highBound-center)/sd),0,1);
+  const normalUnder=clamp(normalCDF((lowBound-center)/sd),0,1);
+  const normalPush=clamp(1-normalOver-normalUnder,0,1);
+  // Preserve the player's observed game-to-game shape, shift it by the
+  // matchup-conditioned center, then use a small smooth prior for sparse logs.
+  const scale=average>0?center/average:1;
+  let observedOver=0,observedUnder=0,observedPush=0;
+  for(const value of values){
+   let scenario=Math.max(0,value*scale);
+   if(whole)scenario=Math.round(scenario);
+   if(scenario>posted)observedOver++;
+   else if(scenario<posted)observedUnder++;
+   else observedPush++;
+  }
+  const priorWeight=Math.min(3,Math.max(1,8/n)),denominator=n+priorWeight;
+  const over=(observedOver+priorWeight*normalOver)/denominator;
+  const under=(observedUnder+priorWeight*normalUnder)/denominator;
+  const push=(observedPush+priorWeight*normalPush)/denominator;
   // Sensitivity to estimated mean error; NOT a validated frequentist confidence interval.
   const centerError=1.28*Math.max(observedSD,floor)/Math.sqrt(n);
   const overLower=clamp(1-normalCDF((highBound-(center-centerError))/sd),0,1);
@@ -87,7 +102,8 @@
    injuryStatus:status||'UNVERIFIED',evidence,evidenceCount:Object.values(evidence).filter(Boolean).length,
    matchupEffect:Math.round((defenseEffect-1)*1000)/10,usageEffect:Math.round((usageEffect-1)*1000)/10,
    injuryEffect:Math.round((injuryEffect-1)*1000)/10,
-   method:'Observed player-game distribution with recency, workload, opponent allowance and documented availability inputs where available; shrunk toward observed mean. Uncalibrated.'};
+   distribution:'matchup-shifted empirical outcomes with a small normal-distribution prior',
+   method:'Observed player-game outcome shape, shifted using recent production, workload, opponent allowance and documented availability inputs where available; small normal prior shrinks sparse histories. Uncalibrated.'};
  }
  function calibrationReady(c,market){
   const rows=finite(c?.gradedRows),marketRows=finite(c?.marketRows?.[market]);
