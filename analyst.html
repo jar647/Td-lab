@@ -53,6 +53,20 @@ if(last.length<5)risks.push('Limited recent sample.');
 if(line<floor)risks.push('Very conservative alternate line. Book availability and price are unverified; omit it if payout contribution is negligible.');
 return {p,d,line,score,reasons,risks,hits,sample,injuryFlag,scenarioRate:best.scenarioRate};
 }
+function invokeGameWorker(gamePlayers,count,selected){
+ return new Promise((resolve,reject)=>{
+  if(typeof Worker==='undefined'){reject(Error('Web Workers are unavailable on this browser'));return}
+  const worker=new Worker('./nfl_game_worker.js');
+  worker.onmessage=e=>{
+   worker.terminate();
+   if(e.data&&e.data.error)reject(Error(e.data.error));
+   else if(e.data&&e.data.result)resolve(e.data.result);
+   else reject(Error('Invalid simulation response'));
+  };
+  worker.onerror=e=>{worker.terminate();reject(Error(e.message||'Simulation worker failed'))};
+  worker.postMessage({players:gamePlayers,count,seed:982451653,selected: selected||[],requestId:1});
+ });
+}
 function render(g,sim){
 const scenarioLookup=new Map(sim.markets.map(x=>[x.id+'|'+x.market+'|'+x.line,x]));
 const candidates=players.filter(p=>p.team+'-'+p.opp===g||p.opp+'-'+p.team===g).flatMap(p=>defs.map(d=>choose(p,d,scenarioLookup)).filter(Boolean)).sort((a,b)=>b.score-a.score);
@@ -108,20 +122,6 @@ const riskNotes=[
  'Joint scenario frequencies are available in the simulator, but they are not calibrated betting probabilities. Individual hit rates must not be multiplied as independent events.'
 ];
 const montePanel='<div class="panel"><h2>Game-first Monte Carlo · Research only</h2><p class="sub">Each scenario generates team plays, passing and rushing attempts, player targets and carries, completions and yards. Teammates compete for opportunities; quarterback passing yards depend on completed receivers. These are NOT calibrated probabilities.</p><div id="gameModel" class="reason"></div><label class="small" for="simCount">Game simulations</label><select id="simCount"><option value="10000" selected>10,000 · Standard</option><option value="50000">50,000 · Detailed</option><option value="100000">100,000 · Deep</option></select><button type="button" id="runSim">Run correlated game simulation</button><div id="simResult" class="reason" aria-live="polite"></div></div>';
-function invokeGameWorker(gamePlayers,count,selected){
- return new Promise((resolve,reject)=>{
-  if(typeof Worker==='undefined'){reject(Error('Web Workers are unavailable on this browser'));return}
-  const worker=new Worker('./nfl_game_worker.js');
-  worker.onmessage=e=>{
-   worker.terminate();
-   if(e.data&&e.data.error)reject(Error(e.data.error));
-   else if(e.data&&e.data.result)resolve(e.data.result);
-   else reject(Error('Invalid simulation response'));
-  };
-  worker.onerror=e=>{worker.terminate();reject(Error(e.message||'Simulation worker failed'))};
-  worker.postMessage({players:gamePlayers,count,seed:982451653,selected: selected||[],requestId:1});
- });
-}
 function mountMonteCarlo(legs,gamePlayers,initial){
  const btn=$('runSim');if(!btn)return;
  $('gameModel').innerHTML='<p><strong>Full matchup opportunity forecast</strong></p>'+
