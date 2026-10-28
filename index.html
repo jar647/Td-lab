@@ -372,7 +372,7 @@ function renderPropMatchups(){
    '<p class="pv-price-review">Experimental probabilities unavailable: '+escapeHTML(price.reason)+'</p>';
   const encodedKey=JSON.stringify(key).replace(/"/g,'&quot;');
   const marketLabel={PTD:'Passing TDs',PASS:'Passing yards',RUSH:'Rushing yards',REC:'Receiving yards',CATCH:'Receptions'}[propCategory]||propCategory;
-  const addToSlip=CookItUpQuickSlip.button({sport:'NFL',game:(activeFeedWeek||'Current week')+' · '+x.r.team+' vs '+x.r.opp,player:x.r.player,team:x.r.team,opponent:x.r.opp,market:marketLabel,line:posted,overOdds:quoted.over,underOdds:quoted.under});
+  const addToSlip=CookItUpQuickSlip.button({sport:'NFL',game:(activeFeedWeek||'Current week')+' · '+x.r.team+' vs '+x.r.opp,player:x.r.player,team:x.r.team,opponent:x.r.opp,market:marketLabel,line:posted,recommendation:price.candidate?price.candidate+' '+(posted??'')+' '+marketLabel:undefined,estimatedEdge:price.candidate?price.estimatedEdge:null,edgeBasis:'break-even',overOdds:quoted.over,underOdds:quoted.under});
   const fmt=n=>n==null?'—':['CATCH','PTD'].includes(propCategory)?n.toFixed(2).replace(/0+$/,'').replace(/\\.$/,''):Math.round(n).toString();
   const edgeText=edge==null?'—':(edge>0?'+':'')+edge.toFixed(propCategory==='PTD'?2:1);
   const tone=decision.label.includes('OVER')?'positive':decision.label.includes('PASS')?'negative':'caution';
