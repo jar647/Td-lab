@@ -40,6 +40,7 @@ function playerParams(p){
   gameCount:history.length,questionable:/QUESTIONABLE|DOUBTFUL|UNVERIFIED|NOT_REPORTED|LIMITED|DNP_PRACTICE/.test(
    [p.injuryReportStatus,p.availability,p.injuryPracticeStatus].join('|').toUpperCase()),
   pass:usage('passAttempts'),targets:usage('targets'),carries:usage('rushAttempts'),
+  verifiedTeamPass:finite(p.teamPassAttemptsPerGame),
   catchRate:targetRate,ypc:yardsPerCatch,ypcarry:rushPerCarry,
   passMatch:clamp(finite(ratios.PASS)??1,.85,1.12),
   recMatch:clamp(finite(ratios.REC)??1,.85,1.12),
@@ -55,8 +56,20 @@ function build(records){
  const league=teams.map(team=>{
   const roster=entries.filter(p=>p.team===team);
   const qbs=roster.filter(p=>p.pos==='QB').sort((a,b)=>b.pass-a.pass);
-  if(!qbs.length||qbs[0].pass<12)throw Error(team+': insufficient verified quarterback history');
-  const qb=qbs[0];
+  const quarterbackVerified=qbs.length>0&&qbs[0].pass>=12;
+  const candidates=roster.map(p=>p.verifiedTeamPass).filter(x=>x!==null&&x>=12&&x<=65);
+  // If the QB's individual history is unavailable (injury, return, change of
+  // starter), use verified historical TEAM passing attempts instead.
+  // An internal anonymous passer enables receiver-target simulations, but
+  // MUST NOT generate a named player/QB passing-yard market or imply a starter.
+  const fallbackAttempts=candidates.length?candidates[0]:null;
+  if(!quarterbackVerified&&fallbackAttempts===null)
+   throw Error(team+': no verified quarterback or historical team passing volume');
+  const qb=quarterbackVerified?qbs[0]:{
+   id:'UNVERIFIED_TEAM_QB_'+team,team,pos:'TEAM_PASSER_UNVERIFIED',
+   pass:fallbackAttempts,passMatch:1,
+   output:{passYards:0,rushYards:0,recYards:0,receptions:0}
+  };
   const receivers=roster.filter(p=>['WR','TE','RB'].includes(p.pos)&&p.targets>=.25);
   const runners=roster.filter(p=>['RB','QB','WR'].includes(p.pos)&&p.carries>=.15);
   const passAttempts=clamp(qb.pass,20,48);
@@ -73,13 +86,17 @@ function build(records){
   const targetPool=pool(receivers.map(p=>({p,weight:p.targets})),passAttempts,2.5);
   const carryPool=pool(runners.map(p=>({p,weight:p.carries})),rushAttempts,1);
   return {team,roster,qb,pace,passRate,targetPool,carryPool,
-   outlook:{team,estimatedPlays:Math.round(pace),estimatedPassAttempts:Math.round(passAttempts),
+   outlook:{team,passVolumeSource:quarterbackVerified?'VERIFIED_QB_PLAYER_HISTORY':'VERIFIED_TEAM_PBP_NO_QB_PROPS',
+    quarterbackPlayerPropsAvailable:quarterbackVerified,
+    warning:quarterbackVerified?null:'QB individual history is insufficient; team passing volume based on completed PBP. No QB props are projected.',
+    estimatedPlays:Math.round(pace),estimatedPassAttempts:Math.round(passAttempts),
     estimatedRushAttempts:Math.round(rushAttempts),passingShare:Math.round(passRate*100),
     untrackedTargetShare:Math.round(targetPool.items[targetPool.items.length-1].weight/targetPool.sum*100),
     untrackedCarryShare:Math.round(carryPool.items[carryPool.items.length-1].weight/carryPool.sum*100)}
   };
  });
- if(league.some(t=>t.roster.length<4))throw Error('Not enough position-verified players for complete matchup');
+ if(league.some(t=>t.roster.length<(t.outlook.quarterbackPlayerPropsAvailable?4:3)))
+  throw Error('Not enough position-verified offensive players for complete matchup');
  return {teams:league,players:entries};
 }
 function simulate(records,count=10000,seed=1307,selected=[]){

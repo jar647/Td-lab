@@ -68,7 +68,7 @@ jobs:
       - name: Build game-picks research slate
         run: python game_picks.py
       - name: Verify NFL game-first analyst with actual matchup feed
-        run: node test_nfl_real_matchup.js
+        run: CI_EXPECT_TEAM_VOLUME=1 node test_nfl_real_matchup.js
       - name: Freeze pregame player prop probabilities for future validation
         run: python capture_prop_probabilities.py
       - name: Freeze pregame game-first research forecasts against prior opportunity baseline

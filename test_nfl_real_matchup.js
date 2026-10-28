@@ -53,5 +53,37 @@ vm.runInContext(js,context);
  assert(output.includes('Projected game script'),'Real matchup should show game script');
  await new Promise(resolve=>setTimeout(resolve,10));
  assert(el('simResult').innerHTML.includes('Simulated'),'Joint simulation should finish');
+
+ // Verify every actual matchup can produce a simulation input or explicitly
+ // refuse for missing historical team data. The prior PHI/WAS gap should now
+ // use the observed-team-PBP fallback rather than inventing a passer.
+ const phi=games.includes('PHI-WAS')?players.filter(p=>['PHI','WAS'].includes(p.team)&&
+   ['PHI','WAS'].includes(p.opp)):null;
+ if(phi){
+  const verifiedTeamHistory=phi.some(p=>p.team==='PHI'&&
+   Number.isFinite(Number(p.teamPassAttemptsPerGame))&&Number(p.teamPassAttemptsPerGame)>=12);
+  if(!verifiedTeamHistory){
+   // A branch-only UI regression uses the previously published JSON until
+   // the feed pipeline rebuilds it. PR/full-feed CI *must* require the new
+   // independently measured team volume after building fresh PBP output.
+   assert.notEqual(process.env.CI_EXPECT_TEAM_VOLUME,'1',
+    'New feed must contain verified PHI historical team passing volume');
+   console.log('Stored prior feed has no team passing-volume field; full-feed rebuild required.');
+  }else{
+  const rebuilt=engine.build(phi);
+  assert.equal(rebuilt.teams.length,2);
+  assert(rebuilt.teams.every(x=>x.outlook.estimatedPassAttempts>=20));
+  const missing=rebuilt.teams.filter(x=>!x.outlook.quarterbackPlayerPropsAvailable);
+  if(missing.length){
+   assert(missing.every(x=>x.outlook.passVolumeSource==='VERIFIED_TEAM_PBP_NO_QB_PROPS'));
+   for(const t of missing)assert(rebuilt.players.filter(p=>p.team===t.team&&p.pos==='QB')
+    .every(p=>p.pass<12));
+  }
+  const scenarioInfo=goal1.script({teams:rebuilt.teams.map(x=>x.outlook)});
+  if(missing.length)assert(scenarioInfo.lines.join(' ').includes('QB individual history is insufficient'),
+   'Real matchup script must show the QB-history fallback warning');
+  console.log('PHI/WAS confirmed: historical team passing fallback where QB history is missing.');
+  }
+ }
  console.log('Actual NFL feed matchup passed game-first UI research flow:',target);
 })().catch(error=>{console.error(error);process.exitCode=1});

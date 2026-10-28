@@ -67,6 +67,7 @@ function script(sim,score){
    ' '+h.toFixed(1)+'. Projected total '+(h+a).toFixed(1)+
    ', margin '+score.home+' '+(h-a>=0?'+':'')+(h-a).toFixed(1)+'.');
  }
+ for(const t of order)if(t.warning)lines.push(t.team+' model warning: '+t.warning);
  lines.push('Targets and carries compete within each offense; quarterback passing yards follow completed receiver outcomes. These assumptions are not calibrated.');
  return {lines,score:score||null,teams:byTeam};
 }

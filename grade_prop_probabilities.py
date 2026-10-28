@@ -5,6 +5,7 @@ Strictly separates pregame capture from postgame snap-verified outcomes.
 Does not infer a sportsbook offering, betting ROI, or live-readiness status.
 """
 import json
+import math
 from collections import defaultdict
 from pathlib import Path
 
@@ -19,6 +20,35 @@ OUT = ROOT / "data" / "forward" / "prop_probability_performance.json"
 
 def frame(obj):
     return obj.to_pandas() if hasattr(obj, "to_pandas") else pd.DataFrame(obj)
+
+def calibration_diagnostics(rows):
+    """Model-vs-baseline reliability. Rows sharing a player-game are dependent."""
+    if not rows:
+        return {"model_log_loss": None, "baseline_log_loss": None,
+                "calibration_bins": [], "expected_calibration_error": None,
+                "distinct_player_games": 0, "distinct_game_market_players": 0}
+    n = len(rows)
+    def log_loss(field):
+        return sum(-(r["hit"]*math.log(max(1e-9, r[field])) +
+            (1-r["hit"])*math.log(max(1e-9,1-r[field]))) for r in rows)/n
+    bins = []
+    ece = 0.0
+    for bucket in range(10):
+        subset = [r for r in rows if min(9,int(r["model_probability"]*10)) == bucket]
+        if not subset:
+            continue
+        expected = sum(x["model_probability"] for x in subset)/len(subset)
+        actual = sum(x["hit"] for x in subset)/len(subset)
+        ece += len(subset)/n*abs(expected-actual)
+        bins.append({"range": f"{bucket*10}-{(bucket+1)*10}%",
+                     "n":len(subset),"predicted":round(expected,4),
+                     "observed":round(actual,4)})
+    return {"model_log_loss":round(log_loss("model_probability"),6),
+            "baseline_log_loss":round(log_loss("baseline_probability"),6),
+            "calibration_bins":bins, "expected_calibration_error":round(ece,6),
+            "distinct_player_games":len({(r["game_id"],r["player_id"]) for r in rows}),
+            "distinct_game_market_players":len({(r["game_id"],r["market"],r["player_id"]) for r in rows})}
+
 
 def evaluate(snapshots, schedules, appearances):
     # appearances contains postgame snap-verified player-game outcomes. Use
@@ -107,15 +137,49 @@ def evaluate(snapshots, schedules, appearances):
                 "baseline_brier": round(baseline_brier, 6) if n else None,
                 "beats_baseline": bool(n and model_brier < baseline_brier),
                 "distinct_weeks": len({(r["season"], r["week"]) for r in rows}),
+                **calibration_diagnostics(rows),
             }
         by_version[version] = {
             "graded": len(subset),
             "distinct_weeks": len({(r["season"], r["week"]) for r in subset}),
+            "distinct_player_games": len({(r["game_id"],r["player_id"]) for r in subset}),
+            "distinct_games": len({r["game_id"] for r in subset}),
             "markets": by_market,
         }
     current = by_version[current_version]
     game_first = by_version[game_first_version]
     weeks = current["distinct_weeks"]
+    review_requirements = {"distinct_weeks":8, "graded_forecast_rows":500,
+                           "distinct_player_games":150,
+                           "minimum_rows_per_market":40}
+    def review_ready(group):
+        return (group["distinct_weeks"] >= review_requirements["distinct_weeks"]
+                and group["graded"] >= review_requirements["graded_forecast_rows"]
+                and group["distinct_player_games"] >= review_requirements["distinct_player_games"]
+                and all(group["markets"][m]["n"] >=
+                        review_requirements["minimum_rows_per_market"]
+                        for m in ("PASS","RUSH","REC","CATCH")))
+    # Snapshot statuses are independent from performance metrics. An unplayed
+    # game is PENDING, not a prediction failure or a zero-stat outcome.
+    snapshot_states=[]
+    for snap in snapshots:
+        game=games.get(str(snap.get("game_id","")))
+        state="FIXTURE_NOT_FOUND" if game is None else (
+            "PENDING_GAME_FINAL" if pd.isna(game.get("home_score")) or
+                pd.isna(game.get("away_score")) else "GAME_FINAL")
+        snapshot_states.append({"model_version":str(snap.get("model_version","UNKNOWN")),
+            "game_id":str(snap.get("game_id","")),
+            "status":state, "forecast_rows":len(snap.get("predictions",[]))})
+    inventory={}
+    for item in snapshot_states:
+        v=item["model_version"]
+        block=inventory.setdefault(v,{"snapshots":0,"pending_final":0,"final_games":0,
+                                      "missing_fixture":0,"forecast_rows":0})
+        block["snapshots"]+=1
+        block["forecast_rows"]+=item["forecast_rows"]
+        if item["status"]=="PENDING_GAME_FINAL":block["pending_final"]+=1
+        elif item["status"]=="GAME_FINAL":block["final_games"]+=1
+        else:block["missing_fixture"]+=1
     return {
         "status": "RESEARCH_ONLY_NOT_BET_READY", "bet_ready": False,
         "model_version": current_version,
@@ -123,14 +187,17 @@ def evaluate(snapshots, schedules, appearances):
         "game_first_model_version": game_first_version,
         "game_first_graded": game_first["graded"],
         "game_first_distinct_weeks": game_first["distinct_weeks"],
-        "game_first_research_review_ready": game_first["distinct_weeks"] >= 8 and game_first["graded"] >= 500,
+        "game_first_research_review_ready": review_ready(game_first),
+        "game_first_distinct_player_games": game_first["distinct_player_games"],
+        "forward_review_thresholds":review_requirements,
+        "snapshot_inventory":inventory,
         "game_first_markets": game_first["markets"],
         "distinct_graded_weeks": weeks,
         "min_forward_weeks_for_review": 8,
-        "eligible_for_research_review": weeks >= 8 and current["graded"] >= 500,
+        "eligible_for_research_review": review_ready(current),
         "markets": current["markets"], "version_reports": by_version,
         "skipped": dict(skipped), "records": graded,
-        "warning": "Only pregame-frozen forecasts count. Opportunity and game-first model versions are scored separately against their frozen baselines. Fixed hypothetical thresholds; no sportsbook lines or betting claims."
+        "warning": "Only pregame-frozen forecasts count. Opportunity and game-first model versions are scored separately. Repeated player-game thresholds are NOT independent samples. Calibration bins describe observed reliability, not a certified edge. Fixed hypothetical thresholds; no sportsbook lines or betting claims."
     }
 def main():
     files = sorted(DIR.glob("*.json")) + sorted(GAME_DIR.glob("*.json"))

@@ -43,6 +43,20 @@ function run(){
  assert.notDeepEqual(result,engine.simulate(lineup,1500,13,legs),'different seeds must vary');
  assert.throws(()=>engine.simulate(lineup,100,1),/Simulation count/);
  assert.throws(()=>engine.simulate(lineup.filter(x=>x.team==='A'),1500,1),/two teams/);
+
+ const anonymous=lineup.filter(p=>p.player_id!=='b-qb');
+ // Never invent a quarterback or allow a guessed QB passing-yards prop.
+ const unverified=anonymous.map(p=>({...p,teamPassAttemptsPerGame:33}));
+ const recovered=engine.simulate(unverified,1500,12,[{id:'b-wr',market:'recYards',line:40}]);
+ const b=recovered.teams.find(t=>t.team==='B');
+ assert.equal(b.passVolumeSource,'VERIFIED_TEAM_PBP_NO_QB_PROPS');
+ assert.equal(b.quarterbackPlayerPropsAvailable,false);
+ assert(recovered.markets.some(m=>m.id==='b-wr'&&m.market==='recYards'),
+   'Receiver forecast must still be available without verified QB');
+ assert(!recovered.markets.some(m=>m.team==='B'&&m.market==='passYards'),
+   'No named passing-yard prop without a verified QB');
+ assert.throws(()=>engine.simulate(anonymous,1500,12),
+   /no verified quarterback or historical team passing volume/);
  console.log('NFL game-first simulator tests passed');
 }
 run();

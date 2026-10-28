@@ -36,6 +36,14 @@ class PropGradingTests(unittest.TestCase):
         self.assertEqual(report["current_model_graded"], 1)
         self.assertEqual(report["records"][0]["hit"], 1)
         self.assertFalse(report["bet_ready"])
+        market=report["markets"]["PASS"]
+        self.assertEqual(market["distinct_player_games"],1)
+        self.assertEqual(market["distinct_game_market_players"],1)
+        self.assertEqual(market["calibration_bins"][0]["range"],"60-70%")
+        self.assertEqual(market["calibration_bins"][0]["observed"],1)
+        self.assertIsInstance(market["expected_calibration_error"],float)
+        self.assertEqual(report["snapshot_inventory"][snap["model_version"]]["final_games"],1)
+        self.assertFalse(report["eligible_for_research_review"])
 
     def test_duplicate_forecast_rejected(self):
         schedules, appearances, snap = self.fixtures()
@@ -56,6 +64,8 @@ class PropGradingTests(unittest.TestCase):
         report = evaluate([snap], schedules, appearances)
         self.assertEqual(report["graded"], 0)
         self.assertEqual(report["skipped"]["GAME_NOT_FINAL"], 1)
+        self.assertEqual(report["snapshot_inventory"][snap["model_version"]]["pending_final"],1)
+        self.assertEqual(report["game_first_graded"],0)
 
 if __name__ == "__main__":
     unittest.main()
