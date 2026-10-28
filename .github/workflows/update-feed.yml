@@ -7,7 +7,6 @@ on:
       - 'build_feed.py'
       - 'capture_prop_probabilities.py'
       - 'grade_prop_probabilities.py'
-      - 'grade_prop_probabilities.py'
       - 'historical_participation.py'
       - 'opportunity_prop_model.py'
       - 'game_picks.py'
@@ -17,6 +16,10 @@ on:
       - 'scripts/audit_history.py'
       - 'scripts/verification_report.py'
       - 'tests/**'
+      - 'nfl_game_engine.js'
+      - 'nfl_game_worker.js'
+      - 'test_nfl_game_engine.js'
+      - 'analyst.html'
       - '.github/workflows/update-feed.yml'
   pull_request:
     branches: [main]
@@ -43,6 +46,8 @@ jobs:
         run: pip install -r requirements.txt
       - name: Verify NFL engine Python syntax
         run: python -m compileall -q build_feed.py capture_prop_probabilities.py grade_prop_probabilities.py historical_participation.py opportunity_prop_model.py player_prop_probability_backtest.py tests
+      - name: Test game-first NFL Monte Carlo engine
+        run: node test_nfl_game_engine.js
       - name: Test touchdown probability calibration
         run: python -m unittest discover -s tests -p 'test_*.py'
       - name: Build verified feed
