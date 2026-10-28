@@ -30,7 +30,7 @@ const context=vm.createContext({
   url.includes('prop_probability_performance.json')?{graded:0,distinct_graded_weeks:0}:
   url.includes('verification_status.json')?{bet_recommendations_enabled:false,gates:{model_calibrated:false}}:
   {generated_at:new Date().toISOString(),
-   availability_diagnostics:{injuries:{rows_for_week:16,matched_ids:0}}}
+   availability_diagnostics:{injuries:{rows_for_week:16,matched_ids:0,practice_flags:12,report_stage:'PRACTICE_ONLY_NO_GAME_DESIGNATIONS'}}}
  })
 });
 vm.runInContext(inline[0],context,{filename:'analyst.html'});
@@ -66,8 +66,10 @@ assert.ok(outcome.joint.scenarioRate<=yards.scenarioRate+1e-6);
 assert.ok(outcome.joint.scenarioRate<=catches.scenarioRate+1e-6);
 assert.equal(outcome.status,'RESEARCH_ONLY_UNCALIBRATED');
 setImmediate(()=>{
- assert.match(elements.get('feedHealth').textContent,/No current-week/,
-  'Missing injury designations must remain visible to users');
+ assert.match(elements.get('feedHealth').textContent,/Practice-only injury update/,
+  'Practice flags must not be mistaken for a final game designation');
+ assert.match(elements.get('feedHealth').textContent,/NOT confirmed/,
+  'Official game-day inactives must remain visibly unverified');
  assert.match(elements.get('validationStatus').textContent,/NOT READY|Not yet validated/,
   'Unvalidated model must not appear bet-ready');
  console.log('NFL analyst regression checks passed');
