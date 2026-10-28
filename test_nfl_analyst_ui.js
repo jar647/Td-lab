@@ -71,6 +71,7 @@ vm.runInContext(inline[0],context);
  assert(el('results').innerHTML.includes('Game-first research candidates'),'fixture should yield at least one matchup-driven research candidate, received: '+el('results').innerHTML.slice(0,1100));
  assert(el('results').innerHTML.includes('Top 3 player recommendations'));
  assert(el('results').innerHTML.includes('Best single bet for this game'));
+ assert(el('results').innerHTML.includes('bestOdds'));
  assert(el('results').innerHTML.includes('Projected game script'));
  assert(el('results').innerHTML.includes('4-leg SGP draft'));
  el('legCount').value='3';await el('legCount').onchange();

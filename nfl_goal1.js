@@ -70,6 +70,22 @@ function script(sim,score){
  lines.push('Targets and carries compete within each offense; quarterback passing yards follow completed receiver outcomes. These assumptions are not calibrated.');
  return {lines,score:score||null,teams:byTeam};
 }
+function applyAlternative(c,line,sim){
+ const val=finite(line);
+ if(val===null)return false;
+ const option=alternatives(c,sim).find(x=>x.line===val);
+ if(!option)return false;
+ c.line=val;c.scenarioRate=option.scenarioRate;
+ const games=Array.isArray(c.p.last5GameStats)?c.p.last5GameStats:[];
+ const values=games.map(g=>finite(g[c.d.key])).filter(v=>v!==null);
+ c.hits=values.filter(v=>v>=val).length;
+ if(Array.isArray(c.reasons)){
+  c.reasons[0]='Game-first scenario frequency: '+(option.scenarioRate*100).toFixed(1)+
+   '% at this selected threshold (UNCALIBRATED).';
+  c.reasons[2]='Cleared '+val+'+ in '+c.hits+' of the last '+values.length+' recorded games.';
+ }
+ return true;
+}
 function americanDecimal(raw){
  if(raw===null||raw===undefined)return null;
  const value=String(raw).trim();
@@ -132,7 +148,7 @@ function gameMarketDraft(type,side,line,odds,game){
  return {ok:true,leg:{type:kind,side:direction,line:kind==='ML'?null:numeric,odds:String(odds||'').trim(),
   name,team,source:'USER_ENTERED_NOT_MODELED'}};
 }
-const api={MIN_ALT,LABEL,rankPlayers,buildTicket,alternatives,script,americanDecimal,singlePrice,priceReview,gameMarketDraft,marketId,identity};
+const api={MIN_ALT,LABEL,rankPlayers,buildTicket,alternatives,applyAlternative,script,americanDecimal,singlePrice,priceReview,gameMarketDraft,marketId,identity};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;
 root.PropVaultGoal1=api;
 })(typeof self!=='undefined'?self:typeof globalThis!=='undefined'?globalThis:this);

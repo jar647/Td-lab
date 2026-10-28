@@ -46,4 +46,10 @@ const sim={markets:[
  {id:'a',market:'recYards',line:80,scenarioRate:.08}
 ]};
 assert.deepEqual(app.alternatives(candidate('a',95),sim).map(x=>x.line),[30,40,50]);
+const altRecord={...candidate('a',95),reasons:['Game-first scenario frequency: old','Recent form','Cleared old']};
+assert.equal(app.applyAlternative(altRecord,50,sim),true);
+assert.equal(altRecord.line,50);
+assert.equal(altRecord.scenarioRate,.56);
+assert(altRecord.reasons[0].includes('56.0%'));
+assert.equal(app.applyAlternative(altRecord,80,sim),false);
 console.log('Goal 1 game workflow decision-layer tests passed');

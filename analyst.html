@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>THE PROP VAULT | Game Analyst</title><style>:root{font-family:system-ui;background:#07120f;color:#e9fff3}*{box-sizing:border-box}body{margin:0}header{padding:22px 16px;background:#0d2119;border-bottom:1px solid #285440}main{max-width:800px;margin:auto;padding:18px}h1{margin:0;font-size:25px}h1 span{color:#27e59a}.sub{color:#a1b9ad;font-size:13px;line-height:1.5}.panel{border:1px solid #2b5342;background:#10241b;border-radius:15px;padding:17px;margin:13px 0}select,button,input{width:100%;padding:14px;background:#0a1912;color:white;border:1px solid #39634c;border-radius:10px;font-size:16px}input{padding:12px;background:#0a1912;color:#fff;border:1px solid #39634c;border-radius:9px;font-size:16px}button{background:#16d98a;color:#062017;font-weight:850;margin-top:12px;cursor:pointer}.leg{border-top:1px solid #31523e;padding:15px 0}.pick{color:#48f3ab;font-size:21px;font-weight:800}.small{font-size:12px;color:#b2cabc}.warning{color:#ffd083}.reason{line-height:1.55;font-size:14px}a{color:#4be9a6}.status{padding:10px 0;color:#b8d0c1}</style></head><body><header><h1>THE PROP <span>VAULT</span></h1><div class="sub">GAME ANALYST · Evidence-led player props · No sportsbook odds needed</div></header><main><a href="./">← Main app</a><section class="panel"><h2>Game-first matchup research</h2><p class="sub">Choose a matchup. The analyst evaluates recent production, usage, opponent tendencies, and injury uncertainty before selecting alternate lines. You make the final betting decision.</p><select id="game"><option value="">Loading matchups…</option></select><button id="build">Analyze game & build research ticket</button><div id="status" class="status"></div><div id="feedHealth" class="warning" role="status" aria-live="polite"></div><div id="validationStatus" class="sub" aria-live="polite">Probability validation: checking forward results…</div></section><section id="results"></section><p class="sub">Research tool, not a guarantee. Historical performance is not a calibrated probability. Data source: existing PROP VAULT matchup feed. Verify official active/inactive lists before placing a bet.</p></main><script src="./nfl_game_engine.js"></script><script src="./nfl_goal1.js"></script><script>
-const $=id=>document.getElementById(id);let players=[];let exclusions=new Set();let feedMeta=null;let currentModel=null;let currentJoint=null;let validationGate=null;let desiredLegs=4;let gameLeg=null;let gamePicksByKey=new Map();let manualLines=new Map();let singleQuotes=new Map();let fullQuote="";let reducedQuote="";let windowLastMatchup=null;
+const $=id=>document.getElementById(id);let players=[];let exclusions=new Set();let feedMeta=null;let currentModel=null;let currentJoint=null;let validationGate=null;let desiredLegs=4;let gameLeg=null;let gamePicksByKey=new Map();let manualLines=new Map();let singleQuotes=new Map();let fullQuote="";let reducedQuote="";let windowLastMatchup=null;let singleBestQuote="";
 const n=v=>v===null||v===undefined||v===''?null:(Number.isFinite(Number(v))?Number(v):null);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const defs=[
@@ -86,7 +86,7 @@ for(const c of selected){
  const alt=manualLines.get(key);
  if(alt!==undefined){
   const matching=PropVaultGoal1.alternatives(c,sim).some(x=>x.line===alt);
-  if(matching)c.line=alt;
+  if(matching)PropVaultGoal1.applyAlternative(c,alt,sim);
  }
 }
 const playerTop3=PropVaultGoal1.rankPlayers(eligible,3);
@@ -129,6 +129,8 @@ const topThreePanel='<div class="panel"><h2>Top 3 player recommendations</h2>'+
 const bestPanel='<div class="panel"><h2>Best single bet for this game</h2>'+
  (bestSingle?'<div class="pick">'+esc(bestSingle.p.player)+' · '+bestSingle.line+'+ '+esc(bestSingle.d.label)+'</div>'+
  '<p class="reason">'+esc(bestSingle.reasons.slice(1).join(' '))+'</p>'+
+ '<label class="small" for="bestOdds">Hard Rock odds for this single · optional</label><input id="bestOdds" inputmode="text" placeholder="-125" value="'+esc(singleBestQuote)+'">'+
+ '<div id="bestQuoteAudit" class="small"></div>'+ 
  '<p class="warning">Best research candidate only. The app has no verified Hard Rock price or calibrated betting probability; do not treat this as an approved wager.</p>':
  '<p>NO BET · no supported individual candidate.</p>')+'</div>';
 const countPanel='<div class="panel"><h2>Build your SGP · 2 to 5 legs</h2>'+
@@ -228,6 +230,14 @@ const ticketHtml='<div class="panel"><h2>Game-first research candidates · '+tic
 el.innerHTML=scriptPanel+topThreePanel+bestPanel+countPanel+ticketHtml+riskPanel+gameMarketPanel+montePanel+quotePanel;
 mountControls();
 mountMonteCarlo(selected,gamePlayers,sim);
+$('bestOdds').oninput=()=>{
+ singleBestQuote=$('bestOdds').value;
+ const checked=PropVaultGoal1.singlePrice(singleBestQuote,bestSingle.scenarioRate);
+ $('bestQuoteAudit').textContent=checked.valid?'Implied break-even '+checked.impliedLabel+'. '+
+  (checked.decimal<1.5?'Extremely short odds; this price is worse than -200. ':'')+
+  'No verified edge from uncalibrated research scenarios.':
+  singleBestQuote.trim()?'Invalid American odds.':'Awaiting Hard Rock quote.';
+};
 for(const btn of el.querySelectorAll('.exclude'))btn.onclick=()=>{
  exclusions.add(btn.dataset.key);render(g,sim)
 };
@@ -244,7 +254,7 @@ for(const item of el.querySelectorAll('.individualQuote'))item.oninput=()=>{
  singleQuotes.set(id,item.value);
  const quote=PropVaultGoal1.singlePrice(item.value,c.scenarioRate);
  $('priceAudit'+i).textContent=quote.valid?'Quoted implied break-even '+quote.impliedLabel+
-  '. Scenario rate '+(100*c.scenarioRate).toFixed(1)+'% is uncalibrated. No betting edge confirmed.':
+  '. Scenario rate '+(100*c.scenarioRate).toFixed(1)+'% is uncalibrated. '+(quote.decimal<1.5?'Very short quoted odds (worse than -200). ':'')+'No betting edge confirmed.':
   item.value.trim()?'Enter valid American odds or leave blank.':'Awaiting quote.';
 };
 $('fullOdds').oninput=()=>{fullQuote=$('fullOdds').value};
@@ -329,7 +339,7 @@ async function init(){
 $('build').onclick=async()=>{
  const g=$('game').value;
  if(!g){$('status').textContent='Choose a game first.';return}
- if(windowLastMatchup!==g){gameLeg=null;manualLines.clear();singleQuotes.clear();fullQuote='';reducedQuote='';windowLastMatchup=g;}
+ if(windowLastMatchup!==g){gameLeg=null;manualLines.clear();singleQuotes.clear();fullQuote='';reducedQuote='';singleBestQuote='';windowLastMatchup=g;}
  const btn=$('build');btn.disabled=true;currentJoint=null;
  $('results').innerHTML='<div class="panel"><h2>Analyzing both offenses</h2><p class="sub">Simulating team plays, game script, opportunities, player yards and correlations before assembling research candidates.</p></div>';
  try{
