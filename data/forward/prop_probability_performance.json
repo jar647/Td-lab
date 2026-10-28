@@ -1,8 +1,9 @@
 {
   "status": "RESEARCH_ONLY_NOT_BET_READY",
   "bet_ready": false,
-  "model_version": "opportunity-2024-trained-blend-v1",
+  "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
   "graded": 0,
+  "current_model_graded": 0,
   "distinct_graded_weeks": 0,
   "min_forward_weeks_for_review": 8,
   "eligible_for_research_review": false,
@@ -11,34 +12,104 @@
       "n": 0,
       "model_brier": null,
       "baseline_brier": null,
-      "distinct_weeks": 0,
-      "beats_baseline": false
+      "beats_baseline": false,
+      "distinct_weeks": 0
     },
     "RUSH": {
       "n": 0,
       "model_brier": null,
       "baseline_brier": null,
-      "distinct_weeks": 0,
-      "beats_baseline": false
+      "beats_baseline": false,
+      "distinct_weeks": 0
     },
     "REC": {
       "n": 0,
       "model_brier": null,
       "baseline_brier": null,
-      "distinct_weeks": 0,
-      "beats_baseline": false
+      "beats_baseline": false,
+      "distinct_weeks": 0
     },
     "CATCH": {
       "n": 0,
       "model_brier": null,
       "baseline_brier": null,
+      "beats_baseline": false,
+      "distinct_weeks": 0
+    }
+  },
+  "version_reports": {
+    "opportunity-2024-trained-blend-v1": {
+      "graded": 0,
       "distinct_weeks": 0,
-      "beats_baseline": false
+      "markets": {
+        "PASS": {
+          "n": 0,
+          "model_brier": null,
+          "baseline_brier": null,
+          "beats_baseline": false,
+          "distinct_weeks": 0
+        },
+        "RUSH": {
+          "n": 0,
+          "model_brier": null,
+          "baseline_brier": null,
+          "beats_baseline": false,
+          "distinct_weeks": 0
+        },
+        "REC": {
+          "n": 0,
+          "model_brier": null,
+          "baseline_brier": null,
+          "beats_baseline": false,
+          "distinct_weeks": 0
+        },
+        "CATCH": {
+          "n": 0,
+          "model_brier": null,
+          "baseline_brier": null,
+          "beats_baseline": false,
+          "distinct_weeks": 0
+        }
+      }
+    },
+    "opportunity-2024-trained-eligible-fullseason-v2": {
+      "graded": 0,
+      "distinct_weeks": 0,
+      "markets": {
+        "PASS": {
+          "n": 0,
+          "model_brier": null,
+          "baseline_brier": null,
+          "beats_baseline": false,
+          "distinct_weeks": 0
+        },
+        "RUSH": {
+          "n": 0,
+          "model_brier": null,
+          "baseline_brier": null,
+          "beats_baseline": false,
+          "distinct_weeks": 0
+        },
+        "REC": {
+          "n": 0,
+          "model_brier": null,
+          "baseline_brier": null,
+          "beats_baseline": false,
+          "distinct_weeks": 0
+        },
+        "CATCH": {
+          "n": 0,
+          "model_brier": null,
+          "baseline_brier": null,
+          "beats_baseline": false,
+          "distinct_weeks": 0
+        }
+      }
     }
   },
   "skipped": {
     "GAME_NOT_FINAL": 14
   },
   "records": [],
-  "warning": "Frozen BEFORE game day, graded AFTER on positive offensive snaps. Fixed hypothetical thresholds, dependent rows per player-game, no bookmaker lines. Research calibration only."
+  "warning": "Only independently frozen current-version forecasts count toward review. Older model versions are shown separately. Fixed hypothetical thresholds; no sportsbook lines or betting claims."
 }
