@@ -1,7 +1,7 @@
 {
   "season": 2026,
   "week": 8,
-  "generated_at": "2026-10-28T12:55:22.764144+00:00",
+  "generated_at": "2026-10-28T13:04:38.449383+00:00",
   "matchups": 391,
   "source": "nflverse play-by-play and rosters",
   "odds_source": null,
@@ -9,10 +9,52 @@
   "lookback_games": 5,
   "availability_diagnostics": {
     "injuries": {
+      "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
       "rows_for_week": 16,
-      "source_rows": 2155,
+      "matched_rows": 16,
       "matched_ids": 0,
       "practice_flags": 12,
+      "game_designations_reported": 0,
+      "teams_with_injury_rows": [
+        "CAR",
+        "GB"
+      ],
+      "teams_without_injury_rows": [
+        "ARI",
+        "ATL",
+        "BAL",
+        "BUF",
+        "CHI",
+        "CIN",
+        "CLE",
+        "DAL",
+        "DEN",
+        "DET",
+        "IND",
+        "JAX",
+        "KC",
+        "LA",
+        "LAC",
+        "LV",
+        "MIA",
+        "MIN",
+        "NE",
+        "NYJ",
+        "PHI",
+        "PIT",
+        "SEA",
+        "TB",
+        "TEN",
+        "WAS"
+      ],
+      "stale_team_or_unmatched_id_rows": 0,
+      "current_week_report_status_counts": {
+        "MISSING": 16
+      },
+      "source_last_updated_utc": null,
+      "official_game_day_active_confirmed": false,
+      "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
+      "source_rows": 2155,
       "columns": [
         "season",
         "season_type",
@@ -57,7 +99,7 @@
     },
     "unverified_output": 1
   },
-  "injury_policy": "Current-week OUT excluded; doubtful/questionable and practice LIMITED/DNP flagged separately (practice DNP is not game OUT); weekly RES/DEV/CUT/RET/EXE/TRD/TRT excluded. ROSTER_ACTIVE only confirms active roster membership, not game-day clearance; late inactives unverified.",
+  "injury_policy": "Exact GSIS ID and current team required; official OUT excluded; questionable/doubtful and practice LIMITED/DNP flagged separately. No game designation can mean report not yet published. Weekly ACT is roster membership only, never game-day clearance. Official inactives are unverified.",
   "status": "ready",
   "snapshot_diagnostics": {
     "exists": true,
