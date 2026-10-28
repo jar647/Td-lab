@@ -629,6 +629,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     'routeParticipation':None,  # Not available in current PBP + roster inputs.
 
                     'last5GameStats':last_series,
+                    'seasonGameStats':season_series,  # All completed player appearances; pregame only.
                     'seasonGamesPlayed':len(season_series),'last5GamesPlayed':len(last_series),
                     'seasonAverages':{k:avg(k,season_series) for k in ('passYards','passAttempts','rushYards','rushAttempts','recYards','receptions','targets','passTDs')},
                     'last5Averages':{k:avg(k,last_series) for k in ('passYards','passAttempts','rushYards','rushAttempts','recYards','receptions','targets')},
