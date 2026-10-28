@@ -107,58 +107,63 @@ const riskNotes=[
  ...(!selected.some(c=>c.p.team!==dominant?.[0])?['No opposing-team props qualified under current screening. This does NOT prove that the opposing team has no worthwhile opportunities.']:[]),
  'Joint hit probability and sportsbook price are unavailable. Individual recent hit rates cannot be multiplied as though legs were independent.'
 ];
-const montePanel='<div class="panel"><h2>Monte Carlo prop scenario explorer</h2><p class="sub">Explores the selected player props together using observed game-to-game variation, shared player outcomes and a shared team passing/rushing environment. This is NOT a possession-level game simulator or a validated betting probability.</p><label class="small" for="simCount">Simulation runs</label><select id="simCount"><option value="10000">10,000 · Quick</option><option value="50000" selected>50,000 · Standard</option><option value="100000">100,000 · Deep</option></select><button type="button" id="runSim">Run Monte Carlo simulation</button><div id="simResult" class="reason" aria-live="polite"></div></div>';
-function runMonteCarlo(legs,count){
- if(!Number.isInteger(count)||count<1||count>100000)throw Error('Invalid simulation count');
- const sample=legs.map(c=>{
-  const games=(c.p.last5GameStats||[]).filter(g=>n(g[c.d.key])!==null&&n(g[c.d.key])>=0);
-  const vals=games.map(g=>n(g[c.d.key]));
-  const season=n(c.p[c.d.season]),recent=n(c.p[c.d.recent]),ratio=n(c.p.defenseOpponentRatio?.[c.d.ratio]);
-  if(!vals.length||season===null||recent===null)throw Error('Incomplete player stat sample');
-  const mu=Math.max(.1,(season*.5+recent*.5)*Math.max(.85,Math.min(1.12,ratio??1)));
-  const empiricalMean=vals.reduce((a,b)=>a+b,0)/vals.length;
-  return {c,games,vals,mu,empiricalMean,hits:0};
+const montePanel='<div class="panel"><h2>Game-first Monte Carlo · Research only</h2><p class="sub">Each scenario generates team plays, passing and rushing attempts, player targets and carries, completions and yards. Teammates compete for opportunities; quarterback passing yards depend on completed receivers. These are NOT calibrated probabilities.</p><div id="gameModel" class="reason"></div><label class="small" for="simCount">Game simulations</label><select id="simCount"><option value="10000" selected>10,000 · Standard</option><option value="50000">50,000 · Detailed</option><option value="100000">100,000 · Deep</option></select><button type="button" id="runSim">Run correlated game simulation</button><div id="simResult" class="reason" aria-live="polite"></div></div>';
+function invokeGameWorker(gamePlayers,count,selected){
+ return new Promise((resolve,reject)=>{
+  if(typeof Worker==='undefined'){reject(Error('Web Workers are unavailable on this browser'));return}
+  const worker=new Worker('./nfl_game_worker.js');
+  worker.onmessage=e=>{
+   worker.terminate();
+   if(e.data&&e.data.error)reject(Error(e.data.error));
+   else if(e.data&&e.data.result)resolve(e.data.result);
+   else reject(Error('Invalid simulation response'));
+  };
+  worker.onerror=e=>{worker.terminate();reject(Error(e.message||'Simulation worker failed'))};
+  worker.postMessage({players:gamePlayers,count,seed:982451653,selected: selected||[],requestId:1});
  });
- // One historic game per player links his simultaneous receiving/catching outcomes.
- // Shared team factors remain illustrative, NOT empirically fitted correlations.
- let joint=0;
- for(let i=0;i<count;i++){
-  const factors={},playerGames={};let all=true;
-  for(const x of sample){
-   const c=x.c,k=c.p.team+':'+(c.d.key==='rushYards'?'rush':'pass');
-   if(factors[k]===undefined)factors[k]=Math.exp((Math.random()+Math.random()+Math.random()+Math.random()-2)*.20);
-   const id=c.p.team+'|'+(c.p.player_id||c.p.player);
-   if(playerGames[id]===undefined)playerGames[id]=Math.floor(Math.random()*x.games.length);
-   const source=x.games[playerGames[id]%x.games.length];
-   const v=n(source[c.d.key])??0;
-   const rescaled=v*(x.mu/Math.max(.1,x.empiricalMean))*factors[k];
-   if(rescaled>=c.line)x.hits++;else all=false;
-  }
-  if(all)joint++;
- }
- return {sample,joint:joint/count,count};
 }
-function mountMonteCarlo(legs){
+function mountMonteCarlo(legs,gamePlayers,initial){
  const btn=$('runSim');if(!btn)return;
- btn.onclick=()=>{
-  const count=Number($('simCount').value),out=$('simResult');
-  if(!legs.length){out.textContent='No supported markets to simulate.';return}
-  btn.disabled=true;out.textContent='Simulating '+count.toLocaleString()+' scenarios…';
-  setTimeout(()=>{
-   try{
-    const r=runMonteCarlo(legs,count);
-    out.innerHTML='<p><strong>All '+legs.length+' legs hit:</strong> '+(r.joint*100).toFixed(1)+'% of simulated scenarios</p>'+
-    r.sample.map(x=>'<p>'+esc(x.c.p.player)+' '+x.c.line+'+ '+esc(x.c.d.label)+': <strong>'+(100*x.hits/r.count).toFixed(1)+'%</strong> simulated hit frequency</p>').join('')+
-    '<p class="warning">Experimental model: only the available recent game samples and matchup feed are used. Shared team factors are assumed, not empirically calibrated. Injuries, missing players, weather and true cross-player correlations are not fully modeled. These percentages are NOT verified true probabilities or a betting edge.</p>';
-   }catch(e){out.textContent='Simulation error: '+e.message}
-   btn.disabled=false;
-  },20);
+ $('gameModel').innerHTML='<p><strong>Full matchup opportunity forecast</strong></p>'+
+  initial.teams.map(t=>'<p><strong>'+esc(t.team)+'</strong>: '+t.estimatedPlays+' plays, ~'+
+   t.estimatedPassAttempts+' pass attempts and '+t.estimatedRushAttempts+' runs. '+
+   t.untrackedTargetShare+'% of targets allocated to unlisted players.</p>').join('')+
+  '<p class="warning">Game pace, player participation, receiver efficiency and game-script dependencies are modeled assumptions, not externally calibrated forecasts.</p>';
+ const out=$('simResult');
+ function showResult(result){
+  currentJoint=result.joint;
+  const keys=new Map(result.markets.map(x=>[x.id+'|'+x.market+'|'+x.line,x]));
+  out.innerHTML='<p>Simulated '+result.count.toLocaleString()+' complete games.</p>'+
+   (result.joint?
+    '<p><strong>All '+result.joint.legs+' slip legs together:</strong> '+
+       (result.joint.scenarioRate*100).toFixed(1)+'% scenario frequency. NOT a proven sportsbook hit probability.</p>':
+    '<p>Running ticket correlation simulation for all selected legs.</p>')+
+   legs.map(c=>{
+    const id=String(c.p.player_id||c.p.team+'|'+c.p.player);
+    const found=keys.get(id+'|'+c.d.key+'|'+c.line);
+    return '<p>'+esc(c.p.player)+' '+c.line+'+ '+esc(c.d.label)+': '+
+     (found?(found.scenarioRate*100).toFixed(1)+'% scenarios':'insufficient market data')+'</p>';
+   }).join('')+
+   '<p class="warning">NO BET: scenario frequencies have not passed independent prospective calibration and do not establish value at Hard Rock prices.</p>';
+ }
+ showResult(initial);
+ btn.onclick=async()=>{
+  btn.disabled=true;out.textContent='Generating correlated team and player outcomes…';
+  try{
+   const requested=Number($('simCount').value);
+   const lines=legs.map(c=>({id:String(c.p.player_id||c.p.team+'|'+c.p.player),
+                            market:c.d.key,line:c.line}));
+   const response=await invokeGameWorker(gamePlayers,requested,lines);
+   showResult(response);
+  }catch(error){currentJoint=null;out.textContent='Game simulation unavailable: '+error.message}
+  finally{btn.disabled=false}
  };
+ if(legs.length)btn.click();
 }
 const oddsPanel='<div class="panel"><h2>Hard Rock SGP payout comparison</h2><p class="sub">Optional: enter the full ticket odds and the odds after removing ONE leg. Accepts American odds, e.g. +313, +236, -110. Calculates the leg\'s effective contribution inside this SGP, not its standalone price or true probability.</p><label class="small" for="fullOdds">Full SGP American odds</label><input id="fullOdds" inputmode="numeric" placeholder="+313"><label class="small" for="reducedOdds">SGP odds without the leg</label><input id="reducedOdds" inputmode="numeric" placeholder="+236"><button type="button" id="compareOdds">Compare payout</button><div id="oddsResult" class="reason" aria-live="polite"></div></div>';
-const el=$('results');if(!selected.length){el.innerHTML=montePanel+'<div class="panel"><h2>NO BET</h2><p>Not enough supported player props in the current feed. No invented selections.</p></div>';mountMonteCarlo([]);return;}
+const el=$('results');if(!selected.length){el.innerHTML=montePanel+'<div class="panel"><h2>NO BET</h2><p>Not enough supported player props in the current feed. No invented selections.</p></div>';mountMonteCarlo([],gamePlayers,sim);return;}
 el.innerHTML=montePanel+'<div class="panel"><h2>Analyst recommendations · '+selected.length+' legs</h2><p class="sub">Highest-ranked supported thresholds, with conservative-line penalties and passing dependency adjustments, without player or team quotas. Multiple picks may depend on the same game script; joint probabilities are not modeled. Dataset-based screening, not a full live scouting report.</p>'+'<p class="sub">Selection audit: '+candidates.length+' qualifying markets, '+selected.length+' included, '+omitted+' omitted due to five-leg ticket size.</p>'+selected.map((c,i)=>'<article class="leg"><div class="small">LEG '+(i+1)+' · '+esc(c.p.team)+' vs '+esc(c.p.opp)+'</div><div class="pick">'+esc(c.p.player)+' · '+c.line+'+ '+esc(c.d.label)+'</div><p class="reason">'+c.reasons.map(esc).join(' ')+'</p>'+(c.risks.length?'<p class="warning">⚠ '+c.risks.map(esc).join(' ')+'</p>':'')+'<p class="small">Other supported thresholds: '+c.d.steps.filter(t=>t!==c.line&&t<=(n(c.p[c.d.season])*.5+n(c.p[c.d.recent])*.5)*1.05).map(t=>{const log=(c.p.last5GameStats||[]).map(g=>n(g[c.d.key])).filter(v=>v!==null);return t+'+ ('+log.filter(v=>v>=t).length+'/'+log.length+' recent)'}).join(' · ')+'</p><button type="button" class="exclude" data-key="'+esc(c.p.player+'|'+c.d.key)+'">Exclude this market & rebuild</button></article>').join('')+'</div>'+oddsPanel;
-mountMonteCarlo(selected);
+mountMonteCarlo(selected,gamePlayers,sim);
 for(const btn of el.querySelectorAll('.exclude'))btn.onclick=()=>{exclusions.add(btn.dataset.key);render(g,sim)};
 $('compareOdds').onclick=()=>{const parse=v=>{const t=v.trim();if(!/^[+-]?\\d+(?:\\.\\d+)?$/.test(t))return null;const x=Number(t);if(x===0||Math.abs(x)<100)return null;return x>0?1+x/100:1+100/Math.abs(x)};const full=parse($('fullOdds').value),reduced=parse($('reducedOdds').value),out=$('oddsResult');if(!full||!reduced){out.textContent='Enter valid American odds (at least +100 or -100) for both tickets.';return}const factor=full/reduced;if(factor<=1){out.textContent='Full-ticket payout must exceed reduced-ticket payout. Check the entered prices.';return}out.textContent='Added leg increases total return by '+((factor-1)*100).toFixed(1)+'%. Its effective incremental break-even probability is '+(100/factor).toFixed(1)+'%. This is SGP pricing math, not a forecast of the player hitting.'};
 }
