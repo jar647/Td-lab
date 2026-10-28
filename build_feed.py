@@ -42,6 +42,31 @@ def availability(injuries, week):
             result[pid]=status
     return result
 
+def practice_flags(injuries, week):
+    """Surface limited/DNP practice risk; never confuse practice DNP with game OUT."""
+    if injuries is None or injuries.empty:
+        return {}
+    if not {'gsis_id','week','practice_status'}.issubset(injuries.columns):
+        return {}
+    rows=injuries.copy()
+    if 'season' in rows:
+        rows=rows[pd.to_numeric(rows.season,errors='coerce')==SEASON]
+    rows=rows[pd.to_numeric(rows.week,errors='coerce')==week]
+    if 'date_modified' in rows:
+        rows=rows.sort_values('date_modified',na_position='first')
+    result={}
+    for _,r in rows.iterrows():
+        if pd.isna(r.gsis_id): continue
+        pid=str(r.gsis_id)
+        raw=str(r.practice_status).strip().upper()
+        if raw in ('DNP','DID NOT PARTICIPATE','DID_NOT_PARTICIPATE') or 'DID NOT PARTICIPATE' in raw:
+            result[pid]='DNP_PRACTICE'
+        elif 'LIMITED' in raw or raw=='LP':
+            result[pid]='LIMITED_PRACTICE'
+        elif raw in ('FULL','FULL PARTICIPATION','FP'):
+            result.pop(pid,None)
+    return result
+
 def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None, snap_counts=None):
     now = now or datetime.now(timezone.utc)
     required(pbp, ['season','week','game_id','posteam','defteam','yardline_100','play_type',
@@ -467,7 +492,9 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     # Use real opponent slate and only players whose latest roster team matches it.
     roster_team=dict(zip(roster.gsis_id.astype(str),roster.team.astype(str)))
     injury_status=availability(injuries,week)
-    injury_diagnostics={'rows_for_week':0,'source_rows':0,'matched_ids':len(injury_status)}
+    practice_status=practice_flags(injuries,week)
+    injury_diagnostics={'rows_for_week':0,'source_rows':0,'matched_ids':len(injury_status),
+                        'practice_flags':len(practice_status)}
     if injuries is not None and not injuries.empty:
         injury_diagnostics['source_rows']=len(injuries)
         if 'week' in injuries.columns:
@@ -637,6 +664,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     'opponentOffenseBaselineRec':opponent_baseline(opp,position,'REC') if position!='QB' else None,
                     'opponentOffenseBaselineCatch':opponent_baseline(opp,position,'CATCH') if position!='QB' else None,
                     'injuryReportStatus':injury_status.get(pid,'NOT_REPORTED'),
+                    'injuryPracticeStatus':practice_status.get(pid,'NOT_REPORTED'),
                     'goalLine5':mean(player_inside5.get((team,pid),0)/pg),
                     'recentRz2':mean(recent_player_events.get((team,pid),0)/recent_offense_games[team]) if recent_offense_games.get(team,0)>0 else None,
                     'recentRz2Games':int(recent_offense_games.get(team,0)),
@@ -648,7 +676,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     return result, {'season':SEASON,'week':week,'generated_at':now.isoformat(),
                     'matchups':len(result),'source':'nflverse play-by-play and rosters',
                     'odds_source':None,'probability_model':None,
-                    'lookback_games':WINDOW,'availability_diagnostics':{'injuries':injury_diagnostics,'weekly_rosters':weekly_diagnostics,'excluded':excluded,'unverified_output':sum(r['availability']=='UNVERIFIED' for r in result)},'injury_policy':'Current-week OUT excluded; doubtful/questionable flagged; weekly RES/DEV/CUT/RET/EXE/TRD/TRT excluded. ROSTER_ACTIVE only confirms active roster membership, not game-day clearance; late inactives unverified.','status':'ready'}
+                    'lookback_games':WINDOW,'availability_diagnostics':{'injuries':injury_diagnostics,'weekly_rosters':weekly_diagnostics,'excluded':excluded,'unverified_output':sum(r['availability']=='UNVERIFIED' for r in result)},'injury_policy':'Current-week OUT excluded; doubtful/questionable and practice LIMITED/DNP flagged separately (practice DNP is not game OUT); weekly RES/DEV/CUT/RET/EXE/TRD/TRT excluded. ROSTER_ACTIVE only confirms active roster membership, not game-day clearance; late inactives unverified.','status':'ready'}
 
 def main():
     now = datetime.now(timezone.utc)
