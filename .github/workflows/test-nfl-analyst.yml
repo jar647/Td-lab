@@ -3,6 +3,10 @@ on:
   push:
     paths:
       - 'analyst.html'
+      - 'index.html'
+      - 'nba.html'
+      - 'market_odds.js'
+      - 'test_market_odds.js'
       - 'nfl_game_engine.js'
       - 'nfl_goal1.js'
       - 'test_nfl_goal1.js'
@@ -24,6 +28,7 @@ jobs:
         with:
           node-version: '22'
       - run: node --check test_analyst_ui.js
+      - run: node test_market_odds.js
       - run: node test_analyst_ui.js
       - run: node test_nfl_game_engine.js
       - run: node test_nfl_goal1.js

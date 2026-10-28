@@ -13,6 +13,8 @@ on:
       - 'test_nba_ui.js'
       - 'test_nba_simulator.js'
       - 'nba.html'
+      - 'market_odds.js'
+      - 'test_market_odds.js'
       - '.github/workflows/nba-feed.yml'
   pull_request:
     branches: [main]
@@ -41,6 +43,8 @@ jobs:
         run: python -m unittest -v test_nba_contracts.py test_nba_daily_learning.py
       - name: Test NBA UI and simulations
         run: |
+          node test_market_odds.js
+          node test_market_odds.js
           node test_nba_ui.js
           node test_nba_simulator.js
       - name: Build research-only daily learning report from tracked results
