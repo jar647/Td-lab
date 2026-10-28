@@ -111,8 +111,10 @@
   return c?.validated===true&&c.liveModelVersion===c.modelVersion&&finite(c.holdoutWeeks)>=8&&
    rows>=500&&marketRows>=40&&brier!==null&&baseline!==null&&brier<baseline&&error!==null&&error<=.05;
  }
- function review({history,market,projection,line,overOdds,underOdds,context={},eligible=true,blockReason='',calibration={}}={}){
+ function review({history,market,projection,line,overOdds,underOdds,context={},eligible=true,blockReason='',calibration={},availableGames=8}={}){
   const model=estimate({history,market,projection,line,context});
+  const available=finite(availableGames);
+  const requiredSample=available===null?8:Math.max(5,Math.min(8,Math.floor(available)));
   const overQuote=pricing.quote(overOdds),underQuote=pricing.quote(underOdds);
   const invalid=(hasValue(overOdds)&&!overQuote)||(hasValue(underOdds)&&!underQuote);
   const sum=overQuote&&underQuote?overQuote.implied+underQuote.implied:null;
@@ -138,7 +140,7 @@
   else if(invalid){status='PASS · INVALID ODDS';reason='Enter valid American odds (+100 or greater, -100 or less); do not interpret malformed prices.'}
   else if(!overQuote&&!underQuote){status='ENTER VEGAS ODDS';reason='Enter the offered price for either side to compare a modeled hit rate against its break-even point.'}
   else if(!eligible){status='PASS · PLAYER OR GAME STATUS UNVERIFIED';reason=blockReason||'Player status or pregame data are not verified.'}
-  else if(model.sample<8){status='PASS · LIMITED VERIFIED HISTORY';reason='Experimental probability calculated, but fewer than 8 actual player games support a price-sensitive research signal.'}
+  else if(model.sample<requiredSample){status='PASS · LIMITED VERIFIED HISTORY';reason='Experimental probability calculated from '+model.sample+' recorded player games, but '+requiredSample+' are required. The evidence minimum is capped at 8 or the number of team games available so far, whichever is lower.'}
   else if(!model.evidence.usage||!model.evidence.matchup){status='PASS · MATCHUP DATA INCOMPLETE';reason='A recent workload measure and opponent-specific allowance are both required before the model can issue a lean. Missing inputs are not treated as neutral evidence.'}
   else if(model.diverges){status='PASS · PROJECTION/HISTORY CONFLICT';reason='The model forecast differs substantially from observed game production; do not elevate an unstable estimate.'}
   else if(best&&calibrated){status='PLAY '+best.name+' · CALIBRATION GATE PASSED';decision='PLAY';reason='The '+best.name+' probability clears the price and uncertainty checks, and this market’s matching model version beat its holdout baseline with adequate calibration evidence.'}
@@ -149,7 +151,7 @@
    invalid,status,decision,reason,candidate:best&&decision!=='PASS'?best.name:null,
    estimatedEdge:best?.edge??null,expectedValue:best?.ev??null,
    betReady:decision==='PLAY',verifiedValue:false,play:decision==='PLAY',
-   modelCalibrated:calibrated};
+   modelCalibrated:calibrated,requiredSample,availableGames:available===null?null:Math.floor(available)};
  }
  function format(r){
   const percent=n=>(100*n).toFixed(1)+'%';
@@ -165,8 +167,9 @@
   const context=r.valid?' Inputs: workload '+(r.usageRatio===null?'missing':(r.usageRatio*100).toFixed(0)+'% of baseline')+
    '; opponent adjustment '+(r.defenseRatio===null?'missing':(r.matchupEffect>=0?'+':'')+r.matchupEffect.toFixed(1)+'%')+
    '; availability '+(r.injuryStatus||'UNVERIFIED')+'. ' :'';
+  const sampleGate=r.requiredSample?'; evidence minimum '+r.requiredSample+'/8'+(r.availableGames!==null&&r.availableGames<8?' based on '+r.availableGames+' available team games'):'');
   const model=r.valid?'UNCALIBRATED model Over '+percent(r.over)+', Under '+percent(r.under)+
-   (r.push>.001?', Push '+percent(r.push):'')+' ('+r.sample+' recorded games). ':
+   (r.push>.001?', Push '+percent(r.push):'')+' ('+r.sample+' recorded games'+sampleGate+'). ':
    'Model probability unavailable ('+r.sample+' recorded games). ';
   return model+context+side('Over',r.overQuote,r.overSide)+'. '+side('Under',r.underQuote,r.underSide)+'.'+noVig+
    ' '+r.status+'. '+r.reason+(r.modelCalibrated?'':' Estimated edge/EV are experimental because this live model has no approved holdout calibration. NO VERIFIED PLAY.');
