@@ -106,7 +106,7 @@ const matchupContext={autoRecords:breakdownRows,gameKey:r=>[r.team,r.opp].sort()
 vm.runInNewContext(breakdown+';renderNFLGameMatchupBreakdown()',matchupContext);
 assert.match(breakdownView.innerHTML,/A defense vs B offense/);
 assert.match(breakdownView.innerHTML,/Based on 6 completed team games/);
-assert.match(breakdownView.innerHTML,/Rushing yards: 115\\.0 allowed\\/game/,'position-specific rushing rates must sum to the team total');
-assert.match(breakdownView.innerHTML,/Receiving yards: 180\\.0 allowed\\/game/,'position-specific receiving rates must sum to the team total');
-assert.match(breakdownView.innerHTML,/Passing yards: 280\\.0 allowed\\/game/,'team passing rate must use the QB-level team value once');
+assert.match(breakdownView.innerHTML,/Rushing yards: 115\.0 allowed\/game/,'position-specific rushing rates must sum to the team total');
+assert.match(breakdownView.innerHTML,/Receiving yards: 180\.0 allowed\/game/,'position-specific receiving rates must sum to the team total');
+assert.match(breakdownView.innerHTML,/Passing yards: 280\.0 allowed\/game/,'team passing rate must use the QB-level team value once');
 console.log('CoOk It Up model probability, EV, uncertainty, push, and NFL/NBA binding tests passed');
