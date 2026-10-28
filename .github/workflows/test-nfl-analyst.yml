@@ -3,7 +3,11 @@ on:
   push:
     paths:
       - 'analyst.html'
+      - 'nfl_game_engine.js'
+      - 'nfl_game_worker.js'
       - 'test_analyst_ui.js'
+      - 'test_nfl_analyst_ui.js'
+      - 'test_nfl_game_engine.js'
       - '.github/workflows/test-nfl-analyst.yml'
   workflow_dispatch:
 jobs:
@@ -18,3 +22,5 @@ jobs:
           node-version: '22'
       - run: node --check test_analyst_ui.js
       - run: node test_analyst_ui.js
+      - run: node test_nfl_game_engine.js
+      - run: node test_nfl_analyst_ui.js
