@@ -35,7 +35,7 @@ def snap_verified_weekly(weekly, rosters, snaps, schedules, season):
     roster = roster.loc[~roster.set_index(["pfr_id", "team"]).index.isin(
         inconsistent[inconsistent != 1].index)]
     roster = roster.drop_duplicates(["pfr_id", "team"])
-    roster = roster[roster.position.isin(POSITIONS)]
+    roster = roster[roster.position.isin(POSITIONS)].rename(columns={"position": "verified_position"})
 
     s = snaps[pd.to_numeric(snaps["season"], errors="coerce").eq(season)].copy()
     s["offense_pct"] = pd.to_numeric(s["offense_pct"], errors="coerce")
@@ -46,6 +46,10 @@ def snap_verified_weekly(weekly, rosters, snaps, schedules, season):
     s = s.merge(roster, left_on=["pfr_player_id", "team"],
                 right_on=["pfr_id", "team"], how="inner", validate="many_to_one")
     s = s.drop_duplicates(["gsis_id", "team", "week"])
+    # Snap files can supply their own position or game identifier. The roster
+    # position and schedule game ID are the authoritative join fields here.
+    s = s.drop(columns=["position", "game_id"], errors="ignore")
+    s = s.rename(columns={"verified_position": "position"})
 
     sch = schedules.loc[pd.to_numeric(schedules["season"], errors="coerce").eq(season)
                         & schedules["game_type"].astype(str).str.upper().eq("REG"),
