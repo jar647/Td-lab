@@ -123,11 +123,11 @@ const topThreePanel='<div class="panel"><h2>Top 3 player recommendations</h2>'+
   esc(c.p.team)+' · '+esc(c.p.pos)+'<p class="reason">'+c.line+'+ '+esc(c.d.label)+
   ' · modeled mean '+(sim.markets.find(x=>x.id===String(c.p.player_id||c.p.team+'|'+c.p.player)&&x.market===c.d.key&&x.line===c.line)?.modeledMean??'N/A')+
   ' · '+(100*c.scenarioRate).toFixed(1)+'% scenario frequency (unvalidated)</p>'+
-  '<p class="small">'+esc(c.reasons.slice(1,4).join(' '))+'</p>'+CookItUpQuickSlip.button({sport:'NFL',game:g,player:c.p.player,team:c.p.team,opponent:c.p.opp,market:c.d.label,line:c.line})+
+  '<p class="small">'+esc(c.reasons.slice(1,4).join(' '))+'</p>'+CookItUpQuickSlip.button({sport:'NFL',game:g,player:c.p.player,team:c.p.team,opponent:c.p.opp,market:c.d.label,recommendationLine:c.line,sampleHits:c.hits,sampleSize:c.sample,scenarioRate:c.scenarioRate})+
   (c.risks.length?'<p class="warning">'+esc(c.risks[0])+'</p>':'')+'</article>').join(''):
   '<p>No player passed the research thresholds. NO BET.</p>')+'</div>';
 const bestPanel='<div class="panel"><h2>Best single bet for this game</h2>'+
- (bestSingle?'<div class="pick">'+esc(bestSingle.p.player)+' · '+bestSingle.line+'+ '+esc(bestSingle.d.label)+'</div>'+CookItUpQuickSlip.button({sport:'NFL',game:g,player:bestSingle.p.player,team:bestSingle.p.team,opponent:bestSingle.p.opp,market:bestSingle.d.label,line:bestSingle.line})+
+ (bestSingle?'<div class="pick">'+esc(bestSingle.p.player)+' · '+bestSingle.line+'+ '+esc(bestSingle.d.label)+'</div>'+CookItUpQuickSlip.button({sport:'NFL',game:g,player:bestSingle.p.player,team:bestSingle.p.team,opponent:bestSingle.p.opp,market:bestSingle.d.label,recommendationLine:bestSingle.line,sampleHits:bestSingle.hits,sampleSize:bestSingle.sample,scenarioRate:bestSingle.scenarioRate})+
  '<p class="reason">'+esc(bestSingle.reasons.slice(1).join(' '))+'</p>'+
  '<label class="small" for="bestOdds">Hard Rock odds for this single · optional</label><input id="bestOdds" inputmode="text" placeholder="-125" value="'+esc(singleBestQuote)+'">'+
  '<div id="bestQuoteAudit" class="small"></div>'+ 
@@ -214,7 +214,7 @@ const ticketHtml='<div class="panel"><h2>Game-first research candidates · '+tic
   const alternatives=PropVaultGoal1.alternatives(c,sim);
   const id=PropVaultGoal1.marketId(c),quote=singleQuotes.get(id)||'';
   return '<article class="leg"><div class="small">LEG '+(i+1)+' · '+esc(c.p.team)+' vs '+esc(c.p.opp)+'</div>'+
-  '<div class="pick">'+esc(c.p.player)+' · '+c.line+'+ '+esc(c.d.label)+'</div>'+CookItUpQuickSlip.button({sport:'NFL',game:g,player:c.p.player,team:c.p.team,opponent:c.p.opp,market:c.d.label,line:c.line})+
+  '<div class="pick">'+esc(c.p.player)+' · '+c.line+'+ '+esc(c.d.label)+'</div>'+CookItUpQuickSlip.button({sport:'NFL',game:g,player:c.p.player,team:c.p.team,opponent:c.p.opp,market:c.d.label,recommendationLine:c.line,sampleHits:c.hits,sampleSize:c.sample,scenarioRate:c.scenarioRate})+
   '<p class="reason">'+c.reasons.map(esc).join(' ')+'</p>'+
   (c.risks.length?'<p class="warning">'+c.risks.map(esc).join(' ')+'</p>':'')+
   '<label class="small" for="alternate'+i+'">Alternate threshold · research, verify Hard Rock availability</label>'+
