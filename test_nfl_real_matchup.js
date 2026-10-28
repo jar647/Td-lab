@@ -49,7 +49,7 @@ vm.runInContext(js,context);
  assert(output.includes('Game-first Monte Carlo'),'Real matchup should initialize simulator: '+output.slice(0,600));
  assert(output.includes('Game-first research candidates'),'Real matchup should produce a research ticket or expose why not: '+output.slice(0,900));
  assert(output.includes('Top 3 player recommendations'),'Real matchup should show top three player research choices');
- assert(output.includes('Best single bet for this game'),'Real matchup should show top single candidate');
+ assert(output.includes('Best single research candidate'),'Real matchup should show the best single research candidate');
  assert(output.includes('Projected game script'),'Real matchup should show game script');
  await new Promise(resolve=>setTimeout(resolve,10));
  assert(el('simResult').innerHTML.includes('Simulated'),'Joint simulation should finish');
