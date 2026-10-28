@@ -20,6 +20,7 @@ on:
       - 'nfl_game_worker.js'
       - 'test_nfl_game_engine.js'
       - 'test_nfl_analyst_ui.js'
+      - 'test_nfl_real_matchup.js'
       - 'capture_game_first.js'
       - 'test_capture_game_first.js'
       - 'analyst.html'
@@ -61,6 +62,8 @@ jobs:
         run: python build_feed.py
       - name: Build game-picks research slate
         run: python game_picks.py
+      - name: Verify NFL game-first analyst with actual matchup feed
+        run: node test_nfl_real_matchup.js
       - name: Freeze pregame player prop probabilities for future validation
         run: python capture_prop_probabilities.py
       - name: Freeze pregame game-first research forecasts against prior opportunity baseline
