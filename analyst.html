@@ -1,6 +1,6 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>THE PROP VAULT | Game Analyst</title><style>:root{font-family:system-ui;background:#07120f;color:#e9fff3}*{box-sizing:border-box}body{margin:0}header{padding:22px 16px;background:#0d2119;border-bottom:1px solid #285440}main{max-width:800px;margin:auto;padding:18px}h1{margin:0;font-size:25px}h1 span{color:#27e59a}.sub{color:#a1b9ad;font-size:13px;line-height:1.5}.panel{border:1px solid #2b5342;background:#10241b;border-radius:15px;padding:17px;margin:13px 0}select,button,input{width:100%;padding:14px;background:#0a1912;color:white;border:1px solid #39634c;border-radius:10px;font-size:16px}input{padding:12px;background:#0a1912;color:#fff;border:1px solid #39634c;border-radius:9px;font-size:16px}button{background:#16d98a;color:#062017;font-weight:850;margin-top:12px;cursor:pointer}.leg{border-top:1px solid #31523e;padding:15px 0}.pick{color:#48f3ab;font-size:21px;font-weight:800}.small{font-size:12px;color:#b2cabc}.warning{color:#ffd083}.reason{line-height:1.55;font-size:14px}a{color:#4be9a6}.status{padding:10px 0;color:#b8d0c1}</style></head><body><header><h1>THE PROP <span>VAULT</span></h1><div class="sub">GAME ANALYST · Evidence-led player props · No sportsbook odds needed</div></header><main><a href="./">← Main app</a><section class="panel"><h2>Build my game slip</h2><p class="sub">Choose a matchup. The analyst evaluates recent production, usage, opponent tendencies, and injury uncertainty before selecting alternate lines. You make the final betting decision.</p><select id="game"><option value="">Loading matchups…</option></select><button id="build">Analyze game & recommend props</button><div id="status" class="status"></div></section><section id="results"></section><p class="sub">Research tool, not a guarantee. Historical performance is not a calibrated probability. Data source: existing PROP VAULT matchup feed. Verify official active/inactive lists before placing a bet.</p></main><script>
-const $=id=>document.getElementById(id);let players=[];let exclusions=new Set();
-const n=v=>Number.isFinite(Number(v))?Number(v):null;
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>THE PROP VAULT | Game Analyst</title><style>:root{font-family:system-ui;background:#07120f;color:#e9fff3}*{box-sizing:border-box}body{margin:0}header{padding:22px 16px;background:#0d2119;border-bottom:1px solid #285440}main{max-width:800px;margin:auto;padding:18px}h1{margin:0;font-size:25px}h1 span{color:#27e59a}.sub{color:#a1b9ad;font-size:13px;line-height:1.5}.panel{border:1px solid #2b5342;background:#10241b;border-radius:15px;padding:17px;margin:13px 0}select,button,input{width:100%;padding:14px;background:#0a1912;color:white;border:1px solid #39634c;border-radius:10px;font-size:16px}input{padding:12px;background:#0a1912;color:#fff;border:1px solid #39634c;border-radius:9px;font-size:16px}button{background:#16d98a;color:#062017;font-weight:850;margin-top:12px;cursor:pointer}.leg{border-top:1px solid #31523e;padding:15px 0}.pick{color:#48f3ab;font-size:21px;font-weight:800}.small{font-size:12px;color:#b2cabc}.warning{color:#ffd083}.reason{line-height:1.55;font-size:14px}a{color:#4be9a6}.status{padding:10px 0;color:#b8d0c1}</style></head><body><header><h1>THE PROP <span>VAULT</span></h1><div class="sub">GAME ANALYST · Evidence-led player props · No sportsbook odds needed</div></header><main><a href="./">← Main app</a><section class="panel"><h2>Build my game slip</h2><p class="sub">Choose a matchup. The analyst evaluates recent production, usage, opponent tendencies, and injury uncertainty before selecting alternate lines. You make the final betting decision.</p><select id="game"><option value="">Loading matchups…</option></select><button id="build">Analyze game & recommend props</button><div id="status" class="status"></div><div id="feedHealth" class="warning" role="status" aria-live="polite"></div></section><section id="results"></section><p class="sub">Research tool, not a guarantee. Historical performance is not a calibrated probability. Data source: existing PROP VAULT matchup feed. Verify official active/inactive lists before placing a bet.</p></main><script>
+const $=id=>document.getElementById(id);let players=[];let exclusions=new Set();let feedMeta=null;
+const n=v=>v===null||v===undefined||v===''?null:(Number.isFinite(Number(v))?Number(v):null);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const defs=[
 {key:'rushYards',season:'playerRushYards',recent:'recent3RushYards',volume:'playerCarries',volumeLabel:'carries/game',def:'defRushYardsAllowed',ratio:'RUSH',label:'rushing yards',positions:['RB','QB'],steps:[25,40,50,60,70,80,100]},
@@ -103,22 +103,32 @@ const riskNotes=[
  ...(!selected.some(c=>c.p.team!==dominant?.[0])?['No opposing-team props qualified under current screening. This does NOT prove that the opposing team has no worthwhile opportunities.']:[]),
  'Joint hit probability and sportsbook price are unavailable. Individual recent hit rates cannot be multiplied as though legs were independent.'
 ];
-const montePanel='<div class="panel"><h2>Monte Carlo game simulator</h2><p class="sub">Simulates the selected player props together using observed game-to-game variation and a shared team passing/rushing environment. This is a scenario model, not a validated betting probability.</p><label class="small" for="simCount">Simulation runs</label><select id="simCount"><option value="10000">10,000 · Quick</option><option value="50000" selected>50,000 · Standard</option><option value="100000">100,000 · Deep</option></select><button type="button" id="runSim">Run Monte Carlo simulation</button><div id="simResult" class="reason" aria-live="polite"></div></div>';
+const montePanel='<div class="panel"><h2>Monte Carlo prop scenario explorer</h2><p class="sub">Explores the selected player props together using observed game-to-game variation, shared player outcomes and a shared team passing/rushing environment. This is NOT a possession-level game simulator or a validated betting probability.</p><label class="small" for="simCount">Simulation runs</label><select id="simCount"><option value="10000">10,000 · Quick</option><option value="50000" selected>50,000 · Standard</option><option value="100000">100,000 · Deep</option></select><button type="button" id="runSim">Run Monte Carlo simulation</button><div id="simResult" class="reason" aria-live="polite"></div></div>';
 function runMonteCarlo(legs,count){
- const sample=legs.map(c=>{const vals=(c.p.last5GameStats||[]).map(g=>n(g[c.d.key])).filter(v=>v!==null&&v>=0);const season=n(c.p[c.d.season]),recent=n(c.p[c.d.recent]);const ratio=n(c.p.defenseOpponentRatio?.[c.d.ratio]);return {c,vals,mu:Math.max(.1,(season*.5+recent*.5)*Math.max(.85,Math.min(1.12,ratio??1))),hits:0,draws:[]};});
- // One shared environment per team and phase introduces scenario-level dependence.
- // Variance is conservatively floored to avoid treating small samples as certainty.
+ if(!Number.isInteger(count)||count<1||count>100000)throw Error('Invalid simulation count');
+ const sample=legs.map(c=>{
+  const games=(c.p.last5GameStats||[]).filter(g=>n(g[c.d.key])!==null&&n(g[c.d.key])>=0);
+  const vals=games.map(g=>n(g[c.d.key]));
+  const season=n(c.p[c.d.season]),recent=n(c.p[c.d.recent]),ratio=n(c.p.defenseOpponentRatio?.[c.d.ratio]);
+  if(!vals.length||season===null||recent===null)throw Error('Incomplete player stat sample');
+  const mu=Math.max(.1,(season*.5+recent*.5)*Math.max(.85,Math.min(1.12,ratio??1)));
+  const empiricalMean=vals.reduce((a,b)=>a+b,0)/vals.length;
+  return {c,games,vals,mu,empiricalMean,hits:0};
+ });
+ // One historic game per player links his simultaneous receiving/catching outcomes.
+ // Shared team factors remain illustrative, NOT empirically fitted correlations.
  let joint=0;
  for(let i=0;i<count;i++){
-  const factors={};let all=true;
+  const factors={},playerGames={};let all=true;
   for(const x of sample){
    const c=x.c,k=c.p.team+':'+(c.d.key==='rushYards'?'rush':'pass');
    if(factors[k]===undefined)factors[k]=Math.exp((Math.random()+Math.random()+Math.random()+Math.random()-2)*.20);
-   const v=x.vals[Math.floor(Math.random()*x.vals.length)];
-   const empiricalMean=x.vals.reduce((a,b)=>a+b,0)/x.vals.length;
-   const rescaled=v*(x.mu/Math.max(.1,empiricalMean))*factors[k];
-   const hit=rescaled>=c.line;if(hit)x.hits++;else all=false;
-   if(i<2500)x.draws.push(rescaled);
+   const id=c.p.team+'|'+(c.p.player_id||c.p.player);
+   if(playerGames[id]===undefined)playerGames[id]=Math.floor(Math.random()*x.games.length);
+   const source=x.games[playerGames[id]%x.games.length];
+   const v=n(source[c.d.key])??0;
+   const rescaled=v*(x.mu/Math.max(.1,x.empiricalMean))*factors[k];
+   if(rescaled>=c.line)x.hits++;else all=false;
   }
   if(all)joint++;
  }
@@ -142,12 +152,38 @@ function mountMonteCarlo(legs){
  };
 }
 const oddsPanel='<div class="panel"><h2>Hard Rock SGP payout comparison</h2><p class="sub">Optional: enter the full ticket odds and the odds after removing ONE leg. Accepts American odds, e.g. +313, +236, -110. Calculates the leg\'s effective contribution inside this SGP, not its standalone price or true probability.</p><label class="small" for="fullOdds">Full SGP American odds</label><input id="fullOdds" inputmode="numeric" placeholder="+313"><label class="small" for="reducedOdds">SGP odds without the leg</label><input id="reducedOdds" inputmode="numeric" placeholder="+236"><button type="button" id="compareOdds">Compare payout</button><div id="oddsResult" class="reason" aria-live="polite"></div></div>';
-const el=$('results');if(!selected.length){el.innerHTML=montePanel+'<div class="panel"><h2>NO BET</h2><p>Not enough supported player props in the current feed. No invented selections.</p></div>';return;}
+const el=$('results');if(!selected.length){el.innerHTML=montePanel+'<div class="panel"><h2>NO BET</h2><p>Not enough supported player props in the current feed. No invented selections.</p></div>';mountMonteCarlo([]);return;}
 el.innerHTML=montePanel+'<div class="panel"><h2>Analyst recommendations · '+selected.length+' legs</h2><p class="sub">Highest-ranked supported thresholds, with conservative-line penalties and passing dependency adjustments, without player or team quotas. Multiple picks may depend on the same game script; joint probabilities are not modeled. Dataset-based screening, not a full live scouting report.</p>'+'<p class="sub">Selection audit: '+candidates.length+' qualifying markets, '+selected.length+' included, '+omitted+' omitted due to five-leg ticket size.</p>'+selected.map((c,i)=>'<article class="leg"><div class="small">LEG '+(i+1)+' · '+esc(c.p.team)+' vs '+esc(c.p.opp)+'</div><div class="pick">'+esc(c.p.player)+' · '+c.line+'+ '+esc(c.d.label)+'</div><p class="reason">'+c.reasons.map(esc).join(' ')+'</p>'+(c.risks.length?'<p class="warning">⚠ '+c.risks.map(esc).join(' ')+'</p>':'')+'<p class="small">Other supported thresholds: '+c.d.steps.filter(t=>t!==c.line&&t<=(n(c.p[c.d.season])*.5+n(c.p[c.d.recent])*.5)*1.05).map(t=>{const log=(c.p.last5GameStats||[]).map(g=>n(g[c.d.key])).filter(v=>v!==null);return t+'+ ('+log.filter(v=>v>=t).length+'/'+log.length+' recent)'}).join(' · ')+'</p><button type="button" class="exclude" data-key="'+esc(c.p.player+'|'+c.d.key)+'">Exclude this market & rebuild</button></article>').join('')+'</div>'+oddsPanel;
 mountMonteCarlo(selected);
 for(const btn of el.querySelectorAll('.exclude'))btn.onclick=()=>{exclusions.add(btn.dataset.key);render(g)};
 $('compareOdds').onclick=()=>{const parse=v=>{const t=v.trim();if(!/^[+-]?\\d+(?:\\.\\d+)?$/.test(t))return null;const x=Number(t);if(x===0||Math.abs(x)<100)return null;return x>0?1+x/100:1+100/Math.abs(x)};const full=parse($('fullOdds').value),reduced=parse($('reducedOdds').value),out=$('oddsResult');if(!full||!reduced){out.textContent='Enter valid American odds (at least +100 or -100) for both tickets.';return}const factor=full/reduced;if(factor<=1){out.textContent='Full-ticket payout must exceed reduced-ticket payout. Check the entered prices.';return}out.textContent='Added leg increases total return by '+((factor-1)*100).toFixed(1)+'%. Its effective incremental break-even probability is '+(100/factor).toFixed(1)+'%. This is SGP pricing math, not a forecast of the player hitting.'};
 }
-async function init(){try{const r=await fetch('./data/matchups.json',{cache:'no-store'});if(!r.ok)throw Error('Feed HTTP '+r.status);players=await r.json();const groups=[...new Set(players.filter(p=>p.team&&p.opp).map(p=>[p.team,p.opp].sort().join('-')))].sort();$('game').innerHTML='<option value="">Select a matchup</option>'+groups.map(g=>'<option value="'+esc(g)+'">'+esc(g.replace('-',' vs '))+'</option>').join('');$('status').textContent='Loaded '+players.length+' player matchup records. Injury statuses may lag official game-day reports.';}catch(e){$('status').textContent='Unable to load matchup data: '+e.message;}}
+async function init(){
+ try{
+  const responses=await Promise.all([
+   fetch('./data/matchups.json',{cache:'no-store'}),
+   fetch('./data/status.json',{cache:'no-store'}).catch(()=>null)
+  ]);
+  const r=responses[0];if(!r.ok)throw Error('Feed HTTP '+r.status);
+  players=await r.json();
+  feedMeta=responses[1]?.ok?await responses[1].json():null;
+  const groups=[...new Set(players.filter(p=>p.team&&p.opp).map(p=>[p.team,p.opp].sort().join('-')))].sort();
+  $('game').innerHTML='<option value="">Select a matchup</option>'+groups.map(g=>'<option value="'+esc(g)+'">'+esc(g.replace('-',' vs '))+'</option>').join('');
+  $('status').textContent='Loaded '+players.length+' player matchup records.';
+  const errors=[];
+  if(!feedMeta||!feedMeta.generated_at)errors.push('Feed generation time unavailable; freshness cannot be verified.');
+  else {
+   const age=(Date.now()-Date.parse(feedMeta.generated_at))/3600000;
+   if(!Number.isFinite(age)||age< -2)errors.push('Feed generation timestamp is invalid.');
+   else if(age>30)errors.push('Feed is '+Math.round(age)+' hours old; verify current rosters and game status.');
+  }
+  const injury=feedMeta?.availability_diagnostics?.injuries;
+  if(!injury||!injury.matched_ids)errors.push('No current-week OUT/QUESTIONABLE/DOUBTFUL designations matched from the injury report. This does NOT mean players are healthy. Check official game-day statuses.');
+  $('feedHealth').textContent=errors.join(' ');
+ }catch(e){
+  $('status').textContent='Unable to load matchup data: '+e.message;
+  $('feedHealth').textContent='Data verification unavailable. No reliable picks can be produced.';
+ }
+}
 $('build').onclick=()=>{const g=$('game').value;if(!g){$('status').textContent='Choose a game first.';return}render(g);$('results').scrollIntoView({behavior:'smooth'});};init();
 </script></body></html>
