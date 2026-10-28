@@ -42,9 +42,9 @@ assert.equal(veryFavorable.candidate,'OVER','big well-supported mismatch should 
 assert.equal(veryFavorable.play,false,'even strong uncalibrated candidates never approve bets');
 const underValue=model.review({market:'PASS',history:[135,140,145,138,142,150,139,147,143,137],projection:140,line:250.5,overOdds:'-110',underOdds:'-110'});
 assert.equal(underValue.candidate,'UNDER','must independently evaluate UNDER');
-const short=model.review({...veryFavorable,history:[300,305,302,301,297,299]});
+const short=model.review({market:'PASS',history:[300,305,302,301,297,299],projection:310,line:200.5,overOdds:'-110',underOdds:'-110'});
 assert.equal(short.status,'PASS · LIMITED VERIFIED HISTORY');
-const longOdds=model.review({...veryFavorable,overOdds:'-250',underOdds:'+190'});
+const longOdds=model.review({market:'PASS',history:[290,310,305,300,298,302,307,294,308,299],projection:310,line:200.5,overOdds:'-250',underOdds:'+190'});
 assert.equal(longOdds.candidate,null,'-250 must never be recommended');
 assert.equal(model.review({...base,history:[0,0,0,0,0]}).sample,5,'true zero stats are observations');
 assert.deepEqual(model.nflHistory({seasonGameStats:[{passYards:0},{passYards:275},{}],playerAppearancesVerified:true},'PASS'),[0,275]);

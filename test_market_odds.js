@@ -23,6 +23,7 @@ assert.equal(math.compare({line:69.5,projection:70,overOdds:'-110',side:null}).s
 const nfl=fs.readFileSync('index.html','utf8'),nba=fs.readFileSync('nba.html','utf8');
 for(const [name,html] of [['NFL',nfl],['NBA',nba]]){
  assert.ok(html.includes('src="./market_odds.js"'),name+' must load the shared pricing math');
+ assert.ok(html.includes('src="./player_probability.js"'),name+' must load the model probability research engine');
  assert.ok(html.includes('Vegas line')||html.includes('Vegas Line'),name+' must have a player market line');
  assert.ok(html.includes('Over odds')&&html.includes('Under odds'),name+' must offer both sides');
  const inline=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(x=>x[1]).filter(Boolean);
