@@ -1,0 +1,28 @@
+name: NFL probability evidence audit
+on:
+  push:
+    paths:
+      - 'audit_probability_readiness.py'
+      - 'data/feed_audit.json'
+      - 'data/history_audit.json'
+      - 'data/probability_model.json'
+      - 'data/game_picks_simulator_audit.json'
+      - 'data/backtest_report.json'
+      - '.github/workflows/probability-evidence.yml'
+  workflow_dispatch:
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python audit_probability_readiness.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nfl-probability-evidence
+          path: data/probability_readiness.json
+          if-no-files-found: error
