@@ -53,5 +53,23 @@ vm.runInContext(js,context);
  assert(output.includes('Projected game script'),'Real matchup should show game script');
  await new Promise(resolve=>setTimeout(resolve,10));
  assert(el('simResult').innerHTML.includes('Simulated'),'Joint simulation should finish');
+
+ // Verify every actual matchup can produce a simulation input or explicitly
+ // refuse for missing historical team data. The prior PHI/WAS gap should now
+ // use the observed-team-PBP fallback rather than inventing a passer.
+ const phi=games.includes('PHI-WAS')?players.filter(p=>['PHI','WAS'].includes(p.team)&&
+   ['PHI','WAS'].includes(p.opp)):null;
+ if(phi){
+  const rebuilt=engine.build(phi);
+  assert.equal(rebuilt.teams.length,2);
+  assert(rebuilt.teams.every(x=>x.outlook.estimatedPassAttempts>=20));
+  const missing=rebuilt.teams.filter(x=>!x.outlook.quarterbackPlayerPropsAvailable);
+  if(missing.length){
+   assert(missing.every(x=>x.outlook.passVolumeSource==='VERIFIED_TEAM_PBP_NO_QB_PROPS'));
+   for(const t of missing)assert(rebuilt.players.filter(p=>p.team===t.team&&p.pos==='QB')
+    .every(p=>p.pass<12));
+  }
+  console.log('PHI/WAS confirmed: historical team passing fallback where QB history is missing.');
+ }
  console.log('Actual NFL feed matchup passed game-first UI research flow:',target);
 })().catch(error=>{console.error(error);process.exitCode=1});

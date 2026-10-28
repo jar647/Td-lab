@@ -168,6 +168,11 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     # Each team's sample denominator counts actual played games, not weeks on the calendar.
     played=plays[['game_id','posteam','defteam']].drop_duplicates()
     offense_games=played.groupby('posteam').game_id.nunique().to_dict()
+    # Team-level REAL passing attempts, averaged over jointly completed
+    # offensive games. Used only when an individual QB has insufficient
+    # verified history. This never supplies an invented quarterback identity.
+    prior_passes=plays[pd.to_numeric(plays.pass_attempt,errors='coerce').eq(1)]
+    team_pass_attempts=prior_passes.groupby('posteam').size().to_dict()
     defense_games=played.groupby('defteam').game_id.nunique().to_dict()
     team_events=events.groupby('team').size().to_dict()
     player_events=events.groupby(['team','player_id']).size().to_dict()
@@ -612,6 +617,8 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                 result.append({'player_id':pid,'availability':health,'player':roster_names.get(str(pid),str(p.player)),'jersey_number':jersey_by_player.get(pid),'pos':position,'team':team,'opp':opp,
                     'games':pg,'teamGames':og,'playerAppearancesVerified':True,
                     'possibleReturningTeammates':[x for x in possible_returnees.get(team,[]) if x['player']!=roster_names.get(str(pid),str(p.player))],
+                    'teamPassAttemptsPerGame':mean(team_pass_attempts[team]/og) if og>0 and team in team_pass_attempts else None,
+                    'teamPassAttemptsSource':'VERIFIED_COMPLETED_PBP' if og>0 and team in team_pass_attempts else 'UNAVAILABLE',
                     'teamTargetsTotal':int(team_targets.get(team,0)),
                     'teamRzChancesTotal':int(team_events.get(team,0)),
                     'tdallowed':mean(player_td.get((opp,position),0)/dg),
