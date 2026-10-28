@@ -255,7 +255,7 @@ function renderNFLGameMatchupBreakdown(){
   return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null;
  };
  const fmt=n=>Number(n).toFixed(1);
- root.innerHTML='<section class="panel"><h2>🏈 Game matchup breakdown</h2><p class="muted">Team defensive rates per game. Rushing and receiving totals combine QB, RB, WR and TE position rates; passing uses the QB team rate. Comparisons use complete team totals from the current feed sample. This is matchup context, not a player projection.</p>'+teams.map(defense=>{
+ root.innerHTML='<section class="panel"><h2>🏈 Game matchup breakdown</h2><p class="muted">Team defensive rates per game. Rushing and receiving totals combine QB, RB, WR and TE position rates; passing uses the QB team rate. Defensive rates use up to the five most recent games in the feed. Comparisons use complete team totals from the current feed sample. This is matchup context, not a player projection.</p>'+teams.map(defense=>{
   const offense=teams.find(t=>t!==defense);
   const sideRows=gameRows.filter(r=>String(r.opp)===defense&&String(r.team)===offense);
   if(!sideRows.length)return '<article class="matchrow"><h3>'+escapeHTML(defense)+' defense vs '+escapeHTML(offense)+' offense</h3><p class="muted">Defensive stats are missing for this side of the matchup.</p></article>';
@@ -268,7 +268,7 @@ function renderNFLGameMatchupBreakdown(){
    const context=delta===null?'':delta>=.08?' · Potential opposing prop opportunity':delta<=-.08?' · Tougher defensive matchup':' · Near sample average';
    return '<div>'+label+': '+fmt(value)+' allowed/game'+comparison+context+'</div>';
   }).join('')+'</div>').join('');
-  return '<article class="matchrow"><h3>'+escapeHTML(defense)+' defense vs '+escapeHTML(offense)+' offense</h3><p class="muted">'+(sampleGames===null?'Game count unavailable.':'Based on '+sampleGames+' completed team games.')+'</p>'+detail+'</article>';
+  return '<article class="matchrow"><h3>'+escapeHTML(defense)+' defense vs '+escapeHTML(offense)+' offense</h3><p class="muted">'+(sampleGames===null?'Team game count unavailable.':'Season: '+sampleGames+' completed team games; rates use up to 5 recent games.')+'</p>'+detail+'</article>';
  }).join('')+'<p class="muted">Team rates are summed from position-level feed values; comparisons include only defenses with complete position coverage. Individual player usage still needs separate review.</p></section>';
 }
 let propCategory='PASS';
