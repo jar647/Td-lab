@@ -26,7 +26,7 @@ class LocalWorker{
  terminate(){}
 }
 const ok=x=>({ok:true,json:async()=>x});
-const context={document:{getElementById:el},Worker:LocalWorker,PropVaultGoal1:goal1,setTimeout,console,Date,
+const context={document:{getElementById:el},Worker:LocalWorker,PropVaultGoal1:goal1,CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'},setTimeout,console,Date,
  fetch:async url=>{
   if(url.includes('matchups.json'))return ok(players);
   if(url.includes('status.json'))return ok(status);
