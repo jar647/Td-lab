@@ -60,12 +60,19 @@ class ForwardPropResearchTests(unittest.TestCase):
             doc=self.capture(Path(root))
             legacy=json.loads(json.dumps(doc))
             legacy["model_version"]="opportunity-2024-trained-blend-v1"
-            legacy["game_id"]="other-game"
-            # Keep same fixture when constructing evaluation and override the
-            # older record's version, then evaluate separately.
-            legacy["game_id"]="g9"
-            with self.assertRaises(RuntimeError):
-                evaluate([doc,legacy],self.schedules,self.appearances)
+            legacy["game_id"]="g8"
+            legacy["week"]=8
+            older_game={**self.fixture,"week":8,"game_id":"g8","game_type":"REG",
+                        "home_score":17,"away_score":10}
+            schedules=pd.concat([self.schedules,pd.DataFrame([older_game])],ignore_index=True)
+            old_appearances=self.appearances.copy()
+            old_appearances["game_id"]="g8"
+            appearances=pd.concat([self.appearances,old_appearances],ignore_index=True)
+            results=evaluate([doc,legacy],schedules,appearances)
+            self.assertIn("opportunity-2024-trained-blend-v1",results["version_reports"])
+            self.assertEqual(results["current_model_graded"],
+                             results["version_reports"][doc["model_version"]]["graded"])
+            self.assertLess(results["current_model_graded"],results["graded"])
 
     def test_missing_player_not_mislabeled_zero(self):
         with tempfile.TemporaryDirectory() as root:
