@@ -200,7 +200,8 @@ async function init(){
    fetch('./data/matchups.json',{cache:'no-store'}),
    fetch('./data/status.json',{cache:'no-store'}).catch(()=>null),
    fetch('./data/forward/prop_probability_performance.json',{cache:'no-store'}).catch(()=>null),
-   fetch('./data/verification_status.json',{cache:'no-store'}).catch(()=>null)
+   fetch('./data/verification_status.json',{cache:'no-store'}).catch(()=>null),
+   fetch('./data/forward/game_first_capture_status.json',{cache:'no-store'}).catch(()=>null)
   ]);
   const r=responses[0];if(!r.ok)throw Error('Feed HTTP '+r.status);
   players=await r.json();
@@ -224,6 +225,8 @@ async function init(){
    ? 'Forward probability audit: '+Number(forward.current_model_graded??forward.graded??0).toLocaleString()+' graded research predictions across '+Number(forward.distinct_graded_weeks??0)+' current-model weeks. '+(forward.eligible_for_research_review?'Eligible for research review, NOT live betting.':'Not yet validated for betting.')
    : 'Forward probability validation data unavailable. No calibrated hit probabilities are claimed.';
   $('validationStatus').textContent+=' Betting verification: '+(validationGate?.bet_recommendations_enabled===true?'reported ready; reconfirm live prices and inactives.':'NOT READY, research only.');
+  const capture=responses[4]?.ok?await responses[4].json():null;
+  if(capture)$('validationStatus').textContent+=' Game-first model: '+Number(forward?.game_first_graded??0)+' graded forecasts; '+Number(capture.frozen_game_snapshots??0)+' of '+Number(capture.fixtures??0)+' matchups frozen before game day.';
  }catch(e){
   $('status').textContent='Unable to load matchup data: '+e.message;
   $('feedHealth').textContent='Data verification unavailable. No reliable picks can be produced.';
