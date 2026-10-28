@@ -2,7 +2,7 @@ const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/st
 const source=fs.readFileSync('nba.html','utf8').match(/<script>([\s\S]*?)<\/script>/)[1];
 const elements=new Map();
 const element=id=>{if(!elements.has(id))elements.set(id,{value:'',innerHTML:'',textContent:'',classList:{toggle(){}}});return elements.get(id)};
-const context={document:{getElementById:element},fetch:async()=>({ok:false}),console,Date,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl};
+const context={document:{getElementById:element},fetch:async()=>({ok:false}),console,Date,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl,CookItUpPricing:require('./market_odds.js')};
 vm.createContext(context);vm.runInContext(source,context,{timeout:2000});
 const now=Date.now();const rows=n=>Array.from({length:n},(_,i)=>({scored:110+(i%5),allowed:103+(i%4),date:now-(i+2)*86400000,home:i%2===0}));
 vm.runInContext(`simulatorStats={home:${JSON.stringify(rows(10))},away:${JSON.stringify(rows(10))},homeMean:112,awayMean:106,homeOff:112,homeDef:103,awayOff:112,awayDef:103,homeSd:5,awaySd:6,homeAdv:1,leagueHomeGames:12,homeName:'Boston Celtics',awayName:'New York Knicks',injuries:[],injuryFresh:true,feedAt:${now},tip:${now+3600000}};`,context);
