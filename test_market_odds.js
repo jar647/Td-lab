@@ -23,13 +23,19 @@ assert.equal(math.compare({line:69.5,projection:70,overOdds:'-110',side:null}).s
 const nfl=fs.readFileSync('index.html','utf8'),nba=fs.readFileSync('nba.html','utf8');
 for(const [name,html] of [['NFL',nfl],['NBA',nba]]){
  assert.ok(html.includes('src="./market_odds.js"'),name+' must load the shared pricing math');
- assert.ok(html.includes('src="./player_probability.js"'),name+' must load the model probability research engine');
  assert.ok(html.includes('Vegas line')||html.includes('Vegas Line'),name+' must have a player market line');
- assert.ok(html.includes('Over odds')&&html.includes('Under odds'),name+' must offer both sides');
+ if(name==='NBA'){
+  assert.ok(html.includes('src="./player_probability.js"'),name+' must load the model probability research engine');
+  assert.ok(html.includes('Over odds')&&html.includes('Under odds'),name+' must retain both-sided pricing');
+ }else{
+  assert.ok(html.includes('src="./nfl_game_engine.js"'),'NFL must load matchup simulations');
+  assert.ok(html.includes('UNCALIBRATED'),'NFL scenario frequencies must be identified as uncalibrated');
+  assert.ok(!html.includes('Over odds')&&!html.includes('Under odds'),'NFL player cards must not request sportsbook prices');
+  assert.ok(!html.includes('setPropOdds('),'NFL player odds must not be stored from cards');
+ }
  const inline=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(x=>x[1]).filter(Boolean);
  assert.equal(inline.length,1,name+' should retain one inline controller');
  new vm.Script(inline[0],{filename:name+'.html'});
 }
-assert.ok(nfl.includes('setPropOdds('),'NFL prices must be saved');
 assert.ok(nba.includes('setNBAQuote('),'NBA prices must be saved');
-console.log('CoOk It Up two-sided player-prop pricing checks passed');
+console.log('NFL odds removal and NBA two-sided pricing checks passed');
