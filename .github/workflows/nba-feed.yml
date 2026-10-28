@@ -14,6 +14,8 @@ on:
       - 'test_nba_simulator.js'
       - 'nba.html'
       - 'market_odds.js'
+      - 'player_probability.js'
+      - 'test_player_probability.js'
       - 'test_market_odds.js'
       - '.github/workflows/nba-feed.yml'
   pull_request:
@@ -44,7 +46,7 @@ jobs:
       - name: Test NBA UI and simulations
         run: |
           node test_market_odds.js
-          node test_market_odds.js
+          node test_player_probability.js
           node test_nba_ui.js
           node test_nba_simulator.js
       - name: Build research-only daily learning report from tracked results
@@ -70,6 +72,8 @@ jobs:
             python nba_tracker.py
             python nba_daily_learning.py
             python -m unittest -v test_nba_contracts.py test_nba_daily_learning.py
+            node test_market_odds.js
+            node test_player_probability.js
             node test_nba_ui.js
             node test_nba_simulator.js
             git add data/nba_games.json data/nba_projection_tracker.json data/nba_daily_learning.json

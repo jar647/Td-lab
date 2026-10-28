@@ -6,6 +6,8 @@ on:
       - 'index.html'
       - 'nba.html'
       - 'market_odds.js'
+      - 'player_probability.js'
+      - 'test_player_probability.js'
       - 'test_market_odds.js'
       - 'nfl_game_engine.js'
       - 'nfl_goal1.js'
@@ -29,6 +31,7 @@ jobs:
           node-version: '22'
       - run: node --check test_analyst_ui.js
       - run: node test_market_odds.js
+      - run: node test_player_probability.js
       - run: node test_analyst_ui.js
       - run: node test_nfl_game_engine.js
       - run: node test_nfl_goal1.js
