@@ -12,13 +12,21 @@ let saved=slip.getPicks();
 assert.equal(saved.length,1);
 assert.equal(saved[0].player,'Example Player');
 assert.equal(saved[0].line,4.5);
-assert.equal(saved[0].side,'','Adding a recommendation must not silently choose a betting side');
-assert.equal(saved[0].odds,'');
+assert.equal(Object.hasOwn(saved[0],'side'),false,'Quick Slip recommendations no longer store a side form field');
+assert.equal(Object.hasOwn(saved[0],'odds'),false,'Quick Slip recommendations no longer store an odds form field');
+assert.equal(slip.formatRecommendation({player:'Jaden McDaniels',market:'assists',recommendationLine:3}),'3+ assists');
+assert.equal(slip.formatRecommendation({player:'Example Player',market:'assists',line:3.5}),'Over 3.5 assists');
 slip.add({...pick,line:5.5});
 assert.equal(slip.getPicks().length,2,'a different line can be saved as its own leg');
 slip.add({...pick,team:'GB'});
 assert.equal(slip.getPicks().length,2,'re-adding the same player, market and line updates instead of duplicating');
 assert.equal(slip.getPicks()[0].team,'GB');
+slip.clear();
+slip.add({...pick,recommendationLine:3,sampleHits:7,sampleSize:10,scenarioRate:.64,estimatedEdge:.14,edgeBasis:'break-even'});
+saved=slip.getPicks();
+assert.equal(saved[0].recommendationLine,3);
+assert.equal(saved[0].sampleHits,7);
+assert.equal(saved[0].estimatedEdge,.14);
 slip.clear();
 assert.deepEqual(slip.getPicks(),[]);
 for(const file of ['index.html','nba.html','analyst.html']){
@@ -26,4 +34,4 @@ for(const file of ['index.html','nba.html','analyst.html']){
  assert.ok(html.includes('quick_slip.js'),file+' must load the shared slip UI');
  assert.ok(html.includes('CookItUpQuickSlip.button'),file+' must add recommendations to the slip');
 }
-console.log('Shared NFL/NBA Quick Slip persistence, deduplication, and manual-side checks passed');
+console.log('Compact NFL/NBA Quick Slip persistence, evidence display, and deduplication checks passed');
