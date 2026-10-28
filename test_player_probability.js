@@ -88,15 +88,25 @@ const breakdownStart=nflHome.indexOf('function renderNFLGameMatchupBreakdown()')
 const breakdownEnd=nflHome.indexOf('\nlet propCategory=',breakdownStart);
 const breakdown=nflHome.slice(breakdownStart,breakdownEnd);
 const breakdownView={innerHTML:''};
-const breakdownRows=[
- {team:'A',opp:'B',market:'ATD',games:6,seasonGamesPlayed:6,defPassYardsAllowed:280,defRushYardsAllowed:120},
- {team:'B',opp:'A',market:'ATD',games:6,seasonGamesPlayed:6,defPassYardsAllowed:190,defRushYardsAllowed:85},
- {team:'C',opp:'A',market:'ATD',games:6,seasonGamesPlayed:6,defPassYardsAllowed:190,defRushYardsAllowed:85},
- {team:'D',opp:'C',market:'ATD',games:6,seasonGamesPlayed:6,defPassYardsAllowed:210,defRushYardsAllowed:95}
-];
+const breakdownRows=[];
+const addDefense=(team,opp,stats)=>{
+ const byPos={
+  QB:{defPassYardsAllowed:stats.passYards,defPassTDsAllowed:stats.passTDs,defPassAttemptsAllowed:stats.passAttempts,defRushYardsAllowed:stats.rush[0],defRushAttemptsAllowed:stats.attempts[0],defRecYardsAllowed:stats.rec[0],defReceptionsAllowed:stats.catches[0],defTargetsAllowed:stats.targets[0]},
+  RB:{defRushYardsAllowed:stats.rush[1],defRushAttemptsAllowed:stats.attempts[1],defRecYardsAllowed:stats.rec[1],defReceptionsAllowed:stats.catches[1],defTargetsAllowed:stats.targets[1]},
+  WR:{defRushYardsAllowed:stats.rush[2],defRushAttemptsAllowed:stats.attempts[2],defRecYardsAllowed:stats.rec[2],defReceptionsAllowed:stats.catches[2],defTargetsAllowed:stats.targets[2]},
+  TE:{defRushYardsAllowed:stats.rush[3],defRushAttemptsAllowed:stats.attempts[3],defRecYardsAllowed:stats.rec[3],defReceptionsAllowed:stats.catches[3],defTargetsAllowed:stats.targets[3]}
+ };
+ for(const [pos,fields] of Object.entries(byPos))breakdownRows.push({team,opp,pos,market:'ATD',games:6,seasonGamesPlayed:6,...fields});
+};
+addDefense('A','B',{passYards:280,passTDs:2,passAttempts:35,rush:[12,100,3,0],attempts:[2,25,1,0],rec:[0,10,130,40],catches:[0,2,8,4],targets:[0,3,12,6]});
+addDefense('B','A',{passYards:190,passTDs:1,passAttempts:32,rush:[5,80,4,1],attempts:[1,20,1,0],rec:[0,15,100,30],catches:[0,3,7,3],targets:[0,4,10,5]});
+addDefense('C','A',{passYards:190,passTDs:1,passAttempts:32,rush:[4,90,5,1],attempts:[1,22,1,0],rec:[0,12,110,25],catches:[0,2,8,3],targets:[0,3,11,5]});
+addDefense('D','C',{passYards:210,passTDs:1,passAttempts:33,rush:[5,105,4,2],attempts:[1,26,1,0],rec:[0,11,115,35],catches:[0,2,8,4],targets:[0,3,12,6]});
 const matchupContext={autoRecords:breakdownRows,gameKey:r=>[r.team,r.opp].sort().join('|'),escapeHTML:s=>String(s??''),document:{getElementById:id=>id==='nflGameMatchupBreakdown'?breakdownView:id==='gameFilter'?{value:'A|B'}:null}};
 vm.runInNewContext(breakdown+';renderNFLGameMatchupBreakdown()',matchupContext);
 assert.match(breakdownView.innerHTML,/A defense vs B offense/);
 assert.match(breakdownView.innerHTML,/Based on 6 completed team games/);
-assert.match(breakdownView.innerHTML,/\+24% vs sample/);
+assert.match(breakdownView.innerHTML,/Rushing yards: 115\\.0 allowed\\/game/,'position-specific rushing rates must sum to the team total');
+assert.match(breakdownView.innerHTML,/Receiving yards: 180\\.0 allowed\\/game/,'position-specific receiving rates must sum to the team total');
+assert.match(breakdownView.innerHTML,/Passing yards: 280\\.0 allowed\\/game/,'team passing rate must use the QB-level team value once');
 console.log('CoOk It Up model probability, EV, uncertainty, push, and NFL/NBA binding tests passed');
