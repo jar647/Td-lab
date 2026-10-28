@@ -18,7 +18,7 @@ assert.ok(match[1].includes('function injuryFor(p)'),'Injury helper required by 
 assert.ok(match[1].includes('Player recommendations · matchup opportunities'),'Top props rendering missing');
 const elements=new Map();
 function element(id){if(!elements.has(id))elements.set(id,{value:'',textContent:'',innerHTML:'',onclick:null});return elements.get(id)}
-const sandbox={document:{getElementById:element},fetch:async()=>({ok:false}),console,Date,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl,CookItUpPricing,CookItUpProbability};
+const sandbox={document:{getElementById:element},fetch:async()=>({ok:false}),console,Date,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl,CookItUpPricing,CookItUpProbability,CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'}};
 vm.createContext(sandbox);vm.runInContext(match[1],sandbox,{timeout:2000});
 assert.equal(typeof element('show').onclick,'function','Analyze must be wired');
 assert.ok(match[1].includes('formatToParts'),'Eastern day comparison must use stable date parts');
@@ -48,7 +48,7 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  const fixtureTime=Date.parse(game.date)-4*3600000;
  assert.equal(easternDay(fixtureTime),easternDay(game.date),'Fixture test clock must remain on the same Eastern day');
  const FixedDate=class extends Date{constructor(...args){super(...(args.length?args:[fixtureTime]))}static now(){return fixtureTime}};
- const context={document:{getElementById:el,createElement:()=>({className:'',id:'',innerHTML:'',append(){el('output').innerHTML+=this.innerHTML}})},fetch:async url=>({ok:true,json:async()=>url.includes('nba_games')?data:url.includes('nba_injuries')?{generated_at:new Date().toISOString(),injuries:[]}:{snapshots:[]}}),console,Date:FixedDate,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl,CookItUpPricing,CookItUpProbability};
+ const context={document:{getElementById:el,createElement:()=>({className:'',id:'',innerHTML:'',append(){el('output').innerHTML+=this.innerHTML}})},fetch:async url=>({ok:true,json:async()=>url.includes('nba_games')?data:url.includes('nba_injuries')?{generated_at:new Date().toISOString(),injuries:[]}:{snapshots:[]}}),console,Date:FixedDate,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl,CookItUpPricing,CookItUpProbability,CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'}};
  vm.createContext(context);vm.runInContext(match[1],context,{timeout:2000});
  await new Promise(resolve=>setTimeout(resolve,50));
  assert.ok(el('games').innerHTML.includes(game.home),'Today-game selector must contain real matchup: '+el('status').textContent);

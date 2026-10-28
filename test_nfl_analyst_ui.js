@@ -53,7 +53,7 @@ class FakeWorker{
  terminate(){}
 }
 function response(obj){return {ok:true,async json(){return obj}}}
-const context={document:{getElementById:el},Worker:FakeWorker,PropVaultGoal1:goal1,
+const context={document:{getElementById:el},Worker:FakeWorker,PropVaultGoal1:goal1,CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'},
  setTimeout,Date,console,fetch:async url=>{
   if(url.includes('matchups'))return response(players);
   if(url.includes('forward'))return response({graded:0,distinct_graded_weeks:0});

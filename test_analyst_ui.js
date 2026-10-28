@@ -25,7 +25,7 @@ const document={getElementById(id){
  return elements.get(id);
 }};
 const context=vm.createContext({
- document,console,setTimeout,Date,PropVaultGoal1:goal1,
+ document,console,setTimeout,Date,PropVaultGoal1:goal1,CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'},
  fetch:async url=>({ok:true,json:async()=>
   url.includes('matchups.json')?[]:
   url.includes('prop_probability_performance.json')?{graded:0,distinct_graded_weeks:0}:
