@@ -65,7 +65,7 @@ vm.runInContext(inline[0],context);
  el('game').value='A-B';
  await el('build').onclick();
  assert(!el('results').innerHTML.includes('Simulation unavailable'),'simulator should initialize');
- assert(el('results').innerHTML.includes('Game-first Monte Carlo'),'game analysis panel expected');
+ assert(el('results').innerHTML.includes('Game-first Monte Carlo'),'game analysis panel expected, received: '+el('results').innerHTML.slice(0,1000));
  await new Promise(resolve=>setTimeout(resolve,35));
  assert(el('simResult').innerHTML.includes('Simulated'),'joint simulation results expected');
  console.log('NFL analyst UI syntax and simulated game-to-ticket flow passed');
