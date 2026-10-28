@@ -1,0 +1,72 @@
+/* Node smoke tests for analyst.html script syntax and simulator handoff. */
+'use strict';
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+const engine=require('./nfl_game_engine.js');
+const html=fs.readFileSync('analyst.html','utf8');
+assert(html.includes('src="./nfl_game_engine.js"'),'analyst must load simulator engine');
+assert(html.includes('nfl_game_worker.js'),'analyst must execute off-thread');
+const inline=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)]
+ .map(x=>x[1]).filter(x=>x.trim());
+assert.equal(inline.length,1,'exactly one analyst inline controller');
+new vm.Script(inline[0],{filename:'analyst-inline.js'});
+const def={playerAppearancesVerified:true,availability:'ROSTER_ACTIVE',injuryReportStatus:'NOT_REPORTED',
+ defenseOpponentRatio:{PASS:1,RUSH:1,REC:1,CATCH:1}};
+const player=(team,id,pos,vals)=>{
+ const history=Array.from({length:8},(_,i)=>({week:i+1,
+  passYards:vals.py||0,passAttempts:vals.p||0,
+  rushYards:vals.ry||0,rushAttempts:vals.r||0,
+  recYards:vals.y||0,receptions:vals.c||0,targets:vals.t||0}));
+ return {...def,player:id,player_id:id,team,opp:team==='A'?'B':'A',pos,
+  seasonGameStats:history,last5GameStats:history.slice(-5),last5GamesPlayed:5,
+  playerRushYards:vals.ry||0,playerCarries:vals.r||0,
+  playerPassYards:vals.py||0,playerPassAttempts:vals.p||0,
+  playerRecYards:vals.y||0,playerReceptions:vals.c||0,
+  playerTargets:vals.t||0,
+  recent3RushYards:vals.ry||0,recent3RecYards:vals.y||0,
+  recent3PassYards:vals.py||0,recent3Receptions:vals.c||0};
+};
+const players=[
+ player('A','aqb','QB',{p:35,py:265,r:4,ry:25}),
+ player('A','arb','RB',{r:18,ry:84,t:4,c:3,y:30}),
+ player('A','awr','WR',{t:11,c:8,y:107}),
+ player('A','ate','TE',{t:6,c:4,y:57}),
+ player('B','bqb','QB',{p:34,py:265,r:4,ry:25}),
+ player('B','brb','RB',{r:18,ry:84,t:4,c:3,y:30}),
+ player('B','bwr','WR',{t:11,c:8,y:107}),
+ player('B','bte','TE',{t:6,c:4,y:57})
+];
+const elements=new Map();
+function el(id){if(!elements.has(id))elements.set(id,{
+ innerHTML:'',textContent:'',value:id==='simCount'?'10000':'',
+ disabled:false,querySelectorAll:()=>[],scrollIntoView:()=>{},
+ click(){if(typeof this.onclick==='function')return this.onclick();}
+});return elements.get(id);}
+class FakeWorker{
+ postMessage(req){setTimeout(()=>{
+  try{const result=engine.simulate(req.players,req.count,req.seed,req.selected);
+   this.onmessage({data:{result}});
+  }catch(err){this.onmessage({data:{error:err.message}})}
+ },0)}
+ terminate(){}
+}
+function response(obj){return {ok:true,async json(){return obj}}}
+const context={document:{getElementById:el},Worker:FakeWorker,
+ setTimeout,Date,console,fetch:async url=>{
+  if(url.includes('matchups'))return response(players);
+  if(url.includes('forward'))return response({graded:0,distinct_graded_weeks:0});
+  return response({generated_at:new Date().toISOString(),availability_diagnostics:{injuries:{matched_ids:0}}});
+ }};
+vm.createContext(context);
+vm.runInContext(inline[0],context);
+(async()=>{
+ await new Promise(resolve=>setTimeout(resolve,10));
+ el('game').value='A-B';
+ await el('build').onclick();
+ assert(!el('results').innerHTML.includes('Simulation unavailable'),'simulator should initialize');
+ assert(el('results').innerHTML.includes('Game-first Monte Carlo'),'game analysis panel expected');
+ await new Promise(resolve=>setTimeout(resolve,35));
+ assert(el('simResult').innerHTML.includes('Simulated'),'joint simulation results expected');
+ console.log('NFL analyst UI syntax and simulated game-to-ticket flow passed');
+})().catch(e=>{console.error(e);process.exitCode=1});
