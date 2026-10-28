@@ -7,7 +7,7 @@ const defs=[
 {key:'recYards',season:'playerRecYards',recent:'recent3RecYards',volume:'playerTargets',volumeLabel:'targets/game',def:'defRecYardsAllowed',ratio:'REC',label:'receiving yards',positions:['WR','TE','RB'],steps:[20,25,30,40,50,60,70,80,100]},
 {key:'receptions',season:'playerReceptions',recent:'recent3Receptions',volume:'playerTargets',volumeLabel:'targets/game',def:'defReceptionsAllowed',ratio:'CATCH',label:'receptions',positions:['WR','TE','RB'],steps:[2,3,4,5,6,7,8]},
 {key:'passYards',season:'playerPassYards',recent:'recent3PassYards',volume:'playerPassAttempts',volumeLabel:'attempts/game',def:'defPassYardsAllowed',ratio:'PASS',label:'passing yards',positions:['QB'],steps:[150,175,200,225,250,275,300]}];
-function choose(p,d){
+function choose(p,d,scenarioLookup){
 if(!d.positions.includes(p.pos)||p.playerAppearancesVerified===false)return null;
 const sample=n(p.last5GamesPlayed)||0;if(sample<3)return null;
 const season=n(p[d.season]),recent=n(p[d.recent]),volume=n(p[d.volume]);if(season===null||season<=0||recent===null)return null;
@@ -20,17 +20,17 @@ const ratio=n(p.defenseOpponentRatio?.[d.ratio]);const matchup=ratio!==null?Math
 const projected=(season*.5+recent*.5)*matchup;
 // Pick a meaningful line that the observed data can support. Do not
 // automatically walk down to a near-free alternate just to force a leg.
-const viable=d.steps.map(line=>({line,hits:last.filter(v=>v>=line).length}))
- .filter(x=>x.line<=projected*.96&&x.hits/last.length>=.6);
+const id=String(p.player_id||p.team+'|'+p.player);
+const viable=d.steps.map(line=>{
+ const scenario=scenarioLookup.get(id+'|'+d.key+'|'+line);
+ return {line,hits:last.filter(v=>v>=line).length,scenarioRate:scenario?.scenarioRate,modeledMean:scenario?.modeledMean};
+}).filter(x=>x.scenarioRate!==undefined&&x.scenarioRate>=.57&&x.modeledMean>0&&x.line<=x.modeledMean*1.04);
 if(!viable.length)return null;
 const floor={receptions:3,recYards:30,rushYards:40,passYards:200}[d.key];
-// A low line is not banned, but it must have unusually strong support
-// and cannot outrank meaningful lines merely for being easy to hit.
 const ranked=viable.map(x=>{
- const rate=x.hits/last.length;
- const low=x.line<floor;
- const proximity=x.line/projected;
- return {...x,utility:rate*35+proximity*50+(x.line>=floor?12:0)-(low?30:0)};
+ const meaningful=x.line>=floor;
+ const proximity=x.line/Math.max(1,x.modeledMean);
+ return {...x,utility:x.scenarioRate*65+proximity*38+(meaningful?9:-24)};
 }).sort((x,y)=>y.utility-x.utility||y.line-x.line);
 const best=ranked[0];
 if(best.line<floor&&best.utility<38)return null;
@@ -42,8 +42,8 @@ const practice=String(p.injuryPracticeStatus||'NOT_REPORTED').toUpperCase();
 const practiceFlag=/DNP_PRACTICE|LIMITED_PRACTICE/.test(practice);
 const injuryFlag=/QUESTIONABLE|DOUBTFUL|LIMITED|UNVERIFIED|NOT_REPORTED/.test(status+' '+availability)||practiceFlag;
 const consistency=hits/last.length;
-const score=best.utility+consistency*20+Math.min(1,sample/5)*10+(ratio!==null?(matchup-1)*35:0)-(injuryFlag?8:0);
-const reasons=[`Recent form: ${recent.toFixed(d.key==='receptions'?1:0)} ${d.label}/game over the latest three recorded games versus ${season.toFixed(d.key==='receptions'?1:0)} season average.`,`Cleared ${line}+ in ${hits} of the last ${last.length} recorded games.`,`Workload: ${volume.toFixed(1)} ${d.volumeLabel}.`];
+const score=best.utility+best.scenarioRate*20+Math.min(1,sample/5)*8-(injuryFlag?12:0);
+const reasons=[`Game-first scenario frequency: ${(best.scenarioRate*100).toFixed(1)}% at this line (UNCALIBRATED).`,`Recent form: ${recent.toFixed(d.key==='receptions'?1:0)} ${d.label}/game over the latest three recorded games versus ${season.toFixed(d.key==='receptions'?1:0)} season average.`,`Cleared ${line}+ in ${hits} of the last ${last.length} recorded games.`,`Workload: ${volume.toFixed(1)} ${d.volumeLabel}.`];
 if(ratio!==null)reasons.push(`Opponent matchup factor: ${ratio.toFixed(2)}× its opponents' baseline in this category (${ratio>1.04?'favorable':ratio<.96?'challenging':'roughly neutral'}).`);
 else reasons.push('Opponent-adjusted category data unavailable; selection relies on production and workload.');
 const risks=[];if(injuryFlag)risks.push(`Game-day status not confirmed (${status}; roster: ${availability}).`);
@@ -51,10 +51,11 @@ if(practiceFlag)risks.push(`Practice report: ${practice.replace('_PRACTICE','')}
 if(p.pos==='RB'&&Array.isArray(p.possibleReturningTeammates)&&p.possibleReturningTeammates.length)risks.push('Potential returning teammates could alter workload.');
 if(last.length<5)risks.push('Limited recent sample.');
 if(line<floor)risks.push('Very conservative alternate line. Book availability and price are unverified; omit it if payout contribution is negligible.');
-return {p,d,line,score,reasons,risks,hits,sample,injuryFlag};
+return {p,d,line,score,reasons,risks,hits,sample,injuryFlag,scenarioRate:best.scenarioRate};
 }
-function render(g){
-const candidates=players.filter(p=>p.team+'-'+p.opp===g||p.opp+'-'+p.team===g).flatMap(p=>defs.map(d=>choose(p,d)).filter(Boolean)).sort((a,b)=>b.score-a.score);
+function render(g,sim){
+const scenarioLookup=new Map(sim.markets.map(x=>[x.id+'|'+x.market+'|'+x.line,x]));
+const candidates=players.filter(p=>p.team+'-'+p.opp===g||p.opp+'-'+p.team===g).flatMap(p=>defs.map(d=>choose(p,d,scenarioLookup)).filter(Boolean)).sort((a,b)=>b.score-a.score);
 const gamePlayers=players.filter(p=>p.team+'-'+p.opp===g||p.opp+'-'+p.team===g);
 const teamNames=[...new Set(gamePlayers.map(p=>p.team))];
 // Rank player-market opportunities without arbitrary team/player quotas.
@@ -158,7 +159,7 @@ const oddsPanel='<div class="panel"><h2>Hard Rock SGP payout comparison</h2><p c
 const el=$('results');if(!selected.length){el.innerHTML=montePanel+'<div class="panel"><h2>NO BET</h2><p>Not enough supported player props in the current feed. No invented selections.</p></div>';mountMonteCarlo([]);return;}
 el.innerHTML=montePanel+'<div class="panel"><h2>Analyst recommendations · '+selected.length+' legs</h2><p class="sub">Highest-ranked supported thresholds, with conservative-line penalties and passing dependency adjustments, without player or team quotas. Multiple picks may depend on the same game script; joint probabilities are not modeled. Dataset-based screening, not a full live scouting report.</p>'+'<p class="sub">Selection audit: '+candidates.length+' qualifying markets, '+selected.length+' included, '+omitted+' omitted due to five-leg ticket size.</p>'+selected.map((c,i)=>'<article class="leg"><div class="small">LEG '+(i+1)+' · '+esc(c.p.team)+' vs '+esc(c.p.opp)+'</div><div class="pick">'+esc(c.p.player)+' · '+c.line+'+ '+esc(c.d.label)+'</div><p class="reason">'+c.reasons.map(esc).join(' ')+'</p>'+(c.risks.length?'<p class="warning">⚠ '+c.risks.map(esc).join(' ')+'</p>':'')+'<p class="small">Other supported thresholds: '+c.d.steps.filter(t=>t!==c.line&&t<=(n(c.p[c.d.season])*.5+n(c.p[c.d.recent])*.5)*1.05).map(t=>{const log=(c.p.last5GameStats||[]).map(g=>n(g[c.d.key])).filter(v=>v!==null);return t+'+ ('+log.filter(v=>v>=t).length+'/'+log.length+' recent)'}).join(' · ')+'</p><button type="button" class="exclude" data-key="'+esc(c.p.player+'|'+c.d.key)+'">Exclude this market & rebuild</button></article>').join('')+'</div>'+oddsPanel;
 mountMonteCarlo(selected);
-for(const btn of el.querySelectorAll('.exclude'))btn.onclick=()=>{exclusions.add(btn.dataset.key);render(g)};
+for(const btn of el.querySelectorAll('.exclude'))btn.onclick=()=>{exclusions.add(btn.dataset.key);render(g,sim)};
 $('compareOdds').onclick=()=>{const parse=v=>{const t=v.trim();if(!/^[+-]?\\d+(?:\\.\\d+)?$/.test(t))return null;const x=Number(t);if(x===0||Math.abs(x)<100)return null;return x>0?1+x/100:1+100/Math.abs(x)};const full=parse($('fullOdds').value),reduced=parse($('reducedOdds').value),out=$('oddsResult');if(!full||!reduced){out.textContent='Enter valid American odds (at least +100 or -100) for both tickets.';return}const factor=full/reduced;if(factor<=1){out.textContent='Full-ticket payout must exceed reduced-ticket payout. Check the entered prices.';return}out.textContent='Added leg increases total return by '+((factor-1)*100).toFixed(1)+'%. Its effective incremental break-even probability is '+(100/factor).toFixed(1)+'%. This is SGP pricing math, not a forecast of the player hitting.'};
 }
 async function init(){
