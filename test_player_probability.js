@@ -80,4 +80,23 @@ for(const file of ['index.html','nba.html']){
  new vm.Script(inline[0],{filename:file});
  assert.ok(html.includes('CookItUpProbability.review'),file+' must compare odds with observed-game probability');
 }
+const nflHome=fs.readFileSync('index.html','utf8');
+assert.ok(nflHome.includes('id="nflGameMatchupBreakdown"'),'NFL page must include the game matchup breakdown slot');
+assert.ok(nflHome.includes('function renderNFLGameMatchupBreakdown()'),'NFL matchup breakdown must render from current feed data');
+assert.ok(nflHome.includes("refreshGameFilter();renderNFLGameMatchupBreakdown();"),'NFL matchup breakdown must refresh when the selected game changes');
+const breakdownStart=nflHome.indexOf('function renderNFLGameMatchupBreakdown()');
+const breakdownEnd=nflHome.indexOf('\nlet propCategory=',breakdownStart);
+const breakdown=nflHome.slice(breakdownStart,breakdownEnd);
+const breakdownView={innerHTML:''};
+const breakdownRows=[
+ {team:'A',opp:'B',market:'ATD',games:6,seasonGamesPlayed:6,defPassYardsAllowed:280,defRushYardsAllowed:120},
+ {team:'B',opp:'A',market:'ATD',games:6,seasonGamesPlayed:6,defPassYardsAllowed:190,defRushYardsAllowed:85},
+ {team:'C',opp:'A',market:'ATD',games:6,seasonGamesPlayed:6,defPassYardsAllowed:190,defRushYardsAllowed:85},
+ {team:'D',opp:'C',market:'ATD',games:6,seasonGamesPlayed:6,defPassYardsAllowed:210,defRushYardsAllowed:95}
+];
+const matchupContext={autoRecords:breakdownRows,gameKey:r=>[r.team,r.opp].sort().join('|'),escapeHTML:s=>String(s??''),document:{getElementById:id=>id==='nflGameMatchupBreakdown'?breakdownView:id==='gameFilter'?{value:'A|B'}:null}};
+vm.runInNewContext(breakdown+';renderNFLGameMatchupBreakdown()',matchupContext);
+assert.match(breakdownView.innerHTML,/A defense vs B offense/);
+assert.match(breakdownView.innerHTML,/Based on 6 completed team games/);
+assert.match(breakdownView.innerHTML,/\+24% vs sample/);
 console.log('CoOk It Up model probability, EV, uncertainty, push, and NFL/NBA binding tests passed');
