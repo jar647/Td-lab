@@ -64,7 +64,7 @@ assert.equal(short.requiredSample,8,'default evidence gate remains 8 when at lea
 const earlySeason=model.review({market:'PASS',history:[300,305,302,301,297,299],projection:310,line:200.5,overOdds:'-110',underOdds:'-110',context:strongContext,availableGames:6});
 assert.equal(earlySeason.requiredSample,6,'early-season evidence gate cannot exceed team games played');
 assert.equal(earlySeason.decision,'LEAN','six recorded outcomes can clear the gate when the team has played only six games');
-assert.match(model.format(earlySeason),/evidence minimum 6\\/8 based on 6 available team games/);
+assert.match(model.format(earlySeason),/evidence minimum 6\/8 based on 6 available team games/);
 const fullSeasonGate=model.review({...base,history:[300,305,302,301,297,299,304,298],availableGames:10});
 assert.equal(fullSeasonGate.requiredSample,8,'once at least eight team games are available, the full eight-game minimum applies');
 const longOdds=model.review({market:'PASS',history:[290,310,305,300,298,302,307,294,308,299],projection:310,line:200.5,overOdds:'-250',underOdds:'+190'});
