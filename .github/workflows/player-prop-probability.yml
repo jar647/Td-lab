@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'player_prop_probability_backtest.py'
+      - 'opportunity_prop_model.py'
       - 'test_player_prop_probability.py'
       - '.github/workflows/player-prop-probability.yml'
   workflow_dispatch:
