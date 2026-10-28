@@ -75,6 +75,7 @@ def evaluate(snapshots, schedules, appearances):
                 skipped["INVALID_FORECAST"] += 1
                 continue
             graded.append({
+                "model_version": str(snapshot.get("model_version", "UNKNOWN")),
                 "season": int(snapshot["season"]), "week": int(snapshot["week"]),
                 "game_id": game_id, "player_id": player_id,
                 "market": str(item["market"]), "threshold": threshold,
@@ -82,31 +83,46 @@ def evaluate(snapshots, schedules, appearances):
             })
     # Duplicate forecasts must not artificially increase sample size.
     keys = [(r["game_id"], r["player_id"], r["market"], r["threshold"]) for r in graded]
-    if len(keys) != len(set(keys)):
-        raise RuntimeError("Duplicate prospective player-prop forecasts")
-    summaries = {}
-    for market in ("PASS", "RUSH", "REC", "CATCH"):
-        rows = [r for r in graded if r["market"] == market]
-        n = len(rows)
-        summaries[market] = {
-            "n": n,
-            "model_brier": round(sum((r["model_probability"]-r["hit"])**2 for r in rows)/n,6) if n else None,
-            "baseline_brier": round(sum((r["baseline_probability"]-r["hit"])**2 for r in rows)/n,6) if n else None,
-            "distinct_weeks": len({(r["season"], r["week"]) for r in rows}),
+    if len(keys) != len(set(ke    # Never pool different frozen model versions and call the result a new
+    # independent validation set. Legacy exploratory snapshots remain auditable.
+    current_version = "opportunity-2024-trained-eligible-fullseason-v2"
+    by_version = {}
+    for version in sorted({r["model_version"] for r in graded} | {
+        str(doc.get("model_version", "UNKNOWN")) for doc in snapshots
+    } | {current_version}):
+        subset = [r for r in graded if r["model_version"] == version]
+        by_market = {}
+        for market in ("PASS", "RUSH", "REC", "CATCH"):
+            rows = [r for r in subset if r["market"] == market]
+            n = len(rows)
+            model_brier = sum((r["model_probability"]-r["hit"])**2 for r in rows)/n if n else None
+            baseline_brier = sum((r["baseline_probability"]-r["hit"])**2 for r in rows)/n if n else None
+            by_market[market] = {
+                "n": n,
+                "model_brier": round(model_brier, 6) if n else None,
+                "baseline_brier": round(baseline_brier, 6) if n else None,
+                "beats_baseline": bool(n and model_brier < baseline_brier),
+                "distinct_weeks": len({(r["season"], r["week"]) for r in rows}),
+            }
+        by_version[version] = {
+            "graded": len(subset),
+            "distinct_weeks": len({(r["season"], r["week"]) for r in subset}),
+            "markets": by_market,
         }
-        if n:
-            summaries[market]["beats_baseline"] = (summaries[market]["model_brier"] < summaries[market]["baseline_brier"])
-        else:
-            summaries[market]["beats_baseline"] = False
-    weeks = len({(r["season"], r["week"]) for r in graded})
+    current = by_version[current_version]
+    weeks = current["distinct_weeks"]
     return {
         "status": "RESEARCH_ONLY_NOT_BET_READY", "bet_ready": False,
-        "model_version": "opportunity-2024-trained-blend-v1",
-        "graded": len(graded), "distinct_graded_weeks": weeks,
+        "model_version": current_version,
+        "graded": len(graded), "current_model_graded": current["graded"],
+        "distinct_graded_weeks": weeks,
         "min_forward_weeks_for_review": 8,
-        "eligible_for_research_review": weeks >= 8 and len(graded) >= 500,
-        "markets": summaries, "skipped": dict(skipped), "records": graded,
-        "warning": "Frozen BEFORE game day, graded AFTER on positive offensive snaps. Fixed hypothetical thresholds, dependent rows per player-game, no bookmaker lines. Research calibration only."
+        "eligible_for_research_review": weeks >= 8 and current["graded"] >= 500,
+        "markets": current["markets"], "version_reports": by_version,
+        "skipped": dict(skipped), "records": graded,
+        "warning": "Only independently frozen current-version forecasts count toward review. Older model versions are shown separately. Fixed hypothetical thresholds; no sportsbook lines or betting claims."
+    }
+ent rows per player-game, no bookmaker lines. Research calibration only."
     }
 
 def main():
