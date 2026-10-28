@@ -15,6 +15,10 @@ const context=vm.createContext({document,console,setTimeout,fetch:async url=>({
     }
 })});
 vm.runInContext(script,context,{filename:'analyst.html'});
+const simStart=script.indexOf('function runMonteCarlo(legs,count){');
+const simEnd=script.indexOf('function mountMonteCarlo(legs){',simStart);
+assert.ok(simStart>0 && simEnd>simStart,'Simulator source must be present');
+vm.runInContext(script.slice(simStart,simEnd),context,{filename:'analyst-simulator.js'});
 assert.equal(vm.runInContext('n(null)',context),null,'Null data is not a numeric zero');
 assert.equal(vm.runInContext('n(undefined)',context),null,'Missing data is not zero');
 assert.equal(vm.runInContext("n('10.5')",context),10.5);
