@@ -4,12 +4,12 @@
 Fixed illustrative thresholds, NOT verified sportsbook offerings or betting edges.
 Walk-forward predictions use exclusively earlier games for the same player.
 2024 calibrates a simple shrinkage adjustment; 2025 is untouched holdout.
-PBP participant rows can omit players who recorded zero relevant opportunities;
-this CONDITIONAL-on-participation study cannot certify live prop probabilities.
+Weekly nflverse player-stat rows include recorded zero-market games for players
+who appear elsewhere in the box score. This still does not establish all active
+players, snap participation, pregame availability, or bookmaker eligibility.
 """
 import json
 import math
-from collections import defaultdict
 from pathlib import Path
 
 import nflreadpy
@@ -18,10 +18,10 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 SEASONS = (2024, 2025)
 MARKETS = {
-    "passing_yards": ("passer_player_id", "pass_attempt", "passing_yards", [149.5, 199.5, 249.5, 299.5]),
-    "rushing_yards": ("rusher_player_id", "rush_attempt", "rushing_yards", [24.5, 49.5, 74.5, 99.5]),
-    "receiving_yards": ("receiver_player_id", "pass_attempt", "receiving_yards", [24.5, 49.5, 74.5, 99.5]),
-    "receptions": ("receiver_player_id", "pass_attempt", "complete_pass", [1.5, 2.5, 3.5, 4.5, 5.5]),
+    "passing_yards": ("passing_yards", ("QB",), [149.5, 199.5, 249.5, 299.5]),
+    "rushing_yards": ("rushing_yards", ("RB", "QB"), [24.5, 49.5, 74.5, 99.5]),
+    "receiving_yards": ("receiving_yards", ("WR", "TE", "RB"), [24.5, 49.5, 74.5, 99.5]),
+    "receptions": ("receptions", ("WR", "TE", "RB"), [1.5, 2.5, 3.5, 4.5, 5.5]),
 }
 MIN_HISTORY = 5
 
@@ -35,32 +35,34 @@ def logloss(rows, key):
     return sum(-(r["hit"] * math.log(max(1e-6, r[key])) +
                  (1 - r["hit"]) * math.log(max(1e-6, 1 - r[key]))) for r in rows) / len(rows) if rows else None
 
-def observations(pbp):
+def observations(weekly):
+    """Build eligible market histories from game-level player box-score rows.
+
+    A zero market statistic is included when the player has a box-score row.
+    This improves on play-level participant filtering but cannot guarantee
+    that an active player with zero offensive usage appears in the stats.
+    """
+    required = {"player_id", "position", "season", "week", "game_id", "season_type"}
+    for stat, _, _ in MARKETS.values():
+        required.add(stat)
+    missing = required - set(weekly.columns)
+    if missing:
+        raise RuntimeError(f"Weekly player-stat columns missing: {sorted(missing)}")
+    weekly = weekly.loc[weekly["season_type"].astype(str).eq("REG")].copy()
+    weekly = weekly.loc[weekly["player_id"].notna() & weekly["game_id"].notna()]
+    keys = ["season", "player_id", "position", "week", "game_id"]
     output = []
-    for market, (pid, flag, stat, thresholds) in MARKETS.items():
-        needed = {pid, flag, stat, "week", "game_id", "season"}
-        if not needed.issubset(pbp.columns):
-            raise RuntimeError(f"Missing columns for {market}: {sorted(needed - set(pbp.columns))}")
-        mask = pd.to_numeric(pbp[flag], errors="coerce").eq(1) & pbp[pid].notna()
-        # PBP flags may include passing attempts for targeted/incomplete receptions;
-        # only the receiver is counted, and a completion produces a catch of 1.
-        subset = pbp.loc[mask, [pid, stat, "season", "week", "game_id"]].copy()
-        subset["value"] = pd.to_numeric(subset[stat], errors="coerce").fillna(0)
-        if market == "receptions":
-            subset["value"] = subset["value"].clip(0, 1)
-        games = (subset.groupby(["season", pid, "week", "game_id"], as_index=False)["value"]
-                 .sum().sort_values(["season", pid, "week", "game_id"]))
-        # No games without market involvement are added here. This is a limitation,
-        # not a claim that zero-stat player games were observed.
-        for (_, player), g in games.groupby(["season", pid], sort=False):
-            vals = g["value"].astype(float).tolist()
+    for market, (stat, positions, thresholds) in MARKETS.items():
+        subset = weekly.loc[weekly["position"].isin(positions), keys + [stat]].copy()
+        subset[stat] = pd.to_numeric(subset[stat], errors="coerce").fillna(0).clip(lower=0)
+        games = (subset.groupby(keys, as_index=False)[stat].sum()
+                 .sort_values(["season", "player_id", "week", "game_id"]))
+        for (_, player), g in games.groupby(["season", "player_id"], sort=False):
+            vals = g[stat].astype(float).tolist()
             weeks = g["week"].tolist()
             for i in range(MIN_HISTORY, len(vals)):
                 prior = vals[:i]
                 recent = prior[-5:]
-                # Laplace smoothing prevents impossible 0% and 100% claims.
-                # Baseline is empirical season-to-date; challenger weights recent
-                # five appearances. The shrinkage is learned only from 2024.
                 for threshold in thresholds:
                     historical_hits = sum(v > threshold for v in prior)
                     recent_hits = sum(v > threshold for v in recent)
@@ -102,12 +104,10 @@ def evaluate(rows, weight):
 def main():
     all_rows = []
     for season in SEASONS:
-        pbp = frame(nflreadpy.load_pbp(seasons=[season]))
-        pbp = pbp.loc[(pd.to_numeric(pbp["season"], errors="coerce") == season) &
-                      (pbp["season_type"].astype(str) == "REG")].copy()
-        if "no_play" in pbp:
-            pbp = pbp.loc[pd.to_numeric(pbp["no_play"], errors="coerce").fillna(0).eq(0)]
-        all_rows.extend(observations(pbp))
+        weekly = frame(nflreadpy.load_player_stats(seasons=[season], summary_level="week"))
+        if weekly.empty:
+            raise RuntimeError(f"No weekly player stats available for {season}")
+        all_rows.extend(observations(weekly))
     train = [r for r in all_rows if r["season"] == 2024]
     holdout = [r for r in all_rows if r["season"] == 2025]
     if len(train) < 500 or len(holdout) < 500:
@@ -125,11 +125,11 @@ def main():
     output = {
         "status": "RESEARCH_ONLY_NOT_BET_READY", "seasons": {"train": 2024, "holdout": 2025},
         "threshold_type": "fixed hypothetical thresholds, not sportsbook lines",
-        "selection_bias": "Only players with recorded market involvement in PBP; zero-opportunity player-games may be missing.",
-        "method": "Walk-forward per-player prior-game hit frequencies; blend weight chosen only on 2024, evaluated on 2025.",
+        "selection_bias": "Weekly box-score rows include many zero-market games, but completely absent active players and full snap eligibility are not proven.",
+        "method": "Weekly nflverse player box scores, walk-forward per-player prior-game hit frequencies; blend weight chosen only on 2024, evaluated on 2025.",
         "limitations": ["Does not evaluate the live app's probability model", "No opponent adjustment",
                          "No injury-as-of verification", "No sportsbook pricing or SGP correlations",
-                         "Not representative of every rostered player-game"],
+                         "Not representative of every rostered player-game; weekly box-score appearance is not a pregame availability signal"],
         "bet_ready": False, "markets": by_market,
     }
     path = ROOT / "data/player_prop_probability_backtest.json"
