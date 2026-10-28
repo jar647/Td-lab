@@ -17,10 +17,11 @@ from opportunity_prop_model import opportunity_probability
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data"
 SNAPSHOTS = DATA / "forward" / "prop_snapshots"
-VERSION = "opportunity-2024-trained-blend-v1"
+VERSION = "opportunity-2024-trained-eligible-fullseason-v2"
 # Training-only 2024 blend weights from player_prop_probability_backtest.py.
 # Frozen here before prospective evaluations; never tune on future test weeks.
 OPPORTUNITY_WEIGHTS = {"PASS": 0.25, "RUSH": 0.75, "REC": 0.75, "CATCH": 0.5}
+MIN_OPPORTUNITIES = {"PASS": 20, "RUSH": 5, "REC": 3, "CATCH": 3}
 MARKETS = {
     "PASS": ("passYards", "passAttempts", "QB", (149.5, 199.5, 249.5, 299.5)),
     "RUSH": ("rushYards", "rushAttempts", "RB,QB", (24.5, 49.5, 74.5, 99.5)),
@@ -37,7 +38,7 @@ def pregame_rows(players):
         if not player.get("player_id") or not player.get("playerAppearancesVerified"):
             continue
         pos = str(player.get("pos", ""))
-        history = player.get("last5GameStats") or []
+        history = player.get("seasonGameStats") or []
         if not isinstance(history, list) or len(history) < 5:
             continue
         for market, (stat, volume, positions, lines) in MARKETS.items():
@@ -50,6 +51,9 @@ def pregame_rows(players):
                 usage = [float(g[volume]) for g in history]
                 # Unknown / negative inputs cannot be treated as valid zeroes.
                 if any(not 0 <= x < 10000 for x in values+usage):
+                    continue
+                average_volume=sum(usage)/len(usage)
+                if average_volume < MIN_OPPORTUNITIES[market]:
                     continue
                 for threshold in lines:
                     candidate = opportunity_probability(values, usage, threshold)
@@ -65,6 +69,7 @@ def pregame_rows(players):
                         "baseline_probability": round(baseline, 8),
                         "opportunity_weight_2024": weight,
                         "sample_games": len(values),
+                        "pregame_average_opportunities": round(average_volume, 4),
                         "availability_at_capture": str(player.get("availability", "UNVERIFIED")),
                         "injury_report_at_capture": str(player.get("injuryReportStatus", "NOT_REPORTED")),
                         "practice_at_capture": str(player.get("injuryPracticeStatus", "NOT_REPORTED")),
@@ -96,6 +101,7 @@ def freeze_fixture(fixture, players, captured_at, output_dir=SNAPSHOTS):
         "captured_at_utc": created.isoformat(),
         "conservative_game_day_cutoff_utc": kickoff_day.isoformat(),
         "threshold_policy": "Illustrative fixed half-point thresholds, NOT sportsbook lines",
+        "selection_policy": "Five or more previously played games; market-specific minimum prior volume; full season-to-date game history only",
         "participation_policy": "Pregame roster availability is unverified; postgame snaps NEVER used at capture",
         "predictions": rows,
     }
