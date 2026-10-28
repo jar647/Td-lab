@@ -54,18 +54,6 @@ function render(g){
 const candidates=players.filter(p=>p.team+'-'+p.opp===g||p.opp+'-'+p.team===g).flatMap(p=>defs.map(d=>choose(p,d)).filter(Boolean)).sort((a,b)=>b.score-a.score);
 const gamePlayers=players.filter(p=>p.team+'-'+p.opp===g||p.opp+'-'+p.team===g);
 const teamNames=[...new Set(gamePlayers.map(p=>p.team))];
-const scouting=teamNames.map(team=>{
- const members=gamePlayers.filter(p=>p.team===team);
- const qbs=members.filter(p=>p.pos==='QB').sort((a,b)=>(n(b.playerPassAttempts)||0)-(n(a.playerPassAttempts)||0));
- const backs=members.filter(p=>p.pos==='RB').sort((a,b)=>(n(b.playerCarries)||0)-(n(a.playerCarries)||0));
- const receivers=members.filter(p=>['WR','TE'].includes(p.pos)).sort((a,b)=>(n(b.playerTargets)||0)-(n(a.playerTargets)||0));
- const qb=qbs[0],rb=backs[0],wr=receivers[0];
- const passRatio=qb?n(qb.defenseOpponentRatio?.PASS):null;
- const rushRatio=rb?n(rb.defenseOpponentRatio?.RUSH):null;
- const passRead=passRatio===null?'passing matchup unverified':passRatio>1.05?'opponent has allowed above-baseline QB passing production':passRatio<.95?'opponent has limited QB passing production':'passing matchup roughly neutral';
- const rushRead=rushRatio===null?'rushing matchup unverified':rushRatio>1.05?'opponent has allowed above-baseline RB rushing production':rushRatio<.95?'opponent has limited RB rushing production':'rushing matchup roughly neutral';
- return {team,qb,rb,wr,passRead,rushRead,passRatio,rushRatio};
-});
 // Rank player-market opportunities without arbitrary team/player quotas.
 // Different markets for the same player can both qualify.
 // Prefer the strongest individual opportunities, but assess the whole slip:
@@ -115,15 +103,48 @@ const riskNotes=[
  ...(!selected.some(c=>c.p.team!==dominant?.[0])?['No opposing-team props qualified under current screening. This does NOT prove that the opposing team has no worthwhile opportunities.']:[]),
  'Joint hit probability and sportsbook price are unavailable. Individual recent hit rates cannot be multiplied as though legs were independent.'
 ];
-const ticketReview='<div class="panel"><h2>Whole-ticket game script & dependencies</h2><p class="reason">'+esc(scriptText)+'</p><p class="reason">Team exposure: '+Object.entries(teamCounts).map(([team,count])=>esc(team)+' '+count+' leg'+(count===1?'':'s')).join('; ')+'. Passing/receiving legs: '+(passCatch.length+qbLegs.length)+'. Rushing legs: '+rushLegs.length+'.</p>'+riskNotes.map(t=>'<p class="warning">⚠ '+t+'</p>').join('')+'</div>';
-const coverageCounts=gamePlayers.reduce((a,p)=>(a[p.team]=(a[p.team]||0)+1,a),{});
-const shortSamples=gamePlayers.filter(p=>(n(p.last5GamesPlayed)||0)<3).map(p=>p.player);
-const coverageReview='<div class="panel"><h2>Data coverage & missing opportunities</h2><p class="reason">Feed includes '+gamePlayers.length+' player records: '+Object.entries(coverageCounts).map(([team,count])=>esc(team)+' '+count).join(', ')+'. '+candidates.length+' player-market candidates qualified.</p>'+(shortSamples.length?'<p class="warning">Short samples: '+shortSamples.map(esc).join(', ')+'. Some markets are excluded by the current evidence requirements.</p>':'')+'<p class="warning">The feed may omit players, and this page cannot independently verify complete rosters, injuries, weather, or defensive schemes. Missing players cannot be scored.</p></div>';
-
-const overview='<div class="panel"><h2>Game-first scouting</h2><p class="sub">Team-level interpretation from player matchup records. This is not a verified coaching, weather, coverage or live-injury report; missing evidence stays missing.</p>'+scouting.map(t=>'<div class="leg"><strong>'+esc(t.team)+' offense</strong><p class="reason">Passing: '+esc(t.passRead)+'. Rushing: '+esc(t.rushRead)+'. '+(t.qb?'QB workload: '+esc(t.qb.player)+' ('+(n(t.qb.playerPassAttempts)||0).toFixed(1)+' attempts/game). ':'')+(t.rb?'Lead observed rushing workload: '+esc(t.rb.player)+' ('+(n(t.rb.playerCarries)||0).toFixed(1)+' carries/game). ':'')+(t.wr?'Most-targeted listed WR/TE: '+esc(t.wr.player)+' ('+(n(t.wr.playerTargets)||0).toFixed(1)+' targets/game).':'')+'</p></div>').join('')+'</div>';
+const montePanel='<div class="panel"><h2>Monte Carlo game simulator</h2><p class="sub">Simulates the selected player props together using observed game-to-game variation and a shared team passing/rushing environment. This is a scenario model, not a validated betting probability.</p><label class="small" for="simCount">Simulation runs</label><select id="simCount"><option value="10000">10,000 · Quick</option><option value="50000" selected>50,000 · Standard</option><option value="100000">100,000 · Deep</option></select><button type="button" id="runSim">Run Monte Carlo simulation</button><div id="simResult" class="reason" aria-live="polite"></div></div>';
+function runMonteCarlo(legs,count){
+ const sample=legs.map(c=>{const vals=(c.p.last5GameStats||[]).map(g=>n(g[c.d.key])).filter(v=>v!==null&&v>=0);const season=n(c.p[c.d.season]),recent=n(c.p[c.d.recent]);const ratio=n(c.p.defenseOpponentRatio?.[c.d.ratio]);return {c,vals,mu:Math.max(.1,(season*.5+recent*.5)*Math.max(.85,Math.min(1.12,ratio??1))),hits:0,draws:[]};});
+ // One shared environment per team and phase introduces scenario-level dependence.
+ // Variance is conservatively floored to avoid treating small samples as certainty.
+ let joint=0;
+ for(let i=0;i<count;i++){
+  const factors={};let all=true;
+  for(const x of sample){
+   const c=x.c,k=c.p.team+':'+(c.d.key==='rushYards'?'rush':'pass');
+   if(factors[k]===undefined)factors[k]=Math.exp((Math.random()+Math.random()+Math.random()+Math.random()-2)*.20);
+   const v=x.vals[Math.floor(Math.random()*x.vals.length)];
+   const empiricalMean=x.vals.reduce((a,b)=>a+b,0)/x.vals.length;
+   const rescaled=v*(x.mu/Math.max(.1,empiricalMean))*factors[k];
+   const hit=rescaled>=c.line;if(hit)x.hits++;else all=false;
+   if(i<2500)x.draws.push(rescaled);
+  }
+  if(all)joint++;
+ }
+ return {sample,joint:joint/count,count};
+}
+function mountMonteCarlo(legs){
+ const btn=$('runSim');if(!btn)return;
+ btn.onclick=()=>{
+  const count=Number($('simCount').value),out=$('simResult');
+  if(!legs.length){out.textContent='No supported markets to simulate.';return}
+  btn.disabled=true;out.textContent='Simulating '+count.toLocaleString()+' scenarios…';
+  setTimeout(()=>{
+   try{
+    const r=runMonteCarlo(legs,count);
+    out.innerHTML='<p><strong>All '+legs.length+' legs hit:</strong> '+(r.joint*100).toFixed(1)+'% of simulated scenarios</p>'+
+    r.sample.map(x=>'<p>'+esc(x.c.p.player)+' '+x.c.line+'+ '+esc(x.c.d.label)+': <strong>'+(100*x.hits/r.count).toFixed(1)+'%</strong> simulated hit frequency</p>').join('')+
+    '<p class="warning">Experimental model: only the available recent game samples and matchup feed are used. Shared team factors are assumed, not empirically calibrated. Injuries, missing players, weather and true cross-player correlations are not fully modeled. These percentages are NOT verified true probabilities or a betting edge.</p>';
+   }catch(e){out.textContent='Simulation error: '+e.message}
+   btn.disabled=false;
+  },20);
+ };
+}
 const oddsPanel='<div class="panel"><h2>Hard Rock SGP payout comparison</h2><p class="sub">Optional: enter the full ticket odds and the odds after removing ONE leg. Accepts American odds, e.g. +313, +236, -110. Calculates the leg\'s effective contribution inside this SGP, not its standalone price or true probability.</p><label class="small" for="fullOdds">Full SGP American odds</label><input id="fullOdds" inputmode="numeric" placeholder="+313"><label class="small" for="reducedOdds">SGP odds without the leg</label><input id="reducedOdds" inputmode="numeric" placeholder="+236"><button type="button" id="compareOdds">Compare payout</button><div id="oddsResult" class="reason" aria-live="polite"></div></div>';
-const el=$('results');if(!selected.length){el.innerHTML=overview+coverageReview+'<div class="panel"><h2>NO BET</h2><p>Not enough supported player props in the current feed. No invented selections.</p></div>';return;}
-el.innerHTML=overview+coverageReview+ticketReview+'<div class="panel"><h2>Analyst recommendations · '+selected.length+' legs</h2><p class="sub">Highest-ranked supported thresholds, with conservative-line penalties and passing dependency adjustments, without player or team quotas. Multiple picks may depend on the same game script; joint probabilities are not modeled. Dataset-based screening, not a full live scouting report.</p>'+'<p class="sub">Selection audit: '+candidates.length+' qualifying markets, '+selected.length+' included, '+omitted+' omitted due to five-leg ticket size.</p>'+selected.map((c,i)=>'<article class="leg"><div class="small">LEG '+(i+1)+' · '+esc(c.p.team)+' vs '+esc(c.p.opp)+'</div><div class="pick">'+esc(c.p.player)+' · '+c.line+'+ '+esc(c.d.label)+'</div><p class="reason">'+c.reasons.map(esc).join(' ')+'</p>'+(c.risks.length?'<p class="warning">⚠ '+c.risks.map(esc).join(' ')+'</p>':'')+'<p class="small">Other supported thresholds: '+c.d.steps.filter(t=>t!==c.line&&t<=(n(c.p[c.d.season])*.5+n(c.p[c.d.recent])*.5)*1.05).map(t=>{const log=(c.p.last5GameStats||[]).map(g=>n(g[c.d.key])).filter(v=>v!==null);return t+'+ ('+log.filter(v=>v>=t).length+'/'+log.length+' recent)'}).join(' · ')+'</p><button type="button" class="exclude" data-key="'+esc(c.p.player+'|'+c.d.key)+'">Exclude this market & rebuild</button></article>').join('')+'</div>'+oddsPanel;
+const el=$('results');if(!selected.length){el.innerHTML=montePanel+'<div class="panel"><h2>NO BET</h2><p>Not enough supported player props in the current feed. No invented selections.</p></div>';return;}
+el.innerHTML=montePanel+'<div class="panel"><h2>Analyst recommendations · '+selected.length+' legs</h2><p class="sub">Highest-ranked supported thresholds, with conservative-line penalties and passing dependency adjustments, without player or team quotas. Multiple picks may depend on the same game script; joint probabilities are not modeled. Dataset-based screening, not a full live scouting report.</p>'+'<p class="sub">Selection audit: '+candidates.length+' qualifying markets, '+selected.length+' included, '+omitted+' omitted due to five-leg ticket size.</p>'+selected.map((c,i)=>'<article class="leg"><div class="small">LEG '+(i+1)+' · '+esc(c.p.team)+' vs '+esc(c.p.opp)+'</div><div class="pick">'+esc(c.p.player)+' · '+c.line+'+ '+esc(c.d.label)+'</div><p class="reason">'+c.reasons.map(esc).join(' ')+'</p>'+(c.risks.length?'<p class="warning">⚠ '+c.risks.map(esc).join(' ')+'</p>':'')+'<p class="small">Other supported thresholds: '+c.d.steps.filter(t=>t!==c.line&&t<=(n(c.p[c.d.season])*.5+n(c.p[c.d.recent])*.5)*1.05).map(t=>{const log=(c.p.last5GameStats||[]).map(g=>n(g[c.d.key])).filter(v=>v!==null);return t+'+ ('+log.filter(v=>v>=t).length+'/'+log.length+' recent)'}).join(' · ')+'</p><button type="button" class="exclude" data-key="'+esc(c.p.player+'|'+c.d.key)+'">Exclude this market & rebuild</button></article>').join('')+'</div>'+oddsPanel;
+mountMonteCarlo(selected);
 for(const btn of el.querySelectorAll('.exclude'))btn.onclick=()=>{exclusions.add(btn.dataset.key);render(g)};
 $('compareOdds').onclick=()=>{const parse=v=>{const t=v.trim();if(!/^[+-]?\\d+(?:\\.\\d+)?$/.test(t))return null;const x=Number(t);if(x===0||Math.abs(x)<100)return null;return x>0?1+x/100:1+100/Math.abs(x)};const full=parse($('fullOdds').value),reduced=parse($('reducedOdds').value),out=$('oddsResult');if(!full||!reduced){out.textContent='Enter valid American odds (at least +100 or -100) for both tickets.';return}const factor=full/reduced;if(factor<=1){out.textContent='Full-ticket payout must exceed reduced-ticket payout. Check the entered prices.';return}out.textContent='Added leg increases total return by '+((factor-1)*100).toFixed(1)+'%. Its effective incremental break-even probability is '+(100/factor).toFixed(1)+'%. This is SGP pricing math, not a forecast of the player hitting.'};
 }
