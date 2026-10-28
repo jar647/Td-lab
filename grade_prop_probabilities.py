@@ -83,7 +83,9 @@ def evaluate(snapshots, schedules, appearances):
             })
     # Duplicate forecasts must not artificially increase sample size.
     keys = [(r["game_id"], r["player_id"], r["market"], r["threshold"]) for r in graded]
-    if len(keys) != len(set(ke    # Never pool different frozen model versions and call the result a new
+    if len(keys) != len(set(keys)):
+        raise RuntimeError("Duplicate frozen forecasts for a player-game market threshold")
+    # Never pool different frozen model versions and call the result a new
     # independent validation set. Legacy exploratory snapshots remain auditable.
     current_version = "opportunity-2024-trained-eligible-fullseason-v2"
     by_version = {}
