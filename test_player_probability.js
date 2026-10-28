@@ -83,6 +83,8 @@ for(const file of ['index.html','nba.html']){
 const nflHome=fs.readFileSync('index.html','utf8');
 assert.ok(nflHome.includes('src="./nfl_game_engine.js"'),'NFL player cards must load the matchup simulation engine');
 assert.ok(nflHome.includes('function loadNFLPlayerScenarios(details)'),'NFL players must expose on-demand game-first scenario percentages');
+assert.ok(nflHome.includes("el.querySelectorAll('.pv-scenario-details').forEach(details=>details.addEventListener('toggle'"),'NFL scenario dropdowns must bind to the renderer-scoped loader');
+assert.ok(!nflHome.includes('ontoggle="loadNFLPlayerScenarios'),'NFL dropdowns must not call a non-global handler from inline markup');
 assert.ok(nflHome.includes('10,000 complete-game simulations'),'NFL scenario estimates must disclose the simulation count');
 assert.ok(nflHome.includes('UN CALIBRATED')||nflHome.includes('UNCALIBRATED'),'NFL scenario estimates must be labeled uncalibrated');
 assert.ok(!nflHome.includes('Over odds · American'),'NFL player cards must not ask for Over odds');
