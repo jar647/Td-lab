@@ -5,6 +5,10 @@ on:
     branches: [main]
     paths:
       - 'build_feed.py'
+      - 'capture_prop_probabilities.py'
+      - 'grade_prop_probabilities.py'
+      - 'historical_participation.py'
+      - 'opportunity_prop_model.py'
       - 'game_picks.py'
       - 'scripts/calibrate_td.py'
       - 'scripts/grade_forward_bets.py'
@@ -42,6 +46,10 @@ jobs:
         run: python build_feed.py
       - name: Build game-picks research slate
         run: python game_picks.py
+      - name: Freeze pregame player prop probabilities for future validation
+        run: python capture_prop_probabilities.py
+      - name: Grade only completed snap-verified frozen player prop forecasts
+        run: python grade_prop_probabilities.py
       - name: Reconcile every player and defensive stat before publishing
         run: python scripts/audit_feed_totals.py
       - name: Audit frozen pregame history
@@ -57,7 +65,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/game_picks.json data/matchups.json data/defense_stats_audit.json data/feed_audit.json data/status.json data/history/ data/probability_model.json data/history_audit.json data/forward/performance.json data/verification_status.json
+          git add data/game_picks.json data/matchups.json data/defense_stats_audit.json data/feed_audit.json data/status.json data/history/ data/probability_model.json data/history_audit.json data/forward/performance.json data/verification_status.json data/forward/prop_snapshots/ data/forward/prop_probability_performance.json
           if ! git diff --cached --quiet; then
             git commit -m "Update verified NFL matchup feed"
             # A developer commit can land while the feed is building.
