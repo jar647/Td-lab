@@ -4,6 +4,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const vm=require('node:vm');
 const engine=require('./nfl_game_engine.js');
+const goal1=require('./nfl_goal1.js');
 const html=fs.readFileSync('analyst.html','utf8');
 assert(html.includes('src="./nfl_game_engine.js"'),'analyst must load simulator engine');
 assert(html.includes('nfl_game_worker.js'),'analyst must execute off-thread');
@@ -52,10 +53,11 @@ class FakeWorker{
  terminate(){}
 }
 function response(obj){return {ok:true,async json(){return obj}}}
-const context={document:{getElementById:el},Worker:FakeWorker,
+const context={document:{getElementById:el},Worker:FakeWorker,PropVaultGoal1:goal1,
  setTimeout,Date,console,fetch:async url=>{
   if(url.includes('matchups'))return response(players);
   if(url.includes('forward'))return response({graded:0,distinct_graded_weeks:0});
+  if(url.includes('game_picks.json'))return response({games:[{home:'A',away:'B',projected_home_points:25,projected_away_points:21}]});
   return response({generated_at:new Date().toISOString(),availability_diagnostics:{injuries:{matched_ids:0}}});
  }};
 vm.createContext(context);
@@ -67,6 +69,21 @@ vm.runInContext(inline[0],context);
  assert(!el('results').innerHTML.includes('Simulation unavailable'),'simulator should initialize');
  assert(el('results').innerHTML.includes('Game-first Monte Carlo'),'game analysis panel expected, received: '+el('results').innerHTML.slice(0,1000));
  assert(el('results').innerHTML.includes('Game-first research candidates'),'fixture should yield at least one matchup-driven research candidate, received: '+el('results').innerHTML.slice(0,1100));
+ assert(el('results').innerHTML.includes('Top 3 player recommendations'));
+ assert(el('results').innerHTML.includes('Best single bet for this game'));
+ assert(el('results').innerHTML.includes('bestOdds'));
+ assert(el('results').innerHTML.includes('Projected game script'));
+ assert(el('results').innerHTML.includes('4-leg SGP draft'));
+ el('legCount').value='3';await el('legCount').onchange();
+ assert(el('results').innerHTML.includes('3-leg SGP draft'));
+ el('marketType').value='ATS';el('marketSide').value='AWAY';el('marketLine').value='+3.5';el('marketOdds').value='-110';
+ await el('applyGameMarket').onclick();
+ assert(el('results').innerHTML.includes('B spread +3.5'));
+ assert(el('results').innerHTML.includes('3-leg SGP draft'));
+ assert(el('results').innerHTML.includes('not an engine recommendation'));
+ el('marketType').value='NONE';await el('applyGameMarket').onclick();
+ assert(!el('results').innerHTML.includes('Included: B spread'));
+ assert(el('results').innerHTML.includes('3-leg SGP draft'));
  await new Promise(resolve=>setTimeout(resolve,35));
  assert(el('simResult').innerHTML.includes('Simulated'),'joint simulation results expected');
  el('fullOdds').value='+313';

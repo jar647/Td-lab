@@ -4,6 +4,9 @@ on:
     paths:
       - 'analyst.html'
       - 'nfl_game_engine.js'
+      - 'nfl_goal1.js'
+      - 'test_nfl_goal1.js'
+      - 'test_nfl_real_matchup.js'
       - 'nfl_game_worker.js'
       - 'test_analyst_ui.js'
       - 'test_nfl_analyst_ui.js'
@@ -23,4 +26,6 @@ jobs:
       - run: node --check test_analyst_ui.js
       - run: node test_analyst_ui.js
       - run: node test_nfl_game_engine.js
+      - run: node test_nfl_goal1.js
       - run: node test_nfl_analyst_ui.js
+      - run: node test_nfl_real_matchup.js
