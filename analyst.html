@@ -160,12 +160,39 @@ function mountMonteCarlo(legs,gamePlayers,initial){
  };
  if(legs.length)btn.click();
 }
-const oddsPanel='<div class="panel"><h2>Hard Rock SGP payout comparison</h2><p class="sub">Optional: enter the full ticket odds and the odds after removing ONE leg. Accepts American odds, e.g. +313, +236, -110. Calculates the leg\'s effective contribution inside this SGP, not its standalone price or true probability.</p><label class="small" for="fullOdds">Full SGP American odds</label><input id="fullOdds" inputmode="numeric" placeholder="+313"><label class="small" for="reducedOdds">SGP odds without the leg</label><input id="reducedOdds" inputmode="numeric" placeholder="+236"><button type="button" id="compareOdds">Compare payout</button><div id="oddsResult" class="reason" aria-live="polite"></div></div>';
+const oddsPanel='<div class="panel"><h2>Hard Rock SGP price check</h2><p class="sub">Enter the actual offered price for the complete SGP. Optionally enter the price without one leg. The app will calculate the implied break-even, compare it with the research-only scenario rate, and identify any missing verification gates. No price is invented.</p><label class="small" for="fullOdds">Full SGP American odds</label><input id="fullOdds" inputmode="text" placeholder="+313"><label class="small" for="reducedOdds">SGP without one leg · optional</label><input id="reducedOdds" inputmode="text" placeholder="+236"><button type="button" id="compareOdds">Analyze quoted odds</button><div id="oddsResult" class="reason" aria-live="polite"></div></div>';
 const el=$('results');if(!selected.length){el.innerHTML=montePanel+'<div class="panel"><h2>NO BET</h2><p>Not enough supported player props in the current feed. No invented selections.</p></div>';mountMonteCarlo([],gamePlayers,sim);return;}
 el.innerHTML=montePanel+'<div class="panel"><h2>Game-first research candidates · '+selected.length+' legs</h2><p class="sub">Candidates selected from joint game scenarios and historical workloads, not sportsbook-approved picks. Correlated joint scenario hit rates are modeled but not calibrated. Verify injuries, availability and prices; default is NO BET.</p>'+'<p class="sub">Selection audit: '+candidates.length+' qualifying markets, '+selected.length+' included, '+omitted+' omitted due to five-leg ticket size.</p>'+selected.map((c,i)=>'<article class="leg"><div class="small">LEG '+(i+1)+' · '+esc(c.p.team)+' vs '+esc(c.p.opp)+'</div><div class="pick">'+esc(c.p.player)+' · '+c.line+'+ '+esc(c.d.label)+'</div><p class="reason">'+c.reasons.map(esc).join(' ')+'</p>'+(c.risks.length?'<p class="warning">⚠ '+c.risks.map(esc).join(' ')+'</p>':'')+'<p class="small">Other supported thresholds: '+c.d.steps.filter(t=>t!==c.line&&t<=(n(c.p[c.d.season])*.5+n(c.p[c.d.recent])*.5)*1.05).map(t=>{const log=(c.p.last5GameStats||[]).map(g=>n(g[c.d.key])).filter(v=>v!==null);return t+'+ ('+log.filter(v=>v>=t).length+'/'+log.length+' recent)'}).join(' · ')+'</p><button type="button" class="exclude" data-key="'+esc(c.p.player+'|'+c.d.key)+'">Exclude this market & rebuild</button></article>').join('')+'</div>'+oddsPanel;
 mountMonteCarlo(selected,gamePlayers,sim);
 for(const btn of el.querySelectorAll('.exclude'))btn.onclick=()=>{exclusions.add(btn.dataset.key);render(g,sim)};
-$('compareOdds').onclick=()=>{const parse=v=>{const t=v.trim();if(!/^[+-]?\\d+(?:\\.\\d+)?$/.test(t))return null;const x=Number(t);if(x===0||Math.abs(x)<100)return null;return x>0?1+x/100:1+100/Math.abs(x)};const full=parse($('fullOdds').value),reduced=parse($('reducedOdds').value),out=$('oddsResult');if(!full||!reduced){out.textContent='Enter valid American odds (at least +100 or -100) for both tickets.';return}const factor=full/reduced;if(factor<=1){out.textContent='Full-ticket payout must exceed reduced-ticket payout. Check the entered prices.';return}out.textContent='Added leg increases total return by '+((factor-1)*100).toFixed(1)+'%. Its effective incremental break-even probability is '+(100/factor).toFixed(1)+'%. This is SGP pricing math, not a forecast of the player hitting.'};
+$('compareOdds').onclick=()=>{
+ const parse=value=>{
+  const t=String(value||'').trim();
+  if(!/^[+-]?\d+(?:\.\d+)?$/.test(t))return null;
+  const num=Number(t);
+  if(!Number.isFinite(num)||num===0||Math.abs(num)<100)return null;
+  return num>0?1+num/100:1+100/Math.abs(num);
+ };
+ const out=$('oddsResult');
+ const full=parse($('fullOdds').value);
+ if(!full){out.textContent='Enter the actual full ticket American odds, for example +313 or -110.';return}
+ const rawReduced=$('reducedOdds').value.trim();
+ const reduced=rawReduced?parse(rawReduced):null;
+ if(rawReduced&&!reduced){out.textContent='The optional reduced-ticket price must be valid American odds.';return}
+ if(reduced&&full<=reduced){out.textContent='The full ticket should have higher decimal payout than the ticket without a leg. Recheck the prices.';return}
+ const implied=100/full;
+ const scenario=currentJoint?.scenarioRate;
+ const gates=validationGate?.gates||{};
+ const verified=validationGate?.bet_recommendations_enabled===true&&Object.keys(gates).length>0&&Object.values(gates).every(Boolean);
+ const missing=Object.entries(gates).filter(([key,passed])=>!passed).map(([key])=>key.replace(/_/g,' '));
+ let message='Quoted full SGP break-even: '+implied.toFixed(1)+'%. ';
+ if(reduced)message+='Removing one leg changes payout by '+((full/reduced-1)*100).toFixed(1)+'%; incremental leg break-even: '+(100*reduced/full).toFixed(1)+'%. ';
+ message+=scenario===undefined?'Run the game simulation to see joint scenario frequency. ':
+  'Correlated game scenario frequency: '+(100*scenario).toFixed(1)+'% (UNCALIBRATED, not a proven hit probability). ';
+ message+=verified?'Official verification status reports ready. Recheck current lines and active rosters before any final decision.':
+  'NO BET: '+(missing.length?'unverified '+missing.join(', '):'required validation is unavailable')+'. Price differences do not establish a betting edge.';
+ out.textContent=message;
+};
 }
 async function init(){
  try{
