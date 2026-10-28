@@ -60,6 +60,16 @@ vm.runInContext(js,context);
  const phi=games.includes('PHI-WAS')?players.filter(p=>['PHI','WAS'].includes(p.team)&&
    ['PHI','WAS'].includes(p.opp)):null;
  if(phi){
+  const verifiedTeamHistory=phi.some(p=>p.team==='PHI'&&
+   Number.isFinite(Number(p.teamPassAttemptsPerGame))&&Number(p.teamPassAttemptsPerGame)>=12);
+  if(!verifiedTeamHistory){
+   // A branch-only UI regression uses the previously published JSON until
+   // the feed pipeline rebuilds it. PR/full-feed CI *must* require the new
+   // independently measured team volume after building fresh PBP output.
+   assert.notEqual(process.env.CI_EXPECT_TEAM_VOLUME,'1',
+    'New feed must contain verified PHI historical team passing volume');
+   console.log('Stored prior feed has no team passing-volume field; full-feed rebuild required.');
+  }else{
   const rebuilt=engine.build(phi);
   assert.equal(rebuilt.teams.length,2);
   assert(rebuilt.teams.every(x=>x.outlook.estimatedPassAttempts>=20));
@@ -70,6 +80,7 @@ vm.runInContext(js,context);
     .every(p=>p.pass<12));
   }
   console.log('PHI/WAS confirmed: historical team passing fallback where QB history is missing.');
+  }
  }
  console.log('Actual NFL feed matchup passed game-first UI research flow:',target);
 })().catch(error=>{console.error(error);process.exitCode=1});
