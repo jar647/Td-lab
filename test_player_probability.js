@@ -105,7 +105,7 @@ addDefense('D','C',{passYards:210,passTDs:1,passAttempts:33,rush:[5,105,4,2],att
 const matchupContext={autoRecords:breakdownRows,gameKey:r=>[r.team,r.opp].sort().join('|'),escapeHTML:s=>String(s??''),document:{getElementById:id=>id==='nflGameMatchupBreakdown'?breakdownView:id==='gameFilter'?{value:'A|B'}:null}};
 vm.runInNewContext(breakdown+';renderNFLGameMatchupBreakdown()',matchupContext);
 assert.match(breakdownView.innerHTML,/A defense vs B offense/);
-assert.match(breakdownView.innerHTML,/Based on 6 completed team games/);
+assert.match(breakdownView.innerHTML,/Season: 6 completed team games; rates use up to 5 recent games/);
 assert.match(breakdownView.innerHTML,/Rushing yards: 115\.0 allowed\/game/,'position-specific rushing rates must sum to the team total');
 assert.match(breakdownView.innerHTML,/Receiving yards: 180\.0 allowed\/game/,'position-specific receiving rates must sum to the team total');
 assert.match(breakdownView.innerHTML,/Passing yards: 280\.0 allowed\/game/,'team passing rate must use the QB-level team value once');
