@@ -96,7 +96,7 @@ function setNBAQuote(key,field,value,forecast){
  const id='nba-price-status-'+key.replace(/[^a-zA-Z0-9_-]/g,'-');
  const status=$(id);if(status)status.textContent=nbaPriceSummary(key,forecast);
 }
-function nbaPriceUI(g,p,market,forecast){
+function nbaPriceUI(g,p,market,forecast,recommendationLine=null,sampleHits=null,sampleSize=null,matchupEdge=null){
  const key=nbaPriceKey(g,p,market),q=nbaPlayerQuotes[key]||{},status='nba-price-status-'+key.replace(/[^a-zA-Z0-9_-]/g,'-');
  const combo={ 'Points + Rebounds':['points','rebounds'], 'Points + Assists':['points','assists'],
   'Rebounds + Assists':['rebounds','assists'], PRA:['points','rebounds','assists'] };
@@ -119,7 +119,7 @@ function nbaPriceUI(g,p,market,forecast){
  const arg=JSON.stringify(key).replace(/"/g,'&quot;'),pVal=Number(forecast).toFixed(3);
  const field=(name,title,placeholder)=>{const id='nba-quote-'+key.replace(/[^a-zA-Z0-9_-]/g,'-')+'-'+name;return '<label>'+title+'<input id="'+id+'" type="'+(name==='line'?'number':'text')+'" inputmode="'+(name==='line'?'decimal':'text')+'" step="'+(name==='line'?'0.5':'any')+'" '+(name==='line'?'min="0" ':'')+'placeholder="'+placeholder+'" aria-label="'+esc(p.name)+' '+title+'" value="'+esc(q[name]||'')+'" onchange="setNBAQuote('+arg+',&quot;'+name+'&quot;,this.value,'+pVal+')"></label>';};
  const quoteId='nba-quote-'+key.replace(/[^a-zA-Z0-9_-]/g,'-')+'-';
- const slipButton=CookItUpQuickSlip.button({sport:'NBA',game:g.away+' @ '+g.home,player:p.name,team:p.team,opponent:p.opponent,market,line:q.line,overOdds:q.over,underOdds:q.under,lineInputId:quoteId+'line',overOddsInputId:quoteId+'over',underOddsInputId:quoteId+'under'});
+ const slipButton=CookItUpQuickSlip.button({sport:'NBA',game:g.away+' @ '+g.home,player:p.name,team:p.team,opponent:p.opponent,market,line:q.line,recommendationLine,sampleHits,sampleSize,matchupEdge,overOdds:q.over,underOdds:q.under,lineInputId:quoteId+'line',overOddsInputId:quoteId+'over',underOddsInputId:quoteId+'under'});
  return '<div class="nba-price-card"><div class="muted">Experimental Over/Under probabilities from recorded player games, compared with YOUR Vegas line and actual prices. Not a verified betting edge.</div>'+
   '<div class="nba-price-grid">'+field('line','Vegas Line','e.g. 22.5')+field('over','Over odds · American','-110')+field('under','Under odds · American','-110')+'</div>'+
   ''+slipButton+'<p class="muted nba-price-summary" id="'+esc(status)+'" role="status">'+esc(nbaPriceSummary(key,forecast))+'</p></div>';
@@ -298,7 +298,7 @@ const watchHtml='<h3>Player recommendations · matchup opportunities</h3><p clas
  const status=injuryFor(p).status;
  return '<div class="player"><strong>#'+(i+1)+' · '+esc(p.name)+' · '+esc(marketNames[p.key])+'</strong>'+
  '<p><strong>Look at: '+esc(investigate)+'</strong> · projected '+p.adjusted.toFixed(1)+'</p>'+
- '<p class="muted">Why: '+esc(p.opponent)+' allows '+p.oppAvg.toFixed(1)+' team '+esc(labels[p.key])+'/game ('+(pct>=0?'+':'')+pct+'% vs sample). '+esc(p.name)+' averaged '+p.recentAvg.toFixed(1)+' in the last '+Math.min(5,p.total)+' recorded games; projected '+p.minutes.toFixed(1)+' minutes. '+p.defenseGames+' opponent games and '+p.total+' player games available. Injury: '+esc(status)+(uncertain.test(status)?' · availability uncertain':'')+'. Check real sportsbook prices, role and confirmed status before choosing a line.</p>'+nbaPriceUI(g,p,p.key,p.adjusted)+'</div>';
+ '<p class="muted">Why: '+esc(p.opponent)+' allows '+p.oppAvg.toFixed(1)+' team '+esc(labels[p.key])+'/game ('+(pct>=0?'+':'')+pct+'% vs sample). '+esc(p.name)+' averaged '+p.recentAvg.toFixed(1)+' in the last '+Math.min(5,p.total)+' recorded games; projected '+p.minutes.toFixed(1)+' minutes. '+p.defenseGames+' opponent games and '+p.total+' player games available. Injury: '+esc(status)+(uncertain.test(status)?' · availability uncertain':'')+'. Check real sportsbook prices, role and confirmed status before choosing a line.</p>'+nbaPriceUI(g,p,p.key,p.adjusted,lineCandidates.length?lineCandidates.at(-1):null,lineCandidates.length?p.rows.slice(0,5).filter(r=>r[p.key]>=lineCandidates.at(-1)).length:null,lineCandidates.length?Math.min(5,p.total):null,p.edge)+'</div>';
 }).join(''):'<p class="warn">No matchup-backed player categories clear the watchlist thresholds with current data. Do not force a recommendation.</p>');
 // Combo markets use actual same-game box-score totals, not sums of independent hit rates.
 const comboSpecs=[
@@ -343,7 +343,7 @@ if(!comboRows.length)comboHtml+='<p class="warn">No combo props pass the history
 for(const c of comboRows){
  comboHtml+='<div class="player"><strong>'+esc(c.p.name)+' · '+esc(c.spec.name)+'</strong>';
  comboHtml+='<p><strong>Investigate '+c.best.line+'+ '+esc(c.spec.name)+'</strong> · historical model '+c.projected.toFixed(1)+'</p>';
- comboHtml+='<p class="muted">Cleared in '+c.best.hits+'/'+c.sample+' recent games · '+c.avgMinutes.toFixed(1)+' average minutes · injury: '+esc(c.status||'unverified')+'. Check teammates, role, minutes and sportsbook prices.</p>'+nbaPriceUI(g,c.p,c.spec.name,c.projected)+'</div>';
+ comboHtml+='<p class="muted">Cleared in '+c.best.hits+'/'+c.sample+' recent games · '+c.avgMinutes.toFixed(1)+' average minutes · injury: '+esc(c.status||'unverified')+'. Check teammates, role, minutes and sportsbook prices.</p>'+nbaPriceUI(g,c.p,c.spec.name,c.projected,c.best.line,c.best.hits,c.sample)+'</div>';
 }
 el.innerHTML=scoutHtml+(retrospective?'<p class="warn">Game already started or finished. These are retrospective pregame-style estimates from earlier games, not live forecasts.</p>':'')+
 watchHtml+comboHtml+'<p class="muted">Projected, NOT confirmed. Based on recent starts, playing time and available injury reports. '+(rosterFresh?'ESPN roster checked where available;':'Roster feed missing or stale;')+' No official confirmed starting-five feed. Small samples are preliminary; sportsbook odds and position-specific defense are not available.</p>'+
