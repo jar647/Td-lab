@@ -200,5 +200,22 @@ async function init(){
   $('validationStatus').textContent='Forward probability validation unavailable.';
  }
 }
-$('build').onclick=()=>{const g=$('game').value;if(!g){$('status').textContent='Choose a game first.';return}render(g);$('results').scrollIntoView({behavior:'smooth'});};init();
+$('build').onclick=async()=>{
+ const g=$('game').value;
+ if(!g){$('status').textContent='Choose a game first.';return}
+ const btn=$('build');btn.disabled=true;currentJoint=null;
+ $('results').innerHTML='<div class="panel"><h2>Analyzing both offenses</h2><p class="sub">Simulating team plays, game script, opportunities, player yards and correlations before assembling research candidates.</p></div>';
+ try{
+  const gamePlayers=players.filter(p=>p.team+'-'+p.opp===g||p.opp+'-'+p.team===g);
+  const sim=await invokeGameWorker(gamePlayers,10000,[]);
+  currentModel=sim;
+  render(g,sim);
+  $('results').scrollIntoView({behavior:'smooth'});
+ }catch(error){
+  currentModel=null;
+  $('results').innerHTML='<div class="panel"><h2>NO BET · Game engine unavailable</h2><p>'+
+   esc(error.message)+'</p><p class="warning">No heuristic fallback to invented probabilities.</p></div>';
+ }finally{btn.disabled=false}
+};
+init();
 </script></body></html>
