@@ -78,9 +78,15 @@ for(const file of ['index.html','nba.html']){
  const inline=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]).filter(Boolean);
  assert.equal(inline.length,1);
  new vm.Script(inline[0],{filename:file});
- assert.ok(html.includes('CookItUpProbability.review'),file+' must compare odds with observed-game probability');
+ if(file==='nba.html')assert.ok(html.includes('CookItUpProbability.review'),file+' must keep its odds comparison engine');
 }
 const nflHome=fs.readFileSync('index.html','utf8');
+assert.ok(nflHome.includes('src="./nfl_game_engine.js"'),'NFL player cards must load the matchup simulation engine');
+assert.ok(nflHome.includes('function loadNFLPlayerScenarios(details)'),'NFL players must expose on-demand game-first scenario percentages');
+assert.ok(nflHome.includes('10,000 complete-game simulations'),'NFL scenario estimates must disclose the simulation count');
+assert.ok(nflHome.includes('UN CALIBRATED')||nflHome.includes('UNCALIBRATED'),'NFL scenario estimates must be labeled uncalibrated');
+assert.ok(!nflHome.includes('Over odds · American'),'NFL player cards must not ask for Over odds');
+assert.ok(!nflHome.includes('Under odds · American'),'NFL player cards must not ask for Under odds');
 assert.ok(nflHome.includes('id="nflGameMatchupBreakdown"'),'NFL page must include the game matchup breakdown slot');
 assert.ok(nflHome.includes('function renderNFLGameMatchupBreakdown()'),'NFL matchup breakdown must render from current feed data');
 assert.ok(nflHome.includes("refreshGameFilter();renderNFLGameMatchupBreakdown();"),'NFL matchup breakdown must refresh when the selected game changes');
