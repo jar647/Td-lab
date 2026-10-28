@@ -80,6 +80,7 @@ function nbaPriceSummary(key,forecast){
  const result=CookItUpProbability.review({
   history:context.history||[],market:context.market||'points',
   projection:Number(forecast),line:q.line??null,overOdds:q.over,underOdds:q.under,
+   context:context.modelContext||{},
   eligible:context.eligible!==false,blockReason:context.blockReason||''
  });
  const gap=q.line===undefined||q.line===''?null:Number(forecast)-Number(q.line);
@@ -103,11 +104,17 @@ function nbaPriceUI(g,p,market,forecast){
  const history=(p.rows||[]).map(r=>{
   const values=fields.map(k=>r[k]);return values.every(Number.isFinite)?values.reduce((a,b)=>a+b,0):null;
  }).filter(v=>v!==null&&v>=0).slice(0,20);
+  const mean=(rows,key)=>{const values=rows.map(r=>r[key]).filter(Number.isFinite);return values.length?values.reduce((a,b)=>a+b,0)/values.length:null};
+  const recentRows=(p.rows||[]).slice(0,5),seasonRows=(p.rows||[]).filter(r=>Number.isFinite(r[fields[0]]));
+  const seasonAverage=fields.length===1?mean(seasonRows,fields[0]):history.length?history.reduce((a,b)=>a+b,0)/history.length:null;
+  const recentAverage=history.length?history.slice(0,5).reduce((a,b)=>a+b,0)/Math.min(5,history.length):null;
+  const seasonMinutes=mean(seasonRows,'minutes'),recentMinutes=mean(recentRows.slice(0,3),'minutes');
  const injury=injuryFor(p).status;
  const invalidStatus=/OUT|INACTIVE|DOUBTFUL|QUESTIONABLE|SUSPENDED|GAME.TIME|DAY.TO.DAY|UNVERIFIED/.test(injury);
  const pregame=g.status==='STATUS_SCHEDULED'&&Date.parse(g.date)>Date.now();
  const injuriesFresh=!!injuryData?.generated_at&&Math.abs(Date.now()-Date.parse(injuryData.generated_at))<12*3600000;
- nbaQuoteContexts[key]={history,market,eligible:pregame&&!invalidStatus&&injuriesFresh,
+  nbaQuoteContexts[key]={history,market,modelContext:{seasonAverage,recentAverage,seasonUsage:seasonMinutes,recentUsage:recentMinutes,
+   opponentRatio:1+(Number(p.defenseDelta)||0)+(Number(p.paceDelta)||0),injuryFactor:Number(p.opportunityFactor)||1,injuryStatus:injury},eligible:pregame&&!invalidStatus&&injuriesFresh,
   blockReason:!pregame?'Not an upcoming pregame market.':!injuriesFresh?'Injury report is stale.':'Availability requires confirmation.'};
  const arg=JSON.stringify(key).replace(/"/g,'&quot;'),pVal=Number(forecast).toFixed(3);
  const field=(name,title,placeholder)=>'<label>'+title+'<input type="'+(name==='line'?'number':'text')+'" inputmode="'+(name==='line'?'decimal':'text')+'" step="'+(name==='line'?'0.5':'any')+'" '+(name==='line'?'min="0" ':'')+'placeholder="'+placeholder+'" aria-label="'+esc(p.name)+' '+title+'" value="'+esc(q[name]||'')+'" onchange="setNBAQuote('+arg+',&quot;'+name+'&quot;,this.value,'+pVal+')"></label>';

@@ -351,8 +351,11 @@ function renderPropMatchups(){
   const rosterStatus=String(x.r.availability||'').toUpperCase();
   const statusUnsafe=/OUT|INACTIVE|DOUBTFUL|QUESTIONABLE|SUSPENDED|IR|DNP|GTD/.test(injuryStatus+'|'+rosterStatus)
    ||manuallyInactive(x.r)||x.r.playerAppearancesVerified===false;
-  const price=CookItUpProbability.review({
+   const usageKey={PTD:'recent3PassAttempts',PASS:'recent3PassAttempts',RUSH:'recent3Carries',REC:'recent3Targets',CATCH:'recent3Targets'}[propCategory];
+   const matchupKey={PTD:'PASS',PASS:'PASS',RUSH:'RUSH',REC:'REC',CATCH:'CATCH'}[propCategory];
+   const price=CookItUpProbability.review({
    history:verifiedHistory,market:propCategory,line:posted,projection:valid?projected:null,
+    context:{seasonAverage:avg,recentAverage:recent,seasonUsage:Number(x.r[cfg.usage]),recentUsage:x.r[usageKey]==null?null:Number(x.r[usageKey]),opponentRatio:Number(x.r.defenseOpponentRatio?.[matchupKey])||null,injuryStatus:x.r.injuryReportStatus||rosterStatus},
    overOdds:quoted.over,underOdds:quoted.under,eligible:!statusUnsafe,
    blockReason:'Current injury / roster / game-day active status is not confirmed.'
   });
@@ -363,9 +366,9 @@ function renderPropMatchups(){
   const priceText=CookItUpProbability.format(price);
   const pct=n=>(100*n).toFixed(1)+'%';
   const priceMetric=x=>!x?'Price not entered':(x.edge>=0?'+':'')+pct(x.edge)+' vs break-even; hypothetical ROI '+(x.ev>=0?'+':'')+pct(x.ev);
-  const modelRates=price.valid?
-   '<div class="pv-prob-grid"><div><span>EXPERIMENTAL MODEL OVER</span><strong>'+pct(price.over)+'</strong><small>'+escapeHTML(priceMetric(price.overSide))+'</small></div>'+
-   '<div><span>EXPERIMENTAL MODEL UNDER</span><strong>'+pct(price.under)+'</strong><small>'+escapeHTML(priceMetric(price.underSide))+'</small></div></div>':
+   const modelRates=price.valid?
+    '<div class="pv-prob-grid"><div><span>UNCALIBRATED MODEL OVER</span><strong>'+pct(price.over)+'</strong><small>'+escapeHTML(priceMetric(price.overSide))+'</small></div>'+ 
+    '<div><span>UNCALIBRATED MODEL UNDER</span><strong>'+pct(price.under)+'</strong><small>'+escapeHTML(priceMetric(price.underSide))+'</small></div></div>':
    '<p class="pv-price-review">Experimental probabilities unavailable: '+escapeHTML(price.reason)+'</p>';
   const encodedKey=JSON.stringify(key).replace(/"/g,'&quot;');
   const fmt=n=>n==null?'—':['CATCH','PTD'].includes(propCategory)?n.toFixed(2).replace(/0+$/,'').replace(/\\.$/,''):Math.round(n).toString();

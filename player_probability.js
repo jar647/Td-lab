@@ -35,7 +35,7 @@
     return name?finite(r[name]):null;
    }).filter(v=>v!==null&&v>=0).slice(-20);
  }
- function estimate({history,market,projection,line}={}){
+ function estimate({history,market,projection,line,context={}}={}){
   const posted=finite(line),forecast=finite(projection);
   if(posted===null||posted<0||forecast===null||forecast<0)return {valid:false,reason:'A positive sportsbook line and an independent player projection are required.',sample:0};
   const values=(Array.isArray(history)?history:[]).map(finite).filter(v=>v!==null&&v>=0).slice(-20);
@@ -47,8 +47,22 @@
   // Explicit uncertainty floor is a conservative modeling assumption, never fabricated game data.
   const floor=FLOORS[market]??Math.max(2,average*.2);
   const sd=Math.max(observedSD,floor)*Math.sqrt(1+1/n);
-  // Shrink matchup adjustments toward the player's actual observed game average.
-  const center=.75*forecast+.25*average;
+  // Build the forecast from independent inputs. Missing matchup or workload data
+  // remain neutral and lower the evidence grade; they are never guessed.
+  const season=finite(context.seasonAverage),recent=finite(context.recentAverage);
+  const contextualMean=season!==null&&recent!==null ? .7*season+.3*recent : forecast;
+  const base=.75*forecast+.25*contextualMean;
+  const seasonUsage=finite(context.seasonUsage),recentUsage=finite(context.recentUsage);
+  const usageRatio=seasonUsage>0&&recentUsage!==null?clamp(recentUsage/seasonUsage,.75,1.25):null;
+  const usageEffect=usageRatio===null?1:1+.15*(usageRatio-1);
+  const defenseRatio=finite(context.opponentRatio);
+  const defenseEffect=defenseRatio===null?1:1+.15*clamp(defenseRatio-1,-.25,.25);
+  const injuryFactor=finite(context.injuryFactor);
+  const injuryEffect=injuryFactor===null?1:clamp(injuryFactor,.8,1.05);
+  const contextual=base*usageEffect*defenseEffect*injuryEffect;
+  // Keep a small anchor to the observed mean so a single projected input
+  // cannot overwhelm the player's game-level record.
+  const center=.75*contextual+.25*average;
   // Player stats are integer outcomes. Whole-number lines can push; half lines cannot.
   const whole=Number.isInteger(posted);
   const highBound=Math.floor(posted)+.5;
@@ -64,13 +78,25 @@
   const underConditional=under/Math.max(.00001,1-push);
   const overLowerConditional=overLower/Math.max(.00001,overLower+normalCDF((lowBound-(center-centerError))/sd));
   const underLowerConditional=underLower/Math.max(.00001,underLower+1-normalCDF((highBound-(center+centerError))/sd));
+  const status=String(context.injuryStatus||'').toUpperCase();
+  const evidence={usage:usageRatio!==null,matchup:defenseRatio!==null,injury:!!status&&!/UNVERIFIED|NOT_REPORTED|NOT LISTED/.test(status),
+   recent:recent!==null,season:season!==null};
   return {valid:true,sample:n,average,center,sd,over,under,push,overConditional,underConditional,
    overLower:clamp(overLowerConditional,0,1),underLower:clamp(underLowerConditional,0,1),
-   diverges:average>0&&(forecast>average*2||forecast<average*.5),
-   method:'Historical player-game distribution, model mean shrunk 25% toward observed average; sample spread and explicit variance floor. Uncalibrated.'};
+   diverges:average>0&&(center>average*2||center<average*.5),usageRatio,defenseRatio,
+   injuryStatus:status||'UNVERIFIED',evidence,evidenceCount:Object.values(evidence).filter(Boolean).length,
+   matchupEffect:Math.round((defenseEffect-1)*1000)/10,usageEffect:Math.round((usageEffect-1)*1000)/10,
+   injuryEffect:Math.round((injuryEffect-1)*1000)/10,
+   method:'Observed player-game distribution with recency, workload, opponent allowance and documented availability inputs where available; shrunk toward observed mean. Uncalibrated.'};
  }
- function review({history,market,projection,line,overOdds,underOdds,eligible=true,blockReason=''}={}){
-  const model=estimate({history,market,projection,line});
+ function calibrationReady(c,market){
+  const rows=finite(c?.gradedRows),marketRows=finite(c?.marketRows?.[market]);
+  const brier=finite(c?.brier),baseline=finite(c?.baselineBrier),error=finite(c?.maxCalibrationError);
+  return c?.validated===true&&c.liveModelVersion===c.modelVersion&&finite(c.holdoutWeeks)>=8&&
+   rows>=500&&marketRows>=40&&brier!==null&&baseline!==null&&brier<baseline&&error!==null&&error<=.05;
+ }
+ function review({history,market,projection,line,overOdds,underOdds,context={},eligible=true,blockReason='',calibration={}}={}){
+  const model=estimate({history,market,projection,line,context});
   const overQuote=pricing.quote(overOdds),underQuote=pricing.quote(underOdds);
   const invalid=(hasValue(overOdds)&&!overQuote)||(hasValue(underOdds)&&!underQuote);
   const sum=overQuote&&underQuote?overQuote.implied+underQuote.implied:null;
@@ -90,19 +116,24 @@
   const ranked=[over,under].filter(Boolean).sort((a,b)=>b.ev-a.ev);
   const strong=ranked.filter(x=>x.priceAllowed&&x.edge>=.05&&x.ev>=.04&&x.conservative>=x.implied);
   const best=strong[0]||null;
-  let status,reason;
+  const calibrated=calibrationReady(calibration,market);
+  let status,reason,decision='PASS';
   if(!model.valid){status='PASS · PROBABILITY UNAVAILABLE';reason=model.reason}
   else if(invalid){status='PASS · INVALID ODDS';reason='Enter valid American odds (+100 or greater, -100 or less); do not interpret malformed prices.'}
   else if(!overQuote&&!underQuote){status='ENTER VEGAS ODDS';reason='Enter the offered price for either side to compare a modeled hit rate against its break-even point.'}
   else if(!eligible){status='PASS · PLAYER OR GAME STATUS UNVERIFIED';reason=blockReason||'Player status or pregame data are not verified.'}
   else if(model.sample<8){status='PASS · LIMITED VERIFIED HISTORY';reason='Experimental probability calculated, but fewer than 8 actual player games support a price-sensitive research signal.'}
+  else if(!model.evidence.usage||!model.evidence.matchup){status='PASS · MATCHUP DATA INCOMPLETE';reason='A recent workload measure and opponent-specific allowance are both required before the model can issue a lean. Missing inputs are not treated as neutral evidence.'}
   else if(model.diverges){status='PASS · PROJECTION/HISTORY CONFLICT';reason='The model forecast differs substantially from observed game production; do not elevate an unstable estimate.'}
-  else if(best){status='RESEARCH '+best.name+' VALUE CANDIDATE · UNVALIDATED';reason='The experimental '+best.name+' probability exceeds the quoted break-even with a conservative sensitivity check. This is NOT an approved bet or verified edge.'}
+  else if(best&&calibrated){status='PLAY '+best.name+' · CALIBRATION GATE PASSED';decision='PLAY';reason='The '+best.name+' probability clears the price and uncertainty checks, and this market’s matching model version beat its holdout baseline with adequate calibration evidence.'}
+  else if(best){status='LEAN '+best.name+' · UNCALIBRATED';decision='LEAN';reason='The experimental '+best.name+' probability clears the price and sensitivity checks, but live-model holdout calibration is not approved. Treat this as a research lean, not a betting edge.'}
   else if(ranked.length&&ranked[0].odds< -200){status='PASS · PRICE TOO SHORT OR NO ROBUST EDGE';reason='Avoid prices worse than -200. No other quoted side clears both the experimental margin and uncertainty checks.'}
   else{status='PASS · NO ROBUST VALUE SIGNAL';reason='No offered side clears the modeled probability, +5 percentage-point edge, +4% hypothetical ROI, and conservative sensitivity checks together.'}
   return {...model,overQuote,underQuote,noVigOver,noVigUnder,overSide:over,underSide:under,
-   invalid,status,reason,candidate:best&&status.startsWith('RESEARCH')?best.name:null,
-   betReady:false,verifiedValue:false,play:false,modelCalibrated:false};
+   invalid,status,decision,reason,candidate:best&&decision!=='PASS'?best.name:null,
+   estimatedEdge:best?.edge??null,expectedValue:best?.ev??null,
+   betReady:decision==='PLAY',verifiedValue:false,play:decision==='PLAY',
+   modelCalibrated:calibrated};
  }
  function format(r){
   const percent=n=>(100*n).toFixed(1)+'%';
@@ -115,11 +146,14 @@
     ' · hypothetical ROI '+(value.ev>=0?'+':'')+percent(value.ev);
   };
   const noVig=r.noVigOver===null?'':' No-vig market: Over '+percent(r.noVigOver)+', Under '+percent(r.noVigUnder)+'.';
-  const model=r.valid?'EXPERIMENTAL model Over '+percent(r.over)+', Under '+percent(r.under)+
+  const context=r.valid?' Inputs: workload '+(r.usageRatio===null?'missing':(r.usageRatio*100).toFixed(0)+'% of baseline')+
+   '; opponent adjustment '+(r.defenseRatio===null?'missing':(r.matchupEffect>=0?'+':'')+r.matchupEffect.toFixed(1)+'%')+
+   '; availability '+(r.injuryStatus||'UNVERIFIED')+'. ' :'';
+  const model=r.valid?'UNCALIBRATED model Over '+percent(r.over)+', Under '+percent(r.under)+
    (r.push>.001?', Push '+percent(r.push):'')+' ('+r.sample+' recorded games). ':
    'Model probability unavailable ('+r.sample+' recorded games). ';
-  return model+side('Over',r.overQuote,r.overSide)+'. '+side('Under',r.underQuote,r.underSide)+'.'+noVig+
-   ' '+r.status+'. '+r.reason+' Hypothetical ROI and edge are NOT independently validated; NO VERIFIED PLAY.';
+  return model+context+side('Over',r.overQuote,r.overSide)+'. '+side('Under',r.underQuote,r.underSide)+'.'+noVig+
+   ' '+r.status+'. '+r.reason+(r.modelCalibrated?'':' Estimated edge/EV are experimental because this live model has no approved holdout calibration. NO VERIFIED PLAY.');
  }
  return {normalCDF,nflHistory,estimate,review,format};
 });
