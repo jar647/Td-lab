@@ -1,0 +1,81 @@
+{
+  "generated_at_utc": "2026-10-28T14:36:50.054847+00:00",
+  "source": "Immutable pregame NBA tracker + ESPN final box scores",
+  "status": "DAILY_RESEARCH_REVIEW_ONLY",
+  "bet_ready": false,
+  "automated_model_promotion": false,
+  "schedule": "Every NBA data refresh; daily result reviews and pregame projections",
+  "source_age_hours": 0.0,
+  "source_fresh": true,
+  "graded_projection_rows": 798,
+  "distinct_graded_game_days": 2,
+  "inventory": {
+    "snapshots": 28,
+    "pending_predictions": 1044,
+    "dnp": 51,
+    "ungraded": 78,
+    "invalid_pregame_locks": 0,
+    "invalid_records": 0
+  },
+  "models": {
+    "last-five-mean-v1": {
+      "assists": {
+        "n": 266,
+        "distinct_games": 13,
+        "distinct_days": 2,
+        "distinct_player_games": 266,
+        "mae": 1.382,
+        "bias": -0.024,
+        "within_20pct": 0.7744,
+        "walk_forward_holdout_days": 0,
+        "walk_forward_holdout_forecasts": 0,
+        "baseline_holdout_mae": null,
+        "bias_challenger_holdout_mae": null,
+        "bias_challenger_mae_improvement": null,
+        "eligible_for_research_review": false,
+        "challenger_outperforms_baseline": false,
+        "daily_walk_forward": []
+      },
+      "points": {
+        "n": 266,
+        "distinct_games": 13,
+        "distinct_days": 2,
+        "distinct_player_games": 266,
+        "mae": 4.742,
+        "bias": 0.065,
+        "within_20pct": 0.3233,
+        "walk_forward_holdout_days": 0,
+        "walk_forward_holdout_forecasts": 0,
+        "baseline_holdout_mae": null,
+        "bias_challenger_holdout_mae": null,
+        "bias_challenger_mae_improvement": null,
+        "eligible_for_research_review": false,
+        "challenger_outperforms_baseline": false,
+        "daily_walk_forward": []
+      },
+      "rebounds": {
+        "n": 266,
+        "distinct_games": 13,
+        "distinct_days": 2,
+        "distinct_player_games": 266,
+        "mae": 2.171,
+        "bias": -0.097,
+        "within_20pct": 0.6053,
+        "walk_forward_holdout_days": 0,
+        "walk_forward_holdout_forecasts": 0,
+        "baseline_holdout_mae": null,
+        "bias_challenger_holdout_mae": null,
+        "bias_challenger_mae_improvement": null,
+        "eligible_for_research_review": false,
+        "challenger_outperforms_baseline": false,
+        "daily_walk_forward": []
+      }
+    }
+  },
+  "minimum_research_review_requirements": {
+    "holdout_days_per_market": 5,
+    "holdout_rows_per_market": 200,
+    "relative_MAE_improvement": 0.03
+  },
+  "warning": "Rolling pregame projections are evaluated daily, but the bias-correction challenger is NOT promoted until independent holdout checks succeed. This evaluates statistical MAE, not calibrated player-prop hit probability, sportsbook odds or SGP ROI."
+}
