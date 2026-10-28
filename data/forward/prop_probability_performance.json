@@ -8,34 +8,81 @@
   "game_first_graded": 0,
   "game_first_distinct_weeks": 0,
   "game_first_research_review_ready": false,
+  "game_first_distinct_player_games": 0,
+  "forward_review_thresholds": {
+    "distinct_weeks": 8,
+    "graded_forecast_rows": 500,
+    "distinct_player_games": 150,
+    "minimum_rows_per_market": 40
+  },
+  "snapshot_inventory": {
+    "opportunity-2024-trained-blend-v1": {
+      "snapshots": 14,
+      "pending_final": 14,
+      "final_games": 0,
+      "missing_fixture": 0,
+      "forecast_rows": 2639
+    },
+    "game-first-volume-v1": {
+      "snapshots": 14,
+      "pending_final": 14,
+      "final_games": 0,
+      "missing_fixture": 0,
+      "forecast_rows": 1962
+    }
+  },
   "game_first_markets": {
     "PASS": {
       "n": 0,
       "model_brier": null,
       "baseline_brier": null,
       "beats_baseline": false,
-      "distinct_weeks": 0
+      "distinct_weeks": 0,
+      "model_log_loss": null,
+      "baseline_log_loss": null,
+      "calibration_bins": [],
+      "expected_calibration_error": null,
+      "distinct_player_games": 0,
+      "distinct_game_market_players": 0
     },
     "RUSH": {
       "n": 0,
       "model_brier": null,
       "baseline_brier": null,
       "beats_baseline": false,
-      "distinct_weeks": 0
+      "distinct_weeks": 0,
+      "model_log_loss": null,
+      "baseline_log_loss": null,
+      "calibration_bins": [],
+      "expected_calibration_error": null,
+      "distinct_player_games": 0,
+      "distinct_game_market_players": 0
     },
     "REC": {
       "n": 0,
       "model_brier": null,
       "baseline_brier": null,
       "beats_baseline": false,
-      "distinct_weeks": 0
+      "distinct_weeks": 0,
+      "model_log_loss": null,
+      "baseline_log_loss": null,
+      "calibration_bins": [],
+      "expected_calibration_error": null,
+      "distinct_player_games": 0,
+      "distinct_game_market_players": 0
     },
     "CATCH": {
       "n": 0,
       "model_brier": null,
       "baseline_brier": null,
       "beats_baseline": false,
-      "distinct_weeks": 0
+      "distinct_weeks": 0,
+      "model_log_loss": null,
+      "baseline_log_loss": null,
+      "calibration_bins": [],
+      "expected_calibration_error": null,
+      "distinct_player_games": 0,
+      "distinct_game_market_players": 0
     }
   },
   "distinct_graded_weeks": 0,
@@ -47,137 +94,239 @@
       "model_brier": null,
       "baseline_brier": null,
       "beats_baseline": false,
-      "distinct_weeks": 0
+      "distinct_weeks": 0,
+      "model_log_loss": null,
+      "baseline_log_loss": null,
+      "calibration_bins": [],
+      "expected_calibration_error": null,
+      "distinct_player_games": 0,
+      "distinct_game_market_players": 0
     },
     "RUSH": {
       "n": 0,
       "model_brier": null,
       "baseline_brier": null,
       "beats_baseline": false,
-      "distinct_weeks": 0
+      "distinct_weeks": 0,
+      "model_log_loss": null,
+      "baseline_log_loss": null,
+      "calibration_bins": [],
+      "expected_calibration_error": null,
+      "distinct_player_games": 0,
+      "distinct_game_market_players": 0
     },
     "REC": {
       "n": 0,
       "model_brier": null,
       "baseline_brier": null,
       "beats_baseline": false,
-      "distinct_weeks": 0
+      "distinct_weeks": 0,
+      "model_log_loss": null,
+      "baseline_log_loss": null,
+      "calibration_bins": [],
+      "expected_calibration_error": null,
+      "distinct_player_games": 0,
+      "distinct_game_market_players": 0
     },
     "CATCH": {
       "n": 0,
       "model_brier": null,
       "baseline_brier": null,
       "beats_baseline": false,
-      "distinct_weeks": 0
+      "distinct_weeks": 0,
+      "model_log_loss": null,
+      "baseline_log_loss": null,
+      "calibration_bins": [],
+      "expected_calibration_error": null,
+      "distinct_player_games": 0,
+      "distinct_game_market_players": 0
     }
   },
   "version_reports": {
     "game-first-volume-v1": {
       "graded": 0,
       "distinct_weeks": 0,
+      "distinct_player_games": 0,
+      "distinct_games": 0,
       "markets": {
         "PASS": {
           "n": 0,
           "model_brier": null,
           "baseline_brier": null,
           "beats_baseline": false,
-          "distinct_weeks": 0
+          "distinct_weeks": 0,
+          "model_log_loss": null,
+          "baseline_log_loss": null,
+          "calibration_bins": [],
+          "expected_calibration_error": null,
+          "distinct_player_games": 0,
+          "distinct_game_market_players": 0
         },
         "RUSH": {
           "n": 0,
           "model_brier": null,
           "baseline_brier": null,
           "beats_baseline": false,
-          "distinct_weeks": 0
+          "distinct_weeks": 0,
+          "model_log_loss": null,
+          "baseline_log_loss": null,
+          "calibration_bins": [],
+          "expected_calibration_error": null,
+          "distinct_player_games": 0,
+          "distinct_game_market_players": 0
         },
         "REC": {
           "n": 0,
           "model_brier": null,
           "baseline_brier": null,
           "beats_baseline": false,
-          "distinct_weeks": 0
+          "distinct_weeks": 0,
+          "model_log_loss": null,
+          "baseline_log_loss": null,
+          "calibration_bins": [],
+          "expected_calibration_error": null,
+          "distinct_player_games": 0,
+          "distinct_game_market_players": 0
         },
         "CATCH": {
           "n": 0,
           "model_brier": null,
           "baseline_brier": null,
           "beats_baseline": false,
-          "distinct_weeks": 0
+          "distinct_weeks": 0,
+          "model_log_loss": null,
+          "baseline_log_loss": null,
+          "calibration_bins": [],
+          "expected_calibration_error": null,
+          "distinct_player_games": 0,
+          "distinct_game_market_players": 0
         }
       }
     },
     "opportunity-2024-trained-blend-v1": {
       "graded": 0,
       "distinct_weeks": 0,
+      "distinct_player_games": 0,
+      "distinct_games": 0,
       "markets": {
         "PASS": {
           "n": 0,
           "model_brier": null,
           "baseline_brier": null,
           "beats_baseline": false,
-          "distinct_weeks": 0
+          "distinct_weeks": 0,
+          "model_log_loss": null,
+          "baseline_log_loss": null,
+          "calibration_bins": [],
+          "expected_calibration_error": null,
+          "distinct_player_games": 0,
+          "distinct_game_market_players": 0
         },
         "RUSH": {
           "n": 0,
           "model_brier": null,
           "baseline_brier": null,
           "beats_baseline": false,
-          "distinct_weeks": 0
+          "distinct_weeks": 0,
+          "model_log_loss": null,
+          "baseline_log_loss": null,
+          "calibration_bins": [],
+          "expected_calibration_error": null,
+          "distinct_player_games": 0,
+          "distinct_game_market_players": 0
         },
         "REC": {
           "n": 0,
           "model_brier": null,
           "baseline_brier": null,
           "beats_baseline": false,
-          "distinct_weeks": 0
+          "distinct_weeks": 0,
+          "model_log_loss": null,
+          "baseline_log_loss": null,
+          "calibration_bins": [],
+          "expected_calibration_error": null,
+          "distinct_player_games": 0,
+          "distinct_game_market_players": 0
         },
         "CATCH": {
           "n": 0,
           "model_brier": null,
           "baseline_brier": null,
           "beats_baseline": false,
-          "distinct_weeks": 0
+          "distinct_weeks": 0,
+          "model_log_loss": null,
+          "baseline_log_loss": null,
+          "calibration_bins": [],
+          "expected_calibration_error": null,
+          "distinct_player_games": 0,
+          "distinct_game_market_players": 0
         }
       }
     },
     "opportunity-2024-trained-eligible-fullseason-v2": {
       "graded": 0,
       "distinct_weeks": 0,
+      "distinct_player_games": 0,
+      "distinct_games": 0,
       "markets": {
         "PASS": {
           "n": 0,
           "model_brier": null,
           "baseline_brier": null,
           "beats_baseline": false,
-          "distinct_weeks": 0
+          "distinct_weeks": 0,
+          "model_log_loss": null,
+          "baseline_log_loss": null,
+          "calibration_bins": [],
+          "expected_calibration_error": null,
+          "distinct_player_games": 0,
+          "distinct_game_market_players": 0
         },
         "RUSH": {
           "n": 0,
           "model_brier": null,
           "baseline_brier": null,
           "beats_baseline": false,
-          "distinct_weeks": 0
+          "distinct_weeks": 0,
+          "model_log_loss": null,
+          "baseline_log_loss": null,
+          "calibration_bins": [],
+          "expected_calibration_error": null,
+          "distinct_player_games": 0,
+          "distinct_game_market_players": 0
         },
         "REC": {
           "n": 0,
           "model_brier": null,
           "baseline_brier": null,
           "beats_baseline": false,
-          "distinct_weeks": 0
+          "distinct_weeks": 0,
+          "model_log_loss": null,
+          "baseline_log_loss": null,
+          "calibration_bins": [],
+          "expected_calibration_error": null,
+          "distinct_player_games": 0,
+          "distinct_game_market_players": 0
         },
         "CATCH": {
           "n": 0,
           "model_brier": null,
           "baseline_brier": null,
           "beats_baseline": false,
-          "distinct_weeks": 0
+          "distinct_weeks": 0,
+          "model_log_loss": null,
+          "baseline_log_loss": null,
+          "calibration_bins": [],
+          "expected_calibration_error": null,
+          "distinct_player_games": 0,
+          "distinct_game_market_players": 0
         }
       }
     }
   },
   "skipped": {
-    "GAME_NOT_FINAL": 27
+    "GAME_NOT_FINAL": 28
   },
   "records": [],
-  "warning": "Only pregame-frozen forecasts count. Opportunity and game-first model versions are scored separately against their frozen baselines. Fixed hypothetical thresholds; no sportsbook lines or betting claims."
+  "warning": "Only pregame-frozen forecasts count. Opportunity and game-first model versions are scored separately. Repeated player-game thresholds are NOT independent samples. Calibration bins describe observed reliability, not a certified edge. Fixed hypothetical thresholds; no sportsbook lines or betting claims."
 }
