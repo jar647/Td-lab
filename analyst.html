@@ -239,14 +239,15 @@ $('bestOdds').oninput=()=>{
   singleBestQuote.trim()?'Invalid American odds.':'Awaiting Hard Rock quote.';
 };
 for(const btn of el.querySelectorAll('.exclude'))btn.onclick=()=>{
- exclusions.add(btn.dataset.key);render(g,sim)
+ exclusions.add(btn.dataset.key);fullQuote='';reducedQuote='';render(g,sim)
 };
 for(const item of el.querySelectorAll('.alternateChoice'))item.onchange=()=>{
  const i=Number(item.dataset.index),leg=selected[i];
  const threshold=Number(item.value);
  if(!leg||!Number.isFinite(threshold))return;
  manualLines.set(PropVaultGoal1.marketId(leg),threshold);
- render(g,sim);
+ singleQuotes.delete(PropVaultGoal1.marketId(leg));
+ fullQuote='';reducedQuote='';render(g,sim);
 };
 for(const item of el.querySelectorAll('.individualQuote'))item.oninput=()=>{
  const i=Number(item.dataset.index),c=selected[i];if(!c)return;
@@ -268,7 +269,7 @@ function mountControls(){
  $('legCount').onchange=()=>{
   const value=Number($('legCount').value);
   if(!Number.isInteger(value)||value<2||value>5)return;
-  desiredLegs=value;render(g,sim);
+  desiredLegs=value;fullQuote='';reducedQuote='';render(g,sim);
  };
  $('applyGameMarket').onclick=()=>{
   const type=$('marketType').value,side=$('marketSide').value;
@@ -276,7 +277,7 @@ function mountControls(){
   const fixture=scoreData?{home:scoreData.home,away:scoreData.away}:null;
   const selection=PropVaultGoal1.gameMarketDraft(type,side,line,odds,fixture);
   if(!selection.ok){$('marketFeedback').textContent=selection.error;return}
-  gameLeg=selection.leg;render(g,sim);
+  gameLeg=selection.leg;fullQuote='';reducedQuote='';render(g,sim);
  };
 }
 }
