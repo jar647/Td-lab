@@ -24,6 +24,7 @@ on:
       - 'test_nfl_game_engine.js'
       - 'test_nfl_analyst_ui.js'
       - 'test_nfl_real_matchup.js'
+      - 'test_jacobs_return_visibility.js'
       - 'capture_game_first.js'
       - 'test_capture_game_first.js'
       - 'analyst.html'
@@ -57,6 +58,8 @@ jobs:
         run: node test_nfl_game_engine.js
       - name: Test Goal 1 decision and odds engine
         run: node test_nfl_goal1.js
+      - name: Test Josh Jacobs verified return visibility
+        run: node test_jacobs_return_visibility.js
       - name: Test NFL analyst browser-controller flow
         run: node test_nfl_analyst_ui.js
       - name: Test game-first pregame forecast immutability
@@ -108,3 +111,4 @@ jobs:
             echo "Feed built, but could not publish after three push attempts." >&2
             exit 1
           fi
+

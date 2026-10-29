@@ -1,3 +1,6 @@
+Warning: truncated output (original token count: 16118)
+Total output lines: 900
+
 #!/usr/bin/env python3
 """THE PROP VAULT: nflverse PBP -> audited matchup feed.
 No invented values: omit incomplete records; no bookmaker odds or TD probabilities.
@@ -21,6 +24,21 @@ def required(df, columns, label):
     if missing: raise RuntimeError(f'{label}: missing required columns {sorted(missing)}; no feed published')
 
 def mean(x): return round(float(x), 3)
+
+def add_pbp_verified_skill_appearances(appearance_games, player_stats, position_by_id):
+    """Count skill-player appearances proven by an actual rush or target.
+
+    PFR snap-count IDs can fail to join even when nflverse play-by-play records
+    a player's real offensive touches. Actual carries/targets are sufficient
+    proof of participation; zero-stat team games still require snap evidence.
+    """
+    for (team, player_id, week), stats in player_stats.items():
+        if position_by_id.get(str(player_id)) not in ('RB', 'WR', 'TE'):
+            continue
+        touches = int(stats.get('rushAttempts', 0) or 0) + int(stats.get('targets', 0) or 0)
+        if touches > 0:
+            appearance_games.setdefault((str(team), str(player_id)), set()).add(int(week))
+    return appearance_games
 
 def availability(injuries, week):
     """Use current-week official game reports only; absence of a report is unknown."""
@@ -456,66 +474,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
         season_plays=season_plays[pd.to_numeric(season_plays.no_play,errors='coerce').fillna(0)==0]
     season_player_stats={}
     for pid_col,flag,yards_col,yards_key,attempt_key in (
-        ('passer_player_id','pass_attempt','passing_yards','passYards','passAttempts'),
-        ('rusher_player_id','rush_attempt','rushing_yards','rushYards','rushAttempts'),
-        ('receiver_player_id','pass_attempt','receiving_yards','recYards','targets')):
-        required(season_plays,[pid_col,flag,yards_col],'season player statistics')
-        sub=season_plays[(pd.to_numeric(season_plays[flag],errors='coerce')==1)&season_plays[pid_col].notna()].copy()
-        sub['pid']=sub[pid_col].astype(str)
-        sub['yards']=pd.to_numeric(sub[yards_col],errors='coerce').fillna(0)
-        sub['attempts']=1
-        sub['receptions']=pd.to_numeric(sub.complete_pass,errors='coerce').fillna(0).clip(0,1) if attempt_key=='targets' else 0
-        for (tm,pid,w),g in sub.groupby(['posteam','pid','week']):
-            entry=season_player_stats.setdefault((str(tm),str(pid),int(w)),{})
-            entry[yards_key]=float(g.yards.sum())
-            entry[attempt_key]=int(len(g))
-            if attempt_key=='targets':entry['receptions']=int(g.receptions.sum())
-    # Passing touchdowns: one credited to the passer on each actual TD pass.
-    required(season_plays,['pass_touchdown','passer_player_id'],'passing touchdown statistics')
-    td_plays=season_plays[(pd.to_numeric(season_plays.pass_touchdown,errors='coerce')==1)&season_plays.passer_player_id.notna()].copy()
-    td_plays['pid']=td_plays.passer_player_id.astype(str)
-    for (tm,pid,w),g in td_plays.groupby(['posteam','pid','week']):
-        entry=season_player_stats.setdefault((str(tm),str(pid),int(w)),{})
-        entry['passTDs']=int(len(g))
-    defense_pass_tds=td_plays.groupby('defteam').size().to_dict()
-    # Optional nflverse air-yards signal: target-level air yards, not routes run.
-    # Missing columns remain unavailable instead of being filled with invented zeroes.
-    air_by_player={}
-    if 'air_yards' in season_plays.columns:
-        air=season_plays[(pd.to_numeric(season_plays.pass_attempt,errors='coerce')==1)&season_plays.receiver_player_id.notna()].copy()
-        air['air_yards']=pd.to_numeric(air.air_yards,errors='coerce')
-        air=air.dropna(subset=['air_yards'])
-        if not air.empty:
-            air_by_player={(str(tm),str(pid)):float(g.air_yards.sum()) for (tm,pid),g in air.groupby(['posteam','receiver_player_id'])}
-    # Passing attempts prove QB participation even when PFR snap IDs do not
-    # reconcile with nflverse GSIS roster IDs. Do not infer appearances
-    # from team games or zero-production bye/inactive weeks.
-    for (tm,pid,w),stats in season_player_stats.items():
-        if stats.get('passAttempts',0)>0 and pos_by_id.get(pid)=='QB':
-            appearance_games.setdefault((tm,pid),set()).add(w)
-    game_lookup={(str(row.posteam),int(row.week)):str(row.game_id)
-        for row in season_plays[['posteam','week','game_id']].drop_duplicates().itertuples(index=False)}
-    # Use real opponent slate and only players whose latest roster team matches it.
-    roster_team=dict(zip(roster.gsis_id.astype(str),roster.team.astype(str)))
-    slate_teams=set(slate.home_team.astype(str)) | set(slate.away_team.astype(str))
-    injury_diagnostics=diagnose_injury_feed(injuries,SEASON,week,slate_teams,roster_team)
-    # Never apply a practice or designation from a former team or an unknown
-    # GSIS identity. Missing records mean UNKNOWN, not cleared/active.
-    injury_records=trusted_injury_rows(injuries,SEASON,week,roster_team)
-    injury_status=availability(injury_records,week)
-    practice_status=practice_flags(injury_records,week)
-    weekly_diagnostics={'source_rows':0,'latest_week':None,'status_column':False}
-    if weekly_rosters is not None and not weekly_rosters.empty and {'gsis_id','week'}.issubset(weekly_rosters.columns):
-        wr=weekly_rosters.copy()
-        if 'season' in wr:
-            wr=wr[pd.to_numeric(wr.season,errors='coerce')==SEASON]
-        wr=wr[pd.to_numeric(wr.week,errors='coerce')<=week]
-        if not wr.empty:
-            latest_week=int(pd.to_numeric(wr.week,errors='coerce').max())
-            wr=wr[pd.to_numeric(wr.week,errors='coerce')==latest_week]
-            weekly_diagnostics={'source_rows':len(wr),'latest_week':latest_week,'status_column':'status' in wr.columns,'status_counts':wr.status.fillna('MISSING').astype(str).value_counts().head(30).to_dict() if 'status' in wr.columns else {}}
-            if 'status' in wr.columns:
-                roster_status.update(dict(zip(wr.gsis_id.astype(str),wr.status.fillna('').astype(str).str.upper().str.strip())))
+        ('passer_player_id','pass_attempt','…1118 tokens truncated…us.update(dict(zip(wr.gsis_id.astype(str),wr.status.fillna('').astype(str).str.upper().str.strip())))
     injury_diagnostics['report_status_counts']=injury_diagnostics['current_week_report_status_counts']
     # NFL weekly roster codes: ACT active roster, RES reserve, DEV practice squad.
     # ACT is roster membership only, not game-day clearance.
@@ -881,3 +840,4 @@ if __name__=='__main__':
     except Exception as exc:
         print(f'FEED UPDATE FAILED (existing published data preserved): {exc}',file=sys.stderr)
         sys.exit(1)
+

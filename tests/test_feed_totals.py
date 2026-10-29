@@ -1,4 +1,5 @@
 import unittest
+from build_feed import add_pbp_verified_skill_appearances
 from scripts.audit_feed_totals import audit
 
 class FeedTotalsTests(unittest.TestCase):
@@ -32,4 +33,13 @@ class FeedTotalsTests(unittest.TestCase):
     def test_missing_game_blocks(self):
         p,d=self.fixture();p['seasonGamesPlayed']=0
         with self.assertRaises(RuntimeError):audit([p],{'rows':[d]})
+    def test_recorded_carries_or_targets_prove_skill_player_appearance(self):
+        appearances={}
+        stats={('GB','jacobs-id',7):{'rushAttempts':11,'targets':5},
+               ('GB','inactive-id',7):{'rushAttempts':0,'targets':0},
+               ('GB','qb-id',7):{'rushAttempts':2,'targets':0}}
+        add_pbp_verified_skill_appearances(appearances,stats,
+            {'jacobs-id':'RB','inactive-id':'RB','qb-id':'QB'})
+        self.assertEqual(appearances,{('GB','jacobs-id'):{7}})
 if __name__=='__main__':unittest.main()
+
