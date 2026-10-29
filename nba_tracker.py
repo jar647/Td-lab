@@ -56,7 +56,8 @@ for g in games:
    missing.setdefault(rows[0]["team"],set()).add(pid)
  projections=[]
  for pid,rows in byid.items():
-  if len(rows)<1:continue
+  # Skip thin player histories; a frozen forecast needs >=3 independent earlier appearances.
+  if len(rows)<3:continue
   if statistics.mean(mins(p) for p in rows[:5])<5:continue
   avg_minutes=statistics.mean(mins(p) for p in rows[:5])
   recent_minutes=statistics.mean(mins(p) for p in rows[:3])
