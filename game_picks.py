@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd
 import nflreadpy
 from game_context import team_context, matchup_context, adjusted_projection, travel_estimate, residual_context
+from nfl_weather import forecast_for_game
 
 ROOT=Path(__file__).resolve().parent
 LEAGUE_POINTS=22.0
@@ -138,13 +139,24 @@ def main():
         matchup=matchup_context(home_context,away_context)
         hp,ap=adjusted_projection(baseline_home,baseline_away,matchup)
         research=game_research_context(r,history,str(r["home_team"]),str(r["away_team"]),player_feed)
+        weather=forecast_for_game(r,str(r["home_team"]),research["venue"].get("roof"))
+        research["weather"]=weather
+        if weather.get("available"):
+            research["venue"].update({"temperature_f":weather.get("temperature_f"),
+                "wind_mph":weather.get("wind_mph"),"wind_direction":weather.get("wind_direction"),
+                "precipitation_probability":weather.get("precipitation_probability"),
+                "weather_condition":weather.get("condition"),"weather_updated_at":weather.get("updated_at")})
+        sim_context=residual_context(r,str(r["home_team"]),str(r["away_team"]))
+        if weather.get("available"):
+            sim_context["temperature_f"]=weather.get("temperature_f")
+            sim_context["wind_mph"]=weather.get("wind_mph")
         games.append({"game_id":str(r["game_id"]),"home":str(r["home_team"]),"away":str(r["away_team"]),"gameday":str(r["gameday"]),
           "model_version":"score-baseline-pbp-v2",
           "projected_home_points":hp,"projected_away_points":ap,
           "projected_margin_home":round(hp-ap,1),"projected_total":round(hp+ap,1),
           "model_inputs":{"home":h,"away":a,"baseline_home_points":baseline_home,"baseline_away_points":baseline_away,
             "matchup":matchup,"research_context":research,
-            "residual_context":residual_context(r,str(r["home_team"]),str(r["away_team"])),
+            "residual_context":sim_context,
             "prior_games":PRIOR_GAMES,"league_points_prior":LEAGUE_POINTS,"home_advantage_points":HOME_ADVANTAGE_POINTS},
           "ml":{"pick":None,"confidence":None,"status":"PASS"},
           "ats":{"pick":None,"confidence":None,"status":"PASS","line":None},

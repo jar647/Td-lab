@@ -25,6 +25,11 @@ const feed={season:2026,week:8,generated_at:new Date().toISOString(),model_versi
  projected_home_points:25,projected_away_points:22,
  model_inputs:{home:{games:7,offense:25,defense_allowed:23},away:{games:7,offense:22,defense_allowed:26}}
 }]};
+feed.games[0].model_inputs.research_context={teams:{},rest_days:{home:7,away:7},
+ venue:{name:'Lambeau Field',roof:'outdoors',surface:'grass'},
+ travel:{available:true,air_distance_miles:600,estimated_flight_hours:2.2,warning:'Estimate only.'},
+ weather:{available:true,source:'National Weather Service hourly forecast',forecast_time:'2026-11-01T13:00:00-06:00',
+  temperature_f:45,wind_mph:12,wind_direction:'NW',precipitation_probability:20,condition:'Light Rain'},source_note:'Public feeds.'};
 const sandbox={document:{getElementById:el},location:{search:'?sport=NFL'},URLSearchParams,Intl,Date,setTimeout,console,
  CookGameOdds:engine,
  localStorage:{getItem:key=>store.get(key)||null,setItem:(key,v)=>store.set(key,v)},
@@ -50,5 +55,7 @@ vm.createContext(sandbox);vm.runInContext(scripts[0],sandbox,{timeout:5000});
  assert.match(el('results').innerHTML,/Spread warning/);
  assert.match(el('results').innerHTML,/no verified historical spread outcomes for an ATS backtest/i);
  assert.match(el('results').innerHTML,/PASS · ATS NOT BACKTESTED/);
+ assert.match(el('results').innerHTML,/National Weather Service hourly forecast/);
+ assert.match(el('results').innerHTML,/Light Rain/);
  console.log('Game Odds UI: game -> book lines -> 100k simulations -> research-only results PASS');
 })().catch(err=>{console.error(err);process.exitCode=1});

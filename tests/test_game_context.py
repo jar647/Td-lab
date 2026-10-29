@@ -1,6 +1,8 @@
 import unittest
 
 from game_context import adjusted_projection, matchup_context, team_context, travel_estimate
+from nfl_weather import forecast_for_game, kickoff_utc, parse_wind_mph, select_hourly_period
+from datetime import datetime
 
 
 def plays(week, game_id, offense_epa, defense_epa, offense, defense):
@@ -65,6 +67,21 @@ class GameContextTests(unittest.TestCase):
         self.assertGreater(known["air_distance_miles"],1500)
         self.assertIn("actual charter route",known["warning"])
         self.assertFalse(travel_estimate("ARI","BUF",True)["available"])
+
+    def test_weather_helpers_parse_nws_hourly_forecasts(self):
+        self.assertEqual(parse_wind_mph("10 to 15 mph"),12.5)
+        self.assertIsNone(parse_wind_mph("Calm"))
+        kickoff=kickoff_utc({"gameday":"2026-11-01","gametime":"13:00"},"GB")
+        self.assertEqual(kickoff.isoformat(),"2026-11-01T19:00:00+00:00")
+        periods=[{"startTime":"2026-11-01T13:00:00-06:00","endTime":"2026-11-01T14:00:00-06:00",
+                  "temperature":45,"windSpeed":"10 to 15 mph","shortForecast":"Rain"}]
+        selected=select_hourly_period(periods,kickoff)
+        self.assertEqual(selected["shortForecast"],"Rain")
+
+    def test_indoor_venue_does_not_use_outdoor_weather(self):
+        result=forecast_for_game({"gameday":"2026-11-01","gametime":"13:00"},"GB","dome")
+        self.assertFalse(result["available"])
+        self.assertIn("Indoor venue",result["reason"])
 
 
 if __name__=="__main__":

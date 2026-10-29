@@ -210,7 +210,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   const sides=[[model.home,data.home_offense_vs_away_defense,model.away],[model.away,data.away_offense_vs_home_defense,model.home]];
   return '<div class="breakdown" style="margin-top:12px"><h3>Pregame offense vs defense matchup</h3>'+sides.map(([team,x,opponent])=>
    '<p><strong>'+esc(team)+' offense vs '+esc(opponent)+' defense:</strong> '+
-   (x?.available?'Season/recent blended EPA/play '+num(x.offense_epa_per_play)+' vs '+num(x.defense_epa_allowed_per_play)+' allowed (matchup delta '+(x.epa_per_play_delta>=0?'+':'')+num(x.epa_per_play_delta)+'); success rate '+pct(x.offense_success_rate)+' vs '+pct(x.defense_success_allowed_rate)+' allowed; recent form uses '+esc(x.recent_form_games||0)+' games at '+pct(x.recent_form_weight)+' weight; explosive-play rates '+pct(x.explosive_rate_offense)+' vs '+pct(x.explosive_rate_defense_allowed)+' allowed; '+num(x.plays_per_game)+' offensive plays/game; pass EPA '+num(x.pass_epa_offense)+' vs '+num(x.pass_epa_defense_allowed)+' allowed; rush EPA '+num(x.rush_epa_offense)+' vs '+num(x.rush_epa_defense_allowed)+' allowed; offense turnovers '+num(x.turnovers_per_game)+'/game, opponent sacks '+num(x.defensive_sacks_per_game)+'/game. Experimental score adjustment '+(x.score_adjustment>=0?'+':'')+num(x.score_adjustment)+'.':esc(x?.warning||'Insufficient matchup data; no adjustment applied.'))+'</p>'
+   (x?.available?'Season/recent blended EPA/play '+num(x.offense_epa_per_play)+' vs '+num(x.defense_epa_allowed_per_play)+' allowed (matchup delta '+(x.epa_per_play_delta>=0?'+':'')+num(x.epa_per_play_delta)+'); success rate '+pct(x.offense_success_rate)+' vs '+pct(x.defense_success_allowed_rate)+' allowed; recent form uses '+esc(x.recent_form_games||0)+' games at '+pct(x.recent_form_weight)+' weight; pass tendency '+pct(x.offense_pass_rate)+' vs opponent pass rate faced '+pct(x.defense_pass_rate_allowed)+' allowed; matchup pass/rush EPA deltas '+num(x.pass_epa_matchup_delta)+' / '+num(x.rush_epa_matchup_delta)+'; explosive-play rates '+pct(x.explosive_rate_offense)+' vs '+pct(x.explosive_rate_defense_allowed)+' allowed; '+num(x.plays_per_game)+' offensive plays/game; offense turnovers '+num(x.turnovers_per_game)+'/game, opponent sacks '+num(x.defensive_sacks_per_game)+'/game. Experimental score adjustment '+(x.score_adjustment>=0?'+':'')+num(x.score_adjustment)+'.':esc(x?.warning||'Insufficient matchup data; no adjustment applied.'))+'</p>'
   ).join('')+'<p class="warn">Uses only completed prior-week play-by-play. Matchup features inform the score estimate, but their resulting probabilities remain uncalibrated.</p></div>';
  }
  function contextPanel(model){
@@ -230,12 +230,14 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
     (skill.length?`<p>Top usage skill players:<br>${skill.map(player).join('<br>')}</p>`:'<p>Top player usage data unavailable.</p>')+
     `<p class="caption">${esc(t.usage?.availability_warning||'')} Availability feed fields are not official inactives.</p></div>`;
   }).join('');
-  const rest=ctx.rest_days||{},venue=ctx.venue||{},travel=ctx.travel||{};
+  const rest=ctx.rest_days||{},venue=ctx.venue||{},travel=ctx.travel||{},weather=ctx.weather||{};
   return `<div class="breakdown" style="margin-top:12px"><h3>Full pregame context</h3><div class="grid2">${teams}</div>`+
    `<p>Rest before kickoff: ${esc(model.home)} ${num(rest.home)} days · ${esc(model.away)} ${num(rest.away)} days.</p>`+
-   `<p>Venue: ${esc(venue.name||'not listed')} · ${esc(venue.location||'location unknown')} · roof ${esc(venue.roof||'unknown')} · surface ${esc(venue.surface||'unknown')} · temperature ${num(venue.temperature_f)}°F · wind ${num(venue.wind_mph)} mph.</p>`+
+   `<p>Venue: ${esc(venue.name||'not listed')} · ${esc(venue.location||'location unknown')} · roof ${esc(venue.roof||'unknown')} · surface ${esc(venue.surface||'unknown')}.</p>`+
+   (weather.available?`<p>Weather near kickoff (${esc(weather.source||'NWS forecast')}): ${esc(weather.condition||'condition unavailable')} · ${num(weather.temperature_f)}°F · ${num(weather.wind_mph)} mph ${esc(weather.wind_direction||'')} wind · precipitation chance ${num(weather.precipitation_probability)}% · forecast ${esc(weather.forecast_time||'time unavailable')}.</p>`:
+    `<p>Game-time weather: ${esc(weather.reason||'NWS forecast unavailable')}.</p>`)+
    `<p>Estimated away travel: ${travel.available?`${num(travel.air_distance_miles)} straight-line miles · approximately ${num(travel.estimated_flight_hours)} hours of flight equivalent`:esc(travel.warning||'unavailable')}.</p>`+
-   `<p class="warn">${esc(travel.warning||'')} Actual team itineraries, active status, coach-report correctness and game-day weather are not confirmed by these feeds. EPA/success matchup and home/road scoring splits shift the score mean. NFL simulation residuals use comparable rest/travel history when at least 40 prior games match; otherwise the broader pool is used and labeled. Player and coach context is surfaced, while unconfirmed lineup changes are not assigned invented point values.</p>`+
+   `<p class="warn">${esc(travel.warning||'')} NWS hourly weather is a forecast, not observed kickoff conditions. EPA/success matchup and home/road scoring splits shift the score mean. Pass/rush efficiency and team play-calling tendency shape the matchup adjustment. Historical NFL score residuals use matched roof/weather plus rest/travel when at least 30 games match, or one context when at least 40 match; otherwise the broader pool is used and labeled. Player availability is shown from its feed, but unconfirmed lineup changes are not assigned invented point values.</p>`+
    `<p class="caption">${esc(ctx.source_note||'Public feed context; individual source rows can be missing or stale.')}</p></div>`;
  }
  function render(result,model){
@@ -275,6 +277,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    esc(model.sample.awayGames)+' for '+esc(model.away)+'. Paired residual pool: '+esc(model.sample.residualGames)+' completed games.</p>'+
    '<p>'+esc(model.method)+'</p><p class="warn">'+esc(model.warning)+'</p>'+
    (source.NBA?.injuryStatus&&model.sport==='NBA'?'<p class="warn">'+esc(source.NBA.injuryStatus)+'</p>':'')+
+   '<p>Residual pool: '+esc(model.sample.residualGames)+' earlier games. '+esc(model.sample.residualContextReason||'No context conditioning recorded.')+'</p>'+
    '<p>Simulation noise near 50% is roughly ±0.16 percentage points at 100,000 draws, but real-world forecasting/model error is much larger and not measured by that number.</p>'+
    '<p><strong>Verification:</strong> '+esc(result.verification)+'</p></div></div>';
   $('results').hidden=false;

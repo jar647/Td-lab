@@ -34,15 +34,29 @@
  }
  function contextualResiduals(records,target){
   const keys=['home_rest','away_rest','travel_miles'];
-  if(!target||keys.some(k=>!Number.isFinite(finite(target[k]))))
-   return {records,used:false,reason:'Rest/travel context is incomplete; using the full earlier-game residual pool.'};
-  const comparable=records.filter(r=>keys.every(k=>Number.isFinite(finite(r[k])))&&
+  if(!target)return {records,used:false,weatherUsed:false,reason:'Pregame context is missing; using all earlier score residuals.'};
+  const restReady=keys.every(k=>Number.isFinite(finite(target[k])));
+  const restMatches=restReady?records.filter(r=>keys.every(k=>Number.isFinite(finite(r[k])))&&
    Math.abs(Number(r.home_rest)-Number(target.home_rest))<=2&&
    Math.abs(Number(r.away_rest)-Number(target.away_rest))<=2&&
-   Math.abs(Number(r.travel_miles)-Number(target.travel_miles))<=750);
-  if(comparable.length<40)
-   return {records,used:false,reason:'Fewer than 40 earlier games match rest and travel context; using the full residual pool.'};
-  return {records:comparable,used:true,reason:'Residuals conditioned on games within 2 rest days for each team and 750 travel miles.'};
+   Math.abs(Number(r.travel_miles)-Number(target.travel_miles))<=750):[];
+  const weatherReady=String(target.roof||'').length>0&&
+   (Number.isFinite(finite(target.temperature_f))||Number.isFinite(finite(target.wind_mph)));
+  const weatherMatches=weatherReady?records.filter(r=>{
+   if(String(r.roof||'').toLowerCase()!==String(target.roof).toLowerCase())return false;
+   if(Number.isFinite(finite(target.temperature_f))&&(!Number.isFinite(finite(r.temperature_f))||Math.abs(Number(r.temperature_f)-Number(target.temperature_f))>20))return false;
+   if(Number.isFinite(finite(target.wind_mph))&&(!Number.isFinite(finite(r.wind_mph))||Math.abs(Number(r.wind_mph)-Number(target.wind_mph))>8))return false;
+   return true;
+  }):[];
+  const combined=restReady&&weatherReady?weatherMatches.filter(r=>restMatches.includes(r)):[];
+  if(combined.length>=30)return {records:combined,used:true,weatherUsed:true,
+   reason:'Residuals matched on roof/weather (within 20°F and 8 mph) plus rest/travel context; '+combined.length+' comparable games.'};
+  if(weatherMatches.length>=40)return {records:weatherMatches,used:true,weatherUsed:true,
+   reason:'Residuals matched on roof/weather (within 20°F and 8 mph); rest/travel match was too sparse.'};
+  if(restMatches.length>=40)return {records:restMatches,used:true,weatherUsed:false,
+   reason:'Residuals matched on rest/travel; weather-matched history was too sparse.'};
+  return {records,used:false,weatherUsed:false,
+   reason:'Fewer than 30 weather-plus-context or 40 single-context games matched; using all earlier score residuals.'};
  }
  function nflGame(game,backtest,meta={}){
   if(!game||!game.home||!game.away)throw Error('Selected NFL matchup is unavailable');
@@ -57,19 +71,20 @@
    return (yr<season||(yr===season&&wk<week))&&Number.isFinite(finite(x.actual_home))&&Number.isFinite(finite(x.actual_away))
     &&Number.isFinite(finite(x.projected_home))&&Number.isFinite(finite(x.projected_away));
   }).map(x=>({homeError:Number(x.actual_home)-Number(x.projected_home),awayError:Number(x.actual_away)-Number(x.projected_away),
-   home_rest:finite(x.home_rest),away_rest:finite(x.away_rest),travel_miles:finite(x.travel_miles)}));
+   home_rest:finite(x.home_rest),away_rest:finite(x.away_rest),travel_miles:finite(x.travel_miles),
+   roof:x.roof,temperature_f:finite(x.temperature_f),wind_mph:finite(x.wind_mph)}));
   if(records.length<40)throw Error('Insufficient earlier NFL score residuals');
   const conditional=contextualResiduals(records,game.model_inputs?.residual_context);
   const simulationRecords=conditional.records;
   return {sport:'NFL',id:String(game.game_id||game.away+'-'+game.home),date:String(game.gameday||''),home:String(game.home),away:String(game.away),
    projectedHome:home,projectedAway:away,residuals:pairedResiduals(simulationRecords),sample:{homeGames:hGames,awayGames:aGames,residualGames:simulationRecords.length,
-    residualContextUsed:conditional.used,residualContextReason:conditional.reason},
+    residualContextUsed:conditional.used,residualWeatherUsed:conditional.weatherUsed,residualContextReason:conditional.reason},
    matchupAnalysis:game.model_inputs?.matchup||null,
    pregameContext:game.model_inputs?.research_context||null,
    method:(game.model_version==='score-baseline-pbp-v2'?'Pregame scoring baseline with shrunk home/road scoring splits and season/recent EPA-success offense-vs-defense adjustment':'Pregame score baseline')+', plus '+conditional.reason+' Paired historical score residual simulation.',
    homeOffense:finite(game.model_inputs?.home?.offense),awayOffense:finite(game.model_inputs?.away?.offense),
    homeAllowed:finite(game.model_inputs?.home?.defense_allowed),awayAllowed:finite(game.model_inputs?.away?.defense_allowed),
-   warning:'Experimental NFL game score. Historical team scoring and play-by-play include prior player/coaching effects, but player availability, weather, and travel itineraries are not fully modeled. Probabilities are uncalibrated.'};
+   warning:'Experimental NFL score model. Historical team performance includes prior player/coaching effects; only confirmed current game information should alter projections. Weather conditions residual sampling only when enough matched history exists. Injury/lineup effects are not assigned a guessed point value. Probabilities are uncalibrated.'};
  }
  function gamePoints(game){
   if(!game||game.status!=='STATUS_FINAL'||Number(game.season_type)!==2)return null;

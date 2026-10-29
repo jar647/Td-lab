@@ -127,16 +127,30 @@ def matchup_context(home, away):
         # recent rate is shrunk toward the season rate to limit early noise.
         recent_games = min(ro.get("games", 0), rd.get("games", 0))
         recent_weight = min(0.4, 0.1 * recent_games)
-        offense_epa = o["epa_per_play"]
-        defense_epa = d["epa_per_play"]
-        offense_success = o["success_rate"]
-        defense_success = d["success_rate"]
-        if recent_games and isinstance(ro.get("epa_per_play"), (int, float)) and isinstance(rd.get("epa_per_play"), (int, float)):
-            offense_epa = (1 - recent_weight) * offense_epa + recent_weight * ro["epa_per_play"]
-            defense_epa = (1 - recent_weight) * defense_epa + recent_weight * rd["epa_per_play"]
-            offense_success = (1 - recent_weight) * offense_success + recent_weight * ro["success_rate"]
-            defense_success = (1 - recent_weight) * defense_success + recent_weight * rd["success_rate"]
-        epa_delta = offense_epa - defense_epa
+        def blend(season_row, recent_row, key):
+            season_value, recent_value = season_row.get(key), recent_row.get(key)
+            if isinstance(season_value, (int, float)) and isinstance(recent_value, (int, float)) and recent_games:
+                return (1 - recent_weight) * season_value + recent_weight * recent_value
+            return season_value
+        offense_epa = blend(o, ro, "epa_per_play")
+        defense_epa = blend(d, rd, "epa_per_play")
+        offense_success = blend(o, ro, "success_rate")
+        defense_success = blend(d, rd, "success_rate")
+        offense_pass = blend(o, ro, "pass_epa")
+        defense_pass = blend(d, rd, "pass_epa")
+        offense_rush = blend(o, ro, "rush_epa")
+        defense_rush = blend(d, rd, "rush_epa")
+        pass_rate_offense = blend(o, ro, "pass_rate")
+        pass_rate_allowed = blend(d, rd, "pass_rate")
+        expected_pass_rate = min(.82, max(.25, (pass_rate_offense + pass_rate_allowed) / 2))
+        if all(isinstance(x, (int, float)) for x in (offense_pass, defense_pass, offense_rush, defense_rush)):
+            pass_delta = offense_pass - defense_pass
+            rush_delta = offense_rush - defense_rush
+            epa_delta = expected_pass_rate * pass_delta + (1 - expected_pass_rate) * rush_delta
+        else:
+            epa_delta = offense_epa - defense_epa
+            pass_delta = offense_pass - defense_pass if isinstance(offense_pass, (int,float)) and isinstance(defense_pass, (int,float)) else None
+            rush_delta = offense_rush - defense_rush if isinstance(offense_rush, (int,float)) and isinstance(defense_rush, (int,float)) else None
         success_delta = offense_success - defense_success
         raw = EPA_SCORE_WEIGHT * epa_delta + SUCCESS_SCORE_WEIGHT * success_delta
         # Shrink early-season estimates; maximum is the empirically tested EPA
@@ -145,12 +159,15 @@ def matchup_context(home, away):
         return {"available": True, "offense_games": o["games"], "defense_games": d["games"],
                 "offense_epa_per_play": offense_epa, "defense_epa_allowed_per_play": defense_epa,
                 "offense_success_rate": offense_success, "defense_success_allowed_rate": defense_success,
+                "offense_pass_rate": pass_rate_offense, "defense_pass_rate_allowed": pass_rate_allowed,
+                "expected_pass_rate": expected_pass_rate,
+                "pass_epa_matchup_delta": pass_delta, "rush_epa_matchup_delta": rush_delta,
                 "recent_form_games": recent_games, "recent_form_weight": recent_weight,
                 "epa_per_play_delta": epa_delta, "success_rate_delta": success_delta,
                 "explosive_rate_offense": o.get("explosive_rate"),
                 "explosive_rate_defense_allowed": d.get("explosive_rate"),
-                "pass_epa_offense": o.get("pass_epa"), "pass_epa_defense_allowed": d.get("pass_epa"),
-                "rush_epa_offense": o.get("rush_epa"), "rush_epa_defense_allowed": d.get("rush_epa"),
+                "pass_epa_offense": offense_pass, "pass_epa_defense_allowed": defense_pass,
+                "rush_epa_offense": offense_rush, "rush_epa_defense_allowed": defense_rush,
                 "plays_per_game": o.get("plays", 0) / max(1, o.get("games", 0)),
                 "turnovers_per_game": o.get("turnovers_per_game"),
                 "defensive_sacks_per_game": d.get("sacks_per_game"),
@@ -195,5 +212,8 @@ def residual_context(game, home, away):
     location = game.get("location")
     neutral = str(location).strip().lower() == "neutral" if location is not None else False
     travel = travel_estimate(away, home, neutral)
+    roof = game.get("roof")
     return {"home_rest": number("home_rest"), "away_rest": number("away_rest"),
-            "travel_miles": travel.get("air_distance_miles") if travel.get("available") else None}
+            "travel_miles": travel.get("air_distance_miles") if travel.get("available") else None,
+            "roof": None if roof is None else str(roof).strip().lower(),
+            "temperature_f": number("temp"), "wind_mph": number("wind")}
