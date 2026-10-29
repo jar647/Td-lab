@@ -8,15 +8,21 @@ for(const invalid of ['',null,0,'-99','+20','abc','-110x'])assert.equal(e.quote(
 const backtest={records:Array.from({length:155},(_,i)=>({
  season:i<125?2024:2025,week:5+i%12,
  projected_home:22,projected_away:21,
+ home_rest:7,away_rest:7,travel_miles:600,
  actual_home:Math.round(22+7*Math.sin(i*.61)+2*Math.cos(i*.7)),
  actual_away:Math.round(21+8*Math.cos(i*.56)+1*Math.sin(i*.32))
 }))};
 const game={game_id:'2026_08_TST_FOO',home:'FOO',away:'TST',gameday:'2026-11-01',
  projected_home_points:25.5,projected_away_points:22.4,
- model_inputs:{home:{games:7,offense:28,defense_allowed:20},away:{games:6,offense:24,defense_allowed:26}}};
+ model_inputs:{home:{games:7,offense:28,defense_allowed:20},away:{games:6,offense:24,defense_allowed:26},
+  residual_context:{home_rest:7,away_rest:7,travel_miles:600}}};
 const prepared=e.nflGame(game,backtest);
 assert.equal(prepared.sample.residualGames,155);
+assert.equal(prepared.sample.residualContextUsed,true,'NFL residual simulation should condition on comparable pregame travel/rest when sample is adequate');
 assert.equal(prepared.projectedHome,25.5);
+const fallback=e.nflGame({...game,model_inputs:{...game.model_inputs,residual_context:{home_rest:10,away_rest:10,travel_miles:3000}}},backtest);
+assert.equal(fallback.sample.residualContextUsed,false,'The model must fall back when too few prior games match the context');
+assert.match(fallback.sample.residualContextReason,/Fewer than 40/);
 const market={homeSpread:-3.5,total:47.5,homeML:'-120',awayML:'+105',
  homeATS:'-110',awayATS:'-110',over:'-115',under:'-105'};
 const r=e.simulate(prepared,market,100000,77);
@@ -35,6 +41,12 @@ const repeated=e.simulate(prepared,market,100000,77);
 assert.deepEqual(repeated.simulated,r.simulated,'Simulation must be reproducible');
 assert.equal(r.modelStatus,'RESEARCH ONLY · NOT CALIBRATED');
 assert.ok(r.markets.every(m=>m.signal!=='PLAY'),'Unvalidated research must not become betting advice');
+const atsRows=r.markets.filter(m=>m.key.endsWith('ATS'));
+assert.equal(atsRows.length,2);
+assert.ok(atsRows.every(m=>m.signal==='PASS · ATS NOT BACKTESTED'&&!m.eligible),
+ 'Spread markets must stay PASS until there is verified ATS holdout validation');
+assert.ok(atsRows.every(m=>Number.isFinite(m.win)&&Number.isFinite(m.ev)),
+ 'Exploratory spread simulation and hypothetical pricing should remain visible');
 assert.ok(r.markets.some(m=>Number.isFinite(m.ev)),'Expected value math should work with an actual quote');
 const noOdds=e.simulate(prepared,{},1000,17);
 assert.equal(noOdds.markets.length,2);

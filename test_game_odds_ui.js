@@ -47,5 +47,8 @@ vm.createContext(sandbox);vm.runInContext(scripts[0],sandbox,{timeout:5000});
  assert.match(el('results').innerHTML,/Over 45.5/);
  assert.match(el('results').innerHTML,/RESEARCH ONLY/);
  assert.match(el('results').innerHTML,/No bet is verified/);
+ assert.match(el('results').innerHTML,/Spread warning/);
+ assert.match(el('results').innerHTML,/no verified historical spread outcomes for an ATS backtest/i);
+ assert.match(el('results').innerHTML,/PASS · ATS NOT BACKTESTED/);
  console.log('Game Odds UI: game -> book lines -> 100k simulations -> research-only results PASS');
 })().catch(err=>{console.error(err);process.exitCode=1});

@@ -32,6 +32,18 @@
   const homeMean=mean(rows.map(r=>r.homeError)),awayMean=mean(rows.map(r=>r.awayError));
   return rows.map(r=>({homeError:r.homeError-homeMean,awayError:r.awayError-awayMean}));
  }
+ function contextualResiduals(records,target){
+  const keys=['home_rest','away_rest','travel_miles'];
+  if(!target||keys.some(k=>!Number.isFinite(finite(target[k]))))
+   return {records,used:false,reason:'Rest/travel context is incomplete; using the full earlier-game residual pool.'};
+  const comparable=records.filter(r=>keys.every(k=>Number.isFinite(finite(r[k])))&&
+   Math.abs(Number(r.home_rest)-Number(target.home_rest))<=2&&
+   Math.abs(Number(r.away_rest)-Number(target.away_rest))<=2&&
+   Math.abs(Number(r.travel_miles)-Number(target.travel_miles))<=750);
+  if(comparable.length<40)
+   return {records,used:false,reason:'Fewer than 40 earlier games match rest and travel context; using the full residual pool.'};
+  return {records:comparable,used:true,reason:'Residuals conditioned on games within 2 rest days for each team and 750 travel miles.'};
+ }
  function nflGame(game,backtest,meta={}){
   if(!game||!game.home||!game.away)throw Error('Selected NFL matchup is unavailable');
   const home=finite(game.projected_home_points),away=finite(game.projected_away_points);
@@ -44,14 +56,20 @@
    const yr=Number(x.season),wk=Number(x.week);
    return (yr<season||(yr===season&&wk<week))&&Number.isFinite(finite(x.actual_home))&&Number.isFinite(finite(x.actual_away))
     &&Number.isFinite(finite(x.projected_home))&&Number.isFinite(finite(x.projected_away));
-  }).map(x=>({homeError:Number(x.actual_home)-Number(x.projected_home),awayError:Number(x.actual_away)-Number(x.projected_away)}));
+  }).map(x=>({homeError:Number(x.actual_home)-Number(x.projected_home),awayError:Number(x.actual_away)-Number(x.projected_away),
+   home_rest:finite(x.home_rest),away_rest:finite(x.away_rest),travel_miles:finite(x.travel_miles)}));
   if(records.length<40)throw Error('Insufficient earlier NFL score residuals');
+  const conditional=contextualResiduals(records,game.model_inputs?.residual_context);
+  const simulationRecords=conditional.records;
   return {sport:'NFL',id:String(game.game_id||game.away+'-'+game.home),date:String(game.gameday||''),home:String(game.home),away:String(game.away),
-   projectedHome:home,projectedAway:away,residuals:pairedResiduals(records),sample:{homeGames:hGames,awayGames:aGames,residualGames:records.length},
-   method:'Pregame score baseline plus paired, centered walk-forward forecast residual bootstrap.',
+   projectedHome:home,projectedAway:away,residuals:pairedResiduals(simulationRecords),sample:{homeGames:hGames,awayGames:aGames,residualGames:simulationRecords.length,
+    residualContextUsed:conditional.used,residualContextReason:conditional.reason},
+   matchupAnalysis:game.model_inputs?.matchup||null,
+   pregameContext:game.model_inputs?.research_context||null,
+   method:(game.model_version==='score-baseline-pbp-v2'?'Pregame scoring baseline with shrunk home/road scoring splits and season/recent EPA-success offense-vs-defense adjustment':'Pregame score baseline')+', plus '+conditional.reason+' Paired historical score residual simulation.',
    homeOffense:finite(game.model_inputs?.home?.offense),awayOffense:finite(game.model_inputs?.away?.offense),
    homeAllowed:finite(game.model_inputs?.home?.defense_allowed),awayAllowed:finite(game.model_inputs?.away?.defense_allowed),
-   warning:'NFL team model does not independently verify game-day injuries, weather, starting quarterbacks or current market prices.'};
+   warning:'Experimental NFL game score. Historical team scoring and play-by-play include prior player/coaching effects, but player availability, weather, and travel itineraries are not fully modeled. Probabilities are uncalibrated.'};
  }
  function gamePoints(game){
   if(!game||game.status!=='STATUS_FINAL'||Number(game.season_type)!==2)return null;
@@ -155,10 +173,16 @@
     key==='awayATS'?game.away+' '+(-market.homeSpread>0?'+':'')+(-market.homeSpread):
     key==='over'?'Over '+market.total:'Under '+market.total;
    const adequatelySampled=game.sample.homeGames>=5&&game.sample.awayGames>=5&&game.sample.residualGames>= (game.sport==='NFL'?100:35);
-   const eligible=adequatelySampled&&price&&price.american>=-200&&ev>=.05&&modelEdge>=.025;
+   // The current repository has no validated home-perspective ATS holdout
+   // results (historical coverage is zero). Keep displaying the simulated
+   // comparison, but never promote a spread side to a research lean from it.
+   const atsBacktestVerified=game.atsBacktestVerified===true;
+   const eligible=adequatelySampled&&price&&price.american>=-200&&ev>=.05&&modelEdge>=.025&&
+    (!key.endsWith('ATS')||atsBacktestVerified);
    const signal=price===null?'NO ODDS ENTERED':
     price.american< -200?'PASS · PRICE WORSE THAN -200':
     !adequatelySampled?'PASS · LIMITED HISTORY':
+    key.endsWith('ATS')&&!atsBacktestVerified?'PASS · ATS NOT BACKTESTED':
     eligible?'RESEARCH LEAN · UNVALIDATED':
     'PASS · NO CLEAR MODEL VALUE';
    return {key,label,win,loss,push,price:price?.american??null,implied:price?.implied??null,

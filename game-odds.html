@@ -194,21 +194,56 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   refresh();
  }
  function marketTable(rows){
-  return '<div class="tableWrap"><table><thead><tr><th>Game market</th><th>Sim win / push</th><th>Your odds</th><th>Break-even*</th><th>No-vig market</th><th>Model diff*</th><th>Sim EV*</th><th>Decision</th></tr></thead><tbody>'+
+  return (rows.some(m=>m.key.endsWith('ATS'))?'<p class="warn"><strong>Spread warning:</strong> ATS percentages, model difference and EV are exploratory only. The repository has no verified historical spread outcomes for an ATS backtest, so both spread sides remain PASS regardless of these numbers.</p>':'')+
+   '<div class="tableWrap"><table><thead><tr><th>Game market</th><th>Uncalibrated sim win / push</th><th>Your odds</th><th>Break-even*</th><th>No-vig market</th><th>Hypothetical diff*</th><th>Hypothetical EV*</th><th>Decision</th></tr></thead><tbody>'+
    rows.map(m=>'<tr><td><strong>'+esc(m.label)+'</strong></td>'+
     '<td>'+pct(m.win)+' / '+pct(m.push)+'</td><td>'+esc(odds(m.price))+'</td>'+
     '<td>'+pct(m.breakEven)+'</td><td>'+pct(m.noVig)+'</td>'+
     '<td class="'+(m.modelEdge!==null&&m.modelEdge>0?'good':'')+'">'+(m.modelEdge===null?'—':(m.modelEdge>0?'+':'')+pct(m.modelEdge))+'</td>'+
     '<td class="'+(m.ev!==null&&m.ev>0?'good':'')+'">'+(m.ev===null?'—':(m.ev>0?'+':'')+pct(m.ev))+'</td>'+
     '<td class="signal '+(m.eligible?'':'no')+'">'+esc(m.signal)+'</td></tr>').join('')+
-   '</tbody></table></div><p class="caption">*Break-even adjusts for pushes: quoted implied probability × (1 − push rate). Model difference is simulated win probability minus adjusted break-even. Sim EV = wins × net decimal payout − losses, per unit wagered. Unpriced sides have no value assessment.</p>';
+   '</tbody></table></div><p class="caption">*Break-even adjusts for pushes: quoted implied probability × (1 − push rate). The hypothetical model difference is simulated win probability minus adjusted break-even. Hypothetical EV = wins × net decimal payout − losses per unit wagered. These values are unvalidated research calculations, not evidence of an edge.</p>';
+ }
+ function matchupPanel(model){
+  const data=model.matchupAnalysis;
+  if(!data)return '<p class="warn">Play-by-play matchup context is not available in this feed version. The displayed projection is score-baseline only.</p>';
+  const sides=[[model.home,data.home_offense_vs_away_defense,model.away],[model.away,data.away_offense_vs_home_defense,model.home]];
+  return '<div class="breakdown" style="margin-top:12px"><h3>Pregame offense vs defense matchup</h3>'+sides.map(([team,x,opponent])=>
+   '<p><strong>'+esc(team)+' offense vs '+esc(opponent)+' defense:</strong> '+
+   (x?.available?'Season/recent blended EPA/play '+num(x.offense_epa_per_play)+' vs '+num(x.defense_epa_allowed_per_play)+' allowed (matchup delta '+(x.epa_per_play_delta>=0?'+':'')+num(x.epa_per_play_delta)+'); success rate '+pct(x.offense_success_rate)+' vs '+pct(x.defense_success_allowed_rate)+' allowed; recent form uses '+esc(x.recent_form_games||0)+' games at '+pct(x.recent_form_weight)+' weight; explosive-play rates '+pct(x.explosive_rate_offense)+' vs '+pct(x.explosive_rate_defense_allowed)+' allowed; '+num(x.plays_per_game)+' offensive plays/game; pass EPA '+num(x.pass_epa_offense)+' vs '+num(x.pass_epa_defense_allowed)+' allowed; rush EPA '+num(x.rush_epa_offense)+' vs '+num(x.rush_epa_defense_allowed)+' allowed; offense turnovers '+num(x.turnovers_per_game)+'/game, opponent sacks '+num(x.defensive_sacks_per_game)+'/game. Experimental score adjustment '+(x.score_adjustment>=0?'+':'')+num(x.score_adjustment)+'.':esc(x?.warning||'Insufficient matchup data; no adjustment applied.'))+'</p>'
+  ).join('')+'<p class="warn">Uses only completed prior-week play-by-play. Matchup features inform the score estimate, but their resulting probabilities remain uncalibrated.</p></div>';
+ }
+ function contextPanel(model){
+  const ctx=model.pregameContext;
+  if(!ctx)return '<div class="breakdown" style="margin-top:12px"><h3>Full pregame context</h3><p class="warn">Player, coach, venue and travel context is missing from this feed snapshot.</p></div>';
+  const rec=r=>r?`${r.wins}-${r.losses}${r.ties?'-'+r.ties:''} (${r.games} games)`:'unavailable';
+  const player=p=>!p?'No verified player record':
+   `<strong>${esc(p.name)} ${esc(p.position)}</strong> · ${esc(p.availability||'NOT REPORTED')} · ${esc(p.games??'—')} games`+
+   (p.position==='QB'?` · ${num(p.pass_attempts_per_game)} pass attempts/g · ${num(p.pass_yards_per_game)} pass yds/g`:
+    ` · ${num(p.carries_per_game)} carries/g · ${num(p.targets_per_game)} targets/g · ${num(p.rush_yards_per_game)} rush yds/g · ${num(p.receiving_yards_per_game)} rec yds/g`);
+  const teams=Object.entries(ctx.teams||{}).map(([team,t])=>{
+   const skill=t.usage?.top_usage_players||[];
+   return `<div class="breakdown"><h3>${esc(team)} team and player context</h3>`+
+    `<p>Record: ${rec(t.record?.overall)} · home ${rec(t.record?.home)} · road ${rec(t.record?.away)}.</p>`+
+    `<p>Head coach: ${esc(t.coach||'unavailable')} · recorded current-season coach record before this game: ${rec(t.coach_record)}.</p>`+
+    `<p>Quarterback: ${player(t.usage?.quarterback)}</p>`+
+    (skill.length?`<p>Top usage skill players:<br>${skill.map(player).join('<br>')}</p>`:'<p>Top player usage data unavailable.</p>')+
+    `<p class="caption">${esc(t.usage?.availability_warning||'')} Availability feed fields are not official inactives.</p></div>`;
+  }).join('');
+  const rest=ctx.rest_days||{},venue=ctx.venue||{},travel=ctx.travel||{};
+  return `<div class="breakdown" style="margin-top:12px"><h3>Full pregame context</h3><div class="grid2">${teams}</div>`+
+   `<p>Rest before kickoff: ${esc(model.home)} ${num(rest.home)} days · ${esc(model.away)} ${num(rest.away)} days.</p>`+
+   `<p>Venue: ${esc(venue.name||'not listed')} · ${esc(venue.location||'location unknown')} · roof ${esc(venue.roof||'unknown')} · surface ${esc(venue.surface||'unknown')} · temperature ${num(venue.temperature_f)}°F · wind ${num(venue.wind_mph)} mph.</p>`+
+   `<p>Estimated away travel: ${travel.available?`${num(travel.air_distance_miles)} straight-line miles · approximately ${num(travel.estimated_flight_hours)} hours of flight equivalent`:esc(travel.warning||'unavailable')}.</p>`+
+   `<p class="warn">${esc(travel.warning||'')} Actual team itineraries, active status, coach-report correctness and game-day weather are not confirmed by these feeds. EPA/success matchup and home/road scoring splits shift the score mean. NFL simulation residuals use comparable rest/travel history when at least 40 prior games match; otherwise the broader pool is used and labeled. Player and coach context is surfaced, while unconfirmed lineup changes are not assigned invented point values.</p>`+
+   `<p class="caption">${esc(ctx.source_note||'Public feed context; individual source rows can be missing or stale.')}</p></div>`;
  }
  function render(result,model){
   const s=result.simulated,p=result.projection;
   const favorites=result.markets.filter(x=>x.eligible).sort((a,b)=>b.ev-a.ev);
   const highest=favorites[0], priced=result.markets.filter(x=>x.price!==null);
   const headline=highest?'Highest research-only price discrepancy: '+highest.label+' ('+(highest.ev>0?'+':'')+pct(highest.ev)+' hypothetical EV).':
-   priced.length?'PASS · No priced market clears the research thresholds.':'NO ODDS ENTERED · Game distribution only.';
+   priced.length?'PASS · No validated game-market recommendation is available.':'NO ODDS ENTERED · Game distribution only.';
   const details=highest?'This is NOT an approved wager. The outcome model has not demonstrated independently calibrated, profitable forecasts.':
    'A model projection is not evidence of a profitable sportsbook edge. Passing is a valid outcome.';
   const date=model.sport==='NFL'?model.date:new Date(model.date).toLocaleString('en-US',{timeZone:'America/New_York',dateStyle:'medium',timeStyle:'short'});
@@ -223,7 +258,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    '<div class="kpi"><span>Sim median total</span><b>'+num(s.total.median)+'</b></div>'+
    '<div class="kpi"><span>Sim median home margin</span><b>'+num(s.margin.median)+'</b></div></div>'+
    (s.tie>0?'<p class="muted">Tie rate: '+pct(s.tie)+' (treated as a moneyline push).</p>':'')+
-   '<h3>Estimated market pricing</h3>'+marketTable(result.markets)+
+   '<h3>Estimated market pricing</h3>'+marketTable(result.markets)+matchupPanel(model)+contextPanel(model)+
    '<div class="breakdown"><h3>Decision summary</h3><strong class="warn">'+esc(headline)+'</strong>'+
    '<p>'+esc(details)+'</p><p class="muted">Only entered odds are evaluated. A 100,000-draw research result is not a calibrated probability or a guaranteed bet.</p></div></div>'+
    '<div class="panel"><h2>🔬 Deep game breakdown</h2><div class="grid2">'+
