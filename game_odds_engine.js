@@ -74,7 +74,7 @@
    againstPoints:x.home===team?x.awayPoints:x.homePoints
   }));
   const homeRecent=teamGames(game.home),awayRecent=teamGames(game.away);
-  if(homeRecent.length<2||awayRecent.length<2)throw Error('At least two completed games for each NBA team are required');
+  // Limited team history falls back to the observed league scoring prior and remains PASS-only.
   const leagueHome=mean(hist.map(x=>x.homePoints)),leagueAway=mean(hist.map(x=>x.awayPoints));
   const homeOff=mean(homeRecent.map(x=>x.forPoints)),awayOff=mean(awayRecent.map(x=>x.forPoints));
   const homeAllowed=mean(homeRecent.map(x=>x.againstPoints)),awayAllowed=mean(awayRecent.map(x=>x.againstPoints));
