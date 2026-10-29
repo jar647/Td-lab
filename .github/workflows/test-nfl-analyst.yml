@@ -4,6 +4,11 @@ on:
     paths:
       - 'analyst.html'
       - 'index.html'
+      - 'game-odds.html'
+      - 'game_odds_engine.js'
+      - 'game_odds_worker.js'
+      - 'test_game_odds.js'
+      - 'test_game_odds_ui.js'
       - 'nba.html'
       - 'market_odds.js'
       - 'player_probability.js'
@@ -31,6 +36,8 @@ jobs:
           node-version: '22'
       - run: node --check test_analyst_ui.js
       - run: node test_market_odds.js
+      - run: node test_game_odds.js
+      - run: node test_game_odds_ui.js
       - run: node test_player_probability.js
       - run: node test_analyst_ui.js
       - run: node test_nfl_game_engine.js
