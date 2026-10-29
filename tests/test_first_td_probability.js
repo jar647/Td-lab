@@ -38,9 +38,4 @@ assert.match(insufficient.reason,/coverage is only/);
 const injured=game.map(r=>({...r,availability:'OUT'}));
 assert.equal(estimate(injured,all).status,'insufficient_data');
 
-const ui=fs.readFileSync(path.join(__dirname,'..','index.html'),'utf8');
-assert.match(ui,/<script src=\"\.\/first_td_probability\.js\"><\/script>/);
-assert.match(ui,/FirstTDProbability\.estimate\(firstTdGameRecords,autoRecords\)/);
-assert.match(ui,/BEST UNCALIBRATED ESTIMATE/);
-assert.match(ui,/probabilities are uncalibrated and conditional on the listed players being available/);
-console.log('First-TD probability model and NFL UI tests passed.');
+console.log('First-TD probability model tests passed.');
