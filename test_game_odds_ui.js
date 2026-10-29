@@ -25,7 +25,7 @@ const feed={season:2026,week:8,generated_at:new Date().toISOString(),model_versi
  projected_home_points:25,projected_away_points:22,
  model_inputs:{home:{games:7,offense:25,defense_allowed:23},away:{games:7,offense:22,defense_allowed:26}}
 }]};
-feed.games[0].model_inputs.research_context={teams:{},rest_days:{home:7,away:7},
+feed.games[0].model_inputs.research_context={teams:{B:{coach:'Example Coach',scoring:{season:{games:6,points_per_game:16.33,points_allowed_per_game:26.17},home:{games:2},road:{games:4},last_three:{games:3}},coach_career:{regular_season:{games:6,wins:1,losses:5,ties:0},playoffs:{games:0,wins:0,losses:0,ties:0},coverage_start_season:1999},injuries:{coverage:'REPORTED',report_count:1,reports:[{player:'Unavailable Player',designation:'Out'}]}}},research:{retrieved_at:'2026-10-29',season:2026,through_week:7,sources:[{name:'Results source',url:'https://github.com/nflverse/nfldata'}],model_use:{injuries:'Context only'}},rest_days:{home:7,away:7},
  venue:{name:'Lambeau Field',roof:'outdoors',surface:'grass'},
  travel:{available:true,air_distance_miles:600,estimated_flight_hours:2.2,warning:'Estimate only.'},
  weather:{available:true,source:'National Weather Service hourly forecast',forecast_time:'2026-11-01T13:00:00-06:00',
@@ -57,5 +57,11 @@ vm.createContext(sandbox);vm.runInContext(scripts[0],sandbox,{timeout:5000});
  assert.match(el('results').innerHTML,/PASS · ATS NOT BACKTESTED/);
  assert.match(el('results').innerHTML,/National Weather Service hourly forecast/);
  assert.match(el('results').innerHTML,/Light Rain/);
+ assert.match(el('results').innerHTML,/Actual scoring/);
+ assert.match(el('results').innerHTML,/16.3 points\/game/);
+ assert.match(el('results').innerHTML,/Head coach NFL record/);
+ assert.match(el('results').innerHTML,/Unavailable Player/);
+ assert.match(el('results').innerHTML,/Results source/);
+ assert.match(el('results').innerHTML,/Context only/);
  console.log('Game Odds UI: game -> book lines -> 100k simulations -> research-only results PASS');
 })().catch(err=>{console.error(err);process.exitCode=1});

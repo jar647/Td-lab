@@ -13,6 +13,7 @@ on:
       - 'game_picks.py'
       - 'game_context.py'
       - 'nfl_weather.py'
+      - 'nfl_research.py'
       - 'scripts/calibrate_td.py'
       - 'scripts/grade_forward_bets.py'
       - 'scripts/audit_feed_totals.py'
@@ -59,7 +60,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Verify NFL engine Python syntax
-        run: python -m compileall -q injury_readiness.py build_feed.py capture_prop_probabilities.py grade_prop_probabilities.py historical_participation.py opportunity_prop_model.py player_prop_probability_backtest.py game_picks.py game_picks_backtest.py game_context.py nfl_weather.py tests
+        run: python -m compileall -q injury_readiness.py build_feed.py capture_prop_probabilities.py grade_prop_probabilities.py historical_participation.py opportunity_prop_model.py player_prop_probability_backtest.py game_picks.py game_picks_backtest.py game_context.py nfl_weather.py nfl_research.py tests
       - name: Test game-first NFL Monte Carlo engine
         run: node test_nfl_game_engine.js
       - name: Test Goal 1 decision and odds engine

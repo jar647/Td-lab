@@ -7,6 +7,7 @@ import pandas as pd
 import nflreadpy
 from game_context import team_context, matchup_context, adjusted_projection, travel_estimate, residual_context
 from nfl_weather import forecast_for_game
+from nfl_research import enrich_research, injury_research
 
 ROOT=Path(__file__).resolve().parent
 LEAGUE_POINTS=22.0
@@ -83,7 +84,7 @@ def key_player_usage(matchups,team):
     def card(p):
         return {"name":p.get("player"),"position":p.get("pos"),
           "games":p.get("seasonGamesPlayed",p.get("games")),
-          "availability":p.get("gameDayAvailability") or p.get("injuryReportStatus") or "NOT_REPORTED",
+          "availability":p.get("injuryReportStatus") if p.get("injuryReportStatus") not in (None,"NOT_REPORTED") else (p.get("gameDayAvailability") or "NOT_REPORTED"),
           "practice":p.get("injuryPracticeStatus") or "NOT_REPORTED",
           "pass_attempts_per_game":p.get("playerPassAttempts"),
           "pass_yards_per_game":p.get("playerPassYards"),
@@ -120,7 +121,19 @@ def main():
     status=json.loads((ROOT/"data/status.json").read_text())
     season=int(status.get("season",datetime.now(timezone.utc).year))
     week=int(status.get("week",0))
-    schedules=frame(nflreadpy.load_schedules([season]))
+    schedules=frame(nflreadpy.load_schedules())
+    try:
+        injuries=frame(nflreadpy.load_injuries([season]))
+        rosters=frame(nflreadpy.load_rosters([season]))
+        injury_error=None
+    except Exception as exc:
+        injuries,rosters=None,None
+        injury_error=str(exc)
+    teams=set(schedules.loc[pd.to_numeric(schedules.season,errors="coerce")==season,"home_team"].dropna().astype(str))
+    injury_reports=injury_research(injuries,rosters,season,week,teams)
+    if injury_error:
+        for report in injury_reports.values():
+            report["source_error"]=injury_error
     pbp=frame(nflreadpy.load_pbp([season])).to_dict("records")
     player_feed=json.loads((ROOT/"data/matchups.json").read_text()) if (ROOT/"data/matchups.json").exists() else []
     regular=schedules[(pd.to_numeric(schedules["season"],errors="coerce")==season)&(schedules["game_type"].astype(str).str.upper()=="REG")].copy()
@@ -140,6 +153,7 @@ def main():
         hp,ap=adjusted_projection(baseline_home,baseline_away,matchup)
         research=game_research_context(r,history,str(r["home_team"]),str(r["away_team"]),player_feed)
         weather=forecast_for_game(r,str(r["home_team"]),research["venue"].get("roof"))
+        research=enrich_research(research,schedules,season,week,injury_reports)
         research["weather"]=weather
         if weather.get("available"):
             research["venue"].update({"temperature_f":weather.get("temperature_f"),

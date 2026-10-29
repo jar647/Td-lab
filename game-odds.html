@@ -226,6 +226,11 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    return `<div class="breakdown"><h3>${esc(team)} team and player context</h3>`+
     `<p>Record: ${rec(t.record?.overall)} · home ${rec(t.record?.home)} · road ${rec(t.record?.away)}.</p>`+
     `<p>Head coach: ${esc(t.coach||'unavailable')} · recorded current-season coach record before this game: ${rec(t.coach_record)}.</p>`+
+    (t.scoring?`<p><strong>Actual scoring:</strong> ${num(t.scoring.season?.points_per_game)} points/game · ${num(t.scoring.season?.points_allowed_per_game)} allowed/game (${esc(t.scoring.season?.games)} games). Home scoring ${num(t.scoring.home?.points_per_game)} (${esc(t.scoring.home?.games)} games); road ${num(t.scoring.road?.points_per_game)} (${esc(t.scoring.road?.games)} games); last three ${num(t.scoring.last_three?.points_per_game)} (${esc(t.scoring.last_three?.games)} games).</p>`:'')+
+    (t.coach_career?`<p>Head coach NFL record: regular season ${rec(t.coach_career.regular_season)} · playoffs ${rec(t.coach_career.playoffs)}. Available history starts ${esc(t.coach_career.coverage_start_season)}; head coach games only.</p>`:'')+
+    (t.injuries?`<details><summary>Current injury research · ${esc(t.injuries.coverage)} · ${esc(t.injuries.report_count||0)} reports</summary>`+
+      (t.injuries.reports||[]).map(r=>`<p><strong>${esc(r.player)}</strong> ${esc(r.position||'')} · designation ${esc(r.designation||'not reported')} · practice ${esc(r.practice||'not reported')} · ${esc(r.injury||'injury detail unavailable')} · source updated ${esc(r.source_updated_at||'unknown')}.</p>`).join('')+
+      `<p class="caption">Official game-day inactives are unconfirmed. Missing reports do not mean healthy. ${esc(t.injuries.model_use||'')} ${esc(t.injuries.source_error||'')}</p></details>`:'')+
     `<p>Quarterback: ${player(t.usage?.quarterback)}</p>`+
     (skill.length?`<p>Top usage skill players:<br>${skill.map(player).join('<br>')}</p>`:'<p>Top player usage data unavailable.</p>')+
     `<p class="caption">${esc(t.usage?.availability_warning||'')} Availability feed fields are not official inactives.</p></div>`;
@@ -238,6 +243,9 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
     `<p>Game-time weather: ${esc(weather.reason||'NWS forecast unavailable')}.</p>`)+
    `<p>Estimated away travel: ${travel.available?`${num(travel.air_distance_miles)} straight-line miles · approximately ${num(travel.estimated_flight_hours)} hours of flight equivalent`:esc(travel.warning||'unavailable')}.</p>`+
    `<p class="warn">${esc(travel.warning||'')} NWS hourly weather is a forecast, not observed kickoff conditions. EPA/success matchup and home/road scoring splits shift the score mean. Pass/rush efficiency and team play-calling tendency shape the matchup adjustment. Historical NFL score residuals use matched roof/weather plus rest/travel when at least 30 games match, or one context when at least 40 match; otherwise the broader pool is used and labeled. Player availability is shown from its feed, but unconfirmed lineup changes are not assigned invented point values.</p>`+
+   (ctx.research?`<details><summary>Research sources and simulation inputs</summary><p>Retrieved ${esc(ctx.research.retrieved_at)} · results through week ${esc(ctx.research.through_week)} of ${esc(ctx.research.season)}.</p>`+
+    (ctx.research.sources||[]).filter(x=>/^https:\/\//.test(x.url)).map(x=>`<p><a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">${esc(x.name)}</a></p>`).join('')+
+    Object.entries(ctx.research.model_use||{}).map(([key,value])=>`<p>${esc(value)}</p>`).join('')+'</details>':'')+
    `<p class="caption">${esc(ctx.source_note||'Public feed context; individual source rows can be missing or stale.')}</p></div>`;
  }
  function render(result,model){
