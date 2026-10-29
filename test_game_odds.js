@@ -2,7 +2,7 @@
 'use strict';
 const assert=require('node:assert/strict');
 const e=require('./game_odds_engine.js');
-assert.equal(e.quote('-115').implied,115/215);
+assert.ok(Math.abs(e.quote('-115').implied-115/215)<1e-12,'American odds implied probability');
 assert.equal(e.quote('+110').decimal,2.1);
 for(const invalid of ['',null,0,'-99','+20','abc','-110x'])assert.equal(e.quote(invalid),null);
 const backtest={records:Array.from({length:155},(_,i)=>({
