@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#08140f"><title>CoOk It Up | Game Odds Simulator</title>
+<meta name="description" content="Explore 100,000 matchup-first NFL and NBA game outcomes, then compare your sportsbook moneyline, spread and total odds.">
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;background:#07110e;color:#effaf4}
+*{box-sizing:border-box}body{margin:0;padding-bottom:44px}
+header{background:#101d17;border-bottom:1px solid #375243;padding:20px max(16px,calc((100vw - 1000px)/2))}
+h1{font-size:clamp(23px,4vw,33px);margin:8px 0;color:#fff}h2{font-size:20px;margin:0 0 12px}h3{font-size:16px;margin:0 0 10px}
+.brand{font-size:21px;font-weight:900;display:flex;align-items:center;gap:8px}
+.brand img{height:35px;width:35px} .brand span{color:#ffb34b}
+nav{display:flex;gap:16px;margin-top:12px;font-size:13px;flex-wrap:wrap}
+a{color:#87f1ba;text-decoration:none}a:hover{text-decoration:underline}
+main{max-width:1000px;padding:18px 14px;margin:auto}.panel{background:#0f2018;border:1px solid #2e4e3e;border-radius:17px;padding:20px;margin:15px 0}
+.muted{font-size:13px;color:#a6bcae;line-height:1.55}.warn{color:#ffce83}.bad{color:#ff988a}.good{color:#72eeaa}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 18px}.controls button{width:auto;flex:1;margin:0}
+button,select,input{border-radius:10px;border:1px solid #496c56;background:#081911;color:#f6fff9;padding:13px;font-size:16px;min-width:0;width:100%}
+input:focus,select:focus,button:focus-visible{outline:2px solid #ffb34b;outline-offset:2px}
+button{cursor:pointer;background:#244d37;font-weight:850}button.primary{background:#ffad42;color:#172012;border-color:#ffad42}
+button:disabled{cursor:wait;opacity:.65}button.current{background:#36c983;color:#05160f}
+label{display:block;font-size:13px;color:#bbd0c2;font-weight:650;margin-bottom:5px}
+.field{min-width:0}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.marketCard{background:#102b20;border:1px solid #3b634a;border-radius:13px;padding:14px;margin:12px 0}
+.marketCard h3{color:#ffd28b}
+.fieldRow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.marketCard .lineField{margin-bottom:12px;max-width:320px}
+.caption{font-size:12px;color:#abc3b1;line-height:1.5}
+#run{font-size:17px;min-height:55px;margin-top:8px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0}
+.kpi{background:#0b1a13;border:1px solid #395741;border-radius:12px;padding:12px;min-width:0}
+.kpi b{font-size:clamp(16px,3vw,24px);display:block;color:#98ffd1;overflow-wrap:anywhere}
+.kpi span{font-size:11px;color:#aec3b4}
+.scoreboard{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.score{background:#0b2017;border:1px solid #45664c;padding:16px;border-radius:12px;text-align:center}
+.score b{font-size:35px;display:block;color:#ffbf65}.score span{font-size:13px;color:#b7cabb}
+.tableWrap{overflow-x:auto}table{width:100%;border-collapse:collapse;white-space:nowrap;font-size:13px}
+th,td{padding:12px 9px;border-bottom:1px solid #355342;text-align:right;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left;white-space:normal;min-width:160px}
+th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
+.signal{font-weight:750;color:#ffd08b}.signal.no{color:#b5c9bb}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.breakdown{background:#0a1b13;border:1px solid #2f4a38;border-radius:12px;padding:13px}
+.breakdown p{margin:7px 0;color:#bed2c5;font-size:13px;line-height:1.5}
+#results[hidden],#marketCard[hidden]{display:none!important}
+@media(max-width:680px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2{grid-template-columns:1fr}.panel{padding:15px}.score b{font-size:28px}}
+@media(max-width:420px){.fieldRow{grid-template-columns:repeat(2,minmax(0,1fr))} .fields{grid-template-columns:1fr}}
+</style></head><body>
+<header>
+<div class="brand"><img src="./cook-it-up-mark.svg" alt=""><div>CoOk <span>It Up</span> 🔥</div></div>
+<h1>🎲 Game Odds Simulator</h1>
+<div class="muted">100,000 simulated game scores · Moneyline · Against the spread · Total · No player props</div>
+<nav><a href="./">NFL research</a><a href="./nba.html">NBA research</a><a href="./analyst.html">NFL player analyst</a></nav>
+</header>
+<main>
+<section class="panel">
+<h2>1. Choose your game</h2>
+<div class="controls" aria-label="Sport">
+<button type="button" class="current" id="sportNFL">🏈 NFL</button>
+<button type="button" id="sportNBA">🏀 NBA</button>
+</div>
+<label for="game">Matchup</label><select id="game"><option value="">Loading scheduled games…</option></select>
+<p id="feedStatus" class="muted" role="status">Connecting to existing game feeds…</p>
+</section>
+<section id="marketCard" class="panel">
+<h2>2. Enter your sportsbook lines and odds</h2>
+<p class="muted">Use the exact line and American odds displayed at your book. Blank odds are allowed. Nothing is assumed to be -110.</p>
+<div class="marketCard"><h3>🏆 Moneyline</h3><div class="fieldRow">
+<div class="field"><label id="homeMLLabel" for="homeML">Home ML odds</label><input id="homeML" type="text" inputmode="text" placeholder="-125" autocomplete="off"></div>
+<div class="field"><label id="awayMLLabel" for="awayML">Away ML odds</label><input id="awayML" type="text" inputmode="text" placeholder="+110" autocomplete="off"></div>
+</div></div>
+<div class="marketCard"><h3>🎯 Against the spread (ATS)</h3>
+<div class="field lineField"><label id="spreadLabel" for="homeSpread">Home-team spread</label><input id="homeSpread" type="number" step="0.5" placeholder="-3.5"></div>
+<div class="fieldRow">
+<div class="field"><label id="homeATSLabel" for="homeATS">Home spread odds</label><input id="homeATS" type="text" inputmode="text" placeholder="-110" autocomplete="off"></div>
+<div class="field"><label id="awayATSLabel" for="awayATS">Away spread odds</label><input id="awayATS" type="text" inputmode="text" placeholder="-110" autocomplete="off"></div>
+</div><p id="awaySpreadHint" class="caption">Away spread is the opposite of the home spread.</p></div>
+<div class="marketCard"><h3>📈 Full-game total</h3>
+<div class="field lineField"><label for="total">Sportsbook full-game total</label><input id="total" type="number" step="0.5" placeholder="47.5"></div>
+<div class="fieldRow">
+<div class="field"><label for="over">Over odds</label><input id="over" type="text" inputmode="text" placeholder="-110" autocomplete="off"></div>
+<div class="field"><label for="under">Under odds</label><input id="under" type="text" inputmode="text" placeholder="-110" autocomplete="off"></div>
+</div></div>
+<button type="button" id="run" class="primary">🔥 Simulate 100,000 games</button>
+<p id="runStatus" class="muted" role="status">Select a matchup, enter the available prices, and simulate.</p>
+</section>
+<section id="results" hidden aria-live="polite"></section>
+<section class="panel"><h2>Important model limits</h2><p class="muted">Each run resamples real paired historical game-score errors, preserving the observed relationship between margin and total. The sportsbook's lines and prices do not influence the simulated scores. Historical scoring patterns and 100,000 draws do not establish predictive calibration or a verified edge. No live sportsbook odds, official inactives, confirmed starters, or game-time weather are assumed. Research-only estimates can be wrong, especially with changing rosters, limited samples, or stale feeds.</p></section>
+</main>
+<script src="./game_odds_engine.js"></script>
+<script>
+(function(){
+ 'use strict';
+ const $=id=>document.getElementById(id);
+ const esc=v=>String(v===null||v===undefined?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const pct=v=>v===null||!Number.isFinite(v)?'—':(v*100).toFixed(1)+'%';
+ const num=v=>v===null||!Number.isFinite(v)?'—':v.toFixed(1);
+ const odds=v=>v===null?'—':(v>0?'+':'')+v;
+ const fields=['homeML','awayML','homeSpread','homeATS','awayATS','total','over','under'];
+ const source={},gamesBySport={NFL:[],NBA:[]},saved={};
+ let sport=new URLSearchParams(location.search).get('sport')==='NBA'?'NBA':'NFL';
+ let selected=null,busy=false,worker=null,runId=0;
+ try{const stored=JSON.parse(localStorage.getItem('cook-game-odds-v1')||'{}');if(stored&&typeof stored==='object'&&!Array.isArray(stored))Object.assign(saved,stored);}catch(_){}
+ function dataKey(){return selected?sport+':'+String(selected.game.id||selected.game.game_id):'';}
+ function readFields(){const obj={};for(const k of fields)obj[k]=$(k).value.trim();return obj;}
+ function store(){
+  if(!selected)return;
+  saved[dataKey()]=readFields();
+  try{localStorage.setItem('cook-game-odds-v1',JSON.stringify(saved));}catch(_){}
+ }
+ function fill(){
+  const v=saved[dataKey()]||{};
+  for(const k of fields)$(k).value=v[k]||'';
+  syncSpread();
+ }
+ function syncSpread(){
+  if(!selected)return;
+  const spread=$('homeSpread').value.trim();
+  const val=spread===''?null:Number(spread);
+  $('awaySpreadHint').textContent=val===null||!Number.isFinite(val)?
+   selected.game.away+' spread is the opposite of '+selected.game.home+' spread.':
+   selected.game.away+' spread: '+(val<0?'+':'')+(-val);
+ }
+ function choose(){
+  $('results').hidden=true;
+  const id=$('game').value;selected=gamesBySport[sport].find(x=>x.id===id)||null;
+  if(!selected){$('marketCard').hidden=true;return;}
+  $('marketCard').hidden=false;
+  const g=selected.game;
+  $('homeMLLabel').textContent=g.home+' moneyline odds';
+  $('awayMLLabel').textContent=g.away+' moneyline odds';
+  $('spreadLabel').textContent=g.home+' spread (negative if favored)';
+  $('homeATSLabel').textContent=g.home+' spread odds';
+  $('awayATSLabel').textContent=g.away+' spread odds';
+  fill();
+  $('runStatus').textContent='Ready for '+g.away+' @ '+g.home+'. 100,000 outcomes will use only pregame information and earlier games.';
+ }
+ function refresh(){
+  $('sportNFL').classList.toggle('current',sport==='NFL');
+  $('sportNBA').classList.toggle('current',sport==='NBA');
+  $('results').hidden=true;
+  const items=gamesBySport[sport];
+  $('game').innerHTML='<option value="">Choose a game…</option>'+items.map(x=>
+   '<option value="'+esc(x.id)+'">'+esc(x.title)+'</option>').join('');
+  selected=null;$('marketCard').hidden=true;
+  const src=source[sport];
+  $('feedStatus').textContent=src?.error?src.error:
+    items.length?items.length+' upcoming '+sport+' matchups found. '+(src?.info||''):
+    'No upcoming games are currently in the published '+sport+' feed. Check back after its next refresh.';
+ }
+ function setSport(value){if(busy)return;sport=value;refresh();}
+ $('sportNFL').onclick=()=>setSport('NFL');$('sportNBA').onclick=()=>setSport('NBA');
+ $('game').onchange=choose;
+ for(const key of fields)$(key).addEventListener('change',store);
+ $('homeSpread').addEventListener('input',syncSpread);
+ function upcomingNFL(g){
+  if(!g?.gameday)return false;
+  const parts=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).map(x=>[x.type,x.value]));
+  const today=parts.year+'-'+parts.month+'-'+parts.day;
+  return String(g.gameday)>=today;
+ }
+ function upcomingNBA(g){return g?.status==='STATUS_SCHEDULED'&&Date.parse(g.date)>Date.now();}
+ function labelDate(g){if(sport==='NFL')return g.gameday||'Date unverified';const t=Date.parse(g.date);
+  return Number.isFinite(t)?new Intl.DateTimeFormat('en-US',{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZone:'America/New_York'}).format(new Date(t))+' ET':'Date unavailable';}
+ async function load(){
+  const requests=await Promise.allSettled([
+   fetch('./data/game_picks.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('NFL slate feed not available');return r.json();}),
+   fetch('./data/game_picks_backtest.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('NFL score backtest unavailable');return r.json();}),
+   fetch('./data/nba_games.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('NBA game feed not available');return r.json();}),
+   fetch('./data/nba_injuries.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null)
+  ]);
+  const get=i=>requests[i].status==='fulfilled'?requests[i].value:null;
+  const nfl=get(0),history=get(1),nba=get(2);
+  source.NFL=!nfl||!history?{error:'NFL schedule or historical projection data unavailable.'}:
+    {info:'Score baseline '+esc(nfl.model_version||'unknown')+' · updated '+esc(nfl.generated_at||'unknown')+'.'};
+  source.NBA=!nba?{error:'NBA feed unavailable.'}:
+    {info:'NBA feed updated '+esc(nba.generated_at||'unknown')+'.'};
+  if(nfl&&history)for(const g of (nfl.games||[]).filter(upcomingNFL)){
+   const key=String(g.game_id||'');
+   try{const model=CookGameOdds.nflGame(g,history,{season:nfl.season,week:nfl.week});
+    gamesBySport.NFL.push({id:key,title:g.away+' @ '+g.home+' · '+g.gameday,game:g,model});
+   }catch(e){/* Never surface a game without a valid model */ }
+  }
+  if(nba)for(const g of (nba.games||[]).filter(upcomingNBA)){
+   try{const model=CookGameOdds.nbaGame(g,nba);
+    const t=Date.parse(g.date),date=Number.isFinite(t)?new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}).format(new Date(t))+' ET':'Date unverified';
+    gamesBySport.NBA.push({id:String(g.id),title:g.away+' @ '+g.home+' · '+date,game:g,model});
+   }catch(e){/* A game with inadequate earlier box scores is not sim-ready */ }
+  }
+  gamesBySport.NBA.sort((a,b)=>Date.parse(a.game.date)-Date.parse(b.game.date));
+  const injury=get(3);
+  source.NBA.injuryStatus=injury?.generated_at&&Math.abs(Date.now()-Date.parse(injury.generated_at))<12*3600000?
+   'NBA injury feed refreshed, but player statuses are NOT applied to this score model.':
+   'NBA injury feed missing/stale. Rotations and availability unverified.';
+  refresh();
+ }
+ function marketTable(rows){
+  return '<div class="tableWrap"><table><thead><tr><th>Game market</th><th>Sim win / push</th><th>Your odds</th><th>Break-even*</th><th>No-vig market</th><th>Model diff*</th><th>Sim EV*</th><th>Decision</th></tr></thead><tbody>'+
+   rows.map(m=>'<tr><td><strong>'+esc(m.label)+'</strong></td>'+
+    '<td>'+pct(m.win)+' / '+pct(m.push)+'</td><td>'+esc(odds(m.price))+'</td>'+
+    '<td>'+pct(m.breakEven)+'</td><td>'+pct(m.noVig)+'</td>'+
+    '<td class="'+(m.modelEdge!==null&&m.modelEdge>0?'good':'')+'">'+(m.modelEdge===null?'—':(m.modelEdge>0?'+':'')+pct(m.modelEdge))+'</td>'+
+    '<td class="'+(m.ev!==null&&m.ev>0?'good':'')+'">'+(m.ev===null?'—':(m.ev>0?'+':'')+pct(m.ev))+'</td>'+
+    '<td class="signal '+(m.eligible?'':'no')+'">'+esc(m.signal)+'</td></tr>').join('')+
+   '</tbody></table></div><p class="caption">*Break-even adjusts for pushes: quoted implied probability × (1 − push rate). Model difference is simulated win probability minus adjusted break-even. Sim EV = wins × net decimal payout − losses, per unit wagered. Unpriced sides have no value assessment.</p>';
+ }
+ function render(result,model){
+  const s=result.simulated,p=result.projection;
+  const favorites=result.markets.filter(x=>x.eligible).sort((a,b)=>b.ev-a.ev);
+  const highest=favorites[0], priced=result.markets.filter(x=>x.price!==null);
+  const headline=highest?'Highest research-only price discrepancy: '+highest.label+' ('+(highest.ev>0?'+':'')+pct(highest.ev)+' hypothetical EV).':
+   priced.length?'PASS · No priced market clears the research thresholds.':'NO ODDS ENTERED · Game distribution only.';
+  const details=highest?'This is NOT an approved wager. The outcome model has not demonstrated independently calibrated, profitable forecasts.':
+   'A model projection is not evidence of a profitable sportsbook edge. Passing is a valid outcome.';
+  const date=model.sport==='NFL'?model.date:new Date(model.date).toLocaleString('en-US',{timeZone:'America/New_York',dateStyle:'medium',timeStyle:'short'});
+  const runStatus='100,000 score outcomes complete. NFL game times, confirmed game-day injuries, and actionable sportsbook execution are not automatically verified.';
+  $('results').innerHTML=
+   '<div class="panel"><h2>🎲 '+esc(model.away)+' @ '+esc(model.home)+' · '+esc(model.sport)+'</h2>'+
+   '<p class="muted">Date: '+esc(date)+' · 100,000 full-game simulations · Score model: <strong>RESEARCH ONLY</strong></p>'+
+   '<div class="scoreboard"><div class="score"><span>'+esc(model.away)+' · projected</span><b>'+num(p.away)+'</b></div>'+
+   '<div class="score"><span>'+esc(model.home)+' · projected</span><b>'+num(p.home)+'</b></div></div>'+
+   '<div class="kpis"><div class="kpi"><span>'+esc(model.home)+' win</span><b>'+pct(s.homeWin)+'</b></div>'+
+   '<div class="kpi"><span>'+esc(model.away)+' win</span><b>'+pct(s.awayWin)+'</b></div>'+
+   '<div class="kpi"><span>Sim median total</span><b>'+num(s.total.median)+'</b></div>'+
+   '<div class="kpi"><span>Sim median home margin</span><b>'+num(s.margin.median)+'</b></div></div>'+
+   (s.tie>0?'<p class="muted">Tie rate: '+pct(s.tie)+' (treated as a moneyline push).</p>':'')+
+   '<h3>Estimated market pricing</h3>'+marketTable(result.markets)+
+   '<div class="breakdown"><h3>Decision summary</h3><strong class="warn">'+esc(headline)+'</strong>'+
+   '<p>'+esc(details)+'</p><p class="muted">Only entered odds are evaluated. A 100,000-draw research result is not a calibrated probability or a guaranteed bet.</p></div></div>'+
+   '<div class="panel"><h2>🔬 Deep game breakdown</h2><div class="grid2">'+
+   '<div class="breakdown"><h3>Scoring environment</h3><p>'+esc(model.home)+' historical offense '+num(model.homeOffense)+' PPG · '+esc(model.away)+' defense allowed '+num(model.awayAllowed)+' PPG.</p>'+
+   '<p>'+esc(model.away)+' historical offense '+num(model.awayOffense)+' PPG · '+esc(model.home)+' defense allowed '+num(model.homeAllowed)+' PPG.</p>'+
+   '<p>Baseline projected total '+num(p.total)+' · projected home margin '+(p.margin>=0?'+':'')+num(p.margin)+'.</p></div>'+
+   '<div class="breakdown"><h3>Distribution, not a single predicted score</h3>'+
+   '<p>Middle 80% of game totals: '+num(s.total.p10)+' to '+num(s.total.p90)+'.</p>'+
+   '<p>Middle 80% of home scoring margins: '+num(s.margin.p10)+' to '+num(s.margin.p90)+'.</p>'+
+   '<p>Middle 80% of '+esc(model.home)+' points: '+num(s.homePoints.p10)+' to '+num(s.homePoints.p90)+'.</p>'+
+   '<p>Middle 80% of '+esc(model.away)+' points: '+num(s.awayPoints.p10)+' to '+num(s.awayPoints.p90)+'.</p></div></div>'+
+   '<div class="breakdown" style="margin-top:12px"><h3>Evidence and risk</h3>'+
+   '<p>Earlier '+esc(model.sport)+' games: '+esc(model.sample.homeGames)+' for '+esc(model.home)+', '+
+   esc(model.sample.awayGames)+' for '+esc(model.away)+'. Paired residual pool: '+esc(model.sample.residualGames)+' completed games.</p>'+
+   '<p>'+esc(model.method)+'</p><p class="warn">'+esc(model.warning)+'</p>'+
+   (source.NBA?.injuryStatus&&model.sport==='NBA'?'<p class="warn">'+esc(source.NBA.injuryStatus)+'</p>':'')+
+   '<p>Simulation noise near 50% is roughly ±0.16 percentage points at 100,000 draws, but real-world forecasting/model error is much larger and not measured by that number.</p>'+
+   '<p><strong>Verification:</strong> '+esc(result.verification)+'</p></div></div>';
+  $('results').hidden=false;
+  $('runStatus').textContent=runStatus;
+  $('results').scrollIntoView?.({behavior:'smooth',block:'start'});
+ }
+ $('run').onclick=()=>{
+  if(busy)return;
+  if(!selected){$('runStatus').textContent='Select a matchup first.';return;}
+  store();
+  const model=selected.model,market=readFields();
+  try{CookGameOdds.marketInput(market);}catch(err){$('runStatus').textContent='⚠️ '+err.message;return;}
+  busy=true;$('run').disabled=true;$('run').textContent='Simulating 100,000 scores…';
+  $('runStatus').textContent='Running 100,000 historical-residual score draws and checking your sportsbook prices.';
+  $('results').hidden=true;
+  const thisId=++runId;
+  const done=(error,result)=>{
+   if(thisId!==runId)return;
+   busy=false;$('run').disabled=false;$('run').textContent='🔥 Simulate 100,000 games';
+   if(worker){worker.terminate();worker=null;}
+   if(error){$('runStatus').textContent='Simulation error: '+error;return;}
+   render(result,model);
+  };
+  if(typeof Worker==='function'){
+   try{worker=new Worker('./game_odds_worker.js');
+    worker.onmessage=e=>{if(e.data?.requestId===thisId)done(e.data.error,e.data.result);};
+    worker.onerror=e=>done(e.message||'Worker failed');
+    worker.postMessage({requestId:thisId,game:model,market,seed:6472026});
+    return;
+   }catch(_){if(worker)worker.terminate();worker=null;}
+  }
+  setTimeout(()=>{try{done(null,CookGameOdds.simulate(model,market,100000,6472026));}catch(e){done(e.message);}},20);
+ };
+ load().catch(e=>{$('feedStatus').textContent='Could not load game feeds: '+e.message;});
+})();
+</script></body></html>
