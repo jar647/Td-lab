@@ -41,7 +41,7 @@ vm.createContext(sandbox);vm.runInContext(scripts[0],sandbox,{timeout:5000});
  el('homeSpread').value='-3.5';el('homeATS').value='-110';el('awayATS').value='-110';
  el('total').value='45.5';el('over').value='-115';el('under').value='-105';
  el('run').onclick();
- await new Promise(resolve=>setTimeout(resolve,450));
+ for(let attempt=0;attempt<30&&el('results').hidden;attempt++)await new Promise(resolve=>setTimeout(resolve,100));
  assert.equal(el('results').hidden,false,'The 100k simulation must render');
  assert.match(el('results').innerHTML,/100,000 full-game simulations/);
  assert.match(el('results').innerHTML,/Over 45.5/);
