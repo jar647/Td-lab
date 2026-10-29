@@ -47,6 +47,8 @@ jobs:
         run: |
           node test_market_odds.js
           node test_player_probability.js
+          node test_game_odds.js
+          node test_game_odds_ui.js
           node test_nba_ui.js
           node test_nba_simulator.js
       - name: Build research-only daily learning report from tracked results
