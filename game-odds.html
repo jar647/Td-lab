@@ -91,7 +91,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
 (function(){
  'use strict';
  const $=id=>document.getElementById(id);
- const esc=v=>String(v===null||v===undefined?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;':'&quot;',"'":'&#39;'}[c]));
+ const esc=v=>String(v===null||v===undefined?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const pct=v=>v===null||!Number.isFinite(v)?'—':(v*100).toFixed(1)+'%';
  const num=v=>v===null||!Number.isFinite(v)?'—':v.toFixed(1);
  const odds=v=>v===null?'—':(v>0?'+':'')+v;
@@ -154,7 +154,8 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
  $('homeSpread').addEventListener('input',syncSpread);
  function upcomingNFL(g){
   if(!g?.gameday)return false;
-  const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+  const parts=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).map(x=>[x.type,x.value]));
+  const today=parts.year+'-'+parts.month+'-'+parts.day;
   return String(g.gameday)>=today;
  }
  function upcomingNBA(g){return g?.status==='STATUS_SCHEDULED'&&Date.parse(g.date)>Date.now();}
