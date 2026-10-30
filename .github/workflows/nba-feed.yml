@@ -4,6 +4,10 @@ on:
     branches: [main]
     paths:
       - 'nba_feed.py'
+      - 'nba_first_basket.py'
+      - 'nba_first_basket.js'
+      - 'test_nba_first_basket.py'
+      - 'test_nba_first_basket.js'
       - 'nba_daily_learning.py'
       - 'test_nba_daily_learning.py'
       - 'nba_tracker.py'
@@ -42,7 +46,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Test locked NBA forecasts and daily learning
-        run: python -m unittest -v test_nba_contracts.py test_nba_daily_learning.py
+        run: python -m unittest -v test_nba_contracts.py test_nba_daily_learning.py test_nba_first_basket.py
       - name: Test NBA UI and simulations
         run: |
           node test_market_odds.js
@@ -51,6 +55,7 @@ jobs:
           node test_game_odds_ui.js
           node test_nba_ui.js
           node test_nba_simulator.js
+          node test_nba_first_basket.js
       - name: Build research-only daily learning report from tracked results
         run: python nba_daily_learning.py
   refresh:
@@ -73,11 +78,12 @@ jobs:
             python nba_injuries.py || echo 'Injury source unavailable; existing file retained, UI will reject stale records'
             python nba_tracker.py
             python nba_daily_learning.py
-            python -m unittest -v test_nba_contracts.py test_nba_daily_learning.py
+            python -m unittest -v test_nba_contracts.py test_nba_daily_learning.py test_nba_first_basket.py
             node test_market_odds.js
             node test_player_probability.js
             node test_nba_ui.js
             node test_nba_simulator.js
+            node test_nba_first_basket.js
             git add data/nba_games.json data/nba_projection_tracker.json data/nba_daily_learning.json
             if test -f data/nba_season_stats.json; then git add data/nba_season_stats.json; fi
             if test -f data/nba_rosters.json; then git add data/nba_rosters.json; fi

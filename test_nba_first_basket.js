@@ -1,0 +1,13 @@
+'use strict';
+const assert=require('node:assert/strict'),{analyze}=require('./nba_first_basket.js');
+const now=Date.parse('2026-10-30T12:00Z'),game={id:'target',away:'A',home:'B',date:'2026-10-31T00:00Z',status:'STATUS_SCHEDULED'};
+const starters=Object.fromEntries(['A','B'].map(t=>[t,Array.from({length:5},(_,i)=>({id:t+i,name:t+i,injury:{status:'NOT LISTED'}}))]));
+const history=Array.from({length:6},(_,i)=>({id:''+i,home:'A',away:'B',date:'2026-10-'+(20+i)+'T00:00Z',status:'STATUS_FINAL',season_type:2,first_basket:{available:true,first_game:{team:i%2?'A':'B',player_id:i%2?'A0':'B0'},first_by_team:{A:{player_id:'A0'},B:{player_id:i%2?'B0':'B1'}}}}));
+let r=analyze(game,history,starters,{now,injuryFresh:true,rosterFresh:true});
+assert(r.available);assert.equal(r.rows[0].name,'A0');assert.equal(r.rows.length,10);assert(r.otherProbability>0);assert(r.rows.reduce((s,p)=>s+p.probability,0)<=1);
+assert.equal(analyze(game,[...history,...history],starters,{now}).rows[0].games,6);
+assert(!analyze(game,history.slice(0,2),starters,{now}).available);
+assert(!analyze({...game,status:'STATUS_FINAL'},history,starters,{now}).available);
+assert(!analyze(game,history.map(x=>({...x,date:'2027-01-01'})),starters,{now}).available);
+starters.A[0].injury.status='OUT';r=analyze(game,history,starters,{now});assert(!r.rows.some(p=>p.id==='A0'));assert.match(r.reason,/stale/);
+console.log('NBA first-basket evidence, normalization, injuries, duplicate games and pregame cutoff PASS');
