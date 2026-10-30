@@ -18,15 +18,15 @@
   "snapshot_inventory": {
     "opportunity-2024-trained-blend-v1": {
       "snapshots": 14,
-      "pending_final": 14,
-      "final_games": 0,
+      "pending_final": 13,
+      "final_games": 1,
       "missing_fixture": 0,
       "forecast_rows": 2639
     },
     "game-first-volume-v1": {
       "snapshots": 14,
-      "pending_final": 14,
-      "final_games": 0,
+      "pending_final": 13,
+      "final_games": 1,
       "missing_fixture": 0,
       "forecast_rows": 1962
     }
@@ -325,7 +325,8 @@
     }
   },
   "skipped": {
-    "GAME_NOT_FINAL": 28
+    "GAME_NOT_FINAL": 26,
+    "SNAP_DATA_INCOMPLETE": 2
   },
   "records": [],
   "warning": "Only pregame-frozen forecasts count. Opportunity and game-first model versions are scored separately. Repeated player-game thresholds are NOT independent samples. Calibration bins describe observed reliability, not a certified edge. Fixed hypothetical thresholds; no sportsbook lines or betting claims."

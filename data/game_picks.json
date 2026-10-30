@@ -1,7 +1,7 @@
 {
   "season": 2026,
   "week": 8,
-  "generated_at": "2026-10-30T02:52:32.865732+00:00",
+  "generated_at": "2026-10-30T03:52:06.835347+00:00",
   "model_status": "EXPERIMENTAL_MATCHUP_SCORE_BASELINE",
   "model_version": "score-baseline-pbp-v2",
   "note": "Projected scores blend completed prior-week points and shrunk home/road splits with offense-vs-defense EPA/success/explosive-play context. Each game also includes team/player usage, injury-report fields, coach records, rest, venue and an approximate travel estimate where available. Uncalibrated research only; no picks.",
@@ -700,12 +700,8 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "grass",
-            "temperature_f": 48,
-            "wind_mph": 5.0,
-            "wind_direction": "NW",
-            "precipitation_probability": 0,
-            "weather_condition": "Mostly Clear",
-            "weather_updated_at": null
+            "temperature_f": null,
+            "wind_mph": null
           },
           "travel": {
             "available": true,
@@ -715,7 +711,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-10-30T02:52:29.448229+00:00",
+            "retrieved_at": "2026-10-30T03:52:03.015110+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -741,15 +737,9 @@
             }
           },
           "weather": {
-            "available": true,
-            "source": "National Weather Service hourly forecast",
-            "forecast_time": "2026-10-29T21:00:00-05:00",
-            "updated_at": null,
-            "temperature_f": 48,
-            "wind_mph": 5.0,
-            "wind_direction": "NW",
-            "precipitation_probability": 0,
-            "condition": "Mostly Clear"
+            "available": false,
+            "source": "NWS",
+            "reason": "Kickoff is outside the available hourly forecast window."
           }
         },
         "residual_context": {
@@ -757,8 +747,8 @@
           "away_rest": 4.0,
           "travel_miles": 746,
           "roof": "outdoors",
-          "temperature_f": 48,
-          "wind_mph": 5.0
+          "temperature_f": null,
+          "wind_mph": null
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -1748,7 +1738,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-10-30T02:52:29.900923+00:00",
+            "retrieved_at": "2026-10-30T03:52:03.316771+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -2655,7 +2645,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-10-30T02:52:30.153606+00:00",
+            "retrieved_at": "2026-10-30T03:52:03.607270+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -3678,7 +3668,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-10-30T02:52:30.414796+00:00",
+            "retrieved_at": "2026-10-30T03:52:03.901950+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -4591,7 +4581,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-10-30T02:52:30.506265+00:00",
+            "retrieved_at": "2026-10-30T03:52:03.987825+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -5555,7 +5545,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-10-30T02:52:30.755648+00:00",
+            "retrieved_at": "2026-10-30T03:52:04.300271+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -6533,7 +6523,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-10-30T02:52:31.067152+00:00",
+            "retrieved_at": "2026-10-30T03:52:04.600375+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -7511,7 +7501,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-10-30T02:52:31.565396+00:00",
+            "retrieved_at": "2026-10-30T03:52:04.924461+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -8498,7 +8488,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-10-30T02:52:31.817260+00:00",
+            "retrieved_at": "2026-10-30T03:52:05.312297+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -9437,7 +9427,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-10-30T02:52:31.907107+00:00",
+            "retrieved_at": "2026-10-30T03:52:05.401063+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -10401,7 +10391,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-10-30T02:52:32.142656+00:00",
+            "retrieved_at": "2026-10-30T03:52:05.836408+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -11434,7 +11424,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-10-30T02:52:32.391044+00:00",
+            "retrieved_at": "2026-10-30T03:52:06.111226+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -12503,7 +12493,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-10-30T02:52:32.633617+00:00",
+            "retrieved_at": "2026-10-30T03:52:06.479310+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -13317,7 +13307,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-10-30T02:52:32.865295+00:00",
+            "retrieved_at": "2026-10-30T03:52:06.834939+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
