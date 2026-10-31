@@ -10,6 +10,7 @@ import time
 import unicodedata
 import urllib.parse
 import urllib.request
+import socket
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DEST = ROOT / "data/nba_opportunities.json"
@@ -40,9 +41,15 @@ def request(kind, n):
         SeasonType="Regular Season", StarterBench="", TeamID="",
         VsConference="", VsDivision="", Weight="")
     url = BASE + "?" + urllib.parse.urlencode(params)
-    req = urllib.request.Request(url, headers=HEADERS)
-    with urllib.request.urlopen(req, timeout=24) as response:
-        payload = json.load(response)
+    # Cloud-hosted runners can be silently dropped by NBA Stats.
+    # Try a browser-compatible TLS transport first, with a bounded timeout.
+    from curl_cffi import requests as browser_requests
+    try:
+        response = browser_requests.get(url, headers=HEADERS, impersonate='chrome', timeout=12)
+        response.raise_for_status()
+        payload = response.json()
+    except Exception as exc:
+        raise RuntimeError('NBA Stats unavailable from this runner (likely cloud IP/TLS restriction): '+str(exc)) from exc
     sets = payload.get("resultSets") or payload.get("resultSet")
     if isinstance(sets, dict):
         sets = [sets]
