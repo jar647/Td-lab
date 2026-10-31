@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install browser-compatible NBA client
+        run: python3 -m pip install 'curl_cffi>=0.11,<1'
       - name: Fetch official NBA tracking metrics
         run: python3 scripts/fetch_nba_opportunities.py
       - name: Commit verified feed only when changed
