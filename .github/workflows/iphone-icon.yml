@@ -1,9 +1,6 @@
 name: Generate iPhone app icon
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - apple-touch-icon.svg
 permissions:
   contents: write
 jobs:
