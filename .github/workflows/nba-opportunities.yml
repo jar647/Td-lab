@@ -15,8 +15,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install browser-compatible NBA client
         run: python3 -m pip install 'curl_cffi>=0.11,<1'
-      - name: Fetch official NBA tracking metrics
-        run: python3 scripts/fetch_nba_opportunities.py
+      - name: Fetch licensed NBA tracking metrics
+        env:
+          SPORTQUANTA_API_TOKEN: \${{ secrets.SPORTQUANTA_API_TOKEN }}
+        run: python3 scripts/fetch_nba_opportunities_sportquanta.py
       - name: Commit verified feed only when changed
         run: |
           git config user.name "github-actions[bot]"
