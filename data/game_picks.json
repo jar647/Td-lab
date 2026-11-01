@@ -1,7 +1,7 @@
 {
   "season": 2026,
   "week": 8,
-  "generated_at": "2026-11-01T19:43:15.527150+00:00",
+  "generated_at": "2026-11-01T20:41:28.984210+00:00",
   "model_status": "AUDITED_BASELINE_UNCALIBRATED",
   "model_version": "score-baseline-trust-v3",
   "note": "Historical scoring research baseline; independently recomputed source rates; QB-led history separated; no unvalidated EPA point correction or verified betting recommendation.",
@@ -718,7 +718,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T19:43:12.499271+00:00",
+            "retrieved_at": "2026-11-01T20:41:25.477350+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -752,7 +752,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5a221fc22d41bfdadea593762a7280df5bdf7d08086216d59bcbf4efe6561070",
-          "checked_at": "2026-11-01T19:43:11.569382+00:00",
+          "checked_at": "2026-11-01T20:41:24.557336+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -1995,12 +1995,8 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "a_turf",
-            "temperature_f": 68,
-            "wind_mph": 7.0,
-            "wind_direction": "SW",
-            "precipitation_probability": 2,
-            "weather_condition": "Mostly Sunny",
-            "weather_updated_at": null
+            "temperature_f": null,
+            "wind_mph": null
           },
           "travel": {
             "available": true,
@@ -2010,7 +2006,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T19:43:12.921502+00:00",
+            "retrieved_at": "2026-11-01T20:41:25.722445+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -2036,21 +2032,15 @@
             }
           },
           "weather": {
-            "available": true,
-            "source": "National Weather Service hourly forecast",
-            "forecast_time": "2026-11-01T14:00:00-05:00",
-            "updated_at": null,
-            "temperature_f": 68,
-            "wind_mph": 7.0,
-            "wind_direction": "SW",
-            "precipitation_probability": 2,
-            "condition": "Mostly Sunny"
+            "available": false,
+            "source": "NWS",
+            "reason": "Kickoff is outside the available hourly forecast window."
           }
         },
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5a221fc22d41bfdadea593762a7280df5bdf7d08086216d59bcbf4efe6561070",
-          "checked_at": "2026-11-01T19:43:11.569382+00:00",
+          "checked_at": "2026-11-01T20:41:24.557336+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -2300,8 +2290,8 @@
           "away_rest": 7.0,
           "travel_miles": 267,
           "roof": "outdoors",
-          "temperature_f": 68,
-          "wind_mph": 7.0
+          "temperature_f": null,
+          "wind_mph": null
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -3209,12 +3199,8 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "fieldturf",
-            "temperature_f": 72,
-            "wind_mph": 3.0,
-            "wind_direction": "SW",
-            "precipitation_probability": 4,
-            "weather_condition": "Cloudy",
-            "weather_updated_at": null
+            "temperature_f": null,
+            "wind_mph": null
           },
           "travel": {
             "available": true,
@@ -3224,7 +3210,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T19:43:13.191907+00:00",
+            "retrieved_at": "2026-11-01T20:41:26.191974+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -3250,21 +3236,15 @@
             }
           },
           "weather": {
-            "available": true,
-            "source": "National Weather Service hourly forecast",
-            "forecast_time": "2026-11-01T14:00:00-05:00",
-            "updated_at": null,
-            "temperature_f": 72,
-            "wind_mph": 3.0,
-            "wind_direction": "SW",
-            "precipitation_probability": 4,
-            "condition": "Cloudy"
+            "available": false,
+            "source": "NWS",
+            "reason": "Kickoff is outside the available hourly forecast window."
           }
         },
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5a221fc22d41bfdadea593762a7280df5bdf7d08086216d59bcbf4efe6561070",
-          "checked_at": "2026-11-01T19:43:11.569382+00:00",
+          "checked_at": "2026-11-01T20:41:24.557336+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -3471,8 +3451,8 @@
           "away_rest": 7.0,
           "travel_miles": 237,
           "roof": "outdoors",
-          "temperature_f": 72,
-          "wind_mph": 3.0
+          "temperature_f": null,
+          "wind_mph": null
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -4505,12 +4485,8 @@
             "location": "Home",
             "roof": null,
             "surface": "matrixturf",
-            "temperature_f": 78,
-            "wind_mph": 5.0,
-            "wind_direction": "SE",
-            "precipitation_probability": 1,
-            "weather_condition": "Partly Sunny",
-            "weather_updated_at": null
+            "temperature_f": null,
+            "wind_mph": null
           },
           "travel": {
             "available": true,
@@ -4520,7 +4496,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T19:43:13.471019+00:00",
+            "retrieved_at": "2026-11-01T20:41:26.400994+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -4546,21 +4522,15 @@
             }
           },
           "weather": {
-            "available": true,
-            "source": "National Weather Service hourly forecast",
-            "forecast_time": "2026-11-01T13:00:00-06:00",
-            "updated_at": null,
-            "temperature_f": 78,
-            "wind_mph": 5.0,
-            "wind_direction": "SE",
-            "precipitation_probability": 1,
-            "condition": "Partly Sunny"
+            "available": false,
+            "source": "NWS",
+            "reason": "Kickoff is outside the available hourly forecast window."
           }
         },
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5a221fc22d41bfdadea593762a7280df5bdf7d08086216d59bcbf4efe6561070",
-          "checked_at": "2026-11-01T19:43:11.569382+00:00",
+          "checked_at": "2026-11-01T20:41:24.557336+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -4768,8 +4738,8 @@
           "away_rest": 7.0,
           "travel_miles": 878,
           "roof": null,
-          "temperature_f": 78,
-          "wind_mph": 5.0
+          "temperature_f": null,
+          "wind_mph": null
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -5707,7 +5677,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T19:43:13.489072+00:00",
+            "retrieved_at": "2026-11-01T20:41:26.443268+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -5741,7 +5711,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5a221fc22d41bfdadea593762a7280df5bdf7d08086216d59bcbf4efe6561070",
-          "checked_at": "2026-11-01T19:43:11.569382+00:00",
+          "checked_at": "2026-11-01T20:41:24.557336+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -6901,12 +6871,8 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "grass",
-            "temperature_f": 78,
-            "wind_mph": 16.0,
-            "wind_direction": "E",
-            "precipitation_probability": 39,
-            "weather_condition": "Chance Showers And Thunderstorms",
-            "weather_updated_at": null
+            "temperature_f": null,
+            "wind_mph": null
           },
           "travel": {
             "available": true,
@@ -6916,7 +6882,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T19:43:13.779141+00:00",
+            "retrieved_at": "2026-11-01T20:41:26.665454+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -6942,21 +6908,15 @@
             }
           },
           "weather": {
-            "available": true,
-            "source": "National Weather Service hourly forecast",
-            "forecast_time": "2026-11-01T14:00:00-05:00",
-            "updated_at": null,
-            "temperature_f": 78,
-            "wind_mph": 16.0,
-            "wind_direction": "E",
-            "precipitation_probability": 39,
-            "condition": "Chance Showers And Thunderstorms"
+            "available": false,
+            "source": "NWS",
+            "reason": "Kickoff is outside the available hourly forecast window."
           }
         },
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5a221fc22d41bfdadea593762a7280df5bdf7d08086216d59bcbf4efe6561070",
-          "checked_at": "2026-11-01T19:43:11.569382+00:00",
+          "checked_at": "2026-11-01T20:41:24.557336+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -7163,8 +7123,8 @@
           "away_rest": 7.0,
           "travel_miles": 700,
           "roof": "outdoors",
-          "temperature_f": 78,
-          "wind_mph": 16.0
+          "temperature_f": null,
+          "wind_mph": null
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -8125,12 +8085,8 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "fieldturf",
-            "temperature_f": 61,
-            "wind_mph": 7.0,
-            "wind_direction": "SW",
-            "precipitation_probability": 0,
-            "weather_condition": "Sunny",
-            "weather_updated_at": null
+            "temperature_f": null,
+            "wind_mph": null
           },
           "travel": {
             "available": true,
@@ -8140,7 +8096,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T19:43:13.988034+00:00",
+            "retrieved_at": "2026-11-01T20:41:26.956843+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -8166,21 +8122,15 @@
             }
           },
           "weather": {
-            "available": true,
-            "source": "National Weather Service hourly forecast",
-            "forecast_time": "2026-11-01T14:00:00-05:00",
-            "updated_at": null,
-            "temperature_f": 61,
-            "wind_mph": 7.0,
-            "wind_direction": "SW",
-            "precipitation_probability": 0,
-            "condition": "Sunny"
+            "available": false,
+            "source": "NWS",
+            "reason": "Kickoff is outside the available hourly forecast window."
           }
         },
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5a221fc22d41bfdadea593762a7280df5bdf7d08086216d59bcbf4efe6561070",
-          "checked_at": "2026-11-01T19:43:11.569382+00:00",
+          "checked_at": "2026-11-01T20:41:24.557336+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -8388,8 +8338,8 @@
           "away_rest": 7.0,
           "travel_miles": 2228,
           "roof": "outdoors",
-          "temperature_f": 61,
-          "wind_mph": 7.0
+          "temperature_f": null,
+          "wind_mph": null
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -9332,12 +9282,8 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "grass",
-            "temperature_f": 67,
-            "wind_mph": 6.0,
-            "wind_direction": "SE",
-            "precipitation_probability": 2,
-            "weather_condition": "Mostly Cloudy",
-            "weather_updated_at": null
+            "temperature_f": null,
+            "wind_mph": null
           },
           "travel": {
             "available": true,
@@ -9347,7 +9293,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T19:43:14.228509+00:00",
+            "retrieved_at": "2026-11-01T20:41:27.467998+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -9373,21 +9319,15 @@
             }
           },
           "weather": {
-            "available": true,
-            "source": "National Weather Service hourly forecast",
-            "forecast_time": "2026-11-01T14:00:00-05:00",
-            "updated_at": null,
-            "temperature_f": 67,
-            "wind_mph": 6.0,
-            "wind_direction": "SE",
-            "precipitation_probability": 2,
-            "condition": "Mostly Cloudy"
+            "available": false,
+            "source": "NWS",
+            "reason": "Kickoff is outside the available hourly forecast window."
           }
         },
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5a221fc22d41bfdadea593762a7280df5bdf7d08086216d59bcbf4efe6561070",
-          "checked_at": "2026-11-01T19:43:11.569382+00:00",
+          "checked_at": "2026-11-01T20:41:24.557336+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -9595,8 +9535,8 @@
           "away_rest": 7.0,
           "travel_miles": 114,
           "roof": "outdoors",
-          "temperature_f": 67,
-          "wind_mph": 6.0
+          "temperature_f": null,
+          "wind_mph": null
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -10629,12 +10569,8 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "grass",
-            "temperature_f": 79,
-            "wind_mph": 12.0,
-            "wind_direction": "E",
-            "precipitation_probability": 62,
-            "weather_condition": "Chance Showers And Thunderstorms",
-            "weather_updated_at": null
+            "temperature_f": null,
+            "wind_mph": null
           },
           "travel": {
             "available": true,
@@ -10644,7 +10580,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T19:43:14.480225+00:00",
+            "retrieved_at": "2026-11-01T20:41:27.718173+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -10670,21 +10606,15 @@
             }
           },
           "weather": {
-            "available": true,
-            "source": "National Weather Service hourly forecast",
-            "forecast_time": "2026-11-01T14:00:00-05:00",
-            "updated_at": null,
-            "temperature_f": 79,
-            "wind_mph": 12.0,
-            "wind_direction": "E",
-            "precipitation_probability": 62,
-            "condition": "Chance Showers And Thunderstorms"
+            "available": false,
+            "source": "NWS",
+            "reason": "Kickoff is outside the available hourly forecast window."
           }
         },
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5a221fc22d41bfdadea593762a7280df5bdf7d08086216d59bcbf4efe6561070",
-          "checked_at": "2026-11-01T19:43:11.569382+00:00",
+          "checked_at": "2026-11-01T20:41:24.557336+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -10892,8 +10822,8 @@
           "away_rest": 7.0,
           "travel_miles": 415,
           "roof": "outdoors",
-          "temperature_f": 79,
-          "wind_mph": 12.0
+          "temperature_f": null,
+          "wind_mph": null
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -11857,7 +11787,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T19:43:14.499260+00:00",
+            "retrieved_at": "2026-11-01T20:41:27.760423+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -11891,7 +11821,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5a221fc22d41bfdadea593762a7280df5bdf7d08086216d59bcbf4efe6561070",
-          "checked_at": "2026-11-01T19:43:11.569382+00:00",
+          "checked_at": "2026-11-01T20:41:24.557336+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -13085,7 +13015,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T19:43:14.874843+00:00",
+            "retrieved_at": "2026-11-01T20:41:28.190097+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -13125,7 +13055,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5a221fc22d41bfdadea593762a7280df5bdf7d08086216d59bcbf4efe6561070",
-          "checked_at": "2026-11-01T19:43:11.569382+00:00",
+          "checked_at": "2026-11-01T20:41:24.557336+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -14355,7 +14285,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T19:43:15.091882+00:00",
+            "retrieved_at": "2026-11-01T20:41:28.453622+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -14395,7 +14325,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5a221fc22d41bfdadea593762a7280df5bdf7d08086216d59bcbf4efe6561070",
-          "checked_at": "2026-11-01T19:43:11.569382+00:00",
+          "checked_at": "2026-11-01T20:41:24.557336+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -15697,7 +15627,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T19:43:15.315805+00:00",
+            "retrieved_at": "2026-11-01T20:41:28.772923+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -15737,7 +15667,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5a221fc22d41bfdadea593762a7280df5bdf7d08086216d59bcbf4efe6561070",
-          "checked_at": "2026-11-01T19:43:11.569382+00:00",
+          "checked_at": "2026-11-01T20:41:24.557336+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -16975,7 +16905,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T19:43:15.526807+00:00",
+            "retrieved_at": "2026-11-01T20:41:28.983684+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -17015,7 +16945,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5a221fc22d41bfdadea593762a7280df5bdf7d08086216d59bcbf4efe6561070",
-          "checked_at": "2026-11-01T19:43:11.569382+00:00",
+          "checked_at": "2026-11-01T20:41:24.557336+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
