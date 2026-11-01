@@ -3,17 +3,17 @@
   "method": "Walk-forward, target week excluded; scoring baseline plus shrunk offense-vs-defense EPA/success adjustment from completed PBP only. Probabilities and ATS are not validated.",
   "overall": {
     "matchup_adjusted": {
-      "games": 459,
-      "total_mae": 10.37,
+      "games": 460,
+      "total_mae": 10.35,
       "margin_mae": 10.36,
-      "winner_accuracy": 0.5983,
+      "winner_accuracy": 0.5991,
       "total_bias": -1.04
     },
     "scoring_baseline": {
-      "games": 459,
-      "total_mae": 10.41,
+      "games": 460,
+      "total_mae": 10.39,
       "margin_mae": 10.36,
-      "winner_accuracy": 0.6135,
+      "winner_accuracy": 0.6144,
       "total_bias": -1.06
     }
   },
@@ -52,17 +52,17 @@
     },
     "2026": {
       "matchup_adjusted": {
-        "games": 43,
-        "total_mae": 11.09,
-        "margin_mae": 10.12,
-        "winner_accuracy": 0.4762,
+        "games": 44,
+        "total_mae": 10.85,
+        "margin_mae": 10.06,
+        "winner_accuracy": 0.4884,
         "total_bias": -0.66
       },
       "scoring_baseline": {
-        "games": 43,
-        "total_mae": 11.1,
-        "margin_mae": 9.85,
-        "winner_accuracy": 0.4048,
+        "games": 44,
+        "total_mae": 10.86,
+        "margin_mae": 9.77,
+        "winner_accuracy": 0.4186,
         "total_bias": -0.65
       }
     }
@@ -11539,6 +11539,31 @@
       "home_rest": 8.0,
       "away_rest": 8.0,
       "travel_miles": 1313,
+      "roof": "outdoors",
+      "temperature_f": null,
+      "wind_mph": null
+    },
+    {
+      "season": 2026,
+      "week": 8,
+      "game_id": "2026_08_CAR_GB",
+      "home": "GB",
+      "away": "CAR",
+      "projected_home": 22.9,
+      "projected_away": 22.5,
+      "projected_total": 45.4,
+      "baseline_home": 23.5,
+      "baseline_away": 22.0,
+      "actual_home": 27.0,
+      "actual_away": 19.0,
+      "actual_total": 46.0,
+      "baseline_margin": 1.5,
+      "baseline_total": 45.5,
+      "projected_margin": 0.4,
+      "actual_margin": 8.0,
+      "home_rest": 4.0,
+      "away_rest": 4.0,
+      "travel_miles": 746,
       "roof": "outdoors",
       "temperature_f": null,
       "wind_mph": null
