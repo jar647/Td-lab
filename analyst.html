@@ -8,7 +8,7 @@ const defs=[
 {key:'receptions',season:'playerReceptions',recent:'recent3Receptions',volume:'playerTargets',volumeLabel:'targets/game',def:'defReceptionsAllowed',ratio:'CATCH',label:'receptions',positions:['WR','TE','RB'],steps:[2,3,4,5,6,7,8]},
 {key:'passYards',season:'playerPassYards',recent:'recent3PassYards',volume:'playerPassAttempts',volumeLabel:'attempts/game',def:'defPassYardsAllowed',ratio:'PASS',label:'passing yards',positions:['QB'],steps:[150,175,200,225,250,275,300]}];
 function choose(p,d,scenarioLookup){
-if(!d.positions.includes(p.pos)||p.playerAppearancesVerified===false)return null;
+if(p.qbRole==='BACKUP'||!d.positions.includes(p.pos)||p.playerAppearancesVerified===false)return null;
 const sample=n(p.last5GamesPlayed)||0;if(sample<3)return null;
 const season=n(p[d.season]),recent=n(p[d.recent]),volume=n(p[d.volume]);if(season===null||season<=0||recent===null)return null;
 if(d.key==='rushYards'&&volume<5)return null;
@@ -318,3 +318,4 @@ $('build').onclick=async()=>{
 };
 init();
 </script></body></html>
+

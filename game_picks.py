@@ -76,13 +76,14 @@ def coach_record(history,coach):
 
 def key_player_usage(matchups,team):
     rows=[p for p in matchups if p.get("team")==team]
-    qbs=sorted((p for p in rows if p.get("pos")=="QB"),
-               key=lambda p:float(p.get("playerPassAttempts") or 0),reverse=True)
+    qbs=sorted((p for p in rows if p.get("pos")=="QB" and p.get("qbRole")!="BACKUP"),
+               key=lambda p:(p.get("qbRole")=="EXPECTED_STARTER",float(p.get("playerPassAttempts") or 0)),reverse=True)
     qb=qbs[0] if qbs else None
     skill=[p for p in rows if p.get("pos") in ("RB","WR","TE")]
     skill.sort(key=lambda p:float(p.get("playerTargets") or 0)+float(p.get("playerCarries") or 0),reverse=True)
     def card(p):
         return {"name":p.get("player"),"position":p.get("pos"),
+          "qb_role":p.get("qbRole"),"starter_context":p.get("starterContext"),
           "games":p.get("seasonGamesPlayed",p.get("games")),
           "availability":p.get("injuryReportStatus") if p.get("injuryReportStatus") not in (None,"NOT_REPORTED") else (p.get("gameDayAvailability") or "NOT_REPORTED"),
           "practice":p.get("injuryPracticeStatus") or "NOT_REPORTED",
@@ -183,3 +184,4 @@ def main():
     path.write_text(json.dumps(out,indent=2))
     print("Game scoring baseline:",len(games),"games; no betting recommendations until validation")
 if __name__=="__main__":main()
+

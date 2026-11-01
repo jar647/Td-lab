@@ -6,6 +6,9 @@ on:
     paths:
       - 'build_feed.py'
       - 'injury_readiness.py'
+      - 'nfl_starters.py'
+      - 'data/nfl_starters.json'
+      - 'test_nfl_starters.py'
       - 'capture_prop_probabilities.py'
       - 'grade_prop_probabilities.py'
       - 'historical_participation.py'
@@ -60,7 +63,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Verify NFL engine Python syntax
-        run: python -m compileall -q injury_readiness.py build_feed.py capture_prop_probabilities.py grade_prop_probabilities.py historical_participation.py opportunity_prop_model.py player_prop_probability_backtest.py game_picks.py game_picks_backtest.py game_context.py nfl_weather.py nfl_research.py tests
+        run: python -m compileall -q injury_readiness.py nfl_starters.py build_feed.py capture_prop_probabilities.py grade_prop_probabilities.py historical_participation.py opportunity_prop_model.py player_prop_probability_backtest.py game_picks.py game_picks_backtest.py game_context.py nfl_weather.py nfl_research.py tests
       - name: Test game-first NFL Monte Carlo engine
         run: node test_nfl_game_engine.js
       - name: Test Goal 1 decision and odds engine
@@ -75,6 +78,8 @@ jobs:
         run: node test_capture_game_first.js
       - name: Test touchdown probability calibration
         run: python -m unittest discover -s tests -p 'test_*.py'
+      - name: Test sourced game-scoped starter confirmations
+        run: python -m unittest -v test_nfl_starters.py
       - name: Build verified feed
         run: python build_feed.py
       - name: Build game-picks research slate
@@ -120,4 +125,5 @@ jobs:
             echo "Feed built, but could not publish after three push attempts." >&2
             exit 1
           fi
+
 

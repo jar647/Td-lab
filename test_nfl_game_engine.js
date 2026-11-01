@@ -57,6 +57,19 @@ function run(){
    'No named passing-yard prop without a verified QB');
  assert.throws(()=>engine.simulate(anonymous,1500,12),
    /no verified quarterback or historical team passing volume/);
+
+ // A returning starter must beat a backup with more recent passing volume.
+ const returned=lineup.map(p=>p.player_id==='a-qb'?{...p,qbRole:'EXPECTED_STARTER',starterContext:{source:'team announcement'}}:p);
+ returned.push(player('A','a-backup','QB',{p:45,r:7,ry:30,py:300},{qbRole:'BACKUP'}));
+ const returnResult=engine.simulate(returned,1500,12);
+ assert.equal(returnResult.teams.find(t=>t.team==='A').quarterback,'a-qb');
+ assert(!returnResult.markets.some(m=>m.id==='a-backup'),'backup cannot consume QB or rushing opportunities');
+ assert(returnResult.markets.some(m=>m.id==='a-qb'&&m.market==='passYards'));
+ const returnOut=returned.map(p=>p.player_id==='a-qb'?{...p,injuryReportStatus:'OUT'}:p).map(p=>({...p,teamPassAttemptsPerGame:33}));
+ const outResult=engine.simulate(returnOut,1500,12);
+ assert.equal(outResult.teams.find(t=>t.team==='A').quarterback,null);
+ assert(!outResult.markets.some(m=>m.id==='a-qb'||m.id==='a-backup'));
  console.log('NFL game-first simulator tests passed');
 }
 run();
+

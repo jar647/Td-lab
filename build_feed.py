@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 import pandas as pd
 from injury_readiness import diagnose_injury_feed, trusted_injury_rows
+from nfl_starters import apply_starter_context
 
 SEASON = int(os.getenv('TDLAB_SEASON', datetime.now(timezone.utc).year))
 WINDOW = int(os.getenv('TDLAB_WINDOW', '5'))
@@ -672,12 +673,12 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     'playerRecYards':avg('recYards',season_series) if position!='QB' else None,
                     'playerReceptions':avg('receptions',season_series) if position!='QB' else None,
                     'defReceptionsAllowed':mean(defense_receptions.get((opp,position),0)/dg) if position!='QB' else None,
-                    'recent3Games':last_counts.get(team,0),
+                    'recent3Games':min(3,len(season_series)) if position=='QB' else last_counts.get(team,0),
                     'recent3Targets':mean(last_target_counts.get((team,pid),0)/last_counts[team]) if last_counts.get(team) else None,
-                    'recent3Carries':mean(last_carry_counts.get((team,pid),0)/last_counts[team]) if last_counts.get(team) else None,
-                    'recent3PassAttempts':mean(last_pass_counts.get((team,pid),0)/last_counts[team]) if last_counts.get(team) and position=='QB' else None,
-                    'recent3PassYards':mean(last_pass_yards.get((team,pid),0)/last_counts[team]) if last_counts.get(team) and position=='QB' else None,
-                    'recent3RushYards':mean(last_rush_yards.get((team,pid),0)/last_counts[team]) if last_counts.get(team) else None,
+                    'recent3Carries':avg('rushAttempts',season_series[-3:]) if position=='QB' else mean(last_carry_counts.get((team,pid),0)/last_counts[team]) if last_counts.get(team) else None,
+                    'recent3PassAttempts':avg('passAttempts',season_series[-3:]) if position=='QB' else None,
+                    'recent3PassYards':avg('passYards',season_series[-3:]) if position=='QB' else None,
+                    'recent3RushYards':avg('rushYards',season_series[-3:]) if position=='QB' else mean(last_rush_yards.get((team,pid),0)/last_counts[team]) if last_counts.get(team) else None,
                     'recent3RecYards':mean(last_rec_yards.get((team,pid),0)/last_counts[team]) if last_counts.get(team) and position!='QB' else None,
                     'recent3Receptions':mean(last_catches.get((team,pid),0)/last_counts[team]) if last_counts.get(team) and position!='QB' else None,
                     'defenseRecent5':{kind:defense_recent.get((opp,position,kind)) for kind in ('PASS','RUSH','REC','CATCH')},
@@ -698,6 +699,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     'odds':'','prob':'','market':'ATD',
                     'notes':f'Availability: {health} (ROSTER_ACTIVE means listed on active roster, NOT cleared for game day; UNVERIFIED does not mean active). nflverse play-by-play; {SEASON} weeks {max(1,week-WINDOW)}-{week-1}; red-zone rushes + intended targets; position verified by roster; no odds or calibrated TD probability. Player RZ share is share of recorded team red-zone rushes and intended targets (not all plays). Goal-line metric counts recorded rushes and intended targets from opponent 5 or closer per played team game; informational only, not part of the ranking score.'})
     if not result: raise RuntimeError('No matchup records passed source and sample validation')
+    apply_starter_context(result,SEASON,week)
     result.sort(key=lambda r:(r['team'],r['pos'],r['player']))
     (OUT/'defense_stats_audit.json.tmp').write_text(json.dumps(audit,indent=2))
     return result, {'season':SEASON,'week':week,'generated_at':now.isoformat(),
@@ -899,3 +901,4 @@ if __name__=='__main__':
     except Exception as exc:
         print(f'FEED UPDATE FAILED (existing published data preserved): {exc}',file=sys.stderr)
         sys.exit(1)
+

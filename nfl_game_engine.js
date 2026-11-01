@@ -19,6 +19,7 @@ function normal(random){const u=Math.max(1e-9,random()),v=random();return Math.s
 function randCount(n,p,random){let x=0;for(let i=0;i<n;i++)if(random()<p)x++;return x;}
 function weighted(items,sum,random){let u=random()*sum;for(let i=0;i<items.length;i++){u-=items[i].weight;if(u<0)return items[i]}return items[items.length-1]}
 function blocked(p){
+ if(p.qbRole==='BACKUP')return true;
  const report=String(p.injuryReportStatus||'').toUpperCase();
  const roster=String(p.availability||'').toUpperCase();
  return /^(OUT|INACTIVE|SUSPENDED|IR|PUP|RES|DEV|CUT|RET|EXE|TRD|TRT)$/.test(report)||
@@ -37,6 +38,7 @@ function playerParams(p){
  const usage=(field)=>.65*mean(history,field)+.35*mean(norm,field);
  const ratios=p.defenseOpponentRatio||{};
  return {id:key,name:String(p.player||key),team:String(p.team),pos:String(p.pos),
+  qbRole:p.qbRole,starterContext:p.starterContext,
   gameCount:history.length,questionable:/QUESTIONABLE|DOUBTFUL|UNVERIFIED|NOT_REPORTED|LIMITED|DNP_PRACTICE/.test(
    [p.injuryReportStatus,p.availability,p.injuryPracticeStatus].join('|').toUpperCase()),
   pass:usage('passAttempts'),targets:usage('targets'),carries:usage('rushAttempts'),
@@ -55,7 +57,7 @@ function build(records){
  if(teams.length!==2)throw Error('Exactly two teams are required for one game');
  const league=teams.map(team=>{
   const roster=entries.filter(p=>p.team===team);
-  const qbs=roster.filter(p=>p.pos==='QB').sort((a,b)=>b.pass-a.pass);
+  const qbs=roster.filter(p=>p.pos==='QB').sort((a,b)=>Number(b.qbRole==='EXPECTED_STARTER')-Number(a.qbRole==='EXPECTED_STARTER')||b.pass-a.pass);
   const quarterbackVerified=qbs.length>0&&qbs[0].pass>=12;
   const candidates=roster.map(p=>p.verifiedTeamPass).filter(x=>x!==null&&x>=12&&x<=65);
   // If the QB's individual history is unavailable (injury, return, change of
@@ -86,7 +88,7 @@ function build(records){
   const targetPool=pool(receivers.map(p=>({p,weight:p.targets})),passAttempts,2.5);
   const carryPool=pool(runners.map(p=>({p,weight:p.carries})),rushAttempts,1);
   return {team,roster,qb,pace,passRate,targetPool,carryPool,
-   outlook:{team,passVolumeSource:quarterbackVerified?'VERIFIED_QB_PLAYER_HISTORY':'VERIFIED_TEAM_PBP_NO_QB_PROPS',
+   outlook:{team,quarterback:quarterbackVerified?qb.name:null,starterContext:qb.starterContext||null,passVolumeSource:quarterbackVerified?'VERIFIED_QB_PLAYER_HISTORY':'VERIFIED_TEAM_PBP_NO_QB_PROPS',
     quarterbackPlayerPropsAvailable:quarterbackVerified,
     warning:quarterbackVerified?null:'QB individual history is insufficient; team passing volume based on completed PBP. No QB props are projected.',
     estimatedPlays:Math.round(pace),estimatedPassAttempts:Math.round(passAttempts),
@@ -192,3 +194,4 @@ const api={build,simulate,MARKETS,blocked};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;
 root.PropVaultGameEngine=api;
 })(typeof self!=='undefined'?self:typeof globalThis!=='undefined'?globalThis:this);
+
