@@ -59,3 +59,17 @@ You may omit a whole market, but a supplied market needs both prices and its lin
 ## Automated checks
 
 `Validate Production Game Projections` rebuilds projections, comparisons and the exact-engine audit in sequence. Pull requests retain reports as artifacts without publishing data. Main-branch and scheduled runs publish the reports. Manual EPA/market workflow entry points call this same pipeline, preventing older formulas or stale inputs from being audited independently.
+
+## Evidence-led NFL handicap report
+
+The Game Handicapper takes the supplied odds and produces three separate directional predictions (winner, ATS and total), fair model prices, the best-priced side among the supplied quotes, and a decision that can remain PASS even when one side is more likely to win. The report lists explicit baseline/EPA scoring contributions; descriptive evidence is labeled separately rather than being assigned invented coefficients.
+
+The feed now adds prior-week season/recent passing and rushing efficiency/success, sacks and QB hits per passing play, explosive plays, third-down conversion, red-zone touchdowns per known drive, neutral early-down pass rate, pass rate above expected where available, and fourth-down go rate. Each statistic has a sample count. Descriptive schedule-adjusted EPA evaluates opponents on their other earlier games. These additional statistics are research evidence, not a newly fitted scoring model. Coaching tendencies reflect game situation and personnel as well as coach decisions.
+
+Timestamped ESPN injury notes supplement, and remain separate from, roster-checked nflverse injury reports. Team identities, source season and timestamps are checked; future rows and stale source payloads are rejected. Secondary reports are not official inactive confirmations. Missing reports never imply a healthy team. Cross-source status conflicts and an unavailable historical high-usage quarterback flag the forecast for review. Official inactives are required for a clean review inside 90 minutes of kickoff. Replacement-player point effects remain explicitly unestimated.
+
+The report checks model freshness, pregame timing, injury coverage, unresolved source conflicts and matching-version market benchmarks. It does not promote a market that failed its historical no-vig benchmark. Directional forecasts remain visible alongside that PASS decision. Research coverage counts are not win probabilities.
+
+Sensitivity is computed by exactly enumerating the production paired-residual distribution under hypothetical team-mean shifts of ±1.5 points, giving margin/total scenarios. These are sensitivity assumptions, not injury estimates or confidence intervals. Their baseline agrees with the 100,000-draw simulation up to Monte Carlo noise.
+
+Kickoff conversion now follows the documented nflverse Eastern-time convention, with daylight saving handled by the timezone library. Neutral-site weather is omitted until actual venue coordinates are verified. Games with a known passed kickoff are excluded from the pregame selector; a same-day game with no verified time is also excluded.

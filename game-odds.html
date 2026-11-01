@@ -47,8 +47,8 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
 </style></head><body>
 <header>
 <div class="brand"><img src="./cook-it-up-mark.svg" alt=""><div>CoOk <span>It Up</span> 🔥</div></div>
-<h1>🎲 Game Odds Simulator</h1>
-<div class="muted">100,000 simulated game scores · Moneyline · Against the spread · Total · No player props</div>
+<h1>🏈 Game Handicapper</h1>
+<div class="muted">Your odds + sourced game research · Winner · Spread · Total</div>
 <nav><a href="./">NFL research</a><a href="./nba.html">NBA research</a><a href="./analyst.html">NFL player analyst</a></nav>
 </header>
 <main>
@@ -81,13 +81,14 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
 <div class="field"><label for="over">Over odds</label><input id="over" type="text" inputmode="text" placeholder="-110" autocomplete="off"></div>
 <div class="field"><label for="under">Under odds</label><input id="under" type="text" inputmode="text" placeholder="-110" autocomplete="off"></div>
 </div></div>
-<button type="button" id="run" class="primary">🔥 Simulate 100,000 games</button>
+<button type="button" id="run" class="primary">🔥 Analyze game & my odds</button>
 <p id="runStatus" class="muted" role="status">Select a matchup, enter the available prices, and simulate.</p>
 </section>
 <section id="results" hidden aria-live="polite"></section>
 <section class="panel"><h2>Important model limits</h2><p class="muted">Each run resamples real paired historical game-score errors, preserving the observed relationship between margin and total. The sportsbook's lines and prices do not influence the simulated scores. Historical scoring patterns and 100,000 draws do not establish predictive calibration or a verified edge. No live sportsbook odds, official inactives, confirmed starters, or game-time weather are assumed. Research-only estimates can be wrong, especially with changing rosters, limited samples, or stale feeds.</p></section>
 </main>
 <script src="./game_odds_engine.js"></script>
+<script src="./game_handicapper.js"></script>
 <script>
 (function(){
  'use strict';
@@ -170,9 +171,11 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
  $('homeSpread').addEventListener('input',syncSpread);
  function upcomingNFL(g){
   if(!g?.gameday)return false;
+  const kickoff=Date.parse(g.kickoff_at||'');
+  if(Number.isFinite(kickoff))return kickoff>Date.now();
   const parts=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).map(x=>[x.type,x.value]));
   const today=parts.year+'-'+parts.month+'-'+parts.day;
-  return String(g.gameday)>=today;
+  return String(g.gameday)>today;
  }
  function upcomingNBA(g){return g?.status==='STATUS_SCHEDULED'&&Date.parse(g.date)>Date.now();}
  function labelDate(g){if(sport==='NFL')return g.gameday||'Date unverified';const t=Date.parse(g.date);
@@ -196,7 +199,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    source.NFL.error='NFL projections are refreshing: slate and score history must match the current model version before simulation.';
   if(nfl&&history)for(const g of (nfl.games||[]).filter(upcomingNFL)){
    const key=String(g.game_id||'');
-   try{const model=CookGameOdds.nflGame(g,history,{season:nfl.season,week:nfl.week});
+   try{const model=CookGameOdds.nflGame(g,history,{season:nfl.season,week:nfl.week,generated_at:nfl.generated_at});
     gamesBySport.NFL.push({id:key,title:g.away+' @ '+g.home+' · '+g.gameday,game:g,model});
    }catch(e){/* Never surface a game without a valid model */ }
   }
@@ -268,15 +271,64 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
     Object.entries(ctx.research.model_use||{}).map(([key,value])=>`<p>${esc(value)}</p>`).join('')+'</details>':'')+
    `<p class="caption">${esc(ctx.source_note||'Public feed context; individual source rows can be missing or stale.')}</p></div>`;
  }
+ function handicapPanel(report,model){
+  const signed=v=>Number.isFinite(v)?(v>=0?'+':'')+num(v):'—';
+  const cards=report.markets.map(m=>'<div class="breakdown"><h3>'+esc(m.title)+'</h3><strong>'+esc(m.lean||'Line needed')+'</strong>'+
+   (m.win!==undefined?'<p>Model win '+pct(m.win)+' · push '+pct(m.push)+' · '+(m.smallLean?'small directional lean':'uncalibrated estimate')+'.</p><p>Model break-even price '+esc(m.fairPrice===null?'unavailable':odds(m.fairPrice))+' · supplied price '+esc(m.quotedPrice===null?'not entered':odds(m.quotedPrice))+'.</p>':'')+
+   '<p class="warn">'+esc(m.status)+'</p><p>'+esc(m.explanation||'')+'</p>'+
+   (m.bestPricedSide?'<p>Price side checked: '+esc(m.bestPricedSide)+' · hypothetical EV '+pct(m.bestQuotedEV)+'.</p>':'')+
+   (m.priceAssessment?'<p>'+esc(m.priceAssessment)+'</p>':'')+
+   (m.sensitivity?'<details><summary>How easily could this lean change?</summary><p>'+esc(m.sensitivity.method)+'</p>'+
+    m.sensitivity.tests.map(t=>'<p>'+esc({homeMarginDown3:'Home margin mean −3 points',homeMarginUp3:'Home margin mean +3 points',totalDown3:'Total mean −3 points',totalUp3:'Total mean +3 points'}[t.scenario])+': '+pct(t.win)+' win · '+pct(t.push)+' push · '+pct(t.ev)+' hypothetical EV.</p>').join('')+'</details>':'')+'</div>').join('');
+  const x=report.attribution,b=report.marketBaseline;
+  const attribution='<details><summary>What moved the score projection?</summary><div class="tableWrap"><table><thead><tr><th>Score component</th><th>'+esc(model.home)+'</th><th>'+esc(model.away)+'</th></tr></thead><tbody>'+
+   '<tr><td>Scoring and venue baseline</td><td>'+num(x.baselineHome)+'</td><td>'+num(x.baselineAway)+'</td></tr>'+
+   '<tr><td>Explicit efficiency adjustment</td><td>'+signed(x.homeMatchupChange)+'</td><td>'+signed(x.awayMatchupChange)+'</td></tr>'+
+   '<tr><td>Projected points</td><td>'+num(x.projectedHome)+'</td><td>'+num(x.projectedAway)+'</td></tr></tbody></table></div><p>Descriptive research is labeled below. It does not silently add extra points or double-count the scoring inputs.</p></details>';
+  const findings='<details open><summary>Why the game leans this way</summary>'+report.findings.map(f=>'<p><strong>'+esc(f.topic)+' · '+esc(f.team)+':</strong> '+esc(f.text)+' <span class="caption">Forecast use: '+esc(f.modelEffect)+'.</span></p>').join('')+'</details>';
+  const questions='<details><summary>Availability and questions that could change the handicap ('+report.questions.length+')</summary>'+report.questions.map(q=>'<p>'+esc(q.question)+(q.source?' <span class="caption">'+esc(q.source)+' · '+esc(q.sourceUpdatedAt||'time unverified')+'</span>':'')+
+   (q.sourceUrl&&/^https:\/\//.test(q.sourceUrl)?' <a href="'+esc(q.sourceUrl)+'" target="_blank" rel="noopener noreferrer">Source</a>':'')+'</p>').join('')+'</details>';
+  const coverage='<details><summary>Research coverage · '+report.coverageCount.available+' / '+report.coverageCount.total+' evidence groups available</summary>'+report.coverage.map(c=>'<p><strong>'+esc(c.name)+' · '+esc(c.status)+':</strong> '+esc(c.detail)+'</p>').join('')+'</details>';
+  return '<div class="breakdown" style="margin:16px 0"><h2>Your game handicap</h2><p>Fair home spread '+signed(report.fairHomeSpread)+' · fair total '+num(report.fairTotal)+'. These are model estimates, not sportsbook quotes.</p>'+
+   (b.impliedHomePoints!==null?'<p>Your spread and total imply approximately '+esc(model.home)+' '+num(b.impliedHomePoints)+' / '+esc(model.away)+' '+num(b.impliedAwayPoints)+'. The independent forecast differs by '+signed(b.marginDifference)+' in home margin and '+signed(b.totalDifference)+' in total. Disagreement needs evidence before it becomes a wager.</p>':'')+
+   '<div class="grid2">'+cards+'</div>'+
+   (report.risks.length?'<details open><summary>What limits this prediction</summary>'+report.risks.map(r=>'<p class="warn">'+esc(r.text)+'</p>').join('')+'</details>':'')+
+   attribution+findings+questions+coverage+deepStatsPanel(model)+'<p class="caption">'+esc(report.note)+'</p></div>';
+ }
+ function deepStatsPanel(model){
+  const metrics=[['pass_epa','Pass EPA / play','number'],['rush_epa','Rush EPA / play','number'],
+   ['pass_success_rate','Pass success','percent'],['rush_success_rate','Rush success','percent'],
+   ['sack_rate','Sacks / pass plays','percent'],['qb_hit_rate','QB hits / pass plays','percent'],
+   ['explosive_pass_rate','Explosive passes (20+ yards)','percent'],['explosive_rush_rate','Explosive runs (10+ yards)','percent'],
+   ['third_down_conversion','Third-down conversion','percent'],['redzone_td_drive_rate','Red-zone TD / known drives','percent'],
+   ['neutral_early_down_pass_rate','Neutral early-down pass rate','percent'],['fourth_down_go_rate','Fourth-down go rate','percent'],
+   ['pass_rate_above_expected','Pass rate above expected','percent']];
+  const facts=model.pregameContext?.teams||{};
+  return '<details><summary>Offensive and defensive deep dive</summary>'+[model.home,model.away].map(team=>{
+   const deep=facts[team]?.deep_stats;
+   if(!deep)return '<p>'+esc(team)+': detailed prior-week play data unavailable.</p>';
+   return '<h3>'+esc(team)+'</h3><p>'+esc(deep.model_use)+'</p>'+['offense','defense'].map(side=>{
+    const season=deep[side]?.season||{},recent=deep[side]?.recent||{};
+    return '<h4>'+esc(side==='offense'?'Offense':'Defense: opponent outcomes allowed')+'</h4><p>Season '+esc(season.plays||0)+' plays / '+esc(season.games||0)+' games · recent '+esc(recent.plays||0)+' plays / '+esc(recent.games||0)+' games.</p>'+
+     '<div class="tableWrap"><table><thead><tr><th>Metric</th><th>Season (observations)</th><th>Last four games (observations)</th></tr></thead><tbody>'+metrics.map(([key,label,type])=>'<tr><td>'+label+'</td><td>'+(type==='percent'?pct(season[key]):num(season[key],3))+' (n='+esc(season.observed_samples?.[key]??'unknown')+')</td><td>'+(type==='percent'?pct(recent[key]):num(recent[key],3))+' (n='+esc(recent.observed_samples?.[key]??'unknown')+')</td></tr>').join('')+'</tbody></table></div>';
+   }).join('');
+  }).join('')+'<p>Missing observations remain unavailable. Recent games overlap the season sample. Situational rates are descriptive; down, distance, opponent and personnel affect them.</p></details>';
+ }
  function render(result,model){
   const s=result.simulated,p=result.projection;
-  const favorites=result.markets.filter(x=>x.eligible).sort((a,b)=>b.ev-a.ev);
+  const handicap=model.sport==='NFL'?CookHandicapper.build(model,result,{audit:source.NFL?.audit}):null;
+  const displayRows=handicap?result.markets.map(m=>{
+   const key=m.key.endsWith('ML')?'ml':m.key.endsWith('ATS')?'ats':'total';
+   const decision=handicap.markets.find(x=>x.key===key);
+   return {...m,signal:decision?.status||m.signal,eligible:decision?.status.startsWith('RESEARCH LEAN')&&m.label===decision.bestPricedSide};
+  }):result.markets;
+  const favorites=displayRows.filter(x=>x.eligible).sort((a,b)=>b.ev-a.ev);
   const highest=favorites[0], priced=result.markets.filter(x=>x.price!==null);
   const headline=highest?'Highest research-only price discrepancy: '+highest.label+' ('+(highest.ev>0?'+':'')+pct(highest.ev)+' hypothetical EV).':
    priced.length?'PASS · No validated game-market recommendation is available.':'NO ODDS ENTERED · Game distribution only.';
   const details=highest?'This is NOT an approved wager. The outcome model has not demonstrated independently calibrated, profitable forecasts.':
    'A model projection is not evidence of a profitable sportsbook edge. Passing is a valid outcome.';
-  const date=model.sport==='NFL'?model.date:new Date(model.date).toLocaleString('en-US',{timeZone:'America/New_York',dateStyle:'medium',timeStyle:'short'});
+  const date=model.sport==='NFL'?(model.forecastMeta?.kickoffAt?new Date(model.forecastMeta.kickoffAt).toLocaleString('en-US',{timeZone:'America/New_York',dateStyle:'medium',timeStyle:'short'})+' ET':model.date):new Date(model.date).toLocaleString('en-US',{timeZone:'America/New_York',dateStyle:'medium',timeStyle:'short'});
   const runStatus='100,000 score outcomes complete. NFL game times, confirmed game-day injuries, and actionable sportsbook execution are not automatically verified.';
   $('results').innerHTML=
    '<div class="panel"><h2>🎲 '+esc(model.away)+' @ '+esc(model.home)+' · '+esc(model.sport)+'</h2>'+
@@ -288,7 +340,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    '<div class="kpi"><span>Sim median total</span><b>'+num(s.total.median)+'</b></div>'+
    '<div class="kpi"><span>Sim median home margin</span><b>'+num(s.margin.median)+'</b></div></div>'+
    (s.tie>0?'<p class="muted">Tie rate: '+pct(s.tie)+' (treated as a moneyline push).</p>':'')+
-   '<h3>Estimated market pricing</h3>'+marketTable(result.markets)+matchupPanel(model)+contextPanel(model)+
+   (handicap?handicapPanel(handicap,model):'')+'<h3>Estimated market pricing</h3>'+marketTable(displayRows)+matchupPanel(model)+contextPanel(model)+
    '<div class="breakdown"><h3>Decision summary</h3><strong class="warn">'+esc(headline)+'</strong>'+
    '<p>'+esc(details)+'</p><p class="muted">Only entered odds are evaluated. A 100,000-draw research result is not a calibrated probability or a guaranteed bet.</p></div></div>'+
    '<div class="panel"><h2>🔬 Deep game breakdown</h2><div class="grid2">'+
@@ -318,13 +370,13 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   store();
   const model=selected.model,market=readFields();
   try{CookGameOdds.marketInput(market);}catch(err){$('runStatus').textContent='⚠️ '+err.message;return;}
-  busy=true;$('run').disabled=true;$('run').textContent='Simulating 100,000 scores…';
-  $('runStatus').textContent='Running 100,000 historical-residual score draws and checking your sportsbook prices.';
+  busy=true;$('run').disabled=true;$('run').textContent='Analyzing matchup and prices…';
+  $('runStatus').textContent='Building the game handicap from sourced research, 100,000 score draws and your sportsbook prices.';
   $('results').hidden=true;
   const thisId=++runId;
   const done=(error,result)=>{
    if(thisId!==runId)return;
-   busy=false;$('run').disabled=false;$('run').textContent='🔥 Simulate 100,000 games';
+   busy=false;$('run').disabled=false;$('run').textContent='🔥 Analyze game & my odds';
    if(worker){worker.terminate();worker=null;}
    if(error){$('runStatus').textContent='Simulation error: '+error;return;}
    render(result,model);

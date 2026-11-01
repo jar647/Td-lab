@@ -6,8 +6,10 @@ from pathlib import Path
 import pandas as pd
 import nflreadpy
 from game_context import MODEL_VERSION, team_context, matchup_context, adjusted_projection, travel_estimate, residual_context
-from nfl_weather import forecast_for_game
+from nfl_weather import forecast_for_game, kickoff_utc
 from nfl_research import enrich_research, injury_research
+from nfl_deep_research import earlier_plays, team_research, PBP_SOURCE
+from nfl_injury_news import fetch_news, SOURCE as INJURY_NEWS_SOURCE
 
 ROOT=Path(__file__).resolve().parent
 LEAGUE_POINTS=22.0
@@ -136,6 +138,9 @@ def main():
         for report in injury_reports.values():
             report["source_error"]=injury_error
     pbp=frame(nflreadpy.load_pbp([season])).to_dict("records")
+    injury_news=fetch_news(season,teams)
+    research_plays=earlier_plays(pbp,season,week)
+    deep_research={team:team_research(research_plays,team) for team in teams}
     player_feed=json.loads((ROOT/"data/matchups.json").read_text()) if (ROOT/"data/matchups.json").exists() else []
     regular=schedules[(pd.to_numeric(schedules["season"],errors="coerce")==season)&(schedules["game_type"].astype(str).str.upper()=="REG")].copy()
     regular["week_num"]=pd.to_numeric(regular["week"],errors="coerce")
@@ -156,6 +161,15 @@ def main():
         research=game_research_context(r,history,str(r["home_team"]),str(r["away_team"]),player_feed)
         weather=forecast_for_game(r,str(r["home_team"]),research["venue"].get("roof"))
         research=enrich_research(research,schedules,season,week,injury_reports)
+        for team in (str(r['home_team']),str(r['away_team'])):
+            research['teams'][team]['deep_stats']=deep_research[team]
+            research['teams'][team]['injury_news']=injury_news[team]
+        research['research']['sources'] += [
+            {'name':'nflverse historical play-by-play','url':PBP_SOURCE},
+            {'name':'ESPN secondary injury updates','url':INJURY_NEWS_SOURCE}]
+        research['research']['model_use']['deep_stats']='Schedule-adjusted EPA, pass protection, explosive plays, red-zone drives and coaching tendencies are descriptive evidence; they are not additional fitted point adjustments.'
+        kickoff=kickoff_utc(r,str(r['home_team']))
+        research['kickoff_at']=kickoff.isoformat() if kickoff else None
         research["weather"]=weather
         if weather.get("available"):
             research["venue"].update({"temperature_f":weather.get("temperature_f"),
@@ -167,6 +181,7 @@ def main():
             sim_context["temperature_f"]=weather.get("temperature_f")
             sim_context["wind_mph"]=weather.get("wind_mph")
         games.append({"game_id":str(r["game_id"]),"home":str(r["home_team"]),"away":str(r["away_team"]),"gameday":str(r["gameday"]),
+          "kickoff_at":kickoff.isoformat() if kickoff else None,
           "model_version":MODEL_VERSION,
           "projected_home_points":hp,"projected_away_points":ap,
           "projected_margin_home":round(hp-ap,1),"projected_total":round(hp+ap,1),

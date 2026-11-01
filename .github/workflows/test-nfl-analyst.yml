@@ -6,6 +6,8 @@ on:
       - 'index.html'
       - 'game-odds.html'
       - 'game_odds_engine.js'
+      - 'game_handicapper.js'
+      - 'test_game_handicapper.js'
       - 'game_odds_worker.js'
       - 'test_game_odds.js'
       - 'test_game_odds_ui.js'
@@ -37,6 +39,7 @@ jobs:
       - run: node --check test_analyst_ui.js
       - run: node test_market_odds.js
       - run: node test_game_odds.js
+      - run: node test_game_handicapper.js
       - run: node test_game_odds_ui.js
       - run: node test_player_probability.js
       - run: node test_analyst_ui.js

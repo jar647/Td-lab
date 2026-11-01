@@ -17,3 +17,5 @@ NFL and NBA cards compare a manually entered Vegas line and optional Over/Under 
 ## Full-game projection validation
 
 NFL scoring now uses prior-league-centered offensive efficiency plus defensive allowance, documented home-handicap ATS conversion, and a walk-forward audit of the exact production simulator. The Game Odds page shows matching historical probability errors against the no-vig market. These are research results, not calibrated betting recommendations. See [model changes, reproduction commands and timestamped quote capture](docs/game-projection-validation.md).
+
+The NFL [Game Handicapper](https://jar647.github.io/Td-lab/game-odds.html?sport=NFL) combines the entered prices with an evidence report: winner/spread/total leans, fair prices, explicit scoring contributions, situational offense/defense statistics, coaching tendencies, timestamped secondary injury news, source conflicts and hypothetical point-shift sensitivity. Injury replacement effects remain unestimated, and an unvalidated price discrepancy does not become an approved wager.

@@ -11,6 +11,11 @@ on:
       - 'game_picks*.py'
       - 'game_odds*.js'
       - 'game-odds.html'
+      - 'game_handicapper.js'
+      - 'nfl_deep_research.py'
+      - 'nfl_injury_news.py'
+      - 'test_game_handicapper.js'
+      - 'tests/test_nfl*.py'
       - 'scripts/archive_game_odds.py'
       - 'tests/test_game*.py'
       - 'tests/test_matchup*.py'
@@ -47,7 +52,9 @@ jobs:
         run: |
           python -m unittest discover -s tests -p 'test_game*.py'
           python -m unittest discover -s tests -p 'test_matchup*.py'
+          python -m unittest discover -s tests -p 'test_nfl*.py'
           node test_game_odds.js
+          node test_game_handicapper.js
           node test_game_odds_backtest.js
           node test_game_odds_ui.js
       - name: Rebuild historical projections with the production score formula

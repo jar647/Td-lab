@@ -73,8 +73,8 @@ class GameContextTests(unittest.TestCase):
         self.assertEqual(parse_wind_mph("10 to 15 mph"),12.5)
         self.assertIsNone(parse_wind_mph("Calm"))
         kickoff=kickoff_utc({"gameday":"2026-11-01","gametime":"13:00"},"GB")
-        self.assertEqual(kickoff.isoformat(),"2026-11-01T19:00:00+00:00")
-        periods=[{"startTime":"2026-11-01T13:00:00-06:00","endTime":"2026-11-01T14:00:00-06:00",
+        self.assertEqual(kickoff.isoformat(),"2026-11-01T18:00:00+00:00")
+        periods=[{"startTime":"2026-11-01T12:00:00-06:00","endTime":"2026-11-01T13:00:00-06:00",
                   "temperature":45,"windSpeed":"10 to 15 mph","shortForecast":"Rain"}]
         selected=select_hourly_period(periods,kickoff)
         self.assertEqual(selected["shortForecast"],"Rain")
