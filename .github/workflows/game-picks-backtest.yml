@@ -1,36 +1,91 @@
-name: Backtest Game Picks Baseline
+name: Validate Production Game Projections
 on:
   workflow_dispatch:
-  push:
+  workflow_call:
+  schedule:
+    - cron: '0 10 * * 2'
+  pull_request:
     paths:
-      - 'game_picks_backtest.py'
-      - 'game_picks.py'
       - 'game_context.py'
+      - 'game_market.py'
+      - 'game_picks*.py'
+      - 'game_odds*.js'
+      - 'game-odds.html'
+      - 'game_handicapper.js'
+      - 'nfl_deep_research.py'
+      - 'nfl_injury_news.py'
+      - 'test_game_handicapper.js'
+      - 'tests/test_nfl*.py'
+      - 'scripts/archive_game_odds.py'
+      - 'tests/test_game*.py'
+      - 'tests/test_matchup*.py'
+      - 'test_game_odds*.js'
+      - '.github/workflows/game-picks*.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'game_context.py'
+      - 'game_market.py'
+      - 'game_picks*.py'
+      - 'game_odds*.js'
       - '.github/workflows/game-picks-backtest.yml'
 permissions:
   contents: write
+concurrency:
+  group: production-game-audit-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   backtest:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: pip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - run: pip install -r requirements.txt
-      - name: Walk-forward historical scoring test
+      - name: Verify matchup direction, odds provenance and exact engine
+        run: |
+          python -m unittest discover -s tests -p 'test_game*.py'
+          python -m unittest discover -s tests -p 'test_matchup*.py'
+          python -m unittest discover -s tests -p 'test_nfl*.py'
+          node test_game_odds.js
+          node test_game_handicapper.js
+          node test_game_odds_backtest.js
+          node test_game_odds_ui.js
+      - name: Rebuild historical projections with the production score formula
         run: python game_picks_backtest.py
-      - name: Commit audited results
+      - name: Compare the same projections and normalize documented ATS lines
+        run: |
+          python game_picks_epa_backtest.py
+          python game_picks_market_backtest.py
+      - name: Audit exact 100000-draw production probabilities
+        run: python game_picks_simulator_audit.py
+      - name: Preserve reviewable reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-projection-validation
+          path: |
+            data/game_picks_backtest.json
+            data/game_picks_epa_comparison.json
+            data/game_picks_market_comparison.json
+            data/game_picks_simulator_audit.json
+            data/game_picks_validation_summary.json
+      - name: Publish audited results
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/game_picks_backtest.json
+          git add data/game_picks_backtest.json data/game_picks_epa_comparison.json data/game_picks_market_comparison.json data/game_picks_simulator_audit.json data/game_picks_validation_summary.json
           if ! git diff --cached --quiet; then
-            git commit -m "Update game picks walk-forward backtest"
+            git commit -m "Update exact-engine game projection audit"
             for attempt in 1 2 3; do
               git fetch origin main
-              git rebase -X theirs origin/main
+              git rebase origin/main
               if git push origin HEAD:main; then exit 0; fi
               sleep 3
             done

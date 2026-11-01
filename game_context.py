@@ -10,6 +10,7 @@ import math
 EPA_SCORE_WEIGHT = 5.0
 SUCCESS_SCORE_WEIGHT = 12.0
 MIN_CONTEXT_GAMES = 3
+MODEL_VERSION = "score-baseline-pbp-v3"
 
 # Approximate NFL home-stadium coordinates used only for great-circle travel
 # estimates. These are not road routes or actual team charter itineraries.
@@ -48,7 +49,7 @@ def _flag(row, key):
 
 def _summarize(rows, team, side):
     team_key = "posteam" if side == "offense" else "defteam"
-    plays = [r for r in rows if r.get(team_key) == team and
+    plays = [r for r in rows if (team is None or r.get(team_key) == team) and
              r.get("play_type") in ("run", "pass") and not _flag(r, "no_play")]
     valid = [(r, _num(r, "epa")) for r in plays]
     valid = [(r, epa) for r, epa in valid if epa is not None]
@@ -104,6 +105,7 @@ def team_context(play_rows, season, week, team):
     recent_ids = {game_id for _, game_id in team_game_weeks[-4:] if game_id}
     recent = [r for r in rows if r.get("game_id") in recent_ids]
     return {"offense": offense, "defense": defense,
+            "league": _summarize(rows, None, "offense"),
             "recent_offense": _summarize(recent, team, "offense"),
             "recent_defense": _summarize(recent, team, "defense")}
 
@@ -112,9 +114,11 @@ def matchup_context(home, away):
     """Summarize both directional offense-vs-defense comparisons."""
     def side(off, defense):
         o, d = off["offense"], defense["defense"]
+        league = off.get("league", {})
         has_rates = all(isinstance(x, (int, float)) for x in
                         (o.get("epa_per_play"), d.get("epa_per_play"),
-                         o.get("success_rate"), d.get("success_rate")))
+                         o.get("success_rate"), d.get("success_rate"),
+                         league.get("epa_per_play"), league.get("success_rate")))
         if not has_rates:
             return {"available": False, "score_adjustment": 0.0,
                     "warning": "Fewer than three complete games of play-by-play context; no EPA adjustment applied."}
@@ -143,18 +147,20 @@ def matchup_context(home, away):
         pass_rate_offense = blend(o, ro, "pass_rate")
         pass_rate_allowed = blend(d, rd, "pass_rate")
         expected_pass_rate = min(.82, max(.25, (pass_rate_offense + pass_rate_allowed) / 2))
-        if all(isinstance(x, (int, float)) for x in (offense_pass, defense_pass, offense_rush, defense_rush)):
-            pass_delta = offense_pass - defense_pass
-            rush_delta = offense_rush - defense_rush
+        if all(isinstance(x, (int, float)) for x in (offense_pass, defense_pass, offense_rush, defense_rush, league.get("pass_epa"), league.get("rush_epa"))):
+            # Both offense EPA and defense EPA ALLOWED increase scoring.
+            # Center each on the earlier league rate; do not subtract allowance.
+            pass_delta = offense_pass + defense_pass - 2 * league["pass_epa"]
+            rush_delta = offense_rush + defense_rush - 2 * league["rush_epa"]
             epa_delta = expected_pass_rate * pass_delta + (1 - expected_pass_rate) * rush_delta
         else:
-            epa_delta = offense_epa - defense_epa
-            pass_delta = offense_pass - defense_pass if isinstance(offense_pass, (int,float)) and isinstance(defense_pass, (int,float)) else None
-            rush_delta = offense_rush - defense_rush if isinstance(offense_rush, (int,float)) and isinstance(defense_rush, (int,float)) else None
-        success_delta = offense_success - defense_success
+            epa_delta = offense_epa + defense_epa - 2 * league["epa_per_play"]
+            pass_delta = None
+            rush_delta = None
+        success_delta = offense_success + defense_success - 2 * league["success_rate"]
         raw = EPA_SCORE_WEIGHT * epa_delta + SUCCESS_SCORE_WEIGHT * success_delta
-        # Shrink early-season estimates; maximum is the empirically tested EPA
-        # challenger correction, while the score distribution remains uncalibrated.
+        # Shrink early-season estimates. These weights remain research hypotheses;
+        # the exact production formula is audited without claiming calibration.
         shrink = min(1.0, games / 6.0)
         return {"available": True, "offense_games": o["games"], "defense_games": d["games"],
                 "offense_epa_per_play": offense_epa, "defense_epa_allowed_per_play": defense_epa,
@@ -164,6 +170,9 @@ def matchup_context(home, away):
                 "pass_epa_matchup_delta": pass_delta, "rush_epa_matchup_delta": rush_delta,
                 "recent_form_games": recent_games, "recent_form_weight": recent_weight,
                 "epa_per_play_delta": epa_delta, "success_rate_delta": success_delta,
+                "league_epa_per_play": league["epa_per_play"],
+                "league_success_rate": league["success_rate"],
+                "adjustment_basis": "Offense and defensive allowance relative to prior-week league rates",
                 "explosive_rate_offense": o.get("explosive_rate"),
                 "explosive_rate_defense_allowed": d.get("explosive_rate"),
                 "pass_epa_offense": offense_pass, "pass_epa_defense_allowed": defense_pass,

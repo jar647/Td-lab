@@ -2,6 +2,7 @@
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const engine=require('./game_odds_engine.js');
+const handicapper=require('./game_handicapper.js');
 const html=fs.readFileSync('game-odds.html','utf8');
 assert.ok(html.includes('<script src="./game_odds_engine.js"></script>'));
 assert.ok(html.includes("new Worker('./game_odds_worker.js')"));
@@ -16,12 +17,12 @@ function el(id){if(!elements.has(id))elements.set(id,{
  value:'',innerHTML:'',textContent:'',hidden:false,disabled:false,onclick:null,onchange:null,
  classList:{toggle(){}},addEventListener(){},scrollIntoView(){}
 });return elements.get(id);}
-const backtest={records:Array.from({length:135},(_,i)=>({
- season:i<110?2024:2025,week:5+i%10,projected_home:22,projected_away:20,
+const backtest={model_version:engine.NFL_MODEL_VERSION,records:Array.from({length:135},(_,i)=>({
+ model_version:engine.NFL_MODEL_VERSION,season:i<110?2024:2025,week:5+i%10,projected_home:22,projected_away:20,
  actual_home:22+Math.round(8*Math.sin(i)),actual_away:20+Math.round(9*Math.cos(i))
 }))};
-const feed={season:2026,week:8,generated_at:new Date().toISOString(),model_version:'score-baseline-v1',games:[{
- game_id:'2026_08_A_B',home:'B',away:'A',gameday:'2099-11-01',
+const feed={season:2026,week:8,generated_at:new Date().toISOString(),model_version:engine.NFL_MODEL_VERSION,games:[{
+ model_version:engine.NFL_MODEL_VERSION,game_id:'2026_08_A_B',home:'B',away:'A',gameday:'2099-11-01',
  projected_home_points:25,projected_away_points:22,
  model_inputs:{home:{games:7,offense:25,defense_allowed:23},away:{games:7,offense:22,defense_allowed:26}}
 }]};
@@ -31,14 +32,16 @@ feed.games[0].model_inputs.research_context={teams:{B:{coach:'Example Coach',sco
  weather:{available:true,source:'National Weather Service hourly forecast',forecast_time:'2026-11-01T13:00:00-06:00',
   temperature_f:45,wind_mph:12,wind_direction:'NW',precipitation_probability:20,condition:'Light Rain'},source_note:'Public feeds.'};
 const sandbox={document:{getElementById:el},location:{search:'?sport=NFL'},URLSearchParams,Intl,Date,setTimeout,console,
- CookGameOdds:engine,
+ CookGameOdds:engine,CookHandicapper:handicapper,
  localStorage:{getItem:key=>store.get(key)||null,setItem:(key,v)=>store.set(key,v)},
  fetch:async url=>({ok:true,json:async()=>String(url).includes('game_picks_backtest')?backtest:
- String(url).includes('game_picks')?feed:String(url).includes('nba_injuries')?null:{games:[]}})
+ String(url).includes('game_picks_validation_summary')?{status:'EXACT_ENGINE_WALK_FORWARD_UNCALIBRATED',model_version:engine.NFL_MODEL_VERSION,holdoutStart:2025,holdout:{games:200,markets:{homeATS:{marketComparison:{games:190,modelBrier:.2512,noVigMarketBrier:.2501}}}}}:String(url).includes('game_picks')?feed:String(url).includes('nba_injuries')?null:{games:[]}})
 };
 vm.createContext(sandbox);vm.runInContext(scripts[0],sandbox,{timeout:5000});
 (async()=>{
  await new Promise(resolve=>setTimeout(resolve,60));
+ assert.match(el('forecastAudit').innerHTML,/Historical forecast accuracy/);
+ assert.match(el('forecastAudit').innerHTML,/0.2512/);
  assert.match(el('game').innerHTML,/A @ B/,'NFL should load from current slate');
  el('game').value='2026_08_A_B';el('game').onchange();
  assert.equal(el('marketCard').hidden,false,'The sportsbook fields must open after game selection');
@@ -53,8 +56,11 @@ vm.createContext(sandbox);vm.runInContext(scripts[0],sandbox,{timeout:5000});
  assert.match(el('results').innerHTML,/RESEARCH ONLY/);
  assert.match(el('results').innerHTML,/No bet is verified/);
  assert.match(el('results').innerHTML,/Spread warning/);
- assert.match(el('results').innerHTML,/no verified historical spread outcomes for an ATS backtest/i);
- assert.match(el('results').innerHTML,/PASS · ATS NOT BACKTESTED/);
+ assert.match(el('results').innerHTML,/no validated prospective ATS advantage/i);
+ assert.match(el('results').innerHTML,/PASS · DATA NEEDS REVIEW/);
+ assert.match(el('results').innerHTML,/Your game handicap/);
+ assert.match(el('results').innerHTML,/What moved the score projection/);
+ assert.match(el('results').innerHTML,/Replacement-player effects/);
  assert.match(el('results').innerHTML,/National Weather Service hourly forecast/);
  assert.match(el('results').innerHTML,/Light Rain/);
  assert.match(el('results').innerHTML,/Actual scoring/);

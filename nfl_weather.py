@@ -10,19 +10,6 @@ from zoneinfo import ZoneInfo
 from game_context import TEAM_COORDS
 
 USER_AGENT = "CoOkItUp/1.0 (+https://github.com/jar647/Td-lab)"
-TEAM_TIMEZONES = {
-    "ARI":"America/Phoenix", "ATL":"America/New_York", "BAL":"America/New_York",
-    "BUF":"America/New_York", "CAR":"America/New_York", "CHI":"America/Chicago",
-    "CIN":"America/New_York", "CLE":"America/New_York", "DAL":"America/Chicago",
-    "DEN":"America/Denver", "DET":"America/Detroit", "GB":"America/Chicago",
-    "HOU":"America/Chicago", "IND":"America/Indiana/Indianapolis", "JAX":"America/New_York",
-    "KC":"America/Chicago", "LA":"America/Los_Angeles", "LAC":"America/Los_Angeles",
-    "LV":"America/Los_Angeles", "MIA":"America/New_York", "MIN":"America/Chicago",
-    "NE":"America/New_York", "NO":"America/Chicago", "NYG":"America/New_York",
-    "NYJ":"America/New_York", "PHI":"America/New_York", "PIT":"America/New_York",
-    "SEA":"America/Los_Angeles", "SF":"America/Los_Angeles", "TB":"America/New_York",
-    "TEN":"America/Chicago", "WAS":"America/New_York",
-}
 _POINT_CACHE = {}
 _HOURLY_CACHE = {}
 
@@ -50,7 +37,9 @@ def kickoff_utc(game, home_team):
         if len(parts) < 2:
             return None
         local = datetime.combine(game_date, time(int(parts[0]), int(parts[1])))
-        local = local.replace(tzinfo=ZoneInfo(TEAM_TIMEZONES[home_team]))
+        # nflverse gametime is Eastern time, including road/neutral venues.
+        # https://github.com/nflverse/nflreadr/blob/main/data-raw/dictionary_schedules.csv
+        local = local.replace(tzinfo=ZoneInfo('America/New_York'))
         return local.astimezone(timezone.utc)
     except (KeyError, TypeError, ValueError):
         return None
@@ -76,12 +65,14 @@ def select_hourly_period(periods, kickoff):
 
 def forecast_for_game(game, home_team, roof=None):
     """Return a timestamped forecast, or explicit missing/unavailable status."""
+    if str(game.get('location','')).lower() == 'neutral':
+        return {"available": False, "source": "NWS", "reason": "Neutral-site stadium coordinates are unverified; designated home stadium weather is not used."}
     if str(roof or "").lower() in ("dome", "closed"):
         return {"available": False, "source": "NWS", "reason": "Indoor venue; outdoor weather is not a game-condition input."}
     coords = TEAM_COORDS.get(home_team)
     kickoff = kickoff_utc(game, home_team)
     if not coords or not kickoff:
-        return {"available": False, "source": "NWS", "reason": "Stadium coordinates or scheduled local kickoff time unavailable."}
+        return {"available": False, "source": "NWS", "reason": "Stadium coordinates or scheduled Eastern kickoff time unavailable."}
     lat, lon = coords
     point_key = (lat, lon)
     try:
