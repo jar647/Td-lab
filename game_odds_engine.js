@@ -10,6 +10,7 @@
  root.CookGameOdds=api;
 })(typeof globalThis!=='undefined'?globalThis:this,function(){
  'use strict';
+ const NFL_MODEL_VERSION='score-baseline-pbp-v3';
  const finite=v=>v===null||v===undefined||v===''?null:(Number.isFinite(Number(v))?Number(v):null);
  const clamp=(v,low,high)=>Math.max(low,Math.min(high,v));
  const mean=vals=>vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0;
@@ -60,6 +61,8 @@
  }
  function nflGame(game,backtest,meta={}){
   if(!game||!game.home||!game.away)throw Error('Selected NFL matchup is unavailable');
+  if(game.model_version!==NFL_MODEL_VERSION||backtest?.model_version!==NFL_MODEL_VERSION)
+   throw Error('NFL model/history version mismatch; regenerate the slate and score backtest before simulation');
   const home=finite(game.projected_home_points),away=finite(game.projected_away_points);
   const hGames=finite(game.model_inputs?.home?.games),aGames=finite(game.model_inputs?.away?.games);
   if(home===null||away===null||home<0||away<0)throw Error('NFL projection unavailable');
@@ -67,6 +70,7 @@
   const season=Number(meta.season)||Number(String(game.game_id||'').split('_')[0])||2026;
   const week=Number(meta.week)||Number(String(game.game_id||'').split('_')[1])||0;
   const records=(backtest?.records||[]).filter(x=>{
+   if(x.model_version!==NFL_MODEL_VERSION)return false;
    const yr=Number(x.season),wk=Number(x.week);
    return (yr<season||(yr===season&&wk<week))&&Number.isFinite(finite(x.actual_home))&&Number.isFinite(finite(x.actual_away))
     &&Number.isFinite(finite(x.projected_home))&&Number.isFinite(finite(x.projected_away));
@@ -81,7 +85,7 @@
     residualContextUsed:conditional.used,residualWeatherUsed:conditional.weatherUsed,residualContextReason:conditional.reason},
    matchupAnalysis:game.model_inputs?.matchup||null,
    pregameContext:game.model_inputs?.research_context||null,
-   method:(game.model_version==='score-baseline-pbp-v2'?'Pregame scoring baseline with shrunk home/road scoring splits and season/recent EPA-success offense-vs-defense adjustment':'Pregame score baseline')+', plus '+conditional.reason+' Paired historical score residual simulation.',
+   method:'Pregame scoring baseline with shrunk home/road splits and prior-league-centered EPA/success allowance adjustment, plus '+conditional.reason+' Paired historical score residual simulation.',
    homeOffense:finite(game.model_inputs?.home?.offense),awayOffense:finite(game.model_inputs?.away?.offense),
    homeAllowed:finite(game.model_inputs?.home?.defense_allowed),awayAllowed:finite(game.model_inputs?.away?.defense_allowed),
    warning:'Experimental NFL score model. Historical team performance includes prior player/coaching effects; only confirmed current game information should alter projections. Weather conditions residual sampling only when enough matched history exists. Injury/lineup effects are not assigned a guessed point value. Probabilities are uncalibrated.'};
@@ -188,9 +192,8 @@
     key==='awayATS'?game.away+' '+(-market.homeSpread>0?'+':'')+(-market.homeSpread):
     key==='over'?'Over '+market.total:'Under '+market.total;
    const adequatelySampled=game.sample.homeGames>=5&&game.sample.awayGames>=5&&game.sample.residualGames>= (game.sport==='NFL'?100:35);
-   // The current repository has no validated home-perspective ATS holdout
-   // results (historical coverage is zero). Keep displaying the simulated
-   // comparison, but never promote a spread side to a research lean from it.
+   // Historical closing-line coverage does not establish a prospective ATS
+   // advantage. Keep the comparison visible without promoting it to a lean.
    const atsBacktestVerified=game.atsBacktestVerified===true;
    const eligible=adequatelySampled&&price&&price.american>=-200&&ev>=.05&&modelEdge>=.025&&
     (!key.endsWith('ATS')||atsBacktestVerified);
@@ -215,5 +218,5 @@
    markets,candidates:candidates.map(x=>x.key),sample:game.sample,method:game.method,warning:game.warning,
    verification:'No bet is verified: model calibration, real execution prices, injuries and lineups are not independently confirmed. 100,000 draws reduce simulation noise, not underlying model error.'};
  }
- return {quote,nflGame,nbaGame,gamePoints,marketInput,simulate};
+ return {NFL_MODEL_VERSION,quote,nflGame,nbaGame,gamePoints,marketInput,simulate};
 });

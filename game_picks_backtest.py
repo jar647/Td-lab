@@ -5,12 +5,13 @@ from pathlib import Path
 import pandas as pd
 import nflreadpy
 from game_picks import frame,team_rates,score_projection
-from game_context import team_context, matchup_context, adjusted_projection, residual_context
+from game_context import MODEL_VERSION, team_context, matchup_context, adjusted_projection, residual_context
 
 ROOT=Path(__file__).resolve().parent
 def main():
     rows=[]
     for season in (2024,2025,2026):
+        print(f"Rebuilding production projections for {season}", flush=True)
         sch=frame(nflreadpy.load_schedules([season]))
         pbp=frame(nflreadpy.load_pbp([season])).to_dict('records')
         reg=sch[(pd.to_numeric(sch.season,errors='coerce')==season)&(sch.game_type.astype(str).str.upper()=='REG')].copy()
@@ -21,7 +22,8 @@ def main():
             past=reg[(reg.week_num<week)&reg.home_score.notna()&reg.away_score.notna()]
             h=team_rates(past,str(game.home_team))
             a=team_rates(past,str(game.away_team))
-            baseline_h,baseline_a=score_projection(h,a)
+            neutral=str(game.get('location','')).lower()=='neutral'
+            baseline_h,baseline_a=score_projection(h,a,neutral=neutral)
             context=matchup_context(team_context(pbp,season,week,str(game.home_team)),
                                     team_context(pbp,season,week,str(game.away_team)))
             hp,ap=adjusted_projection(baseline_h,baseline_a,context)
@@ -29,6 +31,8 @@ def main():
             away_actual=float(game.away_score)
             context=residual_context(game,str(game.home_team),str(game.away_team))
             rows.append({'season':season,'week':week,'game_id':str(game.game_id),
+                'model_version':MODEL_VERSION,'gameday':str(game.gameday),
+                'home_games':h['games'],'away_games':a['games'],
                 'home':str(game.home_team),'away':str(game.away_team),
                 'projected_home':hp,'projected_away':ap,'projected_total':round(hp+ap,1),
                 'baseline_home':baseline_h,'baseline_away':baseline_a,
@@ -46,7 +50,7 @@ def main():
           'margin_mae':round(sum(abs(r[prefix+'_margin']-r['actual_margin']) for r in sub)/n,2),
           'winner_accuracy':round(sum((r[prefix+'_margin']>0)==(r['actual_margin']>0) for r in sub if r['actual_margin']!=0)/max(1,sum(r['actual_margin']!=0 for r in sub)),4),
           'total_bias':round(sum(r[prefix+'_total']-r['actual_total'] for r in sub)/n,2)}
-    out={'model_version':'score-baseline-pbp-v2','method':'Walk-forward, target week excluded; scoring baseline plus shrunk offense-vs-defense EPA/success adjustment from completed PBP only. Probabilities and ATS are not validated.',
+    out={'model_version':MODEL_VERSION,'method':'Walk-forward, target week excluded; production scoring formula with prior-week league-centered EPA and success allowance. Neutral sites have no home advantage. Probabilities and ATS require the exact-engine audit.',
          'overall':{'matchup_adjusted':report(rows),'scoring_baseline':report(rows,'baseline')},
          'by_season':{str(s):{'matchup_adjusted':report([r for r in rows if r['season']==s]),
                               'scoring_baseline':report([r for r in rows if r['season']==s],'baseline')} for s in (2024,2025,2026)},

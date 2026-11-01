@@ -60,6 +60,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
 </div>
 <label for="game">Matchup</label><select id="game"><option value="">Loading scheduled games…</option></select>
 <p id="feedStatus" class="muted" role="status">Connecting to existing game feeds…</p>
+<div id="forecastAudit" class="muted" aria-live="polite"></div>
 </section>
 <section id="marketCard" class="panel">
 <h2>2. Enter your sportsbook lines and odds</h2>
@@ -93,7 +94,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
  const $=id=>document.getElementById(id);
  const esc=v=>String(v===null||v===undefined?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const pct=v=>v===null||!Number.isFinite(v)?'—':(v*100).toFixed(1)+'%';
- const num=v=>v===null||!Number.isFinite(v)?'—':v.toFixed(1);
+ const num=(v,digits=1)=>v===null||!Number.isFinite(v)?'—':v.toFixed(digits);
  const odds=v=>v===null?'—':(v>0?'+':'')+v;
  const fields=['homeML','awayML','homeSpread','homeATS','awayATS','total','over','under'];
  const source={},gamesBySport={NFL:[],NBA:[]},saved={};
@@ -146,6 +147,21 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   $('feedStatus').textContent=src?.error?src.error:
     items.length?items.length+' upcoming '+sport+' matchups found. '+(src?.info||''):
     'No upcoming games are currently in the published '+sport+' feed. Check back after its next refresh.';
+  renderAudit();
+ }
+ function renderAudit(){
+  const audit=source.NFL?.audit;
+  if(sport!=='NFL'){$('forecastAudit').textContent='NBA game probabilities have no matching historical validation report.';return;}
+  if(!audit||audit.model_version!==CookGameOdds.NFL_MODEL_VERSION||audit.status!=='EXACT_ENGINE_WALK_FORWARD_UNCALIBRATED'){
+   $('forecastAudit').textContent='Historical forecast accuracy: waiting for an audit of this model version.';return;
+  }
+  const holdout=audit.holdout;
+  $('forecastAudit').innerHTML='<h3>Historical forecast accuracy</h3><p>'+esc(holdout.games)+' walk-forward games from '+esc(audit.holdoutStart)+'. Probability error (Brier): lower is better. Model and market errors below use the same games with two-sided prices.</p>'+
+   '<div class="tableWrap"><table><thead><tr><th>Market</th><th>Compared games</th><th>Model error</th><th>No-vig market error</th></tr></thead><tbody>'+
+   [['homeML','Moneyline'],['homeATS','Against the spread'],['over','Total']].map(([key,label])=>{
+    const x=holdout.markets?.[key]?.marketComparison;
+    return '<tr><td>'+label+'</td><td>'+esc(x?.games||0)+'</td><td>'+num(x?.modelBrier,4)+'</td><td>'+num(x?.noVigMarketBrier,4)+'</td></tr>';
+   }).join('')+'</tbody></table></div><p class="caption">Historical closing-price comparison; pregame execution and a profitable advantage are unverified. Pushes are excluded from this binary comparison. Historical inputs may be revised; current weather forecasts cannot be fully reconstructed. Probabilities remain uncalibrated.</p>';
  }
  function setSport(value){if(busy)return;sport=value;refresh();}
  $('sportNFL').onclick=()=>setSport('NFL');$('sportNBA').onclick=()=>setSport('NBA');
@@ -166,7 +182,8 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    fetch('./data/game_picks.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('NFL slate feed not available');return r.json();}),
    fetch('./data/game_picks_backtest.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('NFL score backtest unavailable');return r.json();}),
    fetch('./data/nba_games.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('NBA game feed not available');return r.json();}),
-   fetch('./data/nba_injuries.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null)
+   fetch('./data/nba_injuries.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null),
+   fetch('./data/game_picks_validation_summary.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null)
   ]);
   const get=i=>requests[i].status==='fulfilled'?requests[i].value:null;
   const nfl=get(0),history=get(1),nba=get(2);
@@ -174,6 +191,9 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
     {info:'Score baseline '+esc(nfl.model_version||'unknown')+' · updated '+esc(nfl.generated_at||'unknown')+'.'};
   source.NBA=!nba?{error:'NBA feed unavailable.'}:
     {info:'NBA feed updated '+esc(nba.generated_at||'unknown')+'.'};
+  source.NFL.audit=get(4);
+  if(nfl&&history&&(nfl.model_version!==CookGameOdds.NFL_MODEL_VERSION||history.model_version!==CookGameOdds.NFL_MODEL_VERSION))
+   source.NFL.error='NFL projections are refreshing: slate and score history must match the current model version before simulation.';
   if(nfl&&history)for(const g of (nfl.games||[]).filter(upcomingNFL)){
    const key=String(g.game_id||'');
    try{const model=CookGameOdds.nflGame(g,history,{season:nfl.season,week:nfl.week});
@@ -194,7 +214,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   refresh();
  }
  function marketTable(rows){
-  return (rows.some(m=>m.key.endsWith('ATS'))?'<p class="warn"><strong>Spread warning:</strong> ATS percentages, model difference and EV are exploratory only. The repository has no verified historical spread outcomes for an ATS backtest, so both spread sides remain PASS regardless of these numbers.</p>':'')+
+  return (rows.some(m=>m.key.endsWith('ATS'))?'<p class="warn"><strong>Spread warning:</strong> ATS percentages, model difference and EV are exploratory only. There is no validated prospective ATS advantage; historical closing-line audits do not verify an executable edge. Both spread sides remain PASS pending validation.</p>':'')+
    '<div class="tableWrap"><table><thead><tr><th>Game market</th><th>Uncalibrated sim win / push</th><th>Your odds</th><th>Break-even*</th><th>No-vig market</th><th>Hypothetical diff*</th><th>Hypothetical EV*</th><th>Decision</th></tr></thead><tbody>'+
    rows.map(m=>'<tr><td><strong>'+esc(m.label)+'</strong></td>'+
     '<td>'+pct(m.win)+' / '+pct(m.push)+'</td><td>'+esc(odds(m.price))+'</td>'+
@@ -210,7 +230,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   const sides=[[model.home,data.home_offense_vs_away_defense,model.away],[model.away,data.away_offense_vs_home_defense,model.home]];
   return '<div class="breakdown" style="margin-top:12px"><h3>Pregame offense vs defense matchup</h3>'+sides.map(([team,x,opponent])=>
    '<p><strong>'+esc(team)+' offense vs '+esc(opponent)+' defense:</strong> '+
-   (x?.available?'Season/recent blended EPA/play '+num(x.offense_epa_per_play)+' vs '+num(x.defense_epa_allowed_per_play)+' allowed (matchup delta '+(x.epa_per_play_delta>=0?'+':'')+num(x.epa_per_play_delta)+'); success rate '+pct(x.offense_success_rate)+' vs '+pct(x.defense_success_allowed_rate)+' allowed; recent form uses '+esc(x.recent_form_games||0)+' games at '+pct(x.recent_form_weight)+' weight; pass tendency '+pct(x.offense_pass_rate)+' vs opponent pass rate faced '+pct(x.defense_pass_rate_allowed)+' allowed; matchup pass/rush EPA deltas '+num(x.pass_epa_matchup_delta)+' / '+num(x.rush_epa_matchup_delta)+'; explosive-play rates '+pct(x.explosive_rate_offense)+' vs '+pct(x.explosive_rate_defense_allowed)+' allowed; '+num(x.plays_per_game)+' offensive plays/game; offense turnovers '+num(x.turnovers_per_game)+'/game, opponent sacks '+num(x.defensive_sacks_per_game)+'/game. Experimental score adjustment '+(x.score_adjustment>=0?'+':'')+num(x.score_adjustment)+'.':esc(x?.warning||'Insufficient matchup data; no adjustment applied.'))+'</p>'
+   (x?.available?'Season/recent blended EPA/play '+num(x.offense_epa_per_play)+' vs '+num(x.defense_epa_allowed_per_play)+' allowed (league-centered matchup effect '+(x.epa_per_play_delta>=0?'+':'')+num(x.epa_per_play_delta)+'); success rate '+pct(x.offense_success_rate)+' vs '+pct(x.defense_success_allowed_rate)+' allowed; recent form uses '+esc(x.recent_form_games||0)+' games at '+pct(x.recent_form_weight)+' weight; pass tendency '+pct(x.offense_pass_rate)+' vs opponent pass rate faced '+pct(x.defense_pass_rate_allowed)+' allowed; matchup pass/rush EPA deltas '+num(x.pass_epa_matchup_delta)+' / '+num(x.rush_epa_matchup_delta)+'; explosive-play rates '+pct(x.explosive_rate_offense)+' vs '+pct(x.explosive_rate_defense_allowed)+' allowed; '+num(x.plays_per_game)+' offensive plays/game; offense turnovers '+num(x.turnovers_per_game)+'/game, opponent sacks '+num(x.defensive_sacks_per_game)+'/game. Experimental score adjustment '+(x.score_adjustment>=0?'+':'')+num(x.score_adjustment)+'.':esc(x?.warning||'Insufficient matchup data; no adjustment applied.'))+'</p>'
   ).join('')+'<p class="warn">Uses only completed prior-week play-by-play. Matchup features inform the score estimate, but their resulting probabilities remain uncalibrated.</p></div>';
  }
  function contextPanel(model){

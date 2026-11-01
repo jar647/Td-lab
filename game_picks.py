@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 import pandas as pd
 import nflreadpy
-from game_context import team_context, matchup_context, adjusted_projection, travel_estimate, residual_context
+from game_context import MODEL_VERSION, team_context, matchup_context, adjusted_projection, travel_estimate, residual_context
 from nfl_weather import forecast_for_game
 from nfl_research import enrich_research, injury_research
 
@@ -31,14 +31,15 @@ def team_rates(history,team):
             "away_games":len(away),"away_offense":round(shrunk(pd.to_numeric(away.away_score,errors="coerce").dropna()),2),
             "away_defense_allowed":round(shrunk(pd.to_numeric(away.home_score,errors="coerce").dropna()),2)}
 
-def score_projection(home,away):
+def score_projection(home,away,neutral=False):
     # Overall offense/defense rates are blended with shrunk home/road splits.
     # Split influence grows with the available venue sample, capped at 30%.
-    h_overall=(home["offense"]+away["defense_allowed"])/2+HOME_ADVANTAGE_POINTS/2
-    a_overall=(away["offense"]+home["defense_allowed"])/2-HOME_ADVANTAGE_POINTS/2
-    split_weight=min(.30,.05*min(home.get("home_games",0),away.get("away_games",0)))
-    h_split=(home["home_offense"]+away["away_defense_allowed"])/2+HOME_ADVANTAGE_POINTS/2
-    a_split=(away["away_offense"]+home["home_defense_allowed"])/2-HOME_ADVANTAGE_POINTS/2
+    advantage=0 if neutral else HOME_ADVANTAGE_POINTS
+    h_overall=(home["offense"]+away["defense_allowed"])/2+advantage/2
+    a_overall=(away["offense"]+home["defense_allowed"])/2-advantage/2
+    split_weight=0 if neutral else min(.30,.05*min(home.get("home_games",0),away.get("away_games",0)))
+    h_split=(home["home_offense"]+away["away_defense_allowed"])/2+advantage/2
+    a_split=(away["away_offense"]+home["home_defense_allowed"])/2-advantage/2
     h=(1-split_weight)*h_overall+split_weight*h_split
     a=(1-split_weight)*a_overall+split_weight*a_split
     return round(max(0,h),1),round(max(0,a),1)
@@ -146,7 +147,8 @@ def main():
         history=regular[(regular.week_num<week)&regular.home_score.notna()&regular.away_score.notna()]
         h=team_rates(history,str(r["home_team"]))
         a=team_rates(history,str(r["away_team"]))
-        baseline_home,baseline_away=score_projection(h,a)
+        neutral=str(r.get("location", "")).lower()=="neutral"
+        baseline_home,baseline_away=score_projection(h,a,neutral=neutral)
         home_context=team_context(pbp,season,week,str(r["home_team"]))
         away_context=team_context(pbp,season,week,str(r["away_team"]))
         matchup=matchup_context(home_context,away_context)
@@ -165,19 +167,19 @@ def main():
             sim_context["temperature_f"]=weather.get("temperature_f")
             sim_context["wind_mph"]=weather.get("wind_mph")
         games.append({"game_id":str(r["game_id"]),"home":str(r["home_team"]),"away":str(r["away_team"]),"gameday":str(r["gameday"]),
-          "model_version":"score-baseline-pbp-v2",
+          "model_version":MODEL_VERSION,
           "projected_home_points":hp,"projected_away_points":ap,
           "projected_margin_home":round(hp-ap,1),"projected_total":round(hp+ap,1),
           "model_inputs":{"home":h,"away":a,"baseline_home_points":baseline_home,"baseline_away_points":baseline_away,
             "matchup":matchup,"research_context":research,
             "residual_context":sim_context,
-            "prior_games":PRIOR_GAMES,"league_points_prior":LEAGUE_POINTS,"home_advantage_points":HOME_ADVANTAGE_POINTS},
+            "prior_games":PRIOR_GAMES,"league_points_prior":LEAGUE_POINTS,"home_advantage_points":0 if neutral else HOME_ADVANTAGE_POINTS},
           "ml":{"pick":None,"confidence":None,"status":"PASS"},
           "ats":{"pick":None,"confidence":None,"status":"PASS","line":None},
           "total":{"pick":None,"confidence":None,"status":"PASS","line":None},
           "reason":"Projected score blends historical scoring with a shrunk EPA/success-rate offense-vs-defense matchup adjustment. Inputs use completed prior-week play-by-play only. The scoring distribution and probabilities are uncalibrated; no betting recommendation is issued."})
     out={"season":season,"week":week,"generated_at":datetime.now(timezone.utc).isoformat(),
-      "model_status":"EXPERIMENTAL_MATCHUP_SCORE_BASELINE","model_version":"score-baseline-pbp-v2",
+      "model_status":"EXPERIMENTAL_MATCHUP_SCORE_BASELINE","model_version":MODEL_VERSION,
       "note":"Projected scores blend completed prior-week points and shrunk home/road splits with offense-vs-defense EPA/success/explosive-play context. Each game also includes team/player usage, injury-report fields, coach records, rest, venue and an approximate travel estimate where available. Uncalibrated research only; no picks.","games":games}
     path=ROOT/"data/game_picks.json"
     path.write_text(json.dumps(out,indent=2))

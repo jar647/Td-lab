@@ -2,13 +2,14 @@
 """Historical market benchmark for frozen walk-forward score predictions.
 
 Historical schedule odds are treated as closing-line proxies, NOT executable
-real-time prices. ATS is omitted when home-side spread sign is ambiguous.
+real-time prices. ATS uses the documented nflverse home-margin sign convention.
 """
 import json
 from pathlib import Path
 import pandas as pd
 import nflreadpy
 from game_picks import frame
+from game_market import schedule_market
 
 ROOT=Path(__file__).resolve().parent
 def numeric(v):
@@ -81,8 +82,8 @@ def evaluate(rows):
     return outcomes
 
 def main():
-    source=json.loads((ROOT/'data/game_picks_epa_comparison.json').read_text())
-    rows=[dict(r) for r in source['records']]
+    source=json.loads((ROOT/'data/game_picks_backtest.json').read_text())
+    rows=[dict(r, challenger_margin=r['projected_margin'], challenger_total=r['projected_total']) for r in source['records']]
     by_id={r['game_id']:r for r in rows}
     coverage={'games':len(rows),'total_lines':0,'home_spread_lines':0,'moneyline_prices':0}
     for season in sorted({r['season'] for r in rows}):
@@ -90,28 +91,14 @@ def main():
         for _,g in sch.iterrows():
             row=by_id.get(str(g.get('game_id')))
             if row is None:continue
-            line=numeric(g.get('total_line'))
-            if line is not None and 15<=line<=90:
-                row['market_total']=line
-                coverage['total_lines']+=1
-            else:row['market_total']=None
-            # Do not infer whether spread_line is home or favorite-oriented.
-            # Only use a verified home-perspective field if present.
-            spread=numeric(g.get('home_spread'))
-            if spread is not None and abs(spread)<=35:
-                row['market_home_spread']=spread
-                coverage['home_spread_lines']+=1
-            else:row['market_home_spread']=None
-            home_odds=numeric(g.get('home_moneyline'))
-            away_odds=numeric(g.get('away_moneyline'))
-            if home_odds is not None and away_odds is not None:
-                row['home_moneyline']=home_odds
-                row['away_moneyline']=away_odds
-                coverage['moneyline_prices']+=1
+            row.update(schedule_market(g))
+            coverage['total_lines']+=row['market_total'] is not None
+            coverage['home_spread_lines']+=row['market_home_spread'] is not None
+            coverage['moneyline_prices']+=row['home_moneyline'] is not None and row['away_moneyline'] is not None
     results=evaluate(rows)
     for model in ('baseline','challenger'):
         results[model]['moneyline_flat_stake']=moneyline_roi(rows,model)
-    # ATS evaluated only for an explicit home-side spread field.
+    # ATS evaluated using the verified, normalized home handicap.
     for model in ('baseline','challenger'):
         w=l=p=0
         for row in rows:
@@ -124,7 +111,7 @@ def main():
             elif (edge>0)==(actual>0):w+=1
             else:l+=1
         results[model]['ats']={'wins':w,'losses':l,'pushes':p,'hit_rate':round(w/(w+l),4) if w+l else None}
-    out={'status':'HISTORICAL_RESEARCH_ONLY','method':'2024-26 prior-week walk-forward projections compared to historical schedule market totals. Historical lines may reflect closing prices. Moneyline returns use historical schedule prices and 1-unit flat stakes; these are NOT verified pregame executable odds. No calibrated confidence. ATS requires explicit home_spread sign; otherwise not scored.',
+    out={'status':'HISTORICAL_RESEARCH_ONLY','model_version':source['model_version'],'method':'2024-26 prior-week walk-forward projections compared to historical schedule market totals. Historical lines may reflect closing prices. Moneyline returns use historical schedule prices and 1-unit flat stakes; these are NOT verified pregame executable odds. No calibrated confidence. ATS converts documented nflverse spread_line to the home handicap; conflicting fields fail validation.',
       'coverage':coverage,'results':results,'records':rows}
     (ROOT/'data/game_picks_market_comparison.json').write_text(json.dumps(out,indent=2))
     print(json.dumps({'coverage':coverage,'results':results},indent=2))

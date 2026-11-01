@@ -39,14 +39,15 @@ class GameContextTests(unittest.TestCase):
         self.assertAlmostEqual(ctx["recent_offense"]["epa_per_play"],.45)
 
     def test_matchup_adjustment_uses_both_sides_of_the_ball(self):
-        rows=[]
-        for week in range(1,5):
-            rows+=plays(week,f"a{week}",.6,-.2,"A","X")
-            rows+=plays(week,f"b{week}",-.5,-.4,"X","B")
-            rows+=plays(week,f"c{week}",-.5,.2,"B","X")
-            rows+=plays(week,f"d{week}",.5,.4,"X","A")
-        a=team_context(rows,2026,5,"A")
-        b=team_context(rows,2026,5,"B")
+        def context(epa,success):
+            rates={'games':6,'plays':360,'epa_per_play':epa,'success_rate':success,
+                   'pass_epa':epa,'rush_epa':epa,'pass_rate':.6}
+            return {'offense':rates,'defense':rates,
+                    'league':{'epa_per_play':0,'success_rate':.45,'pass_epa':0,'rush_epa':0}}
+        a=context(.2,.5)
+        b=context(.1,.5)
+        b['offense']={**b['offense'],'epa_per_play':-.2,'pass_epa':-.2,'rush_epa':-.2,'success_rate':.4}
+        a['defense']={**a['defense'],'epa_per_play':-.1,'pass_epa':-.1,'rush_epa':-.1,'success_rate':.4}
         result=matchup_context(a,b)
         self.assertTrue(result["home_offense_vs_away_defense"]["available"])
         self.assertGreater(result["home_offense_vs_away_defense"]["score_adjustment"],0)

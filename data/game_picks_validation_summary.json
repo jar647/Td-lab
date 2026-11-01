@@ -1,0 +1,296 @@
+{
+  "status": "EXACT_ENGINE_WALK_FORWARD_UNCALIBRATED",
+  "model_version": "score-baseline-pbp-v3",
+  "holdoutStart": 2025,
+  "holdout": {
+    "games": 252,
+    "marginMAE": 10.257142857142856,
+    "totalMAE": 10.486507936507936,
+    "markets": {
+      "homeML": {
+        "games": 252,
+        "settledGames": 251,
+        "pushes": 1,
+        "brier": 0.22541345158553086,
+        "logLoss": 0.640517615226845,
+        "accuracy": 0.6653386454183267,
+        "threeOutcomeBrier": 0.45602554305714316,
+        "marketComparison": {
+          "games": 251,
+          "modelBrier": 0.22541345158553086,
+          "noVigMarketBrier": 0.22054458937342947
+        },
+        "hypotheticalClosingPriceSelections": {
+          "bets": 70,
+          "netUnits": -7.580076804915514,
+          "roi": -0.10828681149879306
+        },
+        "bins": [
+          {
+            "range": "20-30%",
+            "n": 16,
+            "predicted": 0.27641496074664706,
+            "actual": 0.3125,
+            "observed95": [
+              0.14164435051961052,
+              0.5559606813326594
+            ]
+          },
+          {
+            "range": "30-40%",
+            "n": 35,
+            "predicted": 0.3553298659224696,
+            "actual": 0.3142857142857143,
+            "observed95": [
+              0.18550658059782457,
+              0.47980071879251973
+            ]
+          },
+          {
+            "range": "40-50%",
+            "n": 54,
+            "predicted": 0.44323750861019495,
+            "actual": 0.2777777777777778,
+            "observed95": [
+              0.1761667544821121,
+              0.4089069640872221
+            ]
+          },
+          {
+            "range": "50-60%",
+            "n": 67,
+            "predicted": 0.5502536208901754,
+            "actual": 0.6119402985074627,
+            "observed95": [
+              0.4922287051487494,
+              0.7195112894307066
+            ]
+          },
+          {
+            "range": "60-70%",
+            "n": 43,
+            "predicted": 0.647388470379492,
+            "actual": 0.5581395348837209,
+            "observed95": [
+              0.4110735806551171,
+              0.6956691437607867
+            ]
+          },
+          {
+            "range": "70-80%",
+            "n": 26,
+            "predicted": 0.7421049265034475,
+            "actual": 0.6923076923076923,
+            "observed95": [
+              0.5001138848576876,
+              0.8349887906020732
+            ]
+          },
+          {
+            "range": "80-90%",
+            "n": 9,
+            "predicted": 0.8272258003918008,
+            "actual": 1,
+            "observed95": [
+              0.7008472464490407,
+              1
+            ]
+          },
+          {
+            "range": "90-100%",
+            "n": 1,
+            "predicted": 0.9217921066350468,
+            "actual": 1,
+            "observed95": [
+              0.20654329147389294,
+              1
+            ]
+          }
+        ]
+      },
+      "homeATS": {
+        "games": 252,
+        "settledGames": 250,
+        "pushes": 2,
+        "brier": 0.26280375137719303,
+        "logLoss": 0.7208582551225009,
+        "accuracy": 0.504,
+        "threeOutcomeBrier": 0.5324688961317461,
+        "marketComparison": {
+          "games": 250,
+          "modelBrier": 0.26280375137719303,
+          "noVigMarketBrier": 0.24927689677150475
+        },
+        "hypotheticalClosingPriceSelections": {
+          "bets": 73,
+          "netUnits": -9.665148665928935,
+          "roi": -0.13239929679354706
+        },
+        "bins": [
+          {
+            "range": "20-30%",
+            "n": 14,
+            "predicted": 0.27172928351267156,
+            "actual": 0.35714285714285715,
+            "observed95": [
+              0.16344490737202735,
+              0.6123599531785959
+            ]
+          },
+          {
+            "range": "30-40%",
+            "n": 59,
+            "predicted": 0.36311244061263526,
+            "actual": 0.5084745762711864,
+            "observed95": [
+              0.3843492802145344,
+              0.6315637455518369
+            ]
+          },
+          {
+            "range": "40-50%",
+            "n": 71,
+            "predicted": 0.44597019161158125,
+            "actual": 0.43661971830985913,
+            "observed95": [
+              0.32745937963101784,
+              0.5522866439708294
+            ]
+          },
+          {
+            "range": "50-60%",
+            "n": 63,
+            "predicted": 0.5487097341132867,
+            "actual": 0.4126984126984127,
+            "observed95": [
+              0.2995827804043614,
+              0.5358490464818889
+            ]
+          },
+          {
+            "range": "60-70%",
+            "n": 32,
+            "predicted": 0.6409282820521726,
+            "actual": 0.53125,
+            "observed95": [
+              0.3644923793257382,
+              0.6913087009831766
+            ]
+          },
+          {
+            "range": "70-80%",
+            "n": 10,
+            "predicted": 0.728928471629479,
+            "actual": 0.4,
+            "observed95": [
+              0.16817758120350967,
+              0.6873304525498135
+            ]
+          },
+          {
+            "range": "80-90%",
+            "n": 1,
+            "predicted": 0.86601,
+            "actual": 1,
+            "observed95": [
+              0.20654329147389294,
+              1
+            ]
+          }
+        ]
+      },
+      "over": {
+        "games": 252,
+        "settledGames": 252,
+        "pushes": 0,
+        "brier": 0.2631132359464286,
+        "logLoss": 0.7207469581307386,
+        "accuracy": 0.4603174603174603,
+        "threeOutcomeBrier": 0.5262264718928572,
+        "marketComparison": {
+          "games": 252,
+          "modelBrier": 0.2631132359464286,
+          "noVigMarketBrier": 0.25046513607693693
+        },
+        "hypotheticalClosingPriceSelections": {
+          "bets": 84,
+          "netUnits": -5.458661043450152,
+          "roi": -0.06498406004107324
+        },
+        "bins": [
+          {
+            "range": "20-30%",
+            "n": 6,
+            "predicted": 0.27568166666666666,
+            "actual": 0.8333333333333334,
+            "observed95": [
+              0.43649056343635395,
+              0.9699474141282697
+            ]
+          },
+          {
+            "range": "30-40%",
+            "n": 23,
+            "predicted": 0.35898,
+            "actual": 0.391304347826087,
+            "observed95": [
+              0.22157377982382145,
+              0.5921482039625402
+            ]
+          },
+          {
+            "range": "40-50%",
+            "n": 101,
+            "predicted": 0.45609435643564367,
+            "actual": 0.594059405940594,
+            "observed95": [
+              0.49654808521743277,
+              0.6846776877581798
+            ]
+          },
+          {
+            "range": "50-60%",
+            "n": 71,
+            "predicted": 0.546631971830986,
+            "actual": 0.4788732394366197,
+            "observed95": [
+              0.36677330370106553,
+              0.5931420374995502
+            ]
+          },
+          {
+            "range": "60-70%",
+            "n": 48,
+            "predicted": 0.6399252083333332,
+            "actual": 0.5,
+            "observed95": [
+              0.36389098932037767,
+              0.6361090106796223
+            ]
+          },
+          {
+            "range": "70-80%",
+            "n": 3,
+            "predicted": 0.7522833333333333,
+            "actual": 0.6666666666666666,
+            "observed95": [
+              0.2076549551264879,
+              0.9385096847238394
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "simulation": {
+    "count": 100000,
+    "seed": 6472026
+  },
+  "limits": [
+    "Historical schedule prices are closing proxies, not executable pregame quotes.",
+    "Archived historical pregame weather forecasts are unavailable; target weather/roof matching is disabled.",
+    "Binary metrics condition on no push; three-outcome Brier includes pushes. Market Brier uses identical quoted settled games.",
+    "Historical inputs may be revised. Walk-forward reuse is not an untouched holdout after model development.",
+    "Research price selection uses EV >=5%, probability difference >=2.5 points and odds >=-200. No recommendation gate is enabled."
+  ]
+}

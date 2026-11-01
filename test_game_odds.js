@@ -5,14 +5,14 @@ const e=require('./game_odds_engine.js');
 assert.ok(Math.abs(e.quote('-115').implied-115/215)<1e-12,'American odds implied probability');
 assert.equal(e.quote('+110').decimal,2.1);
 for(const invalid of ['',null,0,'-99','+20','abc','-110x'])assert.equal(e.quote(invalid),null);
-const backtest={records:Array.from({length:155},(_,i)=>({
- season:i<125?2024:2025,week:5+i%12,
+const backtest={model_version:e.NFL_MODEL_VERSION,records:Array.from({length:155},(_,i)=>({
+ model_version:e.NFL_MODEL_VERSION,season:i<125?2024:2025,week:5+i%12,
  projected_home:22,projected_away:21,
  home_rest:7,away_rest:7,travel_miles:600,roof:'outdoors',temperature_f:55,wind_mph:10,
  actual_home:Math.round(22+7*Math.sin(i*.61)+2*Math.cos(i*.7)),
  actual_away:Math.round(21+8*Math.cos(i*.56)+1*Math.sin(i*.32))
 }))};
-const game={game_id:'2026_08_TST_FOO',home:'FOO',away:'TST',gameday:'2026-11-01',
+const game={model_version:e.NFL_MODEL_VERSION,game_id:'2026_08_TST_FOO',home:'FOO',away:'TST',gameday:'2026-11-01',
  projected_home_points:25.5,projected_away_points:22.4,
  model_inputs:{home:{games:7,offense:28,defense_allowed:20},away:{games:6,offense:24,defense_allowed:26},
   residual_context:{home_rest:7,away_rest:7,travel_miles:600,roof:'outdoors',temperature_f:55,wind_mph:10}}};
