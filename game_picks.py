@@ -3,11 +3,13 @@
 import json
 from datetime import datetime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 import pandas as pd
 import nflreadpy
 from game_context import team_context, matchup_context, adjusted_projection, travel_estimate, residual_context
-from nfl_weather import forecast_for_game
+from nfl_weather import forecast_for_game, kickoff_utc
 from nfl_research import enrich_research, injury_research
+from game_trust import MODEL_VERSION, reconcile_contexts, quarterback_context, validation_report
 
 ROOT=Path(__file__).resolve().parent
 LEAGUE_POINTS=22.0
@@ -140,6 +142,18 @@ def main():
     regular=schedules[(pd.to_numeric(schedules["season"],errors="coerce")==season)&(schedules["game_type"].astype(str).str.upper()=="REG")].copy()
     regular["week_num"]=pd.to_numeric(regular["week"],errors="coerce")
     slate=regular[regular.week_num==week]
+    # Reconcile the same completed-game sample through a second aggregation path.
+    completed=regular[(regular.week_num<week)&regular.home_score.notna()&regular.away_score.notna()]
+    completed_ids=set(completed.game_id.astype(str))
+    pbp=[p for p in pbp if str(p.get('game_id')) in completed_ids
+         and int(p.get('season',0))==season and int(p.get('week',week))<week]
+    slate_teams=set(slate.home_team.astype(str))|set(slate.away_team.astype(str))
+    contexts={team:team_context(pbp,season,week,team) for team in slate_teams}
+    expected={team:set(completed.loc[(completed.home_team==team)|(completed.away_team==team),'game_id'].astype(str)) for team in slate_teams}
+    audit=reconcile_contexts(pbp,contexts,expected,season,week)
+    qb_context={team:quarterback_context(pbp,team,player_feed) for team in slate_teams}
+    history_path=ROOT/'data/game_picks_backtest.json'
+    evidence=validation_report(json.loads(history_path.read_text()) if history_path.exists() else {})
     games=[]
     for _,r in slate.iterrows():
         # Exclude target week entirely, even if a game has already finished.
@@ -148,10 +162,24 @@ def main():
         h=team_rates(history,str(r["home_team"]))
         a=team_rates(history,str(r["away_team"]))
         baseline_home,baseline_away=score_projection(h,a)
-        home_context=team_context(pbp,season,week,str(r["home_team"]))
-        away_context=team_context(pbp,season,week,str(r["away_team"]))
+        home_context=contexts[str(r["home_team"])]
+        away_context=contexts[str(r["away_team"])]
         matchup=matchup_context(home_context,away_context)
-        hp,ap=adjusted_projection(baseline_home,baseline_away,matchup)
+        # Keep unvalidated corrections visible, but do not silently move the forecast.
+        for direction, context in matchup.items():
+            context['experimental_score_adjustment']=context['score_adjustment']
+            context['score_adjustment']=0.0
+            context['adjustment_applied']=False
+        hp,ap=baseline_home,baseline_away
+        team_keys=[str(r['home_team']),str(r['away_team'])]
+        trust={'source_status':'RECONCILED','source_sha256':audit['source_sha256'],
+          'checked_at':audit['checked_at'],'through_week':week-1,
+          'epa_missing_plays':audit['epa_missing_plays'],
+          'external_verification':False,'calibration_status':'NOT_CALIBRATED',
+          'projection_basis':'SCORING_BASELINE','experimental_adjustment_enabled':False,
+          'qb_context':{t:qb_context[t] for t in team_keys},
+          'sample':{t:audit['teams'][t] for t in team_keys},
+          'definitions':audit['definitions'],'validation':evidence}
         research=game_research_context(r,history,str(r["home_team"]),str(r["away_team"]),player_feed)
         weather=forecast_for_game(r,str(r["home_team"]),research["venue"].get("roof"))
         research=enrich_research(research,schedules,season,week,injury_reports)
@@ -165,23 +193,36 @@ def main():
         if weather.get("available"):
             sim_context["temperature_f"]=weather.get("temperature_f")
             sim_context["wind_mph"]=weather.get("wind_mph")
-        games.append({"game_id":str(r["game_id"]),"home":str(r["home_team"]),"away":str(r["away_team"]),"gameday":str(r["gameday"]),
-          "model_version":"score-baseline-pbp-v2",
+        games.append({"game_id":str(r["game_id"]),"home":str(r["home_team"]),"away":str(r["away_team"]),"gameday":str(r["gameday"]),"kickoff_at":kickoff_utc(r,str(r["home_team"])).isoformat() if kickoff_utc(r,str(r["home_team"])) else None,
+          "model_version":MODEL_VERSION,
           "projected_home_points":hp,"projected_away_points":ap,
           "projected_margin_home":round(hp-ap,1),"projected_total":round(hp+ap,1),
           "model_inputs":{"home":h,"away":a,"baseline_home_points":baseline_home,"baseline_away_points":baseline_away,
-            "matchup":matchup,"research_context":research,
+            "matchup":matchup,"research_context":research,"trust":trust,
             "residual_context":sim_context,
             "prior_games":PRIOR_GAMES,"league_points_prior":LEAGUE_POINTS,"home_advantage_points":HOME_ADVANTAGE_POINTS},
           "ml":{"pick":None,"confidence":None,"status":"PASS"},
           "ats":{"pick":None,"confidence":None,"status":"PASS","line":None},
           "total":{"pick":None,"confidence":None,"status":"PASS","line":None},
-          "reason":"Projected score blends historical scoring with a shrunk EPA/success-rate offense-vs-defense matchup adjustment. Inputs use completed prior-week play-by-play only. The scoring distribution and probabilities are uncalibrated; no betting recommendation is issued."})
+          "reason":"Historical scoring baseline only. EPA matchup corrections are disabled pending validation. QB return splits are shown separately and do not imply a validated replacement effect. Raw rates reconciled within nflverse; probabilities remain uncalibrated."})
     out={"season":season,"week":week,"generated_at":datetime.now(timezone.utc).isoformat(),
-      "model_status":"EXPERIMENTAL_MATCHUP_SCORE_BASELINE","model_version":"score-baseline-pbp-v2",
+      "model_status":"AUDITED_BASELINE_UNCALIBRATED","model_version":MODEL_VERSION,
       "note":"Projected scores blend completed prior-week points and shrunk home/road splits with offense-vs-defense EPA/success/explosive-play context. Each game also includes team/player usage, injury-report fields, coach records, rest, venue and an approximate travel estimate where available. Uncalibrated research only; no picks.","games":games}
+    # Grade only prior-calendar-day schedule finals. Never use these results as features.
+    today=datetime.now(timezone.utc).astimezone(ZoneInfo('America/New_York')).date().isoformat()
+    results={'generated_at':datetime.now(timezone.utc).isoformat(),'games':{}}
+    for _, final in regular.iterrows():
+        if str(final['gameday'])[:10]>=today or pd.isna(final.home_score) or pd.isna(final.away_score):
+            continue
+        results['games'][str(final.game_id)]={'home':float(final.home_score),'away':float(final.away_score)}
     path=ROOT/"data/game_picks.json"
-    path.write_text(json.dumps(out,indent=2))
+    out['note']='Historical scoring research baseline; independently recomputed source rates; QB-led history separated; no unvalidated EPA point correction or verified betting recommendation.'
+    # Write complete valid JSON to temporary files before replacing published records.
+    for filename, payload in [('game_picks.json',out),('game_context_audit.json',audit),('game_model_validation.json',evidence),('game_score_results.json',results)]:
+        target=ROOT/'data'/filename
+        temporary=target.with_suffix('.json.tmp')
+        temporary.write_text(json.dumps(payload,indent=2,allow_nan=False))
+        temporary.replace(target)
     print("Game scoring baseline:",len(games),"games; no betting recommendations until validation")
 if __name__=="__main__":main()
 

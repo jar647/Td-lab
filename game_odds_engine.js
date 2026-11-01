@@ -66,11 +66,13 @@
   if(hGames===null||aGames===null||hGames<2||aGames<2)throw Error('Insufficient earlier NFL team games');
   const season=Number(meta.season)||Number(String(game.game_id||'').split('_')[0])||2026;
   const week=Number(meta.week)||Number(String(game.game_id||'').split('_')[1])||0;
+  const baselineResiduals=game.model_inputs?.trust?.projection_basis==='SCORING_BASELINE';
+  const historyHome=baselineResiduals?'baseline_home':'projected_home',historyAway=baselineResiduals?'baseline_away':'projected_away';
   const records=(backtest?.records||[]).filter(x=>{
    const yr=Number(x.season),wk=Number(x.week);
    return (yr<season||(yr===season&&wk<week))&&Number.isFinite(finite(x.actual_home))&&Number.isFinite(finite(x.actual_away))
-    &&Number.isFinite(finite(x.projected_home))&&Number.isFinite(finite(x.projected_away));
-  }).map(x=>({homeError:Number(x.actual_home)-Number(x.projected_home),awayError:Number(x.actual_away)-Number(x.projected_away),
+    &&Number.isFinite(finite(x[historyHome]))&&Number.isFinite(finite(x[historyAway]));
+  }).map(x=>({homeError:Number(x.actual_home)-Number(x[historyHome]),awayError:Number(x.actual_away)-Number(x[historyAway]),
    home_rest:finite(x.home_rest),away_rest:finite(x.away_rest),travel_miles:finite(x.travel_miles),
    roof:x.roof,temperature_f:finite(x.temperature_f),wind_mph:finite(x.wind_mph)}));
   if(records.length<40)throw Error('Insufficient earlier NFL score residuals');
@@ -79,9 +81,11 @@
   return {sport:'NFL',id:String(game.game_id||game.away+'-'+game.home),date:String(game.gameday||''),home:String(game.home),away:String(game.away),
    projectedHome:home,projectedAway:away,residuals:pairedResiduals(simulationRecords),sample:{homeGames:hGames,awayGames:aGames,residualGames:simulationRecords.length,
     residualContextUsed:conditional.used,residualWeatherUsed:conditional.weatherUsed,residualContextReason:conditional.reason},
+   trust:game.model_inputs?.trust||null,feedGeneratedAt:meta.generatedAt||null,
+   residualBasis:baselineResiduals?'SCORING_BASELINE':'MATCHUP_ADJUSTED',
    matchupAnalysis:game.model_inputs?.matchup||null,
    pregameContext:game.model_inputs?.research_context||null,
-   method:(game.model_version==='score-baseline-pbp-v2'?'Pregame scoring baseline with shrunk home/road scoring splits and season/recent EPA-success offense-vs-defense adjustment':'Pregame score baseline')+', plus '+conditional.reason+' Paired historical score residual simulation.',
+   method:(baselineResiduals?'Historical scoring baseline. Experimental EPA point corrections disabled; residuals use the same baseline':game.model_version==='score-baseline-pbp-v2'?'Pregame scoring baseline with shrunk home/road scoring splits and season/recent EPA-success offense-vs-defense adjustment':'Pregame score baseline')+', plus '+conditional.reason+' Paired historical score residual simulation.',
    homeOffense:finite(game.model_inputs?.home?.offense),awayOffense:finite(game.model_inputs?.away?.offense),
    homeAllowed:finite(game.model_inputs?.home?.defense_allowed),awayAllowed:finite(game.model_inputs?.away?.defense_allowed),
    warning:'Experimental NFL score model. Historical team performance includes prior player/coaching effects; only confirmed current game information should alter projections. Weather conditions residual sampling only when enough matched history exists. Injury/lineup effects are not assigned a guessed point value. Probabilities are uncalibrated.'};
@@ -192,12 +196,20 @@
    // results (historical coverage is zero). Keep displaying the simulated
    // comparison, but never promote a spread side to a research lean from it.
    const atsBacktestVerified=game.atsBacktestVerified===true;
-   const eligible=adequatelySampled&&price&&price.american>=-200&&ev>=.05&&modelEdge>=.025&&
+   const trustRequired=game.sport==='NFL';
+   const sourceStale=trustRequired&&(!game.feedGeneratedAt||!Number.isFinite(Date.parse(game.feedGeneratedAt))||Date.now()-Date.parse(game.feedGeneratedAt)>24*3600000);
+   const sourceReady=!trustRequired||game.trust?.source_status==='RECONCILED'&&!sourceStale;
+   const lineupMismatch=trustRequired&&Object.values(game.trust?.qb_context||{}).some(x=>x.status==='RETURNING_STARTER_SAMPLE_MISMATCH');
+   const calibrated=!trustRequired||game.trust?.calibration_status==='VERIFIED';
+   const eligible=sourceReady&&!lineupMismatch&&calibrated&&adequatelySampled&&price&&price.american>=-200&&ev>=.05&&modelEdge>=.025&&
     (!key.endsWith('ATS')||atsBacktestVerified);
    const signal=price===null?'NO ODDS ENTERED':
+    key.endsWith('ATS')&&!atsBacktestVerified?'PASS · ATS NOT BACKTESTED':
+    !sourceReady?'PASS · SOURCE UNVERIFIED OR STALE':
+    lineupMismatch?'PASS · QB CHANGE NOT VALIDATED':
     price.american< -200?'PASS · PRICE WORSE THAN -200':
     !adequatelySampled?'PASS · LIMITED HISTORY':
-    key.endsWith('ATS')&&!atsBacktestVerified?'PASS · ATS NOT BACKTESTED':
+    !calibrated?'PASS · MODEL NOT VALIDATED':
     eligible?'RESEARCH LEAN · UNVALIDATED':
     'PASS · NO CLEAR MODEL VALUE';
    return {key,label,win,loss,push,price:price?.american??null,implied:price?.implied??null,
@@ -217,3 +229,4 @@
  }
  return {quote,nflGame,nbaGame,gamePoints,marketInput,simulate};
 });
+

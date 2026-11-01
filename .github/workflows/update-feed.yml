@@ -15,6 +15,10 @@ on:
       - 'opportunity_prop_model.py'
       - 'game_picks.py'
       - 'game_context.py'
+      - 'game_trust.py'
+      - 'track_game_score_forecasts.js'
+      - 'test_game_score_forecasts.js'
+      - 'test_game_trust_ui.js'
       - 'nfl_weather.py'
       - 'nfl_research.py'
       - 'scripts/calibrate_td.py'
@@ -63,13 +67,13 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Verify NFL engine Python syntax
-        run: python -m compileall -q injury_readiness.py nfl_starters.py build_feed.py capture_prop_probabilities.py grade_prop_probabilities.py historical_participation.py opportunity_prop_model.py player_prop_probability_backtest.py game_picks.py game_picks_backtest.py game_context.py nfl_weather.py nfl_research.py tests
+        run: python -m compileall -q injury_readiness.py nfl_starters.py build_feed.py capture_prop_probabilities.py grade_prop_probabilities.py historical_participation.py opportunity_prop_model.py player_prop_probability_backtest.py game_picks.py game_picks_backtest.py game_context.py game_trust.py nfl_weather.py nfl_research.py tests
       - name: Test game-first NFL Monte Carlo engine
         run: node test_nfl_game_engine.js
       - name: Test Goal 1 decision and odds engine
         run: node test_nfl_goal1.js
       - name: Test full-game odds and pregame context simulation
-        run: node test_game_odds.js && node test_game_odds_ui.js
+        run: node test_game_odds.js && node test_game_odds_ui.js && node test_game_score_forecasts.js && node test_game_trust_ui.js
       - name: Test Josh Jacobs verified return visibility
         run: node test_jacobs_return_visibility.js
       - name: Test NFL analyst browser-controller flow
@@ -84,6 +88,8 @@ jobs:
         run: python build_feed.py
       - name: Build game-picks research slate
         run: python game_picks.py
+      - name: Record and grade frozen pregame score forecasts
+        run: node track_game_score_forecasts.js
       - name: Verify NFL game-first analyst with actual matchup feed
         run: CI_EXPECT_TEAM_VOLUME=1 node test_nfl_real_matchup.js
       - name: Freeze pregame player prop probabilities for future validation
@@ -107,7 +113,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/game_picks.json data/matchups.json data/defense_stats_audit.json data/feed_audit.json data/status.json data/history/ data/probability_model.json data/history_audit.json data/forward/performance.json data/verification_status.json data/forward/
+          git add data/game_context_audit.json data/game_model_validation.json data/game_score_forecasts.json data/game_score_results.json data/game_picks.json data/matchups.json data/defense_stats_audit.json data/feed_audit.json data/status.json data/history/ data/probability_model.json data/history_audit.json data/forward/performance.json data/verification_status.json data/forward/
           if ! git diff --cached --quiet; then
             git commit -m "Update verified NFL matchup feed"
             # A developer commit can land while the feed is building.

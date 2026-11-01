@@ -50,7 +50,8 @@ def kickoff_utc(game, home_team):
         if len(parts) < 2:
             return None
         local = datetime.combine(game_date, time(int(parts[0]), int(parts[1])))
-        local = local.replace(tzinfo=ZoneInfo(TEAM_TIMEZONES[home_team]))
+        # nflverse gametime is Eastern for every stadium (dictionary_schedules).
+        local = local.replace(tzinfo=ZoneInfo("America/New_York"))
         return local.astimezone(timezone.utc)
     except (KeyError, TypeError, ValueError):
         return None
@@ -109,3 +110,4 @@ def forecast_for_game(game, home_team, roof=None):
                 "condition": period.get("shortForecast")}
     except (HTTPError, URLError, TimeoutError, OSError, ValueError, json.JSONDecodeError) as exc:
         return {"available": False, "source": "NWS", "reason": f"Forecast fetch failed: {type(exc).__name__}."}
+
