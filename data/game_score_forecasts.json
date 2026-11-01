@@ -1,0 +1,514 @@
+{
+  "status": "PROSPECTIVE_RESEARCH_NOT_CALIBRATED",
+  "updated_at": "2026-11-01T12:57:55.127Z",
+  "method": "First audited baseline forecast per game/model frozen before verified scheduled kickoff. Existing predictions are never replaced. Results graded next calendar day from schedule finals; no historical backfill.",
+  "summary": {
+    "frozen": 13,
+    "graded": 0,
+    "non_tie_winner_games": 0,
+    "margin_mae": null,
+    "total_mae": null,
+    "brier": null,
+    "calibration": [
+      {
+        "range": [
+          0,
+          0.2
+        ],
+        "games": 0,
+        "mean_forecast": null,
+        "actual_home_win_rate": null
+      },
+      {
+        "range": [
+          0.2,
+          0.4
+        ],
+        "games": 0,
+        "mean_forecast": null,
+        "actual_home_win_rate": null
+      },
+      {
+        "range": [
+          0.4,
+          0.6
+        ],
+        "games": 0,
+        "mean_forecast": null,
+        "actual_home_win_rate": null
+      },
+      {
+        "range": [
+          0.6,
+          0.8
+        ],
+        "games": 0,
+        "mean_forecast": null,
+        "actual_home_win_rate": null
+      },
+      {
+        "range": [
+          0.8,
+          1
+        ],
+        "games": 0,
+        "mean_forecast": null,
+        "actual_home_win_rate": null
+      }
+    ],
+    "by_model_signature": {
+      "c3b3e3b460e3a0883e08b2827895eba14a0b62d44312a2206fc697110976aa41": {
+        "frozen": 13,
+        "graded": 0,
+        "margin_mae": null,
+        "total_mae": null,
+        "brier": null
+      }
+    },
+    "scope": "Aggregate research scorecard; compare per-signature groups when model code changes."
+  },
+  "records": [
+    {
+      "key": "score-baseline-trust-v3|2026_08_BAL_BUF",
+      "game_id": "2026_08_BAL_BUF",
+      "model_version": "score-baseline-trust-v3",
+      "model_signature": "c3b3e3b460e3a0883e08b2827895eba14a0b62d44312a2206fc697110976aa41",
+      "captured_at": "2026-11-01T12:57:55.127Z",
+      "kickoff_at": "2026-11-01T18:00:00+00:00",
+      "feed_generated_at": "2026-11-01T12:57:54.881010+00:00",
+      "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
+      "home": "BUF",
+      "away": "BAL",
+      "projection": {
+        "home": 26.3,
+        "away": 23.8,
+        "margin": 2.5,
+        "total": 50.1
+      },
+      "home_win_probability": 0.5856102964447727,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "qb_context": {
+        "BUF": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        },
+        "BAL": {
+          "player": "Lamar Jackson",
+          "status": "RETURNING_STARTER_SAMPLE_MISMATCH"
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "score-baseline-trust-v3|2026_08_TEN_CIN",
+      "game_id": "2026_08_TEN_CIN",
+      "model_version": "score-baseline-trust-v3",
+      "model_signature": "c3b3e3b460e3a0883e08b2827895eba14a0b62d44312a2206fc697110976aa41",
+      "captured_at": "2026-11-01T12:57:55.127Z",
+      "kickoff_at": "2026-11-01T18:00:00+00:00",
+      "feed_generated_at": "2026-11-01T12:57:54.881010+00:00",
+      "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
+      "home": "CIN",
+      "away": "TEN",
+      "projection": {
+        "home": 24.2,
+        "away": 18.9,
+        "margin": 5.3,
+        "total": 43.1
+      },
+      "home_win_probability": 0.6591,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "qb_context": {
+        "CIN": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        },
+        "TEN": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "score-baseline-trust-v3|2026_08_ARI_DAL",
+      "game_id": "2026_08_ARI_DAL",
+      "model_version": "score-baseline-trust-v3",
+      "model_signature": "c3b3e3b460e3a0883e08b2827895eba14a0b62d44312a2206fc697110976aa41",
+      "captured_at": "2026-11-01T12:57:55.127Z",
+      "kickoff_at": "2026-11-01T18:00:00+00:00",
+      "feed_generated_at": "2026-11-01T12:57:54.881010+00:00",
+      "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
+      "home": "DAL",
+      "away": "ARI",
+      "projection": {
+        "home": 26.5,
+        "away": 22,
+        "margin": 4.5,
+        "total": 48.5
+      },
+      "home_win_probability": 0.5993150684931506,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "qb_context": {
+        "DAL": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        },
+        "ARI": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "score-baseline-trust-v3|2026_08_MIN_DET",
+      "game_id": "2026_08_MIN_DET",
+      "model_version": "score-baseline-trust-v3",
+      "model_signature": "c3b3e3b460e3a0883e08b2827895eba14a0b62d44312a2206fc697110976aa41",
+      "captured_at": "2026-11-01T12:57:55.127Z",
+      "kickoff_at": "2026-11-01T18:00:00+00:00",
+      "feed_generated_at": "2026-11-01T12:57:54.881010+00:00",
+      "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
+      "home": "DET",
+      "away": "MIN",
+      "projection": {
+        "home": 22.3,
+        "away": 22.3,
+        "margin": 0,
+        "total": 44.6
+      },
+      "home_win_probability": 0.46298205815632093,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "qb_context": {
+        "DET": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        },
+        "MIN": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "score-baseline-trust-v3|2026_08_IND_JAX",
+      "game_id": "2026_08_IND_JAX",
+      "model_version": "score-baseline-trust-v3",
+      "model_signature": "c3b3e3b460e3a0883e08b2827895eba14a0b62d44312a2206fc697110976aa41",
+      "captured_at": "2026-11-01T12:57:55.127Z",
+      "kickoff_at": "2026-11-01T18:00:00+00:00",
+      "feed_generated_at": "2026-11-01T12:57:54.881010+00:00",
+      "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
+      "home": "JAX",
+      "away": "IND",
+      "projection": {
+        "home": 25.1,
+        "away": 19.9,
+        "margin": 5.2,
+        "total": 45
+      },
+      "home_win_probability": 0.7027565244733257,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "qb_context": {
+        "JAX": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        },
+        "IND": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "score-baseline-trust-v3|2026_08_LV_NYJ",
+      "game_id": "2026_08_LV_NYJ",
+      "model_version": "score-baseline-trust-v3",
+      "model_signature": "c3b3e3b460e3a0883e08b2827895eba14a0b62d44312a2206fc697110976aa41",
+      "captured_at": "2026-11-01T12:57:55.127Z",
+      "kickoff_at": "2026-11-01T18:00:00+00:00",
+      "feed_generated_at": "2026-11-01T12:57:54.881010+00:00",
+      "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
+      "home": "NYJ",
+      "away": "LV",
+      "projection": {
+        "home": 23.9,
+        "away": 22.3,
+        "margin": 1.6,
+        "total": 46.2
+      },
+      "home_win_probability": 0.5458809135399674,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "qb_context": {
+        "NYJ": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        },
+        "LV": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "score-baseline-trust-v3|2026_08_CLE_PIT",
+      "game_id": "2026_08_CLE_PIT",
+      "model_version": "score-baseline-trust-v3",
+      "model_signature": "c3b3e3b460e3a0883e08b2827895eba14a0b62d44312a2206fc697110976aa41",
+      "captured_at": "2026-11-01T12:57:55.127Z",
+      "kickoff_at": "2026-11-01T18:00:00+00:00",
+      "feed_generated_at": "2026-11-01T12:57:54.881010+00:00",
+      "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
+      "home": "PIT",
+      "away": "CLE",
+      "projection": {
+        "home": 22.7,
+        "away": 19.6,
+        "margin": 3.1,
+        "total": 42.3
+      },
+      "home_win_probability": 0.5838685900810783,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "qb_context": {
+        "PIT": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        },
+        "CLE": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "score-baseline-trust-v3|2026_08_ATL_TB",
+      "game_id": "2026_08_ATL_TB",
+      "model_version": "score-baseline-trust-v3",
+      "model_signature": "c3b3e3b460e3a0883e08b2827895eba14a0b62d44312a2206fc697110976aa41",
+      "captured_at": "2026-11-01T12:57:55.127Z",
+      "kickoff_at": "2026-11-01T18:00:00+00:00",
+      "feed_generated_at": "2026-11-01T12:57:54.881010+00:00",
+      "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
+      "home": "TB",
+      "away": "ATL",
+      "projection": {
+        "home": 23.5,
+        "away": 22.1,
+        "margin": 1.4,
+        "total": 45.6
+      },
+      "home_win_probability": 0.5450815468253154,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "qb_context": {
+        "TB": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        },
+        "ATL": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "score-baseline-trust-v3|2026_08_LAC_LA",
+      "game_id": "2026_08_LAC_LA",
+      "model_version": "score-baseline-trust-v3",
+      "model_signature": "c3b3e3b460e3a0883e08b2827895eba14a0b62d44312a2206fc697110976aa41",
+      "captured_at": "2026-11-01T12:57:55.127Z",
+      "kickoff_at": "2026-11-01T21:05:00+00:00",
+      "feed_generated_at": "2026-11-01T12:57:54.881010+00:00",
+      "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
+      "home": "LA",
+      "away": "LAC",
+      "projection": {
+        "home": 24.3,
+        "away": 19.4,
+        "margin": 4.9,
+        "total": 43.7
+      },
+      "home_win_probability": 0.6474850362280794,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "qb_context": {
+        "LA": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        },
+        "LAC": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "score-baseline-trust-v3|2026_08_KC_DEN",
+      "game_id": "2026_08_KC_DEN",
+      "model_version": "score-baseline-trust-v3",
+      "model_signature": "c3b3e3b460e3a0883e08b2827895eba14a0b62d44312a2206fc697110976aa41",
+      "captured_at": "2026-11-01T12:57:55.127Z",
+      "kickoff_at": "2026-11-01T21:25:00+00:00",
+      "feed_generated_at": "2026-11-01T12:57:54.881010+00:00",
+      "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
+      "home": "DEN",
+      "away": "KC",
+      "projection": {
+        "home": 21,
+        "away": 21,
+        "margin": 0,
+        "total": 42
+      },
+      "home_win_probability": 0.4909784513867409,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "qb_context": {
+        "DEN": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        },
+        "KC": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "score-baseline-trust-v3|2026_08_NE_MIA",
+      "game_id": "2026_08_NE_MIA",
+      "model_version": "score-baseline-trust-v3",
+      "model_signature": "c3b3e3b460e3a0883e08b2827895eba14a0b62d44312a2206fc697110976aa41",
+      "captured_at": "2026-11-01T12:57:55.127Z",
+      "kickoff_at": "2026-11-01T21:25:00+00:00",
+      "feed_generated_at": "2026-11-01T12:57:54.881010+00:00",
+      "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
+      "home": "MIA",
+      "away": "NE",
+      "projection": {
+        "home": 20.8,
+        "away": 22.6,
+        "margin": -1.8,
+        "total": 43.4
+      },
+      "home_win_probability": 0.3858027932374252,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "qb_context": {
+        "MIA": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        },
+        "NE": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "score-baseline-trust-v3|2026_08_PHI_WAS",
+      "game_id": "2026_08_PHI_WAS",
+      "model_version": "score-baseline-trust-v3",
+      "model_signature": "c3b3e3b460e3a0883e08b2827895eba14a0b62d44312a2206fc697110976aa41",
+      "captured_at": "2026-11-01T12:57:55.127Z",
+      "kickoff_at": "2026-11-02T01:20:00+00:00",
+      "feed_generated_at": "2026-11-01T12:57:54.881010+00:00",
+      "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
+      "home": "WAS",
+      "away": "PHI",
+      "projection": {
+        "home": 23.6,
+        "away": 22,
+        "margin": 1.6,
+        "total": 45.6
+      },
+      "home_win_probability": 0.5390864015191477,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "qb_context": {
+        "WAS": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        },
+        "PHI": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "score-baseline-trust-v3|2026_08_CHI_SEA",
+      "game_id": "2026_08_CHI_SEA",
+      "model_version": "score-baseline-trust-v3",
+      "model_signature": "c3b3e3b460e3a0883e08b2827895eba14a0b62d44312a2206fc697110976aa41",
+      "captured_at": "2026-11-01T12:57:55.127Z",
+      "kickoff_at": "2026-11-03T01:15:00+00:00",
+      "feed_generated_at": "2026-11-01T12:57:54.881010+00:00",
+      "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
+      "home": "SEA",
+      "away": "CHI",
+      "projection": {
+        "home": 23.2,
+        "away": 21.3,
+        "margin": 1.9,
+        "total": 44.5
+      },
+      "home_win_probability": 0.5387250830564784,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "qb_context": {
+        "SEA": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        },
+        "CHI": {
+          "player": null,
+          "status": "STARTER_UNCONFIRMED"
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "status": "NOT_CALIBRATED",
+  "experimental_adjustment_enabled": false,
+  "games": 460,
+  "model_version_evaluated": "score-baseline-pbp-v2",
+  "metrics": {
+    "margin": {
+      "baseline_mae": 10.355652173913043,
+      "adjusted_mae": 10.355869565217393,
+      "mean_improvement": -0.00021739130434782146,
+      "improvement_95pct_week_cluster_interval": [
+        -0.20268456375838925,
+        0.19641255605381158
+      ]
+    },
+    "total": {
+      "baseline_mae": 10.386956521739132,
+      "adjusted_mae": 10.346739130434782,
+      "mean_improvement": 0.04021739130434775,
+      "improvement_95pct_week_cluster_interval": [
+        -0.1207126948775056,
+        0.1885892116182571
+      ]
+    }
+  },
+  "reported_scores": {
+    "matchup_adjusted": {
+      "games": 460,
+      "total_mae": 10.35,
+      "margin_mae": 10.36,
+      "winner_accuracy": 0.5991,
+      "total_bias": -1.04
+    },
+    "scoring_baseline": {
+      "games": 460,
+      "total_mae": 10.39,
+      "margin_mae": 10.36,
+      "winner_accuracy": 0.6144,
+      "total_bias": -1.06
+    }
+  },
+  "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
+  "method": "Retrospective prior-week walk-forward records, paired bootstrap by season/week (2000 draws). Not an untouched prospective holdout; not evidence of betting profitability."
+}
