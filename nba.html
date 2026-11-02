@@ -578,6 +578,7 @@ for(const row of nbaRecommendationRows){
  const minimumForecast=['points'].includes(row.market)?8:['assists','rebounds'].includes(row.market)?3:10;
  if(row.market==='threes'||row.forecast<minimumForecast||meanMinutes(recent)<20||Math.abs(signal)<.012||!rosterFresh||!fresh||!generatedAt||Math.abs(Date.now()-Date.parse(generatedAt))>12*3600000)continue;
  row.target=nbaResearchTarget(row,side);
+ if(row.target&&row.target.distance>.25)row.target=null;
 }
 if(options.collectOnly)return nbaRankedRows();
 const watchHtml=nbaPropListsHTML();
