@@ -68,6 +68,13 @@ class PipelineTests(unittest.TestCase):
   first=self.analyze()[0]['projections']
   self.feed['games'].append({**self.feed['games'][0],'id':'future','date':(self.now+dt.timedelta(days=2)).isoformat()})
   self.assertEqual(first,self.analyze()[0]['projections'])
+ def test_missing_or_preseason_type_cannot_enter_history(self):
+  original=self.feed['games'][0].copy()
+  self.feed['games'][0]['season_type']=1
+  history=completed_history(self.feed,self.now)
+  self.assertNotIn(original['id'],[g['id'] for g in history])
+  del self.feed['games'][0]['season_type']
+  self.assertNotIn(original['id'],[g['id'] for g in completed_history(self.feed,self.now)])
  def test_combo_draws_equal_components_and_reproducible(self):
   args=build_projection(self.feed['games'][-1],completed_history(self.feed,self.now),self.inj,self.rosters)
   ps,_,_,teams,_,sd=args

@@ -10,7 +10,8 @@
   if(!record)return '<p>No published pregame analysis for this game. No retrospective forecast substituted.</p>';
   const a=record;
   if(!valid(a.generated_at,now,6)||!Number.isFinite(Date.parse(a.tipoff))||Date.parse(a.tipoff)<=now)return '<p class="warn">PASS · Analysis stale, invalid, or game already started.</p>';
-  let html='<h3>'+esc(a.game||a.game_id)+' · '+esc(a.status)+'</h3><p class="muted">'+esc(a.model)+' · '+esc(a.simulation_runs)+' shared game scenarios · published '+esc(a.generated_at)+'</p>';
+  const quoteExpired=a.sgp&&(!valid(a.sgp.observed_at,now,1)||!(a.sgp.legs||[]).every(p=>valid(p.observed_at,now,1)));
+  let html='<h3>'+esc(a.game||a.game_id)+' · '+esc(quoteExpired?'PASS · quote expired':a.status)+'</h3><p class="muted">'+esc(a.model)+' · '+esc(a.simulation_runs)+' shared game scenarios · published '+esc(a.generated_at)+'</p>';
   html+='<p class="warn">'+(a.reasons||[]).map(esc).join(' · ')+'</p>';
   const blocked=(a.blockers||[]).length>0;
   const freshLeg=p=>valid(p.observed_at,now,1);

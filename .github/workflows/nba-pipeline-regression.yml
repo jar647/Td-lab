@@ -59,6 +59,7 @@ jobs:
           import json
           status=json.load(open('data/nba_market_status.json'))
           print('NBA provider status:',status.get('status'),status.get('reason_code','ok'))
+          print('Safe source diagnostics:',json.dumps(status.get('diagnostics',{})))
           if status.get('status')!='ok':
               raise SystemExit('Live odds gate failed; see NBA provider status above. No fabricated prices substituted.')
           PY

@@ -29,7 +29,7 @@ class NBAOddsTests(unittest.TestCase):
   self.assertEqual(parse_props(self.game,self.catalog,self.response,players,self.now),[])
  def test_collect_uses_catalog_and_preserves_no_sgp_price(self):
   feed={'generated_at':self.now.isoformat(),'games':[self.game]};rosters={'generated_at':self.now.isoformat(),'teams':{'Miami Heat':['espn1']}}
-  def request(endpoint,**kwargs):return {'fixtures':[self.fixture],'markets':self.catalog,'odds':self.response}[endpoint]
+  def request(endpoint,**kwargs):return {'fixtures':[self.fixture],'markets':self.catalog,'odds':self.response,'tournaments':[]}[endpoint]
   result=collect(feed,rosters,self.now,request)
   self.assertEqual(len(result['markets']),1);self.assertEqual(result['sgp_quotes'],[])
  def test_failure_preserves_prices_and_does_not_leak_exception(self):

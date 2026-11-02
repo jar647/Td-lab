@@ -70,7 +70,7 @@ def completed_history(feed,now):
     result=[]
     for g in feed.get('games',[]):
         try:
-            if g.get('status')=='STATUS_FINAL' and g.get('season_type',2)==2 and season<=timestamp(g['date'])<now:
+            if g.get('status')=='STATUS_FINAL' and g.get('season_type')==2 and season<=timestamp(g['date'])<now:
                 result.append(g)
         except (KeyError,ValueError,TypeError):continue
     return sorted(result,key=lambda g:timestamp(g['date']),reverse=True)
