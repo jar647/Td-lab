@@ -68,3 +68,9 @@ PR checks and source changes do not establish a deployed release. Combined SGP q
 The interactive NBA price cards evaluate both Over and Under using the same review shown on each card. Fresh same-game Hard Rock prices can populate the line and both sides; manual entries take precedence. Numbered recommendations contain the top three distinct players whose final review qualifies as LEAN/PLAY, ordered by modeled expected return, then edge. Additional qualifying markets remain available separately. Missing line/price candidates are labeled Awaiting odds; PASS props move to Not recommended, and no qualifying selections yields an explicit no-recommendation message.
 
 Changing a quote updates the verdict, rank and Quick Slip direction together without rebuilding the input controls. Changing the line clears the old prices. Imported prices expire after one hour, including the unedited imported side of a partially edited quote. These are research rankings, not calibrated betting-edge claims; existing status, sample, uncertainty and price gates remain in force.
+
+### NBA slate shortlist
+
+Use **Today’s best props → Find today’s best props** to compare all upcoming games using the same price verdict as the individual game cards. The board selects at most five qualifying Over/Under leans with one distinct player per game; three-pointers are excluded. It does not force five picks or claim a combined parlay price. Each add rechecks eligibility and current odds.
+
+If automatic prices are stale or unavailable, a separate research shortlist offers direct links to a few price checks. Unpriced and PASS props cannot be added through the slate board. Existing game tools and NFL behavior are unchanged.

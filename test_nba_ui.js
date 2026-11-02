@@ -179,3 +179,21 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  assert.equal(pick.side,'under');assert.equal(pick.recommendation,'Under 5.5 Points');assert.equal(pick.recommendationLine,null);
  console.log('NBA Under direction preserved in Quick Slip payload: PASS');
 }
+
+// Slate ranking uses the existing verdict, across games and in both directions.
+const slateNow=Date.now();
+sandbox.slateFixture=Array.from({length:9},(_,i)=>({key:'slate-'+i,playerId:'p'+i,name:'Player '+i,market:'points',quality:30,game:{id:i<2?'same':String(i),status:'STATUS_SCHEDULED',date:new Date(slateNow+3600000).toISOString()},quote:{line:20.5,over:-110,under:-110},result:{decision:'LEAN',candidate:i%2?'OVER':'UNDER',expectedValue:1-i*.05,estimatedEdge:.1}}));
+const slate=vm.runInContext('nbaSlateSelection(slateFixture)',sandbox);
+assert.equal(slate.picks.length,5);
+assert.equal(new Set(slate.picks.map(r=>r.game.id)).size,5);
+assert.equal(slate.picks[0].result.candidate,'UNDER');
+sandbox.slateFixture[0].result.decision='PASS';
+sandbox.slateFixture[2].game.date=new Date(slateNow-1000).toISOString();
+sandbox.slateFixture[3].market='threes';
+sandbox.slateFixture[4].quote={};
+const filtered=vm.runInContext('nbaSlateSelection(slateFixture)',sandbox);
+for(const i of [0,2,3,4])assert.ok(!filtered.picks.some(r=>r.key==='slate-'+i));
+assert.ok(filtered.research.some(r=>r.key==='slate-4'));
+assert.ok(match[1].includes('if(options.collectOnly)return nbaRankedRows()'));
+assert.ok(match[1].includes('nbaRecommendationRows=savedRows;currentProjections=savedProjections'));
+console.log('NBA slate max-five, game diversity, both sides and eligibility: PASS');
