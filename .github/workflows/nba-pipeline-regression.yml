@@ -30,22 +30,41 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Check whether provider or model inputs changed
+        id: provider-paths
+        env:
+          NBA_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          NBA_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python - <<'PY'
+          import os, subprocess
+          watched={'nba_feed.py','nba_rosters.py','nba_injuries.py','nba_model.py','nba_pipeline.py','scripts/build_nba_odds.py','scripts/build_hardrock_feed.py','requirements.txt'}
+          changed=set(subprocess.check_output(['git','diff','--name-only',os.environ['NBA_BASE_SHA'],os.environ['NBA_HEAD_SHA']],text=True).splitlines())
+          needed=bool(changed & watched)
+          with open(os.environ['GITHUB_OUTPUT'],'a') as out: out.write('needed='+str(needed).lower()+'\n')
+          print('Live provider check required:',needed)
+          PY
       - name: Refresh real NBA input feeds in disposable checkout
+        if: steps.provider-paths.outputs.needed == 'true'
         run: |
           python nba_feed.py
           python nba_rosters.py
           python nba_injuries.py
       - name: Verify the existing provider connection for NBA
+        if: steps.provider-paths.outputs.needed == 'true'
         env:
           ODDSPAPI_API_KEY: ${{ secrets.ODDSPAPI_API_KEY }}
         run: python -m scripts.build_nba_odds
       - name: Run the published analyst with real current inputs
+        if: steps.provider-paths.outputs.needed == 'true'
         run: python nba_pipeline.py
       - name: Record live-input evidence
-        if: always()
+        if: always() && steps.provider-paths.outputs.needed == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: nba-live-input-evidence
@@ -54,6 +73,7 @@ jobs:
             data/nba_analysis.json
           retention-days: 7
       - name: Require actual fresh prices for the live-input gate
+        if: steps.provider-paths.outputs.needed == 'true'
         run: |
           python - <<'PY'
           import json
