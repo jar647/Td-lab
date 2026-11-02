@@ -43,7 +43,7 @@ jobs:
         run: |
           python - <<'PY'
           import os, subprocess
-          watched={'nba_feed.py','nba_rosters.py','nba_injuries.py','nba_model.py','nba_pipeline.py','scripts/build_nba_odds.py','scripts/build_hardrock_feed.py','requirements.txt'}
+          watched={'nba_rosters.py','nba_injuries.py','nba_model.py','nba_pipeline.py','scripts/build_nba_odds.py','scripts/build_hardrock_feed.py','requirements.txt'}
           changed=set(subprocess.check_output(['git','diff','--name-only',os.environ['NBA_BASE_SHA'],os.environ['NBA_HEAD_SHA']],text=True).splitlines())
           needed=bool(changed & watched)
           with open(os.environ['GITHUB_OUTPUT'],'a') as out: out.write('needed='+str(needed).lower()+'\n')
@@ -83,3 +83,39 @@ jobs:
           if status.get('status')!='ok':
               raise SystemExit('Live odds gate failed; see NBA provider status above. No fabricated prices substituted.')
           PY
+
+  possession-live-check:
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check possession input paths
+        id: paths
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python - <<'PY2'
+          import os,subprocess
+          paths=set(subprocess.check_output(['git','diff','--name-only',os.environ['BASE'],os.environ['HEAD']],text=True).splitlines())
+          needed=bool(paths & {'nba_possession_engine.js','nba_simulator_ui.js','nba_feed.py','nba_shot_profile.py','game_odds_engine.js','scripts/publish_nba_simulator.js'})
+          with open(os.environ['GITHUB_OUTPUT'],'a') as out:out.write('needed='+str(needed).lower()+'\n')
+          PY2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Refresh free possession, injury and roster inputs
+        if: steps.paths.outputs.needed == 'true'
+        run: |
+          python nba_feed.py
+          python nba_rosters.py
+          python nba_injuries.py
+      - name: Verify possession model on current source data
+        if: steps.paths.outputs.needed == 'true'
+        run: node test_nba_possessions.js

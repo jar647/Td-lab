@@ -2,6 +2,7 @@
 """NBA data feed: ESPN public scoreboard and summary. No API keys required."""
 import json,urllib.request,datetime,pathlib,time,sys
 from nba_first_basket import extract_first_baskets
+from nba_shot_profile import extract_shot_profile
 ROOT=pathlib.Path(__file__).resolve().parent
 OUT=ROOT/"data"/"nba_games.json"
 def get(url):
@@ -29,6 +30,8 @@ for delta in range(-35,4):
    if status not in ("STATUS_FINAL","STATUS_IN_PROGRESS"): raise ValueError("pregame box score unavailable")
    detail=get("https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event="+event["id"])
    if status=="STATUS_FINAL" and season_type==2:
+    try:game["shot_profile"]=extract_shot_profile(detail)
+    except (AttributeError,TypeError,ValueError):game["shot_profile"]={"available":False,"reason":"Shot descriptions unavailable; shooting box score retained"}
     game["first_basket"]=extract_first_baskets(detail)
     game["first_basket"]["source_url"]="https://www.espn.com/nba/playbyplay/_/gameId/"+event["id"]
    for team in detail.get("boxscore",{}).get("players",[]):

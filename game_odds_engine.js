@@ -100,7 +100,7 @@
   const h=value(game.home),a=value(game.away);
   return h===null||a===null?null:{home:String(game.home),away:String(game.away),homePoints:h,awayPoints:a,date:String(game.date||''),time:dateTime(game.date)};
  }
- function nbaGame(game,all){
+ function nbaGame(game,all,context=null){
   if(!game||!game.home||!game.away)throw Error('Selected NBA matchup is unavailable');
   const tip=dateTime(game.date);
   if(tip===null)throw Error('NBA tipoff time is missing');
@@ -119,6 +119,11 @@
   const projectedHome=round(leagueHome*(1-strength)+((homeOff+awayAllowed)/2)*strength);
   const projectedAway=round(leagueAway*(1-strength)+((awayOff+homeAllowed)/2)*strength);
   const residuals=pairedResiduals(hist.map(x=>({homeError:x.homePoints-leagueHome,awayError:x.awayPoints-leagueAway})));
+  if(context){const engine=typeof module==='object'&&module.exports?require('./nba_possession_engine.js'):globalThis.CookNBAPossessions;if(!engine)throw Error('Possession engine unavailable');
+   const possessionModel=engine.build(game,all,context.injuries,context.rosters,context.now??Date.now(),{historical:!!context.historical});
+   const pilot=engine.draws(possessionModel,1000,6472026);
+   return {sport:'NBA',id:String(game.id),date:game.date,home:game.home,away:game.away,projectedHome:round(mean(pilot.home)),projectedAway:round(mean(pilot.away)),possessionModel,baseline:{home:projectedHome,away:projectedAway},sample:{homeGames:possessionModel.teams[game.home].games,awayGames:possessionModel.teams[game.away].games,residualGames:hist.length},method:'Injury-adjusted rotations and shared box-score-estimated possessions; two/three-point shooting, free throws, turnovers, offensive rebounds, assists, rest and home/road context. '+engine.VERSION,warning:possessionModel.limits,atsBacktestVerified:false};
+  }
   return {sport:'NBA',id:String(game.id||game.away+'-'+game.home),date:String(game.date),home:String(game.home),away:String(game.away),
    projectedHome,projectedAway,residuals,sample:{homeGames:homeRecent.length,awayGames:awayRecent.length,residualGames:hist.length},
    method:'Prior regular-season team scoring/allowance, shrunk toward league average, plus paired historical NBA scoring residual bootstrap.',
@@ -150,17 +155,20 @@
   return Math.round(decimal>=2?100*(decimal-1):-100/(decimal-1));
  }
  function simulate(game,rawMarket={},count=100000,seed=6472026){
-  if(!game||!Array.isArray(game.residuals)||game.residuals.length<8)throw Error('Historical score distribution unavailable');
+  if(!game||!game.possessionModel&&(!Array.isArray(game.residuals)||game.residuals.length<8))throw Error('Historical score distribution unavailable');
   if(!Number.isInteger(count)||count<1000||count>100000)throw Error('Simulation count must be between 1,000 and 100,000');
+  if(game.possessionModel&&!game.possessionModel.historical){const m=game.possessionModel,now=Date.now();if(now>=Date.parse(game.date)||[['games',12],['injuries',12],['rosters',72]].some(([key,hours])=>!Number.isFinite(Date.parse(m.inputTimes[key]))||now-Date.parse(m.inputTimes[key])>hours*3600000))throw Error('Pregame inputs are stale or the game has started; reload the feeds');}
   const market=marketInput(rawMarket);
+  const engine=game.possessionModel?(typeof module==='object'&&module.exports?require('./nba_possession_engine.js'):globalThis.CookNBAPossessions):null;
+  const possession=engine?engine.draws(game.possessionModel,count,seed,{legs:game.slipLegs||[]}):null;
   const random=rng(seed>>>0),residuals=game.residuals,homeScores=[],awayScores=[],margins=[],totals=[];
   const keys=['homeML','awayML','homeATS','awayATS','over','under'];
   const counts={};for(const key of keys)counts[key]={win:0,loss:0,push:0};
   let homeWin=0,awayWin=0,ties=0,homePoints=0,awayPoints=0;
   for(let i=0;i<count;i++){
-   const err=residuals[Math.floor(random()*residuals.length)];
-   let h=Math.max(0,Math.round(game.projectedHome+err.homeError));
-   let a=Math.max(0,Math.round(game.projectedAway+err.awayError));
+   const err=possession?null:residuals[Math.floor(random()*residuals.length)];
+   let h=possession?possession.home[i]:Math.max(0,Math.round(game.projectedHome+err.homeError));
+   let a=possession?possession.away[i]:Math.max(0,Math.round(game.projectedAway+err.awayError));
    if(game.sport==='NBA'&&h===a){if(random()<.5)h++;else a++;}
    const margin=h-a,total=h+a;
    homeScores.push(h);awayScores.push(a);margins.push(margin);totals.push(total);
@@ -198,9 +206,10 @@
    const atsBacktestVerified=game.atsBacktestVerified===true;
    const trustRequired=game.sport==='NFL';
    const sourceStale=trustRequired&&(!game.feedGeneratedAt||!Number.isFinite(Date.parse(game.feedGeneratedAt))||Date.now()-Date.parse(game.feedGeneratedAt)>24*3600000);
-   const sourceReady=!trustRequired||game.trust?.source_status==='RECONCILED'&&!sourceStale;
+   const nbaReady=!game.possessionModel||!game.possessionModel.uncertain.length&&!game.possessionModel.warnings.length&&Date.now()-Date.parse(game.possessionModel.inputTimes.injuries)<=12*3600000;
+   const sourceReady=(!trustRequired||game.trust?.source_status==='RECONCILED'&&!sourceStale)&&nbaReady;
    const lineupMismatch=trustRequired&&Object.values(game.trust?.qb_context||{}).some(x=>x.status==='RETURNING_STARTER_SAMPLE_MISMATCH');
-   const calibrated=!trustRequired||game.trust?.calibration_status==='VERIFIED';
+   const calibrated=game.possessionModel?game.possessionModel.calibrationVerified===true:!trustRequired||game.trust?.calibration_status==='VERIFIED';
    const eligible=sourceReady&&!lineupMismatch&&calibrated&&adequatelySampled&&price&&price.american>=-200&&ev>=.05&&modelEdge>=.025&&
     (!key.endsWith('ATS')||atsBacktestVerified);
    const signal=price===null?'NO ODDS ENTERED':
@@ -216,8 +225,8 @@
     breakEven:breakeven,noVig:noVig[key]??null,modelEdge,ev,fair,signal,eligible};
   });
   const candidates=markets.filter(m=>m.eligible).sort((a,b)=>b.ev-a.ev);
-  return {sport:game.sport,home:game.home,away:game.away,runCount:count,seed,modelStatus:'RESEARCH ONLY · NOT CALIBRATED',
-   projection:{home:game.projectedHome,away:game.projectedAway,margin:round(game.projectedHome-game.projectedAway),total:round(game.projectedHome+game.projectedAway)},
+  return {possession:possession?{model:possession.model,players:possession.players,overtimeRate:possession.overtimeRate,overtimePeriods:possession.overtimePeriods,blowoutRate:possession.blowoutRate,legs:possession.legs,jointHitRate:possession.jointHitRate,pairHitRates:possession.pairHitRates,pace:game.possessionModel.pace,uncertain:game.possessionModel.uncertain,rotation:game.possessionModel.teams,baseline:game.baseline}:null,sport:game.sport,home:game.home,away:game.away,runCount:count,seed,modelStatus:'RESEARCH ONLY · NOT CALIBRATED',
+   projection:{home:possession?round(homePoints/count):game.projectedHome,away:possession?round(awayPoints/count):game.projectedAway,margin:round(possession?(homePoints-awayPoints)/count:game.projectedHome-game.projectedAway),total:round(possession?(homePoints+awayPoints)/count:game.projectedHome+game.projectedAway)},
    simulated:{home:round(homePoints/count),away:round(awayPoints/count),homeWin:homeWin/count,awayWin:awayWin/count,tie:ties/count,
     margin:{p10:quantile(margins,.1),p25:quantile(margins,.25),median:quantile(margins,.5),p75:quantile(margins,.75),p90:quantile(margins,.9)},
     total:{p10:quantile(totals,.1),p25:quantile(totals,.25),median:quantile(totals,.5),p75:quantile(totals,.75),p90:quantile(totals,.9)},
