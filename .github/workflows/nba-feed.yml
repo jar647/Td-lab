@@ -4,6 +4,13 @@ on:
     branches: [main]
     paths:
       - 'nba_feed.py'
+      - 'nba_model.py'
+      - 'nba_pipeline.py'
+      - 'nba_pipeline_ui.js'
+      - 'scripts/build_nba_odds.py'
+      - 'test_nba_pipeline.py'
+      - 'test_nba_odds.py'
+      - 'test_nba_pipeline_ui.js'
       - 'nba_first_basket.py'
       - 'nba_first_basket.js'
       - 'test_nba_first_basket.py'
@@ -28,7 +35,7 @@ on:
   schedule:
     # Refresh both daily and within the game day (ET); UTC schedule is fixed.
     # Includes morning completed-game grading and afternoon injury/rotation checks.
-    - cron: '15 */3 * * *'
+    - cron: '12,42 * * * *'
 concurrency:
   group: nba-feed-writer
   cancel-in-progress: false
@@ -46,13 +53,14 @@ jobs:
         with:
           python-version: '3.12'
       - name: Test locked NBA forecasts and daily learning
-        run: python -m unittest -v test_nba_contracts.py test_nba_daily_learning.py test_nba_first_basket.py
+        run: python -m unittest -v test_nba_pipeline.py test_nba_odds.py test_nba_contracts.py test_nba_daily_learning.py test_nba_first_basket.py
       - name: Test NBA UI and simulations
         run: |
           node test_market_odds.js
           node test_player_probability.js
           node test_game_odds.js
           node test_game_odds_ui.js
+          node test_nba_pipeline_ui.js
           node test_nba_ui.js
           node test_nba_simulator.js
           node test_nba_first_basket.js
@@ -60,6 +68,9 @@ jobs:
         run: python nba_daily_learning.py
   refresh:
     if: github.event_name != 'pull_request'
+    timeout-minutes: 25
+    env:
+      ODDSPAPI_API_KEY: ${{ secrets.ODDSPAPI_API_KEY }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -77,14 +88,18 @@ jobs:
             python nba_rosters.py || echo 'Roster source unavailable; existing file retained'
             python nba_injuries.py || echo 'Injury source unavailable; existing file retained, UI will reject stale records'
             python nba_tracker.py
+            python -m scripts.build_nba_odds
+            python nba_pipeline.py
             python nba_daily_learning.py
-            python -m unittest -v test_nba_contracts.py test_nba_daily_learning.py test_nba_first_basket.py
+            python -m unittest -v test_nba_pipeline.py test_nba_odds.py test_nba_contracts.py test_nba_daily_learning.py test_nba_first_basket.py
             node test_market_odds.js
             node test_player_probability.js
+            node test_nba_pipeline_ui.js
             node test_nba_ui.js
             node test_nba_simulator.js
             node test_nba_first_basket.js
-            git add data/nba_games.json data/nba_projection_tracker.json data/nba_daily_learning.json
+            git add data/nba_games.json data/nba_projection_tracker.json data/nba_daily_learning.json data/nba_analysis.json data/nba_pipeline_locks.json data/nba_market_status.json
+            if test -f data/nba_market_odds.json; then git add data/nba_market_odds.json; fi
             if test -f data/nba_season_stats.json; then git add data/nba_season_stats.json; fi
             if test -f data/nba_rosters.json; then git add data/nba_rosters.json; fi
             if test -f data/nba_injuries.json; then git add data/nba_injuries.json; fi

@@ -1,0 +1,65 @@
+name: NBA pipeline and NFL regressions
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install -r requirements.txt
+      - run: python -m unittest discover -v
+      - run: python -m unittest discover -s tests -v
+      - name: All JavaScript contracts and NFL regressions
+        run: |
+          set -e
+          for file in test*.js tests/test*.js; do node "$file"; done
+
+  live-input-check:
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Refresh real NBA input feeds in disposable checkout
+        run: |
+          python nba_feed.py
+          python nba_rosters.py
+          python nba_injuries.py
+      - name: Verify the existing provider connection for NBA
+        env:
+          ODDSPAPI_API_KEY: ${{ secrets.ODDSPAPI_API_KEY }}
+        run: python -m scripts.build_nba_odds
+      - name: Run the published analyst with real current inputs
+        run: python nba_pipeline.py
+      - name: Record live-input evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nba-live-input-evidence
+          path: |
+            data/nba_market_status.json
+            data/nba_analysis.json
+          retention-days: 7
+      - name: Require actual fresh prices for the live-input gate
+        run: |
+          python - <<'PY'
+          import json
+          status=json.load(open('data/nba_market_status.json'))
+          print('NBA provider status:',status.get('status'),status.get('reason_code','ok'))
+          print('Safe source diagnostics:',json.dumps(status.get('diagnostics',{})))
+          if status.get('status')!='ok':
+              raise SystemExit('Live odds gate failed; see NBA provider status above. No fabricated prices substituted.')
+          PY

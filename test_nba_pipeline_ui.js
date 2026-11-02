@@ -1,0 +1,15 @@
+const assert=require('node:assert/strict');
+const ui=require('./nba_pipeline_ui.js');
+const now=Date.parse('2026-11-01T12:00:00Z');
+const a={game_id:'g',game:'A @ B',model:'v2',generated_at:new Date(now).toISOString(),tipoff:new Date(now+3600000).toISOString(),status:'RESEARCH LEAN',reasons:[],blockers:[],projections:[],rotation:[],starters:{},top_players:[],best_single:null,simulation_runs:10000,limits:'uncalibrated',sgp:{bookmaker:'hardrockbet',observed_at:new Date(now).toISOString(),decimal_odds:5,joint_probability:.25,estimated_ev:.25,legs:[{player:'<script>bad</script>',observed_at:new Date(now).toISOString(),side:'over',line:10,market:'points',minutes:30,projection:15,sample:8}]}};
+let html=ui.render(a,{model:'v2',graded_games:1,graded_projections:10,mae:2},now);
+assert(html.includes('SGP research lean'));assert(html.includes('&lt;script&gt;'));assert(!html.includes('<script>bad'));
+assert(html.includes('Frozen model grading'));assert(html.includes('Best single'));
+assert(ui.render({...a,generated_at:'invalid'},null,now).includes('PASS'));
+assert(ui.render({...a,generated_at:new Date(now+1).toISOString()},null,now).includes('PASS'));
+assert(ui.render({...a,tipoff:new Date(now-1).toISOString()},null,now).includes('already started'));
+a.sgp.observed_at=new Date(now-7200000).toISOString();html=ui.render(a,null,now);assert(html.includes('quote expired'));assert(!html.includes('Actual combined decimal price'));
+a.sgp=null;a.research_ticket={legs:[],joint_probability:.2,fair_decimal:5,minimum_decimal_for_5pct_ev:5.25};html=ui.render(a,null,now);assert(html.includes('not a bet'));assert(html.includes('5.25'));assert(!html.includes('Actual combined decimal price'));
+a.blockers=['injuries'];assert(!ui.render(a,null,now).includes('Unpriced SGP research target'));
+const fs=require('node:fs');const source=fs.readFileSync('nba.html','utf8');assert(source.includes('request!==pipelineRequest'),'Stale responses must not overwrite selected matchup');assert(source.indexOf('id="pipeline"')<source.indexOf('id="output"'),'Published model must lead');
+console.log('Published NBA model UI: PASS');
