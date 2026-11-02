@@ -210,3 +210,19 @@ assert.equal(vm.runInContext('nbaPriceReview("target",20,'+JSON.stringify({line:
 vm.runInContext('nbaQuoteContexts.target.eligible=false',sandbox);
 assert.equal(vm.runInContext('nbaResearchTarget({key:"target",forecast:20})',sandbox),null);
 console.log('NBA target lines match final price gates and exclude ineligible players: PASS');
+
+// Scores exist only after qualification, reward better prices and retain gates.
+sandbox.ratingContext={history:[18,19,20,20,21,22,20,19,20,21],modelContext:{seasonUsage:30,recentUsage:30}};
+sandbox.ratingResult={decision:'LEAN',candidate:'UNDER',sample:10,underSide:{edge:.10,ev:.12,conservative:.58,implied:.52}};
+const score=vm.runInContext('nbaPropRating(ratingResult,ratingContext)',sandbox);
+assert.ok(score.score>=0&&score.score<=100);
+assert.equal(score.score,score.factors.reduce((sum,x)=>sum+x.points,0));
+const better=vm.runInContext('nbaPropRating({...ratingResult,underSide:{edge:.15,ev:.22,conservative:.58,implied:.47}},ratingContext)',sandbox);
+assert.ok(better.score>score.score,'Better price increases score at unchanged forecast');
+assert.equal(vm.runInContext('nbaPropRating({...ratingResult,decision:"PASS"},ratingContext)',sandbox),null);
+assert.equal(vm.runInContext('nbaPropRating({...ratingResult,candidate:null},ratingContext)',sandbox),null);
+assert.ok(vm.runInContext('nbaPropRating({...ratingResult,sample:20},ratingContext).score',sandbox)>score.score);
+assert.ok(vm.runInContext('nbaPropRating(ratingResult,{...ratingContext,modelContext:{seasonUsage:30,recentUsage:15}}).score',sandbox)<score.score);
+assert.equal(vm.runInContext('nbaRatingHTML({decision:"PASS"})',sandbox),'');
+assert.ok(vm.runInContext('nbaRatingHTML({rating:nbaPropRating(ratingResult,ratingContext)})',sandbox).includes('not win probability'));
+console.log('NBA qualified-only score, price sensitivity, sample and role stability: PASS');
