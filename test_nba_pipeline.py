@@ -88,6 +88,11 @@ class PipelineTests(unittest.TestCase):
   for q in odds['markets']:q['line']=11.5;q['american_odds']=200
   a=self.analyze(odds)[0]
   self.assertIsNone(a['sgp']);self.assertIsNotNone(a['best_single'])
+ def test_large_price_feed_does_not_leak_simulation_arrays(self):
+  odds=self.prices();odds['markets']=[{**odds['markets'][0],'line':.5+i/10,'american_odds':200} for i in range(1000)]
+  a=self.analyze(odds)[0];encoded=json.dumps(a)
+  self.assertNotIn('"draws"',encoded);self.assertNotIn('"outcomes"',encoded)
+  self.assertLess(len(encoded),200000)
  def test_push_aware_single_ev(self):
   from nba_pipeline import grade_stats
   self.assertAlmostEqual(grade_stats([1,0,-1,1],2)['estimated_ev'],.25)

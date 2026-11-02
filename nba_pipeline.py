@@ -1,4 +1,5 @@
 """Scheduled NBA analyst, immutable captures and grading. No invented book prices."""
+import bisect
 import copy
 import datetime as dt
 import hashlib
@@ -20,7 +21,7 @@ def quote_key(q):
 def price_quote(q,now,default_stamp):
     try:
         line=float(q['line']);american=float(q['american_odds'])
-        if not math.isfinite(line) or line<=0 or not math.isfinite(american) or abs(american)<100 or american < -200:return None
+        if not math.isfinite(line) or line<=0 or not math.isfinite(american) or abs(american)<100:return None
         if q['side'] not in ('over','under') or not q.get('bookmaker'):return None
         if not fresh({'generated_at':q.get('observed_at',default_stamp)},now,1):return None
         return line,american,1+(100/abs(american) if american<0 else american/100)
@@ -43,8 +44,12 @@ def ranked_players(rows):
 
 def joint_ticket(legs,runs):
     combined=[];coverage=0
+    settlements=[]
+    for p in legs:
+        if 'outcomes' not in p:p['outcomes']=outcomes(p['draws'],p['line'],p['side'])
+        settlements.append(p['outcomes'])
     for j in range(runs):
-        vals=[p['outcomes'][j] for p in legs]
+        vals=[values[j] for values in settlements]
         combined.append(-1 if -1 in vals else 1 if all(v==1 for v in vals) else 0)
         coverage+=all(p['coverage'][j] for p in legs)
     return combined,coverage/runs
@@ -68,20 +73,30 @@ def analyze(feed,injuries,rosters,odds,now,runs=10000):
             p['projection']=round(st.mean(draws[i]),2)
             p['interval_80']=[sorted(draws[i])[int(.1*(runs-1))],sorted(draws[i])[int(.9*(runs-1))]]
         candidates=[]
+        sorted_draws=[sorted(values) for values in draws]
         market_fresh=fresh(odds,now,1)
+        valid_quotes=[];opposite_index={}
         for q in odds.get('markets',[]) if market_fresh else []:
             if str(q.get('game_id'))!=str(game['id']):continue
-            index=lookup.get((str(q.get('player_id')),q.get('market')))
             valid=price_quote(q,now,odds.get('generated_at'))
-            if index is None or not valid:continue
+            if valid:
+                valid_quotes.append((q,valid))
+                opposite_index[(str(q.get('player_id')),q.get('market'),q.get('bookmaker'),valid[0],q['side'])]=valid[2]
+        for q,valid in valid_quotes:
+            if str(q.get('game_id'))!=str(game['id']):continue
+            index=lookup.get((str(q.get('player_id')),q.get('market')))
+            if index is None:continue
             p=projections[index]
             if p['sample']<5 or p['status'] not in ('NOT LISTED','ACTIVE','AVAILABLE','PROBABLE'):continue
-            line,american,decimal=valid;settlement=outcomes(draws[index],line,q['side'])
-            candidate={**p,'line':line,'side':q['side'],'american_odds':american,'decimal':decimal,'bookmaker':q['bookmaker'],'observed_at':q.get('observed_at',odds['generated_at']),'outcomes':settlement,'coverage':coverage[index],**grade_stats(settlement,decimal)}
+            line,american,decimal=valid
+            if american < -200:continue
+            values=sorted_draws[index];lower=bisect.bisect_left(values,line);upper=bisect.bisect_right(values,line)
+            wins=runs-upper if q['side']=='over' else lower;pushes=upper-lower
+            stats={'probability':wins/runs,'push_probability':pushes/runs,'break_even':1/decimal,'estimated_ev':wins/runs*(decimal-1)-(runs-wins-pushes)/runs,'fair_decimal':(runs-pushes)/wins if wins else None}
+            candidate={**p,'line':line,'side':q['side'],'american_odds':american,'decimal':decimal,'bookmaker':q['bookmaker'],'observed_at':q.get('observed_at',odds['generated_at']),'draws':draws[index],'coverage':coverage[index],**stats}
             # Explicit opposite price and no-vig comparison; never mix books or lines.
-            opposite=next((other for other in odds.get('markets',[]) if str(other.get('game_id'))==str(game['id']) and str(other.get('player_id'))==p['player_id'] and other.get('market')==p['market'] and other.get('side')!=q['side'] and other.get('bookmaker')==q['bookmaker'] and other.get('line')==q.get('line') and price_quote(other,now,odds['generated_at'])),None)
-            if opposite:
-                opp=price_quote(opposite,now,odds['generated_at'])[2]
+            opp=opposite_index.get((p['player_id'],p['market'],q['bookmaker'],line,'under' if q['side']=='over' else 'over'))
+            if opp:
                 candidate['no_vig_probability']=(1/decimal)/(1/decimal+1/opp)
                 candidate['no_vig_edge']=candidate['probability']/max(.001,1-candidate['push_probability'])-candidate['no_vig_probability']
             candidates.append(candidate)
