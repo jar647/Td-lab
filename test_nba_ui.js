@@ -87,3 +87,25 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  assert.ok(el('sim-results').innerHTML.includes('HOLD · limited game sample'),'Two-game samples must remain blocked from edge signals');
  console.log('NBA real-feed selection and numeric projection integration test: PASS');
 })().catch(e=>{console.error(e);process.exitCode=1});
+
+
+// Early-season evidence must use the current team's completed regular-season
+// slate. Keep the player-appearance minimum strict once the team has >=8 games.
+{
+ const tip=Date.UTC(2026,10,2,20),g={id:'sample-gate',home:'Gate Home',away:'Gate Away',status:'STATUS_SCHEDULED',date:new Date(tip).toISOString()};
+ const p={id:'gate-player',name:'Gate Player',team:'Gate Home',rows:Array.from({length:6},(_,i)=>({points:10+i,minutes:30})),defenseDelta:0,paceDelta:0,opportunityFactor:1};
+ const finals=Array.from({length:8},(_,i)=>({id:'prior-'+i,status:'STATUS_FINAL',season_type:2,date:new Date(tip-(i+1)*86400000).toISOString(),home:'Gate Home',away:'Opponent'}));
+ let observed;
+ sandbox.CookItUpProbability={...CookItUpProbability,review:args=>{observed=args;return CookItUpProbability.review(args)}};
+ function bind(history){
+  vm.runInContext('historicalGames='+JSON.stringify(history)+';nbaPriceUI('+JSON.stringify(g)+','+JSON.stringify(p)+',"points",12.5)',sandbox);
+ }
+ // None of these may inflate the six genuine, earlier team games.
+ bind([...finals.slice(0,6),finals[0],{...finals[6],id:'pre',season_type:1},{...finals[7],id:'future',date:new Date(tip+1).toISOString()},{...finals[7],id:'old',date:'2025-11-01T20:00:00Z'}]);
+ assert.equal(observed.availableGames,6,'NBA card must forward six available team games');
+ assert.equal(CookItUpProbability.review(observed).requiredSample,6);
+ bind(finals);
+ assert.equal(observed.availableGames,8);
+ assert.equal(CookItUpProbability.review(observed).requiredSample,8,'Six player appearances in eight team games must remain limited');
+ console.log('NBA early-season sample gate binding: PASS');
+}
