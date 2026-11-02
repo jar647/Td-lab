@@ -235,4 +235,5 @@ assert.equal(three.length,3);assert.deepEqual(Array.from(three,r=>r.key),['m4','
 assert.equal(new Set(three.map(r=>r.playerId)).size,3);
 assert.ok(match[1].includes('outlookHTML+scoutHtml'));
 assert.ok(match[1].includes('row.target=nbaResearchTarget(row,side)'));
+assert.ok(match[1].includes('row.target.distance>.25')); 
 console.log('NBA matchup-first three-player cap, direction and game outlook: PASS');
