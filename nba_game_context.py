@@ -8,8 +8,8 @@ DEFENSE='https://stats.nba.com/stats/leaguedashptdefend'
 MATCHUPS='https://stats.nba.com/stats/leagueseasonmatchups'
 def norm(x):return re.sub('[^a-z0-9]','',unicodedata.normalize('NFKD',str(x)).encode('ascii','ignore').decode().lower())
 def fetch(url):
- req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0','Referer':'https://www.nba.com/','Accept':'application/json'})
- with urllib.request.urlopen(req,timeout=20) as r:return json.load(r)
+ req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/130.0.0.0 Safari/537.36','Referer':'https://www.nba.com/','Origin':'https://www.nba.com','Accept':'application/json, text/plain, */*','Accept-Language':'en-US,en;q=0.9','x-nba-stats-origin':'stats','x-nba-stats-token':'true'})
+ with urllib.request.urlopen(req,timeout=60 if '/stats/' in url else 20) as r:return json.load(r)
 def table(data):
  out=[]
  for t in data.get('resultSets',[]):
@@ -35,10 +35,10 @@ def collect(root=ROOT,now=None,loader=fetch):
  payload={'generated_at':stamp,'season':season,'sources':{},'games':{},'defenders':{},'matchups':[],'limits':['Historical defensive matchups estimate exposure; they do not confirm tonight’s assignments.','Historical quarter rotations describe team substitution patterns, not announced coaching plans.']}
  def task(key,url):
   try:return key,loader(url),None
-  except Exception as e:return key,None,type(e).__name__+': source unavailable'
+  except Exception as e:return key,None,type(e).__name__+(': HTTP '+str(e.code) if hasattr(e,'code') else ': '+str(e)[:100])
  urls={'lineups':LINEUPS.format(day=day.strftime('%Y%m%d'))}
  # Tracking changes after completed games, not every five-minute lineup refresh.
- tracked=old.get('sources',{}).get('tracking',{});same_day=str(tracked.get('retrieved_at',''))[:10]==str(now.date()) and old.get('season')==season
+ tracked=old.get('sources',{}).get('tracking',{});same_day=tracked.get('status')=='ok' and bool(old.get('defenders')) and bool(old.get('matchups')) and str(tracked.get('retrieved_at',''))[:10]==str(now.date()) and old.get('season')==season
  if not same_day:
   q={'College':'','Conference':'','Country':'','DateFrom':'','DateTo':day.strftime('%m/%d/%Y'),'DefenseCategory':'Overall','DraftPick':'','DraftYear':'','GameSegment':'','Height':'','LastNGames':0,'LeagueID':'00','Location':'','Month':0,'OpponentTeamID':0,'Outcome':'','PORound':0,'PerMode':'PerGame','Period':0,'PlayerExperience':'','PlayerID':0,'PlayerPosition':'','Season':season,'SeasonSegment':'','SeasonType':'Regular Season','StarterBench':'','TeamID':0,'VsConference':'','VsDivision':'','Weight':''}
   urls['defense']=DEFENSE+'?'+urllib.parse.urlencode(q)
@@ -64,6 +64,13 @@ def collect(root=ROOT,now=None,loader=fetch):
     payload['defenders'][pid]={'name':r['PLAYER_NAME'],'team':r.get('PLAYER_LAST_TEAM_ABBREVIATION'),'position':r.get('PLAYER_POSITION',''),'shots':attempts,'diff':r['PCT_PLUSMINUS']}
   payload['matchups']=[{'off':str(r['OFF_PLAYER_ID']),'def':str(r['DEF_PLAYER_ID']),'poss':r['PARTIAL_POSS'],'fga':r['MATCHUP_FGA'],'fgm':r['MATCHUP_FGM']} for r in table(pairs or {}) if float(r.get('PARTIAL_POSS') or 0)>=5]
   payload['sources']['tracking']={'status':'ok' if payload['defenders'] and payload['matchups'] else 'partial' if payload['defenders'] else 'unavailable','retrieved_at':stamp,'urls':[urls.get('defense'),urls.get('matchups')],'error':de or pe}
+ # Retain a still-valid last-good snapshot on transient source failures. Its
+ # original retrieved_at is immutable; successful lineup refresh cannot renew it.
+ if payload['sources']['tracking'].get('status')!='ok' and old.get('season')==season and tracked.get('status')=='ok':
+  try:age=(now-datetime.datetime.fromisoformat(tracked['retrieved_at'].replace('Z','+00:00'))).total_seconds()
+  except (KeyError,ValueError):age=999999
+  if 0<=age<=48*3600 and old.get('defenders') and old.get('matchups'):
+   failure=payload['sources']['tracking'].get('error');payload['defenders']=old['defenders'];payload['matchups']=old['matchups'];payload['sources']['tracking']={**tracked,'last_attempt_at':stamp,'refresh_error':failure or 'Tracking refresh incomplete; retained dated cache'}
  # A current injury snapshot is atomic with this context, with its actual timestamp.
  try:payload['availability']=json.loads((data/'nba_injuries.json').read_text())
  except (OSError,ValueError):payload['availability']=None
