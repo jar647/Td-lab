@@ -289,11 +289,38 @@ function registerNBAProp(g,p,market,forecast,quality,reason){
  nbaRecommendationRows.push({game:g,team:p.team,opponent:p.opponent,key,domId,playerId:String(p.id),name:p.name,market,forecast,quality:quality||0,html});
 }
 
+// Targets are hypothetical shopping conditions, never sportsbook quotes.
+function nbaResearchTarget(row){
+ const forecast=Number(row.forecast);if(!Number.isFinite(forecast)||forecast<=0)return null;
+ const targets=[],limit=Math.min(8,Math.max(2,forecast*.25));
+ for(const side of ['OVER','UNDER']){
+  for(let step=0;step<=Math.ceil(limit);step++){
+   const line=(side==='OVER'?Math.floor(forecast-.5)-step:Math.ceil(forecast-.5)+step)+.5;
+   if(line<.5||Math.abs(line-forecast)>limit)continue;
+   const result=nbaPriceReview(row.key,forecast,{line,[side.toLowerCase()]:-110});
+   if(result.candidate===side&&['LEAN','PLAY'].includes(result.decision)){
+    targets.push({side,line,odds:-110,result,distance:Math.abs(line-forecast)/Math.max(1,forecast)});break;
+   }
+   // These blocks cannot be fixed by shopping for another line.
+   if(/HISTORY|UNVERIFIED|INCOMPLETE|CONFLICT/.test(result.status))break;
+  }
+ }
+ targets.sort((a,b)=>a.distance-b.distance||b.result.expectedValue-a.result.expectedValue);
+ return targets[0]||null;
+}
+function nbaTargetPrice(row,target){
+ // Round the worst acceptable price toward the bettor, in ten-point steps.
+ for(let odds=-200;odds<=-110;odds+=10){
+  const result=nbaPriceReview(row.key,row.forecast,{line:target.line,[target.side.toLowerCase()]:odds});
+  if(result.candidate===target.side&&['LEAN','PLAY'].includes(result.decision))return odds;
+ }
+ return -110;
+}
 function nbaSlateSelection(rows){
  const upcoming=rows.filter(r=>r.game?.status==='STATUS_SCHEDULED'&&Date.parse(r.game.date)>Date.now()&&r.market!=='threes');
  const grouped=nbaPropGroups(upcoming),sorted=[...grouped.recommended,...grouped.other].sort((a,b)=>(Number(b.result.decision==='PLAY')-Number(a.result.decision==='PLAY'))||(b.result.expectedValue-a.result.expectedValue)||(b.result.estimatedEdge-a.result.estimatedEdge)||a.key.localeCompare(b.key));
  const distinct=list=>{const players=new Set(),events=new Set();return list.filter(r=>{const event=String(r.game.id);if(players.has(r.playerId)||events.has(event))return false;players.add(r.playerId);events.add(event);return true}).slice(0,5)};
- return {picks:distinct(sorted),research:distinct(grouped.awaiting)};
+ return {picks:distinct(sorted),research:distinct(grouped.awaiting.filter(r=>r.target).sort((a,b)=>a.target.distance-b.target.distance||b.quality-a.quality||a.key.localeCompare(b.key)))};
 }
 function nbaSlateCurrent(){return nbaSlateRows.map(r=>({...r,quote:nbaQuoteFor(r.key),result:nbaPriceReview(r.key,r.forecast)}))}
 function renderNBASlate(){
@@ -301,8 +328,9 @@ function renderNBASlate(){
  const rows=nbaSlateCurrent(),selection=nbaSlateSelection(rows),root=$('slate-results');
  const card=(r,pick)=>'<article class="player"><strong>'+esc(r.name)+' · '+esc(pick?r.result.candidate+' '+r.quote.line+' '+nbaMarketLabel(r.market):nbaMarketLabel(r.market))+'</strong><p class="muted">'+esc(r.game.away+' @ '+r.game.home)+' · Projection '+Number(r.forecast).toFixed(1)+(pick?' · '+esc(r.result.decision)+' · Odds '+esc(r.quote[r.result.candidate.toLowerCase()]):' · Awaiting prices; not a pick')+'</p><button onclick="'+(pick?'addNBASlatePick':'openNBASlateProp')+'('+esc(JSON.stringify(r.key))+')">'+(pick?'Add to Quick Slip':'Check this prop’s price')+'</button></article>';
  const awaiting=nbaPropGroups(rows.filter(r=>r.game?.status==='STATUS_SCHEDULED'&&Date.parse(r.game.date)>Date.now())).awaiting;
- const research=rows.filter(r=>nbaSlateShortlist.includes(r.key)&&awaiting.some(x=>x.key===r.key));
- root.innerHTML='<p>'+selection.picks.length+' qualifying props across today’s slate. No need to fill every slot.</p>'+(selection.picks.length?selection.picks.map(r=>card(r,true)).join(''):'<p>No qualifying priced props right now.</p>')+(research.length?'<details open><summary>Shortlist awaiting prices</summary><p class="muted">Fresh automatic odds are missing for these props. Check only this shortlist; PASS results stay out of the slip. This list is research, not a ranking of betting value.</p>'+research.map(r=>card(r,false)).join('')+'</details>':'')+'<p class="muted">Leans remain experimental. Combining props reduces the chance that every leg wins; this board does not assess combined ticket odds or correlation. <a href="#nba-tools">Open game tools</a></p>';
+ const research=rows.filter(r=>nbaSlateShortlist.includes(r.key)&&r.target&&awaiting.some(x=>x.key===r.key)&&nbaPriceReview(r.key,r.forecast,{line:r.target.line,[r.target.side.toLowerCase()]:-110}).candidate===r.target.side);
+ const targetCard=r=>{const t=r.target,price=nbaTargetPrice(r,t);return '<article class="player"><strong>'+esc(r.name)+' · Look for '+t.side+' '+t.line+' '+esc(nbaMarketLabel(r.market))+'</strong><p class="muted">'+esc(r.game.away+' @ '+r.game.home)+' · Projection '+Number(r.forecast).toFixed(1)+'</p><p>Target line: '+t.line+' '+(t.side==='OVER'?'or lower':'or higher')+' · Price: '+price+' or better</p><p class="muted">Model shopping target; availability and odds are unconfirmed. The target qualifies at a hypothetical -110. Your actual quote gets a fresh verdict.</p><button onclick="openNBASlateProp('+esc(JSON.stringify(r.key))+')">Check target at sportsbook</button></article>'};
+ root.innerHTML='<p>'+selection.picks.length+' qualifying props across today’s slate. No need to fill every slot.</p>'+(selection.picks.length?selection.picks.map(r=>card(r,true)).join(''):'<p>No qualifying priced props right now.</p>')+(research.length?'<details open><summary>Shopping targets · Over &amp; Under</summary><p class="muted">Check whether your book offers these conditions. Skip if it does not. Targets are experimental, not verified betting value.</p>'+research.map(targetCard).join('')+'</details>':'')+'<p class="muted">Leans remain experimental. Combining props reduces the chance that every leg wins; this board does not assess combined ticket odds or correlation. <a href="#nba-tools">Open game tools</a></p>';
 }
 function scanNBASlate(){
  if(!historicalGames.length||!injuryData||!rosterData){$('slate-results').textContent='NBA inputs are still loading. Try again in a moment.';return}
@@ -311,6 +339,7 @@ function scanNBASlate(){
  try{
   nbaSlateRows=[];nbaCollectOnly=true;
   for(const g of games.filter(g=>g.status==='STATUS_SCHEDULED'&&Date.parse(g.date)>Date.now()))nbaSlateRows.push(...(renderProjections(g,{collectOnly:true})||[]));
+  for(const row of nbaSlateRows){const q=nbaQuoteFor(row.key);if(!q.line||(!q.over&&!q.under))row.target=nbaResearchTarget(row)}
   nbaSlateScanned=true;nbaSlateShortlist=nbaSlateSelection(nbaSlateCurrent()).research.map(r=>r.key);renderNBASlate();
  }catch(e){$('slate-results').textContent='Unable to scan slate: '+e.message}
  finally{nbaCollectOnly=false;nbaRecommendationRows=savedRows;currentProjections=savedProjections;$('projections').innerHTML=scratch;button.disabled=false}

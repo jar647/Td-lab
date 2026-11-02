@@ -190,10 +190,23 @@ assert.equal(slate.picks[0].result.candidate,'UNDER');
 sandbox.slateFixture[0].result.decision='PASS';
 sandbox.slateFixture[2].game.date=new Date(slateNow-1000).toISOString();
 sandbox.slateFixture[3].market='threes';
-sandbox.slateFixture[4].quote={};
+sandbox.slateFixture[4].quote={};sandbox.slateFixture[4].target={side:'OVER',line:19.5,distance:.05};
 const filtered=vm.runInContext('nbaSlateSelection(slateFixture)',sandbox);
 for(const i of [0,2,3,4])assert.ok(!filtered.picks.some(r=>r.key==='slate-'+i));
 assert.ok(filtered.research.some(r=>r.key==='slate-4'));
 assert.ok(match[1].includes('if(options.collectOnly)return nbaRankedRows()'));
 assert.ok(match[1].includes('nbaRecommendationRows=savedRows;currentProjections=savedProjections'));
 console.log('NBA slate max-five, game diversity, both sides and eligibility: PASS');
+
+// Shopping targets must clear the exact final verdict with hypothetical odds.
+vm.runInContext('nbaQuoteContexts["target"]={history:[18,19,20,20,21,22,20,19,20,21],market:"points",availableGames:10,eligible:true,modelContext:{seasonAverage:20,recentAverage:20,seasonUsage:30,recentUsage:30,opponentRatio:1,injuryStatus:"NOT LISTED"}}',sandbox);
+const target=vm.runInContext('nbaResearchTarget({key:"target",forecast:20})',sandbox);
+assert.ok(target);assert.ok(['OVER','UNDER'].includes(target.side));
+assert.equal(vm.runInContext('nbaPriceReview("target",20,'+JSON.stringify({line:target.line,[target.side.toLowerCase()]:-110})+').candidate',sandbox),target.side);
+sandbox.testTarget=target;
+const price=vm.runInContext('nbaTargetPrice({key:"target",forecast:20},testTarget)',sandbox);
+assert.ok(price>=-200&&price<=-110);
+assert.equal(vm.runInContext('nbaPriceReview("target",20,'+JSON.stringify({line:target.line,[target.side.toLowerCase()]:price})+').candidate',sandbox),target.side);
+vm.runInContext('nbaQuoteContexts.target.eligible=false',sandbox);
+assert.equal(vm.runInContext('nbaResearchTarget({key:"target",forecast:20})',sandbox),null);
+console.log('NBA target lines match final price gates and exclude ineligible players: PASS');
