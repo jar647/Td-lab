@@ -35,3 +35,23 @@ for(const file of ['index.html','nba.html','analyst.html']){
  assert.ok(html.includes('CookItUpQuickSlip.button'),file+' must add recommendations to the slip');
 }
 console.log('Compact NFL/NBA Quick Slip persistence, evidence display, and deduplication checks passed');
+
+// The saved rating belongs to the exact priced side and survives reload.
+const rated={sport:'NBA',game:'Away @ Home',player:'Rated Player',market:'assists',line:5.5,side:'under',underOdds:-110,propScore:79,ratedLine:5.5,ratedSide:'UNDER',ratedOdds:-110};
+slip.add(rated);
+assert.equal(slip.getPicks()[0].propScore,79);
+assert.match(slip.formatRating(slip.getPicks()[0]),/Saved rating 79\/100 · at -110/);
+const fs=require('node:fs'),vm=require('node:vm');
+const stored=JSON.stringify(slip.getPicks()),ctx={localStorage:{getItem:()=>stored},setTimeout};
+vm.runInNewContext(fs.readFileSync('quick_slip.js','utf8'),ctx);
+assert.equal(ctx.CookItUpQuickSlip.getPicks()[0].propScore,79);
+slip.add({...rated,propScore:84,ratedOdds:100,underOdds:100});
+assert.equal(slip.getPicks().length,1);assert.equal(slip.getPicks()[0].propScore,84);
+slip.add({...rated,underOdds:-130});
+assert.equal(slip.getPicks()[0].propScore,null,'Changed quote must not retain old rating');
+assert.equal(slip.formatRating(slip.getPicks()[0]),'No saved rating');
+assert.equal(slip.formatRating({sport:'NBA',propScore:101}),'No saved rating');
+assert.equal(slip.formatRating({sport:'NBA',propScore:null}),'No saved rating');
+assert.equal(slip.formatRating({sport:'NFL'}),'');
+slip.clear();
+console.log('Quick Slip exact-quote rating snapshot, reload and replacement: PASS');

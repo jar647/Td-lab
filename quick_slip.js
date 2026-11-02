@@ -20,6 +20,11 @@
    if(input)pick[valueKey]=input.value.trim()||null;
    delete pick[inputKey];
   }
+  if(pick.sport==='NBA'){
+   const price=pick.ratedSide&&pick[String(pick.ratedSide).toLowerCase()+'Odds'];
+   if(!validRating(pick)||Number(pick.line)!==Number(pick.ratedLine)||!price||Number(price)!==Number(pick.ratedOdds)||String(pick.side).toUpperCase()!==pick.ratedSide)pick.propScore=null;
+   pick.ratingSavedAt=pick.propScore===null?null:new Date().toISOString();
+  }
   const key=[pick.sport,pick.game,pick.player,pick.market,pick.recommendationLine??pick.line??''].join('|').toLowerCase();
   const exists=picks.findIndex(p=>p.key===key);
   if(exists>=0)picks[exists]={...picks[exists],...pick,key};else picks.push({...pick,key});
@@ -35,6 +40,13 @@
   const numeric=Number(line);
   return Number.isFinite(numeric)?(Number.isInteger(numeric)?numeric+'+ '+market:'Over '+numeric+' '+market):String(line)+' '+market;
  }
+ function validRating(pick){return typeof pick.propScore==='number'&&Number.isInteger(pick.propScore)&&pick.propScore>=0&&pick.propScore<=100}
+ function formatRating(pick){
+  if(pick.sport!=='NBA')return '';
+  if(!validRating(pick))return 'No saved rating';
+  const odds=Number(pick.ratedOdds),price=Number.isFinite(odds)&&Math.abs(odds)>=100?' · at '+(odds>0?'+':'')+odds:'';
+  return 'Saved rating '+pick.propScore+'/100'+price+' · ranking, not win probability';
+ }
  function row(pick,index){
   const has=(value)=>value!==null&&value!==undefined&&value!==''&&Number.isFinite(Number(value));
   const sample=has(pick.sampleHits)&&has(pick.sampleSize)&&Number(pick.sampleSize)>0
@@ -45,7 +57,7 @@
    ?'<span class="quick-slip-sample">Matchup '+(Number(pick.matchupEdge)>=0?'+':'')+(100*Number(pick.matchupEdge)).toFixed(0)+'% vs sample</span>':'';
   const edge=has(pick.estimatedEdge)
    ?'<span class="quick-slip-edge">Edge '+(Number(pick.estimatedEdge)>=0?'+':'')+(100*Number(pick.estimatedEdge)).toFixed(1)+'% vs '+esc(pick.edgeBasis||'price')+' · uncalibrated</span>':'';
-  return '<article class="quick-slip-row"><div class="quick-slip-pick"><div><strong>'+esc(pick.player||'Player')+'</strong><div class="quick-slip-recommendation">'+esc(recommendation(pick))+'</div><div class="quick-slip-evidence">'+sample+matchup+scenario+edge+'</div></div><button type="button" class="quick-slip-remove" aria-label="Remove '+esc(pick.player||'player')+' from Quick Slip" data-slip-remove="'+index+'">×</button></div></article>';
+  return '<article class="quick-slip-row"><div class="quick-slip-pick"><div><strong>'+esc(pick.player||'Player')+'</strong><div class="quick-slip-recommendation">'+esc(recommendation(pick))+'</div><div class="quick-slip-evidence">'+(formatRating(pick)?'<span class="quick-slip-rating">'+esc(formatRating(pick))+'</span>':'')+sample+matchup+scenario+edge+'</div></div><button type="button" class="quick-slip-remove" aria-label="Remove '+esc(pick.player||'player')+' from Quick Slip" data-slip-remove="'+index+'">×</button></div></article>';
  }
  function update(){
   if(!panel||!launcher)return;
@@ -59,7 +71,7 @@
  function mount(){
   if(root.document.getElementById('quickSlipPanel'))return;
   const style=root.document.createElement('style');
-  style.textContent='.quick-slip-panel{scroll-margin-top:18px;border:1px solid #42a77a;background:#10291e;border-radius:14px;padding:16px;margin:14px 0;color:#eafff4}.quick-slip-panel h2{margin:0 0 6px}.quick-slip-help,.quick-slip-meta{font-size:12px;line-height:1.5;color:#a9c7b7}.quick-slip-row{border-top:1px solid #315644;padding:12px 0}.quick-slip-pick{display:flex;justify-content:space-between;align-items:center;gap:12px}.quick-slip-pick strong{font-size:16px}.quick-slip-recommendation{font-weight:750;color:#72f1b8;margin-top:3px}.quick-slip-evidence{display:flex;flex-wrap:wrap;gap:5px 12px;margin-top:4px}.quick-slip-sample,.quick-slip-edge{font-size:12px;line-height:1.5;color:#a9c7b7}.quick-slip-edge{color:#ffce7d}.quick-slip-add{display:inline-block;margin:8px 0;padding:9px 12px;border:1px solid #269b69;border-radius:9px;background:#123927;color:#72f1b8;font-weight:800;cursor:pointer}.quick-slip-add.is-added{background:#1b8259;color:white}.quick-slip-remove,.quick-slip-clear{border:1px solid #55705f;border-radius:8px;background:#16281e;color:#eafff4;padding:5px 10px;cursor:pointer}.quick-slip-remove{width:34px;height:34px;flex:none;font-size:23px;line-height:1}.quick-slip-launcher{position:fixed;right:14px;bottom:18px;z-index:10000;border:1px solid #68f3b4;border-radius:999px;background:#0f3525;color:#88ffbf;padding:12px 16px;font-weight:900;box-shadow:0 5px 20px #0008}.quick-slip-empty{color:#b6cfc0}.quick-slip-warning{color:#ffce7d;font-size:12px;margin:8px 0}';
+  style.textContent='.quick-slip-panel{scroll-margin-top:18px;border:1px solid #42a77a;background:#10291e;border-radius:14px;padding:16px;margin:14px 0;color:#eafff4}.quick-slip-panel h2{margin:0 0 6px}.quick-slip-help,.quick-slip-meta{font-size:12px;line-height:1.5;color:#a9c7b7}.quick-slip-row{border-top:1px solid #315644;padding:12px 0}.quick-slip-pick{display:flex;justify-content:space-between;align-items:center;gap:12px}.quick-slip-pick strong{font-size:16px}.quick-slip-recommendation{font-weight:750;color:#72f1b8;margin-top:3px}.quick-slip-evidence{display:flex;flex-wrap:wrap;gap:5px 12px;margin-top:4px}.quick-slip-sample,.quick-slip-edge{font-size:12px;line-height:1.5;color:#a9c7b7}.quick-slip-rating{display:block;flex-basis:100%;font-size:14px;font-weight:800;color:#72f1b8}.quick-slip-edge{color:#ffce7d}.quick-slip-add{display:inline-block;margin:8px 0;padding:9px 12px;border:1px solid #269b69;border-radius:9px;background:#123927;color:#72f1b8;font-weight:800;cursor:pointer}.quick-slip-add.is-added{background:#1b8259;color:white}.quick-slip-remove,.quick-slip-clear{border:1px solid #55705f;border-radius:8px;background:#16281e;color:#eafff4;padding:5px 10px;cursor:pointer}.quick-slip-remove{width:34px;height:34px;flex:none;font-size:23px;line-height:1}.quick-slip-launcher{position:fixed;right:14px;bottom:18px;z-index:10000;border:1px solid #68f3b4;border-radius:999px;background:#0f3525;color:#88ffbf;padding:12px 16px;font-weight:900;box-shadow:0 5px 20px #0008}.quick-slip-empty{color:#b6cfc0}.quick-slip-warning{color:#ffce7d;font-size:12px;margin:8px 0}';
   root.document.head.appendChild(style);
   panel=root.document.createElement('section');panel.id='quickSlipPanel';panel.className='quick-slip-panel';
   panel.innerHTML='<h2>Quick Slip <span data-slip-count>0</span></h2><p class="quick-slip-help">Your saved player props in one place. Enter every selection manually in your sportsbook.</p><div data-slip-list></div><p class="quick-slip-warning">Research organizer only. Check the live line, price, player status, and parlay eligibility yourself. Nothing is sent to Hard Rock.</p><button type="button" class="quick-slip-clear">Clear slip</button>';
@@ -75,7 +87,7 @@
   });
   update();
  }
- const api={button,createButton,addFromButton,formatRecommendation:recommendation,add:pick=>{const b={dataset:{quickSlip:encode(pick)},textContent:'Added',classList:{add(){}},isConnected:false};addFromButton(b)},open,clear:()=>{picks=[];save()},getPicks:()=>picks.map(x=>({...x}))};
+ const api={button,createButton,addFromButton,formatRecommendation:recommendation,formatRating,add:pick=>{const b={dataset:{quickSlip:encode(pick)},textContent:'Added',classList:{add(){}},isConnected:false};addFromButton(b)},open,clear:()=>{picks=[];save()},getPicks:()=>picks.map(x=>({...x}))};
  root.CookItUpQuickSlip=api;
  if(root.document)mount();
 })(typeof window!=='undefined'?window:globalThis);
