@@ -213,6 +213,8 @@
    const eligible=sourceReady&&!lineupMismatch&&calibrated&&adequatelySampled&&price&&price.american>=-200&&ev>=.05&&modelEdge>=.025&&
     (!key.endsWith('ATS')||atsBacktestVerified);
    const signal=price===null?'NO ODDS ENTERED':
+    game.possessionModel&&!calibrated?'PASS · CANDIDATE MODEL NOT VALIDATED':
+    game.possessionModel&&!nbaReady?'PASS · ROTATION AVAILABILITY UNCERTAIN':
     key.endsWith('ATS')&&!atsBacktestVerified?'PASS · ATS NOT BACKTESTED':
     !sourceReady?'PASS · SOURCE UNVERIFIED OR STALE':
     lineupMismatch?'PASS · QB CHANGE NOT VALIDATED':
