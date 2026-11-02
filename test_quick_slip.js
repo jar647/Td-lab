@@ -55,3 +55,16 @@ assert.equal(slip.formatRating({sport:'NBA',propScore:null}),'No saved rating');
 assert.equal(slip.formatRating({sport:'NFL'}),'');
 slip.clear();
 console.log('Quick Slip exact-quote rating snapshot, reload and replacement: PASS');
+
+// Legacy selections are repaired without touching already-saved scores or other picks.
+slip.add({...rated,propScore:null});slip.add({...pick,line:4.5});
+const before=slip.getPicks();
+const recovered=slip.recoverRatings(p=>({propScore:76,ratedLine:p.line,ratedSide:'UNDER',ratedOdds:-110}));
+assert.equal(recovered.recovered,1);assert.equal(slip.getPicks().length,before.length);
+assert.equal(slip.getPicks()[0].ratingRecalculated,true);
+assert.match(slip.formatRating(slip.getPicks()[0]),/Recalculated rating 76\/100/);
+assert.equal(slip.recoverRatings(()=>{throw Error('Existing scores must not be replaced')}).recovered,0);
+slip.add({...rated,propScore:81});assert.equal(slip.getPicks()[0].ratingRecalculated,false);
+slip.add({...rated,propScore:null});slip.recoverRatings(()=>({ratingNote:'Enter odds for this selection'}));
+assert.match(slip.formatRating(slip.getPicks()[0]),/Enter odds/);
+slip.clear();console.log('Legacy rating recovery preserves selections and saved snapshots: PASS');
