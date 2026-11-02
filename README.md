@@ -61,3 +61,10 @@ Every changed eligible pregame forecast is frozen with a content ID in `data/nba
 Regression CI covers all root/tests Python and JavaScript suites, including NFL. A separate same-repository PR job refreshes the real NBA inputs, checks the existing provider secret/entitlement, runs the model, and uploads sanitized live-input evidence. It fails its live-odds gate when current supported prices cannot actually be fetched.
 
 PR checks and source changes do not establish a deployed release. Combined SGP quote ingestion remains required for an autonomous **priced** SGP recommendation; no undocumented combined-price endpoint is assumed. Confirm the live-input job, review/merge/deploy, then verify the deployed SHA and NBA flows before claiming operational completion. NFL source/data and its existing workflows are unchanged.
+
+
+## NBA recommendation ordering
+
+The interactive NBA price cards evaluate both Over and Under using the same review shown on each card. Fresh same-game Hard Rock prices can populate the line and both sides; manual entries take precedence. Numbered recommendations contain the top three distinct players whose final review qualifies as LEAN/PLAY, ordered by modeled expected return, then edge. Additional qualifying markets remain available separately. Missing line/price candidates are labeled Awaiting odds; PASS props move to Not recommended, and no qualifying selections yields an explicit no-recommendation message.
+
+Changing a quote updates the verdict, rank and Quick Slip direction together without rebuilding the input controls. Changing the line clears the old prices. Imported prices expire after one hour, including the unedited imported side of a partially edited quote. These are research rankings, not calibrated betting-edge claims; existing status, sample, uncertainty and price gates remain in force.
