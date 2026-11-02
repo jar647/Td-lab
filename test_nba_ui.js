@@ -226,3 +226,13 @@ assert.ok(vm.runInContext('nbaPropRating(ratingResult,{...ratingContext,modelCon
 assert.equal(vm.runInContext('nbaRatingHTML({decision:"PASS"})',sandbox),'');
 assert.ok(vm.runInContext('nbaRatingHTML({rating:nbaPropRating(ratingResult,ratingContext)})',sandbox).includes('not win probability'));
 console.log('NBA qualified-only score, price sensitivity, sample and role stability: PASS');
+
+// Matchup research chooses three distinct players, excludes threes and weak/no targets.
+sandbox.matchupFixture=Array.from({length:7},(_,i)=>({key:'m'+i,playerId:i===1?'same':'p'+i,market:'points',quality:99-i,matchup:{strength:i/10},target:{side:i%2?'OVER':'UNDER',line:20.5}}));
+sandbox.matchupFixture[0].playerId='same';sandbox.matchupFixture[6].market='threes';sandbox.matchupFixture[5].target=null;
+const three=vm.runInContext('nbaMatchupThree(matchupFixture)',sandbox);
+assert.equal(three.length,3);assert.deepEqual(Array.from(three,r=>r.key),['m4','m3','m2']);
+assert.equal(new Set(three.map(r=>r.playerId)).size,3);
+assert.ok(match[1].includes('outlookHTML+scoutHtml'));
+assert.ok(match[1].includes('row.target=nbaResearchTarget(row,side)'));
+console.log('NBA matchup-first three-player cap, direction and game outlook: PASS');
