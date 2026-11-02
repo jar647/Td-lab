@@ -93,7 +93,7 @@ function nbaPriceSummary(key,forecast){
  const result=CookItUpProbability.review({
   history:context.history||[],market:context.market||'points',
   projection:Number(forecast),line:q.line??null,overOdds:q.over,underOdds:q.under,
-   context:context.modelContext||{},
+   context:context.modelContext||{},availableGames:context.availableGames??8,
   eligible:context.eligible!==false,blockReason:context.blockReason||''
  });
  const gap=q.line===undefined||q.line===''?null:Number(forecast)-Number(q.line);
@@ -122,11 +122,18 @@ function nbaPriceUI(g,p,market,forecast,recommendationLine=null,sampleHits=null,
   const seasonAverage=fields.length===1?mean(seasonRows,fields[0]):history.length?history.reduce((a,b)=>a+b,0)/history.length:null;
   const recentAverage=history.length?history.slice(0,5).reduce((a,b)=>a+b,0)/Math.min(5,history.length):null;
   const seasonMinutes=mean(seasonRows,'minutes'),recentMinutes=mean(recentRows.slice(0,3),'minutes');
+ // Count independent completed team games in this regular season, not player
+ // appearances, preseason records, duplicate events or games after this tipoff.
+ const tip=Date.parse(g.date),year=new Date(tip).getUTCFullYear(),month=new Date(tip).getUTCMonth();
+ const seasonStart=Date.UTC(year-(month<9?1:0),9,1);
+ const availableGames=new Set(historicalGames.filter(h=>h.status==='STATUS_FINAL'&&h.season_type===2&&
+  [h.home,h.away].includes(p.team)&&Date.parse(h.date)>=seasonStart&&Date.parse(h.date)<tip)
+  .map(h=>String(h.id))).size;
  const injury=injuryFor(p).status;
  const invalidStatus=/OUT|INACTIVE|DOUBTFUL|QUESTIONABLE|SUSPENDED|GAME.TIME|DAY.TO.DAY|UNVERIFIED/.test(injury);
  const pregame=g.status==='STATUS_SCHEDULED'&&Date.parse(g.date)>Date.now();
  const injuriesFresh=!!injuryData?.generated_at&&Math.abs(Date.now()-Date.parse(injuryData.generated_at))<12*3600000;
-  nbaQuoteContexts[key]={history,market,modelContext:{seasonAverage,recentAverage,seasonUsage:seasonMinutes,recentUsage:recentMinutes,
+  nbaQuoteContexts[key]={history,market,availableGames:availableGames||null,modelContext:{seasonAverage,recentAverage,seasonUsage:seasonMinutes,recentUsage:recentMinutes,
    opponentRatio:1+(Number(p.defenseDelta)||0)+(Number(p.paceDelta)||0),injuryFactor:Number(p.opportunityFactor)||1,injuryStatus:injury},eligible:pregame&&!invalidStatus&&injuriesFresh,
   blockReason:!pregame?'Not an upcoming pregame market.':!injuriesFresh?'Injury report is stale.':'Availability requires confirmation.'};
  const arg=JSON.stringify(key).replace(/"/g,'&quot;'),pVal=Number(forecast).toFixed(3);
