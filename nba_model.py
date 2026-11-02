@@ -10,7 +10,7 @@ import re
 import statistics as st
 import unicodedata
 
-MODEL = 'nba-rotation-joint-v2'
+MODEL = 'nba-rotation-joint-v2.1'
 UTC = dt.timezone.utc
 KEYS = {'points': ('PTS',), 'rebounds': ('REB',), 'assists': ('AST',),
         'points_rebounds': ('PTS','REB'), 'points_assists': ('PTS','AST'),
@@ -129,7 +129,7 @@ def build_projection(game,history,injuries,rosters):
             starts=sum(bool(p.get('starter')) for _,p in rows[:5])
             profiles.append({'player_id':pid,'player':player['name'],'team':team,'minutes':round(mins,2),'status':x['status'],'starts_last5':starts,'sample':len(rows),'baseline_minutes':round(x['baseline'],2)})
             for market,keys in KEYS.items():
-                usable=[(h,p) for h,p in rows if all(number(p,k) is not None for k in keys)]
+                usable=[(h,p) for h,p in rows if (number(p,'MIN') or 0)>=5 and all(number(p,k) is not None for k in keys)]
                 if len(usable)<3:continue
                 raw={h['id']:sum(number(p,k) for k in keys)/number(p,'MIN') for h,p in usable}
                 rate=.6*st.mean(list(raw.values())[:3])+.4*st.mean(raw.values())

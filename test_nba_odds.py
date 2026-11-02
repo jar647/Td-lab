@@ -24,6 +24,11 @@ class NBAOddsTests(unittest.TestCase):
   self.assertIsNone(classify_market('Over Under Player Points 1st Half'))
   self.assertIsNone(classify_market('Player 20+ Points'))
   self.catalog[0]['handicap']=float('nan');self.assertEqual(parse_props(self.game,self.catalog,self.response,self.game['players'],self.now),[])
+ def test_real_catalog_order_and_period_metadata(self):
+  self.assertEqual(classify_market('Player Points (Over/Under)'), 'points')
+  self.assertEqual(classify_market('Over/Under - Player - Points'), 'points')
+  self.assertEqual(classify_market('Total Player Rebounds',{'sportId':11,'period':'fulltime','playerProp':True,'outcomes':[{'outcomeName':'Over'},{'outcomeName':'Under'}]}),'rebounds')
+  self.assertIsNone(classify_market('Player Points (Over/Under)',{'sportId':11,'period':'1sthalf'}))
  def test_ambiguous_player_does_not_guess(self):
   players=self.game['players']+[{'id':'espn2','name':'Jose Smith','team':'LA Clippers'}]
   self.assertEqual(parse_props(self.game,self.catalog,self.response,players,self.now),[])

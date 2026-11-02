@@ -30,16 +30,24 @@ def match_fixture(fixture,games):
     matches=[g for g in games if g.get('status')=='STATUS_SCHEDULED' and sides=={team_key(g['home']),team_key(g['away'])} and abs((timestamp(g['date'])-tip).total_seconds())<=7200]
     return matches[0] if len(matches)==1 else None
 
-def classify_market(name):
-    # Only full-game O/U markets. Milestones and partial games settle differently.
-    text=' '.join(str(name).lower().split())
-    if not text.startswith('over under player '):return None
-    text=text[len('over under player '):]
-    allowed={'points':'points','rebounds':'rebounds','assists':'assists',
-             'points + rebounds':'points_rebounds','points + assists':'points_assists',
-             'assists + rebounds':'rebounds_assists','rebounds + assists':'rebounds_assists',
-             'points + assists + rebounds':'pra','points + rebounds + assists':'pra'}
-    return allowed.get(text)
+def classify_market(name,meta=None):
+    # Normalize word order/punctuation, but never infer a partial-game market.
+    text=str(name).lower()
+    if re.search(r'quarter|half|period|regulation|excluding|excl\.?|first|second|third|fourth|[1-4](?:st|nd|rd|th)',text):return None
+    text=re.sub(r'\b(?:including|incl\.?)\s+(?:overtime|ot)\b','',text)
+    words=re.findall(r'[a-z]+',text)
+    metadata=meta or {}
+    if metadata.get('sportId') is not None and str(metadata['sportId'])!='11':return None
+    if metadata.get('period') not in (None,'fulltime','fulltimeinclot','fulltimeinclovertime'):return None
+    explicit='over' in words and 'under' in words and 'player' in words
+    catalog_verified=metadata.get('playerProp') is True and {str(o.get('outcomeName','')).lower() for o in metadata.get('outcomes',[])}=={'over','under'}
+    if not explicit and not catalog_verified:return None
+    words=[w for w in words if w not in ('over','under','player','total','full','time','and')]
+    # Supported component sets; unknown qualifiers/milestone words fail closed.
+    aliases={'point':'points','points':'points','rebound':'rebounds','rebounds':'rebounds','assist':'assists','assists':'assists'}
+    if not words or any(w not in aliases for w in words):return None
+    stats=frozenset(aliases[w] for w in words)
+    return {frozenset(['points']):'points',frozenset(['rebounds']):'rebounds',frozenset(['assists']):'assists',frozenset(['points','rebounds']):'points_rebounds',frozenset(['points','assists']):'points_assists',frozenset(['rebounds','assists']):'rebounds_assists',frozenset(['points','rebounds','assists']):'pra'}.get(stats)
 
 def parse_props(game,catalog,response,players,now,bookmaker='hardrockbet'):
     lookup={str(m.get('marketId')):m for m in records(catalog,'markets')}
@@ -48,7 +56,7 @@ def parse_props(game,catalog,response,players,now,bookmaker='hardrockbet'):
         if p.get('team') in (game['home'],game['away']):names.setdefault(name_key(p['name']),set()).add(str(p['id']))
     out=[]
     for mid,market in response.get('bookmakerOdds',{}).get(bookmaker,{}).get('markets',{}).items():
-        meta=lookup.get(str(mid),{});kind=classify_market(meta.get('marketName'))
+        meta=lookup.get(str(mid),{});kind=classify_market(meta.get('marketName'),meta)
         if not kind:continue
         try:
             line=float(meta['handicap'])
@@ -77,7 +85,8 @@ def collect(feed,rosters,now,request=get,diagnostics=None):
     catalog=request('markets',sportId=11)
     tournaments=records(request('tournaments',sportId=11),'tournaments')
     nba_ids={str(t.get('tournamentId')) for t in tournaments if str(t.get('tournamentName') or t.get('name') or '').strip().lower() in ('nba','usa nba','usa - nba')}
-    diagnostics.update(fixtures=len(fixtures),catalog_markets=len(records(catalog,'markets')),supported_catalog_markets=sum(classify_market(m.get('marketName')) is not None for m in records(catalog,'markets')),nba_tournaments=len(nba_ids),fixture_fields=sorted({k for f in fixtures[:1] if isinstance(f,dict) for k in f}),catalog_fields=sorted({k for m in records(catalog,'markets')[:1] if isinstance(m,dict) for k in m}))
+    diagnostics['basketball_prop_examples']=[{k:m.get(k) for k in ('marketName','period','marketType','playerProp','handicap')} for m in records(catalog,'markets') if str(m.get('sportId'))=='11' and m.get('playerProp') is True][:12]
+    diagnostics.update(fixtures=len(fixtures),catalog_markets=len(records(catalog,'markets')),supported_catalog_markets=sum(classify_market(m.get('marketName'),m) is not None for m in records(catalog,'markets')),nba_tournaments=len(nba_ids),fixture_fields=sorted({k for f in fixtures[:1] if isinstance(f,dict) for k in f}),catalog_fields=sorted({k for m in records(catalog,'markets')[:1] if isinstance(m,dict) for k in m}))
     names={}
     for g in sorted(feed.get('games',[]),key=lambda g:g['date'],reverse=True):
         for p in g.get('players',[]):
