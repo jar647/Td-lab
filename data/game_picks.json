@@ -1,7 +1,7 @@
 {
   "season": 2026,
   "week": 8,
-  "generated_at": "2026-11-01T23:39:34.937396+00:00",
+  "generated_at": "2026-11-02T01:06:53.056660+00:00",
   "model_status": "AUDITED_BASELINE_UNCALIBRATED",
   "model_version": "score-baseline-trust-v3",
   "note": "Historical scoring research baseline; independently recomputed source rates; QB-led history separated; no unvalidated EPA point correction or verified betting recommendation.",
@@ -718,7 +718,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T23:39:31.604808+00:00",
+            "retrieved_at": "2026-11-02T01:06:49.346304+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -752,7 +752,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
-          "checked_at": "2026-11-01T23:39:30.462986+00:00",
+          "checked_at": "2026-11-02T01:06:48.867133+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -1116,108 +1116,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Josh Allen",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 6,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 31.0,
-                  "pass_yards_per_game": 250.667,
-                  "carries_per_game": 6.667,
-                  "rush_yards_per_game": 41.333,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 234.0,
-                    "passAttempts": 30.8,
-                    "rushYards": 44.8,
-                    "rushAttempts": 7.0,
-                    "recYards": 0.2,
-                    "receptions": 0.2,
-                    "targets": 0.2
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "James Cook",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 19.5,
-                    "rush_yards_per_game": 104.5,
-                    "targets_per_game": 2.333,
-                    "receptions_per_game": 1.667,
-                    "receiving_yards_per_game": 14.833,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 114.0,
-                      "rushAttempts": 20.8,
-                      "recYards": 15.4,
-                      "receptions": 1.4,
-                      "targets": 2.0
-                    }
-                  },
-                  {
-                    "name": "DJ Moore",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 4,
-                    "availability": "QUESTIONABLE",
-                    "practice": "LIMITED_PRACTICE",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.5,
-                    "rush_yards_per_game": 1.25,
-                    "targets_per_game": 5.0,
-                    "receptions_per_game": 3.0,
-                    "receiving_yards_per_game": 44.5,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 1.25,
-                      "rushAttempts": 0.5,
-                      "recYards": 44.5,
-                      "receptions": 3.0,
-                      "targets": 5.0
-                    }
-                  },
-                  {
-                    "name": "Khalil Shakir",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.0,
-                    "rush_yards_per_game": 0.0,
-                    "targets_per_game": 5.333,
-                    "receptions_per_game": 3.667,
-                    "receiving_yards_per_game": 46.667,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.0,
-                      "rushAttempts": 0.0,
-                      "recYards": 48.0,
-                      "receptions": 3.6,
-                      "targets": 5.2
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -1547,118 +1447,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Lamar Jackson",
-                  "position": "QB",
-                  "qb_role": "EXPECTED_STARTER",
-                  "starter_context": {
-                    "season": 2026,
-                    "week": 8,
-                    "team": "BAL",
-                    "opponent": "BUF",
-                    "player_id": "00-0034796",
-                    "player": "Lamar Jackson",
-                    "reported_at": "2026-10-30T13:56:00-04:00",
-                    "source": "https://www.baltimoreravens.com/news/lamar-jackson-ravens-bills-set-to-play-2026",
-                    "note": "Team announced Jackson will start after three missed games. Return from ankle injury; workload may differ from pre-injury history. This is not an official game-day active list."
-                  },
-                  "games": 4,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 25.25,
-                  "pass_yards_per_game": 241.75,
-                  "carries_per_game": 4.0,
-                  "rush_yards_per_game": 36.75,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 241.75,
-                    "passAttempts": 25.25,
-                    "rushYards": 36.75,
-                    "rushAttempts": 4.0,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Derrick Henry",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 21.143,
-                    "rush_yards_per_game": 82.714,
-                    "targets_per_game": 1.714,
-                    "receptions_per_game": 1.429,
-                    "receiving_yards_per_game": 9.714,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 73.4,
-                      "rushAttempts": 21.6,
-                      "recYards": 6.0,
-                      "receptions": 1.2,
-                      "targets": 1.6
-                    }
-                  },
-                  {
-                    "name": "Zay Flowers",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.5,
-                    "rush_yards_per_game": 5.667,
-                    "targets_per_game": 8.833,
-                    "receptions_per_game": 6.667,
-                    "receiving_yards_per_game": 101.333,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.2,
-                      "rushYards": 6.8,
-                      "rushAttempts": 0.6,
-                      "recYards": 91.6,
-                      "receptions": 7.0,
-                      "targets": 9.4
-                    }
-                  },
-                  {
-                    "name": "Justice Hill",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 3.0,
-                    "rush_yards_per_game": 20.0,
-                    "targets_per_game": 2.429,
-                    "receptions_per_game": 1.857,
-                    "receiving_yards_per_game": 12.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 23.2,
-                      "rushAttempts": 2.6,
-                      "recYards": 12.4,
-                      "receptions": 2.0,
-                      "targets": 2.8
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -2006,7 +1796,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T23:39:31.986391+00:00",
+            "retrieved_at": "2026-11-02T01:06:49.685614+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -2040,7 +1830,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
-          "checked_at": "2026-11-01T23:39:30.462986+00:00",
+          "checked_at": "2026-11-02T01:06:48.867133+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -2053,51 +1843,8 @@
               "model_use": "Historical team mixture; current starter not independently confirmed."
             },
             "BAL": {
-              "status": "RETURNING_STARTER_SAMPLE_MISMATCH",
-              "player": "Lamar Jackson",
-              "player_id": "00-0034796",
-              "source": {
-                "season": 2026,
-                "week": 8,
-                "team": "BAL",
-                "opponent": "BUF",
-                "player_id": "00-0034796",
-                "player": "Lamar Jackson",
-                "reported_at": "2026-10-30T13:56:00-04:00",
-                "source": "https://www.baltimoreravens.com/news/lamar-jackson-ravens-bills-set-to-play-2026",
-                "note": "Team announced Jackson will start after three missed games. Return from ankle injury; workload may differ from pre-injury history. This is not an official game-day active list."
-              },
-              "starter_led_game_ids": [
-                "2026_01_BAL_IND",
-                "2026_02_NO_BAL",
-                "2026_03_BAL_DAL"
-              ],
-              "recent_games": 4,
-              "recent_games_other_primary_qb": 3,
-              "starter_led_offense": {
-                "games": 3,
-                "plays": 173,
-                "epa_per_play": 0.19329505394749735,
-                "success_rate": 0.5433526011560693,
-                "explosive_rate": 0.14450867052023122,
-                "pass_rate": 0.45664739884393063,
-                "pass_epa": 0.3177195436195061,
-                "rush_epa": 0.08872553603166017,
-                "turnovers_per_game": 0.6666666666666666
-              },
-              "other_or_mixed_offense": {
-                "games": 4,
-                "plays": 253,
-                "epa_per_play": 0.004964279008741245,
-                "success_rate": 0.4189723320158103,
-                "explosive_rate": 0.09090909090909091,
-                "pass_rate": 0.5533596837944664,
-                "pass_epa": 0.11124046952375695,
-                "rush_epa": -0.12670533755853486,
-                "turnovers_per_game": 0.75
-              },
-              "point_adjustment_applied": false,
-              "model_use": "Separate historical QB-led game samples. Opponents, injuries and game scripts differ; these splits do not establish a causal scoring adjustment."
+              "status": "STARTER_UNCONFIRMED",
+              "model_use": "Historical team mixture; current starter not independently confirmed."
             }
           },
           "sample": {
@@ -2447,108 +2194,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Joe Burrow",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 6,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 38.167,
-                  "pass_yards_per_game": 275.5,
-                  "carries_per_game": 2.167,
-                  "rush_yards_per_game": 10.667,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 279.8,
-                    "passAttempts": 38.6,
-                    "rushYards": 8.6,
-                    "rushAttempts": 1.8,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Chase Brown",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 13.667,
-                    "rush_yards_per_game": 47.5,
-                    "targets_per_game": 5.5,
-                    "receptions_per_game": 4.667,
-                    "receiving_yards_per_game": 23.833,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 45.8,
-                      "rushAttempts": 13.2,
-                      "recYards": 24.2,
-                      "receptions": 4.6,
-                      "targets": 5.4
-                    }
-                  },
-                  {
-                    "name": "Tee Higgins",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.0,
-                    "rush_yards_per_game": 0.0,
-                    "targets_per_game": 8.333,
-                    "receptions_per_game": 5.5,
-                    "receiving_yards_per_game": 95.167,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.0,
-                      "rushAttempts": 0.0,
-                      "recYards": 102.4,
-                      "receptions": 6.0,
-                      "targets": 8.8
-                    }
-                  },
-                  {
-                    "name": "Ja'Marr Chase",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.0,
-                    "rush_yards_per_game": 0.0,
-                    "targets_per_game": 7.5,
-                    "receptions_per_game": 5.333,
-                    "receiving_yards_per_game": 58.5,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.0,
-                      "rushAttempts": 0.0,
-                      "recYards": 67.8,
-                      "receptions": 6.0,
-                      "targets": 8.2
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -2824,108 +2471,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Cam Ward",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 7,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 31.429,
-                  "pass_yards_per_game": 168.429,
-                  "carries_per_game": 2.571,
-                  "rush_yards_per_game": 10.286,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 171.2,
-                    "passAttempts": 32.6,
-                    "rushYards": 8.8,
-                    "rushAttempts": 2.0,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Tony Pollard",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 16.0,
-                    "rush_yards_per_game": 68.286,
-                    "targets_per_game": 2.286,
-                    "receptions_per_game": 1.571,
-                    "receiving_yards_per_game": 7.143,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 75.8,
-                      "rushAttempts": 18.2,
-                      "recYards": 10.0,
-                      "receptions": 1.8,
-                      "targets": 2.6
-                    }
-                  },
-                  {
-                    "name": "Wan'Dale Robinson",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.143,
-                    "rush_yards_per_game": 0.143,
-                    "targets_per_game": 6.143,
-                    "receptions_per_game": 4.143,
-                    "receiving_yards_per_game": 29.286,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.2,
-                      "rushAttempts": 0.2,
-                      "recYards": 31.6,
-                      "receptions": 4.6,
-                      "targets": 7.2
-                    }
-                  },
-                  {
-                    "name": "Michael Carter",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 1,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 3.0,
-                    "rush_yards_per_game": 7.0,
-                    "targets_per_game": 1.0,
-                    "receptions_per_game": 1.0,
-                    "receiving_yards_per_game": 7.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 7.0,
-                      "rushAttempts": 3.0,
-                      "recYards": 7.0,
-                      "receptions": 1.0,
-                      "targets": 1.0
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -3210,7 +2757,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T23:39:32.305879+00:00",
+            "retrieved_at": "2026-11-02T01:06:50.172781+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -3244,7 +2791,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
-          "checked_at": "2026-11-01T23:39:30.462986+00:00",
+          "checked_at": "2026-11-02T01:06:48.867133+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -3608,108 +3155,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Dak Prescott",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 7,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 40.429,
-                  "pass_yards_per_game": 264.429,
-                  "carries_per_game": 2.429,
-                  "rush_yards_per_game": 11.571,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 279.4,
-                    "passAttempts": 43.2,
-                    "rushYards": 8.2,
-                    "rushAttempts": 2.2,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Javonte Williams",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 15.714,
-                    "rush_yards_per_game": 67.429,
-                    "targets_per_game": 3.143,
-                    "receptions_per_game": 2.714,
-                    "receiving_yards_per_game": 14.714,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 80.2,
-                      "rushAttempts": 17.2,
-                      "recYards": 10.4,
-                      "receptions": 2.2,
-                      "targets": 2.6
-                    }
-                  },
-                  {
-                    "name": "CeeDee Lamb",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.286,
-                    "rush_yards_per_game": -0.857,
-                    "targets_per_game": 11.857,
-                    "receptions_per_game": 7.571,
-                    "receiving_yards_per_game": 93.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": -1.2,
-                      "rushAttempts": 0.2,
-                      "recYards": 90.8,
-                      "receptions": 8.0,
-                      "targets": 13.2
-                    }
-                  },
-                  {
-                    "name": "George Pickens",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "QUESTIONABLE",
-                    "practice": "LIMITED_PRACTICE",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.0,
-                    "rush_yards_per_game": 0.0,
-                    "targets_per_game": 8.286,
-                    "receptions_per_game": 5.286,
-                    "receiving_yards_per_game": 69.286,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.0,
-                      "rushAttempts": 0.0,
-                      "recYards": 83.4,
-                      "receptions": 5.6,
-                      "targets": 8.8
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -4038,108 +3485,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Jacoby Brissett",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 7,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 42.143,
-                  "pass_yards_per_game": 228.571,
-                  "carries_per_game": 3.286,
-                  "rush_yards_per_game": 11.857,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 245.6,
-                    "passAttempts": 45.4,
-                    "rushYards": 11.8,
-                    "rushAttempts": 3.8,
-                    "recYards": 1.4,
-                    "receptions": 0.2,
-                    "targets": 0.2
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Jeremiyah Love",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 5,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 13.4,
-                    "rush_yards_per_game": 49.0,
-                    "targets_per_game": 2.8,
-                    "receptions_per_game": 2.2,
-                    "receiving_yards_per_game": 7.2,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 49.0,
-                      "rushAttempts": 13.4,
-                      "recYards": 7.2,
-                      "receptions": 2.2,
-                      "targets": 2.8
-                    }
-                  },
-                  {
-                    "name": "Tyler Allgeier",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "LIMITED_PRACTICE",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 8.714,
-                    "rush_yards_per_game": 25.143,
-                    "targets_per_game": 2.429,
-                    "receptions_per_game": 2.286,
-                    "receiving_yards_per_game": 12.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 21.0,
-                      "rushAttempts": 7.8,
-                      "recYards": 13.2,
-                      "receptions": 2.4,
-                      "targets": 2.6
-                    }
-                  },
-                  {
-                    "name": "Trey McBride",
-                    "position": "TE",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.0,
-                    "rush_yards_per_game": 0.0,
-                    "targets_per_game": 11.143,
-                    "receptions_per_game": 8.429,
-                    "receiving_yards_per_game": 67.429,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.0,
-                      "rushAttempts": 0.0,
-                      "recYards": 67.2,
-                      "receptions": 8.4,
-                      "targets": 11.0
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -4496,7 +3843,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T23:39:32.337297+00:00",
+            "retrieved_at": "2026-11-02T01:06:50.189413+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -4530,7 +3877,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
-          "checked_at": "2026-11-01T23:39:30.462986+00:00",
+          "checked_at": "2026-11-02T01:06:48.867133+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -4895,108 +4242,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Jared Goff",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 6,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 39.167,
-                  "pass_yards_per_game": 298.0,
-                  "carries_per_game": 1.5,
-                  "rush_yards_per_game": 3.0,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 316.4,
-                    "passAttempts": 39.0,
-                    "rushYards": 3.2,
-                    "rushAttempts": 1.4,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Jahmyr Gibbs",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 22.333,
-                    "rush_yards_per_game": 103.333,
-                    "targets_per_game": 6.667,
-                    "receptions_per_game": 5.333,
-                    "receiving_yards_per_game": 43.5,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 92.8,
-                      "rushAttempts": 21.0,
-                      "recYards": 46.2,
-                      "receptions": 5.4,
-                      "targets": 7.0
-                    }
-                  },
-                  {
-                    "name": "Amon-Ra St. Brown",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.167,
-                    "rush_yards_per_game": -0.167,
-                    "targets_per_game": 11.333,
-                    "receptions_per_game": 7.667,
-                    "receiving_yards_per_game": 87.5,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": -0.2,
-                      "rushAttempts": 0.2,
-                      "recYards": 91.6,
-                      "receptions": 7.2,
-                      "targets": 10.8
-                    }
-                  },
-                  {
-                    "name": "Sam LaPorta",
-                    "position": "TE",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.0,
-                    "rush_yards_per_game": 0.0,
-                    "targets_per_game": 6.5,
-                    "receptions_per_game": 4.667,
-                    "receiving_yards_per_game": 55.667,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.0,
-                      "rushAttempts": 0.0,
-                      "recYards": 57.2,
-                      "receptions": 4.6,
-                      "targets": 6.2
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -5308,108 +4555,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Kyler Murray",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 5,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 27.2,
-                  "pass_yards_per_game": 162.4,
-                  "carries_per_game": 3.4,
-                  "rush_yards_per_game": 28.4,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 162.4,
-                    "passAttempts": 27.2,
-                    "rushYards": 28.4,
-                    "rushAttempts": 3.4,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Aaron Jones",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 17.5,
-                    "rush_yards_per_game": 72.667,
-                    "targets_per_game": 3.167,
-                    "receptions_per_game": 2.167,
-                    "receiving_yards_per_game": 12.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 79.2,
-                      "rushAttempts": 18.6,
-                      "recYards": 14.4,
-                      "receptions": 2.6,
-                      "targets": 3.6
-                    }
-                  },
-                  {
-                    "name": "Jordan Mason",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 2,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 15.0,
-                    "rush_yards_per_game": 63.5,
-                    "targets_per_game": 1.0,
-                    "receptions_per_game": 0.0,
-                    "receiving_yards_per_game": 0.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 63.5,
-                      "rushAttempts": 15.0,
-                      "recYards": 0.0,
-                      "receptions": 0.0,
-                      "targets": 1.0
-                    }
-                  },
-                  {
-                    "name": "Justin Jefferson",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 5,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.2,
-                    "rush_yards_per_game": -2.2,
-                    "targets_per_game": 6.4,
-                    "receptions_per_game": 4.6,
-                    "receiving_yards_per_game": 60.4,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": -2.2,
-                      "rushAttempts": 0.2,
-                      "recYards": 60.4,
-                      "receptions": 4.6,
-                      "targets": 6.4
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -5677,7 +4824,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T23:39:32.370399+00:00",
+            "retrieved_at": "2026-11-02T01:06:50.206448+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -5711,7 +4858,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
-          "checked_at": "2026-11-01T23:39:30.462986+00:00",
+          "checked_at": "2026-11-02T01:06:48.867133+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -6074,108 +5221,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Trevor Lawrence",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 6,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 32.333,
-                  "pass_yards_per_game": 246.667,
-                  "carries_per_game": 2.333,
-                  "rush_yards_per_game": 12.167,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 247.0,
-                    "passAttempts": 34.0,
-                    "rushYards": 14.0,
-                    "rushAttempts": 2.4,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Bhayshul Tuten",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 15.667,
-                    "rush_yards_per_game": 64.667,
-                    "targets_per_game": 2.333,
-                    "receptions_per_game": 2.167,
-                    "receiving_yards_per_game": 21.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 64.4,
-                      "rushAttempts": 15.8,
-                      "recYards": 20.8,
-                      "receptions": 2.4,
-                      "targets": 2.6
-                    }
-                  },
-                  {
-                    "name": "Parker Washington",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.167,
-                    "rush_yards_per_game": 0.5,
-                    "targets_per_game": 7.667,
-                    "receptions_per_game": 4.333,
-                    "receiving_yards_per_game": 69.333,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.6,
-                      "rushAttempts": 0.2,
-                      "recYards": 66.6,
-                      "receptions": 4.2,
-                      "targets": 8.0
-                    }
-                  },
-                  {
-                    "name": "Chris Rodriguez Jr.",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 6.5,
-                    "rush_yards_per_game": 28.0,
-                    "targets_per_game": 0.333,
-                    "receptions_per_game": 0.167,
-                    "receiving_yards_per_game": 1.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 29.0,
-                      "rushAttempts": 6.6,
-                      "recYards": 1.2,
-                      "receptions": 0.2,
-                      "targets": 0.4
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -6469,108 +5516,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Daniel Jones",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 7,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 36.857,
-                  "pass_yards_per_game": 199.714,
-                  "carries_per_game": 2.714,
-                  "rush_yards_per_game": 10.143,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 204.4,
-                    "passAttempts": 38.8,
-                    "rushYards": 11.4,
-                    "rushAttempts": 3.0,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Jonathan Taylor",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 20.0,
-                    "rush_yards_per_game": 83.857,
-                    "targets_per_game": 3.714,
-                    "receptions_per_game": 2.429,
-                    "receiving_yards_per_game": 25.429,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 79.4,
-                      "rushAttempts": 19.4,
-                      "recYards": 23.0,
-                      "receptions": 2.0,
-                      "targets": 3.6
-                    }
-                  },
-                  {
-                    "name": "Tyler Warren",
-                    "position": "TE",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 5,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.6,
-                    "rush_yards_per_game": 1.2,
-                    "targets_per_game": 7.2,
-                    "receptions_per_game": 6.0,
-                    "receiving_yards_per_game": 42.6,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 1.2,
-                      "rushAttempts": 0.6,
-                      "recYards": 42.6,
-                      "receptions": 6.0,
-                      "targets": 7.2
-                    }
-                  },
-                  {
-                    "name": "Keenan Allen",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.0,
-                    "rush_yards_per_game": 0.0,
-                    "targets_per_game": 7.167,
-                    "receptions_per_game": 4.833,
-                    "receiving_yards_per_game": 43.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.0,
-                      "rushAttempts": 0.0,
-                      "recYards": 45.2,
-                      "receptions": 4.6,
-                      "targets": 7.4
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -6882,7 +5829,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T23:39:32.622458+00:00",
+            "retrieved_at": "2026-11-02T01:06:50.608900+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -6916,7 +5863,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
-          "checked_at": "2026-11-01T23:39:30.462986+00:00",
+          "checked_at": "2026-11-02T01:06:48.867133+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -7280,108 +6227,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Geno Smith",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 7,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 32.857,
-                  "pass_yards_per_game": 231.857,
-                  "carries_per_game": 2.143,
-                  "rush_yards_per_game": 7.0,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 232.2,
-                    "passAttempts": 32.4,
-                    "rushYards": 4.4,
-                    "rushAttempts": 1.4,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Breece Hall",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 3,
-                    "availability": "QUESTIONABLE",
-                    "practice": "LIMITED_PRACTICE",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 17.0,
-                    "rush_yards_per_game": 54.333,
-                    "targets_per_game": 3.333,
-                    "receptions_per_game": 3.333,
-                    "receiving_yards_per_game": 34.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 54.333,
-                      "rushAttempts": 17.0,
-                      "recYards": 34.0,
-                      "receptions": 3.333,
-                      "targets": 3.333
-                    }
-                  },
-                  {
-                    "name": "Braelon Allen",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 13.0,
-                    "rush_yards_per_game": 59.714,
-                    "targets_per_game": 2.857,
-                    "receptions_per_game": 2.143,
-                    "receiving_yards_per_game": 10.714,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 74.2,
-                      "rushAttempts": 15.2,
-                      "recYards": 13.4,
-                      "receptions": 2.8,
-                      "targets": 3.6
-                    }
-                  },
-                  {
-                    "name": "Garrett Wilson",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.0,
-                    "rush_yards_per_game": 0.0,
-                    "targets_per_game": 7.429,
-                    "receptions_per_game": 5.286,
-                    "receiving_yards_per_game": 63.429,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.0,
-                      "rushAttempts": 0.0,
-                      "recYards": 61.6,
-                      "receptions": 5.2,
-                      "targets": 7.6
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -7683,108 +6530,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Kirk Cousins",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 7,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 38.429,
-                  "pass_yards_per_game": 268.143,
-                  "carries_per_game": 1.0,
-                  "rush_yards_per_game": 2.143,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 292.8,
-                    "passAttempts": 41.6,
-                    "rushYards": 2.2,
-                    "rushAttempts": 0.8,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Ashton Jeanty",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 15.143,
-                    "rush_yards_per_game": 46.857,
-                    "targets_per_game": 6.429,
-                    "receptions_per_game": 4.857,
-                    "receiving_yards_per_game": 44.571,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 35.6,
-                      "rushAttempts": 12.4,
-                      "recYards": 50.4,
-                      "receptions": 4.8,
-                      "targets": 6.4
-                    }
-                  },
-                  {
-                    "name": "Brock Bowers",
-                    "position": "TE",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 5,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.0,
-                    "rush_yards_per_game": 0.0,
-                    "targets_per_game": 10.4,
-                    "receptions_per_game": 6.8,
-                    "receiving_yards_per_game": 91.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.0,
-                      "rushAttempts": 0.0,
-                      "recYards": 91.0,
-                      "receptions": 6.8,
-                      "targets": 10.4
-                    }
-                  },
-                  {
-                    "name": "Tre Tucker",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.286,
-                    "rush_yards_per_game": -0.857,
-                    "targets_per_game": 6.714,
-                    "receptions_per_game": 4.143,
-                    "receiving_yards_per_game": 67.714,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": -1.2,
-                      "rushAttempts": 0.4,
-                      "recYards": 65.6,
-                      "receptions": 4.4,
-                      "targets": 7.2
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -8096,7 +6843,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T23:39:32.846885+00:00",
+            "retrieved_at": "2026-11-02T01:06:50.998079+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -8130,7 +6877,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
-          "checked_at": "2026-11-01T23:39:30.462986+00:00",
+          "checked_at": "2026-11-02T01:06:48.867133+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -8495,108 +7242,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Aaron Rodgers",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 7,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 40.429,
-                  "pass_yards_per_game": 242.714,
-                  "carries_per_game": 0.714,
-                  "rush_yards_per_game": 4.429,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 258.2,
-                    "passAttempts": 39.6,
-                    "rushYards": 5.2,
-                    "rushAttempts": 0.8,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Jaylen Warren",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 14.571,
-                    "rush_yards_per_game": 80.143,
-                    "targets_per_game": 5.0,
-                    "receptions_per_game": 3.429,
-                    "receiving_yards_per_game": 42.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 94.4,
-                      "rushAttempts": 16.2,
-                      "recYards": 46.6,
-                      "receptions": 3.4,
-                      "targets": 5.0
-                    }
-                  },
-                  {
-                    "name": "Rico Dowdle",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 4,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 7.75,
-                    "rush_yards_per_game": 29.5,
-                    "targets_per_game": 4.25,
-                    "receptions_per_game": 3.25,
-                    "receiving_yards_per_game": 20.5,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 29.5,
-                      "rushAttempts": 7.75,
-                      "recYards": 20.5,
-                      "receptions": 3.25,
-                      "targets": 4.25
-                    }
-                  },
-                  {
-                    "name": "DK Metcalf",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.143,
-                    "rush_yards_per_game": 1.571,
-                    "targets_per_game": 8.286,
-                    "receptions_per_game": 4.571,
-                    "receiving_yards_per_game": 53.429,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 2.2,
-                      "rushAttempts": 0.2,
-                      "recYards": 61.4,
-                      "receptions": 4.8,
-                      "targets": 7.8
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -8889,108 +7536,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Deshaun Watson",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 7,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 33.714,
-                  "pass_yards_per_game": 211.714,
-                  "carries_per_game": 6.0,
-                  "rush_yards_per_game": 31.571,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 207.8,
-                    "passAttempts": 35.4,
-                    "rushYards": 31.8,
-                    "rushAttempts": 6.2,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Quinshon Judkins",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 15.0,
-                    "rush_yards_per_game": 52.833,
-                    "targets_per_game": 3.5,
-                    "receptions_per_game": 3.167,
-                    "receiving_yards_per_game": 18.333,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 56.8,
-                      "rushAttempts": 15.6,
-                      "recYards": 18.6,
-                      "receptions": 3.4,
-                      "targets": 3.8
-                    }
-                  },
-                  {
-                    "name": "Audric Estim\u00e9",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 1,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 9.0,
-                    "rush_yards_per_game": 19.0,
-                    "targets_per_game": 0.0,
-                    "receptions_per_game": 0.0,
-                    "receiving_yards_per_game": 0.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 19.0,
-                      "rushAttempts": 9.0,
-                      "recYards": 0.0,
-                      "receptions": 0.0,
-                      "targets": 0.0
-                    }
-                  },
-                  {
-                    "name": "Dylan Sampson",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 1,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 6.0,
-                    "rush_yards_per_game": 45.0,
-                    "targets_per_game": 3.0,
-                    "receptions_per_game": 3.0,
-                    "receiving_yards_per_game": 32.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 45.0,
-                      "rushAttempts": 6.0,
-                      "recYards": 32.0,
-                      "receptions": 3.0,
-                      "targets": 3.0
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -9293,7 +7840,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T23:39:33.058827+00:00",
+            "retrieved_at": "2026-11-02T01:06:51.385287+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -9327,7 +7874,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
-          "checked_at": "2026-11-01T23:39:30.462986+00:00",
+          "checked_at": "2026-11-02T01:06:48.867133+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -9692,108 +8239,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Baker Mayfield",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 4,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 30.0,
-                  "pass_yards_per_game": 169.75,
-                  "carries_per_game": 2.75,
-                  "rush_yards_per_game": 16.75,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 169.75,
-                    "passAttempts": 30.0,
-                    "rushYards": 16.75,
-                    "rushAttempts": 2.75,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Bucky Irving",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 17.143,
-                    "rush_yards_per_game": 79.714,
-                    "targets_per_game": 3.286,
-                    "receptions_per_game": 2.571,
-                    "receiving_yards_per_game": 11.143,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 84.8,
-                      "rushAttempts": 19.0,
-                      "recYards": 5.8,
-                      "receptions": 1.4,
-                      "targets": 2.4
-                    }
-                  },
-                  {
-                    "name": "Kenny Gainwell",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "QUESTIONABLE",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 4.714,
-                    "rush_yards_per_game": 21.286,
-                    "targets_per_game": 2.429,
-                    "receptions_per_game": 1.714,
-                    "receiving_yards_per_game": 8.714,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 24.8,
-                      "rushAttempts": 5.2,
-                      "recYards": 10.6,
-                      "receptions": 1.6,
-                      "targets": 2.4
-                    }
-                  },
-                  {
-                    "name": "Chris Godwin Jr.",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.429,
-                    "rush_yards_per_game": 2.571,
-                    "targets_per_game": 4.857,
-                    "receptions_per_game": 3.857,
-                    "receiving_yards_per_game": 34.714,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.6,
-                      "rushAttempts": 0.2,
-                      "recYards": 31.4,
-                      "receptions": 4.0,
-                      "targets": 5.4
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -10104,108 +8551,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Michael Penix Jr.",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 5,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 31.0,
-                  "pass_yards_per_game": 231.4,
-                  "carries_per_game": 1.0,
-                  "rush_yards_per_game": 2.2,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 231.4,
-                    "passAttempts": 31.0,
-                    "rushYards": 2.2,
-                    "rushAttempts": 1.0,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Bijan Robinson",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 18.714,
-                    "rush_yards_per_game": 100.571,
-                    "targets_per_game": 4.571,
-                    "receptions_per_game": 3.571,
-                    "receiving_yards_per_game": 27.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 109.8,
-                      "rushAttempts": 18.8,
-                      "recYards": 18.0,
-                      "receptions": 2.8,
-                      "targets": 3.6
-                    }
-                  },
-                  {
-                    "name": "Drake London",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.286,
-                    "rush_yards_per_game": 0.571,
-                    "targets_per_game": 8.143,
-                    "receptions_per_game": 5.429,
-                    "receiving_yards_per_game": 88.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.0,
-                      "rushAttempts": 0.0,
-                      "recYards": 107.2,
-                      "receptions": 6.4,
-                      "targets": 9.6
-                    }
-                  },
-                  {
-                    "name": "Kyle Pitts",
-                    "position": "TE",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.0,
-                    "rush_yards_per_game": 0.0,
-                    "targets_per_game": 3.857,
-                    "receptions_per_game": 2.857,
-                    "receiving_yards_per_game": 27.286,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.0,
-                      "rushAttempts": 0.0,
-                      "recYards": 35.2,
-                      "receptions": 3.8,
-                      "targets": 4.6
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -10580,7 +8927,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T23:39:33.344803+00:00",
+            "retrieved_at": "2026-11-02T01:06:51.810202+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -10614,7 +8961,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
-          "checked_at": "2026-11-01T23:39:30.462986+00:00",
+          "checked_at": "2026-11-02T01:06:48.867133+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -10979,108 +9326,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Matthew Stafford",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 7,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 41.143,
-                  "pass_yards_per_game": 284.143,
-                  "carries_per_game": 0.857,
-                  "rush_yards_per_game": 3.714,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 301.4,
-                    "passAttempts": 46.4,
-                    "rushYards": 4.8,
-                    "rushAttempts": 0.8,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Kyren Williams",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 13.714,
-                    "rush_yards_per_game": 70.286,
-                    "targets_per_game": 5.857,
-                    "receptions_per_game": 4.571,
-                    "receiving_yards_per_game": 34.143,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 73.2,
-                      "rushAttempts": 14.6,
-                      "recYards": 40.6,
-                      "receptions": 5.4,
-                      "targets": 7.2
-                    }
-                  },
-                  {
-                    "name": "Puka Nacua",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 5,
-                    "availability": "UNVERIFIED",
-                    "practice": "DNP_PRACTICE",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 1.0,
-                    "rush_yards_per_game": 4.2,
-                    "targets_per_game": 12.4,
-                    "receptions_per_game": 9.0,
-                    "receiving_yards_per_game": 97.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 4.2,
-                      "rushAttempts": 1.0,
-                      "recYards": 97.0,
-                      "receptions": 9.0,
-                      "targets": 12.4
-                    }
-                  },
-                  {
-                    "name": "Blake Corum",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 9.143,
-                    "rush_yards_per_game": 45.143,
-                    "targets_per_game": 2.0,
-                    "receptions_per_game": 1.429,
-                    "receiving_yards_per_game": 14.143,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 36.6,
-                      "rushAttempts": 8.4,
-                      "recYards": 17.2,
-                      "receptions": 1.8,
-                      "targets": 2.6
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -11400,108 +9647,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Justin Herbert",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 6,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 33.333,
-                  "pass_yards_per_game": 190.167,
-                  "carries_per_game": 4.833,
-                  "rush_yards_per_game": 28.0,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 186.4,
-                    "passAttempts": 34.0,
-                    "rushYards": 27.8,
-                    "rushAttempts": 4.8,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.2
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Omarion Hampton",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 13.333,
-                    "rush_yards_per_game": 48.167,
-                    "targets_per_game": 1.667,
-                    "receptions_per_game": 1.5,
-                    "receiving_yards_per_game": 9.333,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 49.2,
-                      "rushAttempts": 13.6,
-                      "recYards": 11.2,
-                      "receptions": 1.8,
-                      "targets": 2.0
-                    }
-                  },
-                  {
-                    "name": "KeAndre Lambert-Smith",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 1,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.0,
-                    "rush_yards_per_game": 0.0,
-                    "targets_per_game": 9.0,
-                    "receptions_per_game": 5.0,
-                    "receiving_yards_per_game": 32.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.0,
-                      "rushAttempts": 0.0,
-                      "recYards": 32.0,
-                      "receptions": 5.0,
-                      "targets": 9.0
-                    }
-                  },
-                  {
-                    "name": "Keaton Mitchell",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 5.833,
-                    "rush_yards_per_game": 23.167,
-                    "targets_per_game": 2.5,
-                    "receptions_per_game": 2.0,
-                    "receiving_yards_per_game": 8.667,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 26.0,
-                      "rushAttempts": 6.2,
-                      "recYards": 10.4,
-                      "receptions": 2.4,
-                      "targets": 3.0
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -11775,7 +9922,7 @@
             "name": "SoFi Stadium",
             "location": "Home",
             "roof": "dome",
-            "surface": "matrixturf",
+            "surface": "",
             "temperature_f": null,
             "wind_mph": null
           },
@@ -11787,7 +9934,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T23:39:33.378048+00:00",
+            "retrieved_at": "2026-11-02T01:06:51.826797+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -11821,7 +9968,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
-          "checked_at": "2026-11-01T23:39:30.462986+00:00",
+          "checked_at": "2026-11-02T01:06:48.867133+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -12185,108 +10332,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Bo Nix",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 7,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 32.714,
-                  "pass_yards_per_game": 181.571,
-                  "carries_per_game": 3.143,
-                  "rush_yards_per_game": 16.714,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 170.4,
-                    "passAttempts": 33.2,
-                    "rushYards": 21.0,
-                    "rushAttempts": 3.6,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "J.K. Dobbins",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 12.429,
-                    "rush_yards_per_game": 41.857,
-                    "targets_per_game": 1.286,
-                    "receptions_per_game": 1.143,
-                    "receiving_yards_per_game": 3.857,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 44.2,
-                      "rushAttempts": 13.8,
-                      "recYards": 5.4,
-                      "receptions": 1.6,
-                      "targets": 1.8
-                    }
-                  },
-                  {
-                    "name": "Jonah Coleman",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 3,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 6.333,
-                    "rush_yards_per_game": 31.0,
-                    "targets_per_game": 1.667,
-                    "receptions_per_game": 1.667,
-                    "receiving_yards_per_game": 11.333,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 31.0,
-                      "rushAttempts": 6.333,
-                      "recYards": 11.333,
-                      "receptions": 1.667,
-                      "targets": 1.667
-                    }
-                  },
-                  {
-                    "name": "Jaylen Waddle",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "QUESTIONABLE",
-                    "practice": "LIMITED_PRACTICE",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.286,
-                    "rush_yards_per_game": 3.286,
-                    "targets_per_game": 6.571,
-                    "receptions_per_game": 3.714,
-                    "receiving_yards_per_game": 39.429,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 4.6,
-                      "rushAttempts": 0.4,
-                      "recYards": 27.2,
-                      "receptions": 3.4,
-                      "targets": 6.6
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -12597,108 +10644,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Patrick Mahomes",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 6,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 33.167,
-                  "pass_yards_per_game": 245.667,
-                  "carries_per_game": 2.167,
-                  "rush_yards_per_game": 13.167,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 258.0,
-                    "passAttempts": 34.0,
-                    "rushYards": 10.4,
-                    "rushAttempts": 1.8,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Kenneth Walker III",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 20.0,
-                    "rush_yards_per_game": 116.833,
-                    "targets_per_game": 4.667,
-                    "receptions_per_game": 3.0,
-                    "receiving_yards_per_game": 19.333,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 105.6,
-                      "rushAttempts": 19.4,
-                      "recYards": 19.6,
-                      "receptions": 3.0,
-                      "targets": 4.4
-                    }
-                  },
-                  {
-                    "name": "Travis Kelce",
-                    "position": "TE",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.0,
-                    "rush_yards_per_game": 0.0,
-                    "targets_per_game": 5.833,
-                    "receptions_per_game": 4.0,
-                    "receiving_yards_per_game": 57.167,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.0,
-                      "rushAttempts": 0.0,
-                      "recYards": 54.4,
-                      "receptions": 4.2,
-                      "targets": 6.0
-                    }
-                  },
-                  {
-                    "name": "Xavier Worthy",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.0,
-                    "rush_yards_per_game": 0.0,
-                    "targets_per_game": 5.833,
-                    "receptions_per_game": 4.0,
-                    "receiving_yards_per_game": 36.167,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.0,
-                      "rushAttempts": 0.0,
-                      "recYards": 39.8,
-                      "receptions": 4.2,
-                      "targets": 5.8
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -12999,13 +10946,9 @@
             "name": "Empower Field at Mile High",
             "location": "Home",
             "roof": "outdoors",
-            "surface": "grass",
-            "temperature_f": 62,
-            "wind_mph": 6.0,
-            "wind_direction": "E",
-            "precipitation_probability": 8,
-            "weather_condition": "Mostly Cloudy",
-            "weather_updated_at": null
+            "surface": "",
+            "temperature_f": null,
+            "wind_mph": null
           },
           "travel": {
             "available": true,
@@ -13015,7 +10958,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T23:39:33.589244+00:00",
+            "retrieved_at": "2026-11-02T01:06:52.174672+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -13041,21 +10984,15 @@
             }
           },
           "weather": {
-            "available": true,
-            "source": "National Weather Service hourly forecast",
-            "forecast_time": "2026-11-01T15:00:00-07:00",
-            "updated_at": null,
-            "temperature_f": 62,
-            "wind_mph": 6.0,
-            "wind_direction": "E",
-            "precipitation_probability": 8,
-            "condition": "Mostly Cloudy"
+            "available": false,
+            "source": "NWS",
+            "reason": "Kickoff is outside the available hourly forecast window."
           }
         },
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
-          "checked_at": "2026-11-01T23:39:30.462986+00:00",
+          "checked_at": "2026-11-02T01:06:48.867133+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -13262,8 +11199,8 @@
           "away_rest": 7.0,
           "travel_miles": 564,
           "roof": "outdoors",
-          "temperature_f": 62,
-          "wind_mph": 6.0
+          "temperature_f": null,
+          "wind_mph": null
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -13419,108 +11356,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Malik Willis",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 6,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 27.833,
-                  "pass_yards_per_game": 176.167,
-                  "carries_per_game": 5.5,
-                  "rush_yards_per_game": 37.5,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 167.4,
-                    "passAttempts": 27.0,
-                    "rushYards": 37.2,
-                    "rushAttempts": 5.4,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Ollie Gordon II",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 12.0,
-                    "rush_yards_per_game": 56.5,
-                    "targets_per_game": 1.333,
-                    "receptions_per_game": 1.0,
-                    "receiving_yards_per_game": 2.333,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 67.8,
-                      "rushAttempts": 14.4,
-                      "recYards": 2.8,
-                      "receptions": 1.2,
-                      "targets": 1.6
-                    }
-                  },
-                  {
-                    "name": "Malik Washington",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 1.333,
-                    "rush_yards_per_game": 6.333,
-                    "targets_per_game": 6.5,
-                    "receptions_per_game": 4.333,
-                    "receiving_yards_per_game": 48.167,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 7.6,
-                      "rushAttempts": 1.6,
-                      "recYards": 47.2,
-                      "receptions": 4.6,
-                      "targets": 6.2
-                    }
-                  },
-                  {
-                    "name": "Caleb Douglas",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 3,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.0,
-                    "rush_yards_per_game": 0.0,
-                    "targets_per_game": 4.333,
-                    "receptions_per_game": 3.0,
-                    "receiving_yards_per_game": 61.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.0,
-                      "rushAttempts": 0.0,
-                      "recYards": 61.0,
-                      "receptions": 3.0,
-                      "targets": 4.333
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -13850,108 +11687,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Drake Maye",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 7,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 32.429,
-                  "pass_yards_per_game": 254.857,
-                  "carries_per_game": 4.286,
-                  "rush_yards_per_game": 31.571,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 279.6,
-                    "passAttempts": 33.2,
-                    "rushYards": 30.8,
-                    "rushAttempts": 4.2,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Rhamondre Stevenson",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 11.0,
-                    "rush_yards_per_game": 40.714,
-                    "targets_per_game": 3.571,
-                    "receptions_per_game": 2.857,
-                    "receiving_yards_per_game": 29.143,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 38.2,
-                      "rushAttempts": 10.6,
-                      "recYards": 31.4,
-                      "receptions": 2.8,
-                      "targets": 3.4
-                    }
-                  },
-                  {
-                    "name": "TreVeyon Henderson",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "QUESTIONABLE",
-                    "practice": "DNP_PRACTICE",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 8.667,
-                    "rush_yards_per_game": 33.833,
-                    "targets_per_game": 1.167,
-                    "receptions_per_game": 0.833,
-                    "receiving_yards_per_game": 5.5,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 25.4,
-                      "rushAttempts": 7.2,
-                      "recYards": 6.6,
-                      "receptions": 1.0,
-                      "targets": 1.4
-                    }
-                  },
-                  {
-                    "name": "A.J. Brown",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 3,
-                    "availability": "QUESTIONABLE",
-                    "practice": "DNP_PRACTICE",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.0,
-                    "rush_yards_per_game": 0.0,
-                    "targets_per_game": 6.667,
-                    "receptions_per_game": 3.0,
-                    "receiving_yards_per_game": 33.667,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.0,
-                      "rushAttempts": 0.0,
-                      "recYards": 33.667,
-                      "receptions": 3.0,
-                      "targets": 6.667
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -14269,7 +12006,7 @@
             "name": "Hard Rock Stadium",
             "location": "Home",
             "roof": "outdoors",
-            "surface": "grass",
+            "surface": "",
             "temperature_f": null,
             "wind_mph": null
           },
@@ -14281,7 +12018,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T23:39:33.798267+00:00",
+            "retrieved_at": "2026-11-02T01:06:52.385920+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -14315,7 +12052,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
-          "checked_at": "2026-11-01T23:39:30.462986+00:00",
+          "checked_at": "2026-11-02T01:06:48.867133+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -14679,108 +12416,8 @@
                 "ties": 1
               },
               "usage": {
-                "quarterback": {
-                  "name": "Athan Kaliakmanis",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 1,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 34.0,
-                  "pass_yards_per_game": 186.0,
-                  "carries_per_game": 3.0,
-                  "rush_yards_per_game": 16.0,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 186.0,
-                    "passAttempts": 34.0,
-                    "rushYards": 16.0,
-                    "rushAttempts": 3.0,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Rachaad White",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 5,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 7.2,
-                    "rush_yards_per_game": 29.0,
-                    "targets_per_game": 3.0,
-                    "receptions_per_game": 2.8,
-                    "receiving_yards_per_game": 16.6,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 29.0,
-                      "rushAttempts": 7.2,
-                      "recYards": 16.6,
-                      "receptions": 2.8,
-                      "targets": 3.0
-                    }
-                  },
-                  {
-                    "name": "Stefon Diggs",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 5,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.0,
-                    "rush_yards_per_game": 0.0,
-                    "targets_per_game": 7.6,
-                    "receptions_per_game": 4.8,
-                    "receiving_yards_per_game": 42.8,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.0,
-                      "rushAttempts": 0.0,
-                      "recYards": 42.8,
-                      "receptions": 4.8,
-                      "targets": 7.6
-                    }
-                  },
-                  {
-                    "name": "Jeremy McNichols",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 1,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 5.0,
-                    "rush_yards_per_game": 13.0,
-                    "targets_per_game": 0.0,
-                    "receptions_per_game": 0.0,
-                    "receiving_yards_per_game": 0.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 13.0,
-                      "rushAttempts": 5.0,
-                      "recYards": 0.0,
-                      "receptions": 0.0,
-                      "targets": 0.0
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -15119,108 +12756,8 @@
                 "ties": 0
               },
               "usage": {
-                "quarterback": {
-                  "name": "Tanner McKee",
-                  "position": "QB",
-                  "qb_role": null,
-                  "starter_context": null,
-                  "games": 2,
-                  "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
-                  "pass_attempts_per_game": 42.5,
-                  "pass_yards_per_game": 213.0,
-                  "carries_per_game": 1.0,
-                  "rush_yards_per_game": 0.5,
-                  "targets_per_game": null,
-                  "receptions_per_game": null,
-                  "receiving_yards_per_game": null,
-                  "recent_form": {
-                    "passYards": 213.0,
-                    "passAttempts": 42.5,
-                    "rushYards": 0.5,
-                    "rushAttempts": 1.0,
-                    "recYards": 0.0,
-                    "receptions": 0.0,
-                    "targets": 0.0
-                  }
-                },
-                "top_usage_players": [
-                  {
-                    "name": "Saquon Barkley",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 5,
-                    "availability": "UNVERIFIED",
-                    "practice": "LIMITED_PRACTICE",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 8.6,
-                    "rush_yards_per_game": 48.8,
-                    "targets_per_game": 1.8,
-                    "receptions_per_game": 1.2,
-                    "receiving_yards_per_game": 3.4,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 48.8,
-                      "rushAttempts": 8.6,
-                      "recYards": 3.4,
-                      "receptions": 1.2,
-                      "targets": 1.8
-                    }
-                  },
-                  {
-                    "name": "Elijah Mitchell",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 1,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 3.0,
-                    "rush_yards_per_game": 11.0,
-                    "targets_per_game": 4.0,
-                    "receptions_per_game": 3.0,
-                    "receiving_yards_per_game": 23.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 11.0,
-                      "rushAttempts": 3.0,
-                      "recYards": 23.0,
-                      "receptions": 3.0,
-                      "targets": 4.0
-                    }
-                  },
-                  {
-                    "name": "Dallas Goedert",
-                    "position": "TE",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 5,
-                    "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.0,
-                    "rush_yards_per_game": 0.0,
-                    "targets_per_game": 6.2,
-                    "receptions_per_game": 4.4,
-                    "receiving_yards_per_game": 45.6,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.0,
-                      "rushAttempts": 0.0,
-                      "recYards": 45.6,
-                      "receptions": 4.4,
-                      "targets": 6.2
-                    }
-                  }
-                ],
+                "quarterback": null,
+                "top_usage_players": [],
                 "availability_warning": "Feed labels are not official game-day inactive confirmation."
               },
               "scoring": {
@@ -15606,7 +13143,7 @@
             "wind_mph": 1.0,
             "wind_direction": "SE",
             "precipitation_probability": 0,
-            "weather_condition": "Partly Cloudy",
+            "weather_condition": "Mostly Clear",
             "weather_updated_at": null
           },
           "travel": {
@@ -15617,7 +13154,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T23:39:34.620125+00:00",
+            "retrieved_at": "2026-11-02T01:06:52.726866+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -15651,13 +13188,13 @@
             "wind_mph": 1.0,
             "wind_direction": "SE",
             "precipitation_probability": 0,
-            "condition": "Partly Cloudy"
+            "condition": "Mostly Clear"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
-          "checked_at": "2026-11-01T23:39:30.462986+00:00",
+          "checked_at": "2026-11-02T01:06:48.867133+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -16895,7 +14432,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-01T23:39:34.936679+00:00",
+            "retrieved_at": "2026-11-02T01:06:53.056369+00:00",
             "season": 2026,
             "through_week": 7,
             "sources": [
@@ -16935,7 +14472,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "855f7c223aa05c9b6b5219ac59033ac7f838c5fee1e81654c626b8415e825b90",
-          "checked_at": "2026-11-01T23:39:30.462986+00:00",
+          "checked_at": "2026-11-02T01:06:48.867133+00:00",
           "through_week": 7,
           "epa_missing_plays": 0,
           "external_verification": false,
