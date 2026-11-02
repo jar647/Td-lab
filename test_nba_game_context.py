@@ -18,6 +18,16 @@ class GameContext(unittest.TestCase):
    def failed(url):raise TimeoutError()
    r=collect(root,datetime.datetime(2026,11,2,20,tzinfo=datetime.timezone.utc),failed)
    self.assertEqual(r['games'],{});self.assertEqual(r['sources']['lineups']['status'],'unavailable');self.assertEqual(r['defenders'],{})
+ def test_bootstrap_keeps_original_time_and_expires(self):
+  with tempfile.TemporaryDirectory() as root:
+   data=pathlib.Path(root)/'data';data.mkdir();(data/'nba_games.json').write_text('{"games":[]}')
+   source={'status':'ok','retrieved_at':'2026-11-02T12:00:00+00:00','urls':[]};seed={'season':'2026-27','source':source,'defenders':{'1':{'name':'D','shots':50,'diff':-.01}},'matchups':[{'off':'2','def':'1','poss':10}]}
+   (data/'nba_tracking_snapshot.json').write_text(json.dumps(seed))
+   def failed(url):raise TimeoutError()
+   r=collect(root,datetime.datetime(2026,11,2,20,tzinfo=datetime.timezone.utc),failed)
+   self.assertEqual(r['sources']['tracking']['retrieved_at'],source['retrieved_at']);self.assertEqual(len(r['defenders']),1)
+   r=collect(root,datetime.datetime(2026,11,5,20,tzinfo=datetime.timezone.utc),failed)
+   self.assertEqual(r['defenders'],{});self.assertNotEqual(r['sources']['tracking']['status'],'ok')
  def test_rotation_missing_history_rejected(self):
   self.assertFalse(extract_rotation_profile({})['available'])
  def test_rotations_reconcile_and_detect_bad_substitution(self):
