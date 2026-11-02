@@ -237,3 +237,25 @@ assert.ok(match[1].includes('outlookHTML+scoutHtml'));
 assert.ok(match[1].includes('row.target=nbaResearchTarget(row,side)'));
 assert.ok(match[1].includes('row.target.distance>.25')); 
 console.log('NBA matchup-first three-player cap, direction and game outlook: PASS');
+
+// Recover an old explicitly-directed leg at its own saved price, not another market.
+vm.runInContext(`
+var repairOriginalRenderer=renderProjections;
+var repairGame={id:'repair',home:'Home',away:'Away',status:'STATUS_SCHEDULED',date:new Date(Date.now()+3600000).toISOString()};
+games=[repairGame];historicalGames=[repairGame];injuryData={};rosterData={};
+nbaQuoteContexts.target.eligible=true;
+var legacyLeg={sport:'NBA',player:'Legacy Player',game:'Away @ Home',market:'Points',line:25.5,recommendation:'Under 25.5 Points',underOdds:-110};
+var restoredResult;
+CookItUpQuickSlip={getPicks:()=>[legacyLeg],recoverRatings:fn=>{restoredResult=fn(legacyLeg);return restoredResult}};
+renderProjections=()=>[{key:'target',name:'Legacy Player',game:repairGame,market:'points',forecast:20}];
+recoverNBAQuickSlipRatings();
+`,sandbox);
+assert.equal(vm.runInContext('restoredResult.ratedSide',sandbox),'UNDER');
+assert.equal(vm.runInContext('restoredResult.ratedLine',sandbox),25.5);
+assert.equal(typeof vm.runInContext('restoredResult.propScore',sandbox),'number');
+vm.runInContext('delete legacyLeg.underOdds;recoverNBAQuickSlipRatings()',sandbox);
+assert.match(vm.runInContext('restoredResult.ratingNote',sandbox),/Enter odds/);
+vm.runInContext('legacyLeg.underOdds=-110;legacyLeg.recommendation="Over 25.5 Points";legacyLeg.overOdds=-110;recoverNBAQuickSlipRatings()',sandbox);
+assert.match(vm.runInContext('restoredResult.ratingNote',sandbox),/does not currently qualify/);
+vm.runInContext('renderProjections=repairOriginalRenderer',sandbox);
+console.log('NBA legacy saved-side recovery, missing odds and failing quote: PASS');
