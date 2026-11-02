@@ -3,7 +3,7 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.CookNBAPossessions=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
 'use strict';
 const contextAPI=typeof module==='object'&&module.exports?require('./nba_game_context.js'):globalThis.CookNBAGameContext;
-const VERSION='nba-possession-context-v2',clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),mean=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:0;
+const VERSION='nba-possession-context-v2.1',clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),mean=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:0;
 const finite=x=>x!==null&&x!==undefined&&x!==''&&Number.isFinite(Number(x))?Number(x):null;
 const norm=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
 function min(p){const x=p.stats?.MIN;if(String(x).includes(':')){const [m,s]=String(x).split(':').map(Number);return m+s/60}return finite(x)}
