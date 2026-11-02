@@ -16,7 +16,7 @@ NFL and NBA cards compare a manually entered Vegas line and optional Over/Under 
 
 ## NBA published analyst (PR #22)
 
-The main NBA analyst panel now reads `data/nba_analysis.json`. `nba_model.py` and `nba_pipeline.py` produce its projections, recommendations, simulations and frozen evaluation together. The former client calculators remain collapsed under **Legacy explorer**, explicitly a different experimental model; their historical tracker is not evidence for this model.
+The published NBA analyst panel reads `data/nba_analysis.json`. `nba_model.py` and `nba_pipeline.py` produce its projections, recommendations, simulations and frozen evaluation together. Interactive game analysis, simulation, first-basket research, player/combination props, manual line/odds checks and Quick Slip remain visible in the main game view. Direct navigation links lead to either section. The interactive tools and published analyst are separate experimental calculations; the earlier-model tracker is not evidence for the published model.
 
 ### Model and decision behavior
 
