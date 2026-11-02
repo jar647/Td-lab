@@ -3,6 +3,7 @@
 import json,urllib.request,datetime,pathlib,time,sys
 from nba_first_basket import extract_first_baskets
 from nba_shot_profile import extract_shot_profile
+from nba_rotation_profile import extract_rotation_profile
 ROOT=pathlib.Path(__file__).resolve().parent
 OUT=ROOT/"data"/"nba_games.json"
 def get(url):
@@ -32,6 +33,8 @@ for delta in range(-35,4):
    if status=="STATUS_FINAL" and season_type==2:
     try:game["shot_profile"]=extract_shot_profile(detail)
     except (AttributeError,TypeError,ValueError):game["shot_profile"]={"available":False,"reason":"Shot descriptions unavailable; shooting box score retained"}
+    try:game["rotation_profile"]=extract_rotation_profile(detail)
+    except (AttributeError,TypeError,ValueError):game["rotation_profile"]={"available":False,"reason":"Substitution history unavailable"}
     game["first_basket"]=extract_first_baskets(detail)
     game["first_basket"]["source_url"]="https://www.espn.com/nba/playbyplay/_/gameId/"+event["id"]
    for team in detail.get("boxscore",{}).get("players",[]):

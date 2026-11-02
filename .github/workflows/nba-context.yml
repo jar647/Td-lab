@@ -1,0 +1,45 @@
+name: NBA pregame availability and lineups
+on:
+  push:
+    branches: [main]
+    paths: ['nba_game_context.py', '.github/workflows/nba-context.yml']
+  workflow_dispatch:
+  schedule:
+    - cron: '*/5 * * * *'
+permissions:
+  contents: write
+concurrency:
+  group: nba-context-writer
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Refresh free pregame sources and preserve concurrent data writers
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            python - <<'PY'
+          import datetime,json,pathlib
+          now=datetime.datetime.now(datetime.timezone.utc)
+          games=json.loads(pathlib.Path('data/nba_games.json').read_text()).get('games',[])
+          due=any(g.get('status')=='STATUS_SCHEDULED' and -1<(datetime.datetime.fromisoformat(g['date'].replace('Z','+00:00'))-now).total_seconds()/3600<6 for g in games)
+          pathlib.Path('/tmp/nba-context-due').write_text(str(due))
+          PY
+            if [ "$(cat /tmp/nba-context-due)" != 'True' ]; then exit 0; fi
+            python nba_injuries.py || echo 'Injury refresh failed; actual previous timestamp retained'
+            python nba_game_context.py
+            git add data/nba_injuries.json data/nba_game_context.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "Refresh NBA pregame availability and sourced lineup context"
+            if git push origin HEAD:main; then exit 0; fi
+          done
+          exit 1
