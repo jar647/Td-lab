@@ -88,6 +88,20 @@ const NBA_PLAYER_QUOTES_KEY='cook-it-up-nba-player-odds-v1';
 let nbaPlayerQuotes={};try{if(typeof localStorage!=='undefined'){const saved=JSON.parse(localStorage.getItem(NBA_PLAYER_QUOTES_KEY)||'{}');if(saved&&typeof saved==='object'&&!Array.isArray(saved))nbaPlayerQuotes=saved}}catch(_){}
 function nbaPriceKey(game,player,market){return [game.id||game.date,player.id||player.name,market].join('|')}
 const nbaQuoteContexts=Object.create(null);
+function nbaPropRating(result,context={}){
+ if(!['LEAN','PLAY'].includes(result.decision)||!['OVER','UNDER'].includes(result.candidate))return null;
+ const side=result.candidate==='OVER'?result.overSide:result.underSide;
+ if(!side||![side.edge,side.ev,side.conservative,side.implied].every(Number.isFinite))return null;
+ const clamp=x=>Math.max(0,Math.min(1,x)),m=context.modelContext||{};
+ const usage=Number(m.seasonUsage)>0&&Number.isFinite(Number(m.recentUsage))?clamp(1-Math.abs(m.recentUsage/m.seasonUsage-1)/.25):0;
+ const history=(context.history||[]).filter(Number.isFinite),mean=history.length?history.reduce((a,b)=>a+b,0)/history.length:0;
+ const sd=history.length>1?Math.sqrt(history.reduce((a,b)=>a+(b-mean)**2,0)/(history.length-1)):Infinity;
+ const consistency=mean>0?clamp(1-sd/mean):0;
+ const parts=[['Price edge',20*clamp(side.edge/.20),20],['Expected return',15*clamp(side.ev/.30),15],['Uncertainty cushion',25*clamp((side.conservative-side.implied)/.15),25],['Recorded history',20*clamp(result.sample/20),20],['Role and consistency',20*(usage+consistency)/2,20]];
+ const factors=parts.map(([label,points,max])=>({label,points:Math.round(points),max}));
+ return {score:factors.reduce((sum,x)=>sum+x.points,0),factors};
+}
+function nbaRatingHTML(r){return r.rating?'<p><strong>Prop score '+r.rating.score+'/100</strong> <span class="muted">Ranking score · not win probability</span></p><details class="nba-price-details"><summary>Score breakdown</summary><p class="muted">'+r.rating.factors.map(x=>esc(x.label)+': '+x.points+'/'+x.max).join(' · ')+'</p><p class="muted">Availability, matchup inputs and minimum history must pass before scoring. This heuristic uses the entered price, modeled value, sensitivity cushion, sample depth, recent minutes stability and observed stat consistency. It is not calibrated betting confidence and does not evaluate ticket correlation.</p></details>':''}
 function nbaVerdictHTML(result,forecast,line){
  const parsed=value=>value===null||value===undefined||String(value).trim()===''?null:Number.isFinite(Number(value))?Number(value):null;
  const projection=parsed(forecast),posted=parsed(line),gap=projection!==null&&posted!==null?projection-posted:null;
@@ -110,7 +124,7 @@ function nbaVerdictHTML(result,forecast,line){
  else if(status.includes('PRICE TOO SHORT'))reason='The price is too short, and no other quoted side qualifies.';
  const value=x=>x===null?'—':x.toFixed(1);
  return '<div class="nba-verdict '+kind+'"><strong>'+esc(title)+'</strong><p>'+esc(reason)+'</p></div>'+
-  '<div class="nba-verdict-grid"><div>Projection<strong>'+value(projection)+'</strong></div><div>Your line<strong>'+value(posted)+'</strong></div><div>Projection gap<strong>'+(gap===null?'—':(gap>=0?'+':'')+gap.toFixed(1))+'</strong></div></div>'+
+  nbaRatingHTML(result)+'<div class="nba-verdict-grid"><div>Projection<strong>'+value(projection)+'</strong></div><div>Your line<strong>'+value(posted)+'</strong></div><div>Projection gap<strong>'+(gap===null?'—':(gap>=0?'+':'')+gap.toFixed(1))+'</strong></div></div>'+
   '<details class="nba-price-details"><summary>Why?</summary><p class="muted">'+esc(CookItUpProbability.format(result))+'</p></details>';
 }
 function nbaPriceReview(key,forecast,quote){
@@ -121,6 +135,7 @@ function nbaPriceReview(key,forecast,quote){
    context:context.modelContext||{},availableGames:context.availableGames??8,
   eligible:context.eligible!==false&&(!context.tipoff||Date.parse(context.tipoff)>Date.now())&&(!context.injuryStamp||Math.abs(Date.now()-Date.parse(context.injuryStamp))<12*3600000),blockReason:context.blockReason||''
  });
+ result.rating=nbaPropRating(result,context);
  return result;
 }
 function nbaPriceSummary(key,forecast){return nbaVerdictHTML(nbaPriceReview(key,forecast),forecast,nbaQuoteFor(key).line)}
@@ -226,6 +241,7 @@ function nbaPropGroups(rows){
   else passed.push(row);
  }
  qualified.sort((a,b)=>(Number(b.result.decision==='PLAY')-Number(a.result.decision==='PLAY'))||
+  ((b.result.rating?.score??0)-(a.result.rating?.score??0))||
   ((Number(b.result.expectedValue)||0)-(Number(a.result.expectedValue)||0))||
   ((Number(b.result.estimatedEdge)||0)-(Number(a.result.estimatedEdge)||0))||a.key.localeCompare(b.key));
  const recommended=[],other=[],seen=new Set();
@@ -242,7 +258,7 @@ function nbaPropTitle(row,rank){
 function nbaPropCard(row,rank){return row.html.replace('NBA_PROP_TITLE',esc(nbaPropTitle(row,rank)))}
 function nbaPropListsHTML(){
  const groups=nbaPropGroups(nbaRankedRows());
- return '<section id="nba-recommendations"><h3>Player recommendations · matchup opportunities · Over &amp; Under</h3><p class="muted">Ranked by the final price check. Both sides compete for the same top three spots.</p>'+
+ return '<section id="nba-recommendations"><h3>Player recommendations · matchup opportunities · Over &amp; Under</h3><p class="muted">Qualifying props ranked by score, then modeled return. Both sides compete. Scores are rankings, not win probabilities.</p>'+
   '<p id="nba-rank-feedback" class="muted" role="status"></p><p id="nba-no-props"'+(groups.recommended.length?' hidden':'')+'>No recommended props for this game at the entered odds.</p>'+
   '<div id="nba-recommended-list">'+groups.recommended.map((r,i)=>nbaPropCard(r,i+1)).join('')+'</div>'+
   '<details id="nba-other-panel"'+(groups.other.length?'':' hidden')+'><summary>More qualifying leans <span id="nba-other-count">('+groups.other.length+')</span></summary><div id="nba-other-list">'+groups.other.map(r=>nbaPropCard(r)).join('')+'</div></details>'+
@@ -318,7 +334,7 @@ function nbaTargetPrice(row,target){
 }
 function nbaSlateSelection(rows){
  const upcoming=rows.filter(r=>r.game?.status==='STATUS_SCHEDULED'&&Date.parse(r.game.date)>Date.now()&&r.market!=='threes');
- const grouped=nbaPropGroups(upcoming),sorted=[...grouped.recommended,...grouped.other].sort((a,b)=>(Number(b.result.decision==='PLAY')-Number(a.result.decision==='PLAY'))||(b.result.expectedValue-a.result.expectedValue)||(b.result.estimatedEdge-a.result.estimatedEdge)||a.key.localeCompare(b.key));
+ const grouped=nbaPropGroups(upcoming),sorted=[...grouped.recommended,...grouped.other].sort((a,b)=>(Number(b.result.decision==='PLAY')-Number(a.result.decision==='PLAY'))||((b.result.rating?.score??0)-(a.result.rating?.score??0))||(b.result.expectedValue-a.result.expectedValue)||(b.result.estimatedEdge-a.result.estimatedEdge)||a.key.localeCompare(b.key));
  const distinct=list=>{const players=new Set(),events=new Set();return list.filter(r=>{const event=String(r.game.id);if(players.has(r.playerId)||events.has(event))return false;players.add(r.playerId);events.add(event);return true}).slice(0,5)};
  return {picks:distinct(sorted),research:distinct(grouped.awaiting.filter(r=>r.target).sort((a,b)=>a.target.distance-b.target.distance||b.quality-a.quality||a.key.localeCompare(b.key)))};
 }
@@ -326,7 +342,7 @@ function nbaSlateCurrent(){return nbaSlateRows.map(r=>({...r,quote:nbaQuoteFor(r
 function renderNBASlate(){
  if(!nbaSlateScanned)return;
  const rows=nbaSlateCurrent(),selection=nbaSlateSelection(rows),root=$('slate-results');
- const card=(r,pick)=>'<article class="player"><strong>'+esc(r.name)+' · '+esc(pick?r.result.candidate+' '+r.quote.line+' '+nbaMarketLabel(r.market):nbaMarketLabel(r.market))+'</strong><p class="muted">'+esc(r.game.away+' @ '+r.game.home)+' · Projection '+Number(r.forecast).toFixed(1)+(pick?' · '+esc(r.result.decision)+' · Odds '+esc(r.quote[r.result.candidate.toLowerCase()]):' · Awaiting prices; not a pick')+'</p><button onclick="'+(pick?'addNBASlatePick':'openNBASlateProp')+'('+esc(JSON.stringify(r.key))+')">'+(pick?'Add to Quick Slip':'Check this prop’s price')+'</button></article>';
+ const card=(r,pick)=>'<article class="player"><strong>'+esc(r.name)+' · '+esc(pick?r.result.candidate+' '+r.quote.line+' '+nbaMarketLabel(r.market):nbaMarketLabel(r.market))+'</strong><p class="muted">'+esc(r.game.away+' @ '+r.game.home)+' · Projection '+Number(r.forecast).toFixed(1)+(pick?' · Score '+(r.result.rating?.score??'—')+'/100 · '+esc(r.result.decision)+' · Odds '+esc(r.quote[r.result.candidate.toLowerCase()]):' · Awaiting prices; not a pick')+'</p><button onclick="'+(pick?'addNBASlatePick':'openNBASlateProp')+'('+esc(JSON.stringify(r.key))+')">'+(pick?'Add to Quick Slip':'Check this prop’s price')+'</button></article>';
  const awaiting=nbaPropGroups(rows.filter(r=>r.game?.status==='STATUS_SCHEDULED'&&Date.parse(r.game.date)>Date.now())).awaiting;
  const research=rows.filter(r=>nbaSlateShortlist.includes(r.key)&&r.target&&awaiting.some(x=>x.key===r.key)&&nbaPriceReview(r.key,r.forecast,{line:r.target.line,[r.target.side.toLowerCase()]:-110}).candidate===r.target.side);
  const targetCard=r=>{const t=r.target,price=nbaTargetPrice(r,t);return '<article class="player"><strong>'+esc(r.name)+' · Look for '+t.side+' '+t.line+' '+esc(nbaMarketLabel(r.market))+'</strong><p class="muted">'+esc(r.game.away+' @ '+r.game.home)+' · Projection '+Number(r.forecast).toFixed(1)+'</p><p>Target line: '+t.line+' '+(t.side==='OVER'?'or lower':'or higher')+' · Price: '+price+' or better</p><p class="muted">Model shopping target; availability and odds are unconfirmed. The target qualifies at a hypothetical -110. Your actual quote gets a fresh verdict.</p><button onclick="openNBASlateProp('+esc(JSON.stringify(r.key))+')">Check target at sportsbook</button></article>'};
