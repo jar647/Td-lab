@@ -346,6 +346,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    busy=false;$('run').disabled=false;$('run').textContent='🔥 Simulate 100,000 games';
    if(worker){worker.terminate();worker=null;}
    if(error){$('runStatus').textContent='Simulation error: '+error;return;}
+   if(model.sport==='NBA'&&Date.now()>=Date.parse(model.date)){$('runStatus').textContent='The game started during simulation. No pregame result was saved; choose an upcoming game.';return;}
    render(result,model);
   };
   if(typeof Worker==='function'){
