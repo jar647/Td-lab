@@ -190,7 +190,7 @@ function nbaPriceUI(g,p,market,forecast,recommendationLine=null,sampleHits=null,
  const quoteId='nba-quote-'+key.replace(/[^a-zA-Z0-9_-]/g,'-')+'-';
  const review=nbaPriceReview(key,forecast),side=review.candidate;
  const recommendation=side?(side==='UNDER'?'Under ':'Over ')+q.line+' '+nbaMarketLabel(market):'Research only · '+nbaMarketLabel(market);
- const slipButton=CookItUpQuickSlip.button({sport:'NBA',game:g.away+' @ '+g.home,player:p.name,team:p.team,opponent:p.opponent,market,line:q.line,recommendationLine:null,recommendation,side:side?.toLowerCase(),sampleHits,sampleSize,matchupEdge,overOdds:q.over,underOdds:q.under,lineInputId:quoteId+'line',overOddsInputId:quoteId+'over',underOddsInputId:quoteId+'under'});
+ const slipButton=CookItUpQuickSlip.button({sport:'NBA',game:g.away+' @ '+g.home,player:p.name,team:p.team,opponent:p.opponent,market,line:q.line,recommendationLine:null,recommendation,side:side?.toLowerCase(),sampleHits,sampleSize,matchupEdge,propScore:review.rating?.score??null,ratedLine:q.line,ratedOdds:side?q[side.toLowerCase()]:null,ratedSide:side,overOdds:q.over,underOdds:q.under,lineInputId:quoteId+'line',overOddsInputId:quoteId+'over',underOddsInputId:quoteId+'under'});
  return '<div class="nba-price-card"><p class="muted" id="nba-quote-source-'+key.replace(/[^a-zA-Z0-9_-]/g,'-')+'">'+(nbaPlayerQuotes[key]?'Your entered odds':q._autoAt?'Current Hard Rock odds':'Awaiting odds')+'</p><div class="nba-price-summary" id="'+esc(status)+'" role="status" aria-live="polite">'+nbaPriceSummary(key,forecast)+'</div>'+
   '<div class="nba-price-grid">'+field('line','Vegas Line','e.g. 22.5')+field('over','Over odds · American','-110')+field('under','Under odds · American','-110')+'</div>'+
   ''+slipButton.replace('＋ Add to Quick Slip',review.candidate?'＋ Add to Quick Slip':'Save research')+'</div>';
@@ -288,7 +288,7 @@ function refreshNBARecommendationOrder(editedKey){
    const pick=JSON.parse(decodeURIComponent(button.dataset.quickSlip));
    pick.side=row.result.candidate?.toLowerCase();pick.line=row.quote.line;pick.recommendationLine=null;
    pick.recommendation=row.result.candidate?(row.result.candidate==='UNDER'?'Under ':'Over ')+row.quote.line+' '+nbaMarketLabel(row.market):'Research only · '+nbaMarketLabel(row.market);
-   pick.overOdds=row.quote.over;pick.underOdds=row.quote.under;pick.estimatedEdge=row.result.estimatedEdge;
+   pick.overOdds=row.quote.over;pick.underOdds=row.quote.under;pick.estimatedEdge=row.result.estimatedEdge;pick.propScore=row.result.rating?.score??null;pick.ratedLine=row.quote.line;pick.ratedSide=row.result.candidate;pick.ratedOdds=row.result.candidate?row.quote[row.result.candidate.toLowerCase()]:null;
    button.dataset.quickSlip=encodeURIComponent(JSON.stringify(pick)).replace(/'/g,'%27');
    button.textContent=row.result.candidate?'＋ Add to Quick Slip':'Save research';
   }catch(_){}}
@@ -380,7 +380,7 @@ function addNBASlatePick(key){
  const row=nbaSlateSelection(nbaSlateCurrent()).picks.find(r=>r.key===key);
  if(!row){renderNBASlate();return}
  const side=row.result.candidate,quote=row.quote;
- CookItUpQuickSlip.add({sport:'NBA',game:row.game.away+' @ '+row.game.home,player:row.name,team:row.team,opponent:row.opponent,market:row.market,line:quote.line,side:side.toLowerCase(),recommendation:(side==='UNDER'?'Under ':'Over ')+quote.line+' '+nbaMarketLabel(row.market),overOdds:quote.over,underOdds:quote.under});
+ CookItUpQuickSlip.add({sport:'NBA',game:row.game.away+' @ '+row.game.home,player:row.name,team:row.team,opponent:row.opponent,market:row.market,line:quote.line,side:side.toLowerCase(),propScore:row.result.rating?.score??null,ratedLine:quote.line,ratedSide:side,ratedOdds:quote[side.toLowerCase()],recommendation:(side==='UNDER'?'Under ':'Over ')+quote.line+' '+nbaMarketLabel(row.market),overOdds:quote.over,underOdds:quote.under});
 }
 
 function injuryFor(p){
