@@ -101,7 +101,7 @@ jobs:
           python - <<'PY2'
           import os,subprocess
           paths=set(subprocess.check_output(['git','diff','--name-only',os.environ['BASE'],os.environ['HEAD']],text=True).splitlines())
-          needed=bool(paths & {'nba_possession_engine.js','nba_simulator_ui.js','nba_feed.py','nba_shot_profile.py','game_odds_engine.js','scripts/publish_nba_simulator.js'})
+          needed=bool(paths & {'nba_possession_engine.js','nba_simulator_ui.js','nba_feed.py','nba_shot_profile.py','nba_rotation_profile.py','nba_game_context.py','nba_game_context.js','game_odds_engine.js','scripts/publish_nba_simulator.js'})
           with open(os.environ['GITHUB_OUTPUT'],'a') as out:out.write('needed='+str(needed).lower()+'\n')
           PY2
       - uses: actions/setup-python@v5
@@ -116,6 +116,16 @@ jobs:
           python nba_feed.py
           python nba_rosters.py
           python nba_injuries.py
+          python nba_game_context.py
       - name: Verify possession model on current source data
         if: steps.paths.outputs.needed == 'true'
-        run: node test_nba_possessions.js
+        run: |
+          node test_nba_possessions.js
+          node test_nba_game_context.js
+          python - <<'PY3'
+          import json
+          d=json.load(open('data/nba_game_context.json'))
+          print('Free source checks:',{k:v.get('status') for k,v in d['sources'].items()})
+          assert d['sources']['lineups']['status']=='ok', 'NBA.com lineup source unavailable'
+          assert d['sources']['tracking']['status']=='ok', 'NBA.com defensive tracking unavailable'
+          PY3

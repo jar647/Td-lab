@@ -87,7 +87,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
 <section id="results" hidden aria-live="polite"></section>
 <section class="panel"><h2>Important model limits</h2><p class="muted">NFL runs resample paired historical score errors. NBA runs generate player outcomes within shared estimated possessions and rotations. The sportsbook's lines and prices do not influence the simulated scores. Historical scoring patterns and 100,000 draws do not establish predictive calibration or a verified edge. Starter announcements and weather are shown only where sourced. Official game-day active lists and player replacement scoring effects remain unverified. Research-only estimates can be wrong, especially with changing rosters, limited samples, or stale feeds.</p></section>
 </main>
-<script src="./nba_possession_engine.js"></script><script src="./nba_simulator_ui.js"></script><script src="./quick_slip.js"></script><script src="./game_odds_engine.js"></script>
+<script src="./nba_game_context.js"></script><script src="./nba_live_context.js"></script><script src="./nba_possession_engine.js"></script><script src="./nba_simulator_ui.js"></script><script src="./quick_slip.js"></script><script src="./game_odds_engine.js"></script>
 <script>
 (function(){
  'use strict';
@@ -129,7 +129,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   if(!selected){$('marketCard').hidden=true;return;}
   $('marketCard').hidden=false;
   const g=selected.game;
-  if(sport==='NBA'&&selected.nbaInputs&&!selected.model.possessionModel){try{selected.model=CookGameOdds.nbaGame(g,selected.nbaInputs.feed,{injuries:selected.nbaInputs.injuries,rosters:selected.nbaInputs.rosters});}catch(e){$('marketCard').hidden=true;$('runStatus').textContent='NBA possession model unavailable: '+e.message;selected=null;return}}
+  if(sport==='NBA'&&selected.nbaInputs&&!selected.model.possessionModel){try{selected.model=CookGameOdds.nbaGame(g,selected.nbaInputs.feed,{injuries:selected.nbaInputs.injuries,rosters:selected.nbaInputs.rosters,gameContext:selected.nbaInputs.gameContext});}catch(e){$('marketCard').hidden=true;$('runStatus').textContent='NBA possession model unavailable: '+e.message;selected=null;return}}
   $('homeMLLabel').textContent=g.home+' moneyline odds';
   $('awayMLLabel').textContent=g.away+' moneyline odds';
   $('spreadLabel').textContent=g.home+' spread (negative if favored)';
@@ -175,7 +175,8 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    fetch('./data/nba_injuries.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null),
    fetch('./data/game_score_forecasts.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null),
    fetch('./data/nba_rosters.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null),
-   fetch('./data/nba_simulator_report.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null)
+   fetch('./data/nba_simulator_report.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null),
+   fetch('./data/nba_game_context.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null)
   ]);
   const get=i=>requests[i].status==='fulfilled'?requests[i].value:null;
   const nfl=get(0),history=get(1),nba=get(2);
@@ -194,7 +195,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   if(nba)for(const g of (nba.games||[]).filter(upcomingNBA)){
    try{const model=CookGameOdds.nbaGame(g,nba);
     const t=Date.parse(g.date),date=Number.isFinite(t)?new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}).format(new Date(t))+' ET':'Date unverified';
-    gamesBySport.NBA.push({id:String(g.id),title:g.away+' @ '+g.home+' · '+date,game:g,model,nbaInputs:{feed:nba,injuries:get(3),rosters:get(5)}});
+    gamesBySport.NBA.push({id:String(g.id),title:g.away+' @ '+g.home+' · '+date,game:g,model,nbaInputs:{feed:nba,injuries:get(3),rosters:get(5),gameContext:get(7)}});
    }catch(e){/* A game with inadequate earlier box scores is not sim-ready */ }
   }
   gamesBySport.NBA.sort((a,b)=>Date.parse(a.game.date)-Date.parse(b.game.date));
@@ -324,9 +325,15 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   $('runStatus').textContent=runStatus;
   $('results').scrollIntoView?.({behavior:'smooth',block:'start'});
  }
- $('run').onclick=()=>{
+ $('run').onclick=async()=>{
   if(busy)return;
   if(!selected){$('runStatus').textContent='Select a matchup first.';return;}
+  if(sport==='NBA'&&typeof CookNBALiveContext!=='undefined'){
+   const chosen=selected,request=++runId;busy=true;$('run').disabled=true;$('runStatus').textContent='Checking latest NBA availability and lineups…';
+   try{const latest=await CookNBALiveContext.latest();if(request!==runId||selected!==chosen)return;chosen.nbaInputs.injuries=latest.injuries||chosen.nbaInputs.injuries;chosen.nbaInputs.gameContext=latest.context;chosen.model=CookGameOdds.nbaGame(chosen.game,chosen.nbaInputs.feed,{injuries:chosen.nbaInputs.injuries,rosters:chosen.nbaInputs.rosters,gameContext:latest.context});}
+   catch(e){$('runStatus').textContent='Availability refresh required: '+e.message;busy=false;$('run').disabled=false;return;}
+   busy=false;$('run').disabled=false;
+  }
   store();
   const model=selected.model,market=readFields();if(model.possessionModel)model.slipLegs=CookNBASimulatorUI.slipLegs(selected.game,typeof CookItUpQuickSlip==='undefined'?null:CookItUpQuickSlip);
   try{CookGameOdds.marketInput(market);}catch(err){$('runStatus').textContent='⚠️ '+err.message;return;}
@@ -351,6 +358,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   }
   setTimeout(()=>{try{done(null,CookGameOdds.simulate(model,market,100000,6472026));}catch(e){done(e.message);}},20);
  };
+ if(typeof CookNBALiveContext!=='undefined')CookNBALiveContext.watch(()=>sport==='NBA'?selected?.game:null,latest=>{if(!selected?.nbaInputs)return;selected.nbaInputs.gameContext=latest.context;selected.nbaInputs.injuries=latest.injuries||selected.nbaInputs.injuries;runId++;if(worker){worker.terminate();worker=null}busy=false;$('run').disabled=false;$('run').textContent='🔥 Simulate 100,000 games';$('results').hidden=true;$('runStatus').textContent='Availability or lineup information changed. Simulate again; your entered odds are preserved.';});
  load().catch(e=>{$('feedStatus').textContent='Could not load game feeds: '+e.message;});
 })();
 </script></body></html>
