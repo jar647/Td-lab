@@ -250,24 +250,34 @@ function nbaPropGroups(rows){
  awaiting.sort(researchSort);passed.sort(researchSort);
  return {recommended,other,awaiting,passed};
 }
+function nbaMatchupThree(rows,limit=3){
+ const seen=new Set();
+ return rows.filter(r=>r.target&&r.matchup&&r.market!=='threes').sort((a,b)=>b.matchup.strength-a.matchup.strength||b.quality-a.quality||a.key.localeCompare(b.key)).filter(r=>{if(seen.has(r.playerId))return false;seen.add(r.playerId);return true}).slice(0,limit);
+}
+function nbaGameGroups(){
+ const groups=nbaPropGroups(nbaRankedRows()),seen=new Set(groups.recommended.map(r=>r.playerId));
+ const targets=nbaMatchupThree(groups.awaiting.filter(r=>!seen.has(r.playerId)),Math.max(0,3-groups.recommended.length));
+ const keys=new Set(targets.map(r=>r.key));groups.awaiting=[...targets,...groups.awaiting.filter(r=>!keys.has(r.key))];groups.targetCount=targets.length;
+ return groups;
+}
 function nbaRankedRows(){return nbaRecommendationRows.map(row=>({...row,quote:nbaQuoteFor(row.key),result:nbaPriceReview(row.key,row.forecast)}))}
 function nbaPropTitle(row,rank){
  const r=row.result,q=row.quote;
- return (rank?'#'+rank+' · ':'')+row.name+' · '+(r.candidate?(r.candidate+' '+q.line+' '):'')+nbaMarketLabel(row.market);
+ return (rank?'#'+rank+' · ':'')+row.name+' · '+(r.candidate?(r.candidate+' '+q.line+' '):row.target?'Look for '+row.target.side+' '+row.target.line+' ':'')+nbaMarketLabel(row.market);
 }
-function nbaPropCard(row,rank){return row.html.replace('NBA_PROP_TITLE',esc(nbaPropTitle(row,rank)))}
+function nbaPropCard(row,rank){const note=row.target&&row.matchup?'<p>'+esc(row.matchup.reason)+'</p><p class="muted">Shopping target: '+row.target.side+' '+row.target.line+' '+(row.target.side==='OVER'?'or lower':'or higher')+' at '+nbaTargetPrice(row,row.target)+' or better. Enter the actual offer below.</p>':'';return row.html.replace('NBA_PROP_TITLE',esc(nbaPropTitle(row,rank))).replace('</strong>','</strong>'+note)}
 function nbaPropListsHTML(){
- const groups=nbaPropGroups(nbaRankedRows());
+ const groups=nbaGameGroups();
  return '<section id="nba-recommendations"><h3>Player recommendations · matchup opportunities · Over &amp; Under</h3><p class="muted">Qualifying props ranked by score, then modeled return. Both sides compete. Scores are rankings, not win probabilities.</p>'+
   '<p id="nba-rank-feedback" class="muted" role="status"></p><p id="nba-no-props"'+(groups.recommended.length?' hidden':'')+'>No recommended props for this game at the entered odds.</p>'+
   '<div id="nba-recommended-list">'+groups.recommended.map((r,i)=>nbaPropCard(r,i+1)).join('')+'</div>'+
   '<details id="nba-other-panel"'+(groups.other.length?'':' hidden')+'><summary>More qualifying leans <span id="nba-other-count">('+groups.other.length+')</span></summary><div id="nba-other-list">'+groups.other.map(r=>nbaPropCard(r)).join('')+'</div></details>'+
-  '<section id="nba-awaiting-panel"'+(groups.awaiting.length?'':' hidden')+'><h3>Awaiting odds</h3><p class="muted">Research candidates, not picks. Enter a line and either side’s price.</p><div id="nba-awaiting-list">'+groups.awaiting.slice(0,6).map(r=>nbaPropCard(r)).join('')+'</div><details id="nba-awaiting-more-panel"'+(groups.awaiting.length>6?'':' hidden')+'><summary>More unpriced props</summary><div id="nba-awaiting-more-list">'+groups.awaiting.slice(6).map(r=>nbaPropCard(r)).join('')+'</div></details></section>'+
+  '<section id="nba-awaiting-panel"'+(groups.awaiting.length?'':' hidden')+'><h3>Matchup shortlist · maximum three players</h3><p class="muted">Specific matchup targets to price-check. Fewer than three means fewer supported opportunities. Other markets remain in Advanced research below.</p><div id="nba-awaiting-list">'+groups.awaiting.slice(0,groups.targetCount).map(r=>nbaPropCard(r)).join('')+'</div><details id="nba-awaiting-more-panel"'+(groups.awaiting.length>groups.targetCount?'':' hidden')+'><summary>Advanced research · other unpriced markets</summary><div id="nba-awaiting-more-list">'+groups.awaiting.slice(groups.targetCount).map(r=>nbaPropCard(r)).join('')+'</div></details></section>'+
   '<details id="nba-passed-panel"'+(groups.passed.length?'':' hidden')+'><summary>Not recommended · PASS <span id="nba-pass-count">('+groups.passed.length+')</span></summary><div id="nba-passed-list">'+groups.passed.map(r=>nbaPropCard(r)).join('')+'</div></details></section>';
 }
 function refreshNBARecommendationOrder(editedKey){
  const root=$('nba-recommendations');if(!root?.querySelector)return;
- const groups=nbaPropGroups(nbaRankedRows()),focused=document.activeElement;
+ const groups=nbaGameGroups(),focused=document.activeElement;
  const move=(rows,bucket,ranked=false)=>{const destination=$(bucket);for(const [i,row] of rows.entries()){
   const card=$('nba-prop-'+row.domId);if(!card||!destination)continue;
   for(const field of ['line','over','under']){const input=$('nba-quote-'+row.domId+'-'+field);if(input)input.value=row.quote[field]??''}
@@ -285,15 +295,15 @@ function refreshNBARecommendationOrder(editedKey){
   destination.appendChild(card);
  }};
  move(groups.recommended,'nba-recommended-list',true);move(groups.other,'nba-other-list');
- move(groups.awaiting.slice(0,6),'nba-awaiting-list');move(groups.awaiting.slice(6),'nba-awaiting-more-list');move(groups.passed,'nba-passed-list');
+ move(groups.awaiting.slice(0,groups.targetCount),'nba-awaiting-list');move(groups.awaiting.slice(groups.targetCount),'nba-awaiting-more-list');move(groups.passed,'nba-passed-list');
  $('nba-no-props').hidden=groups.recommended.length>0;$('nba-other-panel').hidden=!groups.other.length;
- $('nba-awaiting-panel').hidden=!groups.awaiting.length;$('nba-awaiting-more-panel').hidden=groups.awaiting.length<=6;
+ $('nba-awaiting-panel').hidden=!groups.awaiting.length;$('nba-awaiting-more-panel').hidden=groups.awaiting.length<=groups.targetCount;
  $('nba-passed-panel').hidden=!groups.passed.length;$('nba-other-count').textContent='('+groups.other.length+')';$('nba-pass-count').textContent='('+groups.passed.length+')';
  const edited=[...groups.recommended,...groups.other,...groups.awaiting,...groups.passed].find(r=>r.key===editedKey);
  if(edited){
   if(groups.passed.some(r=>r.key===editedKey))$('nba-passed-panel').open=true;
   if(groups.other.some(r=>r.key===editedKey))$('nba-other-panel').open=true;
-  if(groups.awaiting.slice(6).some(r=>r.key===editedKey))$('nba-awaiting-more-panel').open=true;
+  if(groups.awaiting.slice(groups.targetCount).some(r=>r.key===editedKey))$('nba-awaiting-more-panel').open=true;
   $('nba-rank-feedback').textContent=edited.name+': '+(edited.result.candidate?edited.result.decision+' '+edited.result.candidate:groups.awaiting.some(r=>r.key===editedKey)?'Awaiting odds':'PASS · moved to Not recommended');
  }
  if(focused?.isConnected)focused.focus?.({preventScroll:true});
@@ -306,10 +316,10 @@ function registerNBAProp(g,p,market,forecast,quality,reason){
 }
 
 // Targets are hypothetical shopping conditions, never sportsbook quotes.
-function nbaResearchTarget(row){
+function nbaResearchTarget(row,preferredSide=null){
  const forecast=Number(row.forecast);if(!Number.isFinite(forecast)||forecast<=0)return null;
  const targets=[],limit=Math.min(8,Math.max(2,forecast*.25));
- for(const side of ['OVER','UNDER']){
+ for(const side of (preferredSide?[preferredSide]:['OVER','UNDER'])){
   for(let step=0;step<=Math.ceil(limit);step++){
    const line=(side==='OVER'?Math.floor(forecast-.5)-step:Math.ceil(forecast-.5)+step)+.5;
    if(line<.5||Math.abs(line-forecast)>limit)continue;
@@ -336,7 +346,7 @@ function nbaSlateSelection(rows){
  const upcoming=rows.filter(r=>r.game?.status==='STATUS_SCHEDULED'&&Date.parse(r.game.date)>Date.now()&&r.market!=='threes');
  const grouped=nbaPropGroups(upcoming),sorted=[...grouped.recommended,...grouped.other].sort((a,b)=>(Number(b.result.decision==='PLAY')-Number(a.result.decision==='PLAY'))||((b.result.rating?.score??0)-(a.result.rating?.score??0))||(b.result.expectedValue-a.result.expectedValue)||(b.result.estimatedEdge-a.result.estimatedEdge)||a.key.localeCompare(b.key));
  const distinct=list=>{const players=new Set(),events=new Set();return list.filter(r=>{const event=String(r.game.id);if(players.has(r.playerId)||events.has(event))return false;players.add(r.playerId);events.add(event);return true}).slice(0,5)};
- return {picks:distinct(sorted),research:distinct(grouped.awaiting.filter(r=>r.target).sort((a,b)=>a.target.distance-b.target.distance||b.quality-a.quality||a.key.localeCompare(b.key)))};
+ return {picks:distinct(sorted),research:distinct(grouped.awaiting.filter(r=>r.target).sort((a,b)=>(b.matchup?.strength??0)-(a.matchup?.strength??0)||a.target.distance-b.target.distance||b.quality-a.quality||a.key.localeCompare(b.key)))};
 }
 function nbaSlateCurrent(){return nbaSlateRows.map(r=>({...r,quote:nbaQuoteFor(r.key),result:nbaPriceReview(r.key,r.forecast)}))}
 function renderNBASlate(){
@@ -355,7 +365,7 @@ function scanNBASlate(){
  try{
   nbaSlateRows=[];nbaCollectOnly=true;
   for(const g of games.filter(g=>g.status==='STATUS_SCHEDULED'&&Date.parse(g.date)>Date.now()))nbaSlateRows.push(...(renderProjections(g,{collectOnly:true})||[]));
-  for(const row of nbaSlateRows){const q=nbaQuoteFor(row.key);if(!q.line||(!q.over&&!q.under))row.target=nbaResearchTarget(row)}
+  for(const row of nbaSlateRows){const q=nbaQuoteFor(row.key);if((!q.line||(!q.over&&!q.under))&&!row.matchup)row.target=nbaResearchTarget(row)}
   nbaSlateScanned=true;nbaSlateShortlist=nbaSlateSelection(nbaSlateCurrent()).research.map(r=>r.key);renderNBASlate();
  }catch(e){$('slate-results').textContent='Unable to scan slate: '+e.message}
  finally{nbaCollectOnly=false;nbaRecommendationRows=savedRows;currentProjections=savedProjections;$('projections').innerHTML=scratch;button.disabled=false}
@@ -543,14 +553,37 @@ for(const p of byPlayer.values()){
   const projected=.6*weighted+.4*mean;
   const roleRisk=recent[0].minutes<avgMinutes*.7;
   if(roleRisk)continue;
-  registerNBAProp(g,p,spec.name,projected,avgMinutes+recent.length,totals.length+' recorded same-game combo totals; '+avgMinutes.toFixed(1)+' recent minutes. Both directions are priced separately.');
+  const components=spec.keys.map(k=>perPlayer.get(String(p.id))?.[k]);
+  if(components.some(x=>!x)||(!rosterFresh||!rosterFor(p.team)||!rosterFor(p.team).includes(String(p.id))))continue;
+  const totalBase=components.reduce((sum,x)=>sum+x.expected,0)||1;
+  const comboPlayer={...p,opponent:p.team===g.home?g.away:g.home,defenseDelta:components.reduce((sum,x)=>sum+x.defenseDelta*x.expected,0)/totalBase,paceDelta:components[0].paceDelta,opportunityFactor:components[0].opportunityFactor};
+  registerNBAProp(g,comboPlayer,spec.name,components.reduce((sum,x)=>sum+x.adjusted,0),avgMinutes+recent.length,totals.length+' recorded same-game combo totals; '+avgMinutes.toFixed(1)+' recent minutes. Both directions are priced separately.');
  }
+}
+// Build game outlook from completed team scoring and opponent allowance.
+const teamOutlook=team=>{const own=history.filter(h=>[h.home,h.away].includes(team)).slice(0,10);const scored=own.map(h=>gameScore(h,team)).filter(Number.isFinite);const opponent=team===g.home?g.away:g.home;const defense=allowed[opponent]||[];return scored.length>=2&&defense.length>=2?(scored.reduce((a,b)=>a+b,0)/scored.length+defense.reduce((a,b)=>a+b.points,0)/defense.length)/2:null};
+const homeOutlook=teamOutlook(g.home),awayOutlook=teamOutlook(g.away),margin=homeOutlook!==null&&awayOutlook!==null?Math.abs(homeOutlook-awayOutlook):null;
+const outlookHTML='<h3>Pregame outlook</h3><p>'+(margin===null?'Insufficient scoring history for an outcome estimate.':esc(g.away)+' '+awayOutlook.toFixed(0)+' · '+esc(g.home)+' '+homeOutlook.toFixed(0)+' projected points. '+(margin<3?'Close game outlook.':esc(homeOutlook>awayOutlook?g.home:g.away)+' favored by about '+margin.toFixed(0)+'.')+' '+(margin>=12?'Lopsided outlook: elevated minutes risk.':'No large projected scoring gap.'))+'</p><p class="muted">Scoring-based estimate from team offense and opponent allowance; scoring environment is a pace proxy, not measured possessions. Injuries and minutes inform player targets below. Team-level samples, not position-specific defensive rankings.</p>';
+for(const row of nbaRecommendationRows){
+ const fields={'Points + Rebounds':['points','rebounds'],'Points + Assists':['points','assists'],'Rebounds + Assists':['rebounds','assists'],PRA:['points','rebounds','assists']}[row.market]||[row.market];
+ const parts=fields.map(k=>perPlayer.get(row.playerId)?.[k]);if(parts.some(x=>!x))continue;
+ const weight=parts.reduce((sum,x)=>sum+x.expected,0)||1,blend=key=>parts.reduce((sum,x)=>sum+(Number(x[key])||0)*x.expected,0)/weight;
+ const base=parts[0],recent=base.rows.slice(0,3),older=base.rows.slice(0,10),meanMinutes=rs=>rs.reduce((a,b)=>a+b.minutes,0)/Math.max(1,rs.length);
+ const workload=Math.max(-.2,Math.min(.2,meanMinutes(recent)/Math.max(1,meanMinutes(older))-1));
+ const defense=blend('defenseDelta'),environment=blend('paceDelta'),opportunity=(base.opportunityFactor||1)-1;
+ const formValues=older.map(r=>fields.reduce((sum,k)=>sum+(r[k]||0),0)),avg=xs=>xs.reduce((a,b)=>a+b,0)/Math.max(1,xs.length),form=avg(formValues)>0?Math.max(-.2,Math.min(.2,avg(formValues.slice(0,3))/avg(formValues)-1)):0;
+ const signal=.7*defense+.3*environment+.25*workload+.15*form+.5*opportunity;
+ const side=signal>=0?'OVER':'UNDER';
+ row.matchup={strength:Math.abs(signal)*(margin>=12?.65:1)*Math.min(1,older.length/10),reason:base.opponent+' '+(defense>=0?'allows more':'allows fewer')+' '+fields.map(nbaMarketLabel).join(' + ')+' than the league sample ('+(defense*100).toFixed(1)+'% after shrinkage). '+meanMinutes(recent).toFixed(1)+' recent minutes; '+(environment>=0?'higher':'lower')+' scoring environment.'+(base.absentTeammates?.length?' Role opportunity with '+base.absentTeammates.join(', ')+' absent.':'')+(margin>=12?' Large projected margin reduces priority.':'')};
+ const minimumForecast=['points'].includes(row.market)?8:['assists','rebounds'].includes(row.market)?3:10;
+ if(row.market==='threes'||row.forecast<minimumForecast||meanMinutes(recent)<20||Math.abs(signal)<.012||!rosterFresh||!fresh||!generatedAt||Math.abs(Date.now()-Date.parse(generatedAt))>12*3600000)continue;
+ row.target=nbaResearchTarget(row,side);
 }
 if(options.collectOnly)return nbaRankedRows();
 const watchHtml=nbaPropListsHTML();
 const comboHtml='<h3>Combo-stat opportunities · PR / PA / RA / PRA</h3><p class="muted">Combined-stat props compete with individual stats in the lists above. Both Over and Under can qualify.</p>';
 
-el.innerHTML=scoutHtml+(retrospective?'<p class="warn">Game already started or finished. These are retrospective pregame-style estimates from earlier games, not live forecasts.</p>':'')+
+el.innerHTML=outlookHTML+scoutHtml+(retrospective?'<p class="warn">Game already started or finished. These are retrospective pregame-style estimates from earlier games, not live forecasts.</p>':'')+
 firstBasketHTML(g,starters,fresh,rosterFresh)+watchHtml+comboHtml+'<p class="muted">Projected, NOT confirmed. Based on recent starts, playing time and available injury reports. '+(rosterFresh?'ESPN roster checked where available;':'Roster feed missing or stale;')+' No official confirmed starting-five feed. Small samples are preliminary; sportsbook odds and position-specific defense are not available.</p>'+
 [g.away,g.home].map(team=>'<h3>'+esc(team)+' · projected five</h3>'+(starters[team].length?starters[team].map(card).join(''):'<p class="warn">Insufficient lineup evidence.</p>')+(starters[team].length<5?'<p class="warn">Fewer than five eligible players with sufficient recent records. No names invented.</p>':'')).join('');
 
