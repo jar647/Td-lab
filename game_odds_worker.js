@@ -1,5 +1,5 @@
 /* Game-only simulator runs 100k independent draws off the UI thread. */
-importScripts('./nba_game_context.js','./nba_possession_engine.js','./game_odds_engine.js');
+importScripts('./nba_game_context.js?v=nba-context-v2','./nba_possession_engine.js?v=nba-context-v2','./game_odds_engine.js?v=nba-context-v2');
 self.onmessage=function(event){
  const data=event.data||{};
  try{
