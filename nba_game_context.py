@@ -32,6 +32,13 @@ def collect(root=ROOT,now=None,loader=fetch):
  data=pathlib.Path(root)/'data';feed=json.loads((data/'nba_games.json').read_text());old={}
  try:old=json.loads((data/'nba_game_context.json').read_text())
  except (OSError,ValueError):pass
+ # Bootstrap with an actual dated source capture, never fabricated records.
+ if old.get('sources',{}).get('tracking',{}).get('status')!='ok':
+  try:
+   seed=json.loads((data/'nba_tracking_snapshot.json').read_text());source=seed['source'];age=(now-datetime.datetime.fromisoformat(source['retrieved_at'].replace('Z','+00:00'))).total_seconds()
+   if seed.get('season')==season and 0<=age<=48*3600 and seed.get('defenders') and seed.get('matchups'):
+    old={**old,'season':season,'defenders':seed['defenders'],'matchups':seed['matchups'],'sources':{**old.get('sources',{}),'tracking':{**source,'refresh_error':'Using the dated NBA.com fallback snapshot; live refresh will retry on the next daily cycle'}}}
+  except (OSError,KeyError,ValueError,TypeError):pass
  payload={'generated_at':stamp,'season':season,'sources':{},'games':{},'defenders':{},'matchups':[],'limits':['Historical defensive matchups estimate exposure; they do not confirm tonight’s assignments.','Historical quarter rotations describe team substitution patterns, not announced coaching plans.']}
  def task(key,url):
   try:return key,loader(url),None

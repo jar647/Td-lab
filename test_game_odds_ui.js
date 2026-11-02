@@ -3,9 +3,9 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const engine=require('./game_odds_engine.js');
 const html=fs.readFileSync('game-odds.html','utf8');
-assert.match(html,/<script src="\.\/game_odds_engine\.js\?v=nba-context-v2"><\/script>/,'Engine assets must be versioned with the worker');
-assert.ok(html.includes("new Worker('./game_odds_worker.js?v=nba-context-v2')"));
-assert.ok(fs.readFileSync('game_odds_worker.js','utf8').includes("nba_possession_engine.js?v=nba-context-v2"),'Worker imports must match the page model version');
+assert.match(html,/<script src="\.\/game_odds_engine\.js\?v=nba-context-v2-1"><\/script>/,'Engine assets must be versioned with the worker');
+assert.ok(html.includes("new Worker('./game_odds_worker.js?v=nba-context-v2-1')"));
+assert.ok(fs.readFileSync('game_odds_worker.js','utf8').includes("nba_possession_engine.js?v=nba-context-v2-1"),'Worker imports must match the page model version');
 for(const field of ['game','homeML','awayML','homeSpread','homeATS','awayATS','total','over','under','run','results','sportNFL','sportNBA'])
  assert.ok(html.includes('id="'+field+'"'),'Missing '+field);
 assert.ok(html.indexOf('id="game"')<html.indexOf('id="homeML"'),'Game selector must appear before odds');
