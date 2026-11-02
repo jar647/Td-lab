@@ -109,3 +109,23 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  assert.equal(CookItUpProbability.review(observed).requiredSample,8,'Six player appearances in eight team games must remain limited');
  console.log('NBA early-season sample gate binding: PASS');
 }
+
+// A bettor should see the decision without reading the technical calculation.
+{
+ const quote=CookItUpProbability.review({history:[4,4,5,2,7,3],market:'assists',projection:4.1,line:3.5,overOdds:-160,underOdds:125,availableGames:6,context:{seasonUsage:30,recentUsage:31,opponentRatio:1.001,injuryStatus:'NOT LISTED'}});
+ const render=(result,line=3.5)=>vm.runInContext('nbaVerdictHTML('+JSON.stringify(result)+',4.1,'+JSON.stringify(line)+')',sandbox);
+ const pass=render({...quote,decision:'PASS',status:'PASS · NO ROBUST VALUE SIGNAL'});
+ const visible=pass.split('<details')[0];
+ assert(visible.includes('PASS · SKIP THIS PROP'));
+ assert(visible.includes('Projection')&&visible.includes('Your line')&&visible.includes('+0.6'));
+ assert(!visible.includes('hypothetical ROI')&&!visible.includes('No-vig')&&!visible.includes('UNCALIBRATED model'));
+ assert(pass.includes('<summary>Why?</summary>'),'Full evidence must remain available on demand');
+ assert(!pass.includes('<details open'),'Technical detail must start collapsed');
+ const lean=render({...quote,decision:'LEAN',candidate:'UNDER',status:'LEAN UNDER · UNCALIBRATED'});
+ assert(lean.includes('LEAN UNDER 3.5 · +125'));
+ assert(lean.includes('Research lean; not a verified betting edge'));
+ assert(render(quote,null).includes('ENTER A LINE'));
+ const escaped=render({...quote,decision:'PASS',status:'PASS',reason:'<img src=x onerror=bad()>'});
+ assert(!escaped.includes('<img src=x'));
+ console.log('NBA concise verdict and optional calculation details: PASS');
+}

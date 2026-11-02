@@ -5,14 +5,16 @@
  const pct=x=>Number.isFinite(x)?(x*100).toFixed(1)+'%':'unavailable';
  const fmt=x=>Number.isFinite(x)?x.toFixed(1):'—';
  const valid=(stamp,now,hours)=>{const t=Date.parse(stamp),age=now-t;return Number.isFinite(t)&&age>=0&&age<=hours*3600000};
- const leg=p=>'<div class="player"><strong>'+esc(p.player)+' · '+esc(p.side)+' '+esc(p.line)+' '+esc(p.market)+'</strong><p>Projection '+fmt(p.projection)+' · '+fmt(p.minutes)+' MIN · '+esc(p.sample)+' prior games · '+esc(p.status)+'</p><p class="muted">'+esc(p.reason)+'</p>'+(p.bookmaker?'<p>'+esc(p.bookmaker)+' '+(p.american_odds>0?'+':'')+esc(p.american_odds)+' · model '+pct(p.probability)+' · break-even '+pct(p.break_even)+' · estimated EV '+pct(p.estimated_ev)+(Number.isFinite(p.no_vig_edge)?' · no-vig edge '+pct(p.no_vig_edge):'')+'</p>':'')+'</div>';
+ const labels={points:'points',rebounds:'rebounds',assists:'assists',points_rebounds:'points + rebounds',points_assists:'points + assists',rebounds_assists:'rebounds + assists',pra:'PRA'};
+ const leg=p=>'<div class="player"><strong>'+esc(p.player)+' · '+esc(p.side)+' '+esc(p.line)+' '+esc(labels[p.market]||p.market)+'</strong><p>Projection '+fmt(p.projection)+' · '+fmt(p.minutes)+' MIN'+(p.bookmaker?' · '+(p.american_odds>0?'+':'')+esc(p.american_odds):'')+'</p><details class="nba-price-details"><summary>Why?</summary><p class="muted">'+esc(p.reason)+' · '+esc(p.sample)+' prior games · '+esc(p.status)+'</p>'+(p.bookmaker?'<p class="muted">'+esc(p.bookmaker)+' · model '+pct(p.probability)+' · break-even '+pct(p.break_even)+' · estimated EV '+pct(p.estimated_ev)+(Number.isFinite(p.no_vig_edge)?' · no-vig edge '+pct(p.no_vig_edge):'')+'</p>':'')+'</details></div>';
+
  function render(record,audit,now=Date.now()){
   if(!record)return '<p>No published pregame analysis for this game. No retrospective forecast substituted.</p>';
   const a=record;
   if(!valid(a.generated_at,now,6)||!Number.isFinite(Date.parse(a.tipoff))||Date.parse(a.tipoff)<=now)return '<p class="warn">PASS · Analysis stale, invalid, or game already started.</p>';
   const quoteExpired=a.sgp&&(!valid(a.sgp.observed_at,now,1)||!(a.sgp.legs||[]).every(p=>valid(p.observed_at,now,1)));
-  let html='<h3>'+esc(a.game||a.game_id)+' · '+esc(quoteExpired?'PASS · quote expired':a.status)+'</h3><p class="muted">'+esc(a.model)+' · '+esc(a.simulation_runs)+' shared game scenarios · published '+esc(a.generated_at)+'</p>';
-  html+='<p class="warn">'+(a.reasons||[]).map(esc).join(' · ')+'</p>';
+  let html='<h3>'+esc(a.game||a.game_id)+' · '+esc(quoteExpired?'PASS · quote expired':a.status)+'</h3>';
+  html+='<p class="warn">'+(a.reasons||[]).map(x=>esc(x==='No qualifying offered SGP quote'?'Combined sportsbook price unavailable.':x)).join(' · ')+'</p>';
   const blocked=(a.blockers||[]).length>0;
   const freshLeg=p=>valid(p.observed_at,now,1);
   if(a.sgp&&!blocked&&freshLeg(a.sgp)&&(a.sgp.legs||[]).every(freshLeg)){
@@ -31,13 +33,13 @@
    for(const p of a.starters?.[team]||[])html+='<p><strong>'+esc(p.player)+'</strong> · '+fmt(p.minutes)+' MIN · '+esc(p.status)+'</p>';
    const context=a.team_context?.[team];if(context)html+='<p class="muted">'+esc(context.games)+' team games · rest '+fmt(context.rest_days)+' days · projected rotation '+fmt(context.rotation_minutes)+' minutes · absent: '+esc(context.absences.join(', ')||'none listed')+'</p>';
   }
-  html+='<h3>Player projections · same model used for grading</h3><table class="sim-table"><thead><tr><th>Player</th><th>MIN</th><th>PTS</th><th>REB</th><th>AST</th><th>PRA</th></tr></thead><tbody>';
+  html+='<details class="nba-price-details"><summary>Full player projections</summary><h3>Player projections · same model used for grading</h3><table class="sim-table"><thead><tr><th>Player</th><th>MIN</th><th>PTS</th><th>REB</th><th>AST</th><th>PRA</th></tr></thead><tbody>';
   for(const player of a.rotation||[]){const ps=(a.projections||[]).filter(p=>p.player_id===player.player_id);const v=k=>fmt(ps.find(p=>p.market===k)?.projection);
    html+='<tr><td>'+esc(player.player)+'<br><span class="muted">'+esc(player.status)+'</span></td><td>'+fmt(player.minutes)+'</td><td>'+v('points')+'</td><td>'+v('rebounds')+'</td><td>'+v('assists')+'</td><td>'+v('pra')+'</td></tr>';
   }
-  html+='</tbody></table><p class="muted">Capture '+esc(a.frozen?a.capture_id:'not frozen — inputs blocked')+'</p><p class="muted">'+esc(a.limits)+'</p>';
+  html+='</tbody></table></details><details class="nba-price-details"><summary>Model details &amp; grading</summary><p class="muted">'+esc(a.model)+' · '+esc(a.simulation_runs)+' scenarios · updated '+esc(a.generated_at)+'</p><p class="muted">Capture '+esc(a.frozen?a.capture_id:'not frozen — inputs blocked')+'</p><p class="muted">'+esc(a.limits)+'</p>';
   if(audit&&audit.model===a.model)html+='<h3>Frozen model grading</h3><p>'+esc(audit.graded_games)+' graded games · '+esc(audit.graded_projections)+' graded player-stat forecasts · MAE '+fmt(audit.mae)+'</p><p class="muted">'+esc(audit.method)+'</p>';
-  return html;
+  return html+'</details>';
  }
  return {render,valid};
 });
