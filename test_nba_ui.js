@@ -129,3 +129,53 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  assert(!escaped.includes('<img src=x'));
  console.log('NBA concise verdict and optional calculation details: PASS');
 }
+
+// Final two-sided price decisions, not the old matchup score, control the ranks.
+{
+ const row=(key,playerId,decision,candidate,ev,quality=0,quote={line:5.5,over:-110,under:-110})=>({key,playerId,quality,quote,result:{decision,candidate,expectedValue:ev,estimatedEdge:ev/2}});
+ const rows=[row('over','one','LEAN','OVER',.10),row('under','two','LEAN','UNDER',.30),row('pass','three','PASS',null,99,999),row('waiting','four','PASS',null,99,998,{}) ,row('second-market','two','LEAN','OVER',.20),row('third','five','LEAN','OVER',.08)];
+ const groups=JSON.parse(vm.runInContext('JSON.stringify(nbaPropGroups('+JSON.stringify(rows)+'))',sandbox));
+ assert.deepEqual(groups.recommended.map(r=>r.key),['under','over','third']);
+ assert.deepEqual(groups.other.map(r=>r.key),['second-market']);
+ assert.deepEqual(groups.passed.map(r=>r.key),['pass']);
+ assert.deepEqual(groups.awaiting.map(r=>r.key),['waiting']);
+ assert.equal(new Set(groups.recommended.map(r=>r.playerId)).size,3);
+ const changed=rows.map(r=>r.key==='under'?{...r,result:{decision:'PASS',candidate:null}}:r);
+ const after=JSON.parse(vm.runInContext('JSON.stringify(nbaPropGroups('+JSON.stringify(changed)+'))',sandbox));
+ assert(!after.recommended.some(r=>r.key==='under'));assert(after.passed.some(r=>r.key==='under'));
+ console.log('NBA Over/Under ranking, PASS removal and awaiting-odds buckets: PASS');
+}
+
+// Current single-book prices can discover an Under. Manual edits win; a changed
+// line cannot reuse the old price, and stale imported prices cannot stay active.
+{
+ const now=new Date().toISOString(),old=new Date(Date.now()-2*3600000).toISOString(),key='auto-game|auto-player|points';
+ const data={generated_at:now,status:'ok',markets:[
+  {game_id:'auto-game',player_id:'auto-player',market:'points',side:'under',line:5.5,american_odds:-110,bookmaker:'hardrockbet',observed_at:now},
+  {game_id:'auto-game',player_id:'auto-player',market:'points',side:'over',line:5.5,american_odds:100,bookmaker:'hardrockbet',observed_at:now},
+  {game_id:'other-game',player_id:'auto-player',market:'points',side:'under',line:99.5,american_odds:900,bookmaker:'hardrockbet',observed_at:now}
+ ]};
+ vm.runInContext('nbaQuoteContexts['+JSON.stringify(key)+']={history:[1,1,2,1,2,1],market:"points",availableGames:6,eligible:true,modelContext:{seasonAverage:1.33,recentAverage:1.4,seasonUsage:30,recentUsage:30,opponentRatio:1,injuryStatus:"NOT LISTED"}};nbaMarketData='+JSON.stringify(data)+';chooseNBAAutoQuote({id:"auto-game"},{id:"auto-player"},"points",1.3,'+JSON.stringify(key)+')',sandbox);
+ assert.equal(vm.runInContext('nbaPriceReview('+JSON.stringify(key)+',1.3).candidate',sandbox),'UNDER');
+ assert.equal(vm.runInContext('nbaQuoteFor('+JSON.stringify(key)+').line',sandbox),5.5);
+ vm.runInContext('setNBAQuote('+JSON.stringify(key)+',"over","-120",1.3);nbaPlayerQuotes['+JSON.stringify(key)+']._autoAt='+JSON.stringify(old),sandbox);
+ assert.equal(vm.runInContext('nbaQuoteFor('+JSON.stringify(key)+').under',sandbox),undefined);
+ assert.equal(vm.runInContext('nbaQuoteFor('+JSON.stringify(key)+').over',sandbox),'-120');
+ vm.runInContext('setNBAQuote('+JSON.stringify(key)+',"line","7.5",1.3)',sandbox);
+ assert.equal(vm.runInContext('nbaQuoteFor('+JSON.stringify(key)+').over',sandbox),undefined);
+ assert.equal(vm.runInContext('nbaQuoteFor('+JSON.stringify(key)+').under',sandbox),undefined);
+ const stale={...data,markets:data.markets.map(q=>({...q,observed_at:old}))};
+ vm.runInContext('delete nbaPlayerQuotes['+JSON.stringify(key)+'];nbaMarketData='+JSON.stringify(stale)+';chooseNBAAutoQuote({id:"auto-game"},{id:"auto-player"},"points",1.3,'+JSON.stringify(key)+')',sandbox);
+ assert.equal(vm.runInContext('nbaQuoteFor('+JSON.stringify(key)+').line',sandbox),undefined);
+ console.log('NBA fresh same-game odds, Under discovery and manual override: PASS');
+}
+
+// A qualified Under must be saved as Under rather than the organizer's default Over.
+{
+ let pick;sandbox.CookItUpQuickSlip={button:value=>{pick=value;return '<button>Add to Quick Slip</button>'}};
+ const g={id:'slip-under',status:'STATUS_SCHEDULED',date:new Date(Date.now()+3600000).toISOString(),home:'Home',away:'Away'};
+ const p={id:'slip-player',name:'Slip Player',team:'Home',rows:Array.from({length:10},(_,i)=>({points:1+i%2,minutes:30})),defenseDelta:0,paceDelta:0,opportunityFactor:1};
+ vm.runInContext('injuryData='+JSON.stringify({generated_at:new Date().toISOString(),injuries:[]})+';nbaPlayerQuotes["slip-under|slip-player|points"]={line:5.5,over:100,under:-110};nbaPriceUI('+JSON.stringify(g)+','+JSON.stringify(p)+',"points",1.5)',sandbox);
+ assert.equal(pick.side,'under');assert.equal(pick.recommendation,'Under 5.5 Points');assert.equal(pick.recommendationLine,null);
+ console.log('NBA Under direction preserved in Quick Slip payload: PASS');
+}
