@@ -14,32 +14,50 @@ NFL and NBA cards compare a manually entered Vegas line and optional Over/Under 
 
 **Calibration and decision gates:** the live probability distributions are explicitly uncalibrated. A clear price and uncertainty signal can return LEAN for research, but PLAY requires a matching live-model version with at least eight independent holdout weeks, 500 graded forecasts overall, 40 outcomes for the market, Brier score better than its baseline, and maximum calibration error of 5% or less. The app currently has no approved calibration record wired to this gate, so it will not issue PLAY. Missing player history, recent workload, opponent-specific allowance, or safe availability; invalid odds; and unstable projection conflicts lead to PASS. Odds are entered by the user and saved locally; no live sportsbook prices are invented. No-vig market probabilities are shown separately from model probabilities. Existing NFL/NBA game features and forward-tracking gates are preserved.
 
-## NBA published pipeline (branch implementation; not live verified)
+## NBA published analyst (PR #22)
 
-`python nba_pipeline.py` publishes `data/nba_analysis.json` and append-only pregame forecasts in `data/nba_pipeline_locks.json`. The NBA refresh workflow runs it after the schedule, roster and injury updates. The added panel displays these same published projections; the older exploratory UI/tracker remains separate for compatibility. Do not treat the older tracker as evaluation of this model.
+The main NBA analyst panel now reads `data/nba_analysis.json`. `nba_model.py` and `nba_pipeline.py` produce its projections, recommendations, simulations and frozen evaluation together. The former client calculators remain collapsed under **Legacy explorer**, explicitly a different experimental model; their historical tracker is not evidence for this model.
 
-The model uses 5–10 completed regular-season appearances, per-minute production, recent minutes, a small back-to-back adjustment and shrunk opponent team allowance. OUT/doubtful players and players absent from the current roster are excluded. Unresolved rotation availability blocks recommendations. It does not estimate a new rotation or redistribute a missing star's usage. Quotes older than one hour, injury/box-score feeds older than six hours and rosters older than 24 hours block recommendations.
+### Model and decision behavior
 
-Joint simulations resample the same historical team-game for teammate stats, preserving observed within-team dependence. Opposing teams are sampled independently. Missing joint observations count as failures, a conservative limitation. This is an uncalibrated bootstrap, not a validated betting edge. Projections remain separate from recommendations; PASS is expected when prices are unavailable.
+- Prior completed regular-season box scores only, current ESPN roster membership, player-ID/name injury matching, recent starts and appearances. No future/live box-score leakage.
+- Allocate a 240-minute team rotation, cap players at 40 minutes, redistribute known absences and apply a small back-to-back weight adjustment. Insufficient depth, large role changes and unresolved rotation injuries block recommendations. Starting fives are projected, not confirmed.
+- Per-minute recent production and shrunk opponent allowance generate points, rebounds, assists and PR/PA/RA/PRA forecasts. Shared scoring-environment scenarios, team-game resampling and common blowout-minute changes model dependence. Combo outcomes equal their components. This is an uncalibrated heuristic model; the scoring-environment proxy is not measured possessions or a validated pace model.
+- Fresh single quotes are evaluated with pushes, expected return, break-even price and an opposite-side no-vig comparison when available. Best single and top three distinct players are independent of whether an SGP quote exists.
+- Actual SGP quotes must match 2–5 distinct players, the exact selections and one sportsbook. Missing/stale quotes cannot produce an SGP value claim. Missing joint observations are tracked and at least 80% joint observed coverage is required.
+- When prices are missing, supported projections may produce an explicitly **unpriced research target**, model fair price and minimum acceptable combined price. This is not a priced recommendation or a claim that the sportsbook offers those lines. No individual prices are multiplied into fake SGP odds.
 
-### NBA market adapter contract
+### Existing provider integration
 
-The repository currently has **no connected NBA prop/SGP price provider**. Supply a provider-authenticated `data/nba_market_odds.json` before expecting autonomous priced recommendations. Keep provider credentials in GitHub Actions secrets. No fake sample quote is published.
+`python -m scripts.build_nba_odds` uses the existing `ODDSPAPI_API_KEY` GitHub Actions secret. It discovers the basketball market catalog, matches NBA fixtures by both teams and tipoff, resolves player names uniquely against ESPN IDs/current rosters, and accepts only active full-game O/U prices from Hard Rock Bet. Unknown/partial-game markets, ambiguous names and malformed prices are rejected. Provider failures retain the previous feed without refreshing its timestamp; a sanitized status is published in `data/nba_market_status.json`. Credentials never enter output or logs.
+
+The prop endpoint does not supply combined SGP quotes. The adapter optionally imports fresh same-book captures from `data/nba_sgp_quotes.json`; it never invents a combined price. Source reference: https://oddspapi.io/blog/player-props-api-nfl-nba-mlb-odds-python/
+
+The normalized `data/nba_market_odds.json` contract is:
 
 ```json
 {
-  "generated_at": "ISO-8601 UTC timestamp",
+  "generated_at": "2026-11-01T12:00:00Z",
+  "status": "ok",
   "markets": [
-    {"game_id":"ESPN event ID", "player_id":"ESPN player ID", "market":"points", "side":"over", "line":24.5, "american_odds":-110}
+    {"game_id":"ESPN_ID", "player_id":"ESPN_PLAYER_ID", "market":"points", "side":"over", "line":24.5, "american_odds":-110, "bookmaker":"hardrockbet", "observed_at":"2026-11-01T12:00:00Z"}
   ],
   "sgp_quotes": [
-    {"game_id":"ESPN event ID", "legs":["PLAYER_ID:points:over:24.5", "OTHER_ID:rebounds:under:8.5"], "decimal_odds":4.2}
+    {"game_id":"ESPN_ID", "bookmaker":"hardrockbet", "observed_at":"2026-11-01T12:00:00Z", "legs":["ESPN_PLAYER_ID:points:over:24.5", "OTHER_ID:rebounds:under:8.5"], "decimal_odds":4.2}
   ]
 }
 ```
 
-Supported markets: points/rebounds/assists, over/under. SGPs use 2–5 distinct players and require the **actual combined sportsbook quote**; individual prices are never multiplied to invent SGP prices. Whole-line pushes are conservatively counted as non-wins for the estimate; frozen grading marks push/void tickets as unsettled pending book rules. Research leans require estimated EV above 5%; no calibration claim is made.
+Supported market keys: `points`, `rebounds`, `assists`, `points_rebounds`, `points_assists`, `rebounds_assists`, `pra`. Each combined quote needs its own original observation timestamp. Fetching fresh individual prices never renews an old SGP quote.
 
-Locks are first eligible pregame captures, never retrospectively created or overwritten. Final box scores add grading alongside the original projections. DNPs and absent results are explicit; projection MAE and SGP settlement are different measurements.
+### Scheduling, freezing and grading
 
-Remaining release gates: connect and validate live price ingestion; establish injury-driven rotations and cross-team correlation; unify the legacy projection display; verify the branch in a browser, pass CI, merge/deploy through review, and test the deployed SHA. A PR does not mean the live app has these changes.
+The NBA refresh workflow runs every 30 minutes (GitHub schedules can be delayed), reusing the existing secret. Odds expire after one hour; injuries/box scores after six hours; rosters after 24 hours. The UI checks age, future timestamps, tipoff and each selected quote again at display time, and discards out-of-order responses when the matchup changes.
+
+Every changed eligible pregame forecast is frozen with a content ID in `data/nba_pipeline_locks.json`. Prior captures are never rewritten when injuries, lines or projections change. Unchanged predictions are deduplicated, including refresh-only timestamps. A record blocked by data/availability gates is not labeled frozen. Final results attach projection errors and actual selection grading. Missing final rows are retried on later refreshes. Evaluation selects one latest valid pregame capture per game/model, preventing revisions from inflating the graded sample. MAE is not a betting hit rate. Push/void SGPs require sportsbook settlement rules and are not credited as full wins.
+
+### Verification and remaining live gate
+
+Regression CI covers all root/tests Python and JavaScript suites, including NFL. A separate same-repository PR job refreshes the real NBA inputs, checks the existing provider secret/entitlement, runs the model, and uploads sanitized live-input evidence. It fails its live-odds gate when current supported prices cannot actually be fetched.
+
+PR checks and source changes do not establish a deployed release. Combined SGP quote ingestion remains required for an autonomous **priced** SGP recommendation; no undocumented combined-price endpoint is assumed. Confirm the live-input job, review/merge/deploy, then verify the deployed SHA and NBA flows before claiming operational completion. NFL source/data and its existing workflows are unchanged.
