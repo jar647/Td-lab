@@ -24,6 +24,10 @@ class NBAOddsTests(unittest.TestCase):
   self.assertIsNone(classify_market('Over Under Player Points 1st Half'))
   self.assertIsNone(classify_market('Player 20+ Points'))
   self.catalog[0]['handicap']=float('nan');self.assertEqual(parse_props(self.game,self.catalog,self.response,self.game['players'],self.now),[])
+ def test_live_catalog_including_overtime_result_period(self):
+  meta={'sportId':11,'period':'result','playerProp':True,'marketType':'playertotals-points','outcomes':[{'outcomeName':'Over'},{'outcomeName':'Under'}]}
+  self.assertEqual(classify_market('Over Under Player Points (incl. overtime)',meta),'points')
+  self.assertIsNone(classify_market('Over Under Player Points',meta))
  def test_real_catalog_order_and_period_metadata(self):
   self.assertEqual(classify_market('Player Points (Over/Under)'), 'points')
   self.assertEqual(classify_market('Over/Under - Player - Points'), 'points')

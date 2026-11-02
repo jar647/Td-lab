@@ -215,6 +215,6 @@ def publish(root,now=None):
     graded=[g for s in final_captures.values() for g in s['grades'] if g['status']=='graded']
     minute_errors=[m['absolute_error'] for s in final_captures.values() for m in s.get('minute_grades',[]) if m['absolute_error'] is not None]
     report={'minutes_mae':st.mean(minute_errors) if minute_errors else None,'model':MODEL,'captures':len([s for s in archive['snapshots'] if s.get('model')==MODEL]),'graded_games':len(final_captures),'graded_projections':len(graded),'mae':st.mean(x['absolute_error'] for x in graded) if graded else None,'method':'One latest valid pregame capture per game/model. Projection MAE is not bet win rate.'}
-    for name,data in [('nba_analysis.json',{'generated_at':now.isoformat(),'model':MODEL,'games':analyses,'audit':report}),('nba_pipeline_locks.json',archive)]:atomic(root/'data'/name,data)
+    for name,data in [('nba_pipeline_locks.json',archive),('nba_analysis.json',{'generated_at':now.isoformat(),'model':MODEL,'games':analyses,'audit':report})]:atomic(root/'data'/name,data)
     return analyses
 if __name__=='__main__':publish(pathlib.Path(__file__).resolve().parent)

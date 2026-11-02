@@ -91,6 +91,17 @@ class PipelineTests(unittest.TestCase):
  def test_push_aware_single_ev(self):
   from nba_pipeline import grade_stats
   self.assertAlmostEqual(grade_stats([1,0,-1,1],2)['estimated_ev'],.25)
+ def test_archive_is_persisted_before_display_claims_frozen(self):
+  from unittest.mock import patch
+  from nba_pipeline import atomic
+  with tempfile.TemporaryDirectory() as tmp:
+   root=pathlib.Path(tmp);(root/'data').mkdir()
+   for name,data in [('nba_games',self.feed),('nba_injuries',self.inj),('nba_rosters',self.rosters)]:
+    (root/'data'/f'{name}.json').write_text(json.dumps(data))
+   order=[]
+   def record(path,data):order.append(path.name);atomic(path,data)
+   with patch('nba_pipeline.atomic',side_effect=record):publish(root,self.now)
+   self.assertEqual(order,['nba_pipeline_locks.json','nba_analysis.json'])
  def test_lock_immutable_revisions_and_grade_repair(self):
   with tempfile.TemporaryDirectory() as tmp:
    root=pathlib.Path(tmp);(root/'data').mkdir()

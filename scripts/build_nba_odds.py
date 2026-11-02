@@ -38,7 +38,12 @@ def classify_market(name,meta=None):
     words=re.findall(r'[a-z]+',text)
     metadata=meta or {}
     if metadata.get('sportId') is not None and str(metadata['sportId'])!='11':return None
-    if metadata.get('period') not in (None,'fulltime','fulltimeinclot','fulltimeinclovertime'):return None
+    period=metadata.get('period')
+    # Live NBA catalog uses result for markets explicitly including overtime.
+    incl_ot=bool(re.search(r'(?:including|incl\.?)\s+(?:overtime|ot)',str(name).lower()))
+    if period=='result':
+        if not incl_ot or metadata.get('playerProp') is not True:return None
+    elif period not in (None,'fulltime','fulltimeinclot','fulltimeinclovertime'):return None
     explicit='over' in words and 'under' in words and 'player' in words
     catalog_verified=metadata.get('playerProp') is True and {str(o.get('outcomeName','')).lower() for o in metadata.get('outcomes',[])}=={'over','under'}
     if not explicit and not catalog_verified:return None
