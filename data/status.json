@@ -1,32 +1,55 @@
 {
   "season": 2026,
-  "week": 8,
-  "generated_at": "2026-11-02T23:53:18.211100+00:00",
-  "matchups": 23,
+  "week": 9,
+  "generated_at": "2026-11-03T01:03:07.022807+00:00",
+  "matchups": 439,
   "source": "nflverse play-by-play and rosters",
   "odds_source": null,
   "probability_model": null,
   "lookback_games": 5,
   "availability_diagnostics": {
     "injuries": {
-      "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-      "rows_for_week": 26,
-      "matched_rows": 26,
-      "matched_ids": 11,
-      "practice_flags": 10,
-      "game_designations_reported": 11,
-      "teams_with_injury_rows": [
+      "report_stage": "NO_CURRENT_WEEK_REPORT",
+      "rows_for_week": 0,
+      "matched_rows": 0,
+      "matched_ids": 0,
+      "practice_flags": 0,
+      "game_designations_reported": 0,
+      "teams_with_injury_rows": [],
+      "teams_without_injury_rows": [
+        "ARI",
+        "ATL",
+        "BAL",
+        "BUF",
+        "CAR",
         "CHI",
-        "SEA"
+        "CIN",
+        "CLE",
+        "DAL",
+        "DEN",
+        "DET",
+        "GB",
+        "HOU",
+        "IND",
+        "JAX",
+        "KC",
+        "LA",
+        "LAC",
+        "LV",
+        "MIA",
+        "MIN",
+        "NE",
+        "NO",
+        "NYG",
+        "NYJ",
+        "PHI",
+        "SEA",
+        "SF",
+        "TB",
+        "WAS"
       ],
-      "teams_without_injury_rows": [],
       "stale_team_or_unmatched_id_rows": 0,
-      "current_week_report_status_counts": {
-        "MISSING": 15,
-        "QUESTIONABLE": 6,
-        "OUT": 4,
-        "DOUBTFUL": 1
-      },
+      "current_week_report_status_counts": {},
       "source_last_updated_utc": null,
       "official_game_day_active_confirmed": false,
       "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
@@ -49,12 +72,7 @@
         "practice_secondary_injury",
         "practice_status"
       ],
-      "report_status_counts": {
-        "MISSING": 15,
-        "QUESTIONABLE": 6,
-        "OUT": 4,
-        "DOUBTFUL": 1
-      }
+      "report_status_counts": {}
     },
     "weekly_rosters": {
       "source_rows": 2259,
@@ -72,22 +90,22 @@
       }
     },
     "excluded": {
-      "out_report": 3,
+      "out_report": 0,
       "unavailable_roster": 0,
-      "nonactive_weekly_roster": 4
+      "nonactive_weekly_roster": 71
     },
-    "unverified_output": 0
+    "unverified_output": 37
   },
   "injury_policy": "Exact GSIS ID and current team required; official OUT excluded; questionable/doubtful and practice LIMITED/DNP flagged separately. No game designation can mean report not yet published. Weekly ACT is roster membership only, never game-day clearance. Official inactives are unverified.",
   "status": "ready",
   "snapshot_diagnostics": {
     "exists": true,
     "accuracy_eligible": true,
-    "captured_at": "2026-10-27T00:49:56.465444+00:00",
-    "candidate_count": 400,
+    "captured_at": "2026-11-03T01:03:07.022807+00:00",
+    "candidate_count": 439,
     "challenger_features_complete": true,
     "readiness": "ELIGIBLE",
-    "first_game_day_utc": "2026-10-29T00:00:00+00:00",
+    "first_game_day_utc": "2026-11-05T00:00:00+00:00",
     "next_action": "READY_FOR_GRADING"
   }
 }
