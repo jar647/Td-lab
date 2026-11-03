@@ -89,36 +89,41 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git reset --hard origin/main
+          python nba_feed.py
+          python nba_rosters.py || echo 'Roster source unavailable; existing file retained'
+          python nba_injuries.py || echo 'Injury source unavailable; existing file retained, UI will reject stale records'
+          python nba_game_context.py
+          python nba_tracker.py
+          python -m scripts.build_nba_odds
+          python nba_pipeline.py
+          node scripts/publish_nba_simulator.js
+          python nba_daily_learning.py
+          python -m unittest -v test_nba_pipeline.py test_nba_odds.py test_nba_contracts.py test_nba_daily_learning.py test_nba_first_basket.py
+          node test_market_odds.js
+          node test_player_probability.js
+          node test_nba_pipeline_ui.js
+          node test_nba_ui.js
+          node test_nba_simulator.js
+          node test_nba_first_basket.js
+          git add data/nba_simulator_report.json data/nba_simulator_locks.json
+          git add data/nba_games.json data/nba_projection_tracker.json data/nba_daily_learning.json data/nba_analysis.json data/nba_pipeline_locks.json data/nba_market_status.json
+          if test -f data/nba_market_odds.json; then git add data/nba_market_odds.json; fi
+          if test -f data/nba_season_stats.json; then git add data/nba_season_stats.json; fi
+          if test -f data/nba_rosters.json; then git add data/nba_rosters.json; fi
+          # Fast availability writer owns these files; retain newer published snapshots.
+          git restore --worktree -- data/nba_injuries.json data/nba_game_context.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Refresh NBA game data and locked projections"
+          # Rebase the completed data commit over disjoint writers instead of recomputing it.
           for attempt in 1 2 3 4; do
             git fetch origin main
-            git reset --hard origin/main
-            python nba_feed.py
-            python nba_rosters.py || echo 'Roster source unavailable; existing file retained'
-            python nba_injuries.py || echo 'Injury source unavailable; existing file retained, UI will reject stale records'
-            python nba_game_context.py
-            python nba_tracker.py
-            python -m scripts.build_nba_odds
-            python nba_pipeline.py
-            node scripts/publish_nba_simulator.js
-            python nba_daily_learning.py
-            python -m unittest -v test_nba_pipeline.py test_nba_odds.py test_nba_contracts.py test_nba_daily_learning.py test_nba_first_basket.py
-            node test_market_odds.js
-            node test_player_probability.js
-            node test_nba_pipeline_ui.js
-            node test_nba_ui.js
-            node test_nba_simulator.js
-            node test_nba_first_basket.js
-            git add data/nba_game_context.json
-            git add data/nba_simulator_report.json data/nba_simulator_locks.json
-            git add data/nba_games.json data/nba_projection_tracker.json data/nba_daily_learning.json data/nba_analysis.json data/nba_pipeline_locks.json data/nba_market_status.json
-            if test -f data/nba_market_odds.json; then git add data/nba_market_odds.json; fi
-            if test -f data/nba_season_stats.json; then git add data/nba_season_stats.json; fi
-            if test -f data/nba_rosters.json; then git add data/nba_rosters.json; fi
-            if test -f data/nba_injuries.json; then git add data/nba_injuries.json; fi
-            if git diff --cached --quiet; then exit 0; fi
-            git commit -m "Refresh NBA game data and locked projections"
+            if ! git rebase origin/main; then
+              git rebase --abort
+              exit 1
+            fi
             if git push origin HEAD:main; then exit 0; fi
-            echo "Concurrent update detected; retrying from latest main"
-            sleep 3
+            sleep 2
           done
           exit 1
