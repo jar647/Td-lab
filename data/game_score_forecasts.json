@@ -1,14 +1,14 @@
 {
   "status": "PROSPECTIVE_RESEARCH_NOT_CALIBRATED",
-  "updated_at": "2026-11-03T03:55:20.265Z",
+  "updated_at": "2026-11-03T12:05:40.929Z",
   "method": "First audited baseline forecast per game/model frozen before verified scheduled kickoff. Existing predictions are never replaced. Results graded next calendar day from schedule finals; no historical backfill.",
   "summary": {
     "frozen": 28,
-    "graded": 12,
-    "non_tie_winner_games": 12,
-    "margin_mae": 11.524999999999999,
-    "total_mae": 13.541666666666666,
-    "brier": 0.2038840949698375,
+    "graded": 13,
+    "non_tie_winner_games": 13,
+    "margin_mae": 12.092307692307692,
+    "total_mae": 13,
+    "brier": 0.2105256811347892,
     "calibration": [
       {
         "range": [
@@ -33,9 +33,9 @@
           0.4,
           0.6
         ],
-        "games": 8,
-        "mean_forecast": 0.5441004158058117,
-        "actual_home_win_rate": 0.75
+        "games": 9,
+        "mean_forecast": 0.5435031566114413,
+        "actual_home_win_rate": 0.6666666666666666
       },
       {
         "range": [
@@ -59,10 +59,10 @@
     "by_model_signature": {
       "c3b3e3b460e3a0883e08b2827895eba14a0b62d44312a2206fc697110976aa41": {
         "frozen": 13,
-        "graded": 12,
-        "margin_mae": 11.524999999999999,
-        "total_mae": 13.541666666666666,
-        "brier": 0.2038840949698375
+        "graded": 13,
+        "margin_mae": 12.092307692307692,
+        "total_mae": 13,
+        "brier": 0.2105256811347892
       },
       "6d9d4e285d034db9eb431e90002e957729227244df654b2b8f6932d849faaaaa": {
         "frozen": 15,
@@ -611,7 +611,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-03T12:05:40.929Z",
+        "home": 17,
+        "away": 34,
+        "margin_error": 18.9,
+        "total_error": -6.5,
+        "brier": 0.2902247151142095,
+        "home_won": false
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_09_JAX_BAL",
