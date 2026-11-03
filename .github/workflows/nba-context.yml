@@ -9,7 +9,7 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: nba-feed-writer
+  group: nba-context-writer
   cancel-in-progress: false
 jobs:
   refresh:
