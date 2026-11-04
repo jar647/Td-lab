@@ -74,3 +74,10 @@ slip.clear();slip.add({sport:'NBA',player:'History lead',game:'A @ B',market:'re
 assert.match(slip.formatRating(slip.getPicks()[0]),/Position matchup/);
 let historicalResolved=false;slip.recoverRatings(()=>{historicalResolved=true;return {ratingNote:'Enter odds'}});assert.equal(historicalResolved,false,'Historical leads never enter sportsbook rating repair');
 slip.clear();
+
+slip.add({sport:'NBA',game:'Away @ Home',player:'Position Player',position:'PF',market:'rebounds',recommendationLine:6,researchMethod:'position-history'});
+assert.equal(slip.getPicks().find(p=>p.player==='Position Player')?.position,'PF');
+assert.ok(require('node:fs').readFileSync('quick_slip.js','utf8').includes("positionSuffix(pick)"),'Saved NBA position must render beside player name');
+assert.equal(slip.getPicks().find(p=>p.player==='Position Player')?.player,'Position Player','Position must not be appended to identity or grading key');
+slip.clear();
+console.log('Quick Slip sourced NBA position metadata: PASS');
