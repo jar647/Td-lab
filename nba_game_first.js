@@ -55,7 +55,7 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
     }
    }
   }
-  return {rows,model: model.version,generatedAt:new Date(now).toISOString(),inputTimes:model.inputTimes,context:model.context,warnings:model.warnings,pace:model.pace,blowoutRate:simulation.blowoutRate,reason:null};
+  return {rows,players:simulation.players,model: model.version,generatedAt:new Date(now).toISOString(),inputTimes:model.inputTimes,context:model.context,warnings:model.warnings,pace:model.pace,blowoutRate:simulation.blowoutRate,reason:null};
  }catch(e){return {rows:[],reason:e.message,warnings:[]};}
 }
 return {chance,candidate,build,analyze,markets};
