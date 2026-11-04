@@ -26,6 +26,17 @@ assert.ok(match[1].includes('formatToParts'),'Eastern day comparison must use st
 assert.ok(match[1].includes('No player projections available because there are no NBA games today.'),'Empty day must be explained');
 assert.ok(match[1].includes('if(!g)'),'Invalid selection must be handled');
 assert.ok(match[1].includes('retrospective?'),'Retrospective warning must survive rendering');
+// Position chips must come from ESPN positions, not inferred from generic G/F labels.
+sandbox.CookNBAMatchups=require('./nba_matchup_discovery.js');
+vm.runInContext('rosterData={players:{"42":{position:"PG"},"43":{position:"G"}}}',sandbox);
+assert.equal(vm.runInContext('nbaPlayerTitle("Sample Guard",{id:"42"})',sandbox),'Sample Guard · PG');
+assert.equal(vm.runInContext('nbaPlayerTitle("Broad Guard",{id:"43"})',sandbox),'Broad Guard');
+assert.equal(vm.runInContext('nbaPlayerTitle("Known Center",{playerId:"no-roster",position:"C"})',sandbox),'Known Center · C');
+assert.equal(vm.runInContext('nbaPlayerTitle("Missing Position",{playerId:"none"})',sandbox),'Missing Position');
+assert.ok(match[1].includes('const summary=r=>nbaPlayerTitle(r.name,r)'), 'Best single, top three and ticket must show sourced positions');
+assert.ok(match[1].includes('esc(nbaPlayerTitle(p.name,p))'), 'Projected starters and first basket must show sourced positions');
+console.log('NBA sourced player position display: PASS');
+
 console.log('NBA lineup/projections UI smoke test: PASS');
 
 
