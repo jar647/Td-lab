@@ -68,3 +68,9 @@ slip.add({...rated,propScore:81});assert.equal(slip.getPicks()[0].ratingRecalcul
 slip.add({...rated,propScore:null});slip.recoverRatings(()=>({ratingNote:'Enter odds for this selection'}));
 assert.match(slip.formatRating(slip.getPicks()[0]),/Enter odds/);
 slip.clear();console.log('Legacy rating recovery preserves selections and saved snapshots: PASS');
+
+
+slip.clear();slip.add({sport:'NBA',player:'History lead',game:'A @ B',market:'rebounds',recommendationLine:6,researchMethod:'position-history',sampleHits:4,sampleSize:5});
+assert.match(slip.formatRating(slip.getPicks()[0]),/Position matchup/);
+let historicalResolved=false;slip.recoverRatings(()=>{historicalResolved=true;return {ratingNote:'Enter odds'}});assert.equal(historicalResolved,false,'Historical leads never enter sportsbook rating repair');
+slip.clear();
