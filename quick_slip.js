@@ -50,6 +50,10 @@
   const odds=Number(pick.ratedOdds),price=Number.isFinite(odds)&&Math.abs(odds)>=100?' · at '+(odds>0?'+':'')+odds:'';
   return (pick.ratingRecalculated?'Recalculated rating ':'Saved rating ')+pick.propScore+'/100'+price+' · ranking, not win probability';
  }
+ function positionSuffix(pick){
+  const code=String(pick.position||'').toUpperCase();
+  return pick.sport==='NBA'&&['PG','SG','SF','PF','C'].includes(code)?' · '+code:'';
+ }
  function row(pick,index){
   const has=(value)=>value!==null&&value!==undefined&&value!==''&&Number.isFinite(Number(value));
   const sample=has(pick.sampleHits)&&has(pick.sampleSize)&&Number(pick.sampleSize)>0
@@ -64,7 +68,7 @@
    ?'<span class="quick-slip-sample">Matchup '+(Number(pick.matchupEdge)>=0?'+':'')+(100*Number(pick.matchupEdge)).toFixed(0)+'% vs sample</span>':'';
   const edge=has(pick.estimatedEdge)
    ?'<span class="quick-slip-edge">Edge '+(Number(pick.estimatedEdge)>=0?'+':'')+(100*Number(pick.estimatedEdge)).toFixed(1)+'% vs '+esc(pick.edgeBasis||'price')+' · uncalibrated</span>':'';
-  return '<article class="quick-slip-row"><div class="quick-slip-pick"><div><strong>'+esc(pick.player||'Player')+'</strong><div class="quick-slip-recommendation">'+esc(recommendation(pick))+'</div><div class="quick-slip-evidence">'+(formatRating(pick)?'<span class="quick-slip-rating">'+esc(formatRating(pick))+'</span>':'')+firstBasket+matchupResearch+sample+matchup+scenario+edge+'</div></div><button type="button" class="quick-slip-remove" aria-label="Remove '+esc(pick.player||'player')+' from Quick Slip" data-slip-remove="'+index+'">×</button></div></article>';
+  return '<article class="quick-slip-row"><div class="quick-slip-pick"><div><strong>'+esc((pick.player||'Player')+positionSuffix(pick))+'</strong><div class="quick-slip-recommendation">'+esc(recommendation(pick))+'</div><div class="quick-slip-evidence">'+(formatRating(pick)?'<span class="quick-slip-rating">'+esc(formatRating(pick))+'</span>':'')+firstBasket+matchupResearch+sample+matchup+scenario+edge+'</div></div><button type="button" class="quick-slip-remove" aria-label="Remove '+esc(pick.player||'player')+' from Quick Slip" data-slip-remove="'+index+'">×</button></div></article>';
  }
  function recoverRatings(resolve){
   let recovered=0,unresolved=0,changed=false;
