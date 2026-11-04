@@ -1,7 +1,7 @@
 {
   "season": 2026,
   "week": 9,
-  "generated_at": "2026-11-03T12:05:20.500518+00:00",
+  "generated_at": "2026-11-04T12:08:28.441425+00:00",
   "matchups": 442,
   "source": "nflverse play-by-play and rosters",
   "odds_source": null,
@@ -9,17 +9,19 @@
   "lookback_games": 5,
   "availability_diagnostics": {
     "injuries": {
-      "report_stage": "NO_CURRENT_WEEK_REPORT",
-      "rows_for_week": 0,
-      "matched_rows": 0,
+      "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+      "rows_for_week": 28,
+      "matched_rows": 28,
       "matched_ids": 0,
-      "practice_flags": 0,
+      "practice_flags": 18,
       "game_designations_reported": 0,
-      "teams_with_injury_rows": [],
+      "teams_with_injury_rows": [
+        "BAL",
+        "JAX"
+      ],
       "teams_without_injury_rows": [
         "ARI",
         "ATL",
-        "BAL",
         "BUF",
         "CAR",
         "CHI",
@@ -31,7 +33,6 @@
         "GB",
         "HOU",
         "IND",
-        "JAX",
         "KC",
         "LA",
         "LAC",
@@ -49,11 +50,13 @@
         "WAS"
       ],
       "stale_team_or_unmatched_id_rows": 0,
-      "current_week_report_status_counts": {},
+      "current_week_report_status_counts": {
+        "MISSING": 28
+      },
       "source_last_updated_utc": null,
       "official_game_day_active_confirmed": false,
       "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-      "source_rows": 2459,
+      "source_rows": 2487,
       "columns": [
         "season",
         "season_type",
@@ -72,7 +75,9 @@
         "practice_secondary_injury",
         "practice_status"
       ],
-      "report_status_counts": {}
+      "report_status_counts": {
+        "MISSING": 28
+      }
     },
     "weekly_rosters": {
       "source_rows": 2259,

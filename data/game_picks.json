@@ -1,7 +1,7 @@
 {
   "season": 2026,
   "week": 9,
-  "generated_at": "2026-11-03T12:05:40.599136+00:00",
+  "generated_at": "2026-11-04T12:08:46.993531+00:00",
   "model_status": "AUDITED_BASELINE_UNCALIBRATED",
   "model_version": "score-baseline-trust-v3",
   "note": "Historical scoring research baseline; independently recomputed source rates; QB-led history separated; no unvalidated EPA point correction or verified betting recommendation.",
@@ -144,7 +144,7 @@
                   "starter_context": null,
                   "games": 5,
                   "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
+                  "practice": "DNP_PRACTICE",
                   "pass_attempts_per_game": 24.4,
                   "pass_yards_per_game": 145.4,
                   "carries_per_game": 3.0,
@@ -356,23 +356,188 @@
                 "scope": "Head coach records in available schedule history; assistant and college records excluded."
               },
               "injuries": {
-                "reports": [],
-                "report_count": 0,
-                "coverage": "NO_MATCHED_CURRENT_WEEK_REPORT",
+                "reports": [
+                  {
+                    "player_id": "00-0026190",
+                    "player": "Calais Campbell",
+                    "position": "DT",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0030070",
+                    "player": "John Jenkins",
+                    "position": "DT",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0032965",
+                    "player": "Ronnie Stanley",
+                    "position": "T",
+                    "designation": null,
+                    "practice": "Full Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0033935",
+                    "player": "Trey Hendrickson",
+                    "position": "LB",
+                    "designation": null,
+                    "practice": "Full Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0034753",
+                    "player": "Mark Andrews",
+                    "position": "TE",
+                    "designation": null,
+                    "practice": "Full Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0034796",
+                    "player": "Lamar Jackson",
+                    "position": "QB",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0034874",
+                    "player": "Roquan Smith",
+                    "position": "LB",
+                    "designation": null,
+                    "practice": "Full Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0034975",
+                    "player": "Justice Hill",
+                    "position": "RB",
+                    "designation": null,
+                    "practice": "Full Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0035993",
+                    "player": "Tyler Huntley",
+                    "position": "QB",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0036302",
+                    "player": "Jaylinn Hawkins",
+                    "position": "S",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0036369",
+                    "player": "John Simpson",
+                    "position": "G",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0039232",
+                    "player": "Nate Wiggins",
+                    "position": "CB",
+                    "designation": null,
+                    "practice": "Full Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0039233",
+                    "player": "Roger Rosengarten",
+                    "position": "T",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0040074",
+                    "player": "Tyler Loop",
+                    "position": "K",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0040866",
+                    "player": "Olaivavega Ioane",
+                    "position": "G",
+                    "designation": null,
+                    "practice": "Full Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0040879",
+                    "player": "Matthew Hibner",
+                    "position": "TE",
+                    "designation": null,
+                    "practice": "Full Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0040888",
+                    "player": "Adam Randall",
+                    "position": "RB",
+                    "designation": null,
+                    "practice": "Full Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0040981",
+                    "player": "Joe Fagnano",
+                    "position": "QB",
+                    "designation": null,
+                    "practice": "Full Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  }
+                ],
+                "report_count": 18,
+                "coverage": "REPORTED",
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -384,7 +549,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -404,11 +568,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -493,7 +659,7 @@
                     "starter_context": null,
                     "games": 7,
                     "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
+                    "practice": "DNP_PRACTICE",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
                     "carries_per_game": 15.714,
@@ -543,7 +709,7 @@
                     "starter_context": null,
                     "games": 7,
                     "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
+                    "practice": "LIMITED_PRACTICE",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
                     "carries_per_game": 6.429,
@@ -671,23 +837,116 @@
                 "scope": "Head coach records in available schedule history; assistant and college records excluded."
               },
               "injuries": {
-                "reports": [],
-                "report_count": 0,
-                "coverage": "NO_MATCHED_CURRENT_WEEK_REPORT",
+                "reports": [
+                  {
+                    "player_id": "00-0033038",
+                    "player": "Eric Murray",
+                    "position": "S",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0034960",
+                    "player": "Jakobi Meyers",
+                    "position": "WR",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0036262",
+                    "player": "DaVon Hamilton",
+                    "position": "DT",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0036327",
+                    "player": "Ezra Cleveland",
+                    "position": "G",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0037235",
+                    "player": "Travon Walker",
+                    "position": "DE",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0038596",
+                    "player": "Antonio Johnson",
+                    "position": "S",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0038611",
+                    "player": "Chris Rodriguez Jr.",
+                    "position": "RB",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0039353",
+                    "player": "Jarrian Jones",
+                    "position": "CB",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0040326",
+                    "player": "Branson Combs",
+                    "position": "LB",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0040719",
+                    "player": "Bhayshul Tuten",
+                    "position": "RB",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  }
+                ],
+                "report_count": 10,
+                "coverage": "REPORTED",
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -699,7 +958,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -719,11 +977,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -756,11 +1016,11 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "grass",
-            "temperature_f": 68,
+            "temperature_f": 67,
             "wind_mph": 3.0,
             "wind_direction": "S",
-            "precipitation_probability": 41,
-            "weather_condition": "Chance Light Rain",
+            "precipitation_probability": 28,
+            "weather_condition": "Chance Rain Showers",
             "weather_updated_at": null
           },
           "travel": {
@@ -771,7 +1031,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-03T12:05:37.206416+00:00",
+            "retrieved_at": "2026-11-04T12:08:44.615886+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -801,17 +1061,17 @@
             "source": "National Weather Service hourly forecast",
             "forecast_time": "2026-11-05T20:00:00-05:00",
             "updated_at": null,
-            "temperature_f": 68,
+            "temperature_f": 67,
             "wind_mph": 3.0,
             "wind_direction": "S",
-            "precipitation_probability": 41,
-            "condition": "Chance Light Rain"
+            "precipitation_probability": 28,
+            "condition": "Chance Rain Showers"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-03T12:05:36.804036+00:00",
+          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
+          "checked_at": "2026-11-04T12:08:44.414518+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -1020,7 +1280,7 @@
           "away_rest": 4.0,
           "travel_miles": 681,
           "roof": "outdoors",
-          "temperature_f": 68,
+          "temperature_f": 67,
           "wind_mph": 3.0
         },
         "prior_games": 4.0,
@@ -1105,7 +1365,7 @@
             "pass_epa_offense": -0.15163211178336236,
             "pass_epa_defense_allowed": 0.014729929396756653,
             "rush_epa_offense": -0.10269647264388046,
-            "rush_epa_defense_allowed": 0.016946326561338643,
+            "rush_epa_defense_allowed": 0.016946326561338636,
             "plays_per_game": 58.75,
             "turnovers_per_game": 1.75,
             "defensive_sacks_per_game": 3.2857142857142856,
@@ -1402,17 +1662,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -1424,7 +1686,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -1444,11 +1705,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -1717,17 +1980,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -1739,7 +2004,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -1759,11 +2023,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -1796,10 +2062,10 @@
             "location": "Neutral",
             "roof": null,
             "surface": "fieldturf",
-            "temperature_f": 55,
+            "temperature_f": 52,
             "wind_mph": 5.0,
             "wind_direction": "N",
-            "precipitation_probability": 5,
+            "precipitation_probability": 0,
             "weather_condition": "Mostly Sunny",
             "weather_updated_at": null
           },
@@ -1809,7 +2075,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-03T12:05:37.489049+00:00",
+            "retrieved_at": "2026-11-04T12:08:44.877380+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -1839,17 +2105,17 @@
             "source": "National Weather Service hourly forecast",
             "forecast_time": "2026-11-08T09:00:00-05:00",
             "updated_at": null,
-            "temperature_f": 55,
+            "temperature_f": 52,
             "wind_mph": 5.0,
             "wind_direction": "N",
-            "precipitation_probability": 5,
+            "precipitation_probability": 0,
             "condition": "Mostly Sunny"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-03T12:05:36.804036+00:00",
+          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
+          "checked_at": "2026-11-04T12:08:44.414518+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -1964,12 +2230,12 @@
                 "defense": {
                   "games": 7,
                   "plays": 437,
-                  "epa_per_play": -0.008485387569738722,
+                  "epa_per_play": -0.00848538756973873,
                   "success_rate": 0.43935926773455375,
                   "explosive_rate": 0.10983981693363844,
                   "pass_rate": 0.6041189931350115,
                   "pass_epa": -0.007076102525973863,
-                  "rush_epa": -0.010635972838836535,
+                  "rush_epa": -0.010635972838836546,
                   "sacks_per_game": 3.2857142857142856
                 },
                 "recent_offense": {
@@ -2058,7 +2324,7 @@
           "away_rest": 7.0,
           "travel_miles": null,
           "roof": null,
-          "temperature_f": 55,
+          "temperature_f": 52,
           "wind_mph": 5.0
         },
         "prior_games": 4.0,
@@ -2432,17 +2698,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -2454,7 +2722,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -2474,11 +2741,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -2755,17 +3024,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -2777,7 +3048,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -2797,11 +3067,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -2834,11 +3106,11 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "grass",
-            "temperature_f": 67,
+            "temperature_f": 64,
             "wind_mph": 5.0,
-            "wind_direction": "W",
-            "precipitation_probability": 6,
-            "weather_condition": "Mostly Sunny",
+            "wind_direction": "NW",
+            "precipitation_probability": 1,
+            "weather_condition": "Sunny",
             "weather_updated_at": null
           },
           "travel": {
@@ -2849,7 +3121,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-03T12:05:38.094274+00:00",
+            "retrieved_at": "2026-11-04T12:08:45.114713+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -2879,17 +3151,17 @@
             "source": "National Weather Service hourly forecast",
             "forecast_time": "2026-11-08T13:00:00-05:00",
             "updated_at": null,
-            "temperature_f": 67,
+            "temperature_f": 64,
             "wind_mph": 5.0,
-            "wind_direction": "W",
-            "precipitation_probability": 6,
-            "condition": "Mostly Sunny"
+            "wind_direction": "NW",
+            "precipitation_probability": 1,
+            "condition": "Sunny"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-03T12:05:36.804036+00:00",
+          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
+          "checked_at": "2026-11-04T12:08:44.414518+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -3098,7 +3370,7 @@
           "away_rest": 7.0,
           "travel_miles": 1357,
           "roof": "outdoors",
-          "temperature_f": 67,
+          "temperature_f": 64,
           "wind_mph": 5.0
         },
         "prior_games": 4.0,
@@ -3480,17 +3752,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -3502,7 +3776,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -3522,11 +3795,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -3803,17 +4078,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -3825,7 +4102,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -3845,11 +4121,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -3885,8 +4163,8 @@
             "temperature_f": 55,
             "wind_mph": 8.0,
             "wind_direction": "W",
-            "precipitation_probability": 12,
-            "weather_condition": "Mostly Sunny",
+            "precipitation_probability": 1,
+            "weather_condition": "Sunny",
             "weather_updated_at": null
           },
           "travel": {
@@ -3897,7 +4175,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-03T12:05:38.352215+00:00",
+            "retrieved_at": "2026-11-04T12:08:45.303972+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -3930,14 +4208,14 @@
             "temperature_f": 55,
             "wind_mph": 8.0,
             "wind_direction": "W",
-            "precipitation_probability": 12,
-            "condition": "Mostly Sunny"
+            "precipitation_probability": 1,
+            "condition": "Sunny"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-03T12:05:36.804036+00:00",
+          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
+          "checked_at": "2026-11-04T12:08:44.414518+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -4521,17 +4799,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -4543,7 +4823,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -4563,11 +4842,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -4844,17 +5125,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -4866,7 +5149,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -4886,11 +5168,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -4924,9 +5208,9 @@
             "roof": "outdoors",
             "surface": "grass",
             "temperature_f": 58,
-            "wind_mph": 8.0,
+            "wind_mph": 3.0,
             "wind_direction": "W",
-            "precipitation_probability": 4,
+            "precipitation_probability": 0,
             "weather_condition": "Sunny",
             "weather_updated_at": null
           },
@@ -4938,7 +5222,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-03T12:05:38.628803+00:00",
+            "retrieved_at": "2026-11-04T12:08:45.470433+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -4969,16 +5253,16 @@
             "forecast_time": "2026-11-08T12:00:00-06:00",
             "updated_at": null,
             "temperature_f": 58,
-            "wind_mph": 8.0,
+            "wind_mph": 3.0,
             "wind_direction": "W",
-            "precipitation_probability": 4,
+            "precipitation_probability": 0,
             "condition": "Sunny"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-03T12:05:36.804036+00:00",
+          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
+          "checked_at": "2026-11-04T12:08:44.414518+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -5188,7 +5472,7 @@
           "travel_miles": 1086,
           "roof": "outdoors",
           "temperature_f": 58,
-          "wind_mph": 8.0
+          "wind_mph": 3.0
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -5561,17 +5845,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -5583,7 +5869,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -5603,11 +5888,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -5876,17 +6163,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -5898,7 +6187,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -5918,11 +6206,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -5956,10 +6246,10 @@
             "roof": "outdoors",
             "surface": "grass",
             "temperature_f": 82,
-            "wind_mph": 6.0,
-            "wind_direction": "SE",
-            "precipitation_probability": 15,
-            "weather_condition": "Slight Chance Showers And Thunderstorms",
+            "wind_mph": 3.0,
+            "wind_direction": "NE",
+            "precipitation_probability": 16,
+            "weather_condition": "Slight Chance Rain Showers",
             "weather_updated_at": null
           },
           "travel": {
@@ -5970,7 +6260,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-03T12:05:38.891104+00:00",
+            "retrieved_at": "2026-11-04T12:08:45.618643+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -6001,16 +6291,16 @@
             "forecast_time": "2026-11-08T13:00:00-05:00",
             "updated_at": null,
             "temperature_f": 82,
-            "wind_mph": 6.0,
-            "wind_direction": "SE",
-            "precipitation_probability": 15,
-            "condition": "Slight Chance Showers And Thunderstorms"
+            "wind_mph": 3.0,
+            "wind_direction": "NE",
+            "precipitation_probability": 16,
+            "condition": "Slight Chance Rain Showers"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-03T12:05:36.804036+00:00",
+          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
+          "checked_at": "2026-11-04T12:08:44.414518+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -6150,7 +6440,7 @@
                   "success_rate": 0.43529411764705883,
                   "explosive_rate": 0.09803921568627451,
                   "pass_rate": 0.6862745098039216,
-                  "pass_epa": 0.17826120175440166,
+                  "pass_epa": 0.17826120175440163,
                   "rush_epa": -0.1452057835755113,
                   "sacks_per_game": 3.0
                 }
@@ -6219,7 +6509,7 @@
           "travel_miles": 1143,
           "roof": "outdoors",
           "temperature_f": 82,
-          "wind_mph": 6.0
+          "wind_mph": 3.0
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -6323,16 +6613,16 @@
             "offense_pass_rate": 0.6078147135373768,
             "defense_pass_rate_allowed": 0.5539606142993607,
             "expected_pass_rate": 0.5808876639183688,
-            "pass_epa_matchup_delta": -0.16762452189905547,
+            "pass_epa_matchup_delta": -0.16762452189905544,
             "rush_epa_matchup_delta": -0.18789561762716978,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": -0.17612038818459982,
+            "epa_per_play_delta": -0.1761203881845998,
             "success_rate_delta": -0.0626775502490684,
             "explosive_rate_offense": 0.08368200836820083,
             "explosive_rate_defense_allowed": 0.10933940774487472,
             "pass_epa_offense": -0.10251835827114089,
-            "pass_epa_defense_allowed": 0.06510616362791458,
+            "pass_epa_defense_allowed": 0.06510616362791455,
             "rush_epa_offense": -0.09653903880107509,
             "rush_epa_defense_allowed": 0.09135657882609469,
             "plays_per_game": 59.75,
@@ -6592,17 +6882,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -6614,7 +6906,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -6634,11 +6925,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -6915,17 +7208,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -6937,7 +7232,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -6957,11 +7251,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -7005,7 +7301,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-03T12:05:38.923565+00:00",
+            "retrieved_at": "2026-11-04T12:08:45.665114+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -7038,8 +7334,8 @@
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-03T12:05:36.804036+00:00",
+          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
+          "checked_at": "2026-11-04T12:08:44.414518+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -7111,11 +7407,11 @@
                 "recent_defense": {
                   "games": 4,
                   "plays": 248,
-                  "epa_per_play": 0.08022060171305033,
+                  "epa_per_play": 0.08022060171305032,
                   "success_rate": 0.4798387096774194,
                   "explosive_rate": 0.125,
                   "pass_rate": 0.5443548387096774,
-                  "pass_epa": 0.04541795992556912,
+                  "pass_epa": 0.04541795992556911,
                   "rush_epa": 0.1217989790697757,
                   "sacks_per_game": 2.75
                 }
@@ -7322,7 +7618,7 @@
             "offense_pass_rate": 0.6305271966527197,
             "defense_pass_rate_allowed": 0.5441015430562469,
             "expected_pass_rate": 0.5873143698544834,
-            "pass_epa_matchup_delta": -0.0766431748000728,
+            "pass_epa_matchup_delta": -0.07664317480007278,
             "rush_epa_matchup_delta": -0.15788704022415326,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
@@ -7331,7 +7627,7 @@
             "explosive_rate_offense": 0.05439330543933055,
             "explosive_rate_defense_allowed": 0.0951219512195122,
             "pass_epa_offense": -0.14137169537929534,
-            "pass_epa_defense_allowed": -0.06472852057922254,
+            "pass_epa_defense_allowed": -0.06472852057922256,
             "rush_epa_offense": -0.12319394152583324,
             "rush_epa_defense_allowed": 0.03469309869832001,
             "plays_per_game": 59.75,
@@ -7630,17 +7926,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -7652,7 +7950,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -7672,11 +7969,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -7945,17 +8244,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -7967,7 +8268,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -7987,11 +8287,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -8024,10 +8326,10 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "grass",
-            "temperature_f": 60,
-            "wind_mph": 5.0,
-            "wind_direction": "NW",
-            "precipitation_probability": 9,
+            "temperature_f": 58,
+            "wind_mph": 10.0,
+            "wind_direction": "W",
+            "precipitation_probability": 5,
             "weather_condition": "Mostly Sunny",
             "weather_updated_at": null
           },
@@ -8039,7 +8341,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-03T12:05:39.184417+00:00",
+            "retrieved_at": "2026-11-04T12:08:45.981157+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -8069,17 +8371,17 @@
             "source": "National Weather Service hourly forecast",
             "forecast_time": "2026-11-08T13:00:00-05:00",
             "updated_at": null,
-            "temperature_f": 60,
-            "wind_mph": 5.0,
-            "wind_direction": "NW",
-            "precipitation_probability": 9,
+            "temperature_f": 58,
+            "wind_mph": 10.0,
+            "wind_direction": "W",
+            "precipitation_probability": 5,
             "condition": "Mostly Sunny"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-03T12:05:36.804036+00:00",
+          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
+          "checked_at": "2026-11-04T12:08:44.414518+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -8194,7 +8496,7 @@
                 "defense": {
                   "games": 7,
                   "plays": 410,
-                  "epa_per_play": 0.011029750879812275,
+                  "epa_per_play": 0.011029750879812271,
                   "success_rate": 0.4317073170731707,
                   "explosive_rate": 0.0951219512195122,
                   "pass_rate": 0.5585365853658537,
@@ -8216,7 +8518,7 @@
                 "recent_defense": {
                   "games": 4,
                   "plays": 245,
-                  "epa_per_play": -0.06054297683787193,
+                  "epa_per_play": -0.06054297683787194,
                   "success_rate": 0.40408163265306124,
                   "explosive_rate": 0.09795918367346938,
                   "pass_rate": 0.5224489795918368,
@@ -8288,8 +8590,8 @@
           "away_rest": 14.0,
           "travel_miles": 85,
           "roof": "outdoors",
-          "temperature_f": 60,
-          "wind_mph": 5.0
+          "temperature_f": 58,
+          "wind_mph": 10.0
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -8662,17 +8964,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -8684,7 +8988,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -8704,11 +9007,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -8985,17 +9290,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -9007,7 +9314,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -9027,11 +9333,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -9064,10 +9372,10 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "grass",
-            "temperature_f": 62,
-            "wind_mph": 6.0,
+            "temperature_f": 59,
+            "wind_mph": 10.0,
             "wind_direction": "NW",
-            "precipitation_probability": 8,
+            "precipitation_probability": 2,
             "weather_condition": "Mostly Sunny",
             "weather_updated_at": null
           },
@@ -9079,7 +9387,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-03T12:05:39.451441+00:00",
+            "retrieved_at": "2026-11-04T12:08:46.190150+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -9109,17 +9417,17 @@
             "source": "National Weather Service hourly forecast",
             "forecast_time": "2026-11-08T13:00:00-05:00",
             "updated_at": null,
-            "temperature_f": 62,
-            "wind_mph": 6.0,
+            "temperature_f": 59,
+            "wind_mph": 10.0,
             "wind_direction": "NW",
-            "precipitation_probability": 8,
+            "precipitation_probability": 2,
             "condition": "Mostly Sunny"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-03T12:05:36.804036+00:00",
+          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
+          "checked_at": "2026-11-04T12:08:44.414518+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -9328,8 +9636,8 @@
           "away_rest": 7.0,
           "travel_miles": 2311,
           "roof": "outdoors",
-          "temperature_f": 62,
-          "wind_mph": 6.0
+          "temperature_f": 59,
+          "wind_mph": 10.0
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -9426,7 +9734,7 @@
             "available": true,
             "offense_games": 7,
             "defense_games": 7,
-            "offense_epa_per_play": 0.0689809121375044,
+            "offense_epa_per_play": 0.06898091213750439,
             "defense_epa_allowed_per_play": -0.0598243945746278,
             "offense_success_rate": 0.4350849673202615,
             "defense_success_allowed_rate": 0.4327274336478996,
@@ -9702,17 +10010,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -9724,7 +10034,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -9744,11 +10053,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -10017,17 +10328,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -10039,7 +10352,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -10059,11 +10371,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -10107,7 +10421,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-03T12:05:39.484442+00:00",
+            "retrieved_at": "2026-11-04T12:08:46.235306+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -10140,8 +10454,8 @@
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-03T12:05:36.804036+00:00",
+          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
+          "checked_at": "2026-11-04T12:08:44.414518+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -10244,12 +10558,12 @@
                 "offense": {
                   "games": 7,
                   "plays": 425,
-                  "epa_per_play": 0.02666427296906783,
+                  "epa_per_play": 0.02666427296906782,
                   "success_rate": 0.4258823529411765,
                   "explosive_rate": 0.09647058823529411,
                   "pass_rate": 0.611764705882353,
-                  "pass_epa": 0.10864273422079983,
-                  "rush_epa": -0.10251390839729774,
+                  "pass_epa": 0.1086427342207998,
+                  "rush_epa": -0.10251390839729776,
                   "turnovers_per_game": 0.42857142857142855
                 },
                 "defense": {
@@ -10259,7 +10573,7 @@
                   "success_rate": 0.41309255079006774,
                   "explosive_rate": 0.09932279909706546,
                   "pass_rate": 0.6027088036117382,
-                  "pass_epa": 0.06286571432806366,
+                  "pass_epa": 0.06286571432806365,
                   "rush_epa": -0.017136531983190005,
                   "sacks_per_game": 3.0
                 },
@@ -10270,7 +10584,7 @@
                   "success_rate": 0.4488888888888889,
                   "explosive_rate": 0.10222222222222223,
                   "pass_rate": 0.5822222222222222,
-                  "pass_epa": 0.2973347262275052,
+                  "pass_epa": 0.2973347262275051,
                   "rush_epa": -0.09732210835656739,
                   "turnovers_per_game": 0.25
                 },
@@ -10723,17 +11037,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -10745,7 +11061,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -10765,11 +11080,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -11046,17 +11363,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -11068,7 +11387,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -11088,11 +11406,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -11129,7 +11449,7 @@
             "wind_mph": 3.0,
             "wind_direction": "NW",
             "precipitation_probability": 0,
-            "weather_condition": "Sunny",
+            "weather_condition": "Mostly Sunny",
             "weather_updated_at": null
           },
           "travel": {
@@ -11140,7 +11460,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-03T12:05:39.759973+00:00",
+            "retrieved_at": "2026-11-04T12:08:46.459572+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -11174,13 +11494,13 @@
             "wind_mph": 3.0,
             "wind_direction": "NW",
             "precipitation_probability": 0,
-            "condition": "Sunny"
+            "condition": "Mostly Sunny"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-03T12:05:36.804036+00:00",
+          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
+          "checked_at": "2026-11-04T12:08:44.414518+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -11771,17 +12091,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -11793,7 +12115,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -11813,11 +12134,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -12094,17 +12417,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -12116,7 +12441,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -12136,11 +12460,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -12173,10 +12499,10 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "fieldturf",
-            "temperature_f": 58,
-            "wind_mph": 5.0,
+            "temperature_f": 56,
+            "wind_mph": 6.0,
             "wind_direction": "W",
-            "precipitation_probability": 10,
+            "precipitation_probability": 5,
             "weather_condition": "Mostly Sunny",
             "weather_updated_at": null
           },
@@ -12188,7 +12514,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-03T12:05:40.031111+00:00",
+            "retrieved_at": "2026-11-04T12:08:46.642242+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -12218,17 +12544,17 @@
             "source": "National Weather Service hourly forecast",
             "forecast_time": "2026-11-08T16:00:00-05:00",
             "updated_at": null,
-            "temperature_f": 58,
-            "wind_mph": 5.0,
+            "temperature_f": 56,
+            "wind_mph": 6.0,
             "wind_direction": "W",
-            "precipitation_probability": 10,
+            "precipitation_probability": 5,
             "condition": "Mostly Sunny"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-03T12:05:36.804036+00:00",
+          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
+          "checked_at": "2026-11-04T12:08:44.414518+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -12438,8 +12764,8 @@
           "away_rest": 10.0,
           "travel_miles": 859,
           "roof": "outdoors",
-          "temperature_f": 58,
-          "wind_mph": 5.0
+          "temperature_f": 56,
+          "wind_mph": 6.0
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -12820,17 +13146,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -12842,7 +13170,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -12862,11 +13189,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -13143,17 +13472,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -13165,7 +13496,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -13185,11 +13515,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -13222,10 +13554,10 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "fieldturf",
-            "temperature_f": 56,
-            "wind_mph": 9.0,
+            "temperature_f": 54,
+            "wind_mph": 10.0,
             "wind_direction": "SSW",
-            "precipitation_probability": 47,
+            "precipitation_probability": 33,
             "weather_condition": "Chance Light Rain",
             "weather_updated_at": null
           },
@@ -13237,7 +13569,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-03T12:05:40.287429+00:00",
+            "retrieved_at": "2026-11-04T12:08:46.781154+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -13267,17 +13599,17 @@
             "source": "National Weather Service hourly forecast",
             "forecast_time": "2026-11-08T13:00:00-08:00",
             "updated_at": null,
-            "temperature_f": 56,
-            "wind_mph": 9.0,
+            "temperature_f": 54,
+            "wind_mph": 10.0,
             "wind_direction": "SSW",
-            "precipitation_probability": 47,
+            "precipitation_probability": 33,
             "condition": "Chance Light Rain"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-03T12:05:36.804036+00:00",
+          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
+          "checked_at": "2026-11-04T12:08:44.414518+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -13487,8 +13819,8 @@
           "away_rest": 7.0,
           "travel_miles": 1104,
           "roof": "outdoors",
-          "temperature_f": 56,
-          "wind_mph": 9.0
+          "temperature_f": 54,
+          "wind_mph": 10.0
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -13869,17 +14201,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -13891,7 +14225,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -13911,11 +14244,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -14192,17 +14527,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -14214,7 +14551,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -14234,11 +14570,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -14271,11 +14609,11 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "grass",
-            "temperature_f": 49,
-            "wind_mph": 10.0,
+            "temperature_f": 48,
+            "wind_mph": 5.0,
             "wind_direction": "W",
-            "precipitation_probability": 16,
-            "weather_condition": "Slight Chance Rain Showers",
+            "precipitation_probability": 2,
+            "weather_condition": "Mostly Clear",
             "weather_updated_at": null
           },
           "travel": {
@@ -14286,7 +14624,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-03T12:05:40.565759+00:00",
+            "retrieved_at": "2026-11-04T12:08:46.948903+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -14316,17 +14654,17 @@
             "source": "National Weather Service hourly forecast",
             "forecast_time": "2026-11-08T19:00:00-06:00",
             "updated_at": null,
-            "temperature_f": 49,
-            "wind_mph": 10.0,
+            "temperature_f": 48,
+            "wind_mph": 5.0,
             "wind_direction": "W",
-            "precipitation_probability": 16,
-            "condition": "Slight Chance Rain Showers"
+            "precipitation_probability": 2,
+            "condition": "Mostly Clear"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-03T12:05:36.804036+00:00",
+          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
+          "checked_at": "2026-11-04T12:08:44.414518+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -14536,8 +14874,8 @@
           "away_rest": 7.0,
           "travel_miles": 1002,
           "roof": "outdoors",
-          "temperature_f": 49,
-          "wind_mph": 10.0
+          "temperature_f": 48,
+          "wind_mph": 5.0
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -14618,7 +14956,7 @@
             "success_rate_delta": -0.06484778885419029,
             "explosive_rate_offense": 0.09203980099502487,
             "explosive_rate_defense_allowed": 0.10021786492374728,
-            "pass_epa_offense": -0.05331548997859801,
+            "pass_epa_offense": -0.053315489978598016,
             "pass_epa_defense_allowed": 0.12273179243710744,
             "rush_epa_offense": -0.13283007286129322,
             "rush_epa_defense_allowed": -0.04880208536228282,
@@ -14910,17 +15248,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -14932,7 +15272,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -14952,11 +15291,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -15225,17 +15566,19 @@
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
-                  "report_stage": "NO_CURRENT_WEEK_REPORT",
-                  "rows_for_week": 0,
-                  "matched_rows": 0,
+                  "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+                  "rows_for_week": 28,
+                  "matched_rows": 28,
                   "matched_ids": 0,
-                  "practice_flags": 0,
+                  "practice_flags": 18,
                   "game_designations_reported": 0,
-                  "teams_with_injury_rows": [],
+                  "teams_with_injury_rows": [
+                    "BAL",
+                    "JAX"
+                  ],
                   "teams_without_injury_rows": [
                     "ARI",
                     "ATL",
-                    "BAL",
                     "BUF",
                     "CAR",
                     "CHI",
@@ -15247,7 +15590,6 @@
                     "GB",
                     "HOU",
                     "IND",
-                    "JAX",
                     "KC",
                     "LA",
                     "LAC",
@@ -15267,11 +15609,13 @@
                     "WAS"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
-                  "current_week_report_status_counts": {},
+                  "current_week_report_status_counts": {
+                    "MISSING": 28
+                  },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2459,
+                  "source_rows": 2487,
                   "columns": [
                     "season",
                     "season_type",
@@ -15315,7 +15659,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-03T12:05:40.598602+00:00",
+            "retrieved_at": "2026-11-04T12:08:46.993091+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -15348,8 +15692,8 @@
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-03T12:05:36.804036+00:00",
+          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
+          "checked_at": "2026-11-04T12:08:44.414518+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -15388,11 +15732,11 @@
                 "offense": {
                   "games": 7,
                   "plays": 402,
-                  "epa_per_play": -0.09576036714675329,
+                  "epa_per_play": -0.0957603671467533,
                   "success_rate": 0.373134328358209,
                   "explosive_rate": 0.09203980099502487,
                   "pass_rate": 0.5348258706467661,
-                  "pass_epa": -0.06938483728459359,
+                  "pass_epa": -0.0693848372845936,
                   "rush_epa": -0.12608517420752513,
                   "turnovers_per_game": 0.7142857142857143
                 },
@@ -15410,11 +15754,11 @@
                 "recent_offense": {
                   "games": 4,
                   "plays": 237,
-                  "epa_per_play": -0.07960081476367961,
+                  "epa_per_play": -0.07960081476367963,
                   "success_rate": 0.4177215189873418,
                   "explosive_rate": 0.10970464135021098,
                   "pass_rate": 0.5569620253164557,
-                  "pass_epa": -0.029211469019604627,
+                  "pass_epa": -0.029211469019604665,
                   "rush_epa": -0.1429474208419453,
                   "turnovers_per_game": 0.75
                 },
