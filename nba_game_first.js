@@ -7,6 +7,7 @@ const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),mean=a=>a.reduce((s,x)=>s+x,0)/Ma
 function chance(row,line){if(!Number.isFinite(line)||line<.5||!row.samples?.length)return null;return row.samples.filter(x=>x>line).length/row.samples.length;}
 function candidate(row,excluded=[],lines={}){
  if(!row||!markets.includes(row.market)||excluded.includes(row.market)||/under/i.test(row.side||'')||row.eligible!==true||!(Number(row.matchupGames)>=3)||!Number.isFinite(row.forecast)||row.forecast<=0||!row.samples?.length||!(row.matchupBoost>0))return null;
+ const minimum={points:8,rebounds:3,assists:3}[row.market]||10;if(row.forecast<minimum)return null;
  const override=lines[row.key];const line=override===undefined?Math.max(.5,Math.floor(row.forecast*.84-.5)+.5):override;
  const probability=chance(row,line);if(probability===null||probability<.5)return null;
  return {...row,line,side:'over',probability,researchOnly:true,score:Math.round(clamp(probability*65+Math.min(15,row.matchupBoost*100)+Math.min(10,row.matchupGames)+Math.min(10,row.minutes/4),0,100))};
