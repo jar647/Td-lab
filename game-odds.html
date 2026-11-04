@@ -87,7 +87,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
 <section id="results" hidden aria-live="polite"></section>
 <section class="panel"><h2>Important model limits</h2><p class="muted">NFL runs resample paired historical score errors. NBA runs generate player outcomes within shared estimated possessions and rotations. The sportsbook's lines and prices do not influence the simulated scores. Historical scoring patterns and 100,000 draws do not establish predictive calibration or a verified edge. Starter announcements and weather are shown only where sourced. Availability and starting-five confirmations apply only when explicitly sourced. Future injury and tactical changes remain unknown. Research-only estimates can be wrong, especially with changing rosters, limited samples, or stale feeds.</p></section>
 </main>
-<script src="./nba_game_context.js?v=nba-sim-availability-1"></script><script src="./nba_live_context.js?v=nba-sim-availability-1"></script><script src="./nba_possession_engine.js?v=nba-sim-availability-1"></script><script src="./nba_simulator_ui.js?v=nba-sim-availability-1"></script><script src="./quick_slip.js"></script><script src="./game_odds_engine.js?v=nba-sim-availability-1"></script>
+<script src="./nba_game_context.js?v=nba-sim-availability-1"></script><script src="./nba_live_context.js?v=nba-sim-availability-1"></script><script src="./nba_possession_engine.js?v=nba-projection-audit-3"></script><script src="./nba_simulator_ui.js?v=nba-sim-availability-1"></script><script src="./quick_slip.js"></script><script src="./game_odds_engine.js?v=nba-sim-availability-1"></script>
 <script>
 (function(){
  'use strict';
@@ -349,7 +349,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    render(result,model);
   };
   if(typeof Worker==='function'){
-   try{worker=new Worker('./game_odds_worker.js?v=nba-sim-availability-1');
+   try{worker=new Worker('./game_odds_worker.js?v=nba-projection-audit-3');
     worker.onmessage=e=>{if(e.data?.requestId===thisId)done(e.data.error,e.data.result);};
     worker.onerror=e=>done(e.message||'Worker failed');
     worker.postMessage({requestId:thisId,game:model,market,seed:6472026});
@@ -362,4 +362,5 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
  load().catch(e=>{$('feedStatus').textContent='Could not load game feeds: '+e.message;});
 })();
 </script></body></html>
+
 
