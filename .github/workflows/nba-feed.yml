@@ -32,6 +32,8 @@ on:
       - 'test_nba_ui.js'
       - 'test_nba_simulator.js'
       - 'nba.html'
+      - 'nba_game_first.js'
+      - 'tests/nba_game_first.test.js'
       - 'market_odds.js'
       - 'player_probability.js'
       - 'test_player_probability.js'
@@ -69,6 +71,7 @@ jobs:
           node test_game_odds.js
           node test_game_odds_ui.js
           node test_nba_pipeline_ui.js
+          node --test tests/nba_game_first.test.js
           node test_nba_ui.js
           node test_nba_simulator.js
           node test_nba_first_basket.js
@@ -104,6 +107,7 @@ jobs:
           node test_market_odds.js
           node test_player_probability.js
           node test_nba_pipeline_ui.js
+          node --test tests/nba_game_first.test.js
           node test_nba_ui.js
           node test_nba_simulator.js
           node test_nba_first_basket.js
@@ -127,3 +131,4 @@ jobs:
             sleep 2
           done
           exit 1
+

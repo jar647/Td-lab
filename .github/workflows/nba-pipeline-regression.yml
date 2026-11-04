@@ -22,7 +22,7 @@ jobs:
       - name: All JavaScript contracts and NFL regressions
         run: |
           set -e
-          for file in test*.js tests/test*.js; do node "$file"; done
+          for file in test*.js tests/test*.js tests/*.test.js; do node "$file"; done
 
   live-input-check:
     if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
@@ -46,7 +46,8 @@ jobs:
           watched={'nba_rosters.py','nba_injuries.py','nba_model.py','nba_pipeline.py','scripts/build_nba_odds.py','scripts/build_hardrock_feed.py','requirements.txt'}
           changed=set(subprocess.check_output(['git','diff','--name-only',os.environ['NBA_BASE_SHA'],os.environ['NBA_HEAD_SHA']],text=True).splitlines())
           needed=bool(changed & watched)
-          with open(os.environ['GITHUB_OUTPUT'],'a') as out: out.write('needed='+str(needed).lower()+'\n')
+          prices=bool(changed & {'scripts/build_nba_odds.py','scripts/build_hardrock_feed.py'})
+          with open(os.environ['GITHUB_OUTPUT'],'a') as out: out.write('needed='+str(needed).lower()+'\nprices='+str(prices).lower()+'\n')
           print('Live provider check required:',needed)
           PY
       - name: Refresh real NBA input feeds in disposable checkout
@@ -56,7 +57,7 @@ jobs:
           python nba_rosters.py
           python nba_injuries.py
       - name: Verify the existing provider connection for NBA
-        if: steps.provider-paths.outputs.needed == 'true'
+        if: steps.provider-paths.outputs.prices == 'true'
         env:
           ODDSPAPI_API_KEY: ${{ secrets.ODDSPAPI_API_KEY }}
         run: python -m scripts.build_nba_odds
@@ -72,8 +73,8 @@ jobs:
             data/nba_market_status.json
             data/nba_analysis.json
           retention-days: 7
-      - name: Require actual fresh prices for the live-input gate
-        if: steps.provider-paths.outputs.needed == 'true'
+      - name: Require actual fresh prices when changing the odds provider
+        if: steps.provider-paths.outputs.prices == 'true'
         run: |
           python - <<'PY'
           import json
@@ -101,7 +102,7 @@ jobs:
           python - <<'PY2'
           import os,subprocess
           paths=set(subprocess.check_output(['git','diff','--name-only',os.environ['BASE'],os.environ['HEAD']],text=True).splitlines())
-          needed=bool(paths & {'nba_possession_engine.js','nba_simulator_ui.js','nba_feed.py','nba_shot_profile.py','nba_rotation_profile.py','nba_game_context.py','nba_game_context.js','game_odds_engine.js','scripts/publish_nba_simulator.js'})
+          needed=bool(paths & {'nba_game_first.js','nba_possession_engine.js','nba_simulator_ui.js','nba_feed.py','nba_shot_profile.py','nba_rotation_profile.py','nba_game_context.py','nba_game_context.js','game_odds_engine.js','scripts/publish_nba_simulator.js'})
           with open(os.environ['GITHUB_OUTPUT'],'a') as out:out.write('needed='+str(needed).lower()+'\n')
           PY2
       - uses: actions/setup-python@v5
@@ -120,6 +121,7 @@ jobs:
       - name: Verify possession model on current source data
         if: steps.paths.outputs.needed == 'true'
         run: |
+          node --test tests/nba_game_first.test.js
           node test_nba_possessions.js
           node test_nba_game_context.js
           python - <<'PY3'
@@ -131,3 +133,4 @@ jobs:
               assert not d['defenders'] or d['sources']['tracking']['status']=='partial'
               print('Tracking unavailable on this runner; dated cache/direct browser NBA.com fallback must remain explicit.')
           PY3
+

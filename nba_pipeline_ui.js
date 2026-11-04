@@ -16,11 +16,12 @@
   let html='<h3>'+esc(a.game||a.game_id)+' · '+esc(quoteExpired?'PASS · quote expired':a.status)+'</h3>';
   html+='<p class="warn">'+(a.reasons||[]).map(x=>esc(x==='No qualifying offered SGP quote'?'Combined sportsbook price unavailable.':x)).join(' · ')+'</p>';
   const blocked=(a.blockers||[]).length>0;
-  const freshLeg=p=>valid(p.observed_at,now,1);
-  if(a.sgp&&!blocked&&freshLeg(a.sgp)&&(a.sgp.legs||[]).every(freshLeg)){
+  const supported=p=>String(p.side).toLowerCase()==='over'&&Object.hasOwn(labels,p.market);
+  const freshLeg=p=>supported(p)&&valid(p.observed_at,now,1);
+  if(a.sgp&&!blocked&&valid(a.sgp.observed_at,now,1)&&(a.sgp.legs||[]).every(freshLeg)){
    html+='<h3>SGP research lean · '+esc(a.sgp.bookmaker)+'</h3>'+a.sgp.legs.map(leg).join('')+'<p>Actual combined decimal price '+esc(a.sgp.decimal_odds)+' · modeled joint chance '+pct(a.sgp.joint_probability)+' · conservative estimated EV '+pct(a.sgp.estimated_ev)+'</p>';
   }else if(a.sgp)html+='<p class="warn">SGP quote expired or inputs blocked. PASS until refreshed.</p>';
-  if(!a.sgp&&a.research_ticket&&!blocked){const t=a.research_ticket;
+  if(!a.sgp&&a.research_ticket&&!blocked&&(a.research_ticket.legs||[]).every(supported)){const t=a.research_ticket;
    html+='<h3>Unpriced SGP research target — not a bet</h3>'+t.legs.map(leg).join('')+'<p>Modeled joint chance '+pct(t.joint_probability)+' · model fair decimal price '+Number(t.fair_decimal).toFixed(2)+' · requires an actual same-book combined price of at least '+Number(t.minimum_decimal_for_5pct_ev).toFixed(2)+' for a 5% modeled EV margin.</p><p class="warn">No sportsbook combined quote is available. Payout and positive value are not established.</p>';
   }
   if(a.best_single&&!blocked&&freshLeg(a.best_single))html+='<h3>Best single · research lean</h3>'+leg(a.best_single);
@@ -43,3 +44,4 @@
  }
  return {render,valid};
 });
+

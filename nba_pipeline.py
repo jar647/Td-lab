@@ -83,6 +83,7 @@ def analyze(feed,injuries,rosters,odds,now,runs=10000):
                 valid_quotes.append((q,valid))
                 opposite_index[(str(q.get('player_id')),q.get('market'),q.get('bookmaker'),valid[0],q['side'])]=valid[2]
         for q,valid in valid_quotes:
+            if q.get('side') != 'over':continue
             if str(q.get('game_id'))!=str(game['id']):continue
             index=lookup.get((str(q.get('player_id')),q.get('market')))
             if index is None:continue
@@ -233,3 +234,4 @@ def publish(root,now=None):
     for name,data in [('nba_pipeline_locks.json',archive),('nba_analysis.json',{'generated_at':now.isoformat(),'model':MODEL,'games':analyses,'audit':report})]:atomic(root/'data'/name,data)
     return analyses
 if __name__=='__main__':publish(pathlib.Path(__file__).resolve().parent)
+

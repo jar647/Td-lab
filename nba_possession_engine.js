@@ -35,6 +35,7 @@ function build(game,feed,injuries,rosters,now=Date.now(),options={}){
  const league=hist.flatMap(g=>[{...g.h,poss:g.poss,duration:g.duration},{...g.a,poss:g.poss,duration:g.duration}]),total=k=>league.reduce((s,x)=>s+x[k],0);
  const zoneTotal=(zone,key)=>hist.filter(g=>g.shot_profile?.available).reduce((sum,g)=>sum+Object.values(g.shot_profile.teams||{}).reduce((s,t)=>s+(t[zone]?.[key]||0),0),0);
  const L={rim:zoneTotal('rim','attempts')>=100?zoneTotal('rim','made')/zoneTotal('rim','attempts'):null,mid:zoneTotal('two_other','attempts')>=100?zoneTotal('two_other','made')/zoneTotal('two_other','attempts'):null,two:(total('fgm')-total('tpm'))/Math.max(1,total('fga')-total('tpa')),three:total('tpm')/Math.max(1,total('tpa')),ft:total('ftm')/Math.max(1,total('fta')),pace:mean(hist.map(g=>g.poss)),ortg:100*total('pts')/league.reduce((s,x)=>s+x.poss*x.duration/48,0)};
+ L.orb=total('orb')/Math.max(1,total('orb')+total('drb'));
  const teams={},warnings=[],uncertain=[];
  for(const team of [game.home,game.away]){
   const hs=hist.filter(g=>[g.home,g.away].includes(team)).slice(0,12);if(hs.length<3)throw Error(team+': at least three complete earlier team box scores required');
@@ -73,7 +74,7 @@ function build(game,feed,injuries,rosters,now=Date.now(),options={}){
 function random(seed){let s=seed>>>0;return ()=>{s+=0x6D2B79F5;let t=s;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296}}
 function draws(model,count=10000,seed=6472026,options={}){
  if(!Number.isInteger(count)||count<1000||count>100000)throw Error('Runs must be between 1000 and 100000');
- const rng=random(seed),gauss=()=>Math.sqrt(-2*Math.log(Math.max(1e-12,rng())))*Math.cos(2*Math.PI*rng()),g=model.game,home=[],away=[],players=Object.values(model.teams).flatMap(t=>t.players),sums=Object.fromEntries(players.map(p=>[p.id,{points:0,rebounds:0,assists:0,minutes:0,played:0}])),legs=(options.legs||[]).slice(0,5),legWins=legs.map(()=>0),pairWins=legs.map(()=>legs.map(()=>0));let allWin=0,overtime=0,overtimePeriods=0,blowouts=0;
+ const rng=random(seed),gauss=()=>Math.sqrt(-2*Math.log(Math.max(1e-12,rng())))*Math.cos(2*Math.PI*rng()),g=model.game,home=[],away=[],players=Object.values(model.teams).flatMap(t=>t.players),sums=Object.fromEntries(players.map(p=>[p.id,{points:0,rebounds:0,assists:0,minutes:0,played:0}])),legs=(options.legs||[]).slice(0,5),legWins=legs.map(()=>0),pairWins=legs.map(()=>legs.map(()=>0));const playerOutcomes=options.collectPlayerOutcomes?{}:null;let allWin=0,overtime=0,overtimePeriods=0,blowouts=0;
  const choose=(ps,weight,exclude)=>{const values=ps.map(p=>p.id===exclude?0:Math.max(0,weight(p))),sum=values.reduce((a,b)=>a+b,0);if(!sum)return null;let n=rng()*sum;for(let i=0;i<ps.length;i++){n-=values[i];if(n<=0)return ps[i]}return ps.at(-1)};
  for(let run=0;run<count;run++){
   const states={};for(const team of [g.home,g.away]){const t=model.teams[team],active=t.players.filter(p=>!p.pending||options.availability==='in'||options.availability!=='out'&&rng()<.5),weights=Object.fromEntries(active.map(p=>[p.id,p.weight]));const minutes=allocate(weights);if(!minutes)throw Error(team+': in/out scenario lacks six supported rotation players');const weighted=key=>active.reduce((sum,p)=>sum+minutes[p.id]*p[key],0);states[team]={...t,turnover:clamp((t.turnover+weighted('to')/t.pace)/2,.05,.25),ftTrips:clamp((t.ftTrips+.5*weighted('fta')/t.pace)/2,.04,.3),orb:clamp(t.orb*weighted('orb')/Math.max(1,t.historicalOrb),.08,.4),assist:clamp(t.assist*weighted('ast')/Math.max(1,t.historicalAst),.2,.85),active,minutes,stats:Object.fromEntries(t.players.map(p=>[p.id,{points:0,rebounds:0,assists:0,minutes:0}])),score:0,heat:gauss()*.018};}
@@ -101,11 +102,12 @@ function draws(model,count=10000,seed=6472026,options={}){
   let ot=0;while(states[g.home].score===states[g.away].score){ot++;period(5,false);if(ot>20)throw Error('Overtime failed to resolve')}
   if(ot)overtime++;overtimePeriods+=ot;
   const stats={...states[g.home].stats,...states[g.away].stats};home.push(states[g.home].score);away.push(states[g.away].score);
-  for(const p of players){const x=stats[p.id],sum=sums[p.id];for(const k of ['points','rebounds','assists','minutes'])sum[k]+=x[k];if(x.minutes>0)sum.played++;}
+  for(const p of players){const x=stats[p.id],sum=sums[p.id];if(playerOutcomes){const samples=playerOutcomes[p.id]??={points:[],rebounds:[],assists:[]};for(const k of ['points','rebounds','assists'])samples[k].push(x[k]);}for(const k of ['points','rebounds','assists','minutes'])sum[k]+=x[k];if(x.minutes>0)sum.played++;}
   const won=legs.map((leg,i)=>{const p=players.find(p=>p.id===String(leg.player_id)||norm(p.name)===norm(leg.player)),x=p&&stats[p.id],fields={points:['points'],rebounds:['rebounds'],assists:['assists'],pra:['points','rebounds','assists'],pointsrebounds:['points','rebounds'],pointsassists:['points','assists'],reboundsassists:['rebounds','assists']}[norm(leg.market)],value=x&&fields?fields.reduce((s,k)=>s+x[k],0):null;const win=value!==null&&x.minutes>0&&(String(leg.side).toLowerCase()==='under'?value<Number(leg.line):value>Number(leg.line));if(win)legWins[i]++;return win;});
   if(won.length&&won.every(Boolean))allWin++;for(let i=0;i<won.length;i++)for(let j=0;j<won.length;j++)if(won[i]&&won[j])pairWins[i][j]++;
  }
- return {home,away,players:players.map(p=>({id:p.id,player:p.name,team:p.team,status:p.status,...Object.fromEntries(Object.entries(sums[p.id]).map(([k,v])=>[k,v/count]))})),overtimeRate:overtime/count,overtimePeriods:overtimePeriods/count,blowoutRate:blowouts/count,legs:legs.map((l,i)=>({...l,hitRate:legWins[i]/count})),jointHitRate:legs.length?allWin/count:null,pairHitRates:pairWins.map(r=>r.map(n=>n/count)),model:VERSION,runCount:count};
+ return {playerOutcomes,home,away,players:players.map(p=>({id:p.id,player:p.name,team:p.team,status:p.status,...Object.fromEntries(Object.entries(sums[p.id]).map(([k,v])=>[k,v/count]))})),overtimeRate:overtime/count,overtimePeriods:overtimePeriods/count,blowoutRate:blowouts/count,legs:legs.map((l,i)=>({...l,hitRate:legWins[i]/count})),jointHitRate:legs.length?allWin/count:null,pairHitRates:pairWins.map(r=>r.map(n=>n/count)),model:VERSION,runCount:count};
 }
 return {VERSION,box,allocate,records,build,draws};
 });
+
