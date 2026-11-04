@@ -25,7 +25,7 @@ def parse_fantasy_positions(data):
 
 def get(url,timeout=25):
  headers={'User-Agent':'Mozilla/5.0'}
- if '/games/fba/' in url:headers['X-Fantasy-Filter']=json.dumps({'limit':1500,'filterActive':{'value':True}})
+ if '/games/fba/' in url:headers['X-Fantasy-Filter']=json.dumps({'limit':1500,'filterActive':{'value':True},'sortPercOwned':{'sortPriority':1,'sortAsc':False}})
  req=urllib.request.Request(url,headers=headers)
  with urllib.request.urlopen(req,timeout=timeout) as response:return json.load(response)
 
