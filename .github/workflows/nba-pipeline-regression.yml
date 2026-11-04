@@ -102,7 +102,7 @@ jobs:
           python - <<'PY2'
           import os,subprocess
           paths=set(subprocess.check_output(['git','diff','--name-only',os.environ['BASE'],os.environ['HEAD']],text=True).splitlines())
-          needed=bool(paths & {'nba_game_first.js','nba_possession_engine.js','nba_simulator_ui.js','nba_feed.py','nba_shot_profile.py','nba_rotation_profile.py','nba_game_context.py','nba_game_context.js','game_odds_engine.js','scripts/publish_nba_simulator.js'})
+          needed=bool(paths & {'scripts/audit_nba_projections.js','scripts/compare_nba_projection_audits.js','nba_game_first.js','nba_possession_engine.js','nba_simulator_ui.js','nba_feed.py','nba_shot_profile.py','nba_rotation_profile.py','nba_game_context.py','nba_game_context.js','game_odds_engine.js','scripts/publish_nba_simulator.js'})
           with open(os.environ['GITHUB_OUTPUT'],'a') as out:out.write('needed='+str(needed).lower()+'\n')
           PY2
       - uses: actions/setup-python@v5
@@ -124,6 +124,12 @@ jobs:
           node --test tests/nba_game_first.test.js
           node test_nba_possessions.js
           node test_nba_game_context.js
+          mkdir -p "$RUNNER_TEMP/nba-audit-baseline"
+          git show ded8f5b275353e92f5228298c6e35da6255924dc:nba_possession_engine.js > "$RUNNER_TEMP/nba-audit-baseline/nba_possession_engine.js"
+          git show ded8f5b275353e92f5228298c6e35da6255924dc:nba_game_context.js > "$RUNNER_TEMP/nba-audit-baseline/nba_game_context.js"
+          node scripts/audit_nba_projections.js "$RUNNER_TEMP/nba-audit-baseline/nba_possession_engine.js" "$RUNNER_TEMP/nba-before.json"
+          node scripts/audit_nba_projections.js "$GITHUB_WORKSPACE/nba_possession_engine.js" "$RUNNER_TEMP/nba-after.json"
+          node scripts/compare_nba_projection_audits.js "$RUNNER_TEMP/nba-before.json" "$RUNNER_TEMP/nba-after.json" "$RUNNER_TEMP/nba-projection-comparison.json"
           python - <<'PY3'
           import json
           d=json.load(open('data/nba_game_context.json'))
@@ -134,3 +140,10 @@ jobs:
               print('Tracking unavailable on this runner; dated cache/direct browser NBA.com fallback must remain explicit.')
           PY3
 
+      - name: Save projection comparison evidence
+        if: always() && steps.paths.outputs.needed == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: nba-projection-audit
+          path: ${{ runner.temp }}/nba-projection-comparison.json
+          retention-days: 14

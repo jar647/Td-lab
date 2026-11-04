@@ -1,0 +1,178 @@
+{
+  "beforeModel": "nba-possession-context-v2.1",
+  "afterModel": "nba-possession-audit-v3",
+  "splitDate": "2026-10-29",
+  "matchedValidationGames": 46,
+  "metrics": {
+    "points": {
+      "n": 853,
+      "beforeMae": 4.957275498241502,
+      "afterMae": 4.932590855803048,
+      "recentAverageMae": 5.039937475576402
+    },
+    "rebounds": {
+      "n": 853,
+      "beforeMae": 2.0517033997655347,
+      "afterMae": 1.9303493552168831,
+      "recentAverageMae": 1.9305197342712046
+    },
+    "assists": {
+      "n": 853,
+      "beforeMae": 1.4746178194607287,
+      "afterMae": 1.477219226260257,
+      "recentAverageMae": 1.469011332551778
+    },
+    "minutes": {
+      "n": 853,
+      "beforeMae": 4.989267783836896,
+      "afterMae": 5.002382495568871,
+      "recentAverageMae": 4.731398983978118
+    }
+  },
+  "reboundGameClusterBootstrap": {
+    "resamples": 10000,
+    "meanGameMaeReduction": 0.1176291211025282,
+    "interval95": [
+      0.061402060177776274,
+      0.17401356119626213
+    ],
+    "note": "Internal retrospective uncertainty only; not evidence of a betting edge."
+  },
+  "gameTotals": {
+    "before": {
+      "points": {
+        "predicted": 226.99434782608682,
+        "actual": 223.52173913043478
+      },
+      "rebounds": {
+        "predicted": 99.59921739130434,
+        "actual": 87.3913043478261
+      },
+      "assists": {
+        "predicted": 51.9015652173913,
+        "actual": 52.41304347826087
+      }
+    },
+    "after": {
+      "points": {
+        "predicted": 222.90826086956514,
+        "actual": 223.52173913043478
+      },
+      "rebounds": {
+        "predicted": 85.33958695652174,
+        "actual": 87.3913043478261
+      },
+      "assists": {
+        "predicted": 50.924086956521734,
+        "actual": 52.41304347826087
+      }
+    }
+  },
+  "checks": {
+    "reboundMaeImproved": true,
+    "pointsRegressionWithinPointOne": true,
+    "assistsRegressionWithinPointZeroFive": true,
+    "minutesRegressionWithinPointOne": true,
+    "sufficientMatchedGames": true
+  },
+  "passed": true,
+  "engineeringLimits": "Regression tripwires against the prior simulator, not statistical certification or baseline superiority.",
+  "limitations": "Retrospective walk-forward box scores only. Historical injury/lineup announcements unavailable; this does not validate current availability adjustments or betting probabilities. A conservative four-hour completion buffer excludes games that might still have been in progress at the forecast cutoff. Chronological validation is an internal holdout, not independent external validation.",
+  "source": {
+    "feed_commit": "48f55809cea9d77397620c35123d602f4171d9da",
+    "feed_generated_at": "2026-11-04T18:29:53.808358+00:00",
+    "feed_games_sha256": "8bfc932d11d107233b1275933bb4d89d43ce91173026a4eb21585635e376d22f",
+    "prior_engine_commit": "ded8f5b275353e92f5228298c6e35da6255924dc",
+    "corrected_engine_sha256": "44ec256e4be6c16df01236e430df948dddc8082a8e0b5602058592887aa3dbe6"
+  },
+  "frozenAvailabilitySubset": {
+    "games": 10,
+    "source": "data/nba_projection_audit_availability.json",
+    "before": {
+      "points": {
+        "n": 198,
+        "mae": 4.618308080808079,
+        "baselineMae": 4.701515151515153,
+        "bias": 0.36257070707070677,
+        "baselineBias": 0.31582491582491584,
+        "rmse": 6.147359627424516
+      },
+      "rebounds": {
+        "n": 198,
+        "mae": 1.890777777777777,
+        "baselineMae": 1.7654882154882157,
+        "bias": 0.7279797979797981,
+        "baselineBias": 0.2983164983164984,
+        "rmse": 2.4504909856408514
+      },
+      "assists": {
+        "n": 198,
+        "mae": 1.4843484848484847,
+        "baselineMae": 1.4635521885521887,
+        "bias": 0.03233838383838383,
+        "baselineBias": 0.07180134680134681,
+        "rmse": 2.0198084455130045
+      },
+      "minutes": {
+        "n": 198,
+        "mae": 4.2217929155624825,
+        "baselineMae": 4.488973063973064,
+        "bias": 0.36843894246550263,
+        "baselineBias": 0.6728114478114476,
+        "rmse": 5.4206592640182585
+      }
+    },
+    "after": {
+      "points": {
+        "n": 198,
+        "mae": 4.5551717171717145,
+        "baselineMae": 4.701515151515153,
+        "bias": 0.15316161616161628,
+        "baselineBias": 0.31582491582491584,
+        "rmse": 6.062017350151297
+      },
+      "rebounds": {
+        "n": 198,
+        "mae": 1.667772727272727,
+        "baselineMae": 1.7654882154882157,
+        "bias": 0.03594444444444443,
+        "baselineBias": 0.2983164983164984,
+        "rmse": 2.2905419774597124
+      },
+      "assists": {
+        "n": 198,
+        "mae": 1.4962525252525258,
+        "baselineMae": 1.4635521885521887,
+        "bias": -0.018717171717171677,
+        "baselineBias": 0.07180134680134681,
+        "rmse": 2.0249945279886163
+      },
+      "minutes": {
+        "n": 198,
+        "mae": 4.2366626918701265,
+        "baselineMae": 4.488973063973064,
+        "bias": 0.3670550299253215,
+        "baselineBias": 0.6728114478114476,
+        "rmse": 5.424595176223248
+      }
+    },
+    "note": "Small diagnostic subset with timestamped pregame absence information; not independent validation."
+  },
+  "rejectedExperiment": {
+    "change": "Include thin-sample bench players and cap redistributed minutes using recent workload ranges",
+    "reason": "Broader minutes MAE worsened from about 4.99 to 5.61; not deployed. Unsupported workload forecasts are withheld instead."
+  },
+  "townsReproduction": {
+    "game": "Chicago Bulls @ New York Knicks",
+    "market": "Rebounds + Assists",
+    "before": 25.552,
+    "after": 19.92,
+    "priorSampleAverage": 17.285714285714285,
+    "beforeMinutes": 39.254180386720144,
+    "afterMinutes": 37.32043339479692,
+    "qualified": false,
+    "reason": "Regular-time allocation 36.5 exceeds the recent-workload review bound of 36.0 in a seven-game sample",
+    "bookLine": 16.5,
+    "bookLineSource": "User-reported; not used to fit or set the projection"
+  }
+}

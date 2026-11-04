@@ -6,7 +6,7 @@ const fields=m=>({'Points + Rebounds':['points','rebounds'],'Points + Assists':[
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),mean=a=>a.reduce((s,x)=>s+x,0)/Math.max(1,a.length);
 function chance(row,line){if(!Number.isFinite(line)||line<.5||!row.samples?.length)return null;return row.samples.filter(x=>x>line).length/row.samples.length;}
 function candidate(row,excluded=[],lines={}){
- if(!row||!markets.includes(row.market)||excluded.includes(row.market)||/under/i.test(row.side||'')||row.eligible!==true||!(Number(row.matchupGames)>=3)||!Number.isFinite(row.forecast)||row.forecast<=0||!row.samples?.length||!(row.matchupBoost>0))return null;
+ if(!row||!markets.includes(row.market)||excluded.includes(row.market)||/under/i.test(row.side||'')||row.reviewRequired||row.eligible!==true||!(Number(row.matchupGames)>=3)||!Number.isFinite(row.forecast)||row.forecast<=0||!row.samples?.length||!(row.matchupBoost>0))return null;
  const minimum={points:8,rebounds:3,assists:3}[row.market]||10;if(row.forecast<minimum)return null;
  const override=lines[row.key];const line=override===undefined?Math.max(.5,Math.floor(row.forecast*.84-.5)+.5):override;
  const probability=chance(row,line);if(probability===null||probability<.5)return null;
@@ -33,12 +33,14 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
  try{
   const model=possessions.build(game,feed,injuries,rosters,now,{context});
   const simulation=possessions.draws(model,options.count||1000,6472026,{collectPlayerOutcomes:true});
-  const rows=[];
+  const rows=[],playerReviews=new Map();
   for(const team of [game.away,game.home]){
    const own=model.teams[team],opponent=team===game.home?game.away:game.home,def=model.teams[opponent];
    for(const player of own.players){
-    if(player.pending||own.minutes[player.id]<20)continue;
+    if(player.pending||player.sample<3||own.minutes[player.id]<20)continue;
     const projected=simulation.players.find(p=>p.id===player.id),samples=simulation.playerOutcomes[player.id];
+    const historical=player.statHistory||[],minuteSample=historical.slice(0,5).map(x=>x.minutes).sort((a,b)=>a-b),minuteUpper=minuteSample.length?Math.max(player.baseline+2,minuteSample[Math.floor((minuteSample.length-1)*.9)]+1):player.baseline;
+    const minuteReview=own.minutes[player.id]>minuteUpper&&player.sample<10;
     const shotShare=own.minutes[player.id]*player.fga/Math.max(.001,own.players.reduce((s,p)=>s+own.minutes[p.id]*p.fga,0));
     const paceBoost=model.pace/model.league.pace-1,minuteBoost=own.minutes[player.id]/Math.max(1,player.baseline)-1;
     const shooting=(1-player.tpa/Math.max(.001,player.fga))*def.twoDefense+player.tpa/Math.max(.001,player.fga)*def.threeDefense;
@@ -47,15 +49,18 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
     for(const market of markets){
      const ks=fields(market),forecast=ks.reduce((s,k)=>s+projected[k],0),defense=mean(ks.map(k=>boosts[k]));
      const boost=defense+.35*paceBoost+.35*clamp(minuteBoost,-.2,.2);
+     const recorded=historical.map(x=>ks.reduce((s,k)=>s+x[k],0)),baseline=mean(recorded),observedMax=recorded.length?Math.max(...recorded):null;
+     const reviewReasons=[];if(minuteReview)reviewReasons.push('Rotation estimate '+own.minutes[player.id].toFixed(1)+' MIN exceeds the recent workload bound '+minuteUpper.toFixed(1)+' MIN in a limited '+player.sample+'-game sample');if(observedMax!==null&&forecast>observedMax&&player.sample<10)reviewReasons.push('Forecast exceeds every observed '+market+' result in the limited prior sample');
+     if(minuteReview)playerReviews.set(player.id,[reviewReasons[0]]);
      const values=samples[ks[0]].map((_,i)=>ks.reduce((s,k)=>s+samples[k][i],0));
-     const reason=player.name+' vs '+opponent+': '+projected.minutes.toFixed(1)+' simulated minutes ('+player.baseline.toFixed(1)+' recent baseline), '+(100*shotShare).toFixed(1)+'% of projected team field-goal attempts. '+
+     const reason='Prior sample average '+baseline.toFixed(1)+' '+market+' ('+player.sample+' games); simulated '+forecast.toFixed(1)+'. '+player.name+' vs '+opponent+': '+projected.minutes.toFixed(1)+' simulated minutes ('+player.baseline.toFixed(1)+' recent baseline), '+(100*shotShare).toFixed(1)+'% of projected team field-goal attempts. '+
       ks.map(k=>k==='rebounds'?'Rebound role: '+(player.orb*36).toFixed(1)+' offensive / '+(player.drb*36).toFixed(1)+' defensive boards per 36 observed minutes; opponent offensive-rebound rate '+(100*def.orb).toFixed(1)+'%. ':k==='assists'?'Creation role: '+(player.ast*36).toFixed(1)+' assists per 36 observed minutes; teammate shooting and opponent defense share the same simulation. ':'Player shooting mix: '+(100*(1-player.tpa/Math.max(.001,player.fga))).toFixed(0)+'% two-point attempts; opponent two-point defense delta '+(100*def.twoDefense).toFixed(1)+' percentage points. ').join('')+
       'Pace '+model.pace.toFixed(1)+' vs '+model.league.pace.toFixed(1)+' league sample possessions; '+player.sample+' player games / '+def.games+' opponent games.'+(own.absent.length?' Rotation redistributed with '+own.absent.join(', ')+' absent.':'')+' '+(100*simulation.blowoutRate).toFixed(1)+'% simulated blowouts; late-game minutes adjust in those outcomes.';
-     rows.push({key:[game.id,player.id,market].join('|'),gameId:String(game.id),game,playerId:player.id,name:player.name,team,opponent,market,forecast,minutes:projected.minutes,matchupGames:def.games,matchupBoost:boost,samples:values,reason:reason+' '+(model.context?.tracking==='fresh'&&Object.keys(player.defenderExposure||{}).length?'Fresh defender tracking incorporated; historical exposure '+Number(player.matchupSample||0).toFixed(0)+' possessions, not a confirmed assignment.':'Individual defender tracking unavailable or stale; that adjustment is omitted.'),eligible:true});
+     rows.push({key:[game.id,player.id,market].join('|'),gameId:String(game.id),game,playerId:player.id,name:player.name,team,opponent,market,forecast,baseline,observedMax,reviewRequired:reviewReasons.length>0,reviewReasons,minutes:projected.minutes,matchupGames:def.games,matchupBoost:boost,samples:values,reason:reason+' '+(model.context?.tracking==='fresh'&&Object.keys(player.defenderExposure||{}).length?'Fresh defender tracking incorporated; historical exposure '+Number(player.matchupSample||0).toFixed(0)+' possessions, not a confirmed assignment.':'Individual defender tracking unavailable or stale; that adjustment is omitted.'),eligible:true});
     }
    }
   }
-  return {rows,players:simulation.players,model: model.version,generatedAt:new Date(now).toISOString(),inputTimes:model.inputTimes,context:model.context,warnings:model.warnings,pace:model.pace,blowoutRate:simulation.blowoutRate,reason:null};
+  return {rows,players:simulation.players.map(p=>({...p,reviewReasons:playerReviews.get(p.id)||[]})),reviewedMarkets:rows.filter(r=>r.reviewRequired).length,model: model.version,generatedAt:new Date(now).toISOString(),inputTimes:model.inputTimes,context:model.context,warnings:model.warnings,pace:model.pace,blowoutRate:simulation.blowoutRate,reason:null};
  }catch(e){return {rows:[],reason:e.message,warnings:[]};}
 }
 return {chance,candidate,build,analyze,markets};

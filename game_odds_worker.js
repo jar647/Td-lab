@@ -1,5 +1,5 @@
 /* Game-only simulator runs 100k independent draws off the UI thread. */
-importScripts('./nba_game_context.js?v=nba-sim-availability-1','./nba_possession_engine.js?v=nba-sim-availability-1','./game_odds_engine.js?v=nba-sim-availability-1');
+importScripts('./nba_game_context.js?v=nba-sim-availability-1','./nba_possession_engine.js?v=nba-projection-audit-3','./game_odds_engine.js?v=nba-sim-availability-1');
 self.onmessage=function(event){
  const data=event.data||{};
  try{
@@ -9,3 +9,4 @@ self.onmessage=function(event){
   self.postMessage({requestId:data.requestId,error:String(error&&error.message||error)});
  }
 };
+
