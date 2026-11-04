@@ -19,7 +19,7 @@ assert.ok(match[1].includes('function injuryFor(p)'),'Injury helper required by 
 assert.ok(match[1].includes('Player recommendations · matchup opportunities'),'Top props rendering missing');
 const elements=new Map();
 function element(id){if(!elements.has(id))elements.set(id,{value:'',textContent:'',innerHTML:'',onclick:null});return elements.get(id)}
-const sandbox={document:{getElementById:element},fetch:async()=>({ok:false}),console,Date,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl,CookNBAFirstBasket,CookItUpPricing,CookItUpProbability,CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'}};
+const sandbox={document:{getElementById:element},fetch:async()=>({ok:false}),console,Date,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl,CookNBAGameFirst:require('./nba_game_first'),CookNBAFirstBasket,CookItUpPricing,CookItUpProbability,CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'}};
 vm.createContext(sandbox);vm.runInContext(match[1],sandbox,{timeout:2000});
 assert.equal(typeof element('show').onclick,'function','Analyze must be wired');
 assert.ok(match[1].includes('formatToParts'),'Eastern day comparison must use stable date parts');
@@ -49,7 +49,7 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  const fixtureTime=Date.parse(game.date)-4*3600000;
  assert.equal(easternDay(fixtureTime),easternDay(game.date),'Fixture test clock must remain on the same Eastern day');
  const FixedDate=class extends Date{constructor(...args){super(...(args.length?args:[fixtureTime]))}static now(){return fixtureTime}};
- const context={document:{getElementById:el,createElement:()=>({className:'',id:'',innerHTML:'',append(){el('output').innerHTML+=this.innerHTML}})},fetch:async url=>({ok:true,json:async()=>url.includes('nba_games')?data:url.includes('nba_injuries')?{generated_at:new Date().toISOString(),injuries:[]}:{snapshots:[]}}),console,Date:FixedDate,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl,CookNBAFirstBasket,CookItUpPricing,CookItUpProbability,CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'}};
+ const context={document:{getElementById:el,createElement:()=>({className:'',id:'',innerHTML:'',append(){el('output').innerHTML+=this.innerHTML}})},fetch:async url=>({ok:true,json:async()=>url.includes('nba_games')?data:url.includes('nba_injuries')?{generated_at:new Date().toISOString(),injuries:[]}:{snapshots:[]}}),console,Date:FixedDate,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl,CookNBAGameFirst:require('./nba_game_first'),CookNBAFirstBasket,CookItUpPricing,CookItUpProbability,CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'}};
  vm.createContext(context);vm.runInContext(match[1],context,{timeout:2000});
  await new Promise(resolve=>setTimeout(resolve,50));
  assert.ok(el('games').innerHTML.includes(game.home),'Today-game selector must contain real matchup: '+el('status').textContent);
@@ -65,7 +65,7 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  assert.ok(html.includes('NBA Game Simulator'),'Selected NBA game must render simulator');
  assert.ok(html.includes('PTS <strong>')&&html.includes('REB <strong>')&&html.includes('AST <strong>')&&html.includes('3PM <strong>'),'Selected game must render all projected stat labels');
  assert.ok(html.includes('Player recommendations · matchup opportunities'),'Selected game must render prop section');
- assert.ok(html.includes('Vegas Line')&&html.includes('Over odds')&&html.includes('Under odds'),'NBA player prop cards must include a two-sided quote entry');
+ assert(!html.includes('Over &amp; Under'),'No two-sided recommendations in the primary workflow');
  assert.ok(/PTS <strong>\d/.test(html),'Selected game must render numeric player projections; selected '+el('games').value+'; preview '+html.slice(0,700));
  // Reproduce a two-game sample with verified old box scores; this will not
  // start failing simply because Portland–Lakers finished yesterday.
@@ -180,23 +180,15 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  console.log('NBA Under direction preserved in Quick Slip payload: PASS');
 }
 
-// Slate ranking uses the existing verdict, across games and in both directions.
+// Matchup slate ignores sportsbook odds, allows same-game players, and caps at five.
 const slateNow=Date.now();
-sandbox.slateFixture=Array.from({length:9},(_,i)=>({key:'slate-'+i,playerId:'p'+i,name:'Player '+i,market:'points',quality:30,game:{id:i<2?'same':String(i),status:'STATUS_SCHEDULED',date:new Date(slateNow+3600000).toISOString()},quote:{line:20.5,over:-110,under:-110},result:{decision:'LEAN',candidate:i%2?'OVER':'UNDER',expectedValue:1-i*.05,estimatedEdge:.1}}));
+sandbox.slateFixture=Array.from({length:9},(_,i)=>({key:'slate-'+i,playerId:'p'+i,name:'Player '+i,market:'points',forecast:20,quality:30,eligible:true,minutes:30,samples:[10,20,21,22,23,24,25,26],gameId:i<2?'same':String(i),matchupGames:8,matchupBoost:.2-i*.01,game:{id:i<2?'same':String(i),status:'STATUS_SCHEDULED',date:new Date(slateNow+3600000).toISOString()}}));
 const slate=vm.runInContext('nbaSlateSelection(slateFixture)',sandbox);
-assert.equal(slate.picks.length,5);
-assert.equal(new Set(slate.picks.map(r=>r.game.id)).size,5);
-assert.equal(slate.picks[0].result.candidate,'UNDER');
-sandbox.slateFixture[0].result.decision='PASS';
-sandbox.slateFixture[2].game.date=new Date(slateNow-1000).toISOString();
-sandbox.slateFixture[3].market='threes';
-sandbox.slateFixture[4].quote={};sandbox.slateFixture[4].target={side:'OVER',line:19.5,distance:.05};
+assert.equal(slate.picks.length,5);assert.equal(slate.picks[0].game.id,slate.picks[1].game.id);
+sandbox.slateFixture[0].matchupBoost=-.1;sandbox.slateFixture[2].game.date=new Date(slateNow-1000).toISOString();sandbox.slateFixture[3].market='threes';sandbox.slateFixture[4].matchupGames=0;
 const filtered=vm.runInContext('nbaSlateSelection(slateFixture)',sandbox);
 for(const i of [0,2,3,4])assert.ok(!filtered.picks.some(r=>r.key==='slate-'+i));
-assert.ok(filtered.research.some(r=>r.key==='slate-4'));
-assert.ok(match[1].includes('if(options.collectOnly)return nbaRankedRows()'));
-assert.ok(match[1].includes('nbaRecommendationRows=savedRows;currentProjections=savedProjections'));
-console.log('NBA slate max-five, game diversity, both sides and eligibility: PASS');
+console.log('NBA odds-free matchup slate, same-game selections and exclusions: PASS');
 
 // Shopping targets must clear the exact final verdict with hypothetical odds.
 vm.runInContext('nbaQuoteContexts["target"]={history:[18,19,20,20,21,22,20,19,20,21],market:"points",availableGames:10,eligible:true,modelContext:{seasonAverage:20,recentAverage:20,seasonUsage:30,recentUsage:30,opponentRatio:1,injuryStatus:"NOT LISTED"}}',sandbox);
@@ -259,3 +251,4 @@ vm.runInContext('legacyLeg.underOdds=-110;legacyLeg.recommendation="Over 25.5 Po
 assert.match(vm.runInContext('restoredResult.ratingNote',sandbox),/does not currently qualify/);
 vm.runInContext('renderProjections=repairOriginalRenderer',sandbox);
 console.log('NBA legacy saved-side recovery, missing odds and failing quote: PASS');
+
