@@ -1,3 +1,4 @@
+import nba_rosters
 import unittest
 from nba_rosters import parse_roster
 class RosterPositions(unittest.TestCase):
@@ -6,3 +7,8 @@ class RosterPositions(unittest.TestCase):
   self.assertEqual(ids,['1','2']);self.assertEqual(players['1']['position'],'C');self.assertEqual(players['2']['position'],'F');self.assertEqual(players['1']['team'],'Team')
  def test_absent_position_is_not_guessed(self):
   _,p=parse_roster({'athletes':[{'id':1,'displayName':'Unknown'}]},'Team');self.assertIsNone(p['1']['position'])
+
+class FantasyPositions(unittest.TestCase):
+ def test_default_only(self):
+  self.assertEqual(nba_rosters.parse_fantasy_positions([{"id":1,"defaultPositionId":3,"eligibleSlots":[1,2,3,4,5]}])["1"]["position"],"SF")
+  self.assertEqual(nba_rosters.parse_fantasy_positions([{"id":2,"defaultPositionId":99}]),{})
