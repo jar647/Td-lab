@@ -103,7 +103,7 @@ jobs:
           import os,subprocess
           paths=set(subprocess.check_output(['git','diff','--name-only',os.environ['BASE'],os.environ['HEAD']],text=True).splitlines())
           needed=bool(paths & {'nba_game_first.js','nba_possession_engine.js','nba_simulator_ui.js','nba_feed.py','nba_shot_profile.py','nba_rotation_profile.py','nba_game_context.py','nba_game_context.js','game_odds_engine.js','scripts/publish_nba_simulator.js'})
-          with open(os.environ['GITHUB_OUTPUT'],'a') as out:out.write('needed='+str(needed).lower()+'\nprices='+str(prices).lower()+'\n')
+          with open(os.environ['GITHUB_OUTPUT'],'a') as out:out.write('needed='+str(needed).lower()+'\n')
           PY2
       - uses: actions/setup-python@v5
         with:
