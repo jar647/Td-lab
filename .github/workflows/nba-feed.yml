@@ -33,6 +33,8 @@ on:
       - 'test_nba_simulator.js'
       - 'nba.html'
       - 'nba_game_first.js'
+      - 'nba_matchup_discovery.js'
+      - 'scripts/verify_nba_matchup_discovery.js'
       - 'tests/nba_game_first.test.js'
       - 'market_odds.js'
       - 'player_probability.js'
@@ -71,6 +73,7 @@ jobs:
           node test_game_odds.js
           node test_game_odds_ui.js
           node test_nba_pipeline_ui.js
+          node tests/test_nba_matchup_discovery.js
           node --test tests/nba_game_first.test.js
           node test_nba_ui.js
           node test_nba_simulator.js
@@ -107,6 +110,7 @@ jobs:
           node test_market_odds.js
           node test_player_probability.js
           node test_nba_pipeline_ui.js
+          node tests/test_nba_matchup_discovery.js
           node --test tests/nba_game_first.test.js
           node test_nba_ui.js
           node test_nba_simulator.js

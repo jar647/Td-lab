@@ -48,7 +48,7 @@ for delta in range(-35,4):
        if isinstance(raw,str) and "-" in raw:
         try:stats["3PM"]=int(raw.split("-")[0])
         except ValueError:pass
-      game["players"].append({"id":athlete.get("athlete",{}).get("id"),"name":athlete.get("athlete",{}).get("displayName"),"team":teamname,"stats":stats,"starter":athlete.get("starter",False),"didNotPlay":athlete.get("didNotPlay",False)})
+      game["players"].append({"id":athlete.get("athlete",{}).get("id"),"name":athlete.get("athlete",{}).get("displayName"),"team":teamname,"position":(athlete.get("athlete",{}).get("position") or {}).get("abbreviation"),"stats":stats,"starter":athlete.get("starter",False),"didNotPlay":athlete.get("didNotPlay",False)})
   except ValueError:pass
   except Exception as e:print("summary",event["id"],str(e))
   games.append(game)
@@ -107,3 +107,4 @@ if season_players:
  (ROOT/"data"/"nba_season_stats.json").write_text(json.dumps({"generated_at":datetime.datetime.now(datetime.timezone.utc).isoformat(),"season":season_start.year+1,"source":"ESPN final box scores; observed season-to-date sample","players":season_players},separators=(",",":")))
  print("Published observed season averages for",len(season_players),"players")
 else:print("No completed season box scores; retaining existing season stats")
+

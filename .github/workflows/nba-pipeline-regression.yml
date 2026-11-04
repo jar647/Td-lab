@@ -102,7 +102,7 @@ jobs:
           python - <<'PY2'
           import os,subprocess
           paths=set(subprocess.check_output(['git','diff','--name-only',os.environ['BASE'],os.environ['HEAD']],text=True).splitlines())
-          needed=bool(paths & {'scripts/audit_nba_projections.js','scripts/compare_nba_projection_audits.js','nba_game_first.js','nba_possession_engine.js','nba_simulator_ui.js','nba_feed.py','nba_shot_profile.py','nba_rotation_profile.py','nba_game_context.py','nba_game_context.js','game_odds_engine.js','scripts/publish_nba_simulator.js'})
+          needed=bool(paths & {'nba_rosters.py','nba_matchup_discovery.js','scripts/verify_nba_matchup_discovery.js','scripts/audit_nba_projections.js','scripts/compare_nba_projection_audits.js','nba_game_first.js','nba_possession_engine.js','nba_simulator_ui.js','nba_feed.py','nba_shot_profile.py','nba_rotation_profile.py','nba_game_context.py','nba_game_context.js','game_odds_engine.js','scripts/publish_nba_simulator.js'})
           with open(os.environ['GITHUB_OUTPUT'],'a') as out:out.write('needed='+str(needed).lower()+'\n')
           PY2
       - uses: actions/setup-python@v5
@@ -124,6 +124,7 @@ jobs:
           node --test tests/nba_game_first.test.js
           node test_nba_possessions.js
           node test_nba_game_context.js
+          node scripts/verify_nba_matchup_discovery.js
           mkdir -p "$RUNNER_TEMP/nba-audit-baseline"
           git show ded8f5b275353e92f5228298c6e35da6255924dc:nba_possession_engine.js > "$RUNNER_TEMP/nba-audit-baseline/nba_possession_engine.js"
           git show ded8f5b275353e92f5228298c6e35da6255924dc:nba_game_context.js > "$RUNNER_TEMP/nba-audit-baseline/nba_game_context.js"
