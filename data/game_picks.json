@@ -1289,7 +1289,30 @@
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
-        "home_advantage_points": 1.5
+        "home_advantage_points": 1.5,
+        "score_candidate": {
+          "version": "opponent-score-ridge-v1",
+          "status": "SHADOW_ONLY_NOT_VALIDATED",
+          "home": 21.0,
+          "away": 26.6,
+          "margin": -5.6,
+          "total": 47.6,
+          "training_games": 393,
+          "qb_basis": {
+            "BAL": {
+              "player_id": "00-0034796",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            },
+            "JAX": {
+              "player_id": "00-0036971",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            }
+          },
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
+          "generated_at": "2026-11-05T16:51:11.625002+00:00"
+        }
       },
       "ml": {
         "pick": null,
@@ -2456,7 +2479,30 @@
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
-        "home_advantage_points": 1.5
+        "home_advantage_points": 1.5,
+        "score_candidate": {
+          "version": "opponent-score-ridge-v1",
+          "status": "SHADOW_ONLY_NOT_VALIDATED",
+          "home": 24.2,
+          "away": 27.3,
+          "margin": -3.1,
+          "total": 51.5,
+          "training_games": 393,
+          "qb_basis": {
+            "ATL": {
+              "player_id": "00-0039917",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            },
+            "CIN": {
+              "player_id": "00-0036442",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            }
+          },
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
+          "generated_at": "2026-11-05T16:51:11.625002+00:00"
+        }
       },
       "ml": {
         "pick": null,
@@ -3661,7 +3707,30 @@
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
-        "home_advantage_points": 1.5
+        "home_advantage_points": 1.5,
+        "score_candidate": {
+          "version": "opponent-score-ridge-v1",
+          "status": "SHADOW_ONLY_NOT_VALIDATED",
+          "home": 21.3,
+          "away": 23.7,
+          "margin": -2.4,
+          "total": 45.0,
+          "training_games": 393,
+          "qb_basis": {
+            "CAR": {
+              "player_id": "00-0039150",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            },
+            "DEN": {
+              "player_id": "00-0039732",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            }
+          },
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
+          "generated_at": "2026-11-05T16:51:11.625002+00:00"
+        }
       },
       "ml": {
         "pick": null,
@@ -4947,7 +5016,30 @@
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
-        "home_advantage_points": 1.5
+        "home_advantage_points": 1.5,
+        "score_candidate": {
+          "version": "opponent-score-ridge-v1",
+          "status": "SHADOW_ONLY_NOT_VALIDATED",
+          "home": 27.2,
+          "away": 27.8,
+          "margin": -0.6,
+          "total": 55.0,
+          "training_games": 393,
+          "qb_basis": {
+            "IND": {
+              "player_id": "00-0035710",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            },
+            "DAL": {
+              "player_id": "00-0033077",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            }
+          },
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
+          "generated_at": "2026-11-05T16:51:11.625002+00:00"
+        }
       },
       "ml": {
         "pick": null,
@@ -6161,7 +6253,30 @@
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
-        "home_advantage_points": 1.5
+        "home_advantage_points": 1.5,
+        "score_candidate": {
+          "version": "opponent-score-ridge-v1",
+          "status": "SHADOW_ONLY_NOT_VALIDATED",
+          "home": 25.3,
+          "away": 17.5,
+          "margin": 7.8,
+          "total": 42.8,
+          "training_games": 393,
+          "qb_basis": {
+            "KC": {
+              "player_id": "00-0033873",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            },
+            "NYJ": {
+              "player_id": "00-0030565",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            }
+          },
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
+          "generated_at": "2026-11-05T16:51:11.625002+00:00"
+        }
       },
       "ml": {
         "pick": null,
@@ -7402,7 +7517,30 @@
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
-        "home_advantage_points": 1.5
+        "home_advantage_points": 1.5,
+        "score_candidate": {
+          "version": "opponent-score-ridge-v1",
+          "status": "SHADOW_ONLY_NOT_VALIDATED",
+          "home": 21.5,
+          "away": 27.4,
+          "margin": -5.9,
+          "total": 48.9,
+          "training_games": 393,
+          "qb_basis": {
+            "MIA": {
+              "player_id": "00-0038128",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            },
+            "DET": {
+              "player_id": "00-0033106",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            }
+          },
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
+          "generated_at": "2026-11-05T16:51:11.625002+00:00"
+        }
       },
       "ml": {
         "pick": null,
@@ -8606,7 +8744,30 @@
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
-        "home_advantage_points": 1.5
+        "home_advantage_points": 1.5,
+        "score_candidate": {
+          "version": "opponent-score-ridge-v1",
+          "status": "SHADOW_ONLY_NOT_VALIDATED",
+          "home": 21.9,
+          "away": 19.4,
+          "margin": 2.5,
+          "total": 41.3,
+          "training_games": 393,
+          "qb_basis": {
+            "NO": {
+              "player_id": "00-0040743",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            },
+            "CLE": {
+              "player_id": "00-0033537",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            }
+          },
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
+          "generated_at": "2026-11-05T16:51:11.625002+00:00"
+        }
       },
       "ml": {
         "pick": null,
@@ -9910,7 +10071,30 @@
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
-        "home_advantage_points": 1.5
+        "home_advantage_points": 1.5,
+        "score_candidate": {
+          "version": "opponent-score-ridge-v1",
+          "status": "SHADOW_ONLY_NOT_VALIDATED",
+          "home": 19.8,
+          "away": 21.9,
+          "margin": -2.1,
+          "total": 41.7,
+          "training_games": 393,
+          "qb_basis": {
+            "PHI": {
+              "player_id": "00-0038400",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            },
+            "NYG": {
+              "player_id": "00-0039923",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            }
+          },
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
+          "generated_at": "2026-11-05T16:51:11.625002+00:00"
+        }
       },
       "ml": {
         "pick": null,
@@ -11142,7 +11326,30 @@
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
-        "home_advantage_points": 1.5
+        "home_advantage_points": 1.5,
+        "score_candidate": {
+          "version": "opponent-score-ridge-v1",
+          "status": "SHADOW_ONLY_NOT_VALIDATED",
+          "home": 21.9,
+          "away": 26.5,
+          "margin": -4.6,
+          "total": 48.4,
+          "training_games": 393,
+          "qb_basis": {
+            "WAS": {
+              "player_id": "00-0039910",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            },
+            "LA": {
+              "player_id": "00-0026498",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            }
+          },
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
+          "generated_at": "2026-11-05T16:51:11.625002+00:00"
+        }
       },
       "ml": {
         "pick": null,
@@ -12337,7 +12544,30 @@
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
-        "home_advantage_points": 1.5
+        "home_advantage_points": 1.5,
+        "score_candidate": {
+          "version": "opponent-score-ridge-v1",
+          "status": "SHADOW_ONLY_NOT_VALIDATED",
+          "home": 18.2,
+          "away": 21.8,
+          "margin": -3.6,
+          "total": 40.0,
+          "training_games": 393,
+          "qb_basis": {
+            "LAC": {
+              "player_id": "00-0036355",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            },
+            "HOU": {
+              "player_id": "00-0039163",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            }
+          },
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
+          "generated_at": "2026-11-05T16:51:11.625002+00:00"
+        }
       },
       "ml": {
         "pick": null,
@@ -13551,7 +13781,30 @@
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
-        "home_advantage_points": 1.5
+        "home_advantage_points": 1.5,
+        "score_candidate": {
+          "version": "opponent-score-ridge-v1",
+          "status": "SHADOW_ONLY_NOT_VALIDATED",
+          "home": 29.8,
+          "away": 22.8,
+          "margin": 7.0,
+          "total": 52.6,
+          "training_games": 393,
+          "qb_basis": {
+            "SF": {
+              "player_id": "00-0037834",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            },
+            "LV": {
+              "player_id": "00-0029604",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            }
+          },
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
+          "generated_at": "2026-11-05T16:51:11.625002+00:00"
+        }
       },
       "ml": {
         "pick": null,
@@ -14801,7 +15054,30 @@
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
-        "home_advantage_points": 1.5
+        "home_advantage_points": 1.5,
+        "score_candidate": {
+          "version": "opponent-score-ridge-v1",
+          "status": "SHADOW_ONLY_NOT_VALIDATED",
+          "home": 23.6,
+          "away": 19.4,
+          "margin": 4.2,
+          "total": 43.0,
+          "training_games": 393,
+          "qb_basis": {
+            "NE": {
+              "player_id": "00-0039851",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            },
+            "GB": {
+              "player_id": "00-0036264",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            }
+          },
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
+          "generated_at": "2026-11-05T16:51:11.625002+00:00"
+        }
       },
       "ml": {
         "pick": null,
@@ -15969,7 +16245,30 @@
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
-        "home_advantage_points": 1.5
+        "home_advantage_points": 1.5,
+        "score_candidate": {
+          "version": "opponent-score-ridge-v1",
+          "status": "SHADOW_ONLY_NOT_VALIDATED",
+          "home": 27.7,
+          "away": 19.1,
+          "margin": 8.6,
+          "total": 46.8,
+          "training_games": 393,
+          "qb_basis": {
+            "SEA": {
+              "player_id": "00-0034869",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            },
+            "ARI": {
+              "player_id": "00-0033119",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            }
+          },
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
+          "generated_at": "2026-11-05T16:51:11.625002+00:00"
+        }
       },
       "ml": {
         "pick": null,
@@ -17101,7 +17400,30 @@
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
-        "home_advantage_points": 1.5
+        "home_advantage_points": 1.5,
+        "score_candidate": {
+          "version": "opponent-score-ridge-v1",
+          "status": "SHADOW_ONLY_NOT_VALIDATED",
+          "home": 26.1,
+          "away": 21.8,
+          "margin": 4.3,
+          "total": 47.9,
+          "training_games": 393,
+          "qb_basis": {
+            "CHI": {
+              "player_id": "00-0039918",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            },
+            "TB": {
+              "player_id": "00-0034855",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            }
+          },
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
+          "generated_at": "2026-11-05T16:51:11.625002+00:00"
+        }
       },
       "ml": {
         "pick": null,
@@ -18132,7 +18454,30 @@
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
-        "home_advantage_points": 1.5
+        "home_advantage_points": 1.5,
+        "score_candidate": {
+          "version": "opponent-score-ridge-v1",
+          "status": "SHADOW_ONLY_NOT_VALIDATED",
+          "home": 21.9,
+          "away": 23.9,
+          "margin": -2.0,
+          "total": 45.8,
+          "training_games": 393,
+          "qb_basis": {
+            "MIN": {
+              "player_id": "00-0035228",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            },
+            "BUF": {
+              "player_id": "00-0034857",
+              "source": "LAST_OBSERVED_QB_PROXY",
+              "historical_effect_available": true
+            }
+          },
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
+          "generated_at": "2026-11-05T16:51:11.625002+00:00"
+        }
       },
       "ml": {
         "pick": null,
