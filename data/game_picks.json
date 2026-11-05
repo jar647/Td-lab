@@ -1,7 +1,7 @@
 {
   "season": 2026,
   "week": 9,
-  "generated_at": "2026-11-05T13:53:50.849226+00:00",
+  "generated_at": "2026-11-05T17:18:24.375069+00:00",
   "model_status": "AUDITED_BASELINE_UNCALIBRATED",
   "model_version": "score-baseline-trust-v3",
   "note": "Historical scoring research baseline; independently recomputed source rates; QB-led history separated; no unvalidated EPA point correction or verified betting recommendation.",
@@ -1020,11 +1020,11 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "grass",
-            "temperature_f": 68,
+            "temperature_f": 67,
             "wind_mph": 5.0,
             "wind_direction": "S",
-            "precipitation_probability": 17,
-            "weather_condition": "Slight Chance Showers And Thunderstorms",
+            "precipitation_probability": 76,
+            "weather_condition": "Showers And Thunderstorms",
             "weather_updated_at": null
           },
           "travel": {
@@ -1035,7 +1035,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-05T13:53:48.956218+00:00",
+            "retrieved_at": "2026-11-05T17:18:22.611322+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -1065,17 +1065,17 @@
             "source": "National Weather Service hourly forecast",
             "forecast_time": "2026-11-05T20:00:00-05:00",
             "updated_at": null,
-            "temperature_f": 68,
+            "temperature_f": 67,
             "wind_mph": 5.0,
             "wind_direction": "S",
-            "precipitation_probability": 17,
-            "condition": "Slight Chance Showers And Thunderstorms"
+            "precipitation_probability": 76,
+            "condition": "Showers And Thunderstorms"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-05T13:53:48.755253+00:00",
+          "checked_at": "2026-11-05T17:18:22.384786+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -1237,59 +1237,48 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 460,
+            "games": 473,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.355652173913043,
-                "adjusted_mae": 10.355869565217393,
-                "mean_improvement": -0.00021739130434782146,
+                "baseline_mae": 10.403382663847779,
+                "adjusted_mae": 10.383509513742075,
+                "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.20268456375838925,
-                  0.19641255605381158
+                  -0.1850840336134454,
+                  0.21941544885177466
                 ]
               },
               "total": {
-                "baseline_mae": 10.386956521739132,
-                "adjusted_mae": 10.346739130434782,
-                "mean_improvement": 0.04021739130434775,
+                "baseline_mae": 10.458773784355184,
+                "adjusted_mae": 10.414376321353066,
+                "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1207126948775056,
+                  -0.11196581196581201,
                   0.1885892116182571
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 460,
-                "total_mae": 10.35,
-                "margin_mae": 10.36,
-                "winner_accuracy": 0.5991,
-                "total_bias": -1.04
+                "games": 473,
+                "total_mae": 10.41,
+                "margin_mae": 10.38,
+                "winner_accuracy": 0.6017,
+                "total_bias": -1.06
               },
               "scoring_baseline": {
-                "games": 460,
-                "total_mae": 10.39,
-                "margin_mae": 10.36,
+                "games": 473,
+                "total_mae": 10.46,
+                "margin_mae": 10.4,
                 "winner_accuracy": 0.6144,
-                "total_bias": -1.06
+                "total_bias": -1.08
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
             "method": "Retrospective prior-week walk-forward records, paired bootstrap by season/week (2000 draws). Not an untouched prospective holdout; not evidence of betting profitability."
           }
         },
-        "residual_context": {
-          "home_rest": 4.0,
-          "away_rest": 4.0,
-          "travel_miles": 681,
-          "roof": "outdoors",
-          "temperature_f": 68,
-          "wind_mph": 5.0
-        },
-        "prior_games": 4.0,
-        "league_points_prior": 22.0,
-        "home_advantage_points": 1.5,
         "score_candidate": {
           "version": "opponent-score-ridge-v1",
           "status": "SHADOW_ONLY_NOT_VALIDATED",
@@ -1310,9 +1299,19 @@
               "historical_effect_available": true
             }
           },
-          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
-          "generated_at": "2026-11-05T16:51:11.625002+00:00"
-        }
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "residual_context": {
+          "home_rest": 4.0,
+          "away_rest": 4.0,
+          "travel_miles": 681,
+          "roof": "outdoors",
+          "temperature_f": 67,
+          "wind_mph": 5.0
+        },
+        "prior_games": 4.0,
+        "league_points_prior": 22.0,
+        "home_advantage_points": 1.5
       },
       "ml": {
         "pick": null,
@@ -2213,8 +2212,8 @@
             "roof": null,
             "surface": "fieldturf",
             "temperature_f": 52,
-            "wind_mph": 5.0,
-            "wind_direction": "E",
+            "wind_mph": 0.0,
+            "wind_direction": "",
             "precipitation_probability": 0,
             "weather_condition": "Sunny",
             "weather_updated_at": null
@@ -2225,7 +2224,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-05T13:53:49.354216+00:00",
+            "retrieved_at": "2026-11-05T17:18:22.745240+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -2256,8 +2255,8 @@
             "forecast_time": "2026-11-08T09:00:00-05:00",
             "updated_at": null,
             "temperature_f": 52,
-            "wind_mph": 5.0,
-            "wind_direction": "E",
+            "wind_mph": 0.0,
+            "wind_direction": "",
             "precipitation_probability": 0,
             "condition": "Sunny"
           }
@@ -2265,7 +2264,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-05T13:53:48.755253+00:00",
+          "checked_at": "2026-11-05T17:18:22.384786+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -2427,59 +2426,48 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 460,
+            "games": 473,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.355652173913043,
-                "adjusted_mae": 10.355869565217393,
-                "mean_improvement": -0.00021739130434782146,
+                "baseline_mae": 10.403382663847779,
+                "adjusted_mae": 10.383509513742075,
+                "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.20268456375838925,
-                  0.19641255605381158
+                  -0.1850840336134454,
+                  0.21941544885177466
                 ]
               },
               "total": {
-                "baseline_mae": 10.386956521739132,
-                "adjusted_mae": 10.346739130434782,
-                "mean_improvement": 0.04021739130434775,
+                "baseline_mae": 10.458773784355184,
+                "adjusted_mae": 10.414376321353066,
+                "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1207126948775056,
+                  -0.11196581196581201,
                   0.1885892116182571
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 460,
-                "total_mae": 10.35,
-                "margin_mae": 10.36,
-                "winner_accuracy": 0.5991,
-                "total_bias": -1.04
+                "games": 473,
+                "total_mae": 10.41,
+                "margin_mae": 10.38,
+                "winner_accuracy": 0.6017,
+                "total_bias": -1.06
               },
               "scoring_baseline": {
-                "games": 460,
-                "total_mae": 10.39,
-                "margin_mae": 10.36,
+                "games": 473,
+                "total_mae": 10.46,
+                "margin_mae": 10.4,
                 "winner_accuracy": 0.6144,
-                "total_bias": -1.06
+                "total_bias": -1.08
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
             "method": "Retrospective prior-week walk-forward records, paired bootstrap by season/week (2000 draws). Not an untouched prospective holdout; not evidence of betting profitability."
           }
         },
-        "residual_context": {
-          "home_rest": 7.0,
-          "away_rest": 7.0,
-          "travel_miles": null,
-          "roof": null,
-          "temperature_f": 52,
-          "wind_mph": 5.0
-        },
-        "prior_games": 4.0,
-        "league_points_prior": 22.0,
-        "home_advantage_points": 1.5,
         "score_candidate": {
           "version": "opponent-score-ridge-v1",
           "status": "SHADOW_ONLY_NOT_VALIDATED",
@@ -2500,9 +2488,19 @@
               "historical_effect_available": true
             }
           },
-          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
-          "generated_at": "2026-11-05T16:51:11.625002+00:00"
-        }
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "residual_context": {
+          "home_rest": 7.0,
+          "away_rest": 7.0,
+          "travel_miles": null,
+          "roof": null,
+          "temperature_f": 52,
+          "wind_mph": 0.0
+        },
+        "prior_games": 4.0,
+        "league_points_prior": 22.0,
+        "home_advantage_points": 1.5
       },
       "ml": {
         "pick": null,
@@ -3453,7 +3451,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-05T13:53:49.479828+00:00",
+            "retrieved_at": "2026-11-05T17:18:22.980506+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -3493,7 +3491,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-05T13:53:48.755253+00:00",
+          "checked_at": "2026-11-05T17:18:22.384786+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -3655,59 +3653,48 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 460,
+            "games": 473,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.355652173913043,
-                "adjusted_mae": 10.355869565217393,
-                "mean_improvement": -0.00021739130434782146,
+                "baseline_mae": 10.403382663847779,
+                "adjusted_mae": 10.383509513742075,
+                "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.20268456375838925,
-                  0.19641255605381158
+                  -0.1850840336134454,
+                  0.21941544885177466
                 ]
               },
               "total": {
-                "baseline_mae": 10.386956521739132,
-                "adjusted_mae": 10.346739130434782,
-                "mean_improvement": 0.04021739130434775,
+                "baseline_mae": 10.458773784355184,
+                "adjusted_mae": 10.414376321353066,
+                "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1207126948775056,
+                  -0.11196581196581201,
                   0.1885892116182571
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 460,
-                "total_mae": 10.35,
-                "margin_mae": 10.36,
-                "winner_accuracy": 0.5991,
-                "total_bias": -1.04
+                "games": 473,
+                "total_mae": 10.41,
+                "margin_mae": 10.38,
+                "winner_accuracy": 0.6017,
+                "total_bias": -1.06
               },
               "scoring_baseline": {
-                "games": 460,
-                "total_mae": 10.39,
-                "margin_mae": 10.36,
+                "games": 473,
+                "total_mae": 10.46,
+                "margin_mae": 10.4,
                 "winner_accuracy": 0.6144,
-                "total_bias": -1.06
+                "total_bias": -1.08
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
             "method": "Retrospective prior-week walk-forward records, paired bootstrap by season/week (2000 draws). Not an untouched prospective holdout; not evidence of betting profitability."
           }
         },
-        "residual_context": {
-          "home_rest": 10.0,
-          "away_rest": 7.0,
-          "travel_miles": 1357,
-          "roof": "outdoors",
-          "temperature_f": 64,
-          "wind_mph": 3.0
-        },
-        "prior_games": 4.0,
-        "league_points_prior": 22.0,
-        "home_advantage_points": 1.5,
         "score_candidate": {
           "version": "opponent-score-ridge-v1",
           "status": "SHADOW_ONLY_NOT_VALIDATED",
@@ -3728,9 +3715,19 @@
               "historical_effect_available": true
             }
           },
-          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
-          "generated_at": "2026-11-05T16:51:11.625002+00:00"
-        }
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "residual_context": {
+          "home_rest": 10.0,
+          "away_rest": 7.0,
+          "travel_miles": 1357,
+          "roof": "outdoors",
+          "temperature_f": 64,
+          "wind_mph": 3.0
+        },
+        "prior_games": 4.0,
+        "league_points_prior": 22.0,
+        "home_advantage_points": 1.5
       },
       "ml": {
         "pick": null,
@@ -4761,7 +4758,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-05T13:53:49.613425+00:00",
+            "retrieved_at": "2026-11-05T17:18:23.107266+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -4801,7 +4798,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-05T13:53:48.755253+00:00",
+          "checked_at": "2026-11-05T17:18:22.384786+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -4964,59 +4961,48 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 460,
+            "games": 473,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.355652173913043,
-                "adjusted_mae": 10.355869565217393,
-                "mean_improvement": -0.00021739130434782146,
+                "baseline_mae": 10.403382663847779,
+                "adjusted_mae": 10.383509513742075,
+                "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.20268456375838925,
-                  0.19641255605381158
+                  -0.1850840336134454,
+                  0.21941544885177466
                 ]
               },
               "total": {
-                "baseline_mae": 10.386956521739132,
-                "adjusted_mae": 10.346739130434782,
-                "mean_improvement": 0.04021739130434775,
+                "baseline_mae": 10.458773784355184,
+                "adjusted_mae": 10.414376321353066,
+                "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1207126948775056,
+                  -0.11196581196581201,
                   0.1885892116182571
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 460,
-                "total_mae": 10.35,
-                "margin_mae": 10.36,
-                "winner_accuracy": 0.5991,
-                "total_bias": -1.04
+                "games": 473,
+                "total_mae": 10.41,
+                "margin_mae": 10.38,
+                "winner_accuracy": 0.6017,
+                "total_bias": -1.06
               },
               "scoring_baseline": {
-                "games": 460,
-                "total_mae": 10.39,
-                "margin_mae": 10.36,
+                "games": 473,
+                "total_mae": 10.46,
+                "margin_mae": 10.4,
                 "winner_accuracy": 0.6144,
-                "total_bias": -1.06
+                "total_bias": -1.08
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
             "method": "Retrospective prior-week walk-forward records, paired bootstrap by season/week (2000 draws). Not an untouched prospective holdout; not evidence of betting profitability."
           }
         },
-        "residual_context": {
-          "home_rest": 7.0,
-          "away_rest": 7.0,
-          "travel_miles": 777,
-          "roof": null,
-          "temperature_f": 54,
-          "wind_mph": 7.0
-        },
-        "prior_games": 4.0,
-        "league_points_prior": 22.0,
-        "home_advantage_points": 1.5,
         "score_candidate": {
           "version": "opponent-score-ridge-v1",
           "status": "SHADOW_ONLY_NOT_VALIDATED",
@@ -5037,9 +5023,19 @@
               "historical_effect_available": true
             }
           },
-          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
-          "generated_at": "2026-11-05T16:51:11.625002+00:00"
-        }
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "residual_context": {
+          "home_rest": 7.0,
+          "away_rest": 7.0,
+          "travel_miles": 777,
+          "roof": null,
+          "temperature_f": 54,
+          "wind_mph": 7.0
+        },
+        "prior_games": 4.0,
+        "league_points_prior": 22.0,
+        "home_advantage_points": 1.5
       },
       "ml": {
         "pick": null,
@@ -5999,7 +5995,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-05T13:53:49.745520+00:00",
+            "retrieved_at": "2026-11-05T17:18:23.274193+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -6039,7 +6035,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-05T13:53:48.755253+00:00",
+          "checked_at": "2026-11-05T17:18:22.384786+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -6201,59 +6197,48 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 460,
+            "games": 473,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.355652173913043,
-                "adjusted_mae": 10.355869565217393,
-                "mean_improvement": -0.00021739130434782146,
+                "baseline_mae": 10.403382663847779,
+                "adjusted_mae": 10.383509513742075,
+                "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.20268456375838925,
-                  0.19641255605381158
+                  -0.1850840336134454,
+                  0.21941544885177466
                 ]
               },
               "total": {
-                "baseline_mae": 10.386956521739132,
-                "adjusted_mae": 10.346739130434782,
-                "mean_improvement": 0.04021739130434775,
+                "baseline_mae": 10.458773784355184,
+                "adjusted_mae": 10.414376321353066,
+                "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1207126948775056,
+                  -0.11196581196581201,
                   0.1885892116182571
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 460,
-                "total_mae": 10.35,
-                "margin_mae": 10.36,
-                "winner_accuracy": 0.5991,
-                "total_bias": -1.04
+                "games": 473,
+                "total_mae": 10.41,
+                "margin_mae": 10.38,
+                "winner_accuracy": 0.6017,
+                "total_bias": -1.06
               },
               "scoring_baseline": {
-                "games": 460,
-                "total_mae": 10.39,
-                "margin_mae": 10.36,
+                "games": 473,
+                "total_mae": 10.46,
+                "margin_mae": 10.4,
                 "winner_accuracy": 0.6144,
-                "total_bias": -1.06
+                "total_bias": -1.08
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
             "method": "Retrospective prior-week walk-forward records, paired bootstrap by season/week (2000 draws). Not an untouched prospective holdout; not evidence of betting profitability."
           }
         },
-        "residual_context": {
-          "home_rest": 7.0,
-          "away_rest": 7.0,
-          "travel_miles": 1086,
-          "roof": "outdoors",
-          "temperature_f": 60,
-          "wind_mph": 3.0
-        },
-        "prior_games": 4.0,
-        "league_points_prior": 22.0,
-        "home_advantage_points": 1.5,
         "score_candidate": {
           "version": "opponent-score-ridge-v1",
           "status": "SHADOW_ONLY_NOT_VALIDATED",
@@ -6274,9 +6259,19 @@
               "historical_effect_available": true
             }
           },
-          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
-          "generated_at": "2026-11-05T16:51:11.625002+00:00"
-        }
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "residual_context": {
+          "home_rest": 7.0,
+          "away_rest": 7.0,
+          "travel_miles": 1086,
+          "roof": "outdoors",
+          "temperature_f": 60,
+          "wind_mph": 3.0
+        },
+        "prior_games": 4.0,
+        "league_points_prior": 22.0,
+        "home_advantage_points": 1.5
       },
       "ml": {
         "pick": null,
@@ -7264,7 +7259,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-05T13:53:49.892169+00:00",
+            "retrieved_at": "2026-11-05T17:18:23.399907+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -7304,7 +7299,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-05T13:53:48.755253+00:00",
+          "checked_at": "2026-11-05T17:18:22.384786+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -7465,59 +7460,48 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 460,
+            "games": 473,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.355652173913043,
-                "adjusted_mae": 10.355869565217393,
-                "mean_improvement": -0.00021739130434782146,
+                "baseline_mae": 10.403382663847779,
+                "adjusted_mae": 10.383509513742075,
+                "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.20268456375838925,
-                  0.19641255605381158
+                  -0.1850840336134454,
+                  0.21941544885177466
                 ]
               },
               "total": {
-                "baseline_mae": 10.386956521739132,
-                "adjusted_mae": 10.346739130434782,
-                "mean_improvement": 0.04021739130434775,
+                "baseline_mae": 10.458773784355184,
+                "adjusted_mae": 10.414376321353066,
+                "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1207126948775056,
+                  -0.11196581196581201,
                   0.1885892116182571
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 460,
-                "total_mae": 10.35,
-                "margin_mae": 10.36,
-                "winner_accuracy": 0.5991,
-                "total_bias": -1.04
+                "games": 473,
+                "total_mae": 10.41,
+                "margin_mae": 10.38,
+                "winner_accuracy": 0.6017,
+                "total_bias": -1.06
               },
               "scoring_baseline": {
-                "games": 460,
-                "total_mae": 10.39,
-                "margin_mae": 10.36,
+                "games": 473,
+                "total_mae": 10.46,
+                "margin_mae": 10.4,
                 "winner_accuracy": 0.6144,
-                "total_bias": -1.06
+                "total_bias": -1.08
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
             "method": "Retrospective prior-week walk-forward records, paired bootstrap by season/week (2000 draws). Not an untouched prospective holdout; not evidence of betting profitability."
           }
         },
-        "residual_context": {
-          "home_rest": 7.0,
-          "away_rest": 7.0,
-          "travel_miles": 1143,
-          "roof": "outdoors",
-          "temperature_f": 82,
-          "wind_mph": 6.0
-        },
-        "prior_games": 4.0,
-        "league_points_prior": 22.0,
-        "home_advantage_points": 1.5,
         "score_candidate": {
           "version": "opponent-score-ridge-v1",
           "status": "SHADOW_ONLY_NOT_VALIDATED",
@@ -7538,9 +7522,19 @@
               "historical_effect_available": true
             }
           },
-          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
-          "generated_at": "2026-11-05T16:51:11.625002+00:00"
-        }
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "residual_context": {
+          "home_rest": 7.0,
+          "away_rest": 7.0,
+          "travel_miles": 1143,
+          "roof": "outdoors",
+          "temperature_f": 82,
+          "wind_mph": 6.0
+        },
+        "prior_games": 4.0,
+        "league_points_prior": 22.0,
+        "home_advantage_points": 1.5
       },
       "ml": {
         "pick": null,
@@ -8496,7 +8490,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-05T13:53:49.917138+00:00",
+            "retrieved_at": "2026-11-05T17:18:23.446731+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -8530,7 +8524,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-05T13:53:48.755253+00:00",
+          "checked_at": "2026-11-05T17:18:22.384786+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -8692,59 +8686,48 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 460,
+            "games": 473,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.355652173913043,
-                "adjusted_mae": 10.355869565217393,
-                "mean_improvement": -0.00021739130434782146,
+                "baseline_mae": 10.403382663847779,
+                "adjusted_mae": 10.383509513742075,
+                "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.20268456375838925,
-                  0.19641255605381158
+                  -0.1850840336134454,
+                  0.21941544885177466
                 ]
               },
               "total": {
-                "baseline_mae": 10.386956521739132,
-                "adjusted_mae": 10.346739130434782,
-                "mean_improvement": 0.04021739130434775,
+                "baseline_mae": 10.458773784355184,
+                "adjusted_mae": 10.414376321353066,
+                "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1207126948775056,
+                  -0.11196581196581201,
                   0.1885892116182571
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 460,
-                "total_mae": 10.35,
-                "margin_mae": 10.36,
-                "winner_accuracy": 0.5991,
-                "total_bias": -1.04
+                "games": 473,
+                "total_mae": 10.41,
+                "margin_mae": 10.38,
+                "winner_accuracy": 0.6017,
+                "total_bias": -1.06
               },
               "scoring_baseline": {
-                "games": 460,
-                "total_mae": 10.39,
-                "margin_mae": 10.36,
+                "games": 473,
+                "total_mae": 10.46,
+                "margin_mae": 10.4,
                 "winner_accuracy": 0.6144,
-                "total_bias": -1.06
+                "total_bias": -1.08
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
             "method": "Retrospective prior-week walk-forward records, paired bootstrap by season/week (2000 draws). Not an untouched prospective holdout; not evidence of betting profitability."
           }
         },
-        "residual_context": {
-          "home_rest": 14.0,
-          "away_rest": 7.0,
-          "travel_miles": 925,
-          "roof": "dome",
-          "temperature_f": null,
-          "wind_mph": null
-        },
-        "prior_games": 4.0,
-        "league_points_prior": 22.0,
-        "home_advantage_points": 1.5,
         "score_candidate": {
           "version": "opponent-score-ridge-v1",
           "status": "SHADOW_ONLY_NOT_VALIDATED",
@@ -8765,9 +8748,19 @@
               "historical_effect_available": true
             }
           },
-          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
-          "generated_at": "2026-11-05T16:51:11.625002+00:00"
-        }
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "residual_context": {
+          "home_rest": 14.0,
+          "away_rest": 7.0,
+          "travel_miles": 925,
+          "roof": "dome",
+          "temperature_f": null,
+          "wind_mph": null
+        },
+        "prior_games": 4.0,
+        "league_points_prior": 22.0,
+        "home_advantage_points": 1.5
       },
       "ml": {
         "pick": null,
@@ -9817,7 +9810,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-05T13:53:50.043325+00:00",
+            "retrieved_at": "2026-11-05T17:18:23.576651+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -9857,7 +9850,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-05T13:53:48.755253+00:00",
+          "checked_at": "2026-11-05T17:18:22.384786+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -10019,59 +10012,48 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 460,
+            "games": 473,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.355652173913043,
-                "adjusted_mae": 10.355869565217393,
-                "mean_improvement": -0.00021739130434782146,
+                "baseline_mae": 10.403382663847779,
+                "adjusted_mae": 10.383509513742075,
+                "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.20268456375838925,
-                  0.19641255605381158
+                  -0.1850840336134454,
+                  0.21941544885177466
                 ]
               },
               "total": {
-                "baseline_mae": 10.386956521739132,
-                "adjusted_mae": 10.346739130434782,
-                "mean_improvement": 0.04021739130434775,
+                "baseline_mae": 10.458773784355184,
+                "adjusted_mae": 10.414376321353066,
+                "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1207126948775056,
+                  -0.11196581196581201,
                   0.1885892116182571
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 460,
-                "total_mae": 10.35,
-                "margin_mae": 10.36,
-                "winner_accuracy": 0.5991,
-                "total_bias": -1.04
+                "games": 473,
+                "total_mae": 10.41,
+                "margin_mae": 10.38,
+                "winner_accuracy": 0.6017,
+                "total_bias": -1.06
               },
               "scoring_baseline": {
-                "games": 460,
-                "total_mae": 10.39,
-                "margin_mae": 10.36,
+                "games": 473,
+                "total_mae": 10.46,
+                "margin_mae": 10.4,
                 "winner_accuracy": 0.6144,
-                "total_bias": -1.06
+                "total_bias": -1.08
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
             "method": "Retrospective prior-week walk-forward records, paired bootstrap by season/week (2000 draws). Not an untouched prospective holdout; not evidence of betting profitability."
           }
         },
-        "residual_context": {
-          "home_rest": 7.0,
-          "away_rest": 14.0,
-          "travel_miles": 85,
-          "roof": "outdoors",
-          "temperature_f": 59,
-          "wind_mph": 10.0
-        },
-        "prior_games": 4.0,
-        "league_points_prior": 22.0,
-        "home_advantage_points": 1.5,
         "score_candidate": {
           "version": "opponent-score-ridge-v1",
           "status": "SHADOW_ONLY_NOT_VALIDATED",
@@ -10092,9 +10074,19 @@
               "historical_effect_available": true
             }
           },
-          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
-          "generated_at": "2026-11-05T16:51:11.625002+00:00"
-        }
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "residual_context": {
+          "home_rest": 7.0,
+          "away_rest": 14.0,
+          "travel_miles": 85,
+          "roof": "outdoors",
+          "temperature_f": 59,
+          "wind_mph": 10.0
+        },
+        "prior_games": 4.0,
+        "league_points_prior": 22.0,
+        "home_advantage_points": 1.5
       },
       "ml": {
         "pick": null,
@@ -11057,8 +11049,8 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "grass",
-            "temperature_f": 60,
-            "wind_mph": 10.0,
+            "temperature_f": 61,
+            "wind_mph": 12.0,
             "wind_direction": "W",
             "precipitation_probability": 0,
             "weather_condition": "Sunny",
@@ -11072,7 +11064,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-05T13:53:50.172381+00:00",
+            "retrieved_at": "2026-11-05T17:18:23.730686+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -11102,8 +11094,8 @@
             "source": "National Weather Service hourly forecast",
             "forecast_time": "2026-11-08T13:00:00-05:00",
             "updated_at": null,
-            "temperature_f": 60,
-            "wind_mph": 10.0,
+            "temperature_f": 61,
+            "wind_mph": 12.0,
             "wind_direction": "W",
             "precipitation_probability": 0,
             "condition": "Sunny"
@@ -11112,7 +11104,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-05T13:53:48.755253+00:00",
+          "checked_at": "2026-11-05T17:18:22.384786+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -11274,59 +11266,48 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 460,
+            "games": 473,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.355652173913043,
-                "adjusted_mae": 10.355869565217393,
-                "mean_improvement": -0.00021739130434782146,
+                "baseline_mae": 10.403382663847779,
+                "adjusted_mae": 10.383509513742075,
+                "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.20268456375838925,
-                  0.19641255605381158
+                  -0.1850840336134454,
+                  0.21941544885177466
                 ]
               },
               "total": {
-                "baseline_mae": 10.386956521739132,
-                "adjusted_mae": 10.346739130434782,
-                "mean_improvement": 0.04021739130434775,
+                "baseline_mae": 10.458773784355184,
+                "adjusted_mae": 10.414376321353066,
+                "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1207126948775056,
+                  -0.11196581196581201,
                   0.1885892116182571
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 460,
-                "total_mae": 10.35,
-                "margin_mae": 10.36,
-                "winner_accuracy": 0.5991,
-                "total_bias": -1.04
+                "games": 473,
+                "total_mae": 10.41,
+                "margin_mae": 10.38,
+                "winner_accuracy": 0.6017,
+                "total_bias": -1.06
               },
               "scoring_baseline": {
-                "games": 460,
-                "total_mae": 10.39,
-                "margin_mae": 10.36,
+                "games": 473,
+                "total_mae": 10.46,
+                "margin_mae": 10.4,
                 "winner_accuracy": 0.6144,
-                "total_bias": -1.06
+                "total_bias": -1.08
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
             "method": "Retrospective prior-week walk-forward records, paired bootstrap by season/week (2000 draws). Not an untouched prospective holdout; not evidence of betting profitability."
           }
         },
-        "residual_context": {
-          "home_rest": 7.0,
-          "away_rest": 7.0,
-          "travel_miles": 2311,
-          "roof": "outdoors",
-          "temperature_f": 60,
-          "wind_mph": 10.0
-        },
-        "prior_games": 4.0,
-        "league_points_prior": 22.0,
-        "home_advantage_points": 1.5,
         "score_candidate": {
           "version": "opponent-score-ridge-v1",
           "status": "SHADOW_ONLY_NOT_VALIDATED",
@@ -11347,9 +11328,19 @@
               "historical_effect_available": true
             }
           },
-          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
-          "generated_at": "2026-11-05T16:51:11.625002+00:00"
-        }
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "residual_context": {
+          "home_rest": 7.0,
+          "away_rest": 7.0,
+          "travel_miles": 2311,
+          "roof": "outdoors",
+          "temperature_f": 61,
+          "wind_mph": 12.0
+        },
+        "prior_games": 4.0,
+        "league_points_prior": 22.0,
+        "home_advantage_points": 1.5
       },
       "ml": {
         "pick": null,
@@ -12297,7 +12288,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-05T13:53:50.197493+00:00",
+            "retrieved_at": "2026-11-05T17:18:23.777731+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -12331,7 +12322,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-05T13:53:48.755253+00:00",
+          "checked_at": "2026-11-05T17:18:22.384786+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -12492,59 +12483,48 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 460,
+            "games": 473,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.355652173913043,
-                "adjusted_mae": 10.355869565217393,
-                "mean_improvement": -0.00021739130434782146,
+                "baseline_mae": 10.403382663847779,
+                "adjusted_mae": 10.383509513742075,
+                "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.20268456375838925,
-                  0.19641255605381158
+                  -0.1850840336134454,
+                  0.21941544885177466
                 ]
               },
               "total": {
-                "baseline_mae": 10.386956521739132,
-                "adjusted_mae": 10.346739130434782,
-                "mean_improvement": 0.04021739130434775,
+                "baseline_mae": 10.458773784355184,
+                "adjusted_mae": 10.414376321353066,
+                "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1207126948775056,
+                  -0.11196581196581201,
                   0.1885892116182571
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 460,
-                "total_mae": 10.35,
-                "margin_mae": 10.36,
-                "winner_accuracy": 0.5991,
-                "total_bias": -1.04
+                "games": 473,
+                "total_mae": 10.41,
+                "margin_mae": 10.38,
+                "winner_accuracy": 0.6017,
+                "total_bias": -1.06
               },
               "scoring_baseline": {
-                "games": 460,
-                "total_mae": 10.39,
-                "margin_mae": 10.36,
+                "games": 473,
+                "total_mae": 10.46,
+                "margin_mae": 10.4,
                 "winner_accuracy": 0.6144,
-                "total_bias": -1.06
+                "total_bias": -1.08
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
             "method": "Retrospective prior-week walk-forward records, paired bootstrap by season/week (2000 draws). Not an untouched prospective holdout; not evidence of betting profitability."
           }
         },
-        "residual_context": {
-          "home_rest": 7.0,
-          "away_rest": 14.0,
-          "travel_miles": 1375,
-          "roof": "dome",
-          "temperature_f": null,
-          "wind_mph": null
-        },
-        "prior_games": 4.0,
-        "league_points_prior": 22.0,
-        "home_advantage_points": 1.5,
         "score_candidate": {
           "version": "opponent-score-ridge-v1",
           "status": "SHADOW_ONLY_NOT_VALIDATED",
@@ -12565,9 +12545,19 @@
               "historical_effect_available": true
             }
           },
-          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
-          "generated_at": "2026-11-05T16:51:11.625002+00:00"
-        }
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "residual_context": {
+          "home_rest": 7.0,
+          "away_rest": 14.0,
+          "travel_miles": 1375,
+          "roof": "dome",
+          "temperature_f": null,
+          "wind_mph": null
+        },
+        "prior_games": 4.0,
+        "league_points_prior": 22.0,
+        "home_advantage_points": 1.5
       },
       "ml": {
         "pick": null,
@@ -13527,7 +13517,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-05T13:53:50.326170+00:00",
+            "retrieved_at": "2026-11-05T17:18:23.907013+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -13567,7 +13557,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-05T13:53:48.755253+00:00",
+          "checked_at": "2026-11-05T17:18:22.384786+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -13729,59 +13719,48 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 460,
+            "games": 473,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.355652173913043,
-                "adjusted_mae": 10.355869565217393,
-                "mean_improvement": -0.00021739130434782146,
+                "baseline_mae": 10.403382663847779,
+                "adjusted_mae": 10.383509513742075,
+                "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.20268456375838925,
-                  0.19641255605381158
+                  -0.1850840336134454,
+                  0.21941544885177466
                 ]
               },
               "total": {
-                "baseline_mae": 10.386956521739132,
-                "adjusted_mae": 10.346739130434782,
-                "mean_improvement": 0.04021739130434775,
+                "baseline_mae": 10.458773784355184,
+                "adjusted_mae": 10.414376321353066,
+                "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1207126948775056,
+                  -0.11196581196581201,
                   0.1885892116182571
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 460,
-                "total_mae": 10.35,
-                "margin_mae": 10.36,
-                "winner_accuracy": 0.5991,
-                "total_bias": -1.04
+                "games": 473,
+                "total_mae": 10.41,
+                "margin_mae": 10.38,
+                "winner_accuracy": 0.6017,
+                "total_bias": -1.06
               },
               "scoring_baseline": {
-                "games": 460,
-                "total_mae": 10.39,
-                "margin_mae": 10.36,
+                "games": 473,
+                "total_mae": 10.46,
+                "margin_mae": 10.4,
                 "winner_accuracy": 0.6144,
-                "total_bias": -1.06
+                "total_bias": -1.08
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
             "method": "Retrospective prior-week walk-forward records, paired bootstrap by season/week (2000 draws). Not an untouched prospective holdout; not evidence of betting profitability."
           }
         },
-        "residual_context": {
-          "home_rest": 14.0,
-          "away_rest": 7.0,
-          "travel_miles": 386,
-          "roof": "outdoors",
-          "temperature_f": 71,
-          "wind_mph": 6.0
-        },
-        "prior_games": 4.0,
-        "league_points_prior": 22.0,
-        "home_advantage_points": 1.5,
         "score_candidate": {
           "version": "opponent-score-ridge-v1",
           "status": "SHADOW_ONLY_NOT_VALIDATED",
@@ -13802,9 +13781,19 @@
               "historical_effect_available": true
             }
           },
-          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
-          "generated_at": "2026-11-05T16:51:11.625002+00:00"
-        }
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "residual_context": {
+          "home_rest": 14.0,
+          "away_rest": 7.0,
+          "travel_miles": 386,
+          "roof": "outdoors",
+          "temperature_f": 71,
+          "wind_mph": 6.0
+        },
+        "prior_games": 4.0,
+        "league_points_prior": 22.0,
+        "home_advantage_points": 1.5
       },
       "ml": {
         "pick": null,
@@ -14799,7 +14788,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-05T13:53:50.498525+00:00",
+            "retrieved_at": "2026-11-05T17:18:24.049513+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -14839,7 +14828,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-05T13:53:48.755253+00:00",
+          "checked_at": "2026-11-05T17:18:22.384786+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -15002,59 +14991,48 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 460,
+            "games": 473,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.355652173913043,
-                "adjusted_mae": 10.355869565217393,
-                "mean_improvement": -0.00021739130434782146,
+                "baseline_mae": 10.403382663847779,
+                "adjusted_mae": 10.383509513742075,
+                "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.20268456375838925,
-                  0.19641255605381158
+                  -0.1850840336134454,
+                  0.21941544885177466
                 ]
               },
               "total": {
-                "baseline_mae": 10.386956521739132,
-                "adjusted_mae": 10.346739130434782,
-                "mean_improvement": 0.04021739130434775,
+                "baseline_mae": 10.458773784355184,
+                "adjusted_mae": 10.414376321353066,
+                "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1207126948775056,
+                  -0.11196581196581201,
                   0.1885892116182571
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 460,
-                "total_mae": 10.35,
-                "margin_mae": 10.36,
-                "winner_accuracy": 0.5991,
-                "total_bias": -1.04
+                "games": 473,
+                "total_mae": 10.41,
+                "margin_mae": 10.38,
+                "winner_accuracy": 0.6017,
+                "total_bias": -1.06
               },
               "scoring_baseline": {
-                "games": 460,
-                "total_mae": 10.39,
-                "margin_mae": 10.36,
+                "games": 473,
+                "total_mae": 10.46,
+                "margin_mae": 10.4,
                 "winner_accuracy": 0.6144,
-                "total_bias": -1.06
+                "total_bias": -1.08
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
             "method": "Retrospective prior-week walk-forward records, paired bootstrap by season/week (2000 draws). Not an untouched prospective holdout; not evidence of betting profitability."
           }
         },
-        "residual_context": {
-          "home_rest": 7.0,
-          "away_rest": 10.0,
-          "travel_miles": 859,
-          "roof": "outdoors",
-          "temperature_f": 56,
-          "wind_mph": 7.0
-        },
-        "prior_games": 4.0,
-        "league_points_prior": 22.0,
-        "home_advantage_points": 1.5,
         "score_candidate": {
           "version": "opponent-score-ridge-v1",
           "status": "SHADOW_ONLY_NOT_VALIDATED",
@@ -15075,9 +15053,19 @@
               "historical_effect_available": true
             }
           },
-          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
-          "generated_at": "2026-11-05T16:51:11.625002+00:00"
-        }
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "residual_context": {
+          "home_rest": 7.0,
+          "away_rest": 10.0,
+          "travel_miles": 859,
+          "roof": "outdoors",
+          "temperature_f": 56,
+          "wind_mph": 7.0
+        },
+        "prior_games": 4.0,
+        "league_points_prior": 22.0,
+        "home_advantage_points": 1.5
       },
       "ml": {
         "pick": null,
@@ -15990,7 +15978,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-05T13:53:50.691584+00:00",
+            "retrieved_at": "2026-11-05T17:18:24.190111+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -16030,7 +16018,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-05T13:53:48.755253+00:00",
+          "checked_at": "2026-11-05T17:18:22.384786+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -16193,59 +16181,48 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 460,
+            "games": 473,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.355652173913043,
-                "adjusted_mae": 10.355869565217393,
-                "mean_improvement": -0.00021739130434782146,
+                "baseline_mae": 10.403382663847779,
+                "adjusted_mae": 10.383509513742075,
+                "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.20268456375838925,
-                  0.19641255605381158
+                  -0.1850840336134454,
+                  0.21941544885177466
                 ]
               },
               "total": {
-                "baseline_mae": 10.386956521739132,
-                "adjusted_mae": 10.346739130434782,
-                "mean_improvement": 0.04021739130434775,
+                "baseline_mae": 10.458773784355184,
+                "adjusted_mae": 10.414376321353066,
+                "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1207126948775056,
+                  -0.11196581196581201,
                   0.1885892116182571
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 460,
-                "total_mae": 10.35,
-                "margin_mae": 10.36,
-                "winner_accuracy": 0.5991,
-                "total_bias": -1.04
+                "games": 473,
+                "total_mae": 10.41,
+                "margin_mae": 10.38,
+                "winner_accuracy": 0.6017,
+                "total_bias": -1.06
               },
               "scoring_baseline": {
-                "games": 460,
-                "total_mae": 10.39,
-                "margin_mae": 10.36,
+                "games": 473,
+                "total_mae": 10.46,
+                "margin_mae": 10.4,
                 "winner_accuracy": 0.6144,
-                "total_bias": -1.06
+                "total_bias": -1.08
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
             "method": "Retrospective prior-week walk-forward records, paired bootstrap by season/week (2000 draws). Not an untouched prospective holdout; not evidence of betting profitability."
           }
         },
-        "residual_context": {
-          "home_rest": 6.0,
-          "away_rest": 7.0,
-          "travel_miles": 1104,
-          "roof": "outdoors",
-          "temperature_f": 55,
-          "wind_mph": 10.0
-        },
-        "prior_games": 4.0,
-        "league_points_prior": 22.0,
-        "home_advantage_points": 1.5,
         "score_candidate": {
           "version": "opponent-score-ridge-v1",
           "status": "SHADOW_ONLY_NOT_VALIDATED",
@@ -16266,9 +16243,19 @@
               "historical_effect_available": true
             }
           },
-          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
-          "generated_at": "2026-11-05T16:51:11.625002+00:00"
-        }
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "residual_context": {
+          "home_rest": 6.0,
+          "away_rest": 7.0,
+          "travel_miles": 1104,
+          "roof": "outdoors",
+          "temperature_f": 55,
+          "wind_mph": 10.0
+        },
+        "prior_games": 4.0,
+        "league_points_prior": 22.0,
+        "home_advantage_points": 1.5
       },
       "ml": {
         "pick": null,
@@ -17145,7 +17132,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-05T13:53:50.823493+00:00",
+            "retrieved_at": "2026-11-05T17:18:24.326433+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -17185,7 +17172,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-05T13:53:48.755253+00:00",
+          "checked_at": "2026-11-05T17:18:22.384786+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -17348,59 +17335,48 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 460,
+            "games": 473,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.355652173913043,
-                "adjusted_mae": 10.355869565217393,
-                "mean_improvement": -0.00021739130434782146,
+                "baseline_mae": 10.403382663847779,
+                "adjusted_mae": 10.383509513742075,
+                "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.20268456375838925,
-                  0.19641255605381158
+                  -0.1850840336134454,
+                  0.21941544885177466
                 ]
               },
               "total": {
-                "baseline_mae": 10.386956521739132,
-                "adjusted_mae": 10.346739130434782,
-                "mean_improvement": 0.04021739130434775,
+                "baseline_mae": 10.458773784355184,
+                "adjusted_mae": 10.414376321353066,
+                "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1207126948775056,
+                  -0.11196581196581201,
                   0.1885892116182571
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 460,
-                "total_mae": 10.35,
-                "margin_mae": 10.36,
-                "winner_accuracy": 0.5991,
-                "total_bias": -1.04
+                "games": 473,
+                "total_mae": 10.41,
+                "margin_mae": 10.38,
+                "winner_accuracy": 0.6017,
+                "total_bias": -1.06
               },
               "scoring_baseline": {
-                "games": 460,
-                "total_mae": 10.39,
-                "margin_mae": 10.36,
+                "games": 473,
+                "total_mae": 10.46,
+                "margin_mae": 10.4,
                 "winner_accuracy": 0.6144,
-                "total_bias": -1.06
+                "total_bias": -1.08
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
             "method": "Retrospective prior-week walk-forward records, paired bootstrap by season/week (2000 draws). Not an untouched prospective holdout; not evidence of betting profitability."
           }
         },
-        "residual_context": {
-          "home_rest": 6.0,
-          "away_rest": 7.0,
-          "travel_miles": 1002,
-          "roof": "outdoors",
-          "temperature_f": 49,
-          "wind_mph": 5.0
-        },
-        "prior_games": 4.0,
-        "league_points_prior": 22.0,
-        "home_advantage_points": 1.5,
         "score_candidate": {
           "version": "opponent-score-ridge-v1",
           "status": "SHADOW_ONLY_NOT_VALIDATED",
@@ -17421,9 +17397,19 @@
               "historical_effect_available": true
             }
           },
-          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
-          "generated_at": "2026-11-05T16:51:11.625002+00:00"
-        }
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "residual_context": {
+          "home_rest": 6.0,
+          "away_rest": 7.0,
+          "travel_miles": 1002,
+          "roof": "outdoors",
+          "temperature_f": 49,
+          "wind_mph": 5.0
+        },
+        "prior_games": 4.0,
+        "league_points_prior": 22.0,
+        "home_advantage_points": 1.5
       },
       "ml": {
         "pick": null,
@@ -18207,7 +18193,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-05T13:53:50.848866+00:00",
+            "retrieved_at": "2026-11-05T17:18:24.374438+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -18241,7 +18227,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
-          "checked_at": "2026-11-05T13:53:48.755253+00:00",
+          "checked_at": "2026-11-05T17:18:22.384786+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -18402,59 +18388,48 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 460,
+            "games": 473,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.355652173913043,
-                "adjusted_mae": 10.355869565217393,
-                "mean_improvement": -0.00021739130434782146,
+                "baseline_mae": 10.403382663847779,
+                "adjusted_mae": 10.383509513742075,
+                "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.20268456375838925,
-                  0.19641255605381158
+                  -0.1850840336134454,
+                  0.21941544885177466
                 ]
               },
               "total": {
-                "baseline_mae": 10.386956521739132,
-                "adjusted_mae": 10.346739130434782,
-                "mean_improvement": 0.04021739130434775,
+                "baseline_mae": 10.458773784355184,
+                "adjusted_mae": 10.414376321353066,
+                "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1207126948775056,
+                  -0.11196581196581201,
                   0.1885892116182571
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 460,
-                "total_mae": 10.35,
-                "margin_mae": 10.36,
-                "winner_accuracy": 0.5991,
-                "total_bias": -1.04
+                "games": 473,
+                "total_mae": 10.41,
+                "margin_mae": 10.38,
+                "winner_accuracy": 0.6017,
+                "total_bias": -1.06
               },
               "scoring_baseline": {
-                "games": 460,
-                "total_mae": 10.39,
-                "margin_mae": 10.36,
+                "games": 473,
+                "total_mae": 10.46,
+                "margin_mae": 10.4,
                 "winner_accuracy": 0.6144,
-                "total_bias": -1.06
+                "total_bias": -1.08
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
             "method": "Retrospective prior-week walk-forward records, paired bootstrap by season/week (2000 draws). Not an untouched prospective holdout; not evidence of betting profitability."
           }
         },
-        "residual_context": {
-          "home_rest": 8.0,
-          "away_rest": 8.0,
-          "travel_miles": 736,
-          "roof": "dome",
-          "temperature_f": null,
-          "wind_mph": null
-        },
-        "prior_games": 4.0,
-        "league_points_prior": 22.0,
-        "home_advantage_points": 1.5,
         "score_candidate": {
           "version": "opponent-score-ridge-v1",
           "status": "SHADOW_ONLY_NOT_VALIDATED",
@@ -18475,9 +18450,19 @@
               "historical_effect_available": true
             }
           },
-          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
-          "generated_at": "2026-11-05T16:51:11.625002+00:00"
-        }
+          "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "residual_context": {
+          "home_rest": 8.0,
+          "away_rest": 8.0,
+          "travel_miles": 736,
+          "roof": "dome",
+          "temperature_f": null,
+          "wind_mph": null
+        },
+        "prior_games": 4.0,
+        "league_points_prior": 22.0,
+        "home_advantage_points": 1.5
       },
       "ml": {
         "pick": null,
