@@ -87,7 +87,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
 <section id="results" hidden aria-live="polite"></section>
 <section class="panel"><h2>Important model limits</h2><p class="muted">NFL runs resample paired historical score errors. NBA runs generate player outcomes within shared estimated possessions and rotations. The sportsbook's lines and prices do not influence the simulated scores. Historical scoring patterns and 100,000 draws do not establish predictive calibration or a verified edge. Starter announcements and weather are shown only where sourced. Availability and starting-five confirmations apply only when explicitly sourced. Future injury and tactical changes remain unknown. Research-only estimates can be wrong, especially with changing rosters, limited samples, or stale feeds.</p></section>
 </main>
-<script src="./nba_game_context.js?v=nba-sim-availability-1"></script><script src="./nba_live_context.js?v=nba-sim-availability-1"></script><script src="./nba_possession_engine.js?v=nba-projection-audit-3"></script><script src="./nba_simulator_ui.js?v=nba-sim-availability-1"></script><script src="./quick_slip.js"></script><script src="./game_odds_engine.js?v=nba-sim-availability-1"></script>
+<script src="./nba_game_context.js?v=nba-sim-availability-1"></script><script src="./nba_live_context.js?v=nba-sim-availability-1"></script><script src="./nba_possession_engine.js?v=nba-projection-audit-3"></script><script src="./nba_simulator_ui.js?v=nba-sim-availability-1"></script><script src="./quick_slip.js"></script><script src="./game_odds_engine.js?v=nfl-score-candidate-1"></script>
 <script>
 (function(){
  'use strict';
@@ -176,11 +176,14 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    fetch('./data/game_score_forecasts.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null),
    fetch('./data/nba_rosters.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null),
    fetch('./data/nba_simulator_report.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null),
-   fetch('./data/nba_game_context.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null)
+   fetch('./data/nba_game_context.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null),
+   fetch('./data/nfl_score_model_summary.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null),
+   fetch('./data/nfl_score_candidate_forecasts.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null)
   ]);
   const get=i=>requests[i].status==='fulfilled'?requests[i].value:null;
   const nfl=get(0),history=get(1),nba=get(2);
   source.scorecard=get(4);source.nbaValidation=get(6);
+  source.nflScoreAudit=get(8);source.nflCandidateScorecard=get(9);
   source.NFL=!nfl||!history?{error:'NFL schedule or historical projection data unavailable.'}:
     {info:'Score baseline '+esc(nfl.model_version||'unknown')+' · updated '+esc(nfl.generated_at||'unknown')+'.'};
   source.NBA=!nba?{error:'NBA feed unavailable.'}:
@@ -213,6 +216,19 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
     '<td class="'+(m.ev!==null&&m.ev>0?'good':'')+'">'+(m.ev===null?'—':(m.ev>0?'+':'')+pct(m.ev))+'</td>'+
     '<td class="signal '+(m.eligible?'':'no')+'">'+esc(m.signal)+'</td></tr>').join('')+
    '</tbody></table></div><p class="caption">*Break-even adjusts for pushes: quoted implied probability × (1 − push rate). The hypothetical model difference is simulated win probability minus adjusted break-even. Hypothetical EV = wins × net decimal payout − losses per unit wagered. These values are unvalidated research calculations, not evidence of an edge.</p>';
+ }
+ function scoreComparison(model,result){
+  if(model.sport!=='NFL')return '';
+  const audit=source.nflScoreAudit,c=model.scoreCandidate,line=result.market.homeSpread;
+  const base=audit?.evaluation?.baseline,challenger=audit?.evaluation?.candidate;
+  const gap=line===null?null:Math.abs(result.projection.margin+line);
+  return '<div class="breakdown"><h3>Model comparison</h3>'+
+   (gap!==null?'<p>Baseline margin: '+esc(model.home)+' '+(result.projection.margin>=0?'+':'')+num(result.projection.margin)+' points. Sportsbook expected margin: '+num(-line)+'. Difference: '+num(gap)+' points.</p>':'')+
+   '<p class="warn">The scoring baseline has historically compressed team differences and favored teams receiving points. A large simulated cover percentage needs independent support.</p>'+
+   (c?'<p><strong>Opponent-adjusted candidate · testing only:</strong> '+esc(model.away)+' '+num(c.away)+' · '+esc(model.home)+' '+num(c.home)+'. These candidate scores do not drive the percentages above.</p>':'')+
+   (base&&challenger?'<details><summary>Historical accuracy and forecast tracking</summary><p>'+esc(base.games)+' later-season games. Winner accuracy: baseline '+pct(base.winner_accuracy)+'; candidate '+pct(challenger.winner_accuracy)+'. Margin error: '+num(base.margin_mae)+' vs '+num(challenger.margin_mae)+' points. Total error: '+num(base.total_mae)+' vs '+num(challenger.total_mae)+' points.</p><p>Improvement is not established by the uncertainty intervals. Candidate remains in testing.</p>'+
+    (source.nflCandidateScorecard?.summary?'<p>Candidate forecasts recorded before kickoff: '+esc(source.nflCandidateScorecard.summary.frozen)+'; graded: '+esc(source.nflCandidateScorecard.summary.graded)+'.</p>':'')+
+    '<p>Historical closing spreads are benchmarks, not verified execution prices. QB effects use historical starter samples; other injury effects and drive-level efficiency are not modeled.</p><a href="./data/nfl_score_model_summary.json">Historical comparison</a> · <a href="./data/nfl_score_candidate_forecasts.json">Recorded candidate forecasts</a></details>':'')+'</div>';
  }
  function trustPanel(model){
   const t=model.trust;if(model.sport!=='NFL')return '';
@@ -299,7 +315,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    '<div class="kpi"><span>Sim median total</span><b>'+num(s.total.median)+'</b></div>'+
    '<div class="kpi"><span>Sim median home margin</span><b>'+num(s.margin.median)+'</b></div></div>'+
    (s.tie>0?'<p class="muted">Tie rate: '+pct(s.tie)+' (treated as a moneyline push).</p>':'')+
-   '<h3>Estimated market pricing</h3>'+marketTable(result.markets)+(typeof CookNBASimulatorUI!=='undefined'?CookNBASimulatorUI.detail(result,model)+(result.possession?CookNBASimulatorUI.validation(source.nbaValidation)+CookNBASimulatorUI.localValidation(source.nbaGrades||{graded:0}):''):'')+matchupPanel(model)+contextPanel(model)+
+   scoreComparison(model,result)+'<h3>Estimated market pricing</h3>'+marketTable(result.markets)+(typeof CookNBASimulatorUI!=='undefined'?CookNBASimulatorUI.detail(result,model)+(result.possession?CookNBASimulatorUI.validation(source.nbaValidation)+CookNBASimulatorUI.localValidation(source.nbaGrades||{graded:0}):''):'')+matchupPanel(model)+contextPanel(model)+
    '<div class="breakdown"><h3>Decision summary</h3><strong class="warn">'+esc(headline)+'</strong>'+
    '<p>'+esc(details)+'</p><p class="muted">Only entered odds are evaluated. A 100,000-draw research result is not a calibrated probability or a guaranteed bet.</p></div></div>'+
    '<div class="panel"><h2>🔬 Deep game breakdown</h2><div class="grid2">'+
@@ -349,7 +365,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    render(result,model);
   };
   if(typeof Worker==='function'){
-   try{worker=new Worker('./game_odds_worker.js?v=nba-projection-audit-3');
+   try{worker=new Worker('./game_odds_worker.js?v=nfl-score-candidate-1');
     worker.onmessage=e=>{if(e.data?.requestId===thisId)done(e.data.error,e.data.result);};
     worker.onerror=e=>done(e.message||'Worker failed');
     worker.postMessage({requestId:thisId,game:model,market,seed:6472026});
@@ -362,5 +378,6 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
  load().catch(e=>{$('feedStatus').textContent='Could not load game feeds: '+e.message;});
 })();
 </script></body></html>
+
 
 

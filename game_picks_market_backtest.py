@@ -95,9 +95,12 @@ def main():
                 row['market_total']=line
                 coverage['total_lines']+=1
             else:row['market_total']=None
-            # Do not infer whether spread_line is home or favorite-oriented.
-            # Only use a verified home-perspective field if present.
+            # nflverse dictionary: positive spread_line means HOME favored.
+            # A home-side betting handicap has the opposite sign.
             spread=numeric(g.get('home_spread'))
+            if spread is None:
+                expected_margin=numeric(g.get('spread_line'))
+                spread=-expected_margin if expected_margin is not None else None
             if spread is not None and abs(spread)<=35:
                 row['market_home_spread']=spread
                 coverage['home_spread_lines']+=1
@@ -129,3 +132,4 @@ def main():
     (ROOT/'data/game_picks_market_comparison.json').write_text(json.dumps(out,indent=2))
     print(json.dumps({'coverage':coverage,'results':results},indent=2))
 if __name__=='__main__':main()
+

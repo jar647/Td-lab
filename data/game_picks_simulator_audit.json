@@ -1,131 +1,5689 @@
 {
-  "status": "ASSUMPTION_AUDIT_NOT_CALIBRATED",
-  "method": "2024 reference period; 2025-2026 out-of-sample audit. Normal-score CDF approximates simulator score uncertainty; exact rounded-score Monte Carlo tie rates are not replicated.",
-  "production_assumptions": {
-    "margin_sd": 13,
-    "total_sd": 13.5
-  },
-  "reference_2024": {
-    "games": 208,
-    "observed_margin_residual_sd": 13.31,
-    "observed_total_residual_sd": 13.09
-  },
-  "holdout": {
-    "games": 238,
+  "status": "CURRENT_BOOTSTRAP_AUDIT_NOT_CALIBRATED",
+  "method": "Exact enumeration of centered, paired, rounded/clipped historical score residuals from CookGameOdds.nflGame; strict earlier-week filtering. Target rest/travel context only. Realized target weather excluded.",
+  "games": 252,
+  "contextMatchedGames": 147,
+  "results": {
     "home_win": {
-      "games": 237,
-      "brier": 0.2306,
-      "accuracy": 0.6076,
+      "games": 251,
+      "brier": 0.23124153578244558,
       "bins": [
         {
-          "range": "30-40%",
-          "n": 20,
-          "predicted": 0.369,
-          "actual": 0.35
+          "low": 20,
+          "games": 1,
+          "predicted": 0.275,
+          "observed": 0
         },
         {
-          "range": "40-50%",
-          "n": 53,
-          "predicted": 0.466,
-          "actual": 0.321
+          "low": 30,
+          "games": 29,
+          "predicted": 0.355110245508396,
+          "observed": 0.3103448275862069
         },
         {
-          "range": "50-60%",
-          "n": 103,
-          "predicted": 0.545,
-          "actual": 0.505
+          "low": 40,
+          "games": 76,
+          "predicted": 0.4611465452269674,
+          "observed": 0.35526315789473684
         },
         {
-          "range": "60-70%",
-          "n": 51,
-          "predicted": 0.644,
-          "actual": 0.647
+          "low": 50,
+          "games": 91,
+          "predicted": 0.5474347034384647,
+          "observed": 0.5274725274725275
         },
         {
-          "range": "70-80%",
-          "n": 10,
-          "predicted": 0.728,
-          "actual": 1.0
-        }
-      ]
-    },
-    "over_total": {
-      "games": 238,
-      "brier": 0.2661,
-      "accuracy": 0.458,
-      "bins": [
-        {
-          "range": "20-30%",
-          "n": 2,
-          "predicted": 0.277,
-          "actual": 0.5
+          "low": 60,
+          "games": 42,
+          "predicted": 0.6453213065256895,
+          "observed": 0.6666666666666666
         },
         {
-          "range": "30-40%",
-          "n": 19,
-          "predicted": 0.362,
-          "actual": 0.526
-        },
-        {
-          "range": "40-50%",
-          "n": 80,
-          "predicted": 0.45,
-          "actual": 0.6
-        },
-        {
-          "range": "50-60%",
-          "n": 84,
-          "predicted": 0.545,
-          "actual": 0.488
-        },
-        {
-          "range": "60-70%",
-          "n": 45,
-          "predicted": 0.643,
-          "actual": 0.444
-        },
-        {
-          "range": "70-80%",
-          "n": 8,
-          "predicted": 0.723,
-          "actual": 0.75
+          "low": 70,
+          "games": 15,
+          "predicted": 0.7332596743750043,
+          "observed": 0.8666666666666667
         }
       ]
     },
     "home_cover": {
-      "games": 0,
-      "brier": null,
-      "accuracy": null,
-      "bins": []
+      "games": 250,
+      "brier": 0.2665224871618944,
+      "bins": [
+        {
+          "low": 10,
+          "games": 1,
+          "predicted": 0.195,
+          "observed": 1
+        },
+        {
+          "low": 20,
+          "games": 22,
+          "predicted": 0.26888400350558433,
+          "observed": 0.5
+        },
+        {
+          "low": 30,
+          "games": 58,
+          "predicted": 0.3546666063580299,
+          "observed": 0.4827586206896552
+        },
+        {
+          "low": 40,
+          "games": 64,
+          "predicted": 0.4477149208917754,
+          "observed": 0.421875
+        },
+        {
+          "low": 50,
+          "games": 52,
+          "predicted": 0.5567651594159572,
+          "observed": 0.40384615384615385
+        },
+        {
+          "low": 60,
+          "games": 45,
+          "predicted": 0.6437378531853197,
+          "observed": 0.4888888888888889
+        },
+        {
+          "low": 70,
+          "games": 12,
+          "predicted": 0.7368119245599997,
+          "observed": 0.5
+        },
+        {
+          "low": 80,
+          "games": 1,
+          "predicted": 0.8802083333333334,
+          "observed": 1
+        }
+      ]
+    },
+    "over": {
+      "games": 252,
+      "brier": 0.26915477952095807,
+      "bins": [
+        {
+          "low": 20,
+          "games": 10,
+          "predicted": 0.26697900825475573,
+          "observed": 0.5
+        },
+        {
+          "low": 30,
+          "games": 31,
+          "predicted": 0.3620490577294549,
+          "observed": 0.5483870967741935
+        },
+        {
+          "low": 40,
+          "games": 84,
+          "predicted": 0.4503914301960675,
+          "observed": 0.5952380952380952
+        },
+        {
+          "low": 50,
+          "games": 73,
+          "predicted": 0.5470022450709862,
+          "observed": 0.5068493150684932
+        },
+        {
+          "low": 60,
+          "games": 50,
+          "predicted": 0.650468653868825,
+          "observed": 0.42
+        },
+        {
+          "low": 70,
+          "games": 7,
+          "predicted": 0.732232686529259,
+          "observed": 0.7142857142857143
+        },
+        {
+          "low": 80,
+          "games": 1,
+          "predicted": 0.8,
+          "observed": 1
+        }
+      ]
     }
   },
   "limits": [
-    "Historical schedule lines may be closing-line proxies",
-    "Missing ATS home-spread signs are excluded",
-    "No historical sportsbook execution is implied",
-    "Normal CDF approximates, but is not identical to, rounded-score Monte Carlo",
-    "No parameter fitting was performed on the holdout"
+    "Retrospective audit, not independent prospective validation.",
+    "Historical forecast-weather snapshots unavailable; production weather conditioning is not evaluated.",
+    "Historical lines are closing proxies, not verified execution prices.",
+    "Binary Brier scores exclude actual pushes and condition simulation probability on no push."
   ],
-  "total_market_comparison": {
-    "market_only": {
-      "games": 238,
-      "brier": 0.25,
-      "direction_accuracy": 0.5294,
-      "total_mae": 10.08
+  "records": [
+    {
+      "game_id": "2025_05_SF_LA",
+      "residualGames": 208,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.565,
+          "y": 0,
+          "push": 0.038461538461538436
+        },
+        "home_cover": {
+          "p": 0.25961538461538464,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4567307692307692,
+          "y": 1,
+          "push": 0
+        }
+      }
     },
-    "model_only": {
-      "games": 238,
-      "brier": 0.2661,
-      "direction_accuracy": 0.458,
-      "total_mae": 10.696
+    {
+      "game_id": "2025_05_MIN_CLE",
+      "residualGames": 208,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.39603960396039606,
+          "y": 0,
+          "push": 0.028846153846153855
+        },
+        "home_cover": {
+          "p": 0.5144230769230769,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.7211538461538461,
+          "y": 1,
+          "push": 0
+        }
+      }
     },
-    "market_anchored_25pct_model": {
-      "games": 238,
-      "brier": 0.2522,
-      "direction_accuracy": 0.458,
-      "total_mae": 10.144
+    {
+      "game_id": "2025_05_HOU_BAL",
+      "residualGames": 74,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4507042253521127,
+          "y": 0,
+          "push": 0.04054054054054057
+        },
+        "home_cover": {
+          "p": 0.5405405405405406,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6621621621621622,
+          "y": 1,
+          "push": 0
+        }
+      }
     },
-    "note": "The market-only over probability is 50% at the line, not a profitable selection rule. Compare Brier and MAE; directional accuracy alone is not sufficient."
-  },
-  "total_recommendation_enabled": false
+    {
+      "game_id": "2025_05_MIA_CAR",
+      "residualGames": 102,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5353535353535354,
+          "y": 1,
+          "push": 0.02941176470588236
+        },
+        "home_cover": {
+          "p": 0.6176470588235294,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5098039215686274,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_05_LV_IND",
+      "residualGames": 51,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6938775510204082,
+          "y": 1,
+          "push": 0.039215686274509776
+        },
+        "home_cover": {
+          "p": 0.4,
+          "y": 1,
+          "push": 0.019607843137254943
+        },
+        "over": {
+          "p": 0.45098039215686275,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_05_NYG_NO",
+      "residualGames": 80,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.42105263157894735,
+          "y": 1,
+          "push": 0.050000000000000044
+        },
+        "home_cover": {
+          "p": 0.3625,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6375,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_05_DAL_NYJ",
+      "residualGames": 63,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.45901639344262296,
+          "y": 0,
+          "push": 0.031746031746031744
+        },
+        "home_cover": {
+          "p": 0.4444444444444444,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5714285714285714,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_05_DEN_PHI",
+      "residualGames": 51,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.46,
+          "y": 0,
+          "push": 0.019607843137254943
+        },
+        "home_cover": {
+          "p": 0.35294117647058826,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.49019607843137253,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_05_TEN_ARI",
+      "residualGames": 208,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.705,
+          "y": 0,
+          "push": 0.038461538461538436
+        },
+        "home_cover": {
+          "p": 0.4326923076923077,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5144230769230769,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_05_TB_SEA",
+      "residualGames": 208,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.6432160804020101,
+          "y": 0,
+          "push": 0.043269230769230727
+        },
+        "home_cover": {
+          "p": 0.4951923076923077,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5048076923076923,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_05_DET_CIN",
+      "residualGames": 82,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.275,
+          "y": 0,
+          "push": 0.024390243902439046
+        },
+        "home_cover": {
+          "p": 0.6951219512195121,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4146341463414634,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_05_WAS_LAC",
+      "residualGames": 208,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5353535353535354,
+          "y": 0,
+          "push": 0.04807692307692313
+        },
+        "home_cover": {
+          "p": 0.46153846153846156,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.38461538461538464,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_05_NE_BUF",
+      "residualGames": 90,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5764705882352941,
+          "y": 0,
+          "push": 0.05555555555555558
+        },
+        "home_cover": {
+          "p": 0.2777777777777778,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4444444444444444,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_05_KC_JAX",
+      "residualGames": 119,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5,
+          "y": 1,
+          "push": 0.025210084033613467
+        },
+        "home_cover": {
+          "p": 0.6554621848739496,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4117647058823529,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_06_PHI_NYG",
+      "residualGames": 222,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.4205607476635514,
+          "y": 1,
+          "push": 0.036036036036036
+        },
+        "home_cover": {
+          "p": 0.6822429906542056,
+          "y": 1,
+          "push": 0.036036036036036
+        },
+        "over": {
+          "p": 0.6036036036036037,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_06_DEN_NYJ",
+      "residualGames": 222,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.38028169014084506,
+          "y": 0,
+          "push": 0.04054054054054057
+        },
+        "home_cover": {
+          "p": 0.6531531531531531,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5630630630630631,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_06_LA_BAL",
+      "residualGames": 222,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.42452830188679247,
+          "y": 0,
+          "push": 0.04504504504504503
+        },
+        "home_cover": {
+          "p": 0.6869158878504673,
+          "y": 0,
+          "push": 0.036036036036036
+        },
+        "over": {
+          "p": 0.6756756756756757,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_06_DAL_CAR",
+      "residualGames": 112,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.46226415094339623,
+          "y": 1,
+          "push": 0.0535714285714286
+        },
+        "home_cover": {
+          "p": 0.6018518518518519,
+          "y": 1,
+          "push": 0.0357142857142857
+        },
+        "over": {
+          "p": 0.5178571428571429,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_06_ARI_IND",
+      "residualGames": 60,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6842105263157895,
+          "y": 1,
+          "push": 0.050000000000000044
+        },
+        "home_cover": {
+          "p": 0.35,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4166666666666667,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_06_SEA_JAX",
+      "residualGames": 222,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5,
+          "y": 0,
+          "push": 0.04504504504504503
+        },
+        "home_cover": {
+          "p": 0.5630630630630631,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4099099099099099,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_06_LAC_MIA",
+      "residualGames": 222,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.4611872146118721,
+          "y": 0,
+          "push": 0.013513513513513487
+        },
+        "home_cover": {
+          "p": 0.5900900900900901,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.44594594594594594,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_06_NE_NO",
+      "residualGames": 75,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.3611111111111111,
+          "y": 0,
+          "push": 0.040000000000000036
+        },
+        "home_cover": {
+          "p": 0.49333333333333335,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.41333333333333333,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_06_CLE_PIT",
+      "residualGames": 222,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.6325581395348837,
+          "y": 1,
+          "push": 0.03153153153153154
+        },
+        "home_cover": {
+          "p": 0.44144144144144143,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6981981981981982,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_06_TEN_LV",
+      "residualGames": 60,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.543859649122807,
+          "y": 1,
+          "push": 0.050000000000000044
+        },
+        "home_cover": {
+          "p": 0.4166666666666667,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5666666666666667,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_06_CIN_GB",
+      "residualGames": 222,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.7302325581395349,
+          "y": 1,
+          "push": 0.03153153153153154
+        },
+        "home_cover": {
+          "p": 0.2420091324200913,
+          "y": 0,
+          "push": 0.013513513513513487
+        },
+        "over": {
+          "p": 0.5135135135135135,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_06_SF_TB",
+      "residualGames": 222,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5164319248826291,
+          "y": 1,
+          "push": 0.04054054054054057
+        },
+        "home_cover": {
+          "p": 0.4009009009009009,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.45495495495495497,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_06_DET_KC",
+      "residualGames": 109,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4326923076923077,
+          "y": 1,
+          "push": 0.04587155963302747
+        },
+        "home_cover": {
+          "p": 0.3211009174311927,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.3853211009174312,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_06_BUF_ATL",
+      "residualGames": 222,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.4265402843601896,
+          "y": 1,
+          "push": 0.0495495495495496
+        },
+        "home_cover": {
+          "p": 0.5630630630630631,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.34234234234234234,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_06_CHI_WAS",
+      "residualGames": 222,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.6497695852534562,
+          "y": 0,
+          "push": 0.022522522522522515
+        },
+        "home_cover": {
+          "p": 0.45495495495495497,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4009009009009009,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_07_PIT_CIN",
+      "residualGames": 237,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.3684210526315789,
+          "y": 1,
+          "push": 0.03797468354430378
+        },
+        "home_cover": {
+          "p": 0.5780590717299579,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4810126582278481,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_07_LA_JAX",
+      "residualGames": 237,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5067264573991032,
+          "y": 0,
+          "push": 0.05907172995780585
+        },
+        "home_cover": {
+          "p": 0.6299559471365639,
+          "y": 0,
+          "push": 0.04219409282700426
+        },
+        "over": {
+          "p": 0.4345991561181435,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_07_NO_CHI",
+      "residualGames": 119,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.591304347826087,
+          "y": 1,
+          "push": 0.03361344537815125
+        },
+        "home_cover": {
+          "p": 0.3949579831932773,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6218487394957983,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_07_MIA_CLE",
+      "residualGames": 100,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.44329896907216493,
+          "y": 1,
+          "push": 0.030000000000000027
+        },
+        "home_cover": {
+          "p": 0.35,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.8,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_07_LV_KC",
+      "residualGames": 92,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6590909090909091,
+          "y": 1,
+          "push": 0.04347826086956519
+        },
+        "home_cover": {
+          "p": 0.2826086956521739,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4673913043478261,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_07_PHI_MIN",
+      "residualGames": 237,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.591304347826087,
+          "y": 0,
+          "push": 0.029535864978902926
+        },
+        "home_cover": {
+          "p": 0.6751054852320675,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5443037974683544,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_07_CAR_NYJ",
+      "residualGames": 107,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.47,
+          "y": 0,
+          "push": 0.06542056074766356
+        },
+        "home_cover": {
+          "p": 0.3925233644859813,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.719626168224299,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_07_NE_TEN",
+      "residualGames": 116,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.30973451327433627,
+          "y": 0,
+          "push": 0.025862068965517238
+        },
+        "home_cover": {
+          "p": 0.5258620689655172,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.603448275862069,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_07_NYG_DEN",
+      "residualGames": 237,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.6493506493506493,
+          "y": 1,
+          "push": 0.025316455696202556
+        },
+        "home_cover": {
+          "p": 0.37130801687763715,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5738396624472574,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_07_IND_LAC",
+      "residualGames": 52,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.37254901960784315,
+          "y": 0,
+          "push": 0.019230769230769273
+        },
+        "home_cover": {
+          "p": 0.3269230769230769,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.38461538461538464,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_07_GB_ARI",
+      "residualGames": 65,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4426229508196721,
+          "y": 0,
+          "push": 0.06153846153846154
+        },
+        "home_cover": {
+          "p": 0.7538461538461538,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.49230769230769234,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_07_WAS_DAL",
+      "residualGames": 87,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4117647058823529,
+          "y": 1,
+          "push": 0.02298850574712641
+        },
+        "home_cover": {
+          "p": 0.3563218390804598,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.3103448275862069,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_07_ATL_SF",
+      "residualGames": 237,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5246636771300448,
+          "y": 1,
+          "push": 0.05907172995780585
+        },
+        "home_cover": {
+          "p": 0.47257383966244726,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.3291139240506329,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_07_TB_DET",
+      "residualGames": 120,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5877192982456141,
+          "y": 1,
+          "push": 0.050000000000000044
+        },
+        "home_cover": {
+          "p": 0.3247863247863248,
+          "y": 1,
+          "push": 0.025000000000000022
+        },
+        "over": {
+          "p": 0.3,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_07_HOU_SEA",
+      "residualGames": 237,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5267857142857143,
+          "y": 1,
+          "push": 0.05485232067510548
+        },
+        "home_cover": {
+          "p": 0.4222222222222222,
+          "y": 1,
+          "push": 0.05063291139240511
+        },
+        "over": {
+          "p": 0.5147679324894515,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_08_MIN_LAC",
+      "residualGames": 252,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.46938775510204084,
+          "y": 1,
+          "push": 0.02777777777777779
+        },
+        "home_cover": {
+          "p": 0.36929460580912865,
+          "y": 1,
+          "push": 0.04365079365079361
+        },
+        "over": {
+          "p": 0.45634920634920634,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_08_MIA_ATL",
+      "residualGames": 118,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6173913043478261,
+          "y": 0,
+          "push": 0.025423728813559365
+        },
+        "home_cover": {
+          "p": 0.33620689655172414,
+          "y": 0,
+          "push": 0.016949152542372836
+        },
+        "over": {
+          "p": 0.4745762711864407,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_08_CHI_BAL",
+      "residualGames": 252,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.46122448979591835,
+          "y": 1,
+          "push": 0.02777777777777779
+        },
+        "home_cover": {
+          "p": 0.373015873015873,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6547619047619048,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_08_BUF_CAR",
+      "residualGames": 252,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.47368421052631576,
+          "y": 0,
+          "push": 0.019841269841269882
+        },
+        "home_cover": {
+          "p": 0.7338709677419355,
+          "y": 0,
+          "push": 0.015873015873015928
+        },
+        "over": {
+          "p": 0.42063492063492064,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_08_NYJ_CIN",
+      "residualGames": 252,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.4897959183673469,
+          "y": 0,
+          "push": 0.02777777777777779
+        },
+        "home_cover": {
+          "p": 0.3055555555555556,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5912698412698413,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_08_SF_HOU",
+      "residualGames": 68,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5846153846153846,
+          "y": 1,
+          "push": 0.044117647058823484
+        },
+        "home_cover": {
+          "p": 0.47058823529411764,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4411764705882353,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_08_CLE_NE",
+      "residualGames": 114,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6666666666666666,
+          "y": 1,
+          "push": 0.052631578947368474
+        },
+        "home_cover": {
+          "p": 0.3853211009174312,
+          "y": 1,
+          "push": 0.04385964912280704
+        },
+        "over": {
+          "p": 0.5701754385964912,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_08_NYG_PHI",
+      "residualGames": 79,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5394736842105263,
+          "y": 1,
+          "push": 0.03797468354430378
+        },
+        "home_cover": {
+          "p": 0.3116883116883117,
+          "y": 1,
+          "push": 0.025316455696202556
+        },
+        "over": {
+          "p": 0.5822784810126582,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_08_TB_NO",
+      "residualGames": 111,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.40186915887850466,
+          "y": 0,
+          "push": 0.036036036036036
+        },
+        "home_cover": {
+          "p": 0.6036036036036037,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.46846846846846846,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_08_DAL_DEN",
+      "residualGames": 121,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5517241379310345,
+          "y": 1,
+          "push": 0.04132231404958675
+        },
+        "home_cover": {
+          "p": 0.4132231404958678,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.39669421487603307,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_08_TEN_IND",
+      "residualGames": 92,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.7865168539325843,
+          "y": 1,
+          "push": 0.03260869565217395
+        },
+        "home_cover": {
+          "p": 0.2717391304347826,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.43478260869565216,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_08_GB_PIT",
+      "residualGames": 252,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.48559670781893005,
+          "y": 0,
+          "push": 0.0357142857142857
+        },
+        "home_cover": {
+          "p": 0.6115702479338843,
+          "y": 0,
+          "push": 0.03968253968253965
+        },
+        "over": {
+          "p": 0.4722222222222222,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_08_WAS_KC",
+      "residualGames": 143,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.60431654676259,
+          "y": 1,
+          "push": 0.027972027972028024
+        },
+        "home_cover": {
+          "p": 0.2867132867132867,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4195804195804196,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_09_BAL_MIA",
+      "residualGames": 265,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5298804780876494,
+          "y": 0,
+          "push": 0.05283018867924527
+        },
+        "home_cover": {
+          "p": 0.7735849056603774,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.39622641509433965,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_09_CHI_CIN",
+      "residualGames": 99,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.46808510638297873,
+          "y": 0,
+          "push": 0.0505050505050505
+        },
+        "home_cover": {
+          "p": 0.5894736842105263,
+          "y": 0,
+          "push": 0.04040404040404044
+        },
+        "over": {
+          "p": 0.4444444444444444,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_09_MIN_DET",
+      "residualGames": 265,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.6653696498054474,
+          "y": 0,
+          "push": 0.030188679245283012
+        },
+        "home_cover": {
+          "p": 0.33584905660377357,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4641509433962264,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_09_CAR_GB",
+      "residualGames": 131,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6356589147286822,
+          "y": 0,
+          "push": 0.01526717557251911
+        },
+        "home_cover": {
+          "p": 0.3053435114503817,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5572519083969466,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_09_DEN_HOU",
+      "residualGames": 132,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5079365079365079,
+          "y": 0,
+          "push": 0.045454545454545414
+        },
+        "home_cover": {
+          "p": 0.45454545454545453,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.553030303030303,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_09_ATL_NE",
+      "residualGames": 132,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6484375,
+          "y": 1,
+          "push": 0.030303030303030276
+        },
+        "home_cover": {
+          "p": 0.45454545454545453,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4166666666666667,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_09_SF_NYG",
+      "residualGames": 265,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.4789272030651341,
+          "y": 0,
+          "push": 0.015094339622641506
+        },
+        "home_cover": {
+          "p": 0.5773584905660377,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.3622641509433962,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_09_IND_PIT",
+      "residualGames": 104,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.3333333333333333,
+          "y": 1,
+          "push": 0.04807692307692313
+        },
+        "home_cover": {
+          "p": 0.5,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4230769230769231,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_09_LAC_TEN",
+      "residualGames": 265,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.3488372093023256,
+          "y": 0,
+          "push": 0.026415094339622636
+        },
+        "home_cover": {
+          "p": 0.6996047430830039,
+          "y": 1,
+          "push": 0.04528301886792452
+        },
+        "over": {
+          "p": 0.4641509433962264,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_09_NO_LA",
+      "residualGames": 265,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.7364341085271318,
+          "y": 1,
+          "push": 0.026415094339622636
+        },
+        "home_cover": {
+          "p": 0.27586206896551724,
+          "y": 1,
+          "push": 0.015094339622641506
+        },
+        "over": {
+          "p": 0.4377358490566038,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_09_JAX_LV",
+      "residualGames": 265,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.4296875,
+          "y": 0,
+          "push": 0.03396226415094339
+        },
+        "home_cover": {
+          "p": 0.5056603773584906,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4528301886792453,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_09_KC_BUF",
+      "residualGames": 132,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4765625,
+          "y": 1,
+          "push": 0.030303030303030276
+        },
+        "home_cover": {
+          "p": 0.5681818181818182,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.23484848484848486,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_09_SEA_WAS",
+      "residualGames": 265,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.44357976653696496,
+          "y": 0,
+          "push": 0.030188679245283012
+        },
+        "home_cover": {
+          "p": 0.5207547169811321,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4377358490566038,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_09_ARI_DAL",
+      "residualGames": 265,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5338645418326693,
+          "y": 0,
+          "push": 0.05283018867924527
+        },
+        "home_cover": {
+          "p": 0.41509433962264153,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.35471698113207545,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_10_LV_DEN",
+      "residualGames": 279,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.73992673992674,
+          "y": 1,
+          "push": 0.021505376344086002
+        },
+        "home_cover": {
+          "p": 0.4121863799283154,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5376344086021505,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_10_ATL_IND",
+      "residualGames": 279,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.7316176470588235,
+          "y": 1,
+          "push": 0.02508960573476704
+        },
+        "home_cover": {
+          "p": 0.4982078853046595,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.36200716845878134,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_10_NO_CAR",
+      "residualGames": 134,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6287878787878788,
+          "y": 0,
+          "push": 0.014925373134328401
+        },
+        "home_cover": {
+          "p": 0.4253731343283582,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6865671641791045,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_10_NYG_CHI",
+      "residualGames": 134,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5891472868217055,
+          "y": 1,
+          "push": 0.03731343283582089
+        },
+        "home_cover": {
+          "p": 0.417910447761194,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6567164179104478,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_10_JAX_HOU",
+      "residualGames": 139,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5846153846153846,
+          "y": 1,
+          "push": 0.06474820143884896
+        },
+        "home_cover": {
+          "p": 0.6258992805755396,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6834532374100719,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_10_BUF_MIA",
+      "residualGames": 279,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.35661764705882354,
+          "y": 1,
+          "push": 0.02508960573476704
+        },
+        "home_cover": {
+          "p": 0.6523297491039427,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.33691756272401435,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_10_BAL_MIN",
+      "residualGames": 279,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5427509293680297,
+          "y": 0,
+          "push": 0.03584229390681004
+        },
+        "home_cover": {
+          "p": 0.7096774193548387,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4551971326164875,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_10_CLE_NYJ",
+      "residualGames": 279,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5457875457875457,
+          "y": 1,
+          "push": 0.021505376344086002
+        },
+        "home_cover": {
+          "p": 0.6093189964157706,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6953405017921147,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_10_NE_TB",
+      "residualGames": 279,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.46691176470588236,
+          "y": 0,
+          "push": 0.02508960573476704
+        },
+        "home_cover": {
+          "p": 0.3906810035842294,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.37992831541218636,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_10_ARI_SEA",
+      "residualGames": 115,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5740740740740741,
+          "y": 1,
+          "push": 0.060869565217391286
+        },
+        "home_cover": {
+          "p": 0.35398230088495575,
+          "y": 1,
+          "push": 0.017391304347826098
+        },
+        "over": {
+          "p": 0.5391304347826087,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_10_LA_SF",
+      "residualGames": 108,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.3883495145631068,
+          "y": 0,
+          "push": 0.04629629629629628
+        },
+        "home_cover": {
+          "p": 0.6203703703703703,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.25925925925925924,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_10_DET_WAS",
+      "residualGames": 117,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.39285714285714285,
+          "y": 0,
+          "push": 0.042735042735042694
+        },
+        "home_cover": {
+          "p": 0.6752136752136753,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.46153846153846156,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_10_PIT_LAC",
+      "residualGames": 279,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5430711610486891,
+          "y": 1,
+          "push": 0.043010752688172005
+        },
+        "home_cover": {
+          "p": 0.43609022556390975,
+          "y": 1,
+          "push": 0.04659498207885304
+        },
+        "over": {
+          "p": 0.5161290322580645,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_10_PHI_GB",
+      "residualGames": 279,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5608856088560885,
+          "y": 0,
+          "push": 0.028673835125448077
+        },
+        "home_cover": {
+          "p": 0.4982078853046595,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4946236559139785,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_11_NYJ_NE",
+      "residualGames": 293,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.6834532374100719,
+          "y": 1,
+          "push": 0.05119453924914674
+        },
+        "home_cover": {
+          "p": 0.2764505119453925,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5870307167235495,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_11_WAS_MIA",
+      "residualGames": 293,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5524475524475524,
+          "y": 1,
+          "push": 0.023890784982935176
+        },
+        "home_cover": {
+          "p": 0.4641638225255973,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.46757679180887374,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_11_CAR_ATL",
+      "residualGames": 109,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5462962962962963,
+          "y": 0,
+          "push": 0.00917431192660545
+        },
+        "home_cover": {
+          "p": 0.3669724770642202,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.47706422018348627,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_11_TB_BUF",
+      "residualGames": 130,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5433070866141733,
+          "y": 1,
+          "push": 0.023076923076923106
+        },
+        "home_cover": {
+          "p": 0.352,
+          "y": 1,
+          "push": 0.038461538461538436
+        },
+        "over": {
+          "p": 0.49230769230769234,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_11_LAC_JAX",
+      "residualGames": 293,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.4631578947368421,
+          "y": 1,
+          "push": 0.027303754266211566
+        },
+        "home_cover": {
+          "p": 0.5684210526315789,
+          "y": 1,
+          "push": 0.027303754266211566
+        },
+        "over": {
+          "p": 0.5290102389078498,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_11_CHI_MIN",
+      "residualGames": 120,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5384615384615384,
+          "y": 0,
+          "push": 0.025000000000000022
+        },
+        "home_cover": {
+          "p": 0.42105263157894735,
+          "y": 0,
+          "push": 0.050000000000000044
+        },
+        "over": {
+          "p": 0.5083333333333333,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_11_GB_NYG",
+      "residualGames": 143,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4028776978417266,
+          "y": 0,
+          "push": 0.027972027972028024
+        },
+        "home_cover": {
+          "p": 0.6783216783216783,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6503496503496503,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_11_CIN_PIT",
+      "residualGames": 293,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.6559139784946236,
+          "y": 1,
+          "push": 0.04778156996587035
+        },
+        "home_cover": {
+          "p": 0.45051194539249145,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4948805460750853,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_11_HOU_TEN",
+      "residualGames": 293,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.31833910034602075,
+          "y": 0,
+          "push": 0.013651877133105783
+        },
+        "home_cover": {
+          "p": 0.4778156996587031,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6655290102389079,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_11_SF_ARI",
+      "residualGames": 137,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5111111111111111,
+          "y": 0,
+          "push": 0.014598540145985384
+        },
+        "home_cover": {
+          "p": 0.635036496350365,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.38686131386861317,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_11_SEA_LA",
+      "residualGames": 142,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.48507462686567165,
+          "y": 1,
+          "push": 0.05633802816901412
+        },
+        "home_cover": {
+          "p": 0.3795620437956204,
+          "y": 0,
+          "push": 0.035211267605633756
+        },
+        "over": {
+          "p": 0.352112676056338,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_11_BAL_CLE",
+      "residualGames": 113,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4672897196261682,
+          "y": 0,
+          "push": 0.053097345132743334
+        },
+        "home_cover": {
+          "p": 0.7168141592920354,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.7168141592920354,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_11_KC_DEN",
+      "residualGames": 293,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5266903914590747,
+          "y": 1,
+          "push": 0.04095563139931746
+        },
+        "home_cover": {
+          "p": 0.658703071672355,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.43686006825938567,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_11_DET_PHI",
+      "residualGames": 126,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4628099173553719,
+          "y": 1,
+          "push": 0.03968253968253965
+        },
+        "home_cover": {
+          "p": 0.35714285714285715,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5396825396825397,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_11_DAL_LV",
+      "residualGames": 293,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.45964912280701753,
+          "y": 0,
+          "push": 0.027303754266211566
+        },
+        "home_cover": {
+          "p": 0.5938566552901023,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.46757679180887374,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_12_BUF_HOU",
+      "residualGames": 308,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5306122448979592,
+          "y": 1,
+          "push": 0.045454545454545414
+        },
+        "home_cover": {
+          "p": 0.7272727272727273,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5194805194805194,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_12_NYJ_BAL",
+      "residualGames": 308,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5906040268456376,
+          "y": 1,
+          "push": 0.03246753246753242
+        },
+        "home_cover": {
+          "p": 0.21241830065359477,
+          "y": 0,
+          "push": 0.00649350649350644
+        },
+        "over": {
+          "p": 0.6006493506493507,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_12_PIT_CHI",
+      "residualGames": 131,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5196850393700787,
+          "y": 1,
+          "push": 0.03053435114503822
+        },
+        "over": {
+          "p": 0.5267175572519084,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_12_NE_CIN",
+      "residualGames": 308,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.3388704318936877,
+          "y": 0,
+          "push": 0.022727272727272707
+        },
+        "home_cover": {
+          "p": 0.5876623376623377,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4577922077922078,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_12_NYG_DET",
+      "residualGames": 137,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6893939393939394,
+          "y": 1,
+          "push": 0.03649635036496346
+        },
+        "home_cover": {
+          "p": 0.2740740740740741,
+          "y": 0,
+          "push": 0.014598540145985384
+        },
+        "over": {
+          "p": 0.41605839416058393,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_12_MIN_GB",
+      "residualGames": 117,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5948275862068966,
+          "y": 1,
+          "push": 0.008547008547008517
+        },
+        "home_cover": {
+          "p": 0.36752136752136755,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5555555555555556,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_12_IND_KC",
+      "residualGames": 308,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5051194539249146,
+          "y": 1,
+          "push": 0.04870129870129869
+        },
+        "home_cover": {
+          "p": 0.38636363636363635,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.3409090909090909,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_12_SEA_TEN",
+      "residualGames": 49,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.3191489361702128,
+          "y": 0,
+          "push": 0.04081632653061229
+        },
+        "home_cover": {
+          "p": 0.6530612244897959,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5714285714285714,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_12_JAX_ARI",
+      "residualGames": 63,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.43548387096774194,
+          "y": 0,
+          "push": 0.015873015873015928
+        },
+        "home_cover": {
+          "p": 0.5079365079365079,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.42857142857142855,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_12_CLE_LV",
+      "residualGames": 60,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4576271186440678,
+          "y": 0,
+          "push": 0.01666666666666672
+        },
+        "home_cover": {
+          "p": 0.43333333333333335,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6666666666666666,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_12_PHI_DAL",
+      "residualGames": 106,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.47572815533980584,
+          "y": 1,
+          "push": 0.028301886792452824
+        },
+        "home_cover": {
+          "p": 0.59,
+          "y": 1,
+          "push": 0.05660377358490565
+        },
+        "over": {
+          "p": 0.5754716981132075,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_12_ATL_NO",
+      "residualGames": 308,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.48172757475083056,
+          "y": 0,
+          "push": 0.022727272727272707
+        },
+        "home_cover": {
+          "p": 0.4318181818181818,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5032467532467533,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_12_TB_LA",
+      "residualGames": 308,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.6428571428571429,
+          "y": 1,
+          "push": 0.045454545454545414
+        },
+        "home_cover": {
+          "p": 0.3979933110367893,
+          "y": 1,
+          "push": 0.02922077922077926
+        },
+        "over": {
+          "p": 0.36038961038961037,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_12_CAR_SF",
+      "residualGames": 47,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5434782608695652,
+          "y": 1,
+          "push": 0.021276595744680882
+        },
+        "home_cover": {
+          "p": 0.40425531914893614,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.2978723404255319,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_13_GB_DET",
+      "residualGames": 322,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5746031746031746,
+          "y": 0,
+          "push": 0.021739130434782594
+        },
+        "home_cover": {
+          "p": 0.48757763975155277,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4254658385093168,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_13_KC_DAL",
+      "residualGames": 322,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.47419354838709676,
+          "y": 1,
+          "push": 0.037267080745341574
+        },
+        "home_cover": {
+          "p": 0.5993788819875776,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.32298136645962733,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_13_CIN_BAL",
+      "residualGames": 322,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.7032258064516129,
+          "y": 0,
+          "push": 0.037267080745341574
+        },
+        "home_cover": {
+          "p": 0.4336569579288026,
+          "y": 0,
+          "push": 0.04037267080745344
+        },
+        "over": {
+          "p": 0.35093167701863354,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_13_CHI_PHI",
+      "residualGames": 155,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5816993464052288,
+          "y": 0,
+          "push": 0.012903225806451646
+        },
+        "home_cover": {
+          "p": 0.35333333333333333,
+          "y": 0,
+          "push": 0.032258064516129004
+        },
+        "over": {
+          "p": 0.6387096774193548,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_13_LA_CAR",
+      "residualGames": 45,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.36363636363636365,
+          "y": 1,
+          "push": 0.022222222222222254
+        },
+        "home_cover": {
+          "p": 0.6590909090909091,
+          "y": 1,
+          "push": 0.022222222222222254
+        },
+        "over": {
+          "p": 0.4666666666666667,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_13_SF_CLE",
+      "residualGames": 41,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4146341463414634,
+          "y": 0,
+          "push": 0
+        },
+        "home_cover": {
+          "p": 0.6097560975609756,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6829268292682927,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_13_HOU_IND",
+      "residualGames": 322,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.6096774193548387,
+          "y": 0,
+          "push": 0.037267080745341574
+        },
+        "home_cover": {
+          "p": 0.5032051282051282,
+          "y": 0,
+          "push": 0.03105590062111796
+        },
+        "over": {
+          "p": 0.48757763975155277,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_13_NO_MIA",
+      "residualGames": 322,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.6242038216560509,
+          "y": 1,
+          "push": 0.024844720496894457
+        },
+        "home_cover": {
+          "p": 0.43478260869565216,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5434782608695652,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_13_ATL_NYJ",
+      "residualGames": 155,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4726027397260274,
+          "y": 1,
+          "push": 0.058064516129032295
+        },
+        "home_cover": {
+          "p": 0.5878378378378378,
+          "y": 1,
+          "push": 0.04516129032258065
+        },
+        "over": {
+          "p": 0.6709677419354839,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_13_ARI_TB",
+      "residualGames": 69,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.47761194029850745,
+          "y": 1,
+          "push": 0.02898550724637683
+        },
+        "home_cover": {
+          "p": 0.37681159420289856,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5507246376811594,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_13_JAX_TEN",
+      "residualGames": 142,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.35,
+          "y": 0,
+          "push": 0.014084507042253502
+        },
+        "home_cover": {
+          "p": 0.5661764705882353,
+          "y": 0,
+          "push": 0.04225352112676062
+        },
+        "over": {
+          "p": 0.6056338028169014,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_13_MIN_SEA",
+      "residualGames": 100,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6947368421052632,
+          "y": 1,
+          "push": 0.050000000000000044
+        },
+        "home_cover": {
+          "p": 0.28,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_13_LV_LAC",
+      "residualGames": 322,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.6957928802588996,
+          "y": 1,
+          "push": 0.04037267080745344
+        },
+        "home_cover": {
+          "p": 0.32371794871794873,
+          "y": 1,
+          "push": 0.03105590062111796
+        },
+        "over": {
+          "p": 0.5496894409937888,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_13_BUF_PIT",
+      "residualGames": 322,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.4857142857142857,
+          "y": 0,
+          "push": 0.021739130434782594
+        },
+        "home_cover": {
+          "p": 0.5947712418300654,
+          "y": 0,
+          "push": 0.0496894409937888
+        },
+        "over": {
+          "p": 0.5807453416149069,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_13_DEN_WAS",
+      "residualGames": 322,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.40514469453376206,
+          "y": 0,
+          "push": 0.03416149068322982
+        },
+        "home_cover": {
+          "p": 0.639751552795031,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.515527950310559,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_13_NYG_NE",
+      "residualGames": 123,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.7155172413793104,
+          "y": 1,
+          "push": 0.05691056910569103
+        },
+        "home_cover": {
+          "p": 0.45454545454545453,
+          "y": 1,
+          "push": 0.016260162601625994
+        },
+        "over": {
+          "p": 0.4878048780487805,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_14_DAL_DET",
+      "residualGames": 143,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6115107913669064,
+          "y": 1,
+          "push": 0.027972027972028024
+        },
+        "home_cover": {
+          "p": 0.46153846153846156,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.36363636363636365,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_14_SEA_ATL",
+      "residualGames": 46,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.38636363636363635,
+          "y": 0,
+          "push": 0.04347826086956519
+        },
+        "home_cover": {
+          "p": 0.6,
+          "y": 0,
+          "push": 0.021739130434782594
+        },
+        "over": {
+          "p": 0.4782608695652174,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_14_PIT_BAL",
+      "residualGames": 338,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5389408099688473,
+          "y": 0,
+          "push": 0.050295857988165715
+        },
+        "home_cover": {
+          "p": 0.34023668639053256,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6005917159763313,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_14_CIN_BUF",
+      "residualGames": 338,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.7275449101796407,
+          "y": 1,
+          "push": 0.011834319526627168
+        },
+        "home_cover": {
+          "p": 0.5151515151515151,
+          "y": 0,
+          "push": 0.023668639053254448
+        },
+        "over": {
+          "p": 0.3047337278106509,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_14_TEN_CLE",
+      "residualGames": 143,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6258992805755396,
+          "y": 0,
+          "push": 0.027972027972028024
+        },
+        "home_cover": {
+          "p": 0.46153846153846156,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6853146853146853,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_14_IND_JAX",
+      "residualGames": 157,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.45394736842105265,
+          "y": 1,
+          "push": 0.031847133757961776
+        },
+        "home_cover": {
+          "p": 0.554140127388535,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.554140127388535,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_14_WAS_MIN",
+      "residualGames": 160,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.535031847133758,
+          "y": 1,
+          "push": 0.018750000000000044
+        },
+        "home_cover": {
+          "p": 0.59375,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.54375,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_14_MIA_NYJ",
+      "residualGames": 140,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.48872180451127817,
+          "y": 0,
+          "push": 0.050000000000000044
+        },
+        "home_cover": {
+          "p": 0.6,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6142857142857143,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_14_NO_TB",
+      "residualGames": 146,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6357142857142857,
+          "y": 0,
+          "push": 0.04109589041095896
+        },
+        "home_cover": {
+          "p": 0.363013698630137,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5753424657534246,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_14_DEN_LV",
+      "residualGames": 153,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.348993288590604,
+          "y": 0,
+          "push": 0.02614379084967322
+        },
+        "home_cover": {
+          "p": 0.6535947712418301,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5424836601307189,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_14_LA_ARI",
+      "residualGames": 133,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.34615384615384615,
+          "y": 0,
+          "push": 0.022556390977443663
+        },
+        "home_cover": {
+          "p": 0.6917293233082706,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.38345864661654133,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_14_CHI_GB",
+      "residualGames": 338,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.6234567901234568,
+          "y": 1,
+          "push": 0.041420118343195256
+        },
+        "home_cover": {
+          "p": 0.38461538461538464,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5355029585798816,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_14_HOU_KC",
+      "residualGames": 338,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5792682926829268,
+          "y": 0,
+          "push": 0.029585798816568087
+        },
+        "home_cover": {
+          "p": 0.4171597633136095,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_14_PHI_LAC",
+      "residualGames": 338,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5644171779141104,
+          "y": 1,
+          "push": 0.035502958579881616
+        },
+        "home_cover": {
+          "p": 0.6094674556213018,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5680473372781065,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_15_ATL_TB",
+      "residualGames": 352,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5734870317002881,
+          "y": 0,
+          "push": 0.014204545454545414
+        },
+        "home_cover": {
+          "p": 0.3556851311953353,
+          "y": 0,
+          "push": 0.025568181818181768
+        },
+        "over": {
+          "p": 0.5340909090909091,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_15_CLE_CHI",
+      "residualGames": 135,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6230769230769231,
+          "y": 1,
+          "push": 0.03703703703703709
+        },
+        "home_cover": {
+          "p": 0.35555555555555557,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6962962962962963,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_15_BAL_CIN",
+      "residualGames": 148,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4295774647887324,
+          "y": 0,
+          "push": 0.04054054054054057
+        },
+        "home_cover": {
+          "p": 0.5337837837837838,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.47297297297297297,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_15_ARI_HOU",
+      "residualGames": 152,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.636986301369863,
+          "y": 1,
+          "push": 0.03947368421052633
+        },
+        "home_cover": {
+          "p": 0.3223684210526316,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5197368421052632,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_15_NYJ_JAX",
+      "residualGames": 169,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6481481481481481,
+          "y": 1,
+          "push": 0.041420118343195256
+        },
+        "home_cover": {
+          "p": 0.28402366863905326,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6686390532544378,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_15_LAC_KC",
+      "residualGames": 109,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5882352941176471,
+          "y": 0,
+          "push": 0.06422018348623848
+        },
+        "home_cover": {
+          "p": 0.3669724770642202,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5596330275229358,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_15_BUF_NE",
+      "residualGames": 352,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5718475073313783,
+          "y": 0,
+          "push": 0.03125
+        },
+        "home_cover": {
+          "p": 0.65625,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.35795454545454547,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_15_WAS_NYG",
+      "residualGames": 352,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5652173913043478,
+          "y": 0,
+          "push": 0.019886363636363646
+        },
+        "home_cover": {
+          "p": 0.4772727272727273,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.48011363636363635,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_15_LV_PHI",
+      "residualGames": 47,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6521739130434783,
+          "y": 1,
+          "push": 0.021276595744680882
+        },
+        "home_cover": {
+          "p": 0.3404255319148936,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5957446808510638,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_15_GB_DEN",
+      "residualGames": 167,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5246913580246914,
+          "y": 1,
+          "push": 0.029940119760479056
+        },
+        "home_cover": {
+          "p": 0.5808383233532934,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5389221556886228,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_15_DET_LA",
+      "residualGames": 352,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.6153846153846154,
+          "y": 1,
+          "push": 0.03977272727272729
+        },
+        "home_cover": {
+          "p": 0.4147727272727273,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.2556818181818182,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_15_CAR_NO",
+      "residualGames": 352,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.49707602339181284,
+          "y": 1,
+          "push": 0.02840909090909094
+        },
+        "home_cover": {
+          "p": 0.5852272727272727,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4602272727272727,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_15_IND_SEA",
+      "residualGames": 69,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6212121212121212,
+          "y": 1,
+          "push": 0.04347826086956519
+        },
+        "home_cover": {
+          "p": 0.2318840579710145,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6666666666666666,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_15_TEN_SF",
+      "residualGames": 352,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.7201166180758017,
+          "y": 1,
+          "push": 0.025568181818181768
+        },
+        "home_cover": {
+          "p": 0.29829545454545453,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4375,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_15_MIN_DAL",
+      "residualGames": 352,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5976331360946746,
+          "y": 0,
+          "push": 0.03977272727272729
+        },
+        "home_cover": {
+          "p": 0.3977272727272727,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5284090909090909,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_15_MIA_PIT",
+      "residualGames": 177,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5117647058823529,
+          "y": 1,
+          "push": 0.039548022598870025
+        },
+        "home_cover": {
+          "p": 0.4093567251461988,
+          "y": 1,
+          "push": 0.03389830508474578
+        },
+        "over": {
+          "p": 0.5706214689265536,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_16_LA_SEA",
+      "residualGames": 368,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5337078651685393,
+          "y": 1,
+          "push": 0.03260869565217395
+        },
+        "home_cover": {
+          "p": 0.49184782608695654,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6304347826086957,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_16_PHI_WAS",
+      "residualGames": 137,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.44776119402985076,
+          "y": 0,
+          "push": 0.021897810218978075
+        },
+        "home_cover": {
+          "p": 0.6666666666666666,
+          "y": 0,
+          "push": 0.058394160583941646
+        },
+        "over": {
+          "p": 0.5328467153284672,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_16_GB_CHI",
+      "residualGames": 145,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5285714285714286,
+          "y": 1,
+          "push": 0.03448275862068961
+        },
+        "home_cover": {
+          "p": 0.4896551724137931,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5379310344827586,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_16_TB_CAR",
+      "residualGames": 368,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5297450424929179,
+          "y": 1,
+          "push": 0.040760869565217406
+        },
+        "home_cover": {
+          "p": 0.6412429378531074,
+          "y": 1,
+          "push": 0.03804347826086951
+        },
+        "over": {
+          "p": 0.5027173913043478,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_16_BUF_CLE",
+      "residualGames": 123,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.3559322033898305,
+          "y": 0,
+          "push": 0.04065040650406504
+        },
+        "home_cover": {
+          "p": 0.7317073170731707,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5934959349593496,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_16_LAC_DAL",
+      "residualGames": 136,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4883720930232558,
+          "y": 0,
+          "push": 0.05147058823529416
+        },
+        "home_cover": {
+          "p": 0.4264705882352941,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4264705882352941,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_16_CIN_MIA",
+      "residualGames": 174,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5988372093023255,
+          "y": 0,
+          "push": 0.011494252873563204
+        },
+        "home_cover": {
+          "p": 0.7183908045977011,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4540229885057471,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_16_NYJ_NO",
+      "residualGames": 143,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5323741007194245,
+          "y": 1,
+          "push": 0.027972027972028024
+        },
+        "home_cover": {
+          "p": 0.32867132867132864,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6573426573426573,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_16_MIN_NYG",
+      "residualGames": 158,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.46710526315789475,
+          "y": 0,
+          "push": 0.03797468354430378
+        },
+        "home_cover": {
+          "p": 0.5506329113924051,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6455696202531646,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_16_KC_TEN",
+      "residualGames": 158,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.34868421052631576,
+          "y": 1,
+          "push": 0.03797468354430378
+        },
+        "home_cover": {
+          "p": 0.44936708860759494,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6962025316455697,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_16_ATL_ARI",
+      "residualGames": 368,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.4958217270194986,
+          "y": 0,
+          "push": 0.024456521739130488
+        },
+        "home_cover": {
+          "p": 0.5842391304347826,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.41032608695652173,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_16_JAX_DEN",
+      "residualGames": 109,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5377358490566038,
+          "y": 0,
+          "push": 0.02752293577981646
+        },
+        "home_cover": {
+          "p": 0.42201834862385323,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.43119266055045874,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_16_PIT_DET",
+      "residualGames": 132,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6030534351145038,
+          "y": 0,
+          "push": 0.007575757575757569
+        },
+        "home_cover": {
+          "p": 0.3484848484848485,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4015151515151515,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_16_LV_HOU",
+      "residualGames": 136,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.7761194029850746,
+          "y": 1,
+          "push": 0.014705882352941124
+        },
+        "home_cover": {
+          "p": 0.3161764705882353,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5661764705882353,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_16_NE_BAL",
+      "residualGames": 145,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.43478260869565216,
+          "y": 0,
+          "push": 0.0482758620689655
+        },
+        "home_cover": {
+          "p": 0.31724137931034485,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.43448275862068964,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_16_SF_IND",
+      "residualGames": 87,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.573170731707317,
+          "y": 0,
+          "push": 0.05747126436781613
+        },
+        "home_cover": {
+          "p": 0.6896551724137931,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4827586206896552,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_17_DAL_WAS",
+      "residualGames": 384,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.49193548387096775,
+          "y": 0,
+          "push": 0.03125
+        },
+        "home_cover": {
+          "p": 0.7708333333333334,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4895833333333333,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_17_DET_MIN",
+      "residualGames": 384,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.4986449864498645,
+          "y": 1,
+          "push": 0.0390625
+        },
+        "home_cover": {
+          "p": 0.7379679144385026,
+          "y": 1,
+          "push": 0.02604166666666663
+        },
+        "over": {
+          "p": 0.5416666666666666,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_17_DEN_KC",
+      "residualGames": 384,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5471698113207547,
+          "y": 0,
+          "push": 0.03385416666666663
+        },
+        "home_cover": {
+          "p": 0.8802083333333334,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6536458333333334,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_17_HOU_LAC",
+      "residualGames": 136,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5,
+          "y": 0,
+          "push": 0.02941176470588236
+        },
+        "home_cover": {
+          "p": 0.45588235294117646,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5514705882352942,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_17_BAL_GB",
+      "residualGames": 182,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5517241379310345,
+          "y": 0,
+          "push": 0.04395604395604391
+        },
+        "home_cover": {
+          "p": 0.4725274725274725,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6868131868131868,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_17_SEA_CAR",
+      "residualGames": 384,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.34946236559139787,
+          "y": 0,
+          "push": 0.03125
+        },
+        "home_cover": {
+          "p": 0.5833333333333334,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5520833333333334,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_17_ARI_CIN",
+      "residualGames": 111,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5137614678899083,
+          "y": 1,
+          "push": 0.018018018018018056
+        },
+        "home_cover": {
+          "p": 0.32407407407407407,
+          "y": 1,
+          "push": 0.027027027027026973
+        },
+        "over": {
+          "p": 0.3783783783783784,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_17_PIT_CLE",
+      "residualGames": 125,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4462809917355372,
+          "y": 1,
+          "push": 0.03200000000000003
+        },
+        "home_cover": {
+          "p": 0.568,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.736,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_17_JAX_IND",
+      "residualGames": 182,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5170454545454546,
+          "y": 0,
+          "push": 0.03296703296703296
+        },
+        "home_cover": {
+          "p": 0.6263736263736264,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.489010989010989,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_17_TB_MIA",
+      "residualGames": 139,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5223880597014925,
+          "y": 1,
+          "push": 0.03597122302158273
+        },
+        "home_cover": {
+          "p": 0.697841726618705,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.539568345323741,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_17_NE_NYJ",
+      "residualGames": 129,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.31496062992125984,
+          "y": 0,
+          "push": 0.015503875968992276
+        },
+        "home_cover": {
+          "p": 0.7364341085271318,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6201550387596899,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_17_NO_TEN",
+      "residualGames": 167,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.47560975609756095,
+          "y": 0,
+          "push": 0.017964071856287456
+        },
+        "home_cover": {
+          "p": 0.5209580838323353,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5808383233532934,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_17_NYG_LV",
+      "residualGames": 49,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.46808510638297873,
+          "y": 0,
+          "push": 0.04081632653061229
+        },
+        "home_cover": {
+          "p": 0.5918367346938775,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5714285714285714,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_17_PHI_BUF",
+      "residualGames": 157,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5657894736842105,
+          "y": 0,
+          "push": 0.031847133757961776
+        },
+        "home_cover": {
+          "p": 0.4563758389261745,
+          "y": 0,
+          "push": 0.05095541401273884
+        },
+        "over": {
+          "p": 0.5222929936305732,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_17_CHI_SF",
+      "residualGames": 96,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5555555555555556,
+          "y": 1,
+          "push": 0.0625
+        },
+        "home_cover": {
+          "p": 0.4270833333333333,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.34375,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_17_LA_ATL",
+      "residualGames": 384,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.33421750663129973,
+          "y": 1,
+          "push": 0.01822916666666663
+        },
+        "home_cover": {
+          "p": 0.6041666666666666,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4375,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_18_CAR_TB",
+      "residualGames": 203,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5634517766497462,
+          "y": 1,
+          "push": 0.029556650246305383
+        },
+        "home_cover": {
+          "p": 0.467005076142132,
+          "y": 0,
+          "push": 0.029556650246305383
+        },
+        "over": {
+          "p": 0.5221674876847291,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_18_SEA_SF",
+      "residualGames": 218,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4449760765550239,
+          "y": 0,
+          "push": 0.041284403669724745
+        },
+        "home_cover": {
+          "p": 0.5137614678899083,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.463302752293578,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_18_NO_ATL",
+      "residualGames": 170,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5521472392638037,
+          "y": 1,
+          "push": 0.04117647058823526
+        },
+        "home_cover": {
+          "p": 0.3941176470588235,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.49411764705882355,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_18_CLE_CIN",
+      "residualGames": 147,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5804195804195804,
+          "y": 0,
+          "push": 0.027210884353741527
+        },
+        "home_cover": {
+          "p": 0.2789115646258503,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4557823129251701,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_18_IND_HOU",
+      "residualGames": 210,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5686274509803921,
+          "y": 1,
+          "push": 0.02857142857142858
+        },
+        "home_cover": {
+          "p": 0.29523809523809524,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.7047619047619048,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_18_TEN_JAX",
+      "residualGames": 178,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.7441860465116279,
+          "y": 1,
+          "push": 0.0337078651685393
+        },
+        "home_cover": {
+          "p": 0.33707865168539325,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4550561797752809,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_18_GB_MIN",
+      "residualGames": 400,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5310880829015544,
+          "y": 1,
+          "push": 0.03500000000000003
+        },
+        "home_cover": {
+          "p": 0.205,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6925,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_18_DAL_NYG",
+      "residualGames": 400,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5025906735751295,
+          "y": 1,
+          "push": 0.03500000000000003
+        },
+        "home_cover": {
+          "p": 0.6062176165803109,
+          "y": 1,
+          "push": 0.03500000000000003
+        },
+        "over": {
+          "p": 0.4675,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_18_NYJ_BUF",
+      "residualGames": 154,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.7364864864864865,
+          "y": 1,
+          "push": 0.038961038961038974
+        },
+        "home_cover": {
+          "p": 0.33116883116883117,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.7272727272727273,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_18_DET_CHI",
+      "residualGames": 400,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5489690721649485,
+          "y": 0,
+          "push": 0.030000000000000027
+        },
+        "home_cover": {
+          "p": 0.43,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.41,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_18_LAC_DEN",
+      "residualGames": 400,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5710594315245479,
+          "y": 1,
+          "push": 0.03249999999999997
+        },
+        "home_cover": {
+          "p": 0.195,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.665,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_18_ARI_LA",
+      "residualGames": 162,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.7435897435897436,
+          "y": 1,
+          "push": 0.03703703703703709
+        },
+        "home_cover": {
+          "p": 0.2839506172839506,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4382716049382716,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_18_KC_LV",
+      "residualGames": 400,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.3669250645994832,
+          "y": 1,
+          "push": 0.03249999999999997
+        },
+        "home_cover": {
+          "p": 0.5025,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6625,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_18_MIA_NE",
+      "residualGames": 148,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6643356643356644,
+          "y": 1,
+          "push": 0.03378378378378377
+        },
+        "home_cover": {
+          "p": 0.2789115646258503,
+          "y": 1,
+          "push": 0.006756756756756799
+        },
+        "over": {
+          "p": 0.5405405405405406,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_18_WAS_PHI",
+      "residualGames": 400,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.6958762886597938,
+          "y": 0,
+          "push": 0.030000000000000027
+        },
+        "home_cover": {
+          "p": 0.5859375,
+          "y": 0,
+          "push": 0.040000000000000036
+        },
+        "over": {
+          "p": 0.6675,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2025_18_BAL_PIT",
+      "residualGames": 156,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4966442953020134,
+          "y": 1,
+          "push": 0.04487179487179482
+        },
+        "home_cover": {
+          "p": 0.6153846153846154,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6602564102564102,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_05_TB_DAL",
+      "residualGames": 416,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5959595959595959,
+          "y": 0,
+          "push": 0.04807692307692313
+        },
+        "home_cover": {
+          "p": 0.2980769230769231,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.40625,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_05_PHI_JAX",
+      "residualGames": 416,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.691358024691358,
+          "y": 1,
+          "push": 0.02644230769230771
+        },
+        "home_cover": {
+          "p": 0.42788461538461536,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5144230769230769,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_05_CHI_GB",
+      "residualGames": 149,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.34265734265734266,
+          "y": 1,
+          "push": 0.04026845637583898
+        },
+        "home_cover": {
+          "p": 0.38926174496644295,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4228187919463087,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_05_CIN_MIA",
+      "residualGames": 201,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.36923076923076925,
+          "y": 0,
+          "push": 0.02985074626865669
+        },
+        "over": {
+          "p": 0.417910447761194,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_05_LV_NE",
+      "residualGames": 41,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.46153846153846156,
+          "y": 1,
+          "push": 0.04878048780487809
+        },
+        "home_cover": {
+          "p": 0.36585365853658536,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.3902439024390244,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_05_MIN_NO",
+      "residualGames": 177,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.3872832369942196,
+          "y": 0,
+          "push": 0.02259887005649719
+        },
+        "home_cover": {
+          "p": 0.4745762711864407,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6384180790960452,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_05_CLE_NYJ",
+      "residualGames": 416,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5454545454545454,
+          "y": 1,
+          "push": 0.02163461538461542
+        },
+        "home_cover": {
+          "p": 0.46875,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6346153846153846,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_05_IND_PIT",
+      "residualGames": 416,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.513715710723192,
+          "y": 1,
+          "push": 0.03605769230769229
+        },
+        "home_cover": {
+          "p": 0.4034653465346535,
+          "y": 1,
+          "push": 0.028846153846153855
+        },
+        "over": {
+          "p": 0.6177884615384616,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_05_HOU_TEN",
+      "residualGames": 201,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5128205128205128,
+          "y": 0,
+          "push": 0.02985074626865669
+        },
+        "home_cover": {
+          "p": 0.7313432835820896,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6517412935323383,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_05_NYG_WAS",
+      "residualGames": 155,
+      "contextUsed": true,
+      "markets": {
+        "home_cover": {
+          "p": 0.32903225806451614,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.632258064516129,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_05_DEN_LAC",
+      "residualGames": 207,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4723618090452261,
+          "y": 0,
+          "push": 0.03864734299516903
+        },
+        "home_cover": {
+          "p": 0.5893719806763285,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5265700483091788,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_05_DET_ARI",
+      "residualGames": 100,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.46875,
+          "y": 0,
+          "push": 0.040000000000000036
+        },
+        "home_cover": {
+          "p": 0.66,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.31,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_05_SF_SEA",
+      "residualGames": 201,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.46842105263157896,
+          "y": 0,
+          "push": 0.05472636815920395
+        },
+        "home_cover": {
+          "p": 0.358974358974359,
+          "y": 0,
+          "push": 0.02985074626865669
+        },
+        "over": {
+          "p": 0.43283582089552236,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_05_BAL_ATL",
+      "residualGames": 194,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4782608695652174,
+          "y": 0,
+          "push": 0.05154639175257736
+        },
+        "home_cover": {
+          "p": 0.36082474226804123,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5824742268041238,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_05_BUF_LA",
+      "residualGames": 73,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4714285714285714,
+          "y": 0,
+          "push": 0.04109589041095896
+        },
+        "home_cover": {
+          "p": 0.3835616438356164,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.2602739726027397,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_06_SEA_DEN",
+      "residualGames": 431,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.45145631067961167,
+          "y": 1,
+          "push": 0.044083526682134555
+        },
+        "home_cover": {
+          "p": 0.5359628770301624,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6102088167053364,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_06_HOU_JAX",
+      "residualGames": 431,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.6411483253588517,
+          "y": 0,
+          "push": 0.030162412993039456
+        },
+        "home_cover": {
+          "p": 0.5475638051044084,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4802784222737819,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_06_CHI_ATL",
+      "residualGames": 202,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.45549738219895286,
+          "y": 0,
+          "push": 0.054455445544554504
+        },
+        "home_cover": {
+          "p": 0.504950495049505,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.2871287128712871,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_06_BAL_CLE",
+      "residualGames": 173,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.43373493975903615,
+          "y": 1,
+          "push": 0.040462427745664775
+        },
+        "home_cover": {
+          "p": 0.5568862275449101,
+          "y": 1,
+          "push": 0.034682080924855474
+        },
+        "over": {
+          "p": 0.6705202312138728,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_06_TEN_IND",
+      "residualGames": 164,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5838509316770186,
+          "y": 0,
+          "push": 0.018292682926829285
+        },
+        "home_cover": {
+          "p": 0.3597560975609756,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4817073170731707,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_06_NYJ_NE",
+      "residualGames": 151,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5570469798657718,
+          "y": 1,
+          "push": 0.013245033112582738
+        },
+        "home_cover": {
+          "p": 0.31125827814569534,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.44370860927152317,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_06_NO_NYG",
+      "residualGames": 169,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5696969696969697,
+          "y": 0,
+          "push": 0.023668639053254448
+        },
+        "home_cover": {
+          "p": 0.621301775147929,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.48520710059171596,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_06_CAR_PHI",
+      "residualGames": 431,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.46522781774580335,
+          "y": 0,
+          "push": 0.0324825986078886
+        },
+        "home_cover": {
+          "p": 0.5676328502415459,
+          "y": 0,
+          "push": 0.03944315545243615
+        },
+        "over": {
+          "p": 0.6821345707656613,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_06_PIT_TB",
+      "residualGames": 431,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5072115384615384,
+          "y": 0,
+          "push": 0.03480278422273786
+        },
+        "home_cover": {
+          "p": 0.5916473317865429,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6357308584686775,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_06_ARI_LA",
+      "residualGames": 179,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6140350877192983,
+          "y": 0,
+          "push": 0.04469273743016755
+        },
+        "home_cover": {
+          "p": 0.2681564245810056,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.37988826815642457,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_06_LAC_KC",
+      "residualGames": 431,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.7023809523809523,
+          "y": 1,
+          "push": 0.025522041763341052
+        },
+        "home_cover": {
+          "p": 0.4431554524361949,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5939675174013921,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_06_BUF_LV",
+      "residualGames": 68,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.46875,
+          "y": 0,
+          "push": 0.05882352941176472
+        },
+        "home_cover": {
+          "p": 0.6617647058823529,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.38235294117647056,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_06_DAL_GB",
+      "residualGames": 431,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5192307692307693,
+          "y": 1,
+          "push": 0.03480278422273786
+        },
+        "home_cover": {
+          "p": 0.5638051044083526,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.271461716937355,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_06_WAS_SF",
+      "residualGames": 59,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.631578947368421,
+          "y": 1,
+          "push": 0.03389830508474578
+        },
+        "home_cover": {
+          "p": 0.4576271186440678,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.3898305084745763,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_07_NE_CHI",
+      "residualGames": 42,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6052631578947368,
+          "y": 1,
+          "push": 0.09523809523809523
+        },
+        "home_cover": {
+          "p": 0.5,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.23809523809523808,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_07_PIT_NO",
+      "residualGames": 445,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.4722222222222222,
+          "y": 0,
+          "push": 0.02921348314606742
+        },
+        "home_cover": {
+          "p": 0.568075117370892,
+          "y": 0,
+          "push": 0.04269662921348316
+        },
+        "over": {
+          "p": 0.6022471910112359,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_07_SF_ATL",
+      "residualGames": 63,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.3492063492063492,
+          "y": 1,
+          "push": 0
+        },
+        "home_cover": {
+          "p": 0.42857142857142855,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4126984126984127,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_07_CIN_BAL",
+      "residualGames": 445,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5290023201856149,
+          "y": 0,
+          "push": 0.03146067415730336
+        },
+        "home_cover": {
+          "p": 0.6351039260969977,
+          "y": 0,
+          "push": 0.026966292134831482
+        },
+        "over": {
+          "p": 0.4606741573033708,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_07_TB_CAR",
+      "residualGames": 203,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.572139303482587,
+          "y": 0,
+          "push": 0.009852216748768461
+        },
+        "home_cover": {
+          "p": 0.4723618090452261,
+          "y": 0,
+          "push": 0.019704433497536922
+        },
+        "over": {
+          "p": 0.5763546798029556,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_07_NYG_HOU",
+      "residualGames": 135,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5151515151515151,
+          "y": 0,
+          "push": 0.022222222222222254
+        },
+        "home_cover": {
+          "p": 0.2537313432835821,
+          "y": 0,
+          "push": 0.007407407407407418
+        },
+        "over": {
+          "p": 0.5777777777777777,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_07_IND_MIN",
+      "residualGames": 445,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.6541176470588236,
+          "y": 1,
+          "push": 0.0449438202247191
+        },
+        "home_cover": {
+          "p": 0.4247191011235955,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5595505617977528,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_07_MIA_NYJ",
+      "residualGames": 445,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.6344339622641509,
+          "y": 0,
+          "push": 0.04719101123595504
+        },
+        "home_cover": {
+          "p": 0.5056179775280899,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5415730337078651,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_07_CLE_TEN",
+      "residualGames": 196,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.4712041884816754,
+          "y": 0,
+          "push": 0.025510204081632626
+        },
+        "home_cover": {
+          "p": 0.5204081632653061,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6173469387755102,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_07_DEN_ARI",
+      "residualGames": 40,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5128205128205128,
+          "y": 0,
+          "push": 0.025000000000000022
+        },
+        "home_cover": {
+          "p": 0.625,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_07_GB_DET",
+      "residualGames": 445,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5552995391705069,
+          "y": 1,
+          "push": 0.024719101123595544
+        },
+        "home_cover": {
+          "p": 0.4449438202247191,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.2651685393258427,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_07_LA_LV",
+      "residualGames": 168,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5279503105590062,
+          "y": 0,
+          "push": 0.04166666666666663
+        },
+        "home_cover": {
+          "p": 0.6369047619047619,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.43452380952380953,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_07_KC_SEA",
+      "residualGames": 445,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.4649532710280374,
+          "y": 1,
+          "push": 0.038202247191011285
+        },
+        "home_cover": {
+          "p": 0.3568075117370892,
+          "y": 1,
+          "push": 0.04269662921348316
+        },
+        "over": {
+          "p": 0.5168539325842697,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_07_DAL_PHI",
+      "residualGames": 178,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.46511627906976744,
+          "y": 0,
+          "push": 0.0337078651685393
+        },
+        "home_cover": {
+          "p": 0.6404494382022472,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5224719101123596,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_08_CAR_GB",
+      "residualGames": 42,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.575,
+          "y": 1,
+          "push": 0.04761904761904767
+        },
+        "home_cover": {
+          "p": 0.4523809523809524,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4523809523809524,
+          "y": 0,
+          "push": 0
+        }
+      }
+    }
+  ]
 }

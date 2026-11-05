@@ -82,6 +82,7 @@
    projectedHome:home,projectedAway:away,residuals:pairedResiduals(simulationRecords),sample:{homeGames:hGames,awayGames:aGames,residualGames:simulationRecords.length,
     residualContextUsed:conditional.used,residualWeatherUsed:conditional.weatherUsed,residualContextReason:conditional.reason},
    trust:game.model_inputs?.trust||null,feedGeneratedAt:meta.generatedAt||null,
+   scoreCandidate:game.model_inputs?.score_candidate||null,
    residualBasis:baselineResiduals?'SCORING_BASELINE':'MATCHUP_ADJUSTED',
    matchupAnalysis:game.model_inputs?.matchup||null,
    pregameContext:game.model_inputs?.research_context||null,
@@ -240,4 +241,5 @@
  }
  return {quote,nflGame,nbaGame,gamePoints,marketInput,simulate};
 });
+
 

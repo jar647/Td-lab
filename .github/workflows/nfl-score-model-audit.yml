@@ -1,0 +1,48 @@
+name: NFL opponent-adjusted score model audit
+on:
+  push:
+    branches: [main]
+    paths: ['nfl_score_model.py', 'score_baseline.py', 'audit_nfl_score_model.py', 'audit_nfl_simulator.js', 'game_odds_engine.js', 'tests/test_nfl_score_model.py', '.github/workflows/nfl-score-model-audit.yml']
+  pull_request:
+    paths: ['nfl_score_model.py', 'score_baseline.py', 'audit_nfl_score_model.py', 'audit_nfl_simulator.js', 'game_odds_engine.js', 'tests/test_nfl_score_model.py', '.github/workflows/nfl-score-model-audit.yml']
+  schedule:
+    - cron: '45 11 * * 2'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: nfl-score-audit-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python -m unittest discover -s tests -p test_nfl_score_model.py -v
+      - run: node test_nfl_simulator_audit.js
+      - run: python audit_nfl_score_model.py
+      - run: node audit_nfl_simulator.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nfl-score-model-evidence
+          path: |
+            data/nfl_score_model*.json
+            data/game_picks_simulator_audit.json
+      - name: Publish comparison evidence
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/nfl_score_model_audit.json data/nfl_score_model_summary.json data/game_picks_simulator_audit.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Refresh NFL score candidate evidence'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi

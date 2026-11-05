@@ -16,6 +16,9 @@ on:
       - 'game_picks.py'
       - 'game_context.py'
       - 'game_trust.py'
+      - 'nfl_score_model.py'
+      - 'score_baseline.py'
+      - 'track_nfl_score_candidate.py'
       - 'track_game_score_forecasts.js'
       - 'test_game_score_forecasts.js'
       - 'test_game_trust_ui.js'
@@ -88,6 +91,8 @@ jobs:
         run: python build_feed.py
       - name: Build game-picks research slate
         run: python game_picks.py
+      - name: Record and grade opponent-adjusted candidate forecasts
+        run: python track_nfl_score_candidate.py
       - name: Record and grade frozen pregame score forecasts
         run: node track_game_score_forecasts.js
       - name: Verify NFL game-first analyst with actual matchup feed
@@ -113,7 +118,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/game_context_audit.json data/game_model_validation.json data/game_score_forecasts.json data/game_score_results.json data/game_picks.json data/matchups.json data/defense_stats_audit.json data/feed_audit.json data/status.json data/history/ data/probability_model.json data/history_audit.json data/forward/performance.json data/verification_status.json data/forward/
+          git add data/nfl_score_candidate_forecasts.json data/game_context_audit.json data/game_model_validation.json data/game_score_forecasts.json data/game_score_results.json data/game_picks.json data/matchups.json data/defense_stats_audit.json data/feed_audit.json data/status.json data/history/ data/probability_model.json data/history_audit.json data/forward/performance.json data/verification_status.json data/forward/
           if ! git diff --cached --quiet; then
             git commit -m "Update verified NFL matchup feed"
             # A developer commit can land while the feed is building.
@@ -131,5 +136,6 @@ jobs:
             echo "Feed built, but could not publish after three push attempts." >&2
             exit 1
           fi
+
 
 
