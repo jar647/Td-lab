@@ -10,6 +10,7 @@ from game_context import team_context, matchup_context, adjusted_projection, tra
 from nfl_weather import forecast_for_game, kickoff_utc
 from nfl_research import enrich_research, injury_research
 from game_trust import MODEL_VERSION, reconcile_contexts, quarterback_context, validation_report
+from nfl_score_model import fit as fit_score_candidate, candidate_card
 
 ROOT=Path(__file__).resolve().parent
 LEAGUE_POINTS=22.0
@@ -154,6 +155,7 @@ def main():
     qb_context={team:quarterback_context(pbp,team,player_feed) for team in slate_teams}
     history_path=ROOT/'data/game_picks_backtest.json'
     evidence=validation_report(json.loads(history_path.read_text()) if history_path.exists() else {})
+    candidate_model=fit_score_candidate(schedules,season,week)
     games=[]
     for _,r in slate.iterrows():
         # Exclude target week entirely, even if a game has already finished.
@@ -172,6 +174,8 @@ def main():
             context['adjustment_applied']=False
         hp,ap=baseline_home,baseline_away
         team_keys=[str(r['home_team']),str(r['away_team'])]
+        candidate=candidate_card(candidate_model,team_keys[0],team_keys[1],qb_context,
+            str(r.get('location','')).lower()=='neutral')
         trust={'source_status':'RECONCILED','source_sha256':audit['source_sha256'],
           'checked_at':audit['checked_at'],'through_week':week-1,
           'epa_missing_plays':audit['epa_missing_plays'],
@@ -198,7 +202,7 @@ def main():
           "projected_home_points":hp,"projected_away_points":ap,
           "projected_margin_home":round(hp-ap,1),"projected_total":round(hp+ap,1),
           "model_inputs":{"home":h,"away":a,"baseline_home_points":baseline_home,"baseline_away_points":baseline_away,
-            "matchup":matchup,"research_context":research,"trust":trust,
+            "matchup":matchup,"research_context":research,"trust":trust,"score_candidate":candidate,
             "residual_context":sim_context,
             "prior_games":PRIOR_GAMES,"league_points_prior":LEAGUE_POINTS,"home_advantage_points":HOME_ADVANTAGE_POINTS},
           "ml":{"pick":None,"confidence":None,"status":"PASS"},
@@ -225,4 +229,5 @@ def main():
         temporary.replace(target)
     print("Game scoring baseline:",len(games),"games; no betting recommendations until validation")
 if __name__=="__main__":main()
+
 
