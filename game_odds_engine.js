@@ -254,7 +254,25 @@
    markets,audit,candidates:candidates.map(x=>x.key),sample:game.sample,method:game.method,warning:game.warning,
    verification:'No bet is verified: model calibration, real execution prices, injuries and lineups are not independently confirmed. 100,000 draws reduce simulation noise, not underlying model error.'};
  }
- return {quote,nflGame,nbaGame,gamePoints,marketInput,simulate};
+ // Walk-forward evaluation: each historical prediction sees ONLY earlier games.
+ // Baseline-only mode intentionally excludes unavailable historical injury snapshots.
+ function backtestNBA(feed,{minHistory=40,maxGames=120,draws=1000}={}){
+  const completed=(feed?.games||[]).map(gamePoints).filter(Boolean).sort((a,b)=>a.time-b.time);
+  const rows=[],skipped={insufficientHistory:0,other:0};
+  for(let i=minHistory;i<completed.length;i++){
+   const actual=completed[i],earlier=completed.slice(0,i);
+   if(rows.length>=maxGames)break;
+   try{
+    const model=nbaGame({id:'walkforward-'+i,home:actual.home,away:actual.away,date:actual.date},{games:earlier.map(g=>({home:g.home,away:g.away,date:g.date,home_score:g.homePoints,away_score:g.awayPoints,status:'STATUS_FINAL'}))});
+    const result=simulate(model,{},draws,6472026+i);
+    const outcome=actual.homePoints>actual.awayPoints?1:0,p=result.simulated.homeWin;
+    rows.push({date:actual.date,home:actual.home,away:actual.away,probability:p,outcome,projectedHome:result.simulated.home,projectedAway:result.simulated.away,actualHome:actual.homePoints,actualAway:actual.awayPoints,brier:(p-outcome)**2,scoreMAE:(Math.abs(result.simulated.home-actual.homePoints)+Math.abs(result.simulated.away-actual.awayPoints))/2});
+   }catch(e){if(/Insufficient/.test(String(e.message)))skipped.insufficientHistory++;else skipped.other++;}
+  }
+  const bins=[{low:0,high:.2},{low:.2,high:.4},{low:.4,high:.6},{low:.6,high:.8},{low:.8,high:1.000001}].map(b=>{const sample=rows.filter(r=>r.probability>=b.low&&r.probability<b.high);return {range:[b.low,b.high>1?1:b.high],games:sample.length,predicted:sample.length?round(mean(sample.map(r=>r.probability))*100)/100:null,observed:sample.length?round(mean(sample.map(r=>r.outcome))*100)/100:null};});
+  return {method:'Walk-forward NBA score baseline only; no historical injury snapshots or sportsbook prices. NOT a validated live possession model.',games:rows.length,brier:rows.length?mean(rows.map(r=>r.brier)):null,scoreMAE:rows.length?mean(rows.map(r=>r.scoreMAE)):null,calibration:bins,skipped,rows};
+ }
+ return {quote,nflGame,nbaGame,gamePoints,marketInput,simulate,backtestNBA};
 });
 
 
