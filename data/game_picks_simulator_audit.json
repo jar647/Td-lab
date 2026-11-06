@@ -1,12 +1,12 @@
 {
   "status": "CURRENT_BOOTSTRAP_AUDIT_NOT_CALIBRATED",
   "method": "Exact enumeration of centered, paired, rounded/clipped historical score residuals from CookGameOdds.nflGame; strict earlier-week filtering. Target rest/travel context only. Realized target weather excluded.",
-  "games": 252,
-  "contextMatchedGames": 147,
+  "games": 265,
+  "contextMatchedGames": 154,
   "results": {
     "home_win": {
-      "games": 251,
-      "brier": 0.23124153578244558,
+      "games": 264,
+      "brier": 0.23066299752490854,
       "bins": [
         {
           "low": 20,
@@ -22,21 +22,21 @@
         },
         {
           "low": 40,
-          "games": 76,
-          "predicted": 0.4611465452269674,
-          "observed": 0.35526315789473684
+          "games": 79,
+          "predicted": 0.4606913396866532,
+          "observed": 0.3670886075949367
         },
         {
           "low": 50,
-          "games": 91,
-          "predicted": 0.5474347034384647,
-          "observed": 0.5274725274725275
+          "games": 97,
+          "predicted": 0.5471035039119383,
+          "observed": 0.5360824742268041
         },
         {
           "low": 60,
-          "games": 42,
-          "predicted": 0.6453213065256895,
-          "observed": 0.6666666666666666
+          "games": 46,
+          "predicted": 0.6454602704841411,
+          "observed": 0.6739130434782609
         },
         {
           "low": 70,
@@ -47,8 +47,8 @@
       ]
     },
     "home_cover": {
-      "games": 250,
-      "brier": 0.2665224871618944,
+      "games": 263,
+      "brier": 0.2672133713701812,
       "bins": [
         {
           "low": 10,
@@ -58,21 +58,21 @@
         },
         {
           "low": 20,
-          "games": 22,
-          "predicted": 0.26888400350558433,
-          "observed": 0.5
+          "games": 23,
+          "predicted": 0.2676180069127913,
+          "observed": 0.4782608695652174
         },
         {
           "low": 30,
-          "games": 58,
-          "predicted": 0.3546666063580299,
-          "observed": 0.4827586206896552
+          "games": 62,
+          "predicted": 0.3539706553576143,
+          "observed": 0.5
         },
         {
           "low": 40,
-          "games": 64,
-          "predicted": 0.4477149208917754,
-          "observed": 0.421875
+          "games": 71,
+          "predicted": 0.44757743042557163,
+          "observed": 0.4507042253521127
         },
         {
           "low": 50,
@@ -82,9 +82,9 @@
         },
         {
           "low": 60,
-          "games": 45,
-          "predicted": 0.6437378531853197,
-          "observed": 0.4888888888888889
+          "games": 46,
+          "predicted": 0.6443018837229988,
+          "observed": 0.5
         },
         {
           "low": 70,
@@ -101,8 +101,8 @@
       ]
     },
     "over": {
-      "games": 252,
-      "brier": 0.26915477952095807,
+      "games": 265,
+      "brier": 0.27029052373209606,
       "bins": [
         {
           "low": 20,
@@ -112,27 +112,27 @@
         },
         {
           "low": 30,
-          "games": 31,
-          "predicted": 0.3620490577294549,
-          "observed": 0.5483870967741935
+          "games": 34,
+          "predicted": 0.35996156401338913,
+          "observed": 0.5294117647058824
         },
         {
           "low": 40,
-          "games": 84,
-          "predicted": 0.4503914301960675,
-          "observed": 0.5952380952380952
+          "games": 89,
+          "predicted": 0.44995268665441523,
+          "observed": 0.6067415730337079
         },
         {
           "low": 50,
-          "games": 73,
-          "predicted": 0.5470022450709862,
-          "observed": 0.5068493150684932
+          "games": 75,
+          "predicted": 0.5466878633926404,
+          "observed": 0.52
         },
         {
           "low": 60,
-          "games": 50,
-          "predicted": 0.650468653868825,
-          "observed": 0.42
+          "games": 53,
+          "predicted": 0.6493024590319942,
+          "observed": 0.39622641509433965
         },
         {
           "low": 70,
@@ -5681,6 +5681,292 @@
         "over": {
           "p": 0.4523809523809524,
           "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_08_BAL_BUF",
+      "residualGames": 459,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5626423690205011,
+          "y": 1,
+          "push": 0.04357298474945537
+        },
+        "home_cover": {
+          "p": 0.46860986547085204,
+          "y": 1,
+          "push": 0.028322440087146017
+        },
+        "over": {
+          "p": 0.3355119825708061,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_08_TEN_CIN",
+      "residualGames": 171,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.654320987654321,
+          "y": 1,
+          "push": 0.052631578947368474
+        },
+        "home_cover": {
+          "p": 0.23976608187134502,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4269005847953216,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_08_ARI_DAL",
+      "residualGames": 223,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.6046511627906976,
+          "y": 0,
+          "push": 0.0358744394618834
+        },
+        "home_cover": {
+          "p": 0.3761467889908257,
+          "y": 0,
+          "push": 0.022421524663677084
+        },
+        "over": {
+          "p": 0.30493273542600896,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_08_MIN_DET",
+      "residualGames": 208,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.47029702970297027,
+          "y": 1,
+          "push": 0.028846153846153855
+        },
+        "home_cover": {
+          "p": 0.36633663366336633,
+          "y": 1,
+          "push": 0.028846153846153855
+        },
+        "over": {
+          "p": 0.4423076923076923,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_08_IND_JAX",
+      "residualGames": 459,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.6711711711711712,
+          "y": 1,
+          "push": 0.0326797385620915
+        },
+        "home_cover": {
+          "p": 0.31096196868008946,
+          "y": 1,
+          "push": 0.02614379084967322
+        },
+        "over": {
+          "p": 0.4793028322440087,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_08_LV_NYJ",
+      "residualGames": 58,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5357142857142857,
+          "y": 0,
+          "push": 0.03448275862068961
+        },
+        "home_cover": {
+          "p": 0.4827586206896552,
+          "y": 0,
+          "push": 0
+        },
+        "over": {
+          "p": 0.4482758620689655,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_08_CLE_PIT",
+      "residualGames": 154,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5637583892617449,
+          "y": 1,
+          "push": 0.03246753246753242
+        },
+        "home_cover": {
+          "p": 0.44805194805194803,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6428571428571429,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_08_ATL_TB",
+      "residualGames": 193,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.5191256830601093,
+          "y": 1,
+          "push": 0.051813471502590636
+        },
+        "home_cover": {
+          "p": 0.43005181347150256,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.6062176165803109,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_08_LAC_LA",
+      "residualGames": 459,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.6575342465753424,
+          "y": 1,
+          "push": 0.04575163398692805
+        },
+        "home_cover": {
+          "p": 0.4357298474945534,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.3747276688453159,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_08_KC_DEN",
+      "residualGames": 212,
+      "contextUsed": true,
+      "markets": {
+        "home_win": {
+          "p": 0.46634615384615385,
+          "y": 1,
+          "push": 0.018867924528301883
+        },
+        "home_cover": {
+          "p": 0.41509433962264153,
+          "y": 1,
+          "push": 0
+        },
+        "over": {
+          "p": 0.5235849056603774,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_08_NE_MIA",
+      "residualGames": 459,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.4108352144469526,
+          "y": 0,
+          "push": 0.034858387799564294
+        },
+        "home_cover": {
+          "p": 0.669683257918552,
+          "y": 1,
+          "push": 0.03703703703703709
+        },
+        "over": {
+          "p": 0.5468409586056645,
+          "y": 1,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_08_PHI_WAS",
+      "residualGames": 459,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5324384787472036,
+          "y": 1,
+          "push": 0.02614379084967322
+        },
+        "home_cover": {
+          "p": 0.32207207207207206,
+          "y": 1,
+          "push": 0.0326797385620915
+        },
+        "over": {
+          "p": 0.6405228758169934,
+          "y": 0,
+          "push": 0
+        }
+      }
+    },
+    {
+      "game_id": "2026_08_CHI_SEA",
+      "residualGames": 459,
+      "contextUsed": false,
+      "markets": {
+        "home_win": {
+          "p": 0.5388026607538803,
+          "y": 0,
+          "push": 0.017429193899782147
+        },
+        "home_cover": {
+          "p": 0.4439461883408072,
+          "y": 0,
+          "push": 0.028322440087146017
+        },
+        "over": {
+          "p": 0.41612200435729846,
+          "y": 1,
           "push": 0
         }
       }

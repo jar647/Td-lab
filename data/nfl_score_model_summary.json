@@ -43,12 +43,12 @@
   },
   "evaluation": {
     "baseline": {
-      "games": 681,
-      "margin_mae": 10.29706,
-      "margin_bias": -0.25477,
-      "total_mae": 10.55668,
-      "total_bias": -0.58164,
-      "winner_accuracy": 0.62206,
+      "games": 682,
+      "margin_mae": 10.31129,
+      "margin_bias": -0.22507,
+      "total_mae": 10.54413,
+      "total_bias": -0.57786,
+      "winner_accuracy": 0.62261,
       "favorite_buckets": {
         "0-3": {
           "games": 159,
@@ -67,12 +67,12 @@
           "ats_direction_accuracy": 0.4441
         },
         "7-10": {
-          "games": 114,
-          "market_favorite_margin": 7.78509,
-          "model_favorite_margin": 3.60614,
-          "actual_favorite_margin": 8.30702,
-          "underdog_selection_rate": 0.99123,
-          "ats_direction_accuracy": 0.57143
+          "games": 115,
+          "market_favorite_margin": 7.7913,
+          "model_favorite_margin": 3.60087,
+          "actual_favorite_margin": 8.43478,
+          "underdog_selection_rate": 0.9913,
+          "ats_direction_accuracy": 0.56637
         },
         "10-100": {
           "games": 74,
@@ -85,12 +85,12 @@
       }
     },
     "candidate": {
-      "games": 681,
-      "margin_mae": 10.21101,
-      "margin_bias": -0.01894,
-      "total_mae": 10.45213,
-      "total_bias": -0.23157,
-      "winner_accuracy": 0.64265,
+      "games": 682,
+      "margin_mae": 10.22155,
+      "margin_bias": 0.0066,
+      "total_mae": 10.44355,
+      "total_bias": -0.22449,
+      "winner_accuracy": 0.64317,
       "favorite_buckets": {
         "0-3": {
           "games": 159,
@@ -109,12 +109,12 @@
           "ats_direction_accuracy": 0.44201
         },
         "7-10": {
-          "games": 114,
-          "market_favorite_margin": 7.78509,
-          "model_favorite_margin": 6.3886,
-          "actual_favorite_margin": 8.30702,
-          "underdog_selection_rate": 0.63964,
-          "ats_direction_accuracy": 0.47706
+          "games": 115,
+          "market_favorite_margin": 7.7913,
+          "model_favorite_margin": 6.38174,
+          "actual_favorite_margin": 8.43478,
+          "underdog_selection_rate": 0.64286,
+          "ats_direction_accuracy": 0.47273
         },
         "10-100": {
           "games": 74,
@@ -388,12 +388,12 @@
     },
     "2026": {
       "baseline": {
-        "games": 57,
-        "margin_mae": 10.30175,
-        "margin_bias": 1.06667,
-        "total_mae": 11.35088,
-        "total_bias": -0.89474,
-        "winner_accuracy": 0.46429,
+        "games": 58,
+        "margin_mae": 10.46897,
+        "margin_bias": 1.3931,
+        "total_mae": 11.18966,
+        "total_bias": -0.84483,
+        "winner_accuracy": 0.47368,
         "favorite_buckets": {
           "0-3": {
             "games": 14,
@@ -412,12 +412,12 @@
             "ats_direction_accuracy": 0.32258
           },
           "7-10": {
-            "games": 8,
-            "market_favorite_margin": 7.5625,
-            "model_favorite_margin": 4.2625,
-            "actual_favorite_margin": 4.0,
+            "games": 9,
+            "market_favorite_margin": 7.66667,
+            "model_favorite_margin": 4.12222,
+            "actual_favorite_margin": 6.11111,
             "underdog_selection_rate": 1.0,
-            "ats_direction_accuracy": 0.85714
+            "ats_direction_accuracy": 0.75
           },
           "10-100": {
             "games": 4,
@@ -430,12 +430,12 @@
         }
       },
       "candidate": {
-        "games": 57,
-        "margin_mae": 10.11228,
-        "margin_bias": 1.05263,
-        "total_mae": 10.77544,
-        "total_bias": 0.20351,
-        "winner_accuracy": 0.58929,
+        "games": 58,
+        "margin_mae": 10.23793,
+        "margin_bias": 1.33448,
+        "total_mae": 10.66897,
+        "total_bias": 0.27931,
+        "winner_accuracy": 0.59649,
         "favorite_buckets": {
           "0-3": {
             "games": 14,
@@ -454,12 +454,12 @@
             "ats_direction_accuracy": 0.3871
           },
           "7-10": {
-            "games": 8,
-            "market_favorite_margin": 7.5625,
-            "model_favorite_margin": 6.925,
-            "actual_favorite_margin": 4.0,
-            "underdog_selection_rate": 0.625,
-            "ats_direction_accuracy": 0.42857
+            "games": 9,
+            "market_favorite_margin": 7.66667,
+            "model_favorite_margin": 6.77778,
+            "actual_favorite_margin": 6.11111,
+            "underdog_selection_rate": 0.66667,
+            "ats_direction_accuracy": 0.375
           },
           "10-100": {
             "games": 4,
@@ -475,19 +475,19 @@
   },
   "paired_improvement_95pct_week_cluster_interval": {
     "margin": [
-      -0.12654,
-      0.2974
+      -0.12192,
+      0.29608
     ],
     "total": [
-      -0.08645,
-      0.29129
+      -0.0813,
+      0.28823
     ]
   },
   "probability_audit": {
     "baseline": {
       "home_win": {
-        "games": 680,
-        "brier": 0.22667,
+        "games": 681,
+        "brier": 0.22654,
         "bins": [
           {
             "range": "20-30",
@@ -497,9 +497,9 @@
           },
           {
             "range": "30-40",
-            "games": 57,
-            "predicted": 0.3649,
-            "observed": 0.3509
+            "games": 58,
+            "predicted": 0.3651,
+            "observed": 0.3448
           },
           {
             "range": "40-50",
@@ -534,8 +534,8 @@
         ]
       },
       "home_cover": {
-        "games": 667,
-        "brier": 0.27092,
+        "games": 668,
+        "brier": 0.27116,
         "bins": [
           {
             "range": "10-20",
@@ -569,9 +569,9 @@
           },
           {
             "range": "60-70",
-            "games": 124,
-            "predicted": 0.6383,
-            "observed": 0.5
+            "games": 125,
+            "predicted": 0.6385,
+            "observed": 0.496
           },
           {
             "range": "70-80",
@@ -588,8 +588,8 @@
         ]
       },
       "over": {
-        "games": 676,
-        "brier": 0.26257,
+        "games": 677,
+        "brier": 0.2624,
         "bins": [
           {
             "range": "20-30",
@@ -617,9 +617,9 @@
           },
           {
             "range": "60-70",
-            "games": 81,
-            "predicted": 0.6403,
-            "observed": 0.4815
+            "games": 82,
+            "predicted": 0.64,
+            "observed": 0.4878
           },
           {
             "range": "70-80",
@@ -632,8 +632,8 @@
     },
     "candidate": {
       "home_win": {
-        "games": 680,
-        "brier": 0.22285,
+        "games": 681,
+        "brier": 0.22266,
         "bins": [
           {
             "range": "10-20",
@@ -649,9 +649,9 @@
           },
           {
             "range": "30-40",
-            "games": 77,
-            "predicted": 0.3561,
-            "observed": 0.2987
+            "games": 78,
+            "predicted": 0.3555,
+            "observed": 0.2949
           },
           {
             "range": "40-50",
@@ -686,8 +686,8 @@
         ]
       },
       "home_cover": {
-        "games": 667,
-        "brier": 0.26895,
+        "games": 668,
+        "brier": 0.26906,
         "bins": [
           {
             "range": "10-20",
@@ -715,9 +715,9 @@
           },
           {
             "range": "50-60",
-            "games": 214,
-            "predicted": 0.5449,
-            "observed": 0.472
+            "games": 215,
+            "predicted": 0.5451,
+            "observed": 0.4698
           },
           {
             "range": "60-70",
@@ -740,8 +740,8 @@
         ]
       },
       "over": {
-        "games": 676,
-        "brier": 0.25695,
+        "games": 677,
+        "brier": 0.25671,
         "bins": [
           {
             "range": "30-40",
@@ -763,9 +763,9 @@
           },
           {
             "range": "60-70",
-            "games": 66,
-            "predicted": 0.6393,
-            "observed": 0.4545
+            "games": 67,
+            "predicted": 0.64,
+            "observed": 0.4627
           },
           {
             "range": "70-80",
