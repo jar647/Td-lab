@@ -41,6 +41,7 @@ on:
       - 'test_player_probability.js'
       - 'test_market_odds.js'
       - '.github/workflows/nba-feed.yml'
+      - 'scripts/archive_nba_evidence.py'
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -106,6 +107,7 @@ jobs:
           python nba_pipeline.py
           node scripts/publish_nba_simulator.js
           python nba_daily_learning.py
+          python scripts/archive_nba_evidence.py
           python -m unittest -v test_nba_pipeline.py test_nba_odds.py test_nba_contracts.py test_nba_daily_learning.py test_nba_first_basket.py
           node test_market_odds.js
           node test_player_probability.js
@@ -116,6 +118,7 @@ jobs:
           node test_nba_simulator.js
           node test_nba_first_basket.js
           git add data/nba_simulator_report.json data/nba_simulator_locks.json
+          git add data/nba_evidence_archive.json
           git add data/nba_games.json data/nba_projection_tracker.json data/nba_daily_learning.json data/nba_analysis.json data/nba_pipeline_locks.json data/nba_market_status.json
           if test -f data/nba_market_odds.json; then git add data/nba_market_odds.json; fi
           if test -f data/nba_season_stats.json; then git add data/nba_season_stats.json; fi
