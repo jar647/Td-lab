@@ -1,14 +1,14 @@
 {
   "status": "PROSPECTIVE_RESEARCH_NOT_CALIBRATED",
-  "updated_at": "2026-11-06T03:56:42.808Z",
+  "updated_at": "2026-11-06T05:00:19.137Z",
   "method": "First audited baseline forecast per game/model frozen before verified scheduled kickoff. Existing predictions are never replaced. Results graded next calendar day from schedule finals; no historical backfill.",
   "summary": {
     "frozen": 28,
-    "graded": 13,
-    "non_tie_winner_games": 13,
-    "margin_mae": 12.092307692307692,
-    "total_mae": 13,
-    "brier": 0.2105256811347892,
+    "graded": 14,
+    "non_tie_winner_games": 14,
+    "margin_mae": 12.657142857142857,
+    "total_mae": 12.214285714285714,
+    "brier": 0.20440185154529789,
     "calibration": [
       {
         "range": [
@@ -24,8 +24,8 @@
           0.2,
           0.4
         ],
-        "games": 1,
-        "mean_forecast": 0.3858027932374252,
+        "games": 2,
+        "mean_forecast": 0.3695309998014118,
         "actual_home_win_rate": 0
       },
       {
@@ -66,10 +66,10 @@
       },
       "6d9d4e285d034db9eb431e90002e957729227244df654b2b8f6932d849faaaaa": {
         "frozen": 15,
-        "graded": 0,
-        "margin_mae": null,
-        "total_mae": null,
-        "brier": null
+        "graded": 1,
+        "margin_mae": 20,
+        "total_mae": 2,
+        "brier": 0.1247920668819111
       }
     },
     "scope": "Aggregate research scorecard; compare per-signature groups when model code changes."
@@ -653,7 +653,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-06T05:00:19.137Z",
+        "home": 10,
+        "away": 33,
+        "margin_error": 20,
+        "total_error": 2,
+        "brier": 0.1247920668819111,
+        "home_won": false
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_09_CIN_ATL",

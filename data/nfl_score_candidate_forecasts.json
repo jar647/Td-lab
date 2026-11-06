@@ -31,6 +31,10 @@
         },
         "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
         "generated_at": "2026-11-05T16:51:11.625002+00:00"
+      },
+      "actual": {
+        "home": 10.0,
+        "away": 33.0
       }
     },
     "2026_09_CIN_ATL|opponent-score-ridge-v1": {
@@ -498,15 +502,15 @@
   },
   "summary": {
     "frozen": 15,
-    "graded": 0,
+    "graded": 1,
     "models": {
       "baseline": {
-        "margin_mae": null,
-        "total_mae": null
+        "margin_mae": 20.0,
+        "total_mae": 2.0
       },
       "candidate": {
-        "margin_mae": null,
-        "total_mae": null
+        "margin_mae": 17.4,
+        "total_mae": 4.6
       }
     }
   },
