@@ -31,9 +31,13 @@ earliest={}
 for at,f in sorted(candidates,key=lambda x:x[0]):
  earliest.setdefault(str(f.get('game_id')),(at,f))
 rows=[]
+pending_games=0
+unusable_final_boxes=0
 for gid,(at,f) in earliest.items():
  g=games.get(gid)
- if not g:continue
+ if not g:
+  pending_games+=1
+  continue
  def score(team):
   vals=[]
   for p in g.get('players',[]):
@@ -42,7 +46,9 @@ for gid,(at,f) in earliest.items():
    except (ValueError,TypeError):pass
   return sum(vals) if len(vals)>=5 else None
  h,a=score(g.get('home')),score(g.get('away'))
- if h is None or a is None:continue
+ if h is None or a is None:
+  unusable_final_boxes+=1
+  continue
  ph,pa=f['home'],f['away']
  actual=1 if h>a else 0 if h<a else None
  rows.append({'game_id':gid,'tipoff':f['tipoff'],'captured_at':at.isoformat(),
@@ -54,7 +60,7 @@ for gid,(at,f) in earliest.items():
   'model':f.get('model')})
 def avg(key):return mean(r[key] for r in rows if r[key] is not None) if any(r[key] is not None for r in rows) else None
 report={'method':'Earliest archived pre-tip simulator forecast per game; only final ESPN box scores; no backfilled forecasts',
- 'captured_forecasts':len(earliest),'archive_snapshots':len(archive),'candidate_locks':len(candidates),'graded_games':len(rows),'score_mae':avg('score_mae'),
+ 'captured_forecasts':len(earliest),'awaiting_final_games':pending_games,'unusable_final_boxes':unusable_final_boxes,'archive_snapshots':len(archive),'candidate_locks':len(candidates),'graded_games':len(rows),'score_mae':avg('score_mae'),
  'margin_mae':avg('margin_error'),'total_mae':avg('total_error'),'brier':avg('brier'),
  'winner_accuracy':avg('correct_winner'),'validated_for_betting':False,'rows':rows}
 (ROOT/'nba_prospective_accuracy.json').write_text(json.dumps(report,indent=2)+'\n')
