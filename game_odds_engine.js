@@ -257,13 +257,13 @@
  // Walk-forward evaluation: each historical prediction sees ONLY earlier games.
  // Baseline-only mode intentionally excludes unavailable historical injury snapshots.
  function backtestNBA(feed,{minHistory=40,maxGames=120,draws=1000}={}){
-  const completed=(feed?.games||[]).map(gamePoints).filter(Boolean).sort((a,b)=>a.time-b.time);
+  const completed=(feed?.games||[]).map(g=>({raw:g,score:gamePoints(g)})).filter(x=>x.score).sort((a,b)=>a.score.time-b.score.time);
   const rows=[],skipped={insufficientHistory:0,other:0};
   for(let i=minHistory;i<completed.length;i++){
-   const actual=completed[i],earlier=completed.slice(0,i);
+   const actual=completed[i].score,earlier=completed.slice(0,i).map(x=>x.raw);
    if(rows.length>=maxGames)break;
    try{
-    const model=nbaGame({id:'walkforward-'+i,home:actual.home,away:actual.away,date:actual.date},{games:earlier.map(g=>({home:g.home,away:g.away,date:g.date,home_score:g.homePoints,away_score:g.awayPoints,status:'STATUS_FINAL'}))});
+    const model=nbaGame({id:'walkforward-'+i,home:actual.home,away:actual.away,date:actual.date},{games:earlier});
     const result=simulate(model,{},draws,6472026+i);
     const outcome=actual.homePoints>actual.awayPoints?1:0,p=result.simulated.homeWin;
     rows.push({date:actual.date,home:actual.home,away:actual.away,probability:p,outcome,projectedHome:result.simulated.home,projectedAway:result.simulated.away,actualHome:actual.homePoints,actualAway:actual.awayPoints,brier:(p-outcome)**2,scoreMAE:(Math.abs(result.simulated.home-actual.homePoints)+Math.abs(result.simulated.away-actual.awayPoints))/2});
