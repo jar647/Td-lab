@@ -1,24 +1,23 @@
 {
   "season": 2026,
   "week": 9,
-  "generated_at": "2026-11-05T23:48:29.530336+00:00",
-  "matchups": 424,
+  "generated_at": "2026-11-06T01:10:39.828588+00:00",
+  "matchups": 394,
   "source": "nflverse play-by-play and rosters",
   "odds_source": null,
   "probability_model": null,
   "lookback_games": 5,
   "availability_diagnostics": {
     "injuries": {
-      "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-      "rows_for_week": 266,
-      "matched_rows": 266,
-      "matched_ids": 7,
-      "practice_flags": 201,
-      "game_designations_reported": 7,
+      "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
+      "rows_for_week": 238,
+      "matched_rows": 238,
+      "matched_ids": 0,
+      "practice_flags": 186,
+      "game_designations_reported": 0,
       "teams_with_injury_rows": [
         "ARI",
         "ATL",
-        "BAL",
         "CAR",
         "CIN",
         "CLE",
@@ -28,7 +27,6 @@
         "GB",
         "HOU",
         "IND",
-        "JAX",
         "KC",
         "LA",
         "LAC",
@@ -51,9 +49,7 @@
       ],
       "stale_team_or_unmatched_id_rows": 0,
       "current_week_report_status_counts": {
-        "MISSING": 259,
-        "QUESTIONABLE": 4,
-        "OUT": 3
+        "MISSING": 238
       },
       "source_last_updated_utc": null,
       "official_game_day_active_confirmed": false,
@@ -78,9 +74,7 @@
         "practice_status"
       ],
       "report_status_counts": {
-        "MISSING": 259,
-        "QUESTIONABLE": 4,
-        "OUT": 3
+        "MISSING": 238
       }
     },
     "weekly_rosters": {
@@ -97,9 +91,9 @@
       }
     },
     "excluded": {
-      "out_report": 2,
+      "out_report": 0,
       "unavailable_roster": 0,
-      "nonactive_weekly_roster": 84
+      "nonactive_weekly_roster": 81
     },
     "unverified_output": 1
   },
