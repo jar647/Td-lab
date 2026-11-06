@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Grade immutable pre-tip NBA simulator forecasts against completed ESPN boxes."""
 import json
+import gzip
 from pathlib import Path
 from datetime import datetime
 from statistics import mean
@@ -13,7 +14,7 @@ def when(value):
  try:return datetime.fromisoformat(str(value).replace('Z','+00:00'))
  except (ValueError,TypeError):return None
 games={str(g.get('id')):g for g in load('nba_games.json').get('games',[]) if g.get('status')=='STATUS_FINAL'}
-archive=load('nba_evidence_archive.json').get('snapshots',[])
+archive=json.loads(gzip.decompress((ROOT/'nba_evidence_archive.json.gz').read_bytes()).decode()).get('snapshots',[])
 candidates=[]
 for capture in archive:
  captured=when(capture.get('captured_at'))
