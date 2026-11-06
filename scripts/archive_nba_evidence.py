@@ -15,7 +15,14 @@ archive=load(OUT) or {'schema_version':1,'snapshots':[]}
 sources={}
 for name in ('nba_injuries','nba_market_odds','nba_simulator_locks'):
     value=load(ROOT/'data'/f'{name}.json')
-    if value is not None: sources[name]=value
+    if value is not None:
+        if name == 'nba_games':
+            # Full historical box scores already live in nba_games.json; avoid
+            # duplicating the entire growing feed every thirty minutes.
+            games=value.get('games',[]) if isinstance(value,dict) else []
+            sources[name]={'game_count':len(games),'latest_game_date':max((str(g.get('date','')) for g in games),default='')}
+        else:
+            sources[name]=value
 if not sources: raise SystemExit('No NBA evidence feeds found')
 # Preserve the source as published, including its own generated timestamp.
 # Historical game results remain in nba_games.json; don't duplicate them in every snapshot.
@@ -25,7 +32,7 @@ if snapshots and snapshots[-1]['sources']==sources:
     print('No source changes; no duplicate snapshot')
 else:
     snapshots.append(snapshot)
-    # Bound repository size while retaining a rolling chronological audit.
+    # Keep up to 240 distinct snapshots, including their original capture times.
     archive['snapshots']=snapshots[-240:]
     OUT.write_text(json.dumps(archive,separators=(',',':'))+'\n')
     print(f"Archived feed snapshot at {NOW}; retained {len(archive['snapshots'])}")
