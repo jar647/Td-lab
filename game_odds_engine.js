@@ -227,6 +227,21 @@
    return {key,label,win,loss,push,price:price?.american??null,implied:price?.implied??null,
     breakEven:breakeven,noVig:noVig[key]??null,modelEdge,ev,fair,signal,eligible};
   });
+  // Every market must reconcile with the exact same score outcomes. Fail closed.
+  const reconciles=(a,b)=>!counts[a].win&&!counts[a].loss&&!counts[a].push||
+    counts[a].win===counts[b].loss&&counts[a].loss===counts[b].win&&counts[a].push===counts[b].push;
+  const audit={
+   draws:count,
+   winLossConservation:homeWin+awayWin+ties===count,
+   moneylineSymmetry:reconciles('homeML','awayML'),
+   spreadSymmetry:market.homeSpread===null||reconciles('homeATS','awayATS'),
+   totalSymmetry:market.total===null||reconciles('over','under'),
+   finiteScores:Number.isFinite(homePoints)&&Number.isFinite(awayPoints),
+   calibrationVerified:game.possessionModel?game.possessionModel.calibrationVerified===true:game.trust?.calibration_status==='VERIFIED',
+   historicalValidationRequired:true
+  };
+  audit.passed=audit.winLossConservation&&audit.moneylineSymmetry&&audit.spreadSymmetry&&audit.totalSymmetry&&audit.finiteScores;
+  if(!audit.passed)throw Error('Simulation integrity check failed; predictions withheld');
   const candidates=markets.filter(m=>m.eligible).sort((a,b)=>b.ev-a.ev);
   return {possession:possession?{context:game.possessionModel.context,model:possession.model,players:possession.players,overtimeRate:possession.overtimeRate,overtimePeriods:possession.overtimePeriods,blowoutRate:possession.blowoutRate,legs:possession.legs,jointHitRate:possession.jointHitRate,pairHitRates:possession.pairHitRates,pace:game.possessionModel.pace,uncertain:game.possessionModel.uncertain,rotation:game.possessionModel.teams,baseline:game.baseline}:null,sport:game.sport,home:game.home,away:game.away,runCount:count,seed,modelStatus:'RESEARCH ONLY · NOT CALIBRATED',
    projection:{home:possession?round(homePoints/count):game.projectedHome,away:possession?round(awayPoints/count):game.projectedAway,margin:round(possession?(homePoints-awayPoints)/count:game.projectedHome-game.projectedAway),total:round(possession?(homePoints+awayPoints)/count:game.projectedHome+game.projectedAway)},
@@ -236,7 +251,7 @@
     homePoints:{p10:quantile(homeScores,.1),p90:quantile(homeScores,.9)},
     awayPoints:{p10:quantile(awayScores,.1),p90:quantile(awayScores,.9)}},
    market:{homeSpread:market.homeSpread,total:market.total},
-   markets,candidates:candidates.map(x=>x.key),sample:game.sample,method:game.method,warning:game.warning,
+   markets,audit,candidates:candidates.map(x=>x.key),sample:game.sample,method:game.method,warning:game.warning,
    verification:'No bet is verified: model calibration, real execution prices, injuries and lineups are not independently confirmed. 100,000 draws reduce simulation noise, not underlying model error.'};
  }
  return {quote,nflGame,nbaGame,gamePoints,marketInput,simulate};
