@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - 'nba_possession_engine.js'
+      - 'scripts/test_nba_injury_sensitivity.cjs'
+      - 'data/nba_games.json'
       - '.github/workflows/nba-injury-sensitivity.yml'
 permissions:
   contents: read
@@ -18,3 +20,4 @@ jobs:
           node-version: '22'
       - run: node --check nba_possession_engine.js
       - run: node -e "const e=require('./nba_possession_engine.js'); if(typeof e.injurySensitivity!=='function'||typeof e.draws!=='function')process.exit(1)"
+      - run: node scripts/test_nba_injury_sensitivity.cjs
