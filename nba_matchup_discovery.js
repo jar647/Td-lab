@@ -13,7 +13,8 @@ function analyze(game,feed,rosters,injuries,now=Date.now()){
  const cutoff=Math.min(Date.parse(game.date),now),year=new Date(game.date).getUTCFullYear()-(new Date(game.date).getUTCMonth()<9),seasonStart=Date.UTC(year,9,1);
  const recent=boxes.records(feed,cutoff).filter(g=>Date.parse(g.date)>=seasonStart),members=rosters?.teams||{},metadata=rosters?.players||{};
  const pos=p=>position(p.position)||position(metadata[String(p.id)]?.position);
- const profiles=new Map(),defense=new Map(),coverage={games:0,omittedTeamGames:0};
+ const profiles=new Map(),defense=new Map(),teamHistory=new Map(),coverage={games:0,omittedTeamGames:0};
+ for(const prior of recent){for(const team of [prior.home,prior.away]){if(!teamHistory.has(team))teamHistory.set(team,[]);teamHistory.get(team).push(prior);}}
  for(const g of recent){
   for(const team of [g.home,g.away]){
    const opponents=(g.players||[]).filter(p=>p.team!==team&&!p.didNotPlay),observed=opponents.map(p=>({p,stats:recorded(p),position:pos(p)})).filter(x=>x.stats),totalMinutes=observed.reduce((s,x)=>s+x.stats.minutes,0),known=observed.filter(x=>x.position).reduce((s,x)=>s+x.stats.minutes,0);
@@ -21,7 +22,7 @@ function analyze(game,feed,rosters,injuries,now=Date.now()){
    if(totalMinutes>0&&known/totalMinutes>=.98&&bucket.length<10){const byPosition=Object.fromEntries(positions.map(p=>[p,{points:0,rebounds:0,assists:0}]));for(const x of observed)if(x.position)for(const k of markets)byPosition[x.position][k]+=x.stats[k];bucket.push({game:g.id,values:byPosition});defense.set(team,bucket);coverage.games++;}else if(bucket.length<10)coverage.omittedTeamGames++;
   }
   for(const p of g.players||[]){const stats=recorded(p),position=pos(p);if(!stats||!position||!Array.isArray(members[p.team])||!members[p.team].map(String).includes(String(p.id)))continue;
-   const id=String(p.id);if(!profiles.has(id))profiles.set(id,{id,name:p.name,team:p.team,position,rows:[]});const row=profiles.get(id);if(row.team!==p.team||row.rows.length>=10)continue;row.rows.push(stats);
+   const id=String(p.id);if(!profiles.has(id))profiles.set(id,{id,name:p.name,team:p.team,position,rows:[]});const row=profiles.get(id);if(row.team!==p.team||row.rows.length>=10)continue;row.rows.push({...stats,date:g.date,home:p.team===g.home});
   }
  }
  const peerProfiles=[...profiles.values()].filter(p=>p.rows.length>=5&&avg(p.rows.slice(0,5).map(r=>r.minutes))>=20);
@@ -40,11 +41,17 @@ function analyze(game,feed,rosters,injuries,now=Date.now()){
     const history=player.rows.map(r=>r[market]),playerAverage=avg(history.slice(0,5)),recentMinutes=avg(player.rows.slice(0,5).map(r=>r.minutes));if(!(playerAverage>peerAverage)||player.rows[0].minutes<15)continue;
     const injury=(injuries?.injuries||[]).find(p=>String(p.player_id||p.id||'')===player.id||norm(p.player||p.name)===norm(player.name)),status=String(injury?.status||'NOT LISTED').toUpperCase();if(!['NOT LISTED','ACTIVE','AVAILABLE','PROBABLE'].includes(status))continue;
     const threshold=baseline(history,market);if(threshold===null)continue;
-    candidates.push({key:[game.id,player.id,market].join('|'),game,playerId:player.id,name:player.name,team:attacking,opponent,position,market,history,playerAverage,peerAverage,peerPlayers:peers.length,recentMinutes,status,baseline:threshold,last5:rate(history,threshold,5),last10:rate(history,threshold,10),thresholds:thresholds(history,market),weakness,priority:weakness.excess*(playerAverage/peerAverage),eligible:pregame&&inputsFresh});
+    const ownHistory=teamHistory.get(attacking)||[],opponentHistory=teamHistory.get(opponent)||[],lastTeam=ownHistory[0],restDays=lastTeam?Math.max(0,Math.round((Date.parse(game.date)-Date.parse(lastTeam.date))/86400000)-1):null,backToBack=restDays===0;
+    const venueRows=player.rows.filter(r=>r.home===(attacking===game.home)),venueAverage=venueRows.length>=3?avg(venueRows.map(r=>r[market])):null;
+    const projectedMinutes=Math.round(Math.min(40,Math.max(0,recentMinutes+(backToBack&&recentMinutes>32?-1:0)))*10)/10;
+    const paceSample=rows=>rows.slice(0,5).map(g=>{const a=(g.players||[]).filter(p=>p.team===g.home),b=(g.players||[]).filter(p=>p.team===g.away);const possession=x=>{const sum=k=>x.reduce((v,p)=>v+(Number(p.stats?.[k])||0),0);return sum('FGA')+.44*sum('FTA')-sum('OREB')+sum('TO')};return (possession(a)+possession(b))/2}).filter(v=>v>70&&v<140);
+    const paceValues=[...paceSample(ownHistory),...paceSample(opponentHistory)],paceEstimate=paceValues.length>=6?Math.round(avg(paceValues)*10)/10:null;
+    const researchScore=Math.max(0,Math.min(100,Math.round(35+Math.min(20,weakness.excess*65)+Math.min(20,(playerAverage/peerAverage-1)*40)+15*rate(history,threshold,10).rate+(venueAverage===null?0:Math.max(-5,Math.min(5,(venueAverage/playerAverage-1)*12)))-(backToBack?3:0))));
+    candidates.push({key:[game.id,player.id,market].join('|'),game,playerId:player.id,name:player.name,team:attacking,opponent,position,market,history,playerAverage,peerAverage,peerPlayers:peers.length,recentMinutes,projectedMinutes,restDays,backToBack,venueAverage,venueGames:venueRows.length,paceEstimate,researchScore,status,baseline:threshold,last5:rate(history,threshold,5),last10:rate(history,threshold,10),thresholds:thresholds(history,market),weakness,priority:weakness.excess*(playerAverage/peerAverage),eligible:pregame&&inputsFresh});
    }
   }
  }
- candidates.sort((a,b)=>b.priority-a.priority||b.last5.rate-a.last5.rate||a.key.localeCompare(b.key));const seen=new Set(),topThree=candidates.filter(p=>p.eligible&&!seen.has(p.playerId)&&seen.add(p.playerId)).slice(0,3);
+ candidates.sort((a,b)=>b.researchScore-a.researchScore||b.priority-a.priority||b.last5.rate-a.last5.rate||a.key.localeCompare(b.key));const seen=new Set(),topThree=candidates.filter(p=>p.eligible&&!seen.has(p.playerId)&&seen.add(p.playerId)).slice(0,3);
  return {game,weaknesses:weaknesses.sort((a,b)=>b.excess-a.excess),candidates:candidates.filter(p=>p.eligible),topThree,bestSingle:topThree[0]||null,coverage,ready:inputsFresh,reason:!pregame?'Historical view: recommendations close at tipoff.':!inputsFresh?'Fresh game, injury and roster data are required for player recommendations.':!weaknesses.length?'Position-level samples are incomplete or no above-average allowances qualify yet.':!topThree.length?'No eligible above-average player has a supported baseline in the matched positions.':null,method:'ESPN listed primary positions; detailed labels use ESPN Fantasy default positions when roster labels are broad. Position totals combine all opposing players at that position; broad G/F labels are not split into invented PG/SG/SF/PF assignments. Hit rates describe earlier appearances, not future win probabilities.'};
 }
 return {analyze,position,recorded,rate,baseline,thresholds,positions,markets,labels};
