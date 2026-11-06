@@ -2,14 +2,16 @@
 """Compact timestamped NBA evidence. Preserve first-seen pre-tip predictions
 without repeatedly copying the entire growing simulator lock history."""
 import json
+import gzip
 from pathlib import Path
 from datetime import datetime, timezone
 
 ROOT=Path(__file__).resolve().parents[1]
-OUT=ROOT/'data/nba_evidence_archive.json'
+OUT=ROOT/'data/nba_evidence_archive.json.gz'
+LEGACY=ROOT/'data/nba_evidence_archive.json'
 NOW=datetime.now(timezone.utc).isoformat()
 def load(p):
-    try: return json.loads(p.read_text())
+    try: return json.loads(gzip.decompress(p.read_bytes()).decode()) if p.suffix=='.gz' else json.loads(p.read_text())
     except (OSError, ValueError): return None
 
 def compact_lock(f):
@@ -34,7 +36,7 @@ def compact_sources(sources,seen):
             result[name]=value
     return result
 
-archive=load(OUT) or {'schema_version':1,'snapshots':[]}
+archive=load(OUT) or load(LEGACY) or {'schema_version':1,'snapshots':[]}
 old=archive.get('snapshots',[])
 seen=set()
 snapshots=[]
@@ -55,7 +57,8 @@ else:
 archive={'schema_version':2,'snapshots':snapshots[-240:]}
 payload=json.dumps(archive,separators=(',',':'))+'\n'
 # Fail before writing/committing if archive would approach GitHub's 100 MB cap.
-if len(payload.encode())>=40_000_000:
-    raise SystemExit('Evidence archive exceeds 40 MB safety limit; split archive before publishing')
-OUT.write_text(payload)
-print(f"Compact NBA evidence: {len(archive['snapshots'])} captures, {len(payload.encode())} bytes")
+compressed=gzip.compress(payload.encode(),compresslevel=9,mtime=0)
+if len(compressed)>=40_000_000:
+    raise SystemExit('Compressed evidence archive exceeds 40 MB safety limit; split archive before publishing')
+OUT.write_bytes(compressed)
+print(f"Compressed NBA evidence: {len(archive['snapshots'])} captures, {len(compressed)} bytes")
