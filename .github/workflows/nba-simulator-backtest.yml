@@ -1,0 +1,30 @@
+name: NBA simulator walk-forward validation
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'game_odds_engine.js'
+      - 'scripts/run_nba_simulator_backtest.cjs'
+      - 'data/nba_games.json'
+      - '.github/workflows/nba-simulator-backtest.yml'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run NBA simulator walk-forward test
+        run: node scripts/run_nba_simulator_backtest.cjs
+      - name: Upload accuracy report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nba-simulator-walkforward
+          path: data/nba_simulator_backtest.json
+          if-no-files-found: warn
