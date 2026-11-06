@@ -1,8 +1,8 @@
 {
   "season": 2026,
   "week": 9,
-  "generated_at": "2026-11-06T04:59:59.253504+00:00",
-  "matchups": 394,
+  "generated_at": "2026-11-06T12:07:48.631939+00:00",
+  "matchups": 395,
   "source": "nflverse play-by-play and rosters",
   "odds_source": null,
   "probability_model": null,
@@ -10,15 +10,17 @@
   "availability_diagnostics": {
     "injuries": {
       "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
-      "rows_for_week": 238,
-      "matched_rows": 238,
+      "rows_for_week": 312,
+      "matched_rows": 312,
       "matched_ids": 0,
-      "practice_flags": 186,
+      "practice_flags": 207,
       "game_designations_reported": 0,
       "teams_with_injury_rows": [
         "ARI",
         "ATL",
+        "BUF",
         "CAR",
+        "CHI",
         "CIN",
         "CLE",
         "DAL",
@@ -32,29 +34,26 @@
         "LAC",
         "LV",
         "MIA",
+        "MIN",
         "NE",
         "NO",
         "NYG",
         "NYJ",
         "PHI",
+        "SEA",
         "SF",
         "TB",
         "WAS"
       ],
-      "teams_without_injury_rows": [
-        "BUF",
-        "CHI",
-        "MIN",
-        "SEA"
-      ],
+      "teams_without_injury_rows": [],
       "stale_team_or_unmatched_id_rows": 0,
       "current_week_report_status_counts": {
-        "MISSING": 238
+        "MISSING": 312
       },
       "source_last_updated_utc": null,
       "official_game_day_active_confirmed": false,
       "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-      "source_rows": 2725,
+      "source_rows": 2799,
       "columns": [
         "season",
         "season_type",
@@ -74,26 +73,27 @@
         "practice_status"
       ],
       "report_status_counts": {
-        "MISSING": 238
+        "MISSING": 312
       }
     },
     "weekly_rosters": {
-      "source_rows": 2396,
+      "source_rows": 2413,
       "latest_week": 9,
       "status_column": true,
       "status_counts": {
-        "ACT": 1574,
-        "DEV": 500,
-        "RES": 294,
+        "ACT": 1571,
+        "DEV": 505,
+        "RES": 296,
         "RET": 23,
-        "CUT": 3,
+        "INA": 10,
+        "CUT": 6,
         "EXE": 2
       }
     },
     "excluded": {
       "out_report": 0,
       "unavailable_roster": 0,
-      "nonactive_weekly_roster": 81
+      "nonactive_weekly_roster": 80
     },
     "unverified_output": 1
   },
