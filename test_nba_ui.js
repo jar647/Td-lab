@@ -17,6 +17,7 @@ assert.ok(match[1].includes("fetch('./data/nba_daily_learning.json'"),'Daily mod
 assert.ok(match[1].includes('projected five'),'Starting lineup rendering missing');
 assert.ok(match[1].includes('function injuryFor(p)'),'Injury helper required by projection rendering');
 assert.ok(match[1].includes('Player recommendations · matchup opportunities'),'Top props rendering missing');
+assert.match(match[1],/\$\('output'\)\.innerHTML=intro;renderNBAGameFirst\(g\)/,'Analyze must actually render the game-first player prop ticket after refreshing output');
 const elements=new Map();
 function element(id){if(!elements.has(id))elements.set(id,{value:'',textContent:'',innerHTML:'',onclick:null});return elements.get(id)}
 const sandbox={document:{getElementById:element},fetch:async()=>({ok:false}),console,Date,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl,CookNBAGameFirst:require('./nba_game_first'),CookNBAFirstBasket,CookItUpPricing,CookItUpProbability,CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'}};
