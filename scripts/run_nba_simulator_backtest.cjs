@@ -49,6 +49,29 @@ report.scoreBenchmark={
  rows:scoredHold
 };
 if(scoredHold.length<30)throw Error('Insufficient score benchmark holdout');
+// Paired bootstrap uncertainty for the holdout improvement. A green workflow
+// means the audit ran, not that an edge was established.
+function pairedBootstrap(rows,fieldA,fieldB,reps=3000){
+ const differences=rows.map(r=>r[fieldB]-r[fieldA]);
+ if(differences.length<30)return {samples:differences.length,ci95:null,statisticallySupported:false};
+ let seed=6472026;
+ const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296};
+ const means=[];
+ for(let j=0;j<reps;j++){let sum=0;for(let i=0;i<differences.length;i++)sum+=differences[Math.floor(random()*differences.length)];means.push(sum/differences.length);}
+ means.sort((a,b)=>a-b);
+ const ci95=[means[Math.floor(.025*reps)],means[Math.floor(.975*reps)]];
+ return {samples:differences.length,improvement:average(differences),ci95,statisticallySupported:ci95[0]>0};
+}
+report.scoreBenchmark.uncertainty=pairedBootstrap(scoredHold,'modelError','baselineError');
+report.accuracyGate={
+ scoreBenchmarkPassed:report.scoreBenchmark.beatsBaseline,
+ scoreImprovementSupported:report.scoreBenchmark.uncertainty.statisticallySupported,
+ probabilityBeatsCoinFlip:report.brier<report.benchmarkBrier,
+ liveInjuryAdjustedModelBacktested:false,
+ sportsbookClosingLineBenchmarkAvailable:false,
+ validatedForBetting:false,
+ reason:'Historical baseline evaluation does not validate the live injury-adjusted model or betting value; bootstrap uncertainty must also be considered.'
+};
 report.chronologicalCalibration={
  method:'Expanding-window, regularized linear probability calibration. Fit only to earlier completed predictions; 40-game minimum training. Evaluation is research-only.',
  trainingMinimum:minimumTraining,
@@ -64,4 +87,4 @@ if(calibrationRows.length<30)throw Error('Insufficient chronological calibration
 
 const out=path.join(__dirname,'../data/nba_simulator_backtest.json');
 fs.writeFileSync(out,JSON.stringify({...report,generatedAt:new Date().toISOString()},null,2)+'\n');
-console.log(JSON.stringify({games:report.games,brier:report.brier,benchmarkBrier:report.benchmarkBrier,beatsCoinFlip:report.beatsCoinFlip,scoreMAE:report.scoreMAE,scoreBenchmark:{...report.scoreBenchmark,rows:undefined},chronologicalCalibration:{...report.chronologicalCalibration,rows:undefined},skipped:report.skipped,calibration:report.calibration},null,2));
+console.log(JSON.stringify({games:report.games,brier:report.brier,benchmarkBrier:report.benchmarkBrier,beatsCoinFlip:report.beatsCoinFlip,scoreMAE:report.scoreMAE,scoreBenchmark:{...report.scoreBenchmark,rows:undefined},accuracyGate:report.accuracyGate,chronologicalCalibration:{...report.chronologicalCalibration,rows:undefined},skipped:report.skipped,calibration:report.calibration},null,2));
