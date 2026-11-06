@@ -114,6 +114,32 @@ function draws(model,count=10000,seed=6472026,options={}){
  }
  return {playerOutcomes,home,away,players:players.map(p=>({id:p.id,player:p.name,team:p.team,status:p.status,...Object.fromEntries(Object.entries(sums[p.id]).map(([k,v])=>[k,v/count]))})),overtimeRate:overtime/count,overtimePeriods:overtimePeriods/count,blowoutRate:blowouts/count,legs:legs.map((l,i)=>({...l,hitRate:legWins[i]/count})),jointHitRate:legs.length?allWin/count:null,pairHitRates:pairWins.map(r=>r.map(n=>n/count)),model:VERSION,runCount:count};
 }
-return {VERSION,box,allocate,records,build,draws};
+// Paired counterfactual sensitivity: identical seeds, only availability changes.
+// Diagnostic, not evidence that the estimated injury impact is historically accurate.
+function injurySensitivity(model,team,playerId,{count=1000,seed=6472026}={}){
+ if(!model?.teams?.[team])throw Error('Unknown team for injury sensitivity');
+ const id=String(playerId),baseTeam=model.teams[team],target=baseTeam.players.find(p=>String(p.id)===id);
+ if(!target)throw Error('Player is not in the projected active rotation');
+ const originalMinutes=baseTeam.minutes[id]||0;
+ if(originalMinutes<1)throw Error('Player has no projected minutes to remove');
+ const altered=JSON.parse(JSON.stringify(model)),t=altered.teams[team];
+ t.players=t.players.filter(p=>String(p.id)!==id);
+ if(t.players.length<6)throw Error('Insufficient replacement rotation players for counterfactual');
+ const weights=Object.fromEntries(t.players.map(p=>[p.id,Math.max(.01,t.minutes[p.id]||p.weight||1)]));
+ const minutes=allocate(weights,240,40);
+ if(!minutes)throw Error('Cannot allocate replacement minutes safely');
+ t.minutes=minutes;t.absent=[...(t.absent||[]),target.name];
+ const baseline=draws(model,count,seed),without=draws(altered,count,seed);
+ const avg=a=>mean(a);
+ const before=avg(team===model.game.home?baseline.home:baseline.away);
+ const after=avg(team===model.game.home?without.home:without.away);
+ const oppBefore=avg(team===model.game.home?baseline.away:baseline.home);
+ const oppAfter=avg(team===model.game.home?without.away:without.home);
+ const replacementMinutes=t.players.map(p=>({player:p.name,before:baseTeam.minutes[p.id]||0,after:t.minutes[p.id]||0,delta:(t.minutes[p.id]||0)-(baseTeam.minutes[p.id]||0)})).filter(p=>p.delta>0.1).sort((a,b)=>b.delta-a.delta);
+ const totalMinutes=Object.values(t.minutes).reduce((a,b)=>a+b,0);
+ if(Math.abs(totalMinutes-240)>1e-5)throw Error('Replacement rotation minute budget failed');
+ return {team,player:target.name,removedMinutes:originalMinutes,baselinePoints:before,withoutPoints:after,teamPointDelta:after-before,opponentPointDelta:oppAfter-oppBefore,replacementMinutes,draws:count,method:'Seed-paired simulated removal with reallocated rotation minutes; not a causal injury estimate or validated betting edge.',historicallyValidated:false};
+}
+return {VERSION,box,allocate,records,build,draws,injurySensitivity};
 });
 
