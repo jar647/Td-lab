@@ -266,11 +266,13 @@
     const model=nbaGame({id:'walkforward-'+i,home:actual.home,away:actual.away,date:actual.date},{games:earlier});
     const result=simulate(model,{},draws,6472026+i);
     const outcome=actual.homePoints>actual.awayPoints?1:0,p=result.simulated.homeWin;
-    rows.push({date:actual.date,home:actual.home,away:actual.away,probability:p,outcome,projectedHome:result.simulated.home,projectedAway:result.simulated.away,actualHome:actual.homePoints,actualAway:actual.awayPoints,brier:(p-outcome)**2,scoreMAE:(Math.abs(result.simulated.home-actual.homePoints)+Math.abs(result.simulated.away-actual.awayPoints))/2});
+    // Benchmark: fixed 50% coin flip. Avoid claiming model skill without beating it.
+    const benchmarkBrier=(.5-outcome)**2;
+    rows.push({date:actual.date,home:actual.home,away:actual.away,probability:p,outcome,projectedHome:result.simulated.home,projectedAway:result.simulated.away,actualHome:actual.homePoints,actualAway:actual.awayPoints,brier:(p-outcome)**2,benchmarkBrier,scoreMAE:(Math.abs(result.simulated.home-actual.homePoints)+Math.abs(result.simulated.away-actual.awayPoints))/2});
    }catch(e){if(/Insufficient/.test(String(e.message)))skipped.insufficientHistory++;else skipped.other++;}
   }
   const bins=[{low:0,high:.2},{low:.2,high:.4},{low:.4,high:.6},{low:.6,high:.8},{low:.8,high:1.000001}].map(b=>{const sample=rows.filter(r=>r.probability>=b.low&&r.probability<b.high);return {range:[b.low,b.high>1?1:b.high],games:sample.length,predicted:sample.length?round(mean(sample.map(r=>r.probability))*100)/100:null,observed:sample.length?round(mean(sample.map(r=>r.outcome))*100)/100:null};});
-  return {method:'Walk-forward NBA score baseline only; no historical injury snapshots or sportsbook prices. NOT a validated live possession model.',games:rows.length,brier:rows.length?mean(rows.map(r=>r.brier)):null,scoreMAE:rows.length?mean(rows.map(r=>r.scoreMAE)):null,calibration:bins,skipped,rows};
+  return {method:'Walk-forward NBA score baseline only; no historical injury snapshots or sportsbook prices. NOT a validated live possession model.',games:rows.length,brier:rows.length?mean(rows.map(r=>r.brier)):null,benchmarkBrier:rows.length?mean(rows.map(r=>r.benchmarkBrier)):null,beatsCoinFlip:rows.length>=50?mean(rows.map(r=>r.brier))<mean(rows.map(r=>r.benchmarkBrier)):null,scoreMAE:rows.length?mean(rows.map(r=>r.scoreMAE)):null,calibration:bins,skipped,rows};
  }
  return {quote,nflGame,nbaGame,gamePoints,marketInput,simulate,backtestNBA};
 });
