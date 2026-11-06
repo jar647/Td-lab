@@ -29,11 +29,11 @@ for(let i=minimumTraining;i<report.rows.length;i++){
 const average=(xs)=>xs.length?xs.reduce((a,b)=>a+b,0)/xs.length:null;
 // Chronological score-accuracy benchmark against a fixed league-average
 // forecast. Unlike a 50/50 winner benchmark, this tests the point forecasts.
-const scored=report.rows.filter(r=>Number.isFinite(r.homeActual)&&Number.isFinite(r.awayActual)&&Number.isFinite(r.homeProjected)&&Number.isFinite(r.awayProjected));
+const scored=report.rows.filter(r=>Number.isFinite(r.actualHome)&&Number.isFinite(r.actualAway)&&Number.isFinite(r.projectedHome)&&Number.isFinite(r.projectedAway));
 if(scored.length){
  const first=40,hold=scored.slice(first);
  const mae=(rows,fn)=>rows.length?rows.reduce((sum,r)=>sum+fn(r),0)/(2*rows.length):null;
- report.scoreBenchmark={holdoutGames:hold.length,modelMAE:mae(hold,r=>Math.abs(r.homeActual-r.homeProjected)+Math.abs(r.awayActual-r.awayProjected)),leagueMeanMAE:mae(hold,r=>Math.abs(r.homeActual-112)+Math.abs(r.awayActual-112)),benchmark:'Fixed 112 points per team; diagnostic only',validatedForBetting:false};
+ report.scoreBenchmark={holdoutGames:hold.length,modelMAE:mae(hold,r=>Math.abs(r.actualHome-r.projectedHome)+Math.abs(r.actualAway-r.projectedAway)),leagueMeanMAE:mae(hold,r=>Math.abs(r.actualHome-112)+Math.abs(r.actualAway-112)),benchmark:'Fixed 112 points per team; diagnostic only',validatedForBetting:false};
 }
 report.chronologicalCalibration={
  method:'Expanding-window, regularized linear probability calibration. Fit only to earlier completed predictions; 40-game minimum training. Evaluation is research-only.',
