@@ -27,14 +27,28 @@ for(let i=minimumTraining;i<report.rows.length;i++){
  calibrationRows.push({date:game.date,raw:game.probability,calibrated:adjusted,outcome:game.outcome,rawBrier:(game.probability-game.outcome)**2,calibratedBrier:(adjusted-game.outcome)**2,coinFlipBrier:.25});
 }
 const average=(xs)=>xs.length?xs.reduce((a,b)=>a+b,0)/xs.length:null;
-// Chronological score-accuracy benchmark against a fixed league-average
-// forecast. Unlike a 50/50 winner benchmark, this tests the point forecasts.
-const scored=report.rows.filter(r=>Number.isFinite(r.actualHome)&&Number.isFinite(r.actualAway)&&Number.isFinite(r.projectedHome)&&Number.isFinite(r.projectedAway));
-if(scored.length){
- const first=40,hold=scored.slice(first);
- const mae=(rows,fn)=>rows.length?rows.reduce((sum,r)=>sum+fn(r),0)/(2*rows.length):null;
- report.scoreBenchmark={holdoutGames:hold.length,modelMAE:mae(hold,r=>Math.abs(r.actualHome-r.projectedHome)+Math.abs(r.actualAway-r.projectedAway)),leagueMeanMAE:mae(hold,r=>Math.abs(r.actualHome-112)+Math.abs(r.actualAway-112)),benchmark:'Fixed 112 points per team; diagnostic only',validatedForBetting:false};
-}
+// Strictly out-of-sample scoring benchmarks: each baseline uses earlier
+// completed games only, never the result of the game being evaluated.
+const scored=report.rows.filter(r=>['actualHome','actualAway','projectedHome','projectedAway'].every(k=>Number.isFinite(r[k])));
+const hold=scored.slice(40);
+const priorMean=(rows,key)=>rows.reduce((sum,r)=>sum+r[key],0)/rows.length;
+const scoredHold=hold.map((r,i)=>{
+ const prior=scored.slice(0,i+40);
+ const homeBaseline=priorMean(prior,'actualHome'),awayBaseline=priorMean(prior,'actualAway');
+ const modelError=(Math.abs(r.actualHome-r.projectedHome)+Math.abs(r.actualAway-r.projectedAway))/2;
+ const baselineError=(Math.abs(r.actualHome-homeBaseline)+Math.abs(r.actualAway-awayBaseline))/2;
+ return {date:r.date,modelError,baselineError};
+});
+report.scoreBenchmark={
+ method:'Chronological expanding-window prior completed-game home/away scoring averages; 40-game initial history. No future results used.',
+ holdoutGames:scoredHold.length,
+ modelMAE:average(scoredHold.map(r=>r.modelError)),
+ historicalMeanMAE:average(scoredHold.map(r=>r.baselineError)),
+ beatsBaseline:scoredHold.length>=30?average(scoredHold.map(r=>r.modelError))<average(scoredHold.map(r=>r.baselineError)):null,
+ validatedForBetting:false,
+ rows:scoredHold
+};
+if(scoredHold.length<30)throw Error('Insufficient score benchmark holdout');
 report.chronologicalCalibration={
  method:'Expanding-window, regularized linear probability calibration. Fit only to earlier completed predictions; 40-game minimum training. Evaluation is research-only.',
  trainingMinimum:minimumTraining,
@@ -50,4 +64,4 @@ if(calibrationRows.length<30)throw Error('Insufficient chronological calibration
 
 const out=path.join(__dirname,'../data/nba_simulator_backtest.json');
 fs.writeFileSync(out,JSON.stringify({...report,generatedAt:new Date().toISOString()},null,2)+'\n');
-console.log(JSON.stringify({games:report.games,brier:report.brier,benchmarkBrier:report.benchmarkBrier,beatsCoinFlip:report.beatsCoinFlip,scoreMAE:report.scoreMAE,chronologicalCalibration:{...report.chronologicalCalibration,rows:undefined},skipped:report.skipped,calibration:report.calibration},null,2));
+console.log(JSON.stringify({games:report.games,brier:report.brier,benchmarkBrier:report.benchmarkBrier,beatsCoinFlip:report.beatsCoinFlip,scoreMAE:report.scoreMAE,scoreBenchmark:{...report.scoreBenchmark,rows:undefined},chronologicalCalibration:{...report.chronologicalCalibration,rows:undefined},skipped:report.skipped,calibration:report.calibration},null,2));
