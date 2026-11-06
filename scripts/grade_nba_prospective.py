@@ -19,7 +19,9 @@ for capture in archive:
  captured=when(capture.get('captured_at'))
  locks=capture.get('sources',{}).get('nba_simulator_locks')
  if not captured or not isinstance(locks,dict):continue
- for f in locks.get('forecasts',[]):
+ if 'snapshots' not in locks or not isinstance(locks['snapshots'],list):
+  raise SystemExit('NBA simulator lock archive missing snapshots list')
+ for f in locks.get('snapshots',[]):
   tip=when(f.get('tipoff'));locked=when(f.get('locked_at'))
   if not tip or not locked or not (locked<=captured<tip):continue
   if not all(isinstance(f.get(k),(int,float)) for k in ('home','away','home_win')):continue
@@ -52,7 +54,7 @@ for gid,(at,f) in earliest.items():
   'model':f.get('model')})
 def avg(key):return mean(r[key] for r in rows if r[key] is not None) if any(r[key] is not None for r in rows) else None
 report={'method':'Earliest archived pre-tip simulator forecast per game; only final ESPN box scores; no backfilled forecasts',
- 'captured_forecasts':len(earliest),'graded_games':len(rows),'score_mae':avg('score_mae'),
+ 'captured_forecasts':len(earliest),'archive_snapshots':len(archive),'candidate_locks':len(candidates),'graded_games':len(rows),'score_mae':avg('score_mae'),
  'margin_mae':avg('margin_error'),'total_mae':avg('total_error'),'brier':avg('brier'),
  'winner_accuracy':avg('correct_winner'),'validated_for_betting':False,'rows':rows}
 (ROOT/'nba_prospective_accuracy.json').write_text(json.dumps(report,indent=2)+'\n')
