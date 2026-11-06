@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Fail closed on malformed NBA prospective evidence; report market coverage."""
 import json
+import gzip
 from pathlib import Path
 from datetime import datetime, timezone
 
 root=Path(__file__).resolve().parents[1]
-p=root/'data/nba_evidence_archive.json'
+p=root/'data/nba_evidence_archive.json.gz'
 if not p.exists(): raise SystemExit('Evidence archive missing')
-data=json.loads(p.read_text())
+data=json.loads(gzip.decompress(p.read_bytes()).decode())
 rows=data.get('snapshots',[])
 if not rows: raise SystemExit('No evidence snapshots')
 previous=None
