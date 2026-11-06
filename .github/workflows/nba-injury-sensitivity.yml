@@ -1,0 +1,20 @@
+name: NBA injury sensitivity code audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'nba_possession_engine.js'
+      - '.github/workflows/nba-injury-sensitivity.yml'
+permissions:
+  contents: read
+jobs:
+  syntax-and-exports:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check nba_possession_engine.js
+      - run: node -e "const e=require('./nba_possession_engine.js'); if(typeof e.injurySensitivity!=='function'||typeof e.draws!=='function')process.exit(1)"
