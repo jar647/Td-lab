@@ -13,12 +13,13 @@ def load(p):
     except (OSError,ValueError): return None
 archive=load(OUT) or {'schema_version':1,'snapshots':[]}
 sources={}
-for name in ('nba_injuries','nba_market_odds','nba_games','nba_simulator_locks'):
+for name in ('nba_injuries','nba_market_odds','nba_simulator_locks'):
     value=load(ROOT/'data'/f'{name}.json')
     if value is not None: sources[name]=value
 if not sources: raise SystemExit('No NBA evidence feeds found')
 # Preserve the source as published, including its own generated timestamp.
-snapshot={'captured_at':NOW,'sources':sources}
+# Historical game results remain in nba_games.json; don't duplicate them in every snapshot.
+snapshot={'captured_at':NOW,'sources':sources,'evidence_type':'capture_not_verified_closing_line'}
 snapshots=archive.setdefault('snapshots',[])
 if snapshots and snapshots[-1]['sources']==sources:
     print('No source changes; no duplicate snapshot')
