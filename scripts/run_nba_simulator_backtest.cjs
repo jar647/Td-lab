@@ -63,11 +63,30 @@ function pairedBootstrap(rows,fieldA,fieldB,reps=3000){
  return {samples:differences.length,improvement:average(differences),ci95,statisticallySupported:ci95[0]>0};
 }
 report.scoreBenchmark.uncertainty=pairedBootstrap(scoredHold,'modelError','baselineError');
+// Evidence inventory: do not confuse final-game box scores with a dated
+// pre-tip injury snapshot or an archived sportsbook closing market.
+const games=(feed.games||[]).filter(g=>g.status==='STATUS_FINAL');
+const isPresent=v=>v!==null&&v!==undefined&&v!==''&&!(Array.isArray(v)&&!v.length);
+const hasDatedInjuries=g=>isPresent(g.pretip_injury_snapshot?.captured_at)&&isPresent(g.pretip_injury_snapshot?.players);
+const hasClosingMarket=g=>isPresent(g.closing_market?.captured_at)&&Number.isFinite(Number(g.closing_market?.home_spread))&&Number.isFinite(Number(g.closing_market?.total))&&Number.isFinite(Number(g.closing_market?.home_moneyline))&&Number.isFinite(Number(g.closing_market?.away_moneyline));
+report.evidenceCoverage={
+ completedGames:games.length,
+ datedPretipInjurySnapshots:games.filter(hasDatedInjuries).length,
+ archivedClosingMarkets:games.filter(hasClosingMarket).length,
+ injuryBacktestReady:games.filter(hasDatedInjuries).length>=50,
+ marketBacktestReady:games.filter(hasClosingMarket).length>=50,
+ definitions:{
+  datedPretipInjurySnapshots:'pretip_injury_snapshot with captured_at and players; must be verified to precede game tip',
+  archivedClosingMarkets:'closing_market with captured_at, home_spread, total, home_moneyline and away_moneyline; must be verified as pre-tip'
+ }
+};
 report.accuracyGate={
  scoreBenchmarkPassed:report.scoreBenchmark.beatsBaseline,
  scoreImprovementSupported:report.scoreBenchmark.uncertainty.statisticallySupported,
  probabilityBeatsCoinFlip:report.brier<report.benchmarkBrier,
  liveInjuryAdjustedModelBacktested:false,
+ historicalInjurySnapshotCoverage:report.evidenceCoverage.datedPretipInjurySnapshots,
+ historicalClosingMarketCoverage:report.evidenceCoverage.archivedClosingMarkets,
  sportsbookClosingLineBenchmarkAvailable:false,
  validatedForBetting:false,
  reason:'Historical baseline evaluation does not validate the live injury-adjusted model or betting value; bootstrap uncertainty must also be considered.'
@@ -87,4 +106,4 @@ if(calibrationRows.length<30)throw Error('Insufficient chronological calibration
 
 const out=path.join(__dirname,'../data/nba_simulator_backtest.json');
 fs.writeFileSync(out,JSON.stringify({...report,generatedAt:new Date().toISOString()},null,2)+'\n');
-console.log(JSON.stringify({games:report.games,brier:report.brier,benchmarkBrier:report.benchmarkBrier,beatsCoinFlip:report.beatsCoinFlip,scoreMAE:report.scoreMAE,scoreBenchmark:{...report.scoreBenchmark,rows:undefined},accuracyGate:report.accuracyGate,chronologicalCalibration:{...report.chronologicalCalibration,rows:undefined},skipped:report.skipped,calibration:report.calibration},null,2));
+console.log(JSON.stringify({games:report.games,brier:report.brier,benchmarkBrier:report.benchmarkBrier,beatsCoinFlip:report.beatsCoinFlip,scoreMAE:report.scoreMAE,scoreBenchmark:{...report.scoreBenchmark,rows:undefined},accuracyGate:report.accuracyGate,evidenceCoverage:report.evidenceCoverage,chronologicalCalibration:{...report.chronologicalCalibration,rows:undefined},skipped:report.skipped,calibration:report.calibration},null,2));
