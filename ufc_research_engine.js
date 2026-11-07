@@ -18,7 +18,8 @@ const p=clamp(1/(1+Math.exp(-score)),0.08,0.92);
 const seed=(options.seed===undefined?49271:Number(options.seed))>>>0;let state=seed||1;const random=()=>{state=(Math.imul(1664525,state)+1013904223)>>>0;return state/4294967296;};
 const draws=clamp(Math.floor(num(options.draws)??10000),100,100000),wins=[0,0];
 for(let i=0;i<draws;i++)wins[random()<p?0:1]++;
-return {status:'experimental',probabilities:[wins[0]/draws,wins[1]/draws],draws,score,features:{striking,absorption,grappling,submissions},reason:'Experimental, uncalibrated heuristic using verified fighter striking and grappling rates. Not a validated betting edge.',recommendation:'PASS_UNVALIDATED'};
+const estimate=wins[0]/draws;const margin=1.96*Math.sqrt(estimate*(1-estimate)/draws);const simulationInterval=[clamp(estimate-margin,0,1),clamp(estimate+margin,0,1)];
+return {status:'experimental',probabilities:[estimate,1-estimate],simulationInterval,modelProbability:p,draws,score,features:{striking,absorption,grappling,submissions},reason:'Experimental, uncalibrated heuristic using verified fighter striking and grappling rates. The simulation interval describes Monte Carlo sampling error only, not model accuracy or predictive uncertainty. Not a validated betting edge.',recommendation:'PASS_UNVALIDATED'};
 }
 return {normalize,evaluate};
 });
