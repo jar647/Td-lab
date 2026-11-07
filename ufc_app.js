@@ -49,7 +49,7 @@ function statsFrom(competitor) {
     }
     const parsed = numeric(value);
     // Bare provider fractions for percentage metrics use 0–1; explicit '%' values already use 0–100.
-    result[key] = parsed !== null && PERCENT.has(key) && parsed > 0 && parsed < 1 && !(typeof value === 'string' && value.includes('%')) ? parsed * 100 : parsed;
+    result[key] = parsed !== null && PERCENT.has(key) && parsed > 0 && parsed <= 1 && !(typeof value === 'string' && value.includes('%')) ? parsed * 100 : parsed;
   }
   return result;
 }
@@ -99,23 +99,27 @@ function matchupReport(fighters) {
 function researchPreview(fighters) {
   const report=matchupReport(fighters);
   if(!report)return '';
+  const available=report.areas.filter(area=>area.complete&&area.side!==null).sort((a,b)=>Math.abs(b.contribution)-Math.abs(a.contribution))[0];
+  const heading=report.status==='incomplete'&&available?available.title+' favors '+fighterName(fighters[available.side]):report.heading;
   const missing=report.missing.map((items,i)=>items.length?fighterName(fighters[i])+': '+items.length+' career metrics unavailable':'').filter(Boolean);
-  return '<div class="research-preview"><span class="eyebrow">MATCHUP RESEARCH</span><h3>'+escape(report.heading)+'</h3><p class="muted">'+escape(report.status==='incomplete'?missing.join(' · '):report.leanReason)+'</p><span class="small muted">'+(report.status==='incomplete'?'Available evidence is shown in the fight breakdown below.':'Experimental statistical lean · independent of sportsbook prices')+'</span></div>';
+  return '<div class="research-preview"><span class="eyebrow">MATCHUP RESEARCH</span><h3>'+escape(heading)+'</h3><p class="muted">'+escape(report.status==='incomplete'?'Partial comparison · '+missing.join(' · '):report.leanReason)+'</p><span class="small muted">'+(report.status==='incomplete'?'Available evidence is shown in the fight breakdown below.':'Experimental statistical lean · independent of sportsbook prices')+'</span></div>';
 }
 function recentHistory(c) {
   const profile=profileFor(c), name=fighterName(c), id=String(profile.id||c.id||'');
   const rows=(Array.isArray(profile.recent_fights)?profile.recent_fights:[]).filter(f=>f && (f.winner || /final|complete|post/i.test(String(f.status||'')))).slice(0,5);
   const ufc=profile.ufc_record;
   const record=typeof ufc==='string'?ufc:ufc&&typeof ufc==='object'?[ufc.wins,ufc.losses,ufc.draws].every(x=>numeric(x)!==null)?[ufc.wins,ufc.losses,ufc.draws].join('-'):null:null;
-  return '<section class="history-side"><h4>'+escape(name)+'</h4>'+(record?'<p class="muted">UFC record: '+escape(record)+'</p>':'')+(rows.length?'<ol class="fight-history">'+rows.map(f=>{
+  return '<section class="history-side"><h4>'+escape(name)+'</h4>'+(record?'<p class="muted">Provider fight record: '+escape(record)+'</p>':'')+(rows.length?'<ol class="fight-history">'+rows.map(f=>{
     const a=String(f.fighter_a||''), b=String(f.fighter_b||''), side=a===id?0:b===id?1:nameKey(f.fighter_a_name)===nameKey(name)?0:nameKey(f.fighter_b_name)===nameKey(name)?1:null;
     const opponent=side===0?f.fighter_b_name:side===1?f.fighter_a_name:'Opponent unavailable';
-    const winner=String(f.winner||''), own=winner===id || nameKey(winner)===nameKey(name);
+    const rawWinner=String(f.winner||'');
+    const winner=rawWinner.toLowerCase()==='a'?a:rawWinner.toLowerCase()==='b'?b:rawWinner;
+    const own=Boolean(winner)&&Boolean(id)&&(winner===id || nameKey(winner)===nameKey(name));
     const otherId=side===0?b:a;
     const lost=winner && (winner===otherId || nameKey(winner)===nameKey(opponent));
     const result=own?'W':lost?'L':/draw/i.test(winner)?'D':'Result unavailable';
-    return '<li><strong class="'+(own?'winner':'')+'">'+escape(result)+'</strong> vs '+escape(opponent||'Opponent unavailable')+'<small>'+escape([f.method_display,f.end_round?'Round '+f.end_round:'',f.event_date?dateText(f.event_date,{dateStyle:'medium'}):f.starts_at?dateText(f.starts_at,{dateStyle:'medium'}):''].filter(Boolean).join(' · '))+'</small></li>';
-  }).join('')+'</ol>':'<p class="muted">Recent UFC results have not been supplied for this fighter. A professional record alone does not establish opponent quality or matchup strength.</p>')+'</section>';
+    return '<li><strong class="'+(own?'winner':'')+'">'+escape(result)+'</strong> vs '+escape(opponent||'Opponent unavailable')+'<small>'+escape([f.event_name,f.method_display,f.end_round?'Round '+f.end_round:'',f.event_date?dateText(f.event_date,{dateStyle:'medium'}):f.starts_at?dateText(f.starts_at,{dateStyle:'medium'}):''].filter(Boolean).join(' · '))+'</small></li>';
+  }).join('')+'</ol>':'<p class="muted">Recent results have not been supplied for this fighter. A professional record alone does not establish opponent quality or matchup strength.</p>')+'</section>';
 }
 function showValue(value, key) {const n = numeric(value); return n === null ? 'Unavailable' : n.toLocaleString(undefined,{maximumFractionDigits:2})+(PERCENT.has(key) ? '%' : '');}
 function recordFor(c) {return (c.records || []).find(x => x.type === 'total' || x.name === 'overall')?.summary || c.records?.[0]?.summary || profileFor(c).record || 'Record unavailable';}
@@ -139,7 +143,7 @@ function analysis(fighters) {
   const paths=(report.paths||[]).map(path=>'<p class="muted"><strong>'+escape(fighterName(fighters[path.side]))+'</strong>: '+escape(path.summary)+'</p>').join('');
   const counter=report.counterargument?'<section class="research-counter"><h4>The case against the lean</h4><p class="muted">'+escape(report.counterargument.summary)+'</p></section>':'';
   const timestamps=fighters.map(c=>fighterName(c)+': '+(profileFor(c).fetched_at?dateText(profileFor(c).fetched_at):cacheDate?dateText(cacheDate):'provider only')).join(' · ');
-  return '<span class="pass">'+(report.status==='incomplete'?'PARTIAL RESEARCH · NO PICK':'EXPERIMENTAL · UNVALIDATED')+'</span><h3 class="research-heading">'+escape(report.heading)+'</h3><p class="muted">'+escape(report.leanReason)+'</p>'+facts+counter+(paths?'<section class="research-paths"><h4>Possible paths · statistical inferences</h4>'+paths+'</section>':'')+'<details class="research-history"><summary>Recent results &amp; experience</summary><div class="history-grid">'+fighters.map(recentHistory).join('')+'</div></details>'+(gaps?'<section class="research-gaps"><h4>What is missing</h4>'+gaps+'</section>':'')+'<p class="muted research-limit">'+escape((report.cautions||[]).join(' '))+'</p><p class="muted source-note">Career stats and recent UFC results: FighterAPI. '+escape(timestamps)+'. Records and card details: ESPN.</p>';
+  return '<span class="pass">'+(report.status==='incomplete'?'PARTIAL RESEARCH · NO PICK':'EXPERIMENTAL · UNVALIDATED')+'</span><h3 class="research-heading">'+escape(report.heading)+'</h3><p class="muted">'+escape(report.leanReason)+'</p>'+facts+counter+(paths?'<section class="research-paths"><h4>Possible paths · statistical inferences</h4>'+paths+'</section>':'')+'<details class="research-history"><summary>Recent results &amp; experience</summary><div class="history-grid">'+fighters.map(recentHistory).join('')+'</div></details>'+(gaps?'<section class="research-gaps"><h4>What is missing</h4>'+gaps+'</section>':'')+'<p class="muted research-limit">'+escape((report.cautions||[]).join(' '))+'</p><p class="muted source-note">Sources: ESPN event feed and FighterAPI where available. Profile fetch times: '+escape(timestamps)+'. Recent results appear only when supplied.</p>';
 }
 function marketResult(key) {
   const prices = odds[key] || {}, result = market(prices.a, prices.b);
@@ -226,7 +230,7 @@ async function load() {
     if (!next.length) throw new Error('No UFC cards are currently published in the next six weeks.');
     events = next.map(event=>({...event,competitions:event.competitions.map(c=>{
       const bout=cacheBouts.find(b=>String(b.event_id)===String(event.id)&&String(b.bout_id)===String(c.id));
-      const segment=({main:'main',prelim:'prelim',prelims:'prelim',early:'early',early_prelims:'early',early_prelim:'early'})[bout?.card_segment];
+      const segment=({main:'main',prelim:'prelim',prelims:'prelim',prelims1:'prelim',prelims2:'prelim',early:'early',early_prelims:'early',early_prelim:'early'})[bout?.card_segment];
       return segment?{...c,cardSegment:segment==='main'?'Main Card':segment==='early'?'Early Prelims':'Prelims'}:c;
     })})); loaded = true;
     if(schedule.source==='live')save(SCHEDULE_KEY,{events,generated_at:new Date().toISOString()});

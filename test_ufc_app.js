@@ -28,3 +28,6 @@ assert.equal(app.escape('<img onerror="x">'), '&lt;img onerror=&quot;x&quot;&gt;
 const base={slpm:4.2,sapm:3.1,strAcc:48,strDef:55,tdAvg:1.8,tdAcc:42,tdDef:72,subAvg:0.4};
 for(const value of [true,false,' ',[],{}])assert.equal(research.evaluate({...base,slpm:value},base).status,'insufficient_data');
 console.log('UFC card classification, odds, data normalization and model input tests PASS');
+
+assert.equal(app.statsFrom({statistics:{strAcc:1}}).strAcc,100);
+assert.equal(app.statsFrom({statistics:{strAcc:'1%'}}).strAcc,1);

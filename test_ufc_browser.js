@@ -54,11 +54,12 @@ await test.locator('[data-section="analysis"] > summary').click();await test.get
 await test.locator('[data-filter="main"]').click();if(await test.locator('article.fight').count()!==1)throw Error('Main filter failed');
 // A partial profile keeps valid facts and recent results visible without a fabricated lean.
 const partial=JSON.parse(JSON.stringify(profile));
-partial.fighters[two]={id:event.competitions[0].competitors[1].id,stats:{slpm:5,sapm:4,strAcc:50,strDef:45,tdAvg:null,tdAcc:null,tdDef:null,subAvg:null},fetched_at:new Date().toISOString(),recent_fights:[{fighter_a:event.competitions[0].competitors[1].id,fighter_a_name:two,fighter_b:'test-opponent',fighter_b_name:'Test Opponent',winner:event.competitions[0].competitors[1].id,status:'final',method_display:'Decision',event_date:'2026-10-01'}]};
+partial.fighters[two]={id:event.competitions[0].competitors[1].id,stats:{slpm:5,sapm:4,strAcc:50,strDef:45,tdAvg:null,tdAcc:null,tdDef:null,subAvg:null},fetched_at:new Date().toISOString(),recent_fights:[{fighter_a:event.competitions[0].competitors[1].id,fighter_a_name:two,fighter_b:'test-opponent',fighter_b_name:'Test Opponent',winner:'a',status:'final',method_display:'Decision',event_date:'2026-10-01'}]};
 await test.route('**/ufc_fighter_data.json',r=>r.fulfill({json:partial}));await test.reload();await test.waitForSelector('article.fight');await test.locator('#event').selectOption(String(event.id));await test.locator('[data-filter="early"]').click();
 await test.locator('[data-section="analysis"] > summary').click();
 await test.getByText('PARTIAL RESEARCH · NO PICK',{exact:true}).waitFor();
 await test.locator('.research-history summary').click();await test.getByText('vs Test Opponent',{exact:false}).waitFor();
+if(await test.locator('.fight-history strong').first().textContent()!=='W')throw Error('Winner side token did not resolve to fighter');
 if(await test.locator('[data-section="analysis"]').textContent().then(x=>!x.includes('5 significant strikes landed/min')))throw Error('Discarded partial striking stats');
 if(errors.length)throw Error(errors.join('\n'));
 console.log('Browser PASS: mobile overflow, search, persisted odds, refresh fallback, unavailable state, card filters, research rendering; no JS errors');
