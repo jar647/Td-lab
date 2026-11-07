@@ -127,6 +127,19 @@ class UFCRefreshTests(unittest.TestCase):
                 refresh.refresh_fighters(self.now + datetime.timedelta(days=1), "test")
             self.assertEqual(calls.call_count, 1)
 
+    def test_transient_profile_failure_preserves_recent_verified_profile(self):
+        old = refresh.profile_data({"career_rates": self.rates}, "a", "Fighter A", self.now - datetime.timedelta(days=8))
+        with self.workspace():
+            self.cache({"fighter a": old})
+            with mock.patch.object(refresh, "api", side_effect=[
+                {"bouts": [self.bout]}, TimeoutError("temporary"), {"career_rates": self.rates}
+            ]):
+                result = refresh.refresh_fighters(self.now, "test")
+            self.assertEqual(result["fighters"]["fighter a"]["stats"], old["stats"])
+            self.assertEqual(result["fighters"]["fighter a"]["fetched_at"], old["fetched_at"])
+            self.assertTrue(refresh.valid_stats(result["fighters"]["fighter b"]["stats"]))
+            self.assertEqual(result["coverage"]["complete_profiles"], 2)
+
     def test_empty_or_failed_response_preserves_previous_file(self):
         with self.workspace():
             self.cache({"fighter a": {"id": "a", "stats": {}}})
