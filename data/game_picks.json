@@ -1,7 +1,7 @@
 {
   "season": 2026,
   "week": 9,
-  "generated_at": "2026-11-07T02:55:00.020270+00:00",
+  "generated_at": "2026-11-07T16:35:54.599769+00:00",
   "model_status": "AUDITED_BASELINE_UNCALIBRATED",
   "model_version": "score-baseline-trust-v3",
   "note": "Historical scoring research baseline; independently recomputed source rates; QB-led history separated; no unvalidated EPA point correction or verified betting recommendation.",
@@ -426,11 +426,11 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -469,14 +469,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -737,11 +738,11 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -780,14 +781,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -831,7 +833,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-07T02:54:57.288017+00:00",
+            "retrieved_at": "2026-11-07T16:35:52.124600+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -864,8 +866,8 @@
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
-          "checked_at": "2026-11-07T02:54:56.962548+00:00",
+          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
+          "checked_at": "2026-11-07T16:35:51.881748+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -1181,7 +1183,7 @@
             "pass_epa_offense": -0.15163211178336236,
             "pass_epa_defense_allowed": 0.014729929396756653,
             "rush_epa_offense": -0.10269647264388046,
-            "rush_epa_defense_allowed": 0.016946326561338636,
+            "rush_epa_defense_allowed": 0.016946326561338643,
             "plays_per_game": 58.75,
             "turnovers_per_game": 1.75,
             "defensive_sacks_per_game": 3.2857142857142856,
@@ -1305,31 +1307,6 @@
                     }
                   },
                   {
-                    "name": "Brian Robinson",
-                    "position": "RB",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 6,
-                    "availability": "UNVERIFIED",
-                    "practice": "LIMITED_PRACTICE",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 8.833,
-                    "rush_yards_per_game": 35.167,
-                    "targets_per_game": 1.0,
-                    "receptions_per_game": 0.833,
-                    "receiving_yards_per_game": 5.0,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 36.0,
-                      "rushAttempts": 8.8,
-                      "recYards": 6.0,
-                      "receptions": 1.0,
-                      "targets": 1.2
-                    }
-                  },
-                  {
                     "name": "Drake London",
                     "position": "WR",
                     "qb_role": null,
@@ -1352,6 +1329,31 @@
                       "recYards": 70.0,
                       "receptions": 4.8,
                       "targets": 8.8
+                    }
+                  },
+                  {
+                    "name": "Kyle Pitts",
+                    "position": "TE",
+                    "qb_role": null,
+                    "starter_context": null,
+                    "games": 8,
+                    "availability": "UNVERIFIED",
+                    "practice": "NOT_REPORTED",
+                    "pass_attempts_per_game": null,
+                    "pass_yards_per_game": null,
+                    "carries_per_game": 0.0,
+                    "rush_yards_per_game": 0.0,
+                    "targets_per_game": 4.0,
+                    "receptions_per_game": 2.75,
+                    "receiving_yards_per_game": 24.625,
+                    "recent_form": {
+                      "passYards": 0.0,
+                      "passAttempts": 0.0,
+                      "rushYards": 0.0,
+                      "rushAttempts": 0.0,
+                      "recYards": 35.4,
+                      "receptions": 4.0,
+                      "targets": 5.2
                     }
                   }
                 ],
@@ -1477,27 +1479,27 @@
                     "player_id": "00-0036990",
                     "player": "Divine Deablo",
                     "position": "LB",
-                    "designation": null,
-                    "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "designation": "Questionable",
+                    "practice": "Full Participation in Practice",
+                    "injury": "Forearm",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0037746",
                     "player": "Brian Robinson",
                     "position": "RB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Hamstring",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0038580",
                     "player": "Yasir Abdullah",
                     "position": "DE",
-                    "designation": null,
-                    "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "designation": "Questionable",
+                    "practice": "Full Participation in Practice",
+                    "injury": "Hamstring",
                     "source_updated_at": null
                   },
                   {
@@ -1513,36 +1515,36 @@
                     "player_id": "00-0040432",
                     "player": "Beaux Collins",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Full Participation in Practice",
-                    "injury": null,
+                    "injury": "Hip",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0040578",
                     "player": "James Pearce Jr.",
                     "position": "DE",
-                    "designation": null,
-                    "practice": "Full Participation in Practice",
-                    "injury": null,
+                    "designation": "Questionable",
+                    "practice": "Limited Participation in Practice",
+                    "injury": "Back",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0040687",
                     "player": "Cameron Williams",
                     "position": "T",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Full Participation in Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0041044",
                     "player": "Zachariah Branch",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Hamstring",
                     "source_updated_at": null
                   }
                 ],
@@ -1552,11 +1554,11 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -1595,14 +1597,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -1871,7 +1874,7 @@
                     "player": "Jonathan Allen",
                     "position": "DT",
                     "designation": null,
-                    "practice": "Did Not Participate In Practice",
+                    "practice": "Limited Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -1880,7 +1883,16 @@
                     "player": "B.J. Hill",
                     "position": "DT",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0035683",
+                    "player": "Dexter Lawrence",
+                    "position": "DT",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -1888,9 +1900,9 @@
                     "player_id": "00-0036231",
                     "player": "Kyle Dugger",
                     "position": "S",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Quadricep",
                     "source_updated_at": null
                   },
                   {
@@ -1907,7 +1919,7 @@
                     "player": "Jordan Battle",
                     "position": "S",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -1915,23 +1927,23 @@
                     "player_id": "00-0039752",
                     "player": "Cedric Johnson",
                     "position": "DE",
-                    "designation": null,
-                    "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "designation": "Questionable",
+                    "practice": "Full Participation in Practice",
+                    "injury": "Ankle",
                     "source_updated_at": null
                   }
                 ],
-                "report_count": 6,
+                "report_count": 7,
                 "coverage": "REPORTED",
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -1970,14 +1982,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -2010,9 +2023,9 @@
             "location": "Neutral",
             "roof": null,
             "surface": "fieldturf",
-            "temperature_f": 51,
-            "wind_mph": 0.0,
-            "wind_direction": "",
+            "temperature_f": 53,
+            "wind_mph": 5.0,
+            "wind_direction": "E",
             "precipitation_probability": 0,
             "weather_condition": "Sunny",
             "weather_updated_at": null
@@ -2023,7 +2036,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-07T02:54:57.706924+00:00",
+            "retrieved_at": "2026-11-07T16:35:52.919545+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -2053,17 +2066,17 @@
             "source": "National Weather Service hourly forecast",
             "forecast_time": "2026-11-08T09:00:00-05:00",
             "updated_at": null,
-            "temperature_f": 51,
-            "wind_mph": 0.0,
-            "wind_direction": "",
+            "temperature_f": 53,
+            "wind_mph": 5.0,
+            "wind_direction": "E",
             "precipitation_probability": 0,
             "condition": "Sunny"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
-          "checked_at": "2026-11-07T02:54:56.962548+00:00",
+          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
+          "checked_at": "2026-11-07T16:35:51.881748+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -2178,12 +2191,12 @@
                 "defense": {
                   "games": 7,
                   "plays": 437,
-                  "epa_per_play": -0.00848538756973873,
+                  "epa_per_play": -0.008485387569738722,
                   "success_rate": 0.43935926773455375,
                   "explosive_rate": 0.10983981693363844,
                   "pass_rate": 0.6041189931350115,
                   "pass_epa": -0.007076102525973863,
-                  "rush_epa": -0.010635972838836546,
+                  "rush_epa": -0.010635972838836535,
                   "sacks_per_game": 3.2857142857142856
                 },
                 "recent_offense": {
@@ -2294,8 +2307,8 @@
           "away_rest": 7.0,
           "travel_miles": null,
           "roof": null,
-          "temperature_f": 51,
-          "wind_mph": 0.0
+          "temperature_f": 53,
+          "wind_mph": 5.0
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -2667,9 +2680,9 @@
                     "player_id": "00-0035687",
                     "player": "Bobby Okereke",
                     "position": "LB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Foot",
                     "source_updated_at": null
                   },
                   {
@@ -2677,7 +2690,7 @@
                     "player": "Trevis Gipson",
                     "position": "LB",
                     "designation": null,
-                    "practice": "Did Not Participate In Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -2685,9 +2698,9 @@
                     "player_id": "00-0036417",
                     "player": "Damien Lewis",
                     "position": "G",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Knee",
                     "source_updated_at": null
                   },
                   {
@@ -2703,18 +2716,18 @@
                     "player_id": "00-0036934",
                     "player": "Jaelan Phillips",
                     "position": "LB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Hamstring",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0036968",
                     "player": "Brady Christensen",
                     "position": "G",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Full Participation in Practice",
-                    "injury": null,
+                    "injury": "Hamstring",
                     "source_updated_at": null
                   },
                   {
@@ -2730,27 +2743,27 @@
                     "player_id": "00-0039242",
                     "player": "Corey Bullock",
                     "position": "G",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Full Participation in Practice",
-                    "injury": null,
+                    "injury": "Quadricep",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0040541",
                     "player": "Torricelli Simpkins III",
                     "position": "G",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Full Participation in Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0041063",
                     "player": "Will Lee III",
                     "position": "CB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Hamstring",
                     "source_updated_at": null
                   }
                 ],
@@ -2760,11 +2773,11 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -2803,14 +2816,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -3104,18 +3118,18 @@
                     "player_id": "00-0036221",
                     "player": "Brandon Jones",
                     "position": "S",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Hamstring",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0036564",
                     "player": "Talanoa Hufanga",
                     "position": "S",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
@@ -3128,44 +3142,53 @@
                     "source_updated_at": null
                   },
                   {
+                    "player_id": "00-0037799",
+                    "player": "Dondrea Tillman",
+                    "position": "LB",
+                    "designation": "Questionable",
+                    "practice": "Full Participation in Practice",
+                    "injury": "Hip",
+                    "source_updated_at": null
+                  },
+                  {
                     "player_id": "00-0038106",
                     "player": "Eyioma Uwazurike",
                     "position": "DE",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Shoulder",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0039371",
                     "player": "Kris Abrams-Draine",
                     "position": "CB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0040134",
                     "player": "Pat Bryant",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Full Participation in Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   }
                 ],
-                "report_count": 8,
+                "report_count": 9,
                 "coverage": "REPORTED",
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -3204,14 +3227,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -3244,7 +3268,7 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "grass",
-            "temperature_f": 63,
+            "temperature_f": 62,
             "wind_mph": 6.0,
             "wind_direction": "WSW",
             "precipitation_probability": 0,
@@ -3259,7 +3283,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-07T02:54:58.005080+00:00",
+            "retrieved_at": "2026-11-07T16:35:53.073330+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -3289,7 +3313,7 @@
             "source": "National Weather Service hourly forecast",
             "forecast_time": "2026-11-08T13:00:00-05:00",
             "updated_at": null,
-            "temperature_f": 63,
+            "temperature_f": 62,
             "wind_mph": 6.0,
             "wind_direction": "WSW",
             "precipitation_probability": 0,
@@ -3298,8 +3322,8 @@
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
-          "checked_at": "2026-11-07T02:54:56.962548+00:00",
+          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
+          "checked_at": "2026-11-07T16:35:51.881748+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -3530,7 +3554,7 @@
           "away_rest": 7.0,
           "travel_miles": 1357,
           "roof": "outdoors",
-          "temperature_f": 63,
+          "temperature_f": 62,
           "wind_mph": 6.0
         },
         "prior_games": 4.0,
@@ -3921,7 +3945,7 @@
                     "player": "Grover Stewart",
                     "position": "DT",
                     "designation": null,
-                    "practice": "Did Not Participate In Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -3947,9 +3971,9 @@
                     "player_id": "00-0036298",
                     "player": "Akeem Davis-Gaither",
                     "position": "LB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Knee",
                     "source_updated_at": null
                   },
                   {
@@ -3957,7 +3981,16 @@
                     "player": "Andrew Ogletree",
                     "position": "TE",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0038394",
+                    "player": "Will Mallory",
+                    "position": "TE",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -3974,18 +4007,27 @@
                     "player_id": "00-0040139",
                     "player": "Justin Walley",
                     "position": "CB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Knee",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0040163",
                     "player": "Jalen Travis",
                     "position": "T",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Full Participation in Practice",
-                    "injury": null,
+                    "injury": "Thumb",
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0041043",
+                    "player": "A.J. Haulcy",
+                    "position": "S",
+                    "designation": "Questionable",
+                    "practice": "Limited Participation in Practice",
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
@@ -3998,17 +4040,17 @@
                     "source_updated_at": null
                   }
                 ],
-                "report_count": 10,
+                "report_count": 12,
                 "coverage": "REPORTED",
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -4047,14 +4089,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -4188,7 +4231,7 @@
                     "qb_role": null,
                     "starter_context": null,
                     "games": 8,
-                    "availability": "UNVERIFIED",
+                    "availability": "QUESTIONABLE",
                     "practice": "LIMITED_PRACTICE",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
@@ -4339,9 +4382,9 @@
                     "player_id": "00-0033093",
                     "player": "Jonathan Bullard",
                     "position": "DE",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Full Participation in Practice",
-                    "injury": null,
+                    "injury": "Calf",
                     "source_updated_at": null
                   },
                   {
@@ -4358,7 +4401,7 @@
                     "player": "P.J. Locke",
                     "position": "S",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -4367,7 +4410,7 @@
                     "player": "Tyler Smith",
                     "position": "G",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -4375,45 +4418,45 @@
                     "player_id": "00-0037247",
                     "player": "George Pickens",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Hamstring",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0037801",
                     "player": "KaVontae Turpin",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Ribs",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0038041",
                     "player": "Jake Ferguson",
                     "position": "TE",
-                    "designation": null,
-                    "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "designation": "Questionable",
+                    "practice": "Limited Participation in Practice",
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0038547",
                     "player": "Luke Schoonmaker",
                     "position": "TE",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Groin",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0038556",
                     "player": "DeMarvion Overshown",
                     "position": "LB",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Hamstring",
                     "source_updated_at": null
                   },
                   {
@@ -4438,18 +4481,18 @@
                     "player_id": "00-0039167",
                     "player": "Joey Porter Jr.",
                     "position": "CB",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0039352",
                     "player": "Marist Liufau",
                     "position": "LB",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Full Participation in Practice",
-                    "injury": null,
+                    "injury": "Forearm",
                     "source_updated_at": null
                   },
                   {
@@ -4457,7 +4500,7 @@
                     "player": "Caleb Downs",
                     "position": "S",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -4474,9 +4517,9 @@
                     "player_id": "00-0041537",
                     "player": "Malachi Lawrence",
                     "position": "LB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   }
                 ],
@@ -4486,11 +4529,11 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -4529,14 +4572,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -4569,9 +4613,9 @@
             "location": "Home",
             "roof": null,
             "surface": "fieldturf",
-            "temperature_f": 57,
-            "wind_mph": 13.0,
-            "wind_direction": "WSW",
+            "temperature_f": 56,
+            "wind_mph": 12.0,
+            "wind_direction": "SW",
             "precipitation_probability": 0,
             "weather_condition": "Sunny",
             "weather_updated_at": null
@@ -4584,7 +4628,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-07T02:54:58.194519+00:00",
+            "retrieved_at": "2026-11-07T16:35:53.220321+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -4614,17 +4658,17 @@
             "source": "National Weather Service hourly forecast",
             "forecast_time": "2026-11-08T13:00:00-05:00",
             "updated_at": null,
-            "temperature_f": 57,
-            "wind_mph": 13.0,
-            "wind_direction": "WSW",
+            "temperature_f": 56,
+            "wind_mph": 12.0,
+            "wind_direction": "SW",
             "precipitation_probability": 0,
             "condition": "Sunny"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
-          "checked_at": "2026-11-07T02:54:56.962548+00:00",
+          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
+          "checked_at": "2026-11-07T16:35:51.881748+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -4856,8 +4900,8 @@
           "away_rest": 7.0,
           "travel_miles": 777,
           "roof": null,
-          "temperature_f": 57,
-          "wind_mph": 13.0
+          "temperature_f": 56,
+          "wind_mph": 12.0
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -5265,9 +5309,9 @@
                     "player_id": "00-0038519",
                     "player": "Nikko Remigio",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Full Participation in Practice",
-                    "injury": null,
+                    "injury": "Hip",
                     "source_updated_at": null
                   },
                   {
@@ -5283,27 +5327,27 @@
                     "player_id": "00-0040748",
                     "player": "Omarr Norman-Lott",
                     "position": "DT",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Knee",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0041543",
                     "player": "Mansoor Delane",
                     "position": "CB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Shoulder",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0041545",
                     "player": "Peter Woods",
                     "position": "DT",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Neck",
                     "source_updated_at": null
                   }
                 ],
@@ -5313,11 +5357,11 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -5356,14 +5400,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -5492,28 +5537,28 @@
                     }
                   },
                   {
-                    "name": "Garrett Wilson",
+                    "name": "Adonai Mitchell",
                     "position": "WR",
                     "qb_role": null,
                     "starter_context": null,
-                    "games": 8,
+                    "games": 4,
                     "availability": "UNVERIFIED",
-                    "practice": "DNP_PRACTICE",
+                    "practice": "NOT_REPORTED",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
                     "carries_per_game": 0.0,
                     "rush_yards_per_game": 0.0,
-                    "targets_per_game": 8.0,
-                    "receptions_per_game": 5.375,
-                    "receiving_yards_per_game": 65.875,
+                    "targets_per_game": 6.75,
+                    "receptions_per_game": 4.0,
+                    "receiving_yards_per_game": 66.25,
                     "recent_form": {
                       "passYards": 0.0,
                       "passAttempts": 0.0,
                       "rushYards": 0.0,
                       "rushAttempts": 0.0,
-                      "recYards": 56.8,
-                      "receptions": 4.4,
-                      "targets": 7.2
+                      "recYards": 66.25,
+                      "receptions": 4.0,
+                      "targets": 6.75
                     }
                   }
                 ],
@@ -5648,27 +5693,36 @@
                     "player_id": "00-0034782",
                     "player": "Harrison Phillips",
                     "position": "DT",
-                    "designation": null,
-                    "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "designation": "Questionable",
+                    "practice": "Full Participation in Practice",
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0036902",
                     "player": "Joseph Ossai",
                     "position": "DE",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Ankle",
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0036986",
+                    "player": "Nahshon Wright",
+                    "position": "CB",
+                    "designation": "Questionable",
+                    "practice": "Did Not Participate In Practice",
+                    "injury": "Back",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0037740",
                     "player": "Garrett Wilson",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Concussion",
                     "source_updated_at": null
                   },
                   {
@@ -5684,9 +5738,9 @@
                     "player_id": "00-0039347",
                     "player": "Trevin Wallace",
                     "position": "LB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Groin",
                     "source_updated_at": null
                   },
                   {
@@ -5711,23 +5765,23 @@
                     "player_id": "00-0041120",
                     "player": "VJ Payne",
                     "position": "S",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Full Participation in Practice",
-                    "injury": null,
+                    "injury": "Knee",
                     "source_updated_at": null
                   }
                 ],
-                "report_count": 9,
+                "report_count": 10,
                 "coverage": "REPORTED",
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -5766,14 +5820,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -5807,7 +5862,7 @@
             "roof": "outdoors",
             "surface": "grass",
             "temperature_f": 60,
-            "wind_mph": 3.0,
+            "wind_mph": 5.0,
             "wind_direction": "W",
             "precipitation_probability": 0,
             "weather_condition": "Sunny",
@@ -5821,7 +5876,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-07T02:54:58.414384+00:00",
+            "retrieved_at": "2026-11-07T16:35:53.364880+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -5852,7 +5907,7 @@
             "forecast_time": "2026-11-08T12:00:00-06:00",
             "updated_at": null,
             "temperature_f": 60,
-            "wind_mph": 3.0,
+            "wind_mph": 5.0,
             "wind_direction": "W",
             "precipitation_probability": 0,
             "condition": "Sunny"
@@ -5860,8 +5915,8 @@
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
-          "checked_at": "2026-11-07T02:54:56.962548+00:00",
+          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
+          "checked_at": "2026-11-07T16:35:51.881748+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -6093,7 +6148,7 @@
           "travel_miles": 1086,
           "roof": "outdoors",
           "temperature_f": 60,
-          "wind_mph": 3.0
+          "wind_mph": 5.0
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -6466,7 +6521,7 @@
                     "player": "Zach Sieler",
                     "position": "DT",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -6474,9 +6529,9 @@
                     "player_id": "00-0036682",
                     "player": "Malik Herring",
                     "position": "DE",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Neck",
                     "source_updated_at": null
                   },
                   {
@@ -6510,9 +6565,9 @@
                     "player_id": "00-0039874",
                     "player": "Jaylen Wright",
                     "position": "RB",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Quadricep",
                     "source_updated_at": null
                   },
                   {
@@ -6520,7 +6575,7 @@
                     "player": "Chop Robinson",
                     "position": "LB",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -6529,7 +6584,7 @@
                     "player": "Dante Trader Jr.",
                     "position": "S",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -6537,9 +6592,9 @@
                     "player_id": "00-0041096",
                     "player": "Kaytron Allen",
                     "position": "RB",
-                    "designation": null,
-                    "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "designation": "Questionable",
+                    "practice": "Full Participation in Practice",
+                    "injury": "Quadricep",
                     "source_updated_at": null
                   },
                   {
@@ -6556,7 +6611,7 @@
                     "player": "Will Kacmarek",
                     "position": "TE",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -6565,7 +6620,7 @@
                     "player": "Michael Taaffe",
                     "position": "S",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   }
@@ -6576,11 +6631,11 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -6619,14 +6674,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -6735,7 +6791,7 @@
                     "qb_role": null,
                     "starter_context": null,
                     "games": 7,
-                    "availability": "UNVERIFIED",
+                    "availability": "QUESTIONABLE",
                     "practice": "LIMITED_PRACTICE",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
@@ -6894,9 +6950,9 @@
                     "player_id": "00-0034384",
                     "player": "D.J. Reed",
                     "position": "CB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Hip",
                     "source_updated_at": null
                   },
                   {
@@ -6912,9 +6968,9 @@
                     "player_id": "00-0036335",
                     "player": "DJ Wonnum",
                     "position": "DE",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Concussion",
                     "source_updated_at": null
                   },
                   {
@@ -6930,45 +6986,45 @@
                     "player_id": "00-0036963",
                     "player": "Amon-Ra St. Brown",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Rib",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0037297",
                     "player": "Cade Mays",
                     "position": "C",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0037667",
                     "player": "Kerby Joseph",
                     "position": "S",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Knee",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0038896",
                     "player": "Jacob Saylors",
                     "position": "RB",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Neck",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0039018",
                     "player": "Jack Campbell",
                     "position": "LB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Neck",
                     "source_updated_at": null
                   },
                   {
@@ -6979,19 +7035,28 @@
                     "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0039364",
+                    "player": "Sione Vaki",
+                    "position": "RB",
+                    "designation": "Questionable",
+                    "practice": "Did Not Participate In Practice",
+                    "injury": "Ankle",
+                    "source_updated_at": null
                   }
                 ],
-                "report_count": 10,
+                "report_count": 11,
                 "coverage": "REPORTED",
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -7030,14 +7095,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -7073,7 +7139,7 @@
             "temperature_f": 82,
             "wind_mph": 6.0,
             "wind_direction": "NE",
-            "precipitation_probability": 12,
+            "precipitation_probability": 3,
             "weather_condition": "Mostly Sunny",
             "weather_updated_at": null
           },
@@ -7085,7 +7151,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-07T02:54:58.621661+00:00",
+            "retrieved_at": "2026-11-07T16:35:53.516133+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -7118,14 +7184,14 @@
             "temperature_f": 82,
             "wind_mph": 6.0,
             "wind_direction": "NE",
-            "precipitation_probability": 12,
+            "precipitation_probability": 3,
             "condition": "Mostly Sunny"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
-          "checked_at": "2026-11-07T02:54:56.962548+00:00",
+          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
+          "checked_at": "2026-11-07T16:35:51.881748+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -7265,7 +7331,7 @@
                   "success_rate": 0.43529411764705883,
                   "explosive_rate": 0.09803921568627451,
                   "pass_rate": 0.6862745098039216,
-                  "pass_epa": 0.17826120175440163,
+                  "pass_epa": 0.17826120175440166,
                   "rush_epa": -0.1452057835755113,
                   "sacks_per_game": 3.0
                 }
@@ -7460,16 +7526,16 @@
             "offense_pass_rate": 0.6078147135373768,
             "defense_pass_rate_allowed": 0.5539606142993607,
             "expected_pass_rate": 0.5808876639183688,
-            "pass_epa_matchup_delta": -0.16762452189905544,
+            "pass_epa_matchup_delta": -0.16762452189905547,
             "rush_epa_matchup_delta": -0.18789561762716978,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": -0.1761203881845998,
+            "epa_per_play_delta": -0.17612038818459982,
             "success_rate_delta": -0.0626775502490684,
             "explosive_rate_offense": 0.08368200836820083,
             "explosive_rate_defense_allowed": 0.10933940774487472,
             "pass_epa_offense": -0.10251835827114089,
-            "pass_epa_defense_allowed": 0.06510616362791455,
+            "pass_epa_defense_allowed": 0.06510616362791458,
             "rush_epa_offense": -0.09653903880107509,
             "rush_epa_defense_allowed": 0.09135657882609469,
             "plays_per_game": 59.75,
@@ -7570,7 +7636,7 @@
                     "starter_context": null,
                     "games": 6,
                     "availability": "UNVERIFIED",
-                    "practice": "LIMITED_PRACTICE",
+                    "practice": "NOT_REPORTED",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
                     "carries_per_game": 6.833,
@@ -7729,7 +7795,7 @@
                     "player": "Davon Godchaux",
                     "position": "DT",
                     "designation": null,
-                    "practice": "Did Not Participate In Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -7738,7 +7804,7 @@
                     "player": "Alvin Kamara",
                     "position": "RB",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -7773,45 +7839,45 @@
                     "player_id": "00-0037250",
                     "player": "Martin Emerson",
                     "position": "CB",
-                    "designation": null,
-                    "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "designation": "Questionable",
+                    "practice": "Did Not Participate In Practice",
+                    "injury": "Shin",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0038601",
                     "player": "Asim Richards",
                     "position": "T",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Thumb",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0040125",
                     "player": "Kelvin Banks Jr.",
                     "position": "T",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0041029",
                     "player": "Jordyn Tyson",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Hamstring",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0041326",
                     "player": "CJ Donaldson",
                     "position": "RB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Shoulder",
                     "source_updated_at": null
                   }
                 ],
@@ -7821,11 +7887,11 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -7864,14 +7930,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -7929,8 +7996,8 @@
                   "qb_role": null,
                   "starter_context": null,
                   "games": 8,
-                  "availability": "UNVERIFIED",
-                  "practice": "DNP_PRACTICE",
+                  "availability": "QUESTIONABLE",
+                  "practice": "LIMITED_PRACTICE",
                   "pass_attempts_per_game": 35.375,
                   "pass_yards_per_game": 225.75,
                   "carries_per_game": 5.5,
@@ -8147,18 +8214,18 @@
                     "player_id": "00-0033131",
                     "player": "Maliek Collins",
                     "position": "DT",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Elbow",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0033537",
                     "player": "Deshaun Watson",
                     "position": "QB",
-                    "designation": null,
-                    "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "designation": "Questionable",
+                    "practice": "Limited Participation in Practice",
+                    "injury": "Concussion",
                     "source_updated_at": null
                   },
                   {
@@ -8202,7 +8269,7 @@
                     "player": "Carson Schwesinger",
                     "position": "LB",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -8220,7 +8287,7 @@
                     "player": "Denzel Boston",
                     "position": "WR",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -8229,7 +8296,7 @@
                     "player": "Austin Barber",
                     "position": "T",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -8249,11 +8316,11 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -8292,14 +8359,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -8343,7 +8411,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-07T02:54:58.639128+00:00",
+            "retrieved_at": "2026-11-07T16:35:53.560946+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -8376,8 +8444,8 @@
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
-          "checked_at": "2026-11-07T02:54:56.962548+00:00",
+          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
+          "checked_at": "2026-11-07T16:35:51.881748+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -8449,11 +8517,11 @@
                 "recent_defense": {
                   "games": 4,
                   "plays": 248,
-                  "epa_per_play": 0.08022060171305032,
+                  "epa_per_play": 0.08022060171305033,
                   "success_rate": 0.4798387096774194,
                   "explosive_rate": 0.125,
                   "pass_rate": 0.5443548387096774,
-                  "pass_epa": 0.04541795992556911,
+                  "pass_epa": 0.04541795992556912,
                   "rush_epa": 0.1217989790697757,
                   "sacks_per_game": 2.75
                 }
@@ -8682,7 +8750,7 @@
             "offense_pass_rate": 0.6305271966527197,
             "defense_pass_rate_allowed": 0.5441015430562469,
             "expected_pass_rate": 0.5873143698544834,
-            "pass_epa_matchup_delta": -0.07664317480007278,
+            "pass_epa_matchup_delta": -0.0766431748000728,
             "rush_epa_matchup_delta": -0.15788704022415326,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
@@ -8691,7 +8759,7 @@
             "explosive_rate_offense": 0.05439330543933055,
             "explosive_rate_defense_allowed": 0.0951219512195122,
             "pass_epa_offense": -0.14137169537929534,
-            "pass_epa_defense_allowed": -0.06472852057922256,
+            "pass_epa_defense_allowed": -0.06472852057922254,
             "rush_epa_offense": -0.12319394152583324,
             "rush_epa_defense_allowed": 0.03469309869832001,
             "plays_per_game": 59.75,
@@ -8771,7 +8839,7 @@
                   "qb_role": null,
                   "starter_context": null,
                   "games": 3,
-                  "availability": "UNVERIFIED",
+                  "availability": "QUESTIONABLE",
                   "practice": "LIMITED_PRACTICE",
                   "pass_attempts_per_game": 41.333,
                   "pass_yards_per_game": 212.667,
@@ -8817,31 +8885,6 @@
                     }
                   },
                   {
-                    "name": "DeVonta Smith",
-                    "position": "WR",
-                    "qb_role": null,
-                    "starter_context": null,
-                    "games": 4,
-                    "availability": "UNVERIFIED",
-                    "practice": "DNP_PRACTICE",
-                    "pass_attempts_per_game": null,
-                    "pass_yards_per_game": null,
-                    "carries_per_game": 0.0,
-                    "rush_yards_per_game": 0.0,
-                    "targets_per_game": 10.25,
-                    "receptions_per_game": 6.5,
-                    "receiving_yards_per_game": 77.5,
-                    "recent_form": {
-                      "passYards": 0.0,
-                      "passAttempts": 0.0,
-                      "rushYards": 0.0,
-                      "rushAttempts": 0.0,
-                      "recYards": 77.5,
-                      "receptions": 6.5,
-                      "targets": 10.25
-                    }
-                  },
-                  {
                     "name": "Dallas Goedert",
                     "position": "TE",
                     "qb_role": null,
@@ -8864,6 +8907,31 @@
                       "recYards": 36.2,
                       "receptions": 4.4,
                       "targets": 6.0
+                    }
+                  },
+                  {
+                    "name": "Makai Lemon",
+                    "position": "WR",
+                    "qb_role": null,
+                    "starter_context": null,
+                    "games": 8,
+                    "availability": "UNVERIFIED",
+                    "practice": "NOT_REPORTED",
+                    "pass_attempts_per_game": null,
+                    "pass_yards_per_game": null,
+                    "carries_per_game": 0.125,
+                    "rush_yards_per_game": -0.625,
+                    "targets_per_game": 5.625,
+                    "receptions_per_game": 3.875,
+                    "receiving_yards_per_game": 31.375,
+                    "recent_form": {
+                      "passYards": 0.0,
+                      "passAttempts": 0.0,
+                      "rushYards": 0.0,
+                      "rushAttempts": 0.0,
+                      "recYards": 42.6,
+                      "receptions": 4.8,
+                      "targets": 7.2
                     }
                   }
                 ],
@@ -8989,9 +9057,9 @@
                     "player_id": "00-0032580",
                     "player": "Jonathan Jones",
                     "position": "CB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Hamstring",
                     "source_updated_at": null
                   },
                   {
@@ -9008,7 +9076,7 @@
                     "player": "Jake Elliott",
                     "position": "K",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -9044,7 +9112,7 @@
                     "player": "Jonathan Greenard",
                     "position": "LB",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -9061,17 +9129,26 @@
                     "player_id": "00-0036501",
                     "player": "Michael Carter II",
                     "position": "CB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Abdomen",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0036912",
                     "player": "DeVonta Smith",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
+                    "injury": "Hamstring",
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0036980",
+                    "player": "Elijah Moore",
+                    "position": "WR",
+                    "designation": null,
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -9097,27 +9174,27 @@
                     "player_id": "00-0037132",
                     "player": "Britain Covey",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Knee",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0038393",
                     "player": "Dontayvion Wicks",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0038400",
                     "player": "Tanner McKee",
                     "position": "QB",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Rib",
                     "source_updated_at": null
                   },
                   {
@@ -9142,9 +9219,9 @@
                     "player_id": "00-0040708",
                     "player": "Jihaad Campbell",
                     "position": "LB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Hamstring",
                     "source_updated_at": null
                   },
                   {
@@ -9157,17 +9234,17 @@
                     "source_updated_at": null
                   }
                 ],
-                "report_count": 19,
+                "report_count": 20,
                 "coverage": "REPORTED",
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -9206,14 +9283,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -9297,8 +9375,8 @@
                     "qb_role": null,
                     "starter_context": null,
                     "games": 7,
-                    "availability": "UNVERIFIED",
-                    "practice": "DNP_PRACTICE",
+                    "availability": "DOUBTFUL",
+                    "practice": "LIMITED_PRACTICE",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
                     "carries_per_game": 14.0,
@@ -9323,7 +9401,7 @@
                     "starter_context": null,
                     "games": 7,
                     "availability": "UNVERIFIED",
-                    "practice": "DNP_PRACTICE",
+                    "practice": "NOT_REPORTED",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
                     "carries_per_game": 0.0,
@@ -9491,7 +9569,7 @@
                     "player": "Jermaine Eluemunor",
                     "position": "T",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -9509,7 +9587,7 @@
                     "player": "Andrew Thomas",
                     "position": "T",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -9526,9 +9604,9 @@
                     "player_id": "00-0038576",
                     "player": "Charlie Jones",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Hand",
                     "source_updated_at": null
                   },
                   {
@@ -9536,7 +9614,7 @@
                     "player": "Malik Nabers",
                     "position": "WR",
                     "designation": null,
-                    "practice": "Did Not Participate In Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -9590,7 +9668,7 @@
                     "player": "Darius Alexander",
                     "position": "DT",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -9598,9 +9676,9 @@
                     "player_id": "00-0040715",
                     "player": "Cam Skattebo",
                     "position": "RB",
-                    "designation": null,
-                    "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "designation": "Doubtful",
+                    "practice": "Limited Participation in Practice",
+                    "injury": "Hamstring",
                     "source_updated_at": null
                   },
                   {
@@ -9619,11 +9697,11 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -9662,14 +9740,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -9717,7 +9796,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-07T02:54:58.844021+00:00",
+            "retrieved_at": "2026-11-07T16:35:53.756879+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -9756,8 +9835,8 @@
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
-          "checked_at": "2026-11-07T02:54:56.962548+00:00",
+          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
+          "checked_at": "2026-11-07T16:35:51.881748+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -9872,7 +9951,7 @@
                 "defense": {
                   "games": 7,
                   "plays": 410,
-                  "epa_per_play": 0.011029750879812271,
+                  "epa_per_play": 0.011029750879812275,
                   "success_rate": 0.4317073170731707,
                   "explosive_rate": 0.0951219512195122,
                   "pass_rate": 0.5585365853658537,
@@ -9894,7 +9973,7 @@
                 "recent_defense": {
                   "games": 4,
                   "plays": 245,
-                  "epa_per_play": -0.06054297683787194,
+                  "epa_per_play": -0.06054297683787193,
                   "success_rate": 0.40408163265306124,
                   "explosive_rate": 0.09795918367346938,
                   "pass_rate": 0.5224489795918368,
@@ -10367,6 +10446,15 @@
                     "source_updated_at": null
                   },
                   {
+                    "player_id": "00-0033947",
+                    "player": "Deatrich Wise",
+                    "position": "DE",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
                     "player_id": "00-0035409",
                     "player": "Shy Tuttle",
                     "position": "DT",
@@ -10380,7 +10468,7 @@
                     "player": "Sam Cosmi",
                     "position": "G",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -10388,9 +10476,9 @@
                     "player_id": "00-0036626",
                     "player": "Dyami Brown",
                     "position": "WR",
-                    "designation": null,
-                    "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "designation": "Out",
+                    "practice": "Did Not Participate In Practice",
+                    "injury": "Calf",
                     "source_updated_at": null
                   },
                   {
@@ -10406,9 +10494,9 @@
                     "player_id": "00-0037742",
                     "player": "Treylon Burks",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Foot",
                     "source_updated_at": null
                   },
                   {
@@ -10424,9 +10512,9 @@
                     "player_id": "00-0039906",
                     "player": "Jer'Zhan Newton",
                     "position": "DT",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Full Participation in Practice",
-                    "injury": null,
+                    "injury": "Pectoral",
                     "source_updated_at": null
                   },
                   {
@@ -10448,17 +10536,17 @@
                     "source_updated_at": null
                   }
                 ],
-                "report_count": 10,
+                "report_count": 11,
                 "coverage": "REPORTED",
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -10497,14 +10585,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -10614,7 +10703,7 @@
                     "starter_context": null,
                     "games": 6,
                     "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
+                    "practice": "DNP_PRACTICE",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
                     "carries_per_game": 0.833,
@@ -10786,9 +10875,27 @@
                     "source_updated_at": null
                   },
                   {
+                    "player_id": "00-0031388",
+                    "player": "Aaron Donald",
+                    "position": "DT",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
                     "player_id": "00-0032228",
                     "player": "Joe Cardona",
                     "position": "LS",
+                    "designation": "Doubtful",
+                    "practice": "Did Not Participate In Practice",
+                    "injury": "Ankle",
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0033110",
+                    "player": "Tyler Higbee",
+                    "position": "TE",
                     "designation": null,
                     "practice": "Did Not Participate In Practice",
                     "injury": null,
@@ -10799,7 +10906,7 @@
                     "player": "Myles Garrett",
                     "position": "LB",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Did Not Participate In Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -10807,15 +10914,24 @@
                     "player_id": "00-0036244",
                     "player": "Colby Parkinson",
                     "position": "TE",
-                    "designation": null,
-                    "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "designation": "Questionable",
+                    "practice": "Limited Participation in Practice",
+                    "injury": "Ribs",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0036349",
                     "player": "Kam Curl",
                     "position": "S",
+                    "designation": "Questionable",
+                    "practice": "Limited Participation in Practice",
+                    "injury": "Foot",
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0036603",
+                    "player": "Alaric Jackson",
+                    "position": "T",
                     "designation": null,
                     "practice": "Did Not Participate In Practice",
                     "injury": null,
@@ -10825,27 +10941,27 @@
                     "player_id": "00-0036672",
                     "player": "Grant Stuard",
                     "position": "LB",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Hamstring",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0037191",
                     "player": "Trent McDuffie",
                     "position": "CB",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Back",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0037195",
                     "player": "Jaylen Watson",
                     "position": "CB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Shoulder",
                     "source_updated_at": null
                   },
                   {
@@ -10862,7 +10978,25 @@
                     "player": "Steve Avila",
                     "position": "G",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0039075",
+                    "player": "Puka Nacua",
+                    "position": "WR",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0039137",
+                    "player": "Byron Young",
+                    "position": "LB",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -10870,32 +11004,32 @@
                     "player_id": "00-0039751",
                     "player": "Jordan Whittington",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Back",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0040737",
                     "player": "Terrance Ferguson",
                     "position": "TE",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   }
                 ],
-                "report_count": 12,
+                "report_count": 17,
                 "coverage": "REPORTED",
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -10934,14 +11068,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -10975,7 +11110,7 @@
             "roof": "outdoors",
             "surface": "grass",
             "temperature_f": 61,
-            "wind_mph": 9.0,
+            "wind_mph": 12.0,
             "wind_direction": "W",
             "precipitation_probability": 0,
             "weather_condition": "Sunny",
@@ -10989,7 +11124,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-07T02:54:59.070880+00:00",
+            "retrieved_at": "2026-11-07T16:35:53.895481+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -11020,7 +11155,7 @@
             "forecast_time": "2026-11-08T13:00:00-05:00",
             "updated_at": null,
             "temperature_f": 61,
-            "wind_mph": 9.0,
+            "wind_mph": 12.0,
             "wind_direction": "W",
             "precipitation_probability": 0,
             "condition": "Sunny"
@@ -11028,8 +11163,8 @@
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
-          "checked_at": "2026-11-07T02:54:56.962548+00:00",
+          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
+          "checked_at": "2026-11-07T16:35:51.881748+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -11261,7 +11396,7 @@
           "travel_miles": 2311,
           "roof": "outdoors",
           "temperature_f": 61,
-          "wind_mph": 9.0
+          "wind_mph": 12.0
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -11358,7 +11493,7 @@
             "available": true,
             "offense_games": 7,
             "defense_games": 7,
-            "offense_epa_per_play": 0.06898091213750439,
+            "offense_epa_per_play": 0.0689809121375044,
             "defense_epa_allowed_per_play": -0.0598243945746278,
             "offense_success_rate": 0.4350849673202615,
             "defense_success_allowed_rate": 0.4327274336478996,
@@ -11634,7 +11769,7 @@
                     "player": "Khalil Mack",
                     "position": "DE",
                     "designation": null,
-                    "practice": "Did Not Participate In Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -11642,9 +11777,9 @@
                     "player_id": "00-0032103",
                     "player": "Denzel Perryman",
                     "position": "LB",
-                    "designation": null,
+                    "designation": "Doubtful",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Pectoral",
                     "source_updated_at": null
                   },
                   {
@@ -11652,7 +11787,7 @@
                     "player": "Bud Dupree",
                     "position": "DE",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -11660,9 +11795,9 @@
                     "player_id": "00-0033885",
                     "player": "David Njoku",
                     "position": "TE",
-                    "designation": null,
+                    "designation": "Doubtful",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Fibula",
                     "source_updated_at": null
                   },
                   {
@@ -11670,7 +11805,7 @@
                     "player": "Donte Jackson",
                     "position": "CB",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -11678,27 +11813,27 @@
                     "player_id": "00-0036736",
                     "player": "Kayode Awosika",
                     "position": "G",
-                    "designation": null,
+                    "designation": "Doubtful",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Fibula",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0037320",
                     "player": "Deane Leonard",
                     "position": "CB",
-                    "designation": null,
-                    "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "designation": "Out",
+                    "practice": "Limited Participation in Practice",
+                    "injury": "Concussion",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0038414",
                     "player": "Kendall Williamson",
                     "position": "S",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Calf",
                     "source_updated_at": null
                   },
                   {
@@ -11706,7 +11841,7 @@
                     "player": "Daiyan Henley",
                     "position": "LB",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -11715,7 +11850,7 @@
                     "player": "Rodney Shelley",
                     "position": "CB",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -11723,9 +11858,9 @@
                     "player_id": "00-0041550",
                     "player": "Brenen Thompson",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Doubtful",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Quadricep",
                     "source_updated_at": null
                   }
                 ],
@@ -11735,11 +11870,11 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -11778,14 +11913,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -12119,11 +12255,11 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -12162,14 +12298,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -12213,7 +12350,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-07T02:54:59.088399+00:00",
+            "retrieved_at": "2026-11-07T16:35:53.940057+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -12246,8 +12383,8 @@
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
-          "checked_at": "2026-11-07T02:54:56.962548+00:00",
+          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
+          "checked_at": "2026-11-07T16:35:51.881748+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -12350,12 +12487,12 @@
                 "offense": {
                   "games": 7,
                   "plays": 425,
-                  "epa_per_play": 0.02666427296906782,
+                  "epa_per_play": 0.02666427296906783,
                   "success_rate": 0.4258823529411765,
                   "explosive_rate": 0.09647058823529411,
                   "pass_rate": 0.611764705882353,
-                  "pass_epa": 0.1086427342207998,
-                  "rush_epa": -0.10251390839729776,
+                  "pass_epa": 0.10864273422079983,
+                  "rush_epa": -0.10251390839729774,
                   "turnovers_per_game": 0.42857142857142855
                 },
                 "defense": {
@@ -12365,7 +12502,7 @@
                   "success_rate": 0.41309255079006774,
                   "explosive_rate": 0.09932279909706546,
                   "pass_rate": 0.6027088036117382,
-                  "pass_epa": 0.06286571432806365,
+                  "pass_epa": 0.06286571432806366,
                   "rush_epa": -0.017136531983190005,
                   "sacks_per_game": 3.0
                 },
@@ -12376,7 +12513,7 @@
                   "success_rate": 0.4488888888888889,
                   "explosive_rate": 0.10222222222222223,
                   "pass_rate": 0.5822222222222222,
-                  "pass_epa": 0.2973347262275051,
+                  "pass_epa": 0.2973347262275052,
                   "rush_epa": -0.09732210835656739,
                   "turnovers_per_game": 0.25
                 },
@@ -12667,7 +12804,7 @@
                     "starter_context": null,
                     "games": 7,
                     "availability": "UNVERIFIED",
-                    "practice": "LIMITED_PRACTICE",
+                    "practice": "NOT_REPORTED",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
                     "carries_per_game": 12.0,
@@ -12711,28 +12848,28 @@
                     }
                   },
                   {
-                    "name": "Mike Evans",
-                    "position": "WR",
+                    "name": "George Kittle",
+                    "position": "TE",
                     "qb_role": null,
                     "starter_context": null,
-                    "games": 6,
+                    "games": 7,
                     "availability": "UNVERIFIED",
-                    "practice": "DNP_PRACTICE",
+                    "practice": "NOT_REPORTED",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
                     "carries_per_game": 0.0,
                     "rush_yards_per_game": 0.0,
-                    "targets_per_game": 6.667,
-                    "receptions_per_game": 4.5,
-                    "receiving_yards_per_game": 70.0,
+                    "targets_per_game": 6.571,
+                    "receptions_per_game": 4.857,
+                    "receiving_yards_per_game": 60.714,
                     "recent_form": {
                       "passYards": 0.0,
                       "passAttempts": 0.0,
                       "rushYards": 0.0,
                       "rushAttempts": 0.0,
-                      "recYards": 74.2,
-                      "receptions": 4.2,
-                      "targets": 6.6
+                      "recYards": 66.6,
+                      "receptions": 5.6,
+                      "targets": 7.4
                     }
                   }
                 ],
@@ -12859,18 +12996,18 @@
                     "player_id": "00-0031408",
                     "player": "Mike Evans",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Ribs",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0032775",
                     "player": "Demarcus Robinson",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
@@ -12878,7 +13015,7 @@
                     "player": "Christian McCaffrey",
                     "position": "RB",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -12886,18 +13023,18 @@
                     "player_id": "00-0034391",
                     "player": "Siran Neal",
                     "position": "S",
-                    "designation": null,
-                    "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "designation": "Questionable",
+                    "practice": "Limited Participation in Practice",
+                    "injury": "Knee",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0034775",
                     "player": "Christian Kirk",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Knee",
                     "source_updated_at": null
                   },
                   {
@@ -12905,7 +13042,7 @@
                     "player": "Luke Gifford",
                     "position": "LB",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -12914,7 +13051,7 @@
                     "player": "Nick Bosa",
                     "position": "DE",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -12922,9 +13059,9 @@
                     "player_id": "00-0035719",
                     "player": "Deebo Samuel Sr.",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Hamstring",
                     "source_updated_at": null
                   },
                   {
@@ -12932,7 +13069,7 @@
                     "player": "Garret Wallow",
                     "position": "LB",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -12940,18 +13077,18 @@
                     "player_id": "00-0036871",
                     "player": "Nate Hobbs",
                     "position": "CB",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Groin",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0040152",
                     "player": "Upton Stout",
                     "position": "CB",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Shoulder",
                     "source_updated_at": null
                   },
                   {
@@ -12959,7 +13096,7 @@
                     "player": "Marques Sigle",
                     "position": "S",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -12979,11 +13116,11 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -13022,14 +13159,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -13323,9 +13461,9 @@
                     "player_id": "00-0037262",
                     "player": "Thomas Booker",
                     "position": "DT",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
@@ -13333,7 +13471,7 @@
                     "player": "Dont'e Thornton Jr.",
                     "position": "WR",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -13341,9 +13479,9 @@
                     "player_id": "00-0040641",
                     "player": "Darien Porter",
                     "position": "CB",
-                    "designation": null,
-                    "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "designation": "Questionable",
+                    "practice": "Full Participation in Practice",
+                    "injury": "Groin",
                     "source_updated_at": null
                   }
                 ],
@@ -13353,11 +13491,11 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -13396,14 +13534,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -13451,7 +13590,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-07T02:54:59.311165+00:00",
+            "retrieved_at": "2026-11-07T16:35:54.124828+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -13490,8 +13629,8 @@
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
-          "checked_at": "2026-11-07T02:54:56.962548+00:00",
+          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
+          "checked_at": "2026-11-07T16:35:51.881748+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -13931,53 +14070,53 @@
                     }
                   },
                   {
-                    "name": "TreVeyon Henderson",
+                    "name": "Corey Kiner",
                     "position": "RB",
                     "qb_role": null,
                     "starter_context": null,
-                    "games": 6,
+                    "games": 8,
                     "availability": "UNVERIFIED",
-                    "practice": "DNP_PRACTICE",
+                    "practice": "NOT_REPORTED",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
-                    "carries_per_game": 8.667,
-                    "rush_yards_per_game": 33.833,
-                    "targets_per_game": 1.167,
-                    "receptions_per_game": 0.833,
-                    "receiving_yards_per_game": 5.5,
+                    "carries_per_game": 5.25,
+                    "rush_yards_per_game": 23.625,
+                    "targets_per_game": 0.25,
+                    "receptions_per_game": 0.25,
+                    "receiving_yards_per_game": 2.0,
                     "recent_form": {
                       "passYards": 0.0,
                       "passAttempts": 0.0,
-                      "rushYards": 25.4,
-                      "rushAttempts": 7.2,
-                      "recYards": 6.6,
-                      "receptions": 1.0,
-                      "targets": 1.4
+                      "rushYards": 32.0,
+                      "rushAttempts": 5.6,
+                      "recYards": 1.4,
+                      "receptions": 0.2,
+                      "targets": 0.2
                     }
                   },
                   {
-                    "name": "A.J. Brown",
+                    "name": "DeMario Douglas",
                     "position": "WR",
                     "qb_role": null,
                     "starter_context": null,
-                    "games": 3,
+                    "games": 8,
                     "availability": "UNVERIFIED",
-                    "practice": "DNP_PRACTICE",
+                    "practice": "NOT_REPORTED",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
                     "carries_per_game": 0.0,
                     "rush_yards_per_game": 0.0,
-                    "targets_per_game": 6.667,
-                    "receptions_per_game": 3.0,
-                    "receiving_yards_per_game": 33.667,
+                    "targets_per_game": 4.625,
+                    "receptions_per_game": 3.25,
+                    "receiving_yards_per_game": 41.5,
                     "recent_form": {
                       "passYards": 0.0,
                       "passAttempts": 0.0,
                       "rushYards": 0.0,
                       "rushAttempts": 0.0,
-                      "recYards": 33.667,
-                      "receptions": 3.0,
-                      "targets": 6.667
+                      "recYards": 53.0,
+                      "receptions": 3.8,
+                      "targets": 4.6
                     }
                   }
                 ],
@@ -14103,63 +14242,63 @@
                     "player_id": "00-0029685",
                     "player": "Greg Van Roten",
                     "position": "G",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Hamstring",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0031330",
                     "player": "Morgan Moses",
                     "position": "T",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Foot",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0033090",
                     "player": "Hunter Henry",
                     "position": "TE",
-                    "designation": null,
-                    "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "designation": "Questionable",
+                    "practice": "Limited Participation in Practice",
+                    "injury": "Foot",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0033132",
                     "player": "Kevin Byard",
                     "position": "S",
-                    "designation": null,
-                    "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "designation": "Questionable",
+                    "practice": "Full Participation in Practice",
+                    "injury": "Chest",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0033555",
                     "player": "Mack Hollins",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Calf",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0034778",
                     "player": "Carlton Davis III",
                     "position": "CB",
-                    "designation": null,
-                    "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "designation": "Questionable",
+                    "practice": "Full Participation in Practice",
+                    "injury": "Neck",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0035676",
                     "player": "A.J. Brown",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
@@ -14167,7 +14306,7 @@
                     "player": "Dre'Mont Jones",
                     "position": "LB",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -14184,9 +14323,9 @@
                     "player_id": "00-0037205",
                     "player": "Brenden Schooler",
                     "position": "S",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Hamstring",
                     "source_updated_at": null
                   },
                   {
@@ -14194,7 +14333,7 @@
                     "player": "Marcus Jones",
                     "position": "CB",
                     "designation": null,
-                    "practice": "Did Not Participate In Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -14211,9 +14350,9 @@
                     "player_id": "00-0040734",
                     "player": "TreVeyon Henderson",
                     "position": "RB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Illness",
                     "source_updated_at": null
                   },
                   {
@@ -14221,7 +14360,7 @@
                     "player": "Gabe Jacas",
                     "position": "LB",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   }
@@ -14232,11 +14371,11 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -14275,14 +14414,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -14416,7 +14556,7 @@
                     "qb_role": null,
                     "starter_context": null,
                     "games": 8,
-                    "availability": "UNVERIFIED",
+                    "availability": "QUESTIONABLE",
                     "practice": "LIMITED_PRACTICE",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
@@ -14558,18 +14698,18 @@
                     "player_id": "00-0034431",
                     "player": "Zaire Franklin",
                     "position": "LB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Shin",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0035133",
                     "player": "Keisean Nixon",
                     "position": "CB",
-                    "designation": null,
-                    "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "designation": "Questionable",
+                    "practice": "Limited Participation in Practice",
+                    "injury": "Groin",
                     "source_updated_at": null
                   },
                   {
@@ -14585,18 +14725,18 @@
                     "player_id": "00-0036932",
                     "player": "Micah Parsons",
                     "position": "LB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Knee",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0037076",
                     "player": "Sean Rhyan",
                     "position": "C",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
@@ -14612,50 +14752,59 @@
                     "player_id": "00-0038589",
                     "player": "Josh Whyle",
                     "position": "TE",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Concussion",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0038685",
                     "player": "Chris Brooks",
                     "position": "RB",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0039811",
                     "player": "MarShawn Lloyd",
                     "position": "RB",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Knee",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0039819",
                     "player": "Travis Glover",
                     "position": "G",
+                    "designation": "Out",
+                    "practice": "Did Not Participate In Practice",
+                    "injury": "Knee",
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0039867",
+                    "player": "Javon Bullard",
+                    "position": "S",
                     "designation": null,
                     "practice": "Did Not Participate In Practice",
                     "injury": null,
                     "source_updated_at": null
                   }
                 ],
-                "report_count": 10,
+                "report_count": 11,
                 "coverage": "REPORTED",
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -14694,14 +14843,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -14734,11 +14884,11 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "fieldturf",
-            "temperature_f": 58,
+            "temperature_f": 57,
             "wind_mph": 7.0,
             "wind_direction": "W",
             "precipitation_probability": 0,
-            "weather_condition": "Mostly Sunny",
+            "weather_condition": "Sunny",
             "weather_updated_at": null
           },
           "travel": {
@@ -14749,7 +14899,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-07T02:54:59.521728+00:00",
+            "retrieved_at": "2026-11-07T16:35:54.282305+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -14779,17 +14929,17 @@
             "source": "National Weather Service hourly forecast",
             "forecast_time": "2026-11-08T16:00:00-05:00",
             "updated_at": null,
-            "temperature_f": 58,
+            "temperature_f": 57,
             "wind_mph": 7.0,
             "wind_direction": "W",
             "precipitation_probability": 0,
-            "condition": "Mostly Sunny"
+            "condition": "Sunny"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
-          "checked_at": "2026-11-07T02:54:56.962548+00:00",
+          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
+          "checked_at": "2026-11-07T16:35:51.881748+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -15021,7 +15171,7 @@
           "away_rest": 10.0,
           "travel_miles": 859,
           "roof": "outdoors",
-          "temperature_f": 58,
+          "temperature_f": 57,
           "wind_mph": 7.0
         },
         "prior_games": 4.0,
@@ -15179,25 +15329,25 @@
               },
               "usage": {
                 "quarterback": {
-                  "name": "Sam Darnold",
+                  "name": "Drew Lock",
                   "position": "QB",
                   "qb_role": null,
                   "starter_context": null,
-                  "games": 7,
+                  "games": 2,
                   "availability": "UNVERIFIED",
-                  "practice": "DNP_PRACTICE",
-                  "pass_attempts_per_game": 32.571,
-                  "pass_yards_per_game": 211.143,
-                  "carries_per_game": 1.286,
-                  "rush_yards_per_game": 10.571,
+                  "practice": "LIMITED_PRACTICE",
+                  "pass_attempts_per_game": 25.0,
+                  "pass_yards_per_game": 211.0,
+                  "carries_per_game": 0.5,
+                  "rush_yards_per_game": 7.0,
                   "targets_per_game": null,
                   "receptions_per_game": null,
                   "receiving_yards_per_game": null,
                   "recent_form": {
-                    "passYards": 217.2,
-                    "passAttempts": 36.0,
-                    "rushYards": 13.8,
-                    "rushAttempts": 1.6,
+                    "passYards": 211.0,
+                    "passAttempts": 25.0,
+                    "rushYards": 7.0,
+                    "rushAttempts": 0.5,
                     "recYards": 0.0,
                     "receptions": 0.0,
                     "targets": 0.0
@@ -15261,7 +15411,7 @@
                     "starter_context": null,
                     "games": 8,
                     "availability": "UNVERIFIED",
-                    "practice": "LIMITED_PRACTICE",
+                    "practice": "NOT_REPORTED",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
                     "carries_per_game": 0.375,
@@ -15402,36 +15552,36 @@
                     "player_id": "00-0031933",
                     "player": "Leonard Williams",
                     "position": "DT",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Stinger",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0034342",
                     "player": "Quenton Nelson",
                     "position": "G",
-                    "designation": null,
-                    "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "designation": "Out",
+                    "practice": "Did Not Participate In Practice",
+                    "injury": "Knee",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0034350",
                     "player": "Uchenna Nwosu",
                     "position": "LB",
-                    "designation": null,
-                    "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "designation": "Out",
+                    "practice": "Did Not Participate In Practice",
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0034869",
                     "player": "Sam Darnold",
                     "position": "QB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Quadricep",
                     "source_updated_at": null
                   },
                   {
@@ -15444,12 +15594,21 @@
                     "source_updated_at": null
                   },
                   {
+                    "player_id": "00-0036994",
+                    "player": "Ernest Jones",
+                    "position": "LB",
+                    "designation": null,
+                    "practice": "Full Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
                     "player_id": "00-0037545",
                     "player": "Rashid Shaheed",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Knee",
                     "source_updated_at": null
                   },
                   {
@@ -15465,9 +15624,9 @@
                     "player_id": "00-0037821",
                     "player": "Charles Cross",
                     "position": "T",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
@@ -15475,7 +15634,7 @@
                     "player": "Jaxon Smith-Njigba",
                     "position": "WR",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -15483,9 +15642,9 @@
                     "player_id": "00-0038694",
                     "player": "Brandon Pili",
                     "position": "DT",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Back",
                     "source_updated_at": null
                   },
                   {
@@ -15493,7 +15652,16 @@
                     "player": "Anthony Bradford",
                     "position": "G",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0039047",
+                    "player": "Derick Hall",
+                    "position": "LB",
+                    "designation": null,
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -15510,9 +15678,9 @@
                     "player_id": "00-0040061",
                     "player": "Connor O'Toole",
                     "position": "LB",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Foot",
                     "source_updated_at": null
                   },
                   {
@@ -15534,17 +15702,17 @@
                     "source_updated_at": null
                   }
                 ],
-                "report_count": 15,
+                "report_count": 17,
                 "coverage": "REPORTED",
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -15583,14 +15751,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -15911,9 +16080,9 @@
                     "player_id": "00-0037157",
                     "player": "Bam Knight",
                     "position": "RB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Concussion",
                     "source_updated_at": null
                   },
                   {
@@ -15929,36 +16098,36 @@
                     "player_id": "00-0038571",
                     "player": "Jon Gaines II",
                     "position": "G",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0039807",
                     "player": "Max Melton",
                     "position": "CB",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Knee",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0039808",
                     "player": "Isaiah Adams",
                     "position": "G",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0040706",
                     "player": "Walter Nolen",
                     "position": "DT",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Ankle",
                     "source_updated_at": null
                   },
                   {
@@ -15974,9 +16143,9 @@
                     "player_id": "00-0041113",
                     "player": "Jayden Williams",
                     "position": "T",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Knee",
                     "source_updated_at": null
                   }
                 ],
@@ -15986,11 +16155,11 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -16029,14 +16198,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -16069,11 +16239,11 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "fieldturf",
-            "temperature_f": 56,
-            "wind_mph": 12.0,
+            "temperature_f": 55,
+            "wind_mph": 10.0,
             "wind_direction": "SSW",
-            "precipitation_probability": 10,
-            "weather_condition": "Partly Sunny",
+            "precipitation_probability": 35,
+            "weather_condition": "Chance Rain Showers",
             "weather_updated_at": null
           },
           "travel": {
@@ -16084,7 +16254,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-07T02:54:59.757813+00:00",
+            "retrieved_at": "2026-11-07T16:35:54.419450+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -16114,17 +16284,17 @@
             "source": "National Weather Service hourly forecast",
             "forecast_time": "2026-11-08T13:00:00-08:00",
             "updated_at": null,
-            "temperature_f": 56,
-            "wind_mph": 12.0,
+            "temperature_f": 55,
+            "wind_mph": 10.0,
             "wind_direction": "SSW",
-            "precipitation_probability": 10,
-            "condition": "Partly Sunny"
+            "precipitation_probability": 35,
+            "condition": "Chance Rain Showers"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
-          "checked_at": "2026-11-07T02:54:56.962548+00:00",
+          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
+          "checked_at": "2026-11-07T16:35:51.881748+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -16356,8 +16526,8 @@
           "away_rest": 7.0,
           "travel_miles": 1104,
           "roof": "outdoors",
-          "temperature_f": 56,
-          "wind_mph": 12.0
+          "temperature_f": 55,
+          "wind_mph": 10.0
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -16570,8 +16740,8 @@
                     "qb_role": null,
                     "starter_context": null,
                     "games": 4,
-                    "availability": "UNVERIFIED",
-                    "practice": "DNP_PRACTICE",
+                    "availability": "QUESTIONABLE",
+                    "practice": "LIMITED_PRACTICE",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
                     "carries_per_game": 15.0,
@@ -16738,7 +16908,7 @@
                     "player": "Grady Jarrett",
                     "position": "DT",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -16747,7 +16917,7 @@
                     "player": "Joe Thuney",
                     "position": "G",
                     "designation": null,
-                    "practice": "Did Not Participate In Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -16765,7 +16935,7 @@
                     "player": "D'Marco Jackson",
                     "position": "LB",
                     "designation": null,
-                    "practice": "Did Not Participate In Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -16779,11 +16949,20 @@
                     "source_updated_at": null
                   },
                   {
+                    "player_id": "00-0039071",
+                    "player": "Tyrique Stevenson",
+                    "position": "CB",
+                    "designation": "Questionable",
+                    "practice": "Limited Participation in Practice",
+                    "injury": "Thumb",
+                    "source_updated_at": null
+                  },
+                  {
                     "player_id": "00-0039459",
                     "player": "Theo Benedet",
                     "position": "T",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -16791,32 +16970,32 @@
                     "player_id": "00-0040236",
                     "player": "Kyle Monangai",
                     "position": "RB",
-                    "designation": null,
-                    "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "designation": "Questionable",
+                    "practice": "Limited Participation in Practice",
+                    "injury": "Thumb",
                     "source_updated_at": null
                   },
                   {
                     "player_id": "00-0041060",
                     "player": "Malik Muhammad",
                     "position": "CB",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Limited Participation in Practice",
-                    "injury": null,
+                    "injury": "Toe",
                     "source_updated_at": null
                   }
                 ],
-                "report_count": 8,
+                "report_count": 9,
                 "coverage": "REPORTED",
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -16855,14 +17034,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -16947,7 +17127,7 @@
                     "starter_context": null,
                     "games": 8,
                     "availability": "UNVERIFIED",
-                    "practice": "DNP_PRACTICE",
+                    "practice": "NOT_REPORTED",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
                     "carries_per_game": 18.375,
@@ -16996,7 +17176,7 @@
                     "qb_role": null,
                     "starter_context": null,
                     "games": 6,
-                    "availability": "UNVERIFIED",
+                    "availability": "QUESTIONABLE",
                     "practice": "NOT_REPORTED",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
@@ -17139,7 +17319,7 @@
                     "player": "A'Shawn Robinson",
                     "position": "DT",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -17148,7 +17328,7 @@
                     "player": "Chris Godwin Jr.",
                     "position": "WR",
                     "designation": null,
-                    "practice": "Did Not Participate In Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -17166,7 +17346,7 @@
                     "player": "Tristan Wirfs",
                     "position": "T",
                     "designation": null,
-                    "practice": "Did Not Participate In Practice",
+                    "practice": "Limited Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -17192,9 +17372,9 @@
                     "player_id": "00-0039068",
                     "player": "Yaya Diaby",
                     "position": "LB",
-                    "designation": null,
+                    "designation": "Out",
                     "practice": "Did Not Participate In Practice",
-                    "injury": null,
+                    "injury": "Knee",
                     "source_updated_at": null
                   },
                   {
@@ -17211,7 +17391,7 @@
                     "player": "Bucky Irving",
                     "position": "RB",
                     "designation": null,
-                    "practice": "Did Not Participate In Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -17220,7 +17400,7 @@
                     "player": "Tykee Smith",
                     "position": "S",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -17228,9 +17408,9 @@
                     "player_id": "00-0040129",
                     "player": "Emeka Egbuka",
                     "position": "WR",
-                    "designation": null,
+                    "designation": "Questionable",
                     "practice": "Full Participation in Practice",
-                    "injury": null,
+                    "injury": "Foot",
                     "source_updated_at": null
                   },
                   {
@@ -17249,11 +17429,11 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -17292,14 +17472,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -17332,7 +17513,7 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "grass",
-            "temperature_f": 51,
+            "temperature_f": 53,
             "wind_mph": 10.0,
             "wind_direction": "WNW",
             "precipitation_probability": 0,
@@ -17347,7 +17528,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-07T02:55:00.002129+00:00",
+            "retrieved_at": "2026-11-07T16:35:54.553624+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -17377,7 +17558,7 @@
             "source": "National Weather Service hourly forecast",
             "forecast_time": "2026-11-08T19:00:00-06:00",
             "updated_at": null,
-            "temperature_f": 51,
+            "temperature_f": 53,
             "wind_mph": 10.0,
             "wind_direction": "WNW",
             "precipitation_probability": 0,
@@ -17386,8 +17567,8 @@
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
-          "checked_at": "2026-11-07T02:54:56.962548+00:00",
+          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
+          "checked_at": "2026-11-07T16:35:51.881748+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -17619,7 +17800,7 @@
           "away_rest": 7.0,
           "travel_miles": 1002,
           "roof": "outdoors",
-          "temperature_f": 51,
+          "temperature_f": 53,
           "wind_mph": 10.0
         },
         "prior_games": 4.0,
@@ -17701,7 +17882,7 @@
             "success_rate_delta": -0.06484778885419029,
             "explosive_rate_offense": 0.09203980099502487,
             "explosive_rate_defense_allowed": 0.10021786492374728,
-            "pass_epa_offense": -0.053315489978598016,
+            "pass_epa_offense": -0.05331548997859801,
             "pass_epa_defense_allowed": 0.12273179243710744,
             "rush_epa_offense": -0.13283007286129322,
             "rush_epa_defense_allowed": -0.04880208536228282,
@@ -18011,7 +18192,7 @@
                     "player": "Isaiah Rodgers",
                     "position": "CB",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -18020,7 +18201,7 @@
                     "player": "Jauan Jennings",
                     "position": "WR",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Did Not Participate In Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -18029,7 +18210,7 @@
                     "player": "Christian Darrisaw",
                     "position": "T",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -18056,7 +18237,7 @@
                     "player": "Demond Claiborne",
                     "position": "RB",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Did Not Participate In Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -18065,7 +18246,7 @@
                     "player": "Jake Golday",
                     "position": "LB",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   }
@@ -18076,11 +18257,11 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -18119,14 +18300,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -18261,7 +18443,7 @@
                     "starter_context": null,
                     "games": 7,
                     "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
+                    "practice": "DNP_PRACTICE",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
                     "carries_per_game": 0.0,
@@ -18431,7 +18613,7 @@
                     "player": "Ty Johnson",
                     "position": "RB",
                     "designation": null,
-                    "practice": "Did Not Participate In Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -18439,6 +18621,15 @@
                     "player_id": "00-0035667",
                     "player": "Greg Gaines",
                     "position": "DT",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0036037",
+                    "player": "Sam Franklin Jr.",
+                    "position": "S",
                     "designation": null,
                     "practice": "Did Not Participate In Practice",
                     "injury": null,
@@ -18472,6 +18663,15 @@
                     "source_updated_at": null
                   },
                   {
+                    "player_id": "00-0037261",
+                    "player": "Khalil Shakir",
+                    "position": "WR",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
                     "player_id": "00-0037428",
                     "player": "Alec Anderson",
                     "position": "G",
@@ -18494,7 +18694,7 @@
                     "player": "Dalton Kincaid",
                     "position": "TE",
                     "designation": null,
-                    "practice": "Limited Participation in Practice",
+                    "practice": "Full Participation in Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -18526,6 +18726,15 @@
                     "source_updated_at": null
                   },
                   {
+                    "player_id": "00-0040710",
+                    "player": "Deone Walker",
+                    "position": "DT",
+                    "designation": null,
+                    "practice": "Full Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
                     "player_id": "00-0040724",
                     "player": "T.J. Sanders",
                     "position": "DE",
@@ -18553,17 +18762,17 @@
                     "source_updated_at": null
                   }
                 ],
-                "report_count": 18,
+                "report_count": 21,
                 "coverage": "REPORTED",
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 340,
-                  "matched_rows": 340,
-                  "matched_ids": 7,
-                  "practice_flags": 222,
-                  "game_designations_reported": 7,
+                  "rows_for_week": 360,
+                  "matched_rows": 360,
+                  "matched_ids": 141,
+                  "practice_flags": 176,
+                  "game_designations_reported": 141,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
@@ -18602,14 +18811,15 @@
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 333,
-                    "QUESTIONABLE": 4,
-                    "OUT": 3
+                    "MISSING": 219,
+                    "QUESTIONABLE": 72,
+                    "OUT": 63,
+                    "DOUBTFUL": 6
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 2799,
+                  "source_rows": 2819,
                   "columns": [
                     "season",
                     "season_type",
@@ -18653,7 +18863,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-07T02:55:00.020024+00:00",
+            "retrieved_at": "2026-11-07T16:35:54.599334+00:00",
             "season": 2026,
             "through_week": 8,
             "sources": [
@@ -18686,8 +18896,8 @@
         },
         "trust": {
           "source_status": "RECONCILED",
-          "source_sha256": "ba3f14549c865ef8f00b5b937d62a91366861ec325bcd3b79f8391872647dac2",
-          "checked_at": "2026-11-07T02:54:56.962548+00:00",
+          "source_sha256": "5fa5c354c2c1b8bf14cb6a0907f49764f29958bc0ea9451a9dfb72747545abc9",
+          "checked_at": "2026-11-07T16:35:51.881748+00:00",
           "through_week": 8,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -18726,11 +18936,11 @@
                 "offense": {
                   "games": 7,
                   "plays": 402,
-                  "epa_per_play": -0.0957603671467533,
+                  "epa_per_play": -0.09576036714675329,
                   "success_rate": 0.373134328358209,
                   "explosive_rate": 0.09203980099502487,
                   "pass_rate": 0.5348258706467661,
-                  "pass_epa": -0.0693848372845936,
+                  "pass_epa": -0.06938483728459359,
                   "rush_epa": -0.12608517420752513,
                   "turnovers_per_game": 0.7142857142857143
                 },
@@ -18748,11 +18958,11 @@
                 "recent_offense": {
                   "games": 4,
                   "plays": 237,
-                  "epa_per_play": -0.07960081476367963,
+                  "epa_per_play": -0.07960081476367961,
                   "success_rate": 0.4177215189873418,
                   "explosive_rate": 0.10970464135021098,
                   "pass_rate": 0.5569620253164557,
-                  "pass_epa": -0.029211469019604665,
+                  "pass_epa": -0.029211469019604627,
                   "rush_epa": -0.1429474208419453,
                   "turnovers_per_game": 0.75
                 },
