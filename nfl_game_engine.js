@@ -113,7 +113,7 @@ function simulate(records,count=10000,seed=1307,selected=[]){
   if(market==='passYards'&&p.pos!=='QB')continue;
   if(['recYards','receptions'].includes(market)&&!['RB','WR','TE'].includes(p.pos))continue;
   if(market==='rushYards'&&!['QB','RB','WR'].includes(p.pos))continue;
-  for(const line of lines)hits.set(p.id+'|'+market+'|'+line,0);
+  for(const line of lines)hits.set(JSON.stringify([p.id,market,line]),0);
  }
  let joint=0;
  const sumScores={};
@@ -166,7 +166,7 @@ function simulate(records,count=10000,seed=1307,selected=[]){
  }
  const markets=[];
  for(const [key,n] of hits.entries()){
-  const [id,market,line]=key.split('|');
+  const [id,market,line]=JSON.parse(key);
   const p=byId.get(id);
   if(!p)continue;
   const rate=n/count;
