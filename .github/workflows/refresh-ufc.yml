@@ -25,6 +25,8 @@ jobs:
         if: ${{ !cancelled() }}
         run: |
           node test_ufc_research.js
+          python scripts/validate_ufc_cache.py
+          python -m py_compile scripts/refresh_ufc.py scripts/validate_ufc_cache.py
           node test_ufc_app.js
           python -m unittest discover -s tests -p test_ufc_refresh.py
           if [ -f ufc_schedule.json ]; then python -m json.tool ufc_schedule.json >/dev/null; fi

@@ -96,7 +96,7 @@ def refresh_fighters(now, key):
                 data = api("get_fighter", {"fighter_id": str(fid)}, key)
                 extracted = stats(data)
                 if extracted:
-                    fighters[name.strip().casefold()] = {"id": str(fid), "name": name, "stats": extracted, "record": data.get("fighter", {}).get("pro_record"), "updated_at": now.isoformat()}
+                    fighters[name.strip().casefold()] = {"id": str(fid), "name": name, "stats": extracted, "record": data.get("fighter", {}).get("pro_record"), "fetched_at": now.isoformat()}
                 else:
                     print("Incomplete career rates:", name)
             except Exception as exc:
@@ -105,7 +105,7 @@ def refresh_fighters(now, key):
             time.sleep(0.12)
     if not fighters:
         raise ValueError("No complete fighter profiles; preserving the previous cache")
-    write_json("ufc_fighter_data.json", {"generated_at": now.isoformat(), "source": "FighterAPI authenticated REST get_schedule/get_fighter", "fighters": fighters, "scheduled_bouts": len(bouts)})
+    write_json("ufc_fighter_data.json", {"generated_at": now.isoformat(), "source": "FighterAPI authenticated REST get_schedule/get_fighter", "fighters": fighters, "scheduled_bouts": len(bouts), "coverage": {"profiles": len(fighters), "fighters_expected": len(seen), "complete": len(fighters) == len(seen)}})
     print("Refreshed fighter profiles:", len(fighters))
 
 
