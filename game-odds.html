@@ -342,11 +342,11 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
  $('run').onclick=async()=>{
   if(busy)return;
   if(!selected){$('runStatus').textContent='Select a matchup first.';return;}
-  if(sport==='NBA'&&typeof CookNBALiveContext!=='undefined'){
-   const chosen=selected,request=++runId;busy=true;$('run').disabled=true;$('runStatus').textContent='Checking latest NBA availability and lineups…';
-   try{const latest=await Promise.race([CookNBALiveContext.latest(),new Promise((_,reject)=>setTimeout(()=>reject(Error('Availability check timed out after 12 seconds')),12000))]);if(request!==runId||selected!==chosen)return;chosen.nbaInputs.injuries=latest.injuries||chosen.nbaInputs.injuries;chosen.nbaInputs.gameContext=latest.context;chosen.model=CookGameOdds.nbaGame(chosen.game,chosen.nbaInputs.feed,{injuries:chosen.nbaInputs.injuries,rosters:chosen.nbaInputs.rosters,gameContext:latest.context});}
-   catch(e){$('runStatus').textContent='Live availability could not refresh: '+e.message+'. Using the previously published NBA injury and lineup snapshot.';if(request!==runId||selected!==chosen)return;}
-   busy=false;$('run').disabled=false;
+  // A network availability refresh must never block the actual game simulation.
+  // The pregame feed and injury snapshot were already loaded for this matchup.
+  if(sport==='NBA'&&!selected.model&&selected.nbaInputs){
+   try{selected.model=CookGameOdds.nbaGame(selected.game,selected.nbaInputs.feed,{injuries:selected.nbaInputs.injuries,rosters:selected.nbaInputs.rosters,gameContext:selected.nbaInputs.gameContext});}
+   catch(e){$('runStatus').textContent='Cannot prepare NBA model: '+e.message;return;}
   }
   if(!selected.model){$('runStatus').textContent='NBA simulation modules are unavailable. Reload this page to retry.';return;}
   store();
