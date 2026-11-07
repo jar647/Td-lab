@@ -344,8 +344,8 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   if(!selected){$('runStatus').textContent='Select a matchup first.';return;}
   if(sport==='NBA'&&typeof CookNBALiveContext!=='undefined'){
    const chosen=selected,request=++runId;busy=true;$('run').disabled=true;$('runStatus').textContent='Checking latest NBA availability and lineups…';
-   try{const latest=await CookNBALiveContext.latest();if(request!==runId||selected!==chosen)return;chosen.nbaInputs.injuries=latest.injuries||chosen.nbaInputs.injuries;chosen.nbaInputs.gameContext=latest.context;chosen.model=CookGameOdds.nbaGame(chosen.game,chosen.nbaInputs.feed,{injuries:chosen.nbaInputs.injuries,rosters:chosen.nbaInputs.rosters,gameContext:latest.context});}
-   catch(e){$('runStatus').textContent='Availability refresh required: '+e.message;busy=false;$('run').disabled=false;return;}
+   try{const latest=await Promise.race([CookNBALiveContext.latest(),new Promise((_,reject)=>setTimeout(()=>reject(Error('Availability check timed out after 12 seconds')),12000))]);if(request!==runId||selected!==chosen)return;chosen.nbaInputs.injuries=latest.injuries||chosen.nbaInputs.injuries;chosen.nbaInputs.gameContext=latest.context;chosen.model=CookGameOdds.nbaGame(chosen.game,chosen.nbaInputs.feed,{injuries:chosen.nbaInputs.injuries,rosters:chosen.nbaInputs.rosters,gameContext:latest.context});}
+   catch(e){$('runStatus').textContent='Live availability could not refresh: '+e.message+'. Using the previously published NBA injury and lineup snapshot.';if(request!==runId||selected!==chosen)return;}
    busy=false;$('run').disabled=false;
   }
   if(!selected.model){$('runStatus').textContent='NBA simulation modules are unavailable. Reload this page to retry.';return;}
@@ -365,16 +365,16 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    render(result,model);
   };
   if(typeof Worker==='function'){
-   try{worker=new Worker('./game_odds_worker.js?v=nfl-score-candidate-1');
-    worker.onmessage=e=>{if(e.data?.requestId===thisId)done(e.data.error,e.data.result);};
-    worker.onerror=e=>done(e.message||'Worker failed');
+   try{worker=new Worker('./game_odds_worker.js?v=nba-sim-watchdog-1');const activeWorker=worker;const workerTimer=setTimeout(()=>{if(worker===activeWorker)done('Simulation worker timed out after 30 seconds. Please retry.');},30000);
+    worker.onmessage=e=>{if(e.data?.requestId===thisId){clearTimeout(workerTimer);done(e.data.error,e.data.result);}};
+    worker.onerror=e=>{clearTimeout(workerTimer);done(e.message||'Worker failed');};worker.onmessageerror=()=>{clearTimeout(workerTimer);done('Worker response could not be read');};
     worker.postMessage({requestId:thisId,game:model,market,seed:6472026});
     return;
    }catch(_){if(worker)worker.terminate();worker=null;}
   }
   setTimeout(()=>{try{done(null,CookGameOdds.simulate(model,market,100000,6472026));}catch(e){done(e.message);}},20);
  };
- if(typeof CookNBALiveContext!=='undefined')CookNBALiveContext.watch(()=>sport==='NBA'?selected?.game:null,latest=>{if(!selected?.nbaInputs)return;selected.nbaInputs.gameContext=latest.context;selected.nbaInputs.injuries=latest.injuries||selected.nbaInputs.injuries;runId++;if(worker){worker.terminate();worker=null}busy=false;$('run').disabled=false;$('run').textContent='🔥 Simulate 100,000 games';$('results').hidden=true;$('runStatus').textContent='Availability or lineup information changed. Simulate again; your entered odds are preserved.';});
+ if(typeof CookNBALiveContext!=='undefined')CookNBALiveContext.watch(()=>sport==='NBA'?selected?.game:null,latest=>{if(!selected?.nbaInputs)return;selected.nbaInputs.gameContext=latest.context;selected.nbaInputs.injuries=latest.injuries||selected.nbaInputs.injuries;if(busy)return;runId++;if(worker){worker.terminate();worker=null}busy=false;$('run').disabled=false;$('run').textContent='🔥 Simulate 100,000 games';$('results').hidden=true;$('runStatus').textContent='Availability or lineup information changed. Simulate again; your entered odds are preserved.';});
  load().catch(e=>{$('feedStatus').textContent='Could not load game feeds: '+e.message;});
 })();
 </script></body></html>
