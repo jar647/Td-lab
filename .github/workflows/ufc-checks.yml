@@ -6,9 +6,14 @@ on:
       - 'ufc.css'
       - 'ufc_app.js'
       - 'ufc_matchup_research.js'
+      - 'ufc_prop_research.js'
+      - 'test_ufc_prop_research.js'
       - 'test_ufc_matchup_research.js'
       - 'test_ufc_app.js'
       - 'scripts/refresh_ufc.py'
+      - 'scripts/refresh_ufc_history.py'
+      - 'tests/test_ufc_history.py'
+      - 'ufc_history_data.json'
       - 'scripts/validate_ufc_cache.py'
       - 'ufc_fighter_data.json'
       - 'tests/test_ufc_refresh.py'
@@ -20,6 +25,9 @@ on:
     paths:
       - '*ufc*'
       - 'scripts/refresh_ufc.py'
+      - 'scripts/refresh_ufc_history.py'
+      - 'tests/test_ufc_history.py'
+      - 'ufc_history_data.json'
       - 'scripts/validate_ufc_cache.py'
       - 'ufc_fighter_data.json'
       - 'tests/test_ufc_refresh.py'
@@ -41,7 +49,8 @@ jobs:
           python -m py_compile scripts/refresh_ufc.py scripts/validate_ufc_cache.py
           node test_ufc_app.js
           node test_ufc_matchup_research.js
-          python -m unittest discover -s tests -p test_ufc_refresh.py
+          node test_ufc_prop_research.js
+          python -m unittest discover -s tests -p 'test_ufc*.py'
           python scripts/test_ufc_refresh_unit.py
       - name: Check live ESPN UFC feed structure
         shell: bash
