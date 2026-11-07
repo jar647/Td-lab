@@ -350,7 +350,11 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   }
   if(!selected.model){$('runStatus').textContent='NBA simulation modules are unavailable. Reload this page to retry.';return;}
   store();
-  const model=selected.model,market=readFields();if(model.possessionModel)model.slipLegs=CookNBASimulatorUI.slipLegs(selected.game,typeof CookItUpQuickSlip==='undefined'?null:CookItUpQuickSlip);
+  const model=selected.model,market=readFields();
+  if(model.possessionModel&&typeof CookNBASimulatorUI!=='undefined'&&typeof CookNBASimulatorUI.slipLegs==='function'){
+   try{model.slipLegs=CookNBASimulatorUI.slipLegs(selected.game,typeof CookItUpQuickSlip==='undefined'?null:CookItUpQuickSlip);}
+   catch(e){model.slipLegs=[];console.warn('Optional NBA slip context unavailable',e);}
+  }
   try{CookGameOdds.marketInput(market);}catch(err){$('runStatus').textContent='⚠️ '+err.message;return;}
   busy=true;$('run').disabled=true;$('run').textContent='Simulating 100,000 scores…';
   $('runStatus').textContent='Running 100,000 game outcomes and checking your sportsbook prices. NBA possession simulation may take longer.';
