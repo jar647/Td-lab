@@ -1,0 +1,27 @@
+name: UFC regression tests
+on:
+  push:
+    paths:
+      - 'ufc_*.js'
+      - 'tests/ufc*.test.js'
+      - '.github/workflows/ufc-tests.yml'
+  pull_request:
+    paths:
+      - 'ufc_*.js'
+      - 'tests/ufc*.test.js'
+      - '.github/workflows/ufc-tests.yml'
+  workflow_dispatch:
+jobs:
+  ufc-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check UFC JavaScript syntax
+        run: |
+          for file in ufc_*.js; do node --check "$file"; done
+      - name: Run UFC regression suite
+        run: node --test tests/ufc*.test.js
