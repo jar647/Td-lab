@@ -3,7 +3,9 @@ on:
   push:
     paths:
       - 'nfl_game_engine.js'
+      - 'nfl_backtest.js'
       - 'tests/nfl_game_engine.test.js'
+      - 'tests/nfl_backtest.test.js'
       - '.github/workflows/nfl-tests.yml'
   pull_request:
     paths:
@@ -21,4 +23,5 @@ jobs:
         with:
           node-version: '22'
       - run: node --check nfl_game_engine.js
-      - run: node --test tests/nfl_game_engine.test.js
+      - run: node --check nfl_backtest.js
+      - run: node --test tests/nfl_game_engine.test.js tests/nfl_backtest.test.js
