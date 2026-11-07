@@ -19,9 +19,15 @@ def stats(profile):
     result={}
     for k,(source,divisor) in aliases.items():
         v=rates.get(source)
-        if not isinstance(v,(int,float)) or isinstance(v,bool):return None
+        if isinstance(v,bool):return None
+        if isinstance(v,str):
+            try:v=float(v.strip().rstrip("%"))
+            except ValueError:return None
+        if not isinstance(v,(int,float)) or not __import__("math").isfinite(v):return None
         v=float(v)/divisor
-        if k in ("strAcc","strDef","tdAcc","tdDef"):v*=100
+        if k in ("strAcc","strDef","tdAcc","tdDef"):
+            if 0<=v<=1:v*=100
+            elif not 0<=v<=100:return None
         if not 0<=v<=1000:return None
         result[k]=round(v,5)
     return result
@@ -41,7 +47,7 @@ for bout in bouts:
         if not fid or not name:continue
         key=name.strip().casefold()
         if key in fighters:continue
-        if key in old and old[key].get("id")==str(fid):
+        if key in old and old[key].get("id")==str(fid) and all(isinstance(old[key].get("stats",{}).get(metric),(int,float)) for metric in ("slpm","sapm","strAcc","strDef","tdAvg","tdAcc","tdDef","subAvg")):
             fighters[key]=old[key]
             continue
         try:
