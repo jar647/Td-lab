@@ -69,12 +69,14 @@ if (typeof module === 'object' && module.exports) module.exports = api;
 root.UFCApp = api;
 if (typeof document === 'undefined') return;
 const $ = id => document.getElementById(id);
-const ODDS_KEY = 'prop-shop-ufc-odds-v1', SCHEDULE_KEY = 'prop-shop-ufc-schedule-v1';
+const ODDS_KEY = 'prop-shop-ufc-odds-v1', SCHEDULE_KEY = 'prop-shop-ufc-schedule-v1', PROP_KEY='prop-shop-ufc-props-v1';
 function read(key, fallback) {try {return JSON.parse(localStorage.getItem(key)) ?? fallback;} catch (_) {return fallback;}}
 function save(key, value) {try {localStorage.setItem(key, JSON.stringify(value));} catch (_) {/* Storage may be disabled. */}}
 const storedOdds = read(ODDS_KEY, {});
 let odds = storedOdds && typeof storedOdds === 'object' && !Array.isArray(storedOdds) ? storedOdds : {};
-let events = [], active = '', filter = 'all', query = '', order = 'time', cache = {}, cacheDate = '', cacheBouts = [], generation = 0, loaded = false;
+const initialProps=read(PROP_KEY,{});
+const propInputs=initialProps&&typeof initialProps==='object'&&!Array.isArray(initialProps)?initialProps:{};
+let events = [], active = '', filter = 'all', query = '', order = 'time', cache = {}, cacheDate = '', cacheBouts = [], publicHistory = {}, generation = 0, loaded = false;
 const labels = {early:'EARLY PRELIMS',prelim:'PRELIMS',main:'MAIN CARD',unknown:'CARD POSITION UNVERIFIED'};
 const dateText = (value, options = {dateStyle:'medium',timeStyle:'short'}) => Number.isFinite(Date.parse(value)) ? new Date(value).toLocaleString(undefined, options) : 'Time TBA';
 const fighterName = c => c?.athlete?.displayName || c?.athlete?.fullName || c?.displayName || 'Fighter TBD';
@@ -93,6 +95,16 @@ function fighterStats(c) {
   for (const [key,value] of Object.entries(profileFor(c).stats || {})) if (numeric(value)!==null) result[key]=value;
   return result;
 }
+function freshHistorySource(value){const age=Date.now()-Date.parse(value);return Number.isFinite(age)&&age>=-86400000&&age<=7*86400000;}
+function propProfileFor(c) {
+  const base=profileFor(c),id=String(c?.athlete?.id||c?.id||base.id||'');
+  const extra=publicHistory[id];
+  if(!extra||String(extra.id)!==id)return base;
+  const historyFresh=freshHistorySource(extra.history_fetched_at),recordFresh=freshHistorySource(extra.method_record_fetched_at);
+  if(!historyFresh&&!recordFresh)return base;
+  const histories=[...(historyFresh?extra.recent_fights||[]:[]),...(base.recent_fights||[])];
+  return {...base,id,name:fighterName(c),...(extra.method_record&&recordFresh?{method_record:extra.method_record,method_record_scope:extra.method_record_scope,method_record_source:extra.method_record_source,method_record_fetched_at:extra.method_record_fetched_at}:{}),recent_fights:histories.sort((a,b)=>Date.parse(b.starts_at||b.event_date)-Date.parse(a.starts_at||a.event_date)),history_source:historyFresh?extra.history_source:base.history_source,history_fetched_at:historyFresh?extra.history_fetched_at:base.history_fetched_at};
+}
 function matchupReport(fighters) {
   return root.UFCMatchupResearch?.describe(...fighters.map(fighterStats),{names:fighters.map(fighterName),profiles:fighters.map(profileFor)});
 }
@@ -105,8 +117,9 @@ function researchPreview(fighters) {
   return '<div class="research-preview"><span class="eyebrow">MATCHUP RESEARCH</span><h3>'+escape(heading)+'</h3><p class="muted">'+escape(report.status==='incomplete'?'Partial comparison · '+missing.join(' · '):report.leanReason)+'</p><span class="small muted">'+(report.status==='incomplete'?'Available evidence is shown in the fight breakdown below.':'Experimental statistical lean · independent of sportsbook prices')+'</span></div>';
 }
 function recentHistory(c) {
-  const profile=profileFor(c), name=fighterName(c), id=String(profile.id||c.id||'');
-  const rows=(Array.isArray(profile.recent_fights)?profile.recent_fights:[]).filter(f=>f && (f.winner || /final|complete|post/i.test(String(f.status||'')))).slice(0,5);
+  const profile=propProfileFor(c), name=fighterName(c), id=String(profile.id||c.id||'');
+  const seen=new Set();
+  const rows=(Array.isArray(profile.recent_fights)?profile.recent_fights:[]).filter(f=>{if(!f||(!f.winner&&!/final|complete|post/i.test(String(f.status||''))))return false;const id=String(f.bout_id||'');if(id&&seen.has(id))return false;if(id)seen.add(id);return true;}).slice(0,5);
   const ufc=profile.ufc_record;
   const record=typeof ufc==='string'?ufc:ufc&&typeof ufc==='object'?[ufc.wins,ufc.losses,ufc.draws].every(x=>numeric(x)!==null)?[ufc.wins,ufc.losses,ufc.draws].join('-'):null:null;
   return '<section class="history-side"><h4>'+escape(name)+'</h4>'+(record?'<p class="muted">Provider fight record: '+escape(record)+'</p>':'')+(rows.length?'<ol class="fight-history">'+rows.map(f=>{
@@ -143,13 +156,58 @@ function analysis(fighters) {
   const paths=(report.paths||[]).map(path=>'<p class="muted"><strong>'+escape(fighterName(fighters[path.side]))+'</strong>: '+escape(path.summary)+'</p>').join('');
   const counter=report.counterargument?'<section class="research-counter"><h4>The case against the lean</h4><p class="muted">'+escape(report.counterargument.summary)+'</p></section>':'';
   const timestamps=fighters.map(c=>fighterName(c)+': '+(profileFor(c).fetched_at?dateText(profileFor(c).fetched_at):cacheDate?dateText(cacheDate):'provider only')).join(' · ');
-  return '<span class="pass">'+(report.status==='incomplete'?'PARTIAL RESEARCH · NO PICK':'EXPERIMENTAL · UNVALIDATED')+'</span><h3 class="research-heading">'+escape(report.heading)+'</h3><p class="muted">'+escape(report.leanReason)+'</p>'+facts+counter+(paths?'<section class="research-paths"><h4>Possible paths · statistical inferences</h4>'+paths+'</section>':'')+'<details class="research-history"><summary>Recent results &amp; experience</summary><div class="history-grid">'+fighters.map(recentHistory).join('')+'</div></details>'+(gaps?'<section class="research-gaps"><h4>What is missing</h4>'+gaps+'</section>':'')+'<p class="muted research-limit">'+escape((report.cautions||[]).join(' '))+'</p><p class="muted source-note">Sources: ESPN event feed and FighterAPI where available. Profile fetch times: '+escape(timestamps)+'. Recent results appear only when supplied.</p>';
+  return '<span class="pass">'+(report.status==='incomplete'?'PARTIAL RESEARCH · NO PICK':'EXPERIMENTAL · UNVALIDATED')+'</span><h3 class="research-heading">'+escape(report.heading)+'</h3><p class="muted">'+escape(report.leanReason)+'</p>'+facts+counter+(paths?'<section class="research-paths"><h4>Possible paths · statistical inferences</h4>'+paths+'</section>':'')+'<details class="research-history"><summary>Recent results &amp; experience</summary><div class="history-grid">'+fighters.map(recentHistory).join('')+'</div></details>'+(gaps?'<section class="research-gaps"><h4>What is missing</h4>'+gaps+'</section>':'')+'<p class="muted research-limit">'+escape((report.cautions||[]).join(' '))+'</p><p class="muted source-note">Sources: ESPN records and fight results; FighterAPI career rates where available. Career profile fetch times: '+escape(timestamps)+'. Recent results appear only when supplied.</p>';
 }
 function marketResult(key) {
   const prices = odds[key] || {}, result = market(prices.a, prices.b);
   if (!result) return '<p class="muted">'+(prices.a || prices.b ? 'Enter valid American odds for both fighters, such as −125 and +105 (whole numbers with absolute value of at least 100).' : 'Enter both sportsbook prices to compare implied probabilities and the margin.')+'</p>';
   return '<div class="grid">'+result.fair.map((p,i)=>'<div class="stat"><span>Fighter '+(i===0?'1':'2')+' · no-vig baseline</span><strong>'+(p*100).toFixed(1)+'%</strong><span>Raw implied '+(result.implied[i]*100).toFixed(1)+'%</span></div>').join('')+'</div><p class="muted">Bookmaker margin: '+(result.margin*100).toFixed(2)+' percentage points.'+(result.margin < 0 ? ' These prices form an underround; check that both are current and from the same market.' : '')+' These market-derived numbers are not independent fight predictions.</p>';
 }
+function storedProps(key) {
+  if(!Object.hasOwn(propInputs,key)||!propInputs[key]||typeof propInputs[key]!=='object'||Array.isArray(propInputs[key]))propInputs[key]={};
+  return propInputs[key];
+}
+function confirmedRounds(c) {
+  const n=Number(c.format?.regulation?.periods ?? c.scheduledRounds);
+  return n===3||n===5?n:null;
+}
+function propQuoteKey(kind,line,side,method) {return kind==='total'?'total:'+line+':'+side:'method:'+side+':'+method;}
+function breakEvenText(value) {
+  const p=implied(value);
+  return p===null?(String(value||'').trim()?'Enter valid signed American odds, such as -125 or +200.':'Enter the sportsbook price to see its break-even rate.'):'Needs '+(p*100).toFixed(1)+'% to break even at this price. This is a price calculation, not a predicted hit rate.';
+}
+function propPriceInput(key,quote,label,value,placeholder='+150') {
+  return '<label class="prop-price-label">'+escape(label)+'<input class="ufc-prop-price" data-bout="'+escape(key)+'" data-quote="'+escape(quote)+'" value="'+escape(value||'')+'" inputmode="text" autocomplete="off" spellcheck="false" placeholder="'+placeholder+'" aria-label="'+escape(label)+' American odds"></label><p class="prop-break-even muted" data-quote-result="'+escape(quote)+'">'+escape(breakEvenText(value))+'</p>';
+}
+function methodCount(count,total,outcome) {
+  if(count===null)return 'Method count unavailable'+(total===null?'':' · '+total+' recorded '+outcome);
+  return count+(total===null?' recorded · total '+outcome+' unavailable':' of '+total+' recorded '+outcome);
+}
+function propResearchBody(fighters,c) {
+  if(!root.UFCPropResearch)return '<p class="muted">Round and method research is loading. Refresh to retry.</p>';
+  const key=boutKey(c), saved=storedProps(key), rounds=confirmedRounds(c), lines=root.UFCPropResearch.availableLines(rounds);
+  const line=lines.includes(Number(saved.line))?Number(saved.line):2.5;
+  const event=events.find(e=>String(e.id)===active);
+  const report=root.UFCPropResearch.research(fighters.map(propProfileFor),{names:fighters.map(fighterName),rounds,line,boutId:c.id,eventDate:c.date||c.startDate||event?.date||null});
+  const totals=report.totals;
+  const threshold=totals.thresholdSeconds;
+  const thresholdLabel=threshold===null?'':Math.floor(threshold/60)+':'+String(threshold%60).padStart(2,'0');
+  const samples=totals.fighters.map(f=>'<div class="prop-sample"><strong>'+escape(f.name)+'</strong><span>'+f.over+' over · '+f.under+' under · '+f.sample+' eligible fights</span></div>').join('');
+  const totalPrices=['over','under'].map(side=>{const quote=propQuoteKey('total',line,side);return '<div>'+propPriceInput(key,quote,(side==='over'?'Over ':'Under ')+line+' price',saved[quote],side==='over'?'-115':'+100')+'</div>';}).join('');
+  const sources={overall_professional:'Overall professional record (ESPN)',career_record:'Provider promotion record',recent_results:'Available recent results',unavailable:'Not supplied'};
+  const methods=report.methods.map(method=>'<section class="prop-method-side"><h4>'+escape(method.name)+'</h4><p class="muted">'+escape(method.summary)+'</p><p class="prop-source muted">Win counts: '+sources[method.recordSource]+'. Opposing loss counts: '+sources[method.opponentRecordSource]+'.</p>'+method.rows.map(row=>{
+    const quote=propQuoteKey('method',line,method.side,row.key);
+    return '<section class="prop-method-row'+(row.candidate?' prop-candidate':'')+'"><h5>'+escape(row.label)+(row.candidate?' <span class="badge">METHOD TO RESEARCH</span>':'')+'</h5><p class="muted">'+escape(method.name)+' won by this method: <strong>'+escape(methodCount(row.winCount,row.totalWins,'wins'))+'</strong>.<br>'+escape(fighterName(fighters[1-method.side]))+' lost by this method: <strong>'+escape(methodCount(row.opponentLossCount,row.totalOpponentLosses,'losses'))+'</strong>.</p><p class="muted">'+escape(row.reason)+'</p>'+propPriceInput(key,quote,method.name+' by '+row.label+' price',saved[quote])+'</section>';
+  }).join('')+'<p class="muted prop-source">'+escape(method.cautions.join(' '))+'</p></section>').join('');
+  return '<p class="muted">Research another market for this fight: total rounds, KO/TKO, submission or decision. An alternative to a short moneyline still needs evidence and a suitable price.</p><section class="prop-totals"><div class="row"><h3>Total rounds</h3><span class="badge">'+(rounds?rounds+' ROUNDS CONFIRMED':'FORMAT UNCONFIRMED')+'</span></div><label class="prop-line-label">Sportsbook round line<select class="ufc-total-line" data-bout="'+escape(key)+'" '+(!rounds?'disabled':'')+'>'+(lines.length?lines.map(n=>'<option value="'+n+'" '+(n===line?'selected':'')+'>'+n+' rounds</option>').join(''):'<option>Format unavailable</option>')+'</select></label>'+(rounds?'<p class="muted">'+line+' rounds = '+thresholdLabel+' elapsed. Over means the fight lasts beyond that point; Under means it ends before it. Check your book’s settlement rules.</p>':'')+'<h4 class="prop-lean">'+escape(totals.heading)+'</h4><p class="muted">'+escape(totals.summary)+'</p><div class="prop-samples">'+samples+'</div><p class="prop-source muted">'+totals.pooled.sample+' unique fights combined; shared bouts counted once. Only the same scheduled fight length is compared. Historical counts are not probabilities for this matchup.</p><div class="grid">'+totalPrices+'</div></section><section class="prop-methods"><h3>Win method · KO/TKO, submission or decision</h3><p class="muted">Compare the fighter’s recorded winning methods with the opponent’s recorded losing methods. A win-method share describes how past wins happened; it is not the chance of winning this prop.</p>'+methods+'</section><p class="prop-limit muted">No calibrated totals or method probabilities are available. These research angles and your entered prices do not establish a betting edge. Missing or mixed evidence stays unranked.</p>';
+}
+function propResearch(fighters,c) {
+  return '<details data-section="props"><summary>Round totals &amp; win method</summary><div class="detail-body prop-root" data-bout="'+escape(boutKey(c))+'">'+propResearchBody(fighters,c)+'</div></details>';
+}
+function findCurrentBout(key) {
+  return events.find(e=>String(e.id)===active)?.competitions.find(c=>boutKey(c)===key);
+}
+
 function renderFight(c) {
   const fighters = [...(c.competitors || [])].sort((a,b)=>(a.order||0)-(b.order||0));
   while (fighters.length < 2) fighters.push({});
@@ -158,7 +216,7 @@ function renderFight(c) {
   const isLive = state.state === 'in';
   const outcome = completed ? state.detail || state.description || 'Final' : isLive ? [state.description, c.status?.period ? 'Round '+c.status.period : '', c.status?.displayClock].filter(Boolean).join(' · ') : dateText(c.date || c.startDate);
   const meta = [c.type?.abbreviation || c.type?.text, c.format?.regulation?.periods ? c.format.regulation.periods+' rounds' : '', c.broadcast || c.broadcasts?.flatMap(x=>x.names||[]).join(', ')].filter(Boolean).join(' · ');
-  return '<article class="panel fight" data-id="'+escape(key)+'"><div class="fight-top"><span class="badge">'+labels[tier(c)]+'</span><span class="badge '+(isLive?'live':completed?'result':'')+'">'+(isLive?'● LIVE':completed?'FINAL':'SCHEDULED')+'</span></div><div class="matchup">'+two.map((x,i)=>(i?'<div class="vs">VS</div>':'')+'<div class="fighter"><div class="avatar" aria-hidden="true">'+escape(initials(fighterName(x)))+'</div><h3>'+escape(fighterName(x))+'</h3><p class="muted">'+escape(recordFor(x))+'</p>'+(completed&&x.winner?'<span class="winner">WINNER</span>':'')+'</div>').join('')+'</div><div class="bout-meta">'+escape(meta)+'<br>'+escape(outcome)+'</div>'+researchPreview(two)+'<details data-section="analysis"><summary>Fight breakdown · reasons and risks</summary><div class="detail-body">'+analysis(two)+'</div></details><details data-section="comparison"><summary>Fighter comparison · all career metrics</summary><div class="detail-body">'+comparison(two)+'</div></details><details data-section="market"><summary>Sportsbook price calculator</summary><div class="detail-body"><div class="grid">'+two.map((x,i)=>'<label class="odds-label">'+(i+1)+'. '+escape(fighterName(x))+'<input type="text" inputmode="text" autocomplete="off" spellcheck="false" class="ufc-odds" data-bout="'+escape(key)+'" data-side="'+(i?'b':'a')+'" value="'+escape(prices[i?'b':'a'] || '')+'" placeholder="'+(i?'+105':'−125')+'" aria-label="'+escape(fighterName(x))+' American moneyline odds"></label>').join('')+'</div><div class="market-result" aria-live="polite" data-market="'+escape(key)+'">'+marketResult(key)+'</div><p class="muted small">Use American moneyline odds for the same two-way market. Saved on this device.</p></div></details></article>';
+  return '<article class="panel fight" data-id="'+escape(key)+'"><div class="fight-top"><span class="badge">'+labels[tier(c)]+'</span><span class="badge '+(isLive?'live':completed?'result':'')+'">'+(isLive?'● LIVE':completed?'FINAL':'SCHEDULED')+'</span></div><div class="matchup">'+two.map((x,i)=>(i?'<div class="vs">VS</div>':'')+'<div class="fighter"><div class="avatar" aria-hidden="true">'+escape(initials(fighterName(x)))+'</div><h3>'+escape(fighterName(x))+'</h3><p class="muted">'+escape(recordFor(x))+'</p>'+(completed&&x.winner?'<span class="winner">WINNER</span>':'')+'</div>').join('')+'</div><div class="bout-meta">'+escape(meta)+'<br>'+escape(outcome)+'</div>'+researchPreview(two)+propResearch(two,c)+'<details data-section="analysis"><summary>Fight breakdown · reasons and risks</summary><div class="detail-body">'+analysis(two)+'</div></details><details data-section="comparison"><summary>Fighter comparison · all career metrics</summary><div class="detail-body">'+comparison(two)+'</div></details><details data-section="market"><summary>Sportsbook price calculator</summary><div class="detail-body"><div class="grid">'+two.map((x,i)=>'<label class="odds-label">'+(i+1)+'. '+escape(fighterName(x))+'<input type="text" inputmode="text" autocomplete="off" spellcheck="false" class="ufc-odds" data-bout="'+escape(key)+'" data-side="'+(i?'b':'a')+'" value="'+escape(prices[i?'b':'a'] || '')+'" placeholder="'+(i?'+105':'−125')+'" aria-label="'+escape(fighterName(x))+' American moneyline odds"></label>').join('')+'</div><div class="market-result" aria-live="polite" data-market="'+escape(key)+'">'+marketResult(key)+'</div><p class="muted small">Use American moneyline odds for the same two-way market. Saved on this device.</p></div></details></article>';
 }
 function show() {
   const event = events.find(e=>String(e.id)===active);
@@ -205,6 +263,17 @@ async function researchCache() {
   } catch (_) {/* Provider metrics can still be used without the optional cache. */}
   $('research-status').textContent = cacheDate ? Object.keys(cache).length+' fighter profiles, including available partial data · cache updated '+dateText(cacheDate)+'. Cache profiles older than 30 days are excluded.' : 'No current fighter research cache is available. Provider-supplied statistics still appear; incomplete matchups stay PASS.';
 }
+async function publicHistoryCache() {
+  publicHistory={};
+  try{
+    const data=await request('./ufc_history_data.json',6000);
+    if(!data.source||!data.fighters||Array.isArray(data.fighters))return;
+    for(const [id,p] of Object.entries(data.fighters)){
+      if(!p||typeof p!=='object')continue;
+      if(String(p.id)===String(id)&&(freshHistorySource(p.history_fetched_at)||freshHistorySource(p.method_record_fetched_at)))publicHistory[id]=p;
+    }
+  }catch(_){/* The original fighter cache remains available. */}
+}
 function cachedSchedule(data) {
   const age = Date.now()-Date.parse(data?.generated_at);
   if (!Number.isFinite(age)||age< -86400000||age>7*86400000) return [];
@@ -224,14 +293,14 @@ async function load() {
       }
       throw new Error('The live provider could not be reached and no recent saved schedule is available.');
     });
-    const [schedule] = await Promise.all([scheduleTask,researchCache()]);
+    const [schedule] = await Promise.all([scheduleTask,researchCache(),publicHistoryCache()]);
     if (run!==generation) return;
     const next = eventsFrom(schedule.data);
     if (!next.length) throw new Error('No UFC cards are currently published in the next six weeks.');
     events = next.map(event=>({...event,competitions:event.competitions.map(c=>{
       const bout=cacheBouts.find(b=>String(b.event_id)===String(event.id)&&String(b.bout_id)===String(c.id));
       const segment=({main:'main',prelim:'prelim',prelims:'prelim',prelims1:'prelim',prelims2:'prelim',early:'early',early_prelims:'early',early_prelim:'early'})[bout?.card_segment];
-      return segment?{...c,cardSegment:segment==='main'?'Main Card':segment==='early'?'Early Prelims':'Prelims'}:c;
+      return {...c,...(segment?{cardSegment:segment==='main'?'Main Card':segment==='early'?'Early Prelims':'Prelims'}:{}),...(Number(bout?.scheduled_rounds)===3||Number(bout?.scheduled_rounds)===5?{scheduledRounds:Number(bout.scheduled_rounds)}:{})};
     })})); loaded = true;
     if(schedule.source==='live')save(SCHEDULE_KEY,{events,generated_at:new Date().toISOString()});
     $('event').innerHTML=events.map(e=>'<option value="'+escape(e.id)+'">'+escape(e.name||'UFC event')+' · '+escape(dateText(e.date,{month:'short',day:'numeric'}))+'</option>').join('');
@@ -253,6 +322,25 @@ $('search').addEventListener('input',()=>{query=$('search').value;if(events.leng
 $('sort').addEventListener('change',()=>{order=$('sort').value;if(events.length)show();});
 $('filters').addEventListener('click',e=>{const b=e.target.closest('button[data-filter]');if(b&&!b.disabled){filter=b.dataset.filter;if(events.length)show();}});
 $('fights').addEventListener('click',e=>{if(e.target.closest('[data-retry]'))load();if(e.target.closest('[data-reset]')){filter='all';query='';$('search').value='';show();}});
+$('fights').addEventListener('change',e=>{
+  if(!e.target.matches('.ufc-total-line'))return;
+  const key=e.target.dataset.bout,c=findCurrentBout(key);
+  if(!c)return;
+  const value=Number(e.target.value);
+  if(!root.UFCPropResearch.availableLines(confirmedRounds(c)).includes(value))return;
+  storedProps(key).line=value;save(PROP_KEY,propInputs);
+  const fighters=[...(c.competitors||[])].sort((a,b)=>(a.order||0)-(b.order||0)).slice(0,2);
+  while(fighters.length<2)fighters.push({});
+  e.target.closest('.prop-root').innerHTML=propResearchBody(fighters,c);
+});
+$('fights').addEventListener('input',e=>{
+  if(!e.target.matches('.ufc-prop-price'))return;
+  const key=e.target.dataset.bout,quote=e.target.dataset.quote;
+  if(!findCurrentBout(key)||!/^total:(0\.5|1\.5|2\.5|3\.5|4\.5):(over|under)$|^method:[01]:(ko|submission|decision)$/.test(quote))return;
+  const value=e.target.value.replace(/−/g,'-');storedProps(key)[quote]=value;save(PROP_KEY,propInputs);
+  const out=[...e.target.closest('.prop-root').querySelectorAll('[data-quote-result]')].find(x=>x.dataset.quoteResult===quote);
+  if(out)out.textContent=breakEvenText(value);
+});
 $('fights').addEventListener('input',e=>{
   if(!e.target.matches('.ufc-odds'))return;
   const key=e.target.dataset.bout, side=e.target.dataset.side;

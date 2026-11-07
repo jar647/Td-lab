@@ -49,6 +49,56 @@ and survive filtering, switching cards and reloads. They display implied and
 no-vig probabilities and the two-price bookmaker margin. They do not supply a
 model prediction or live sportsbook prices.
 
+## Public finish records and durations
+
+`python scripts/refresh_ufc_history.py` writes `ufc_history_data.json` from public
+ESPN athlete histories, overall records and explicit competition formats. It
+uses no FighterAPI credits or credentials. Profiles are keyed by the verified
+ESPN athlete ID. Professional method records include regional promotions and
+are labeled as overall professional records; duration samples are restricted
+to available UFC/DWCS bouts. Decision counts are only added when complete
+observed outcomes reconcile with the supplied totals and KO/submission counts.
+They are never inferred by subtracting other methods from total wins.
+
+The daily UFC workflow runs this public refresh even when authenticated research
+fails. It reuses profiles for 24 hours and shares cached historical format lookups.
+The page excludes individual public record/history components older than seven
+days; a fresh history fetch cannot make a stale method record appear current.
+The initial public refresh retrieved 84 profiles with history and method records,
+plus 470 explicit format lookups.
+
+## Round totals and win methods
+
+Each bout has a **Round totals & win method** section. Confirmed three-round
+fights offer 0.5/1.5/2.5 lines; confirmed five-round fights also offer 3.5/4.5.
+Unknown formats remain unconfirmed. A 2.5 line means 12:30 elapsed, not the start
+of round three. Each line has its own saved Over/Under prices.
+
+Totals evidence uses dated, completed bouts with a known scheduled distance,
+valid final round and elapsed finish clock, and a resolved ordinary outcome.
+Only matching three-/five-round formats are compared. Current/future bouts,
+NCs, draws, DQs, technical decisions and exact-threshold finishes are excluded.
+Shared bouts are counted once. A historical research lean requires at least
+three eligible fights per fighter, six unique combined, a majority in the same
+direction for both, and at least 60% combined support. These thresholds are a
+transparent research rule, not fitted or calibrated prediction parameters.
+
+KO/TKO, submission and decision evidence compares a fighter's actual win-method
+counts with the opponent's actual loss-method counts. When a complete provider
+record is absent, dated recent results can supply an explicitly limited sample.
+A method to research requires at least three recorded wins and three opposing
+losses, with more than half in that method on both sides. Conditional method
+shares are never presented as the chance of winning a prop. Missing counts stay
+unavailable; striking volume and submission attempts are not substitutes for
+finish records. Career counts fetched after the target event remain context,
+not verified pre-fight evidence.
+
+Entered American prices show break-even rates only. No odds feed, calibrated
+prop probability, value/EV claim, automatic bet or moneyline-to-prop conversion
+is added. The six fighter/method rows omit draw/other outcomes and are never
+normalized as an exhaustive market. Prices are saved independently by event,
+bout, method and total-round line.
+
 ## Validation
 
 ```sh
@@ -56,6 +106,7 @@ node --check ufc_app.js
 node test_ufc_research.js
 node test_ufc_app.js
 node test_ufc_matchup_research.js
+node test_ufc_prop_research.js
 PYTHONDONTWRITEBYTECODE=1 python -m unittest discover -s tests -p test_ufc_refresh.py
 ```
 
