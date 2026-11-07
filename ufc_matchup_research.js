@@ -91,6 +91,33 @@ function describe(a,b,options={}) {
     }
   }
   exploits.sort((x,y)=>y.score-x.score);
+  // Historical finish tendencies are descriptive only; opponent quality and pace are not established.
+  const histories=(options.profiles||[]).map(profile=>{
+    const rows=Array.isArray(profile?.recent_fights)?profile.recent_fights:[];
+    const ownId=String(profile?.id||'');
+    const known=rows.filter(f=>f&&f.winner&&f.method_display&&
+      (String(f.fighter_a||'')===ownId||String(f.fighter_b||'')===ownId));
+    const seen=new Set();
+    const unique=known.filter(f=>{const key=String(f.bout_id||[f.event_date,f.fighter_a,f.fighter_b].join('|'));if(seen.has(key))return false;seen.add(key);return true;}).slice(0,5);
+    const outcomes=unique.map(f=>{
+      const winner=String(f.winner||'');
+      const winnerId=winner.toLowerCase()==='a'?String(f.fighter_a):winner.toLowerCase()==='b'?String(f.fighter_b):winner;
+      const method=String(f.method_display||'');
+      return {win:winnerId===ownId,ko:/knockout|\bko\b|\btko\b/i.test(method),submission:/submission/i.test(method),decision:/decision/i.test(method)};
+    });
+    return {sample:outcomes.length,wins:outcomes.filter(x=>x.win).length,losses:outcomes.filter(x=>!x.win).length,koWins:outcomes.filter(x=>x.win&&x.ko).length,submissionWins:outcomes.filter(x=>x.win&&x.submission).length,decisionWins:outcomes.filter(x=>x.win&&x.decision).length,koLosses:outcomes.filter(x=>!x.win&&x.ko).length,submissionLosses:outcomes.filter(x=>!x.win&&x.submission).length};
+  });
+  const recentEvidence=names.map((name,i)=>({
+    name,...(histories[i]||{sample:0,wins:0,losses:0,koWins:0,submissionWins:0,decisionWins:0,koLosses:0,submissionLosses:0})
+  }));
+  const finishRoutes=[];
+  for(let i=0;i<2;i++){
+    const own=recentEvidence[i],opp=recentEvidence[1-i];
+    if(own.sample>=2&&opp.sample>=2){
+      if(own.koWins>0&&opp.koLosses>0)finishRoutes.push(names[i]+' has '+own.koWins+' KO/TKO win(s) in '+own.sample+' verified recent fights; '+names[1-i]+' has '+opp.koLosses+' KO/TKO loss(es) in '+opp.sample+'. Potential striking finish route, not a probability.');
+      if(own.submissionWins>0&&opp.submissionLosses>0)finishRoutes.push(names[i]+' has '+own.submissionWins+' submission win(s) in '+own.sample+' verified recent fights; '+names[1-i]+' has '+opp.submissionLosses+' submission loss(es) in '+opp.sample+'. Potential submission route, not a probability.');
+    }
+  }
   const evaluated = complete && engine?.evaluate ? engine.evaluate(A,B) : null;
   const probability = evaluated?.status==='experimental' ? evaluated.modelProbability : null;
   const leanSide = probability===null ? null : signSide(probability-0.5);
@@ -107,7 +134,7 @@ function describe(a,b,options={}) {
     status, heading:status==='incomplete'?'Research incomplete':status==='balanced'?'No statistical lean':'Statistical lean: '+names[leanSide],
     leanSide,
     leanReason:status==='incomplete'?'The missing rates are listed separately for each fighter below.':status==='balanced'?'The underlying career-rate score is level; simulation noise is not used to break the tie.':'The rate-based score favors '+names[leanSide]+(supportive.length?', led by '+supportive.slice(0,2).map(x=>x.title.toLowerCase()).join(' and '):'')+'.',
-    areas,exploits,missing,paths,counterargument,cautions,modelProbability:probability
+    areas,exploits,recentEvidence,finishRoutes,missing,paths,counterargument,cautions,modelProbability:probability
   };
 }
 return {describe,normalize,METRICS};
