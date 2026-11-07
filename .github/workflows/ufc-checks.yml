@@ -12,6 +12,7 @@ on:
       - 'scripts/validate_ufc_cache.py'
       - 'ufc_fighter_data.json'
       - 'tests/test_ufc_refresh.py'
+      - 'scripts/test_ufc_refresh_unit.py'
       - 'ufc_research_engine.js'
       - 'test_ufc_research.js'
       - '.github/workflows/ufc-checks.yml'
@@ -41,6 +42,7 @@ jobs:
           node test_ufc_app.js
           node test_ufc_matchup_research.js
           python -m unittest discover -s tests -p test_ufc_refresh.py
+          python scripts/test_ufc_refresh_unit.py
       - name: Check live ESPN UFC feed structure
         shell: bash
         run: |
