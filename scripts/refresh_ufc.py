@@ -1,79 +1,59 @@
 #!/usr/bin/env python3
-"""Refresh UFC fighter research data using a server-side FighterAPI key.
-Never place API keys in public site files. Fail closed on schema changes.
+"""Secure UFC statistics refresh. API key stays in GitHub Actions secrets.
+FighterAPI REST docs: /v1/get_schedule -> data.bouts; /v1/get_fighter -> data.career_rates.
 """
-import json, os, urllib.request, datetime, pathlib, sys, time
-API="https://mcp.fighterapi.com/v1/"
+import datetime,json,os,pathlib,sys,time,urllib.request
 KEY=os.getenv("FIGHTERAPI_KEY","").strip()
+OUT=pathlib.Path("ufc_fighter_data.json")
 if not KEY:
-    print("FIGHTERAPI_KEY not configured. Keeping existing research cache unchanged.")
+    print("FIGHTERAPI_KEY absent: skipping refresh; no unverified data generated.")
     sys.exit(0)
-def call(tool,args=None):
-    body=json.dumps(args or {}).encode()
-    req=urllib.request.Request(API+tool,data=body,headers={"Content-Type":"application/json","x-api-key":KEY},method="POST")
-    with urllib.request.urlopen(req,timeout=25) as response:
-        return json.load(response)
-def unwrap(value):
-    if isinstance(value,dict):
-        for k in ("result","data"):
-            if k in value and isinstance(value[k],(dict,list)):return unwrap(value[k])
-    return value
-def list_items(obj):
-    obj=unwrap(obj)
-    if isinstance(obj,list):return obj
-    if isinstance(obj,dict):
-        for k in ("fights","bouts","schedule","events","items"):
-            if isinstance(obj.get(k),list):return obj[k]
-    return []
-def name(f):
-    if isinstance(f,str):return f
-    if isinstance(f,dict):return f.get("name") or f.get("display_name") or f.get("full_name") or ""
-    return ""
-def fighter_name(b,side):
-    return name(b.get("fighter_"+side+"_name") or b.get("fighter_"+side) or b.get("fighter"+side.upper()) or b.get(side))
-def safe_stats(profile):
-    profile=unwrap(profile)
-    if not isinstance(profile,dict):return None
-    stats=profile.get("career_rates") or profile.get("stats") or profile.get("statistics") or {}
-    if not isinstance(stats,dict):return None
-    aliases={
-        "slpm":("slpm","sig_strikes_landed_per_minute","strikes_landed_per_minute"),
-        "sapm":("sapm","sig_strikes_absorbed_per_minute","strikes_absorbed_per_minute"),
-        "strAcc":("strAcc","striking_accuracy","sig_strike_accuracy"),
-        "strDef":("strDef","striking_defense","sig_strike_defense"),
-        "tdAvg":("tdAvg","takedown_average","takedowns_per_15_min"),
-        "tdAcc":("tdAcc","takedown_accuracy"),
-        "tdDef":("tdDef","takedown_defense"),
-        "subAvg":("subAvg","submission_average","submissions_per_15_min")}
+def api(method,args):
+    request=urllib.request.Request("https://mcp.fighterapi.com/v1/"+method,data=json.dumps(args).encode(),headers={"Content-Type":"application/json","x-api-key":KEY},method="POST")
+    with urllib.request.urlopen(request,timeout=30) as response: raw=json.load(response)
+    if not isinstance(raw,dict) or not isinstance(raw.get("data"),dict):raise ValueError("Unexpected FighterAPI REST envelope")
+    return raw["data"]
+def stats(profile):
+    rates=profile.get("career_rates") or {}
+    aliases={"slpm":("sig_landed_per_15",15),"sapm":("sig_absorbed_per_15",15),"strAcc":("sig_accuracy",1),"strDef":("sig_defense",1),"tdAvg":("td_per_15",1),"tdAcc":("td_accuracy",1),"tdDef":("td_defense",1),"subAvg":("sub_attempts_per_15",1)}
     result={}
-    for field,keys in aliases.items():
-        raw=next((stats[k] for k in keys if k in stats and stats[k] is not None),None)
-        if raw is None:return None
-        try: v=float(str(raw).replace("%",""))
-        except (ValueError,TypeError):return None
-        if field in ("strAcc","strDef","tdAcc","tdDef") and 0<=v<=1:v*=100
-        if not 0<=v<=10000:return None
-        result[field]=v
+    for k,(source,divisor) in aliases.items():
+        v=rates.get(source)
+        if not isinstance(v,(int,float)) or isinstance(v,bool):return None
+        v=float(v)/divisor
+        if k in ("strAcc","strDef","tdAcc","tdDef"):v*=100
+        if not 0<=v<=1000:return None
+        result[k]=round(v,5)
     return result
-schedule=list_items(call("get_schedule"))
-output={"generated_at":datetime.datetime.now(datetime.timezone.utc).isoformat(),"source":"FighterAPI authenticated server-side refresh","fighters":{},"matched_bouts":0}
-for bout in schedule[:100]:
+old={}
+if OUT.exists():
+    try:old=json.loads(OUT.read_text()).get("fighters",{})
+    except (ValueError,OSError):pass
+schedule=api("get_schedule",{"days":42})
+bouts=schedule.get("bouts",[])
+if not isinstance(bouts,list):raise ValueError("Unexpected schedule.bouts")
+fighters={}
+for bout in bouts:
     if not isinstance(bout,dict):continue
     for side in ("a","b"):
-        label=fighter_name(bout,side)
-        fid=bout.get("fighter_"+side+"_id")
-        if not label or not fid:continue
+        fid=bout.get("fighter_"+side)
+        name=bout.get("fighter_"+side+"_name")
+        if not fid or not name:continue
+        key=name.strip().casefold()
+        if key in fighters:continue
+        if key in old and old[key].get("id")==str(fid):
+            fighters[key]=old[key]
+            continue
         try:
-            profile=call("get_fighter",{"fighter_id":str(fid)})
-            stats=safe_stats(profile)
-            if stats:output["fighters"][label.casefold()]={"name":label,"stats":stats}
-        except Exception as exc:
-            print("Fighter lookup failed:",label,type(exc).__name__)
-        time.sleep(0.1)
-    output["matched_bouts"]+=1
-if not output["fighters"]:
-    print("Provider returned no complete recognized fighter statistics; refusing to overwrite existing cache.")
+            data=api("get_fighter",{"fighter_id":str(fid)})
+            extracted=stats(data)
+            if extracted: fighters[key]={"id":str(fid),"name":name,"stats":extracted,"record":data.get("fighter",{}).get("pro_record"),"rating":data.get("rating",{}).get("current")}
+            else:print("Incomplete career rates:",name)
+        except Exception as exc:print("Fighter refresh error:",name,type(exc).__name__)
+        time.sleep(0.12)
+if not fighters:
+    print("No complete verified fighter profiles; refusing to overwrite cache.")
     sys.exit(1)
-path=pathlib.Path("ufc_fighter_data.json")
-path.write_text(json.dumps(output,ensure_ascii=False,separators=(",",":"))+"\n")
-print("Saved verified fighter profiles:",len(output["fighters"]))
+payload={"generated_at":datetime.datetime.now(datetime.timezone.utc).isoformat(),"source":"FighterAPI authenticated REST get_schedule/get_fighter","fighters":fighters,"scheduled_bouts":len(bouts)}
+OUT.write_text(json.dumps(payload,ensure_ascii=False,separators=(",",":"))+"\n")
+print("Verified profiles:",len(fighters),"scheduled bouts:",len(bouts))
