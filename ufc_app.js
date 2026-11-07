@@ -74,7 +74,7 @@ function read(key, fallback) {try {return JSON.parse(localStorage.getItem(key)) 
 function save(key, value) {try {localStorage.setItem(key, JSON.stringify(value));} catch (_) {/* Storage may be disabled. */}}
 const storedOdds = read(ODDS_KEY, {});
 let odds = storedOdds && typeof storedOdds === 'object' && !Array.isArray(storedOdds) ? storedOdds : {};
-let events = [], active = '', filter = 'all', query = '', order = 'time', cache = {}, cacheDate = '', generation = 0, loaded = false;
+let events = [], active = '', filter = 'all', query = '', order = 'time', cache = {}, cacheDate = '', cacheBouts = [], generation = 0, loaded = false;
 const labels = {early:'EARLY PRELIMS',prelim:'PRELIMS',main:'MAIN CARD',unknown:'CARD POSITION UNVERIFIED'};
 const dateText = (value, options = {dateStyle:'medium',timeStyle:'short'}) => Number.isFinite(Date.parse(value)) ? new Date(value).toLocaleString(undefined, options) : 'Time TBA';
 const fighterName = c => c?.athlete?.displayName || c?.athlete?.fullName || c?.displayName || 'Fighter TBD';
@@ -82,13 +82,41 @@ const boutKey = c => String(active)+':'+String(c.id || (c.competitors || []).map
 function profileFor(c) {
   const profile = cache[nameKey(fighterName(c))] || {};
   // Never merge a same-name cache record for a different provider fighter ID.
-  const providerId = c?.athlete?.id;
+  const providerId = c?.athlete?.id || c?.id;
   if (providerId && profile.id && String(providerId) !== String(profile.id)) return {};
   const fetched = Date.parse(profile.fetched_at || cacheDate);
   if (!Number.isFinite(fetched) || fetched > Date.now()+86400000 || Date.now()-fetched > 30*86400000) return {};
   return profile;
 }
-function fighterStats(c) {return {...statsFrom(c), ...(profileFor(c).stats || {})};}
+function fighterStats(c) {
+  const result = statsFrom(c);
+  for (const [key,value] of Object.entries(profileFor(c).stats || {})) if (numeric(value)!==null) result[key]=value;
+  return result;
+}
+function matchupReport(fighters) {
+  return root.UFCMatchupResearch?.describe(...fighters.map(fighterStats),{names:fighters.map(fighterName),profiles:fighters.map(profileFor)});
+}
+function researchPreview(fighters) {
+  const report=matchupReport(fighters);
+  if(!report)return '';
+  const missing=report.missing.map((items,i)=>items.length?fighterName(fighters[i])+': '+items.length+' career metrics unavailable':'').filter(Boolean);
+  return '<div class="research-preview"><span class="eyebrow">MATCHUP RESEARCH</span><h3>'+escape(report.heading)+'</h3><p class="muted">'+escape(report.status==='incomplete'?missing.join(' · '):report.leanReason)+'</p><span class="small muted">'+(report.status==='incomplete'?'Available evidence is shown in the fight breakdown below.':'Experimental statistical lean · independent of sportsbook prices')+'</span></div>';
+}
+function recentHistory(c) {
+  const profile=profileFor(c), name=fighterName(c), id=String(profile.id||c.id||'');
+  const rows=(Array.isArray(profile.recent_fights)?profile.recent_fights:[]).filter(f=>f && (f.winner || /final|complete|post/i.test(String(f.status||'')))).slice(0,5);
+  const ufc=profile.ufc_record;
+  const record=typeof ufc==='string'?ufc:ufc&&typeof ufc==='object'?[ufc.wins,ufc.losses,ufc.draws].every(x=>numeric(x)!==null)?[ufc.wins,ufc.losses,ufc.draws].join('-'):null:null;
+  return '<section class="history-side"><h4>'+escape(name)+'</h4>'+(record?'<p class="muted">UFC record: '+escape(record)+'</p>':'')+(rows.length?'<ol class="fight-history">'+rows.map(f=>{
+    const a=String(f.fighter_a||''), b=String(f.fighter_b||''), side=a===id?0:b===id?1:nameKey(f.fighter_a_name)===nameKey(name)?0:nameKey(f.fighter_b_name)===nameKey(name)?1:null;
+    const opponent=side===0?f.fighter_b_name:side===1?f.fighter_a_name:'Opponent unavailable';
+    const winner=String(f.winner||''), own=winner===id || nameKey(winner)===nameKey(name);
+    const otherId=side===0?b:a;
+    const lost=winner && (winner===otherId || nameKey(winner)===nameKey(opponent));
+    const result=own?'W':lost?'L':/draw/i.test(winner)?'D':'Result unavailable';
+    return '<li><strong class="'+(own?'winner':'')+'">'+escape(result)+'</strong> vs '+escape(opponent||'Opponent unavailable')+'<small>'+escape([f.method_display,f.end_round?'Round '+f.end_round:'',f.event_date?dateText(f.event_date,{dateStyle:'medium'}):f.starts_at?dateText(f.starts_at,{dateStyle:'medium'}):''].filter(Boolean).join(' · '))+'</small></li>';
+  }).join('')+'</ol>':'<p class="muted">Recent UFC results have not been supplied for this fighter. A professional record alone does not establish opponent quality or matchup strength.</p>')+'</section>';
+}
 function showValue(value, key) {const n = numeric(value); return n === null ? 'Unavailable' : n.toLocaleString(undefined,{maximumFractionDigits:2})+(PERCENT.has(key) ? '%' : '');}
 function recordFor(c) {return (c.records || []).find(x => x.type === 'total' || x.name === 'overall')?.summary || c.records?.[0]?.summary || profileFor(c).record || 'Record unavailable';}
 function initials(name) {return name.split(/\s+/).filter(Boolean).map(x=>x[0]).slice(0,2).join('');}
@@ -104,10 +132,14 @@ function comparison(fighters) {
   return '<table class="comparison"><caption class="sr-only">Fighter records, measurements and career rates</caption><thead><tr><th scope="col">Career metrics</th>'+fighters.map(c=>'<th scope="col">'+escape(fighterName(c))+'</th>').join('')+'</tr></thead><tbody>'+rows+'</tbody></table><p class="muted">Records: ESPN'+(cacheDate ? ' · Research cache: '+escape(dateText(cacheDate)) : '')+'. Unavailable means the source has not supplied this metric. Percentages use a 0–100 scale.</p>';
 }
 function analysis(fighters) {
-  const result = fighters.length === 2 && root.UFCResearch ? root.UFCResearch.evaluate(...fighters.map(fighterStats)) : {status:'insufficient_data',reason:'Two confirmed fighters and the research engine are required.'};
-  if (result.status !== 'experimental') return '<span class="pass">PASS · INSUFFICIENT VERIFIED DATA</span><p class="muted">'+escape(result.reason)+'</p><p class="muted">Open Fighter comparison to see which metrics are available.</p>';
-  const features = Object.entries(result.features).map(([k,v]) => k+': '+(v>=0?'+':'')+v.toFixed(2)).join(' · ');
-  return '<span class="pass">EXPERIMENTAL · UNVALIDATED</span><div class="grid" style="margin-top:14px">'+fighters.map((c,i)=>'<div class="stat"><span>'+escape(fighterName(c))+'</span><strong>'+(result.probabilities[i]*100).toFixed(1)+'%</strong><span>Experimental win estimate</span></div>').join('')+'</div><p class="muted">'+escape(features)+'. Positive feature scores favor '+escape(fighterName(fighters[0]))+'.</p><p class="muted">'+result.draws.toLocaleString()+' seeded draws. First fighter simulation interval: '+result.simulationInterval.map(x=>(x*100).toFixed(1)+'%').join('–')+'. This interval measures simulation sampling error only. The heuristic has not been calibrated or backtested and does not establish betting value.</p>';
+  const report=matchupReport(fighters);
+  if(!report)return '<p class="muted">Matchup research is temporarily unavailable. Refresh to retry.</p>';
+  const facts=report.areas.map(area=>'<section class="research-area"><div class="row"><h4>'+escape(area.title)+'</h4><span class="badge">'+escape(area.side===null?'NO COMPARATIVE EDGE':fighterName(fighters[area.side]))+'</span></div><p class="muted">'+escape(area.summary)+'</p></section>').join('');
+  const gaps=report.missing.map((items,i)=>items.length?'<p class="muted"><strong>'+escape(fighterName(fighters[i]))+'</strong>: '+escape(items.join(', '))+'.</p>':'').join('');
+  const paths=(report.paths||[]).map(path=>'<p class="muted"><strong>'+escape(fighterName(fighters[path.side]))+'</strong>: '+escape(path.summary)+'</p>').join('');
+  const counter=report.counterargument?'<section class="research-counter"><h4>The case against the lean</h4><p class="muted">'+escape(report.counterargument.summary)+'</p></section>':'';
+  const timestamps=fighters.map(c=>fighterName(c)+': '+(profileFor(c).fetched_at?dateText(profileFor(c).fetched_at):cacheDate?dateText(cacheDate):'provider only')).join(' · ');
+  return '<span class="pass">'+(report.status==='incomplete'?'PARTIAL RESEARCH · NO PICK':'EXPERIMENTAL · UNVALIDATED')+'</span><h3 class="research-heading">'+escape(report.heading)+'</h3><p class="muted">'+escape(report.leanReason)+'</p>'+facts+counter+(paths?'<section class="research-paths"><h4>Possible paths · statistical inferences</h4>'+paths+'</section>':'')+'<details class="research-history"><summary>Recent results &amp; experience</summary><div class="history-grid">'+fighters.map(recentHistory).join('')+'</div></details>'+(gaps?'<section class="research-gaps"><h4>What is missing</h4>'+gaps+'</section>':'')+'<p class="muted research-limit">'+escape((report.cautions||[]).join(' '))+'</p><p class="muted source-note">Career stats and recent UFC results: FighterAPI. '+escape(timestamps)+'. Records and card details: ESPN.</p>';
 }
 function marketResult(key) {
   const prices = odds[key] || {}, result = market(prices.a, prices.b);
@@ -122,7 +154,7 @@ function renderFight(c) {
   const isLive = state.state === 'in';
   const outcome = completed ? state.detail || state.description || 'Final' : isLive ? [state.description, c.status?.period ? 'Round '+c.status.period : '', c.status?.displayClock].filter(Boolean).join(' · ') : dateText(c.date || c.startDate);
   const meta = [c.type?.abbreviation || c.type?.text, c.format?.regulation?.periods ? c.format.regulation.periods+' rounds' : '', c.broadcast || c.broadcasts?.flatMap(x=>x.names||[]).join(', ')].filter(Boolean).join(' · ');
-  return '<article class="panel fight" data-id="'+escape(key)+'"><div class="fight-top"><span class="badge">'+labels[tier(c)]+'</span><span class="badge '+(isLive?'live':completed?'result':'')+'">'+(isLive?'● LIVE':completed?'FINAL':'SCHEDULED')+'</span></div><div class="matchup">'+two.map((x,i)=>(i?'<div class="vs">VS</div>':'')+'<div class="fighter"><div class="avatar" aria-hidden="true">'+escape(initials(fighterName(x)))+'</div><h3>'+escape(fighterName(x))+'</h3><p class="muted">'+escape(recordFor(x))+'</p>'+(completed&&x.winner?'<span class="winner">WINNER</span>':'')+'</div>').join('')+'</div><div class="bout-meta">'+escape(meta)+'<br>'+escape(outcome)+'</div><details data-section="comparison"><summary>Fighter comparison</summary><div class="detail-body">'+comparison(two)+'</div></details><details data-section="analysis"><summary>Independent matchup research</summary><div class="detail-body">'+analysis(two)+'</div></details><details data-section="market"><summary>Moneyline comparison</summary><div class="detail-body"><div class="grid">'+two.map((x,i)=>'<label class="odds-label">'+(i+1)+'. '+escape(fighterName(x))+'<input type="text" inputmode="text" autocomplete="off" spellcheck="false" class="ufc-odds" data-bout="'+escape(key)+'" data-side="'+(i?'b':'a')+'" value="'+escape(prices[i?'b':'a'] || '')+'" placeholder="'+(i?'+105':'−125')+'" aria-label="'+escape(fighterName(x))+' American moneyline odds"></label>').join('')+'</div><div class="market-result" aria-live="polite" data-market="'+escape(key)+'">'+marketResult(key)+'</div><p class="muted small">Use American moneyline odds for the same two-way market. Saved on this device.</p></div></details></article>';
+  return '<article class="panel fight" data-id="'+escape(key)+'"><div class="fight-top"><span class="badge">'+labels[tier(c)]+'</span><span class="badge '+(isLive?'live':completed?'result':'')+'">'+(isLive?'● LIVE':completed?'FINAL':'SCHEDULED')+'</span></div><div class="matchup">'+two.map((x,i)=>(i?'<div class="vs">VS</div>':'')+'<div class="fighter"><div class="avatar" aria-hidden="true">'+escape(initials(fighterName(x)))+'</div><h3>'+escape(fighterName(x))+'</h3><p class="muted">'+escape(recordFor(x))+'</p>'+(completed&&x.winner?'<span class="winner">WINNER</span>':'')+'</div>').join('')+'</div><div class="bout-meta">'+escape(meta)+'<br>'+escape(outcome)+'</div>'+researchPreview(two)+'<details data-section="analysis"><summary>Fight breakdown · reasons and risks</summary><div class="detail-body">'+analysis(two)+'</div></details><details data-section="comparison"><summary>Fighter comparison · all career metrics</summary><div class="detail-body">'+comparison(two)+'</div></details><details data-section="market"><summary>Sportsbook price calculator</summary><div class="detail-body"><div class="grid">'+two.map((x,i)=>'<label class="odds-label">'+(i+1)+'. '+escape(fighterName(x))+'<input type="text" inputmode="text" autocomplete="off" spellcheck="false" class="ufc-odds" data-bout="'+escape(key)+'" data-side="'+(i?'b':'a')+'" value="'+escape(prices[i?'b':'a'] || '')+'" placeholder="'+(i?'+105':'−125')+'" aria-label="'+escape(fighterName(x))+' American moneyline odds"></label>').join('')+'</div><div class="market-result" aria-live="polite" data-market="'+escape(key)+'">'+marketResult(key)+'</div><p class="muted small">Use American moneyline odds for the same two-way market. Saved on this device.</p></div></details></article>';
 }
 function show() {
   const event = events.find(e=>String(e.id)===active);
@@ -158,15 +190,16 @@ async function request(url, timeout = 12000) {
   try {const r = await fetch(url,{cache:'no-store',signal:controller.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json();} finally {clearTimeout(timer);}
 }
 async function researchCache() {
-  cache = {}; cacheDate = '';
+  cache = {}; cacheDate = ''; cacheBouts = [];
   try {
     const data = await request('./ufc_fighter_data.json',6000);
     const age = Date.now()-Date.parse(data.generated_at);
     if (!Number.isFinite(age) || age< -86400000 || age>30*86400000 || !data.source || !data.fighters || Array.isArray(data.fighters)) throw new Error('Missing provenance or outdated cache');
     cache = Object.fromEntries(Object.entries(data.fighters).filter(([,p])=>p && typeof p.stats==='object').map(([name,p])=>[nameKey(name),p]));
     cacheDate = data.generated_at;
+    cacheBouts = Array.isArray(data.bouts)?data.bouts:[];
   } catch (_) {/* Provider metrics can still be used without the optional cache. */}
-  $('research-status').textContent = cacheDate ? Object.keys(cache).length+' cached fighter profiles · updated '+dateText(cacheDate)+'. Cache profiles older than 30 days are excluded.' : 'No current fighter research cache is available. Provider-supplied statistics still appear; incomplete matchups stay PASS.';
+  $('research-status').textContent = cacheDate ? Object.keys(cache).length+' fighter profiles, including available partial data · cache updated '+dateText(cacheDate)+'. Cache profiles older than 30 days are excluded.' : 'No current fighter research cache is available. Provider-supplied statistics still appear; incomplete matchups stay PASS.';
 }
 function cachedSchedule(data) {
   const age = Date.now()-Date.parse(data?.generated_at);
@@ -191,7 +224,11 @@ async function load() {
     if (run!==generation) return;
     const next = eventsFrom(schedule.data);
     if (!next.length) throw new Error('No UFC cards are currently published in the next six weeks.');
-    events = next; loaded = true;
+    events = next.map(event=>({...event,competitions:event.competitions.map(c=>{
+      const bout=cacheBouts.find(b=>String(b.event_id)===String(event.id)&&String(b.bout_id)===String(c.id));
+      const segment=({main:'main',prelim:'prelim',prelims:'prelim',early:'early',early_prelims:'early',early_prelim:'early'})[bout?.card_segment];
+      return segment?{...c,cardSegment:segment==='main'?'Main Card':segment==='early'?'Early Prelims':'Prelims'}:c;
+    })})); loaded = true;
     if(schedule.source==='live')save(SCHEDULE_KEY,{events,generated_at:new Date().toISOString()});
     $('event').innerHTML=events.map(e=>'<option value="'+escape(e.id)+'">'+escape(e.name||'UFC event')+' · '+escape(dateText(e.date,{month:'short',day:'numeric'}))+'</option>').join('');
     $('event').disabled = false;
