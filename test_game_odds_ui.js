@@ -52,7 +52,7 @@ vm.createContext(sandbox);vm.runInContext(scripts[0],sandbox,{timeout:5000});
  el('run').onclick();
  for(let attempt=0;attempt<30&&el('results').hidden;attempt++)await new Promise(resolve=>setTimeout(resolve,100));
  assert.equal(el('results').hidden,false,'The 100k simulation must render');
- assert.match(el('results').innerHTML,/100,000 full-game simulations/);
+ assert.match(el('results').innerHTML,/100,000 (?:historical score bootstrap outcomes|paired score bootstrap outcomes)/);
  assert.match(el('results').innerHTML,/Over 45.5/);
  assert.match(el('results').innerHTML,/RESEARCH ONLY/);
  assert.match(el('results').innerHTML,/No bet is verified/);
