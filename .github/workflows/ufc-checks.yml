@@ -5,6 +5,9 @@ on:
       - 'ufc.html'
       - 'ufc_research_engine.js'
       - 'test_ufc_research.js'
+      - 'scripts/refresh_ufc.py'
+      - 'scripts/validate_ufc_cache.py'
+      - 'ufc_fighter_data.json'
       - '.github/workflows/ufc-checks.yml'
   workflow_dispatch:
 jobs:
@@ -16,7 +19,10 @@ jobs:
         with:
           node-version: '22'
       - name: Run UFC research tests
-        run: node test_ufc_research.js
+        run: |
+          node test_ufc_research.js
+          python scripts/validate_ufc_cache.py
+          python -m py_compile scripts/refresh_ufc.py scripts/validate_ufc_cache.py
       - name: Check live ESPN UFC feed structure
         shell: bash
         run: |
