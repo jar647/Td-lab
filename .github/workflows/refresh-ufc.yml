@@ -20,7 +20,7 @@ jobs:
       - name: Validate cache and model integration
         run: |
           node test_ufc_research.js
-          if [ -f ufc_fighter_data.json ]; then python -m json.tool ufc_fighter_data.json >/dev/null; fi
+          python scripts/validate_ufc_cache.py
       - name: Commit refreshed public statistics only
         run: |
           if [ -f ufc_fighter_data.json ]; then
