@@ -208,6 +208,19 @@ function findCurrentBout(key) {
   return events.find(e=>String(e.id)===active)?.competitions.find(c=>boutKey(c)===key);
 }
 
+function cardResearchSummary(competitions) {
+  const rows=competitions.map(c=>{
+    const fighters=(c.competitors||[]).slice(0,2);
+    if(fighters.length!==2)return null;
+    const result=root.UFCResearch?.evaluate?.(fighterStats(fighters[0]),fighterStats(fighters[1]),{draws:10000,seed:49271});
+    if(result?.status!=='experimental')return {names:fighters.map(fighterName),available:false};
+    const side=result.modelProbability>=0.5?0:1;
+    return {names:fighters.map(fighterName),available:true,strength:Math.abs(result.modelProbability-0.5),side,probability:Math.max(result.modelProbability,1-result.modelProbability)};
+  });
+  const valid=rows.filter(r=>r?.available).sort((a,b)=>b.strength-a.strength);
+  const unavailable=rows.filter(r=>r&&!r.available).length;
+  return '<section class="panel" aria-label="Card research ranking"><h2>Card-wide matchup research</h2><p class="muted">Ranked by an <strong>uncalibrated</strong> career-statistics heuristic, not verified accuracy, betting value or confidence. No approved bets.</p>'+(valid.length?'<ol>'+valid.map(r=>'<li><strong>'+escape(r.names[r.side])+'</strong> vs '+escape(r.names[1-r.side])+' · heuristic '+(r.probability*100).toFixed(1)+'% <span class="muted">EXPERIMENTAL · PASS</span></li>').join('')+'</ol>':'<p class="muted">No fights have sufficient statistics to calculate a model lean.</p>')+(unavailable?'<p class="muted">'+unavailable+' matchup(s) excluded because required fighter statistics are missing.</p>':'')+'</section>';
+}
 function simulationPreview(fighters) {
   if (!root.UFCResearch?.evaluate) return '<p class="muted">Simulation engine unavailable.</p>';
   const result=root.UFCResearch.evaluate(fighterStats(fighters[0]),fighterStats(fighters[1]),{draws:10000,seed:49271});
@@ -240,7 +253,7 @@ function show() {
   bouts = bouts.map((c,i)=>({c,i})).sort((a,b)=>{const da=Date.parse(a.c.date||a.c.startDate),db=Date.parse(b.c.date||b.c.startDate);return ((Number.isFinite(da)&&Number.isFinite(db)?da-db:0)||a.i-b.i)*(order==='reverse'?-1:1);}).map(x=>x.c);
   $('fight-count').textContent = bouts.length+' of '+competitions.length+' fights'+(competitions.some(c=>tier(c)==='unknown')?' · Some card positions unpublished':'');
   const open = new Set([...$('fights').querySelectorAll('details[open]')].map(d=>d.closest('article').dataset.id+'/'+d.dataset.section));
-  $('fights').innerHTML = bouts.length ? bouts.map(renderFight).join('') : '<div class="panel empty"><h2>No matching fights</h2>Try another fighter, weight class or card segment.<br><button type="button" data-reset>Clear filters</button></div>';
+  $('fights').innerHTML = bouts.length ? cardResearchSummary(bouts)+bouts.map(renderFight).join('') : '<div class="panel empty"><h2>No matching fights</h2>Try another fighter, weight class or card segment.<br><button type="button" data-reset>Clear filters</button></div>';
   for (const d of $('fights').querySelectorAll('details')) d.open = open.has(d.closest('article').dataset.id+'/'+d.dataset.section);
 }
 function select() {
