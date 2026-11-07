@@ -6,6 +6,8 @@ on:
       - 'nfl_backtest.js'
       - 'tests/nfl_game_engine.test.js'
       - 'tests/nfl_backtest.test.js'
+      - 'tests/nfl_backtest_cli.test.js'
+      - 'scripts/grade_nfl_simulator.js'
       - '.github/workflows/nfl-tests.yml'
   pull_request:
     paths:
@@ -24,4 +26,4 @@ jobs:
           node-version: '22'
       - run: node --check nfl_game_engine.js
       - run: node --check nfl_backtest.js
-      - run: node --test tests/nfl_game_engine.test.js tests/nfl_backtest.test.js
+      - run: node --test tests/nfl_game_engine.test.js tests/nfl_backtest.test.js tests/nfl_backtest_cli.test.js
