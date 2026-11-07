@@ -223,7 +223,7 @@ function cardResearchSummary(competitions) {
 }
 function methodPreview(fighters,c) {
   if(!root.UFCPropResearch?.research)return '';
-  const report=root.UFCPropResearch.research(fighters.map(propProfileFor),{names:fighters.map(fighterName),eventDate:c.date||c.startDate,boutId:c.id,rounds:c.format?.regulation?.periods});
+  const report=root.UFCPropResearch.research(fighters.map(propProfileFor),{names:fighters.map(fighterName),eventDate:c.date||c.startDate||events.find(e=>String(e.id)===active)?.date||null,boutId:c.id,rounds:c.format?.regulation?.periods});
   const angles=report.methods.filter(x=>x.status==='research_angle');
   if(!angles.length)return '<p class="muted small">Method-of-victory research: no supported historical angle for this matchup. Expand Round totals &amp; win method for the available records.</p>';
   return '<section class="research-preview"><span class="eyebrow">HISTORICAL METHOD RESEARCH</span>'+angles.map(x=>'<p><strong>'+escape(x.heading)+'</strong></p><p class="muted">'+escape(x.summary)+'</p>').join('')+'<p class="muted small">Recorded win/loss methods only. Not a calibrated finish probability or approved bet.</p></section>';
