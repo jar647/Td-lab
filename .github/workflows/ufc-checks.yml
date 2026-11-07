@@ -1,0 +1,38 @@
+name: UFC Fight Center checks
+on:
+  push:
+    paths:
+      - 'ufc.html'
+      - 'ufc_research_engine.js'
+      - 'test_ufc_research.js'
+      - '.github/workflows/ufc-checks.yml'
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run UFC research tests
+        run: node test_ufc_research.js
+      - name: Check live ESPN UFC feed structure
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json,urllib.request
+          url='https://site.api.espn.com/apis/site/v2/sports/mma/ufc/scoreboard'
+          try:
+              req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'})
+              with urllib.request.urlopen(req,timeout=15) as r:
+                  d=json.load(r)
+              events=d.get('events',[])
+              print('Events:',len(events))
+              for e in events[:5]:
+                  comps=e.get('competitions',[])
+                  print('Event:',e.get('name'),'competitions:',len(comps),'first competitors:',len((comps[0] if comps else {}).get('competitors',[])))
+              if not events: print('WARNING: ESPN returned no current events; full-card availability not verified')
+          except Exception as exc:
+              print('WARNING: Live feed could not be checked:',exc)
+          PY
