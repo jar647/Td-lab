@@ -153,7 +153,7 @@ function simulate(records,count=10000,seed=1307,selected=[]){
   for(const p of model.players){
    for(const [market,lines] of Object.entries(MARKETS)){
     for(const line of lines){
-     const key=p.id+'|'+market+'|'+line;
+     const key=JSON.stringify([p.id,market,line]);
      if(!hits.has(key))continue;
      if(p.output[market]>=line)hits.set(key,hits.get(key)+1);
     }
