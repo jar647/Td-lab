@@ -47,7 +47,9 @@ function statsFrom(competitor) {
       // displayValue carries explicit percent units; a bare fraction is ambiguous.
       value = item?.displayValue ?? item?.value;
     }
-    result[key] = numeric(value);
+    const parsed = numeric(value);
+    // Bare provider fractions for percentage metrics use 0–1; explicit '%' values already use 0–100.
+    result[key] = parsed !== null && PERCENT.has(key) && parsed > 0 && parsed < 1 && !(typeof value === 'string' && value.includes('%')) ? parsed * 100 : parsed;
   }
   return result;
 }
@@ -77,7 +79,15 @@ const labels = {early:'EARLY PRELIMS',prelim:'PRELIMS',main:'MAIN CARD',unknown:
 const dateText = (value, options = {dateStyle:'medium',timeStyle:'short'}) => Number.isFinite(Date.parse(value)) ? new Date(value).toLocaleString(undefined, options) : 'Time TBA';
 const fighterName = c => c?.athlete?.displayName || c?.athlete?.fullName || c?.displayName || 'Fighter TBD';
 const boutKey = c => String(active)+':'+String(c.id || (c.competitors || []).map(x => x.id || nameKey(fighterName(x))).sort().join('|'));
-function profileFor(c) {return cache[nameKey(fighterName(c))] || {};}
+function profileFor(c) {
+  const profile = cache[nameKey(fighterName(c))] || {};
+  // Never merge a same-name cache record for a different provider fighter ID.
+  const providerId = c?.athlete?.id;
+  if (providerId && profile.id && String(providerId) !== String(profile.id)) return {};
+  const fetched = Date.parse(profile.fetched_at || cacheDate);
+  if (!Number.isFinite(fetched) || fetched > Date.now()+86400000 || Date.now()-fetched > 30*86400000) return {};
+  return profile;
+}
 function fighterStats(c) {return {...statsFrom(c), ...(profileFor(c).stats || {})};}
 function showValue(value, key) {const n = numeric(value); return n === null ? 'Unavailable' : n.toLocaleString(undefined,{maximumFractionDigits:2})+(PERCENT.has(key) ? '%' : '');}
 function recordFor(c) {return (c.records || []).find(x => x.type === 'total' || x.name === 'overall')?.summary || c.records?.[0]?.summary || profileFor(c).record || 'Record unavailable';}
