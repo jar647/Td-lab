@@ -195,9 +195,9 @@ def refresh_fighters(now, key):
         age = age_days(previous, now) if previous else math.inf
         if previous and age <= 30 and isinstance(previous.get("stats"), dict):
             # Nulls are retained, with the actual previous source fetch time.
-            fighters[name.casefold()] = previous
+            fighters[name.casefold()] = {**previous, "name": name}
         checked_age = age_days({"fetched_at": previous.get("checked_at")}, now) if previous else math.inf
-        if previous and age <= 30 and (age <= 7 or checked_age <= 7):
+        if previous and age <= 30 and (age <= 7 or checked_age <= 7) and valid_stats(previous.get("stats")):
             continue
         pending.append((fid, name, previous))
     # Missing profiles first, then incomplete profiles; retain source schedule order within groups.
