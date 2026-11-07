@@ -95,10 +95,11 @@ function describe(a,b,options={}) {
   const histories=(options.profiles||[]).map(profile=>{
     const rows=Array.isArray(profile?.recent_fights)?profile.recent_fights:[];
     const ownId=String(profile?.id||'');
-    const known=rows.filter(f=>f&&f.winner&&f.method_display&&
+    const known=rows.filter(f=>f&&f.winner&&f.method_display&&!/draw|no contest|overturned/i.test(String(f.winner)+' '+String(f.method_display))&&
       (String(f.fighter_a||'')===ownId||String(f.fighter_b||'')===ownId));
     const seen=new Set();
     const unique=known.filter(f=>{const key=String(f.bout_id||[f.event_date,f.fighter_a,f.fighter_b].join('|'));if(seen.has(key))return false;seen.add(key);return true;}).slice(0,5);
+    unique.sort((a,b)=>Date.parse(b.starts_at||b.event_date||0)-Date.parse(a.starts_at||a.event_date||0));
     const outcomes=unique.map(f=>{
       const winner=String(f.winner||'');
       const winnerId=winner.toLowerCase()==='a'?String(f.fighter_a):winner.toLowerCase()==='b'?String(f.fighter_b):winner;
@@ -110,6 +111,18 @@ function describe(a,b,options={}) {
   const recentEvidence=names.map((name,i)=>({
     name,...(histories[i]||{sample:0,wins:0,losses:0,koWins:0,submissionWins:0,decisionWins:0,koLosses:0,submissionLosses:0})
   }));
+  const contextualFlags=[];
+  for(let i=0;i<2;i++){
+    const h=recentEvidence[i],name=names[i];
+    if(h.sample>=3){
+      contextualFlags.push(name+': '+h.wins+'-'+h.losses+' in '+h.sample+' recorded recent decisive fights. Recent results describe form, not opponent quality.');
+      if(h.koLosses>=2)contextualFlags.push(name+': multiple recent KO/TKO losses warrant a durability review; chin and medical status cannot be inferred.');
+      if(h.submissionLosses>=2)contextualFlags.push(name+': multiple recent submission losses warrant a grappling-defense review.');
+    }else contextualFlags.push(name+': insufficient verified recent decisive results to assess form.');
+    if(stats[i].slpm!==null&&stats[i].sapm!==null&&stats[i].sapm>stats[i].slpm)
+      contextualFlags.push(name+': absorbs more significant strikes per minute than landed across career; opponent quality and fight context are unknown.');
+  }
+  const unresolved=['Opponent quality: no verified strength-of-schedule or opponent-adjusted performance data','Cardio: no round-by-round output or pace decay supplied','Durability: recorded KO/TKO losses are not medical or chin assessments','Fighting style: striking and takedown rates do not reveal stance, cage control, clinch work or tactical tendencies'];
   const finishRoutes=[];
   for(let i=0;i<2;i++){
     const own=recentEvidence[i],opp=recentEvidence[1-i];
@@ -134,7 +147,7 @@ function describe(a,b,options={}) {
     status, heading:status==='incomplete'?'Research incomplete':status==='balanced'?'No statistical lean':'Statistical lean: '+names[leanSide],
     leanSide,
     leanReason:status==='incomplete'?'The missing rates are listed separately for each fighter below.':status==='balanced'?'The underlying career-rate score is level; simulation noise is not used to break the tie.':'The rate-based score favors '+names[leanSide]+(supportive.length?', led by '+supportive.slice(0,2).map(x=>x.title.toLowerCase()).join(' and '):'')+'.',
-    areas,exploits,recentEvidence,finishRoutes,missing,paths,counterargument,cautions,modelProbability:probability
+    areas,exploits,recentEvidence,contextualFlags,unresolved,finishRoutes,missing,paths,counterargument,cautions,modelProbability:probability
   };
 }
 return {describe,normalize,METRICS};
