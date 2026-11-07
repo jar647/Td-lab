@@ -47,19 +47,19 @@ for bout in bouts:
         if not fid or not name:continue
         key=name.strip().casefold()
         if key in fighters:continue
-        if key in old and old[key].get("id")==str(fid) and all(isinstance(old[key].get("stats",{}).get(metric),(int,float)) for metric in ("slpm","sapm","strAcc","strDef","tdAvg","tdAcc","tdDef","subAvg")):
+        if key in old and old[key].get("id")==str(fid) and old[key].get("fetched_at") and all(isinstance(old[key].get("stats",{}).get(metric),(int,float)) for metric in ("slpm","sapm","strAcc","strDef","tdAvg","tdAcc","tdDef","subAvg")) and (datetime.datetime.now(datetime.timezone.utc)-datetime.datetime.fromisoformat(old[key]["fetched_at"])).total_seconds() < 86400:
             fighters[key]=old[key]
             continue
         try:
             data=api("get_fighter",{"fighter_id":str(fid)})
             extracted=stats(data)
-            if extracted: fighters[key]={"id":str(fid),"name":name,"stats":extracted,"record":data.get("fighter",{}).get("pro_record"),"rating":data.get("rating",{}).get("current")}
+            if extracted: fighters[key]={"id":str(fid),"name":name,"stats":extracted,"record":data.get("fighter",{}).get("pro_record"),"rating":data.get("rating",{}).get("current"),"fetched_at":datetime.datetime.now(datetime.timezone.utc).isoformat()}
             else:print("Incomplete career rates:",name)
         except Exception as exc:print("Fighter refresh error:",name,type(exc).__name__)
         time.sleep(0.12)
 if not fighters:
     print("No complete verified fighter profiles; refusing to overwrite cache.")
     sys.exit(1)
-payload={"generated_at":datetime.datetime.now(datetime.timezone.utc).isoformat(),"source":"FighterAPI authenticated REST get_schedule/get_fighter","fighters":fighters,"scheduled_bouts":len(bouts)}
+payload={"coverage":{"profiles":len(fighters),"fighters_expected":len({str(b.get("fighter_"+side)) for b in bouts if isinstance(b,dict) for side in ("a","b") if b.get("fighter_"+side)}),"complete":len(fighters)>=len({str(b.get("fighter_"+side)) for b in bouts if isinstance(b,dict) for side in ("a","b") if b.get("fighter_"+side)})},"generated_at":datetime.datetime.now(datetime.timezone.utc).isoformat(),"source":"FighterAPI authenticated REST get_schedule/get_fighter","fighters":fighters,"scheduled_bouts":len(bouts)}
 OUT.write_text(json.dumps(payload,ensure_ascii=False,separators=(",",":"))+"\n")
 print("Verified profiles:",len(fighters),"scheduled bouts:",len(bouts))
