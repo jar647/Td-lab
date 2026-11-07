@@ -3,7 +3,7 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.UFCResearch=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
 'use strict';
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
-function num(x){if(x===null||x===undefined||x==='')return null;const n=Number(x);return Number.isFinite(n)?n:null;}
+function num(x){if(!['string','number'].includes(typeof x)||String(x).trim()==='')return null;const n=Number(x);return Number.isFinite(n)?n:null;}
 function normalize(f){const a={};for(const k of ['slpm','sapm','strAcc','strDef','tdAvg','tdAcc','tdDef','subAvg'])a[k]=num(f?.[k]);return a;}
 function evaluate(a,b,options={}){
 const A=normalize(a),B=normalize(b),keys=Object.keys(A),missing=keys.filter(k=>A[k]===null||B[k]===null);

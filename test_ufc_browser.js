@@ -1,0 +1,49 @@
+const {chromium}=require('playwright');
+const fs=require('node:fs');
+(async()=>{
+const artifactDir=process.env.UFC_ARTIFACT_DIR || '/tmp/ufc-artifacts';fs.mkdirSync(artifactDir,{recursive:true});
+const browser=await chromium.launch({headless:true,executablePath:process.env.UFC_CHROMIUM_PATH || '/usr/bin/chromium',args:['--no-sandbox']});
+const page=await browser.newPage({viewport:{width:390,height:844}});
+const errors=[];page.on('pageerror',e=>errors.push(e.message));
+const feed=JSON.parse(fs.readFileSync(require('node:path').join(__dirname,'ufc_schedule.json'),'utf8'));
+await page.route('**/scoreboard?**',r=>r.fulfill({json:feed}));
+await page.goto((process.env.UFC_TEST_URL || 'http://127.0.0.1:8000/ufc.html'));
+await page.waitForSelector('article.fight');
+console.log('Rendered live-source bouts:',await page.locator('article.fight').count());
+if(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth))throw Error('Mobile horizontal overflow');
+await page.screenshot({path:require('node:path').join(artifactDir,'ufc-mobile.png'),fullPage:true});
+const first=page.locator('article.fight').first();
+await first.locator('details[data-section="market"] summary').click();
+await first.locator('[data-side="a"]').fill('-125');await first.locator('[data-side="b"]').fill('+105');
+await page.getByText('53.2%',{exact:true}).waitFor();
+const name=await first.locator('h3').first().textContent();
+await page.locator('#search').fill('No fighter by this name');await page.getByRole('heading',{name:'No matching fights'}).waitFor();
+await page.getByRole('button',{name:'Clear filters'}).click();
+if(await page.locator('article.fight').first().locator('[data-side="a"]').inputValue()!=='-125')throw Error('Odds lost after render');
+await page.reload();await page.waitForSelector('article.fight');
+if(await page.locator('article.fight').first().locator('[data-side="b"]').inputValue()!=='+105')throw Error('Odds lost after reload');
+await page.locator('#search').fill(name);if(await page.locator('article.fight').count()!==1)throw Error('Search failed');
+await page.locator('#search').fill('');
+await page.setViewportSize({width:1440,height:1000});await page.screenshot({path:require('node:path').join(artifactDir,'ufc-desktop.png'),fullPage:true});
+// Simulate provider outage: saved source data must be explicitly labeled.
+await page.unroute('**/scoreboard?**');await page.route('**/scoreboard?**',r=>r.abort());await page.reload();
+await page.locator('#feed-notice').filter({hasText:'Saved schedule'}).waitFor();await page.waitForSelector('article.fight');
+// Clean session and both sources unavailable: show a retry without invented data.
+const empty=await browser.newPage();
+await empty.route('**/scoreboard?**',r=>r.abort());await empty.route('**/ufc_schedule.json',r=>r.abort());
+await empty.goto((process.env.UFC_TEST_URL || 'http://127.0.0.1:8000/ufc.html'));await empty.getByRole('button',{name:'Try again'}).waitFor();
+if(await empty.locator('article.fight').count())throw Error('Invented bouts after feed failure');
+// Use clearly synthetic route fixtures to cover segment labels and real metric rendering.
+const fixture=JSON.parse(JSON.stringify(feed));const event=fixture.events[0];event.competitions=event.competitions.slice(0,3);event.competitions.forEach((c,i)=>{c.notes=[{headline:['Early Prelims','Prelims','Main Card'][i]}];});
+const fighter=event.competitions[0].competitors[0].athlete.displayName;
+const profile={generated_at:new Date().toISOString(),source:'TEST FIXTURE ONLY',fighters:{[fighter]:{stats:{slpm:4,sapm:3,strAcc:48,strDef:55,tdAvg:1,tdAcc:40,tdDef:70,subAvg:.4}}}};
+const two=event.competitions[0].competitors[1].athlete.displayName;profile.fighters[two]=profile.fighters[fighter];
+const test=await browser.newPage();await test.route('**/scoreboard?**',r=>r.fulfill({json:fixture}));await test.route('**/ufc_fighter_data.json',r=>r.fulfill({json:profile}));await test.goto((process.env.UFC_TEST_URL || 'http://127.0.0.1:8000/ufc.html'));
+await test.waitForSelector('article.fight');await test.locator('#event').selectOption(String(event.id));
+await test.locator('[data-filter="early"]').click();if(await test.locator('article.fight').count()!==1)throw Error('Early filter failed');
+await test.locator('[data-section="analysis"] summary').click();await test.getByText('EXPERIMENTAL · UNVALIDATED',{exact:true}).waitFor();
+await test.locator('[data-filter="main"]').click();if(await test.locator('article.fight').count()!==1)throw Error('Main filter failed');
+if(errors.length)throw Error(errors.join('\n'));
+console.log('Browser PASS: mobile overflow, search, persisted odds, refresh fallback, unavailable state, card filters, research rendering; no JS errors');
+await browser.close();
+})().catch(e=>{console.error(e);process.exit(1)});

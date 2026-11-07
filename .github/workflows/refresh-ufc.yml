@@ -13,19 +13,32 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Fetch authenticated fighter statistics
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Fetch public cards and authenticated fighter statistics
         env:
           FIGHTERAPI_KEY: ${{ secrets.FIGHTERAPI_KEY }}
         run: python scripts/refresh_ufc.py
       - name: Validate cache and model integration
+        id: validate
+        if: ${{ !cancelled() }}
         run: |
           node test_ufc_research.js
           python scripts/validate_ufc_cache.py
+          python -m py_compile scripts/refresh_ufc.py scripts/validate_ufc_cache.py
+          node test_ufc_app.js
+          python -m unittest discover -s tests -p test_ufc_refresh.py
+          if [ -f ufc_schedule.json ]; then python -m json.tool ufc_schedule.json >/dev/null; fi
+          if [ -f ufc_fighter_data.json ]; then python -m json.tool ufc_fighter_data.json >/dev/null; fi
       - name: Commit refreshed public statistics only
+        if: ${{ !cancelled() && steps.validate.outcome == 'success' }}
         run: |
-          if [ -f ufc_fighter_data.json ]; then
+          if [ -f ufc_fighter_data.json ] || [ -f ufc_schedule.json ]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add ufc_fighter_data.json
+            for file in ufc_fighter_data.json ufc_schedule.json; do
+              if [ -f "$file" ]; then git add "$file"; fi
+            done
             git diff --cached --quiet || (git commit -m "Refresh UFC fighter research cache" && git push)
           fi
