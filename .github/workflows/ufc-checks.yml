@@ -3,8 +3,19 @@ on:
   push:
     paths:
       - 'ufc.html'
+      - 'ufc.css'
+      - 'ufc_app.js'
+      - 'test_ufc_app.js'
+      - 'scripts/refresh_ufc.py'
+      - 'tests/test_ufc_refresh.py'
       - 'ufc_research_engine.js'
       - 'test_ufc_research.js'
+      - '.github/workflows/ufc-checks.yml'
+  pull_request:
+    paths:
+      - '*ufc*'
+      - 'scripts/refresh_ufc.py'
+      - 'tests/test_ufc_refresh.py'
       - '.github/workflows/ufc-checks.yml'
   workflow_dispatch:
 jobs:
@@ -16,7 +27,11 @@ jobs:
         with:
           node-version: '22'
       - name: Run UFC research tests
-        run: node test_ufc_research.js
+        run: |
+          node --check ufc_app.js
+          node test_ufc_research.js
+          node test_ufc_app.js
+          python -m unittest discover -s tests -p test_ufc_refresh.py
       - name: Check live ESPN UFC feed structure
         shell: bash
         run: |
