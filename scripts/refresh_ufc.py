@@ -219,11 +219,17 @@ def refresh_fighters(now, key):
             fetched += 1
         except APIError as exc:
             print("Fighter refresh error:", name, f"HTTP {exc.status}")
+            # Keep recent verified data after transient errors, without
+            # changing its original fetch timestamp or fighter identity.
+            if previous and age_days(previous, now) <= 30 and isinstance(previous.get("stats"), dict):
+                fighters[name.casefold()] = {**previous, "name": name}
             if exc.status in (401, 402, 403):
                 blocked = exc.status
                 break
         except Exception as exc:
             print("Fighter refresh error:", name, type(exc).__name__)
+            if previous and age_days(previous, now) <= 30 and isinstance(previous.get("stats"), dict):
+                fighters[name.casefold()] = {**previous, "name": name}
     if not fighters:
         raise ValueError("No source-backed fighter profiles; preserving the previous cache")
     payload = {"generated_at": now.isoformat(), "source": SOURCE, "fighters": fighters,
