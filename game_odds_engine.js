@@ -161,15 +161,20 @@
   if(game.possessionModel&&!game.possessionModel.historical){const m=game.possessionModel,now=Date.now();if(now>=Date.parse(game.date)||[['games',12],['injuries',12],['rosters',72]].some(([key,hours])=>!Number.isFinite(Date.parse(m.inputTimes[key]))||now-Date.parse(m.inputTimes[key])>hours*3600000))throw Error('Pregame inputs are stale or the game has started; reload the feeds');}
   const market=marketInput(rawMarket);
   const engine=game.possessionModel?(typeof module==='object'&&module.exports?require('./nba_possession_engine.js'):globalThis.CookNBAPossessions):null;
-  const possession=engine?engine.draws(game.possessionModel,count,seed,{legs:game.slipLegs||[]}):null;
+  // Detailed possession simulation is expensive on mobile. Sample a bounded
+  // number of complete games, then bootstrap paired final scores to preserve
+  // home/away correlation for the requested market-outcome count.
+  const detailedCount=engine?Math.min(count,1500):count;
+  const possession=engine?engine.draws(game.possessionModel,detailedCount,seed,{legs:game.slipLegs||[]}):null;
   const random=rng(seed>>>0),residuals=game.residuals,homeScores=[],awayScores=[],margins=[],totals=[];
   const keys=['homeML','awayML','homeATS','awayATS','over','under'];
   const counts={};for(const key of keys)counts[key]={win:0,loss:0,push:0};
   let homeWin=0,awayWin=0,ties=0,homePoints=0,awayPoints=0;
   for(let i=0;i<count;i++){
    const err=possession?null:residuals[Math.floor(random()*residuals.length)];
-   let h=possession?possession.home[i]:Math.max(0,Math.round(game.projectedHome+err.homeError));
-   let a=possession?possession.away[i]:Math.max(0,Math.round(game.projectedAway+err.awayError));
+   const sampledIndex=possession?Math.floor(random()*detailedCount):i;
+   let h=possession?possession.home[sampledIndex]:Math.max(0,Math.round(game.projectedHome+err.homeError));
+   let a=possession?possession.away[sampledIndex]:Math.max(0,Math.round(game.projectedAway+err.awayError));
    if(game.sport==='NBA'&&h===a){if(random()<.5)h++;else a++;}
    const margin=h-a,total=h+a;
    homeScores.push(h);awayScores.push(a);margins.push(margin);totals.push(total);
@@ -190,6 +195,7 @@
    const sum=x&&y?x.implied+y.implied:0;
    if(sum){noVig[a]=x.implied/sum;noVig[b]=y.implied/sum;}
   }
+  const simulationMethod=possession?`${detailedCount.toLocaleString('en-US')} detailed possession simulations; ${count.toLocaleString('en-US')} paired score bootstrap outcomes`:`${count.toLocaleString('en-US')} historical score bootstrap outcomes`;
   const markets=keys.filter(key=>(!key.endsWith('ATS')||market.homeSpread!==null)&&(!['over','under'].includes(key)||market.total!==null)).map(key=>{
    const c=counts[key],price=market.prices[key],win=c.win/count,loss=c.loss/count,push=c.push/count;
    const breakeven=price?price.implied*(1-push):null;
