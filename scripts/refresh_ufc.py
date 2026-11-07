@@ -197,7 +197,7 @@ def refresh_fighters(now, key):
             # Nulls are retained, with the actual previous source fetch time.
             fighters[name.casefold()] = {**previous, "name": name}
         checked_age = age_days({"fetched_at": previous.get("checked_at")}, now) if previous else math.inf
-        if previous and age <= 30 and (age <= 7 or checked_age <= 7) and valid_stats(previous.get("stats")):
+        if previous and age <= 30 and (age <= 7 or checked_age <= (7 if valid_stats(previous.get("stats")) else 1)):
             continue
         pending.append((fid, name, previous))
     # Missing profiles first, then incomplete profiles; retain source schedule order within groups.
@@ -213,6 +213,8 @@ def refresh_fighters(now, key):
                 # still be retained; checked_at only controls retry cadence.
                 updated = {**previous, **updated, "stats": previous["stats"],
                            "fetched_at": previous["fetched_at"], "checked_at": now.isoformat()}
+            if not valid_stats(updated["stats"]):
+                updated["checked_at"] = now.isoformat()
             fighters[name.casefold()] = updated
             fetched += 1
         except APIError as exc:
