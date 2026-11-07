@@ -18,4 +18,6 @@ test('simulation preserves market identifiers containing pipe characters',()=>{
  assert.ok(out.markets.some(m=>m.id==='AAA|WR'&&m.market==='receptions'&&m.line===4));
  assert.ok(out.markets.some(m=>m.id==='BBB|QB'&&m.market==='passYards'));
  assert.ok(out.markets.every(m=>m.id.includes('|')&&m.scenarioRate>=0&&m.scenarioRate<=1));
+ assert.ok(out.markets.some(m=>m.scenarioRate>0),'Expected positive simulated hit rates; all-zero rates indicate broken hit-key counting');
+ assert.ok(out.markets.some(m=>m.scenarioRate>0&&m.scenarioRate<1),'Expected non-degenerate Monte Carlo probability');
 });
