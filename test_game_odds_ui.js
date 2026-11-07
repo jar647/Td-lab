@@ -4,7 +4,9 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 const engine=require('./game_odds_engine.js');
 const html=fs.readFileSync('game-odds.html','utf8');
 assert.match(html,/<script src="\.\/game_odds_engine\.js\?v=nfl-score-candidate-1"><\/script>/,'Engine assets must be versioned with the worker');
-assert.ok(html.includes("new Worker('./game_odds_worker.js?v=nfl-score-candidate-1')"));
+assert.match(html,/new Worker\('\.\/game_odds_worker\.js\?v=[^']+'\)/,'Game Odds must use a versioned simulation worker');
+assert.match(html,/Availability check timed out after 12 seconds/,'Live NBA availability must have a timeout');
+assert.match(html,/if\(busy\)return;runId\+\+/,'Background availability updates must not interrupt active simulations');
 assert.ok(fs.readFileSync('game_odds_worker.js','utf8').includes("nba_possession_engine.js?v=nba-projection-audit-3"),'Worker imports must match the page model version');
 for(const field of ['game','homeML','awayML','homeSpread','homeATS','awayATS','total','over','under','run','results','sportNFL','sportNBA'])
  assert.ok(html.includes('id="'+field+'"'),'Missing '+field);
