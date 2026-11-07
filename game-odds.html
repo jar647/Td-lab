@@ -295,7 +295,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    `<p class="caption">${esc(ctx.source_note||'Public feed context; individual source rows can be missing or stale.')}</p></div>`;
  }
  function render(result,model){
-  const saved=result.possession&&typeof localStorage!=='undefined'?CookNBASimulatorUI.capture(result,model,localStorage):null;
+  let saved=null;if(result.possession&&typeof localStorage!=='undefined'&&typeof CookNBASimulatorUI!=='undefined'){try{saved=CookNBASimulatorUI.capture(result,model,localStorage)}catch(e){console.warn('Optional result archival failed',e)}}
   const s=result.simulated,p=result.projection;
   const favorites=result.markets.filter(x=>x.eligible).sort((a,b)=>b.ev-a.ev);
   const highest=favorites[0], priced=result.markets.filter(x=>x.price!==null);
@@ -304,10 +304,10 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   const details=highest?'This is NOT an approved wager. The outcome model has not demonstrated independently calibrated, profitable forecasts.':
    'A model projection is not evidence of a profitable sportsbook edge. Passing is a valid outcome.';
   const date=model.sport==='NFL'?model.date:new Date(model.date).toLocaleString('en-US',{timeZone:'America/New_York',dateStyle:'medium',timeStyle:'short'});
-  const runStatus=result.possession?'100,000 outcomes complete. Latest published NBA availability and lineup context checked before this run. Sportsbook execution remains unverified.':'100,000 score outcomes complete. Kickoffs use the published Eastern-time schedule. Official game-day active lists and sportsbook execution remain unverified.';
+  const runStatus=result.possession?'100,000 paired score outcomes complete from '+result.detailedGameCount+' detailed possession simulations. Published pregame availability used. Sportsbook execution remains unverified.':'100,000 score outcomes complete. Kickoffs use the published Eastern-time schedule. Official game-day active lists and sportsbook execution remain unverified.';
   $('results').innerHTML=
    '<div class="panel"><h2>🎲 '+esc(model.away)+' @ '+esc(model.home)+' · '+esc(model.sport)+'</h2>'+
-   '<p class="muted">Date: '+esc(date)+' · 100,000 full-game simulations · Score model: <strong>RESEARCH ONLY</strong></p>'+
+   '<p class="muted">Date: '+esc(date)+' · '+esc(result.simulationMethod||'100,000 score outcomes')+' · Score model: <strong>RESEARCH ONLY</strong></p>'+
    (saved&&!saved.saved?'<p class="warn">'+esc(saved.reason)+'. This run was not saved for grading.</p>':'')+trustPanel(model)+'<div class="scoreboard"><div class="score"><span>'+esc(model.away)+' · projected</span><b>'+num(p.away)+'</b></div>'+
    '<div class="score"><span>'+esc(model.home)+' · projected</span><b>'+num(p.home)+'</b></div></div>'+
    '<div class="kpis"><div class="kpi"><span>'+esc(model.home)+' win</span><b>'+pct(s.homeWin)+'</b></div>'+
