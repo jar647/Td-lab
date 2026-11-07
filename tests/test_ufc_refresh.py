@@ -96,6 +96,21 @@ class UFCRefreshTests(unittest.TestCase):
             self.assertEqual(calls.call_count, 1)
             self.assertEqual(output["fighters"]["fighter a"]["fetched_at"], profile["fetched_at"])
 
+    def test_two_day_old_incomplete_profile_is_refetched(self):
+        partial = refresh.profile_data({}, "a", "Fighter A", self.now - datetime.timedelta(days=2))
+        complete = refresh.profile_data({"career_rates": self.rates}, "b", "Fighter B", self.now)
+        with self.workspace():
+            self.cache({"fighter a": partial, "fighter b": complete})
+            with mock.patch.object(refresh, "api", side_effect=[
+                {"bouts": [self.bout]},
+                {"career_rates": self.rates}
+            ]) as calls:
+                output = refresh.refresh_fighters(self.now, "test")
+            self.assertEqual(calls.call_count, 2)
+            self.assertEqual(calls.call_args.args[1]["fighter_id"], "a")
+            self.assertTrue(refresh.valid_stats(output["fighters"]["fighter a"]["stats"]))
+            self.assertEqual(output["coverage"]["complete_profiles"], 2)
+
     def test_incomplete_refresh_keeps_known_good_rates_and_original_source_time(self):
         old = refresh.profile_data({"career_rates": self.rates}, "a", "Fighter A", self.now - datetime.timedelta(days=8))
         other = refresh.profile_data({}, "b", "Fighter B", self.now)
