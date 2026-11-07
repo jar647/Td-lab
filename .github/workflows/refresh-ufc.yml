@@ -1,0 +1,31 @@
+name: Refresh UFC fighter research
+on:
+  schedule:
+    - cron: '30 12 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch authenticated fighter statistics
+        env:
+          FIGHTERAPI_KEY: ${{ secrets.FIGHTERAPI_KEY }}
+        run: python scripts/refresh_ufc.py
+      - name: Validate cache and model integration
+        run: |
+          node test_ufc_research.js
+          if [ -f ufc_fighter_data.json ]; then python -m json.tool ufc_fighter_data.json >/dev/null; fi
+      - name: Commit refreshed public statistics only
+        run: |
+          if [ -f ufc_fighter_data.json ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add ufc_fighter_data.json
+            git diff --cached --quiet || (git commit -m "Refresh UFC fighter research cache" && git push)
+          fi
