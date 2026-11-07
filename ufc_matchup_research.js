@@ -64,6 +64,33 @@ function describe(a,b,options={}) {
     area('Takedown matchup',['tdAvg','tdAcc','tdDef'],stats,names,grappling,0.24,grapplingFacts,i=>'Possible route (inference): '+names[i]+' could pursue takedowns, with '+format(stats[i].tdAvg)+' takedowns/15 min and '+percent(stats[i].tdAcc)+' accuracy against '+percent(stats[1-i].tdDef)+' opponent takedown defense. The career rates do not establish how much control time would follow.'),
     area('Submission activity',['subAvg'],stats,names,submissions,0.16,submissionFacts,i=>'Possible route (inference): '+names[i]+' could seek grappling opportunities to use their higher submission activity: '+format(stats[i].subAvg)+' attempts/15 min versus '+format(stats[1-i].subAvg)+'/15 min. Attempts are not submission finishes.')
   ];
+  // Cross-match attack against the opponent's specific defensive weakness.
+  // These are matchup hypotheses, not measured finish probabilities.
+  const exploits=[];
+  for(let i=0;i<2;i++){
+    const own=stats[i],opp=stats[1-i],name=names[i],other=names[1-i];
+    if(has(own,['slpm','strAcc'])&&has(opp,['sapm','strDef'])){
+      const strikingPressure=own.slpm*(own.strAcc/50)*(1-opp.strDef/100);
+      exploits.push({side:i,kind:'striking',score:strikingPressure,
+        title:name+' striking against '+other+' striking defense',
+        summary:name+' lands '+format(own.slpm)+' significant strikes/min at '+percent(own.strAcc)+' accuracy; '+other+' absorbs '+format(opp.sapm)+'/min with '+percent(opp.strDef)+' striking defense.',
+        route:name+' may exploit openings in '+other+'\'s striking defense by maintaining distance and volume. This does not establish knockout power.'});
+    }
+    if(has(own,['tdAvg','tdAcc'])&&has(opp,['tdDef'])){
+      const wrestlingPressure=own.tdAvg*(own.tdAcc/50)*(1-opp.tdDef/100);
+      exploits.push({side:i,kind:'wrestling',score:wrestlingPressure,
+        title:name+' takedowns against '+other+' takedown defense',
+        summary:name+' averages '+format(own.tdAvg)+' takedowns/15 min with '+percent(own.tdAcc)+' accuracy; '+other+' defends '+percent(opp.tdDef)+' of takedown attempts.',
+        route:name+' may exploit '+other+'\'s takedown defense by forcing wrestling exchanges. Ground control and submission success remain unverified.'});
+    }
+    if(has(own,['subAvg'])&&has(opp,['tdDef'])&&own.subAvg>0){
+      exploits.push({side:i,kind:'submission',score:own.subAvg*(1-opp.tdDef/100),
+        title:name+' submission activity against '+other+' takedown defense',
+        summary:name+' attempts '+format(own.subAvg)+' submissions/15 min; '+other+'\'s takedown defense is '+percent(opp.tdDef)+'.',
+        route:name+' could pursue submissions if grappling exchanges develop. Submission attempts are not submission wins.'});
+    }
+  }
+  exploits.sort((x,y)=>y.score-x.score);
   const evaluated = complete && engine?.evaluate ? engine.evaluate(A,B) : null;
   const probability = evaluated?.status==='experimental' ? evaluated.modelProbability : null;
   const leanSide = probability===null ? null : signSide(probability-0.5);
@@ -80,7 +107,7 @@ function describe(a,b,options={}) {
     status, heading:status==='incomplete'?'Research incomplete':status==='balanced'?'No statistical lean':'Statistical lean: '+names[leanSide],
     leanSide,
     leanReason:status==='incomplete'?'The missing rates are listed separately for each fighter below.':status==='balanced'?'The underlying career-rate score is level; simulation noise is not used to break the tie.':'The rate-based score favors '+names[leanSide]+(supportive.length?', led by '+supportive.slice(0,2).map(x=>x.title.toLowerCase()).join(' and '):'')+'.',
-    areas,missing,paths,counterargument,cautions,modelProbability:probability
+    areas,exploits,missing,paths,counterargument,cautions,modelProbability:probability
   };
 }
 return {describe,normalize,METRICS};
