@@ -4,7 +4,7 @@ assert.equal(evaluate({},base).status,'insufficient_data');
 assert.equal(evaluate({...base,strAcc:125},base).status,'invalid_data');
 const r=evaluate({...base,slpm:5.5},base,{seed:123,draws:10000});
 assert.equal(r.status,'experimental');assert.equal(r.recommendation,'PASS_UNVALIDATED');
-assert.equal(r.draws,10000);assert.ok(r.probabilities[0]>0.5);assert.ok(Math.abs(r.probabilities.reduce((a,b)=>a+b,0)-1)<1e-9);
+assert.equal(r.draws,10000);assert.ok(r.simulationInterval[0]<=r.probabilities[0]);assert.ok(r.simulationInterval[1]>=r.probabilities[0]);assert.ok(r.modelProbability>0.5);assert.ok(r.probabilities[0]>0.5);assert.ok(Math.abs(r.probabilities.reduce((a,b)=>a+b,0)-1)<1e-9);
 assert.deepEqual(r.probabilities,evaluate({...base,slpm:5.5},base,{seed:123,draws:10000}).probabilities);
 assert.equal(evaluate(base,base,{draws:10000}).status,'experimental');
 console.log('UFC research engine guardrails, probabilities, reproducibility PASS');
