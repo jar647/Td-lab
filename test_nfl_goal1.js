@@ -6,7 +6,7 @@ const candidate=(id,score,team='A',key='recYards')=>({
  p:{player_id:id,player:id,team,opp:team==='A'?'B':'A'},
  d:{key,label:'receiving yards'},score,line:40,scenarioRate:.68,risks:[],reasons:['game script']
 });
-const pool=[candidate('a',95),candidate('a',90),candidate('b',86),candidate('c',84,'B'),candidate('d',81,'B')];
+const pool=[candidate('a',95),candidate('a',90,'A','receptions'),candidate('b',86),candidate('c',84,'B'),candidate('d',81,'B')];
 assert.equal(app.rankPlayers(pool,3).length,3);
 assert.deepEqual(app.rankPlayers(pool,3).map(x=>x.p.player_id),['a','b','c']);
 for(const n of [2,3,4,5]){
@@ -14,6 +14,19 @@ for(const n of [2,3,4,5]){
  assert.equal(slip.length,n);
  assert.equal(new Set(slip.map(x=>app.identity(x))).size,Math.min(n,4),'prefer unique players until the pool is exhausted');
 }
+const largePool=Array.from({length:12},(_,i)=>candidate('p'+i,100-i,i%2?'B':'A'));
+// Conflicting alternate lines for the same market stay a single leg.
+const conflicting={...largePool[0],score:20,line:50};
+for(const n of [6,8,10]){
+ const slip=app.buildTicket([...largePool,conflicting],n);
+ assert.equal(slip.length,n,'honor supported '+n+'-leg requests');
+ assert.equal(new Set(slip.map(app.marketId)).size,n,'no duplicate player-market legs');
+ assert.equal(slip.filter(x=>app.marketId(x)===app.marketId(largePool[0])).length,1);
+ assert.equal(slip.find(x=>app.marketId(x)===app.marketId(largePool[0])).line,40);
+}
+assert.equal(app.buildTicket(largePool,99).length,10,'maximum ticket size is bounded');
+assert.equal(app.buildTicket([...pool,pool[0]],10).length,5,'limited pools do not invent or duplicate legs');
+assert.equal(app.buildTicket([],10).length,0,'empty pools stay empty');
 assert.equal(app.americanDecimal('+400'),5);
 assert.equal(app.americanDecimal('-125'),1.8);
 assert.equal(app.americanDecimal('-600'),1+100/600);
