@@ -1,0 +1,11 @@
+const test=require('node:test');const assert=require('node:assert/strict');
+const {score}=require('../ufc_probability_backtest.js');
+const bout={bout_id:'1',starts_at:'2025-08-01T20:00:00Z',fighter_a:'a',fighter_b:'b',winner:'a',status:'final',method:'Decision'};
+const p={stats_as_of:'2025-07-31T00:00:00Z',stats_source:'verified',stats:{slpm:4}};
+const snaps={'1':[{...p,fighter_id:'a'},{...p,fighter_id:'b'}]};
+const pred={'1':{winner_id:'a',winner_probability:0.8,frozen_at:'2025-08-01T19:00:00Z'}};
+test('scores eligible frozen probability with Brier and log loss',()=>{const x=score([bout],snaps,pred);assert.equal(x.scored,1);assert.ok(Math.abs(x.brier-0.04)<1e-12);assert.ok(Math.abs(x.logLoss+Math.log(0.8))<1e-12);assert.equal(x.bins[8].count,1);assert.equal(x.calibrated,false)});
+test('does not score missing or invalid probability',()=>{for(const value of [undefined,NaN,-0.1,1.1,'0.8']){const x=score([bout],snaps,{'1':{...pred['1'],winner_probability:value}});assert.equal(x.scored,0);assert.equal(x.brier,null);assert.equal(x.missingProbability,1)}});
+test('does not score late predictions or leaked snapshots',()=>{const late=score([bout],snaps,{'1':{...pred['1'],frozen_at:'2025-08-01T21:00:00Z'}});assert.equal(late.scored,0);const leaked=score([bout],{'1':[{...p,fighter_id:'a',stats_as_of:'2025-08-01T19:30:00Z'},{...p,fighter_id:'b'}]},pred);assert.equal(leaked.scored,0)});
+test('scores wrong predictions and boundary probabilities without infinite log loss',()=>{const x=score([bout],snaps,{'1':{...pred['1'],winner_id:'b',winner_probability:1}});assert.equal(x.brier,1);assert.ok(Number.isFinite(x.logLoss));assert.equal(x.bins[9].count,1)});
+test('empty dataset never claims model performance',()=>{const x=score([],{},{});assert.equal(x.scored,0);assert.equal(x.logLoss,null);assert.equal(x.bettingEdgeVerified,false)});
