@@ -7,7 +7,7 @@
  root.UFCBacktestEvaluator=api;
 })(typeof globalThis!=='undefined'?globalThis:this,function(guard){
  'use strict';
- const time=v=>{if(typeof v!=='string'||!/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$/.test(v))return null;const n=Date.parse(v);return Number.isFinite(n)?n:null;};
+ const time=v=>{if(typeof v!=='string'||!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(v))return null;const n=Date.parse(v);return Number.isFinite(n)?n:null;};
  function evaluate(bouts,snapshotsByBout,predictionsByBout){
   const rows=[];
   const seen=new Set();
