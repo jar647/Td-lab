@@ -176,22 +176,37 @@ function describe(a,b,options={}) {
   const opposing = leanSide===null ? [] : ranked(1-leanSide);
   const counterargument = opposing.length ? {side:1-leanSide,title:opposing[0].title,summary:opposing[0].summary} : null;
   const paths = [0,1].map(side=>({side,summary:ranked(side)[0]?.route || 'No comparative advantage for '+names[side]+' is established by the available career rates. More matchup evidence is needed to describe a supported route.'}));
-  // A decision summary is a conditional scouting lean, not a calibrated win pick.
+  // Always supply a directional pick when two fighters are named. This is a
+  // deterministic scouting lean, NOT a calibrated win probability.
   const evidenceCount=areas.filter(x=>x.complete).length;
-  const hasRecent=recentEvidence.every(x=>x.sample>=2);
-  const hasOpponentQuality=opponentQuality.length===2&&opponentQuality.every(x=>x.verified>=2);
-  const supportedSide=complete&&hasRecent&&hasOpponentQuality&&leanSide!==null?leanSide:null;
+  const contributions=areas.filter(x=>x.complete).map(x=>x.contribution);
+  const careerScore=contributions.reduce((sum,v)=>sum+v,0);
+  const recentScore=recentEvidence.every(x=>x.sample>0)?
+    (recentEvidence[0].wins/recentEvidence[0].sample-recentEvidence[1].wins/recentEvidence[1].sample)*0.25:0;
+  const qualityScore=opponentQuality.every(x=>x.verified>0)?
+    (opponentQuality[0].averageWinRate-opponentQuality[1].averageWinRate)*0.1:0;
+  const combinedScore=careerScore+recentScore+qualityScore;
+  const scoreAvailable=evidenceCount>0||recentEvidence.every(x=>x.sample>0)||opponentQuality.every(x=>x.verified>0);
+  // Tie-breaking is intentionally stable across refreshes. Never mistake a tie
+  // or missing evidence for a statistically supported advantage.
+  const predictedSide=combinedScore>1e-10?0:combinedScore< -1e-10?1:
+    names[0].localeCompare(names[1],undefined,{sensitivity:'base'})<=0?0:1;
+  const tied=Math.abs(combinedScore)<=1e-10;
   const decision={
-    status:supportedSide===null?'RESEARCH_ONLY':'CONDITIONAL_LEAN',
-    fighter:supportedSide===null?null:names[supportedSide],
-    reason:supportedSide===null?'A confident selection is withheld until both fighters have complete career rates, at least two verified recent results, and two sourced opponent records.':'Conditional statistical lean based on career rates, recent results and available opponent records; opponent quality is not yet included in the probability model.',
-    primaryRoute:supportedSide===null?null:exploits.find(x=>x.side===supportedSide)?.route||paths[supportedSide].summary,
-    counterRoute:supportedSide===null?null:exploits.find(x=>x.side===1-supportedSide)?.route||paths[1-supportedSide].summary,
+    status:!scoreAvailable?'NO_DATA_LEAN':tied?'TIEBREAK_LEAN':'PREDICTED_WINNER',
+    fighter:names[predictedSide],
+    side:predictedSide,
+    reason:!scoreAvailable?'No comparative evidence is available. This is a deterministic placeholder pick, not an evidence-based prediction.':
+      tied?'The available weighted comparisons are tied. A deterministic tiebreak supplies a pick, not a statistical advantage.':
+      'Directional lean from available career-rate comparisons'+(recentScore?' and recent results':'')+(qualityScore?' and sourced opponent records':'')+'. Missing data reduces reliability.',
+    primaryRoute:exploits.find(x=>x.side===predictedSide)?.route||paths[predictedSide].summary,
+    counterRoute:exploits.find(x=>x.side===1-predictedSide)?.route||paths[1-predictedSide].summary,
     evidence:{careerAreas:evidenceCount,recentResults:recentEvidence.map(x=>x.sample),sourcedOpponentRecords:opponentQuality.map(x=>x.verified)},
-    confidence:'UNVALIDATED'
+    confidence:!scoreAvailable||tied?'VERY_LOW':!complete||!recentEvidence.every(x=>x.sample>=2)?'LOW':'UNVALIDATED',
+    calibratedProbability:null
   };
   const cautions = ['This is an unvalidated career-rate heuristic. It has not been calibrated or backtested and does not establish a betting edge.', 'Career averages can hide differences in opponent quality, recent form, injuries, weight cuts and changes in fighting style. Those factors are not established by these rate comparisons.'];
-  if (!complete) cautions.unshift('Incomplete data: the available facts can be compared, but a winner lean is withheld until both fighters have all required valid rates.');
+  if (!complete) cautions.unshift('Incomplete data: the winner pick uses available comparisons only; missing career rates reduce reliability.');
   if (leanSide!==null&&!counterargument) cautions.push('No scored rate component favors the other fighter. That does not establish that the other fighter has no path to win.');
   return {
     status, heading:status==='incomplete'?'Research incomplete':status==='balanced'?'No statistical lean':'Statistical lean: '+names[leanSide],
