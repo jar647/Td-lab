@@ -33,6 +33,10 @@
   return {eligible:audit.evaluated,scored,missingProbability:audit.evaluated-scored,
    expectedCalibrationError,maxCalibrationError,
    brier:scored?brierSum/scored:null,logLoss:scored?logSum/scored:null,
+   // A 50/50 benchmark has Brier 0.25 and log loss ln(2) for every decisive bout.
+   // Positive skill means improvement over that naive baseline, not betting profit.
+   brierSkillVsEven:scored?1-(brierSum/scored)/0.25:null,
+   logLossImprovementVsEven:scored?Math.LN2-logSum/scored:null,
    bins:bins.map(({lower,upper,count,probabilitySum,outcomeSum})=>({lower,upper,count,meanProbability:count?probabilitySum/count:null,observedRate:count?outcomeSum/count:null})),
    rows,calibrated:false,bettingEdgeVerified:false};
  }
