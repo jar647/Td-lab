@@ -47,7 +47,18 @@ function area(title, keys, stats, names, value, weight, observed, inference) {
 }
 function describe(a,b,options={}) {
   const names = [0,1].map(i => typeof options.names?.[i] === 'string' && options.names[i].trim() ? options.names[i].trim() : 'Fighter '+(i+1));
-  const stats = [normalize(a),normalize(b)], A=stats[0], B=stats[1];
+  // Historical comparisons must never reuse career aggregates captured after
+  // the bout. A pre-fight timestamp is required for each supplied profile.
+  const cutoff=typeof options.asOf==='string'&&Number.isFinite(Date.parse(options.asOf))?Date.parse(options.asOf):null;
+  const raw=[a,b];
+  const stats=raw.map((value,i)=>{
+    if(cutoff===null)return normalize(value);
+    const profile=options.profiles?.[i];
+    const stamp=profile?.stats_as_of||profile?.snapshot_at||profile?.fetched_at;
+    const timestamp=typeof stamp==='string'?Date.parse(stamp):NaN;
+    return Number.isFinite(timestamp)&&timestamp<cutoff?normalize(value):normalize(null);
+  });
+  const A=stats[0], B=stats[1];
   const missing = stats.map(s=>Object.keys(METRICS).filter(k=>s[k]===null).map(k=>METRICS[k]));
   const complete = missing.every(list=>list.length===0);
   const striking = allHave(stats,['slpm','strAcc','strDef']) ? A.slpm*(A.strAcc/50)*(1-B.strDef/130)-B.slpm*(B.strAcc/50)*(1-A.strDef/130) : 0;
@@ -92,7 +103,7 @@ function describe(a,b,options={}) {
   }
   exploits.sort((x,y)=>y.score-x.score);
   // Historical finish tendencies are descriptive only; opponent quality and pace are not established.
-  const asOf=Number.isFinite(Date.parse(options.asOf))?Date.parse(options.asOf):null;
+  const asOf=cutoff;
   const histories=(options.profiles||[]).map(profile=>{
     const rows=Array.isArray(profile?.recent_fights)?profile.recent_fights:[];
     const ownId=String(profile?.id||'');
@@ -225,6 +236,7 @@ function describe(a,b,options={}) {
   };
   const cautions = ['This is an unvalidated career-rate heuristic. It has not been calibrated or backtested and does not establish a betting edge.', 'Career averages can hide differences in opponent quality, recent form, injuries, weight cuts and changes in fighting style. Those factors are not established by these rate comparisons.'];
   if (!complete) cautions.unshift('Incomplete data: the winner pick uses available comparisons only; missing career rates reduce reliability.');
+  if(cutoff!==null&&stats.some((_,i)=>{const p=options.profiles?.[i];const t=Date.parse(p?.stats_as_of||p?.snapshot_at||p?.fetched_at);return !Number.isFinite(t)||t>=cutoff;}))cautions.unshift('Historical safety: career statistics without a verified pre-fight snapshot were excluded to prevent future-data leakage.');
   if (leanSide!==null&&!counterargument) cautions.push('No scored rate component favors the other fighter. That does not establish that the other fighter has no path to win.');
   return {
     status, heading:status==='incomplete'?'Research incomplete':status==='balanced'?'No statistical lean':'Statistical lean: '+names[leanSide],
