@@ -17,9 +17,13 @@
    const actual=String(p?.fighter_id||p?.id||'');
    if(!expected||!actual)errors.push('fighter_'+i+'_missing_snapshot_identity');
    else if(actual!==expected)errors.push('fighter_'+i+'_snapshot_identity_mismatch');
-   const at=timestamp(p?.stats_as_of||p?.snapshot_at);
-   if(at===null)errors.push('fighter_'+i+'_missing_stats_snapshot_timestamp');
-   else if(cutoff!==null&&at>=cutoff)errors.push('fighter_'+i+'_stats_snapshot_after_bout');
+   const hasAsOf=p?.stats_as_of!==undefined&&p?.stats_as_of!==null;
+   const hasSnapshot=p?.snapshot_at!==undefined&&p?.snapshot_at!==null;
+   const asOf=hasAsOf?timestamp(p.stats_as_of):null;
+   const collected=hasSnapshot?timestamp(p.snapshot_at):null;
+   if((hasAsOf&&asOf===null)||(hasSnapshot&&collected===null)||(!hasAsOf&&!hasSnapshot))errors.push('fighter_'+i+'_missing_stats_snapshot_timestamp');
+   if(asOf!==null&&collected!==null&&asOf>collected)errors.push('fighter_'+i+'_stats_as_of_after_collection');
+   for(const at of [asOf,collected])if(at!==null&&cutoff!==null&&at>=cutoff){errors.push('fighter_'+i+'_stats_snapshot_after_bout');break;}
    const source=typeof p?.stats_source==='string'?p.stats_source.trim():'';
    if(!source)errors.push('fighter_'+i+'_missing_stats_source');
    const stats=p?.stats;
