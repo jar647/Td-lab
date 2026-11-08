@@ -223,7 +223,7 @@ def refresh_fighters(now, key):
             # changing its original fetch timestamp or fighter identity.
             if previous and age_days(previous, now) <= 30 and isinstance(previous.get("stats"), dict):
                 fighters[name.casefold()] = {**previous, "name": name}
-            if exc.status in (401, 402, 403):
+            if exc.status in (401, 402, 403, 429):
                 blocked = exc.status
                 break
         except Exception as exc:
