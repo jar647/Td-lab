@@ -17,7 +17,7 @@ class RefreshFailClosedTests(unittest.TestCase):
     def test_unexpected_fighter_error_preserves_cache(self):
         now = datetime.datetime(2026, 11, 8, tzinfo=datetime.timezone.utc)
         with tempfile.TemporaryDirectory() as temp:
-            with mock.patch("os.getcwd", return_value=temp):
+            if True:
                 # chdir is required because the production refresh uses a relative path.
                 import os
                 original = os.getcwd()
