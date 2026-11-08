@@ -81,6 +81,8 @@ const eligible=candidates.filter(c=>!exclusions.has(c.p.player+'|'+c.d.key));
 const scoreData=gamePicksByKey.get(g)||null;
 const visibleCount=Math.max(1,desiredLegs-(gameLeg?1:0));
 const selected=PropVaultGoal1.buildTicket(eligible,visibleCount);
+const supportedCount=selected.length+(gameLeg?1:0);
+const shortfall=desiredLegs-supportedCount;
 for(const c of selected){
  const key=PropVaultGoal1.marketId(c);
  const alt=manualLines.get(key);
@@ -131,10 +133,11 @@ const bestPanel='<div class="panel"><h2>Best single research candidate</h2>'+
  '<p class="reason">'+esc(bestSingle.reasons.slice(1).join(' '))+'</p>'+
  '<p class="warning">Best research candidate only. The app has no verified Hard Rock price or calibrated betting probability; do not treat this as an approved wager.</p>':
  '<p>NO BET · no supported individual candidate.</p>')+'</div>';
-const countPanel='<div class="panel"><h2>Build your SGP · 2 to 5 legs</h2>'+
+const countPanel='<div class="panel"><h2>Build your SGP · 2 to 10 legs</h2>'+
  '<label class="small" for="legCount">Ticket size</label><select id="legCount">'+
- [2,3,4,5].map(n=>'<option value="'+n+'"'+(n===desiredLegs?' selected':'')+'>'+n+' legs</option>').join('')+
- '</select><p class="sub">The engine selects supported player legs first. You can change alternate thresholds or include an ML, ATS or total leg with your own line. No extra leg is invented to fill a ticket.</p></div>';
+ Array.from({length:9},(_,i)=>i+2).map(n=>'<option value="'+n+'"'+(n===desiredLegs?' selected':'')+'>'+n+' legs</option>').join('')+
+ '</select><p class="sub">The engine selects supported player legs first. You can change alternate thresholds or include an ML, ATS or total leg with your own line. No extra leg is invented to fill a ticket.</p>'+
+ (shortfall>0?'<p class="warning" role="status">Requested '+desiredLegs+' legs; only '+supportedCount+' supported '+(supportedCount===1?'leg is':'legs are')+' available. Showing '+supportedCount+'; no filler legs added.</p>':'')+'</div>';
 const gameMarketPanel='<div class="panel"><h2>Optional game-market leg · ML / ATS / total</h2>'+
  '<p class="sub">The score baseline can inform a lean, but we do NOT have calibrated game-win, spread, or total probabilities. A game-market leg must be manually specified and is not part of the simulated joint probability.</p>'+
  '<label class="small" for="marketType">Market</label><select id="marketType">'+
@@ -229,7 +232,7 @@ for(const item of el.querySelectorAll('.alternateChoice'))item.onchange=()=>{
 function mountControls(){
  $('legCount').onchange=()=>{
   const value=Number($('legCount').value);
-  if(!Number.isInteger(value)||value<2||value>5)return;
+  if(!Number.isInteger(value)||value<2||value>10)return;
   desiredLegs=value;render(g,sim);
  };
  $('applyGameMarket').onclick=()=>{

@@ -686,7 +686,7 @@ function renderGameSGP(){
   return 1;
  };
  candidates.sort((a,b)=>b.robustScore*scriptBias(b)-a.robustScore*scriptBias(a));
- // Quality-gated portfolio selection: no mandatory fifth leg and no double
+ // Quality-gated portfolio selection: no forced ticket size and no double
  // counting one player's correlated receiving yards/receptions as independent.
  const eligible=candidates.filter(x=>
   x.verdict!=='PASS'&&x.logCount>=3&&
@@ -756,7 +756,7 @@ function renderGameSGP(){
  const controls=document.createElement('div');controls.style.cssText='display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0';
  const countLabel=document.createElement('label');countLabel.textContent='Number of legs';countLabel.htmlFor='autoSgpLegCount';
  const countSelect=document.createElement('select');countSelect.id='autoSgpLegCount';countSelect.style.cssText='padding:9px;border-radius:8px';
- for(const n of [2,3,4,5]){const opt=document.createElement('option');opt.value=String(n);opt.textContent=n+' legs';if(n===5)opt.selected=true;countSelect.appendChild(opt);}
+ for(let n=2;n<=10;n++){const opt=document.createElement('option');opt.value=String(n);opt.textContent=n+' legs';if(n===5)opt.selected=true;countSelect.appendChild(opt);}
  controls.append(countLabel,countSelect);autoCard.appendChild(controls);
  const autoList=document.createElement('ol');autoList.style.cssText='padding-left:22px;margin:10px 0';autoCard.appendChild(autoList);
  const autoNotice=document.createElement('p');autoNotice.className='muted';autoCard.appendChild(autoNotice);
@@ -779,7 +779,7 @@ function renderGameSGP(){
   return score;
  }
  function selectAutoLegs(n){
-  const pool=eligible.filter(x=>analystScore(x)>=.49).sort((a,b)=>analystScore(b)-analystScore(a)).slice(0,22);
+  const pool=eligible.filter(x=>analystScore(x)>=.49).sort((a,b)=>analystScore(b)-analystScore(a));
   pool.push(...qualifiedGameLegs());
   let beams=[{picks:[],used:new Set(),score:0}],best=beams[0];
   for(let depth=0;depth<n;depth++){
@@ -820,11 +820,12 @@ function renderGameSGP(){
   if(props.some(x=>x.injuryWarning))notes.push('QUESTIONABLE player included: verify official active status before betting');
   if(props.some(x=>x.returnWarning))notes.push('Possible returning teammate changes opportunity');
   if(props.some(x=>x.logCount<5))notes.push('Some projections rely on fewer than five verified recent logs');
-  if(picks.length>=5)notes.push('Five legs compound failure risk even when each leg looks reasonable');
+  if(picks.length>=5)notes.push(picks.length+' legs compound failure risk even when each leg looks reasonable');
   return notes;
  }
  function refreshAuto(){
-  const requested=Number(countSelect.value);
+  const value=Number(countSelect.value);
+  const requested=Number.isInteger(value)&&value>=2&&value<=10?value:5;
   displayed=selectAutoLegs(requested);
   for(const x of displayed)if(!x.gameLeg&&!x.ticketPick)x.ticketPick={target:x.line+'+ '+x.d.unit};
   autoList.replaceChildren();
