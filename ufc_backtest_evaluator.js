@@ -36,7 +36,15 @@
   }
   const eligible=rows.filter(r=>r.eligible);
   const wins=eligible.filter(r=>r.correct).length;
-  return {total:rows.length,evaluated:eligible.length,excluded:rows.length-eligible.length,correct:wins,incorrect:eligible.length-wins,accuracy:eligible.length?wins/eligible.length:null,rows,calibrated:false};
+  const excludedByReason={};
+  for(const row of rows)if(!row.eligible)for(const reason of new Set(row.errors))excludedByReason[reason]=(excludedByReason[reason]||0)+1;
+  // Wilson score interval describes sampling uncertainty, not model calibration.
+  const n=eligible.length,p=n?wins/n:null,z=1.959963984540054;
+  const denominator=1+z*z/n;
+  const center=n?(p+z*z/(2*n))/denominator:null;
+  const margin=n?z*Math.sqrt(p*(1-p)/n+z*z/(4*n*n))/denominator:null;
+  const accuracyInterval95=n?[Math.max(0,center-margin),Math.min(1,center+margin)]:null;
+  return {total:rows.length,evaluated:n,excluded:rows.length-n,excludedByReason,correct:wins,incorrect:n-wins,accuracy:p,accuracyInterval95,rows,calibrated:false};
  }
  return {evaluate};
 });
