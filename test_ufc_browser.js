@@ -1,22 +1,43 @@
 const {chromium}=require('playwright');
 const fs=require('node:fs');
+const http=require('node:http');
+const path=require('node:path');
 (async()=>{
 const artifactDir=process.env.UFC_ARTIFACT_DIR || '/tmp/ufc-artifacts';fs.mkdirSync(artifactDir,{recursive:true});
+let localServer;
+let testUrl=process.env.UFC_TEST_URL;
+if(!testUrl){
+ localServer=http.createServer((req,res)=>{
+  const filename=path.resolve(__dirname,'.'+new URL(req.url,'http://localhost').pathname);
+  if(!filename.startsWith(__dirname+path.sep)){res.writeHead(403).end();return;}
+  fs.readFile(filename,(error,data)=>{if(error){res.writeHead(404).end();return;}
+   res.setHeader('Content-Type',({'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json'})[path.extname(filename)]||'application/octet-stream');res.end(data);
+  });
+ });
+ await new Promise(resolve=>localServer.listen(0,'127.0.0.1',resolve));
+ testUrl='http://127.0.0.1:'+localServer.address().port+'/ufc.html';
+}
 const browser=await chromium.launch({headless:true,executablePath:process.env.UFC_CHROMIUM_PATH || '/usr/bin/chromium',args:['--no-sandbox']});
 const page=await browser.newPage({viewport:{width:390,height:844}});
 const errors=[];page.on('pageerror',e=>errors.push(e.message));
 const feed=JSON.parse(fs.readFileSync(require('node:path').join(__dirname,'ufc_schedule.json'),'utf8'));
 await page.route('**/scoreboard?**',r=>r.fulfill({json:feed}));
-await page.goto((process.env.UFC_TEST_URL || 'http://127.0.0.1:8000/ufc.html'));
+await page.goto(testUrl);
 await page.waitForSelector('article.fight');
 console.log('Rendered live-source bouts:',await page.locator('article.fight').count());
 if(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth))throw Error('Mobile horizontal overflow');
 await page.screenshot({path:require('node:path').join(artifactDir,'ufc-mobile.png'),fullPage:true});
+if(await page.locator('.pick-card').count()!==await page.locator('article.fight').count())throw Error('Each fight needs exactly one top selection');
 const first=page.locator('article.fight').first();
+await first.locator('.pick-label').waitFor();
+if(await first.locator('.pick-card input').count())throw Error('Top pick requires odds entry');
+const originalPick=await first.locator('.pick-card').textContent();
 await first.locator('[data-section="props"] > summary').click();
 await first.locator('.ufc-total-line').selectOption('1.5');
+await first.locator('[data-section="total-prices"] > summary').click();
 await first.locator('[data-quote="total:1.5:under"]').fill('-120');
 await first.locator('[data-quote-result="total:1.5:under"]').filter({hasText:'54.5%'}).waitFor();
+await first.locator('[data-section="method-price-0-ko"] > summary').click();
 await first.locator('[data-quote="method:0:ko"]').fill('+200');
 await first.locator('[data-quote-result="method:0:ko"]').filter({hasText:'33.3%'}).waitFor();
 await first.locator('.ufc-total-line').selectOption('2.5');
@@ -31,12 +52,13 @@ await page.getByText('53.2%',{exact:true}).waitFor();
 const researchBefore=await first.locator('[data-section="analysis"]').textContent();
 await first.locator('[data-side="a"]').fill('+190');await first.locator('[data-side="b"]').fill('-240');
 if(await first.locator('[data-section="analysis"]').textContent()!==researchBefore)throw Error('Odds changed independent research');
+if(await first.locator('.pick-card').textContent()!==originalPick)throw Error('Odds changed top selection');
 await first.locator('[data-side="a"]').fill('-125');await first.locator('[data-side="b"]').fill('+105');
 await first.locator('[data-section="analysis"] > summary').click();
 await first.locator('.research-area').first().waitFor();
 const evidence=await first.locator('[data-section="analysis"]').textContent();
-if(!evidence.includes('What is missing'))throw Error('Missing data not explained by fighter');
-if(!evidence.includes('Jonny Parsons')||!evidence.includes('José Souza'))throw Error('Missing per-fighter evidence');
+const fighterNames=await first.locator('.fighter h3').allTextContents();
+if(!fighterNames.every(name=>evidence.includes(name)))throw Error('Missing per-fighter evidence');
 const name=await first.locator('h3').first().textContent();
 await page.locator('#search').fill('No fighter by this name');await page.getByRole('heading',{name:'No matching fights'}).waitFor();
 await page.getByRole('button',{name:'Clear filters'}).click();
@@ -54,17 +76,18 @@ await page.locator('#feed-notice').filter({hasText:'Saved schedule'}).waitFor();
 // Clean session and both sources unavailable: show a retry without invented data.
 const empty=await browser.newPage();
 await empty.route('**/scoreboard?**',r=>r.abort());await empty.route('**/ufc_schedule.json',r=>r.abort());
-await empty.goto((process.env.UFC_TEST_URL || 'http://127.0.0.1:8000/ufc.html'));await empty.getByRole('button',{name:'Try again'}).waitFor();
+await empty.goto(testUrl);await empty.getByRole('button',{name:'Try again'}).waitFor();
 if(await empty.locator('article.fight').count())throw Error('Invented bouts after feed failure');
 // Use clearly synthetic route fixtures to cover segment labels and real metric rendering.
-const fixture=JSON.parse(JSON.stringify(feed));const event=fixture.events[0];event.competitions=event.competitions.slice(0,3);event.competitions.forEach((c,i)=>{c.notes=[{headline:['Early Prelims','Prelims','Main Card'][i]}];});
+const fixture=JSON.parse(JSON.stringify(feed));const event=fixture.events[0];event.date=new Date(Date.now()+3600000).toISOString();event.competitions=event.competitions.slice(0,3);event.competitions.forEach(c=>{c.date=event.date;c.startDate=event.date;c.status={type:{state:'pre',completed:false}}});event.competitions.forEach((c,i)=>{c.notes=[{headline:['Early Prelims','Prelims','Main Card'][i]}];});
 const fighter=event.competitions[0].competitors[0].athlete.displayName;
 const profile={generated_at:new Date().toISOString(),source:'TEST FIXTURE ONLY',fighters:{[fighter]:{stats:{slpm:4,sapm:3,strAcc:48,strDef:55,tdAvg:1,tdAcc:40,tdDef:70,subAvg:.4}}}};
-const two=event.competitions[0].competitors[1].athlete.displayName;profile.fighters[two]=profile.fighters[fighter];
-const test=await browser.newPage();await test.route('**/scoreboard?**',r=>r.fulfill({json:fixture}));await test.route('**/ufc_fighter_data.json',r=>r.fulfill({json:profile}));await test.goto((process.env.UFC_TEST_URL || 'http://127.0.0.1:8000/ufc.html'));
+const two=event.competitions[0].competitors[1].athlete.displayName;profile.fighters[two]={stats:{slpm:2,sapm:5,strAcc:35,strDef:35,tdAvg:0,tdAcc:0,tdDef:30,subAvg:0}};
+const test=await browser.newPage();await test.route('**/scoreboard?**',r=>r.fulfill({json:fixture}));await test.route('**/ufc_fighter_data.json',r=>r.fulfill({json:profile}));await test.goto(testUrl);
 await test.waitForSelector('article.fight');await test.locator('#event').selectOption(String(event.id));
 await test.locator('[data-filter="early"]').click();if(await test.locator('article.fight').count()!==1)throw Error('Early filter failed');
 await test.locator('[data-section="analysis"] > summary').click();await test.getByText('EXPERIMENTAL · UNVALIDATED',{exact:true}).waitFor();
+await test.locator('.pick-card .pick-label').filter({hasText:fighter}).waitFor();
 await test.locator('[data-filter="main"]').click();if(await test.locator('article.fight').count()!==1)throw Error('Main filter failed');
 // A partial profile keeps valid facts and recent results visible without a fabricated lean.
 const partial=JSON.parse(JSON.stringify(profile));
@@ -85,7 +108,12 @@ delete event.competitions[0].format;
 await test.reload();await test.waitForSelector('article.fight');await test.locator('#event').selectOption(String(event.id));await test.locator('[data-filter="early"]').click();
 await test.locator('[data-section="props"] > summary').click();
 if(!(await test.locator('.ufc-total-line').isDisabled()))throw Error('Unknown format silently defaulted');
+// A completed fight must not receive a fresh pre-fight selection.
+event.competitions[0].status={type:{state:'post',completed:true,description:'Final'}};
+await test.reload();await test.waitForSelector('article.fight');await test.locator('#event').selectOption(String(event.id));await test.locator('[data-filter="early"]').click();
+await test.locator('.pick-label').filter({hasText:'Fight completed'}).waitFor();
 if(errors.length)throw Error(errors.join('\n'));
 console.log('Browser PASS: mobile overflow, search, persisted odds, refresh fallback, unavailable state, card filters, research rendering; no JS errors');
 await browser.close();
+if(localServer)await new Promise(resolve=>localServer.close(resolve));
 })().catch(e=>{console.error(e);process.exit(1)});

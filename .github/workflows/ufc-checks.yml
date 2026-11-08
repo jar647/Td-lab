@@ -7,6 +7,8 @@ on:
       - 'ufc_app.js'
       - 'ufc_matchup_research.js'
       - 'ufc_prop_research.js'
+      - 'ufc_pick_engine.js'
+      - 'test_ufc_pick_engine.js'
       - 'test_ufc_prop_research.js'
       - 'test_ufc_matchup_research.js'
       - 'test_ufc_app.js'
@@ -50,6 +52,7 @@ jobs:
           node test_ufc_app.js
           node test_ufc_matchup_research.js
           node test_ufc_prop_research.js
+          node test_ufc_pick_engine.js
           python -m unittest discover -s tests -p 'test_ufc*.py'
           python scripts/test_ufc_refresh_unit.py
       - name: Check live ESPN UFC feed structure
@@ -71,3 +74,18 @@ jobs:
           except Exception as exc:
               print('WARNING: Live feed could not be checked:',exc)
           PY
+
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser test client
+        run: npm install --no-save playwright@1.62.1
+      - name: Verify the single-pick UI and existing UFC flows
+        env:
+          UFC_CHROMIUM_PATH: /usr/bin/google-chrome
+        run: node test_ufc_browser.js

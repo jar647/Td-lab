@@ -4,6 +4,29 @@ Open `ufc.html` using a static HTTP server. The page keeps The Prop Shop's green
 palette and works without a build step. It uses `ufc.css`, `ufc_app.js` and
 `ufc_research_engine.js` and `ufc_matchup_research.js`.
 
+## One top pick per fight
+
+Each scheduled fight leads with one **Top pick**, its reason and its main risk.
+No price input is needed. The fixed selection rule is in `ufc_pick_engine.js`:
+strong standard totals (2.5 for three-round bouts, 4.5 for five-round bouts) can
+take priority when the winner evidence competes; a concentrated method route
+must agree with the independent winner lean; otherwise use the supported winner
+lean or a qualified total. There is no automatically selected Over 0.5 shortcut.
+The expanded basis explains the observations and opposing evidence.
+
+This is an unvalidated selection policy, not calibrated accuracy, betting value
+or expected return. Thresholds are explicit judgment rules, not fitted model
+parameters. Unsupported fights return one clear PASS. Live, final, unavailable
+and stale scheduled states do not receive a fresh pre-fight selection. Price
+tools remain optional and cannot change the top pick.
+
+A missing takedown accuracy can be mathematically unused when that fighter has
+a verified zero takedown rate; a missing takedown defense can be unused when the
+opponent has zero takedown volume. Such percentages remain null and visible,
+never filled with invented zeros. Invalid supplied values still block the
+model, and completed-input scores remain unchanged. A selection based on these
+conditional-valid inputs is labeled as using limited source data.
+
 ## Data and refresh
 
 The live ESPN scoreboard supplies events, bouts, records, weight classes, venues,
@@ -107,11 +130,12 @@ node test_ufc_research.js
 node test_ufc_app.js
 node test_ufc_matchup_research.js
 node test_ufc_prop_research.js
+node test_ufc_pick_engine.js
 PYTHONDONTWRITEBYTECODE=1 python -m unittest discover -s tests -p test_ufc_refresh.py
 ```
 
-For browser regression coverage, make Playwright available to Node, start
-`python -m http.server 8000`, then run `node test_ufc_browser.js`. The test uses
+For browser regression coverage, make Playwright available to Node and run
+`node test_ufc_browser.js`. The test starts and closes its own local HTTP server. The test uses
 system Chromium at `/usr/bin/chromium`; override with `UFC_CHROMIUM_PATH`.
 `UFC_TEST_URL` and `UFC_ARTIFACT_DIR` can override the local URL and screenshot
 directory. It tests recorded ESPN schedule data and explicitly synthetic route
