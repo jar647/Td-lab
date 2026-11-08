@@ -22,8 +22,14 @@ function rankPlayers(candidates,max=3){
  return result;
 }
 function buildTicket(candidates,count=4){
- const maximum=Math.max(1,Math.min(5,Math.trunc(count)||4));
- const pool=[...candidates].sort((a,b)=>b.score-a.score);
+ const maximum=Math.max(1,Math.min(10,Math.trunc(count)||4));
+ // One threshold per player/market; duplicate feed rows must not fill a ticket.
+ const seenMarkets=new Set();
+ const pool=[...candidates].sort((a,b)=>b.score-a.score).filter(c=>{
+  const key=marketId(c);
+  if(seenMarkets.has(key))return false;
+  seenMarkets.add(key);return true;
+ });
  const chosen=[];
  while(pool.length&&chosen.length<maximum){
   let bestAt=0,bestScore=-Infinity;
