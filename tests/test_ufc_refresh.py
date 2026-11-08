@@ -131,9 +131,15 @@ class UFCRefreshTests(unittest.TestCase):
         old = refresh.profile_data({"career_rates": self.rates}, "a", "Fighter A", self.now - datetime.timedelta(days=8))
         with self.workspace():
             self.cache({"fighter a": old})
-            with mock.patch.object(refresh, "api", side_effect=[
-                {"bouts": [self.bout]}, TimeoutError("temporary"), {"career_rates": self.rates}
-            ]):
+            def response(method, args, key):
+                if method == "get_schedule":
+                    return {"bouts": [self.bout]}
+                if args["fighter_id"] == "a":
+                    raise TimeoutError("temporary")
+                self.assertEqual(args["fighter_id"], "b")
+                return {"career_rates": self.rates}
+
+            with mock.patch.object(refresh, "api", side_effect=response):
                 result = refresh.refresh_fighters(self.now, "test")
             self.assertEqual(result["fighters"]["fighter a"]["stats"], old["stats"])
             self.assertEqual(result["fighters"]["fighter a"]["fetched_at"], old["fetched_at"])
@@ -192,3 +198,4 @@ class UFCRefreshTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
