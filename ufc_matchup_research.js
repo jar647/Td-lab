@@ -139,7 +139,7 @@ function describe(a,b,options={}) {
   }));
   // Opponent quality is displayed only when an explicitly sourced opponent record exists.
   // Never estimate strength of schedule from the fighter's own wins or rankings.
-  const opponentQuality=(options.profiles||[]).map(profile=>{
+  const opponentQuality=names.map((_,i)=>options.profiles?.[i]||null).map(profile=>{
     const ownId=String(profile?.id||'');
     const seen=new Set();
     const bouts=(Array.isArray(profile?.recent_fights)?profile.recent_fights:[])
@@ -161,7 +161,7 @@ function describe(a,b,options={}) {
     }
     return {verified:records.length,opponents:records,averageWinRate:records.length?records.reduce((sum,x)=>sum+x.winRate,0)/records.length:null};
   });
-  const physical=(options.profiles||[]).map(p=>({
+  const physical=names.map((_,i)=>options.profiles?.[i]||null).map(p=>({
     stance:typeof p?.stance==='string'&&/^(orthodox|southpaw|switch)$/i.test(p.stance.trim())?p.stance.trim():null,
     reach:Number.isFinite(Number(p?.reach_in))&&Number(p.reach_in)>40&&Number(p.reach_in)<100?Number(p.reach_in):null,
     height:Number.isFinite(Number(p?.height_in))&&Number(p.height_in)>48&&Number(p.height_in)<96?Number(p.height_in):null
