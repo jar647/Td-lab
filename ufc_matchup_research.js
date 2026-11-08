@@ -132,6 +132,21 @@ function describe(a,b,options={}) {
     }
     return {verified:records.length,opponents:records,averageWinRate:records.length?records.reduce((sum,x)=>sum+x.winRate,0)/records.length:null};
   });
+  const physical=(options.profiles||[]).map(p=>({
+    stance:typeof p?.stance==='string'&&/^(orthodox|southpaw|switch)$/i.test(p.stance.trim())?p.stance.trim():null,
+    reach:Number.isFinite(Number(p?.reach_in))&&Number(p.reach_in)>40&&Number(p.reach_in)<100?Number(p.reach_in):null,
+    height:Number.isFinite(Number(p?.height_in))&&Number(p.height_in)>48&&Number(p.height_in)<96?Number(p.height_in):null
+  }));
+  const styleEvidence=[];
+  if(physical.length===2){
+    const [x,y]=physical;
+    if(x.stance&&y.stance)styleEvidence.push(names[0]+' fights '+x.stance+'; '+names[1]+' fights '+y.stance+'. Stance alone does not establish an advantage.');
+    if(x.reach!==null&&y.reach!==null){
+      const diff=x.reach-y.reach;
+      styleEvidence.push(diff===0?'Both fighters have equal listed reach.':names[diff>0?0:1]+' has a '+format(Math.abs(diff))+'-inch listed reach advantage; distance management remains a tactical inference.');
+    }
+    if(x.height!==null&&y.height!==null&&x.height!==y.height)styleEvidence.push(names[x.height>y.height?0:1]+' is '+format(Math.abs(x.height-y.height))+' inches taller. Height alone does not establish grappling or striking superiority.');
+  }
   const contextualFlags=[];
   for(let i=0;i<2;i++){
     const h=recentEvidence[i],name=names[i];
@@ -182,7 +197,7 @@ function describe(a,b,options={}) {
     status, heading:status==='incomplete'?'Research incomplete':status==='balanced'?'No statistical lean':'Statistical lean: '+names[leanSide],
     leanSide,
     leanReason:status==='incomplete'?'The missing rates are listed separately for each fighter below.':status==='balanced'?'The underlying career-rate score is level; simulation noise is not used to break the tie.':'The rate-based score favors '+names[leanSide]+(supportive.length?', led by '+supportive.slice(0,2).map(x=>x.title.toLowerCase()).join(' and '):'')+'.',
-    decision,areas,exploits,recentEvidence,opponentQuality,contextualFlags,unresolved,finishRoutes,missing,paths,counterargument,cautions,modelProbability:probability
+    decision,areas,exploits,recentEvidence,opponentQuality,styleEvidence,contextualFlags,unresolved,finishRoutes,missing,paths,counterargument,cautions,modelProbability:probability
   };
 }
 return {describe,normalize,METRICS};
