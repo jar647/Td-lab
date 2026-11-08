@@ -228,9 +228,10 @@ def refresh_fighters(now, key):
             blocked = exc.status
             break
         except Exception as exc:
+            # Unexpected transport, decoding, or provider-envelope errors are
+            # incomplete refreshes too. Never publish a mixed/partial snapshot.
             print("Fighter refresh error:", name, type(exc).__name__)
-            if previous and age_days(previous, now) <= 30 and isinstance(previous.get("stats"), dict):
-                fighters[name.casefold()] = {**previous, "name": name}
+            raise RuntimeError("Fighter research refresh incomplete") from exc
     if not fighters:
         raise ValueError("No source-backed fighter profiles; preserving the previous cache")
     payload = {"generated_at": now.isoformat(), "source": SOURCE, "fighters": fighters,
