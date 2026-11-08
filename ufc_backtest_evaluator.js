@@ -23,6 +23,15 @@
    const cutoff=time(bout?.starts_at);
    if(before===null)errors.push('missing_frozen_prediction_timestamp');
    else if(cutoff!==null&&before>=cutoff)errors.push('prediction_not_frozen_before_bout');
+   // The frozen prediction must not depend on a snapshot collected later,
+   // even when that snapshot predates the actual fight.
+   const profiles=snapshotsByBout?.[id];
+   if(before!==null&&Array.isArray(profiles)&&profiles.length===2){
+    profiles.forEach((profile,i)=>{
+     const snapshotTime=time(profile?.stats_as_of||profile?.snapshot_at);
+     if(snapshotTime!==null&&snapshotTime>before)errors.push('fighter_'+i+'_snapshot_after_prediction');
+    });
+   }
    const a=String(bout?.fighter_a||''),b=String(bout?.fighter_b||'');
    const picked=String(prediction?.winner_id||'');
    if(!a||!b||a===b)errors.push('invalid_competitors');
