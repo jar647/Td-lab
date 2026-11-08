@@ -27,3 +27,26 @@ test('reliability error weights occupied bins and ignores empty bins',()=>{
  assert.ok(Math.abs(x.expectedCalibrationError-0.25)<1e-12);
  assert.ok(Math.abs(x.maxCalibrationError-0.3)<1e-12);
 });
+
+test('rejects collection after freeze even when stats_as_of predates freeze',()=>{
+ const later={'1':[{...p,fighter_id:'a',snapshot_at:'2025-08-01T19:30:00Z'},{...p,fighter_id:'b'}]};
+ const x=score([bout],later,pred);
+ assert.equal(x.scored,0);
+ assert.ok(x.rows[0].errors.includes('fighter_0_snapshot_after_prediction'));
+});
+test('rejects malformed secondary timestamp rather than trusting valid stats_as_of',()=>{
+ const malformed={'1':[{...p,fighter_id:'a',snapshot_at:'not-a-date'},{...p,fighter_id:'b'}]};
+ const x=score([bout],malformed,pred);
+ assert.equal(x.scored,0);
+ assert.ok(x.rows[0].errors.includes('fighter_0_missing_stats_snapshot_timestamp'));
+});
+test('rejects stats timestamp later than collection timestamp',()=>{
+ const impossible={'1':[{...p,fighter_id:'a',snapshot_at:'2025-07-30T00:00:00Z'},{...p,fighter_id:'b'}]};
+ const x=score([bout],impossible,pred);
+ assert.equal(x.scored,0);
+ assert.ok(x.rows[0].errors.includes('fighter_0_stats_as_of_after_collection'));
+});
+test('accepts consistent dual timestamps collected before freeze',()=>{
+ const valid={'1':[{...p,fighter_id:'a',snapshot_at:'2025-07-31T12:00:00Z'},{...p,fighter_id:'b'}]};
+ assert.equal(score([bout],valid,pred).scored,1);
+});
