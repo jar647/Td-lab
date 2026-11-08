@@ -157,11 +157,13 @@ class UFCRefreshTests(unittest.TestCase):
         old = refresh.profile_data({"career_rates": self.rates}, "a", "Fighter A", self.now - datetime.timedelta(days=8))
         with self.workspace():
             self.cache({"fighter a": old})
+            original = pathlib.Path("ufc_fighter_data.json").read_bytes()
             output = io.StringIO()
             with mock.patch.object(refresh, "api", side_effect=[{"bouts": [self.bout]}, refresh.APIError(402)]) as calls, contextlib.redirect_stdout(output):
                 with self.assertRaises(refresh.APIError):
                     refresh.refresh_fighters(self.now, "do-not-log-private-key")
             self.assertEqual(calls.call_count, 2)
+            self.assertEqual(pathlib.Path("ufc_fighter_data.json").read_bytes(), original)
             saved = json.loads(pathlib.Path("ufc_fighter_data.json").read_text())
             self.assertEqual(saved["fighters"]["fighter a"]["fetched_at"], old["fetched_at"])
             self.assertNotIn("do-not-log-private-key", output.getvalue())
