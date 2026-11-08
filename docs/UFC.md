@@ -134,11 +134,12 @@ node test_ufc_pick_engine.js
 PYTHONDONTWRITEBYTECODE=1 python -m unittest discover -s tests -p test_ufc_refresh.py
 ```
 
-For browser regression coverage, make Playwright available to Node and run
-`node test_ufc_browser.js`. The test starts and closes its own local HTTP server. The test uses
+For browser regression coverage, make Playwright available to Node, start
+`python -m http.server 8000`, then run `node test_ufc_browser.js`. The test uses
 system Chromium at `/usr/bin/chromium`; override with `UFC_CHROMIUM_PATH`.
 `UFC_TEST_URL` and `UFC_ARTIFACT_DIR` can override the local URL and screenshot
 directory. It tests recorded ESPN schedule data and explicitly synthetic route
 fixtures for card segments and research; test fixtures never enter production
 cache files. It covers mobile overflow, search, persistence, error recovery,
 filtering and research rendering. Screenshots default to `/tmp/ufc-artifacts`.
+
