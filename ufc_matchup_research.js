@@ -95,8 +95,22 @@ function describe(a,b,options={}) {
   const histories=(options.profiles||[]).map(profile=>{
     const rows=Array.isArray(profile?.recent_fights)?profile.recent_fights:[];
     const ownId=String(profile?.id||'');
-    const known=rows.filter(f=>f&&f.winner&&f.method_display&&!/draw|no contest|overturned/i.test(String(f.winner)+' '+String(f.method_display))&&
-      (String(f.fighter_a||'')===ownId||String(f.fighter_b||'')===ownId));
+    const asOf=Number.isFinite(Date.parse(options.asOf))?Date.parse(options.asOf):null;
+    const known=rows.filter(f=>{
+      if(!f||!ownId||!f.winner||!f.method_display)return false;
+      if(!/^(final|completed)$/i.test(String(f.status||'final')))return false;
+      if(/draw|no contest|overturned/i.test(String(f.winner)+' '+String(f.method_display)))return false;
+      const fighterA=String(f.fighter_a||''),fighterB=String(f.fighter_b||'');
+      if(fighterA===fighterB||(fighterA!==ownId&&fighterB!==ownId))return false;
+      const winner=String(f.winner);
+      const winnerId=winner.toLowerCase()==='a'?fighterA:winner.toLowerCase()==='b'?fighterB:winner;
+      if(winnerId!==fighterA&&winnerId!==fighterB)return false;
+      if(asOf!==null){
+        const boutDate=Date.parse(f.starts_at||f.event_date);
+        if(!Number.isFinite(boutDate)||boutDate>=asOf)return false;
+      }
+      return true;
+    });
     const seen=new Set();
     const unique=known.filter(f=>{const key=String(f.bout_id||[f.event_date,f.fighter_a,f.fighter_b].join('|'));if(seen.has(key))return false;seen.add(key);return true;});
     unique.sort((a,b)=>(Date.parse(b.starts_at||b.event_date)||0)-(Date.parse(a.starts_at||a.event_date)||0));
@@ -125,6 +139,10 @@ function describe(a,b,options={}) {
     for(const f of bouts){
       const key=String(f.bout_id||[f.event_date,f.fighter_a,f.fighter_b].join('|'));
       if(seen.has(key))continue;seen.add(key);
+      if(asOf!==null){
+        const boutDate=Date.parse(f.starts_at||f.event_date);
+        if(!Number.isFinite(boutDate)||boutDate>=asOf)continue;
+      }
       const record=f.opponent_record;
       if(!record||!Number.isInteger(record.wins)||!Number.isInteger(record.losses)||record.wins<0||record.losses<0||record.wins+record.losses===0||!f.opponent_record_source)continue;
       records.push({opponent:String(f.fighter_a)===ownId?f.fighter_b_name:f.fighter_a_name,record:record.wins+'-'+record.losses,winRate:record.wins/(record.wins+record.losses),source:String(f.opponent_record_source)});
