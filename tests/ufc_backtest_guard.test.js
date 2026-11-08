@@ -13,7 +13,7 @@ test('unknown provenance blocks evaluation',()=>{
  assert.equal(result.eligible,false);assert.ok(result.errors.some(x=>x.includes('missing_stats_source')));
 });
 test('audit counts eligible and blocked bouts without inventing predictions',()=>{
- const result=audit([bout,{bout_id:'2',event_date:'2025-09-01'}],{'1':[profile,profile]});
+ const result=audit([bout,{bout_id:'2',event_date:'2025-09-01'}],{'1':[profile,{...profile,fighter_id:'b'}]});
  assert.equal(result.eligible,1);assert.equal(result.blocked,1);assert.equal(result.total,2);
 });
 
