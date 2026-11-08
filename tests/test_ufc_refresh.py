@@ -175,6 +175,21 @@ class UFCRefreshTests(unittest.TestCase):
             self.assertNotIn("do-not-log-private-key", output.getvalue())
             self.assertIn("HTTP 402", output.getvalue())
 
+    def test_rate_limit_preserves_verified_cache_without_partial_publish(self):
+        old = refresh.profile_data({"career_rates": self.rates}, "a", "Fighter A",
+                                   self.now - datetime.timedelta(days=8))
+        with self.workspace():
+            self.cache({"fighter a": old})
+            before = pathlib.Path("ufc_fighter_data.json").read_bytes()
+            with mock.patch.object(refresh, "api", side_effect=[
+                {"bouts": [self.bout]}, refresh.APIError(429)
+            ]) as calls:
+                with self.assertRaises(refresh.APIError) as caught:
+                    refresh.refresh_fighters(self.now, "test-key")
+            self.assertEqual(caught.exception.status, 429)
+            self.assertEqual(calls.call_count, 2)
+            self.assertEqual(pathlib.Path("ufc_fighter_data.json").read_bytes(), before)
+
     def test_http_errors_hide_response_and_retry_429_only(self):
         refresh._api_last_call = None
         refresh._api_remaining = None
