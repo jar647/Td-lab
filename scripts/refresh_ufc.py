@@ -223,9 +223,8 @@ def refresh_fighters(now, key):
             # changing its original fetch timestamp or fighter identity.
             if previous and age_days(previous, now) <= 30 and isinstance(previous.get("stats"), dict):
                 fighters[name.casefold()] = {**previous, "name": name}
-            # Any provider HTTP failure makes this refresh incomplete. Never publish\n            # a partial card snapshot, including transient 5xx outages.\n            if True:
-                blocked = exc.status
-                break
+            # Any provider HTTP failure makes this refresh incomplete. Never publish\n            # a partial card snapshot, including transient 5xx outages.\n            blocked = exc.status
+            break
         except Exception as exc:
             print("Fighter refresh error:", name, type(exc).__name__)
             if previous and age_days(previous, now) <= 30 and isinstance(previous.get("stats"), dict):
