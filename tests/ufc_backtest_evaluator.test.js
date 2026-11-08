@@ -9,3 +9,5 @@ test('rejects draws, no contests, pending fights, invalid picks and duplicates',
 test('empty backtest never invents accuracy',()=>{const x=evaluate([],{},{});assert.equal(x.accuracy,null);assert.equal(x.evaluated,0)});
 
 test('rejects snapshots without fighter identity',()=>{const x=evaluate([bout],{'101':[p,p]},pred);assert.equal(x.evaluated,0);assert.ok(x.rows[0].errors.includes('fighter_0_missing_snapshot_identity'));});
+
+test('rejects ambiguous date-only prediction timestamps',()=>{const x=evaluate([bout],snap,{'101':{winner_id:'a',frozen_at:'2025-07-31'}});assert.equal(x.evaluated,0);assert.ok(x.rows[0].errors.includes('missing_frozen_prediction_timestamp'));});
