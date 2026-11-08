@@ -6,7 +6,7 @@
  root.UFCBacktestGuard=api;
 })(typeof globalThis!=='undefined'?globalThis:this,function(){
  'use strict';
- function timestamp(v){if(typeof v!=='string'||!/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$/.test(v))return null;const t=Date.parse(v);return Number.isFinite(t)?t:null;}
+ function timestamp(v){if(typeof v!=='string'||!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(v))return null;const t=Date.parse(v);return Number.isFinite(t)?t:null;}
  function inspect(bout,profiles){
   const cutoff=timestamp(bout?.starts_at);
   const errors=[];
