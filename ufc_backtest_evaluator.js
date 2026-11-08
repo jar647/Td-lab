@@ -7,7 +7,7 @@
  root.UFCBacktestEvaluator=api;
 })(typeof globalThis!=='undefined'?globalThis:this,function(guard){
  'use strict';
- const time=v=>{const n=Date.parse(v);return Number.isFinite(n)?n:null;};
+ const time=v=>{if(typeof v!=='string'||!/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$/.test(v))return null;const n=Date.parse(v);return Number.isFinite(n)?n:null;};
  function evaluate(bouts,snapshotsByBout,predictionsByBout){
   const rows=[];
   const seen=new Set();
@@ -20,7 +20,7 @@
    errors.push(...check.errors);
    const prediction=predictionsByBout?.[id];
    const before=time(prediction?.frozen_at);
-   const cutoff=time(bout?.starts_at||bout?.event_date);
+   const cutoff=time(bout?.starts_at);
    if(before===null)errors.push('missing_frozen_prediction_timestamp');
    else if(cutoff!==null&&before>=cutoff)errors.push('prediction_not_frozen_before_bout');
    const a=String(bout?.fighter_a||''),b=String(bout?.fighter_b||'');
