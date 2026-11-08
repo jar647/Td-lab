@@ -5,11 +5,19 @@ on:
       - 'ufc_*.js'
       - 'tests/ufc*.test.js'
       - '.github/workflows/ufc-tests.yml'
+      - '.github/workflows/refresh-ufc.yml'
+      - 'scripts/refresh_ufc*.py'
+      - 'scripts/validate_ufc_cache.py'
+      - 'tests/test_ufc*.py'
   pull_request:
     paths:
       - 'ufc_*.js'
       - 'tests/ufc*.test.js'
       - '.github/workflows/ufc-tests.yml'
+      - '.github/workflows/refresh-ufc.yml'
+      - 'scripts/refresh_ufc*.py'
+      - 'scripts/validate_ufc_cache.py'
+      - 'tests/test_ufc*.py'
   workflow_dispatch:
 jobs:
   ufc-tests:
@@ -25,3 +33,8 @@ jobs:
           for file in ufc_*.js; do node --check "$file"; done
       - name: Run UFC regression suite
         run: node --test tests/ufc*.test.js
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run UFC refresh and cache regression tests
+        run: python -m unittest discover -s tests -p 'test_ufc*.py'
