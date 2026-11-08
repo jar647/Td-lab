@@ -17,27 +17,26 @@ class RefreshFailClosedTests(unittest.TestCase):
     def test_unexpected_fighter_error_preserves_cache(self):
         now = datetime.datetime(2026, 11, 8, tzinfo=datetime.timezone.utc)
         with tempfile.TemporaryDirectory() as temp:
-            if True:
-                # chdir is required because the production refresh uses a relative path.
-                import os
-                original = os.getcwd()
-                try:
-                    os.chdir(temp)
-                    cache = pathlib.Path("ufc_fighter_data.json")
-                    original_bytes = b'{"previous":"verified"}\n'
-                    cache.write_bytes(original_bytes)
-                    schedule = {"bouts": [{"fighter_a": "1", "fighter_a_name": "Test A",
-                                           "fighter_b": "2", "fighter_b_name": "Test B"}]}
-                    def fake_api(method, args, key):
-                        if method == "get_schedule":
-                            return schedule
-                        raise ValueError("malformed provider envelope")
-                    with mock.patch.object(module, "api", side_effect=fake_api):
-                        with self.assertRaisesRegex(RuntimeError, "refresh incomplete"):
-                            module.refresh_fighters(now, "fake-key")
-                    self.assertEqual(cache.read_bytes(), original_bytes)
-                finally:
-                    os.chdir(original)
+            # chdir is required because the production refresh uses a relative path.
+            import os
+            original = os.getcwd()
+            try:
+                os.chdir(temp)
+                cache = pathlib.Path("ufc_fighter_data.json")
+                original_bytes = b'{"previous":"verified"}\n'
+                cache.write_bytes(original_bytes)
+                schedule = {"bouts": [{"fighter_a": "1", "fighter_a_name": "Test A",
+                                       "fighter_b": "2", "fighter_b_name": "Test B"}]}
+                def fake_api(method, args, key):
+                    if method == "get_schedule":
+                        return schedule
+                    raise ValueError("malformed provider envelope")
+                with mock.patch.object(module, "api", side_effect=fake_api):
+                    with self.assertRaisesRegex(RuntimeError, "refresh incomplete"):
+                        module.refresh_fighters(now, "fake-key")
+                self.assertEqual(cache.read_bytes(), original_bytes)
+            finally:
+                os.chdir(original)
 
     def test_network_error_preserves_cache(self):
         now = datetime.datetime(2026, 11, 8, tzinfo=datetime.timezone.utc)
