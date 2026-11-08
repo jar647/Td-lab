@@ -212,10 +212,10 @@ function describe(a,b,options={}) {
   const careerScore=contributions.reduce((sum,v)=>sum+v,0);
   const recentScore=recentEvidence.every(x=>x.sample>0)?
     (recentEvidence[0].wins/recentEvidence[0].sample-recentEvidence[1].wins/recentEvidence[1].sample)*0.25:0;
-  const qualityScore=opponentQuality.every(x=>x.verified>0)?
+  const qualityScore=opponentQuality.every(x=>x&&x.verified>0)?
     (opponentQuality[0].averageWinRate-opponentQuality[1].averageWinRate)*0.1:0;
   const combinedScore=careerScore+recentScore+qualityScore;
-  const scoreAvailable=evidenceCount>0||recentEvidence.every(x=>x.sample>0)||opponentQuality.every(x=>x.verified>0);
+  const scoreAvailable=evidenceCount>0||recentEvidence.every(x=>x.sample>0)||opponentQuality.every(x=>x&&x.verified>0);
   // Tie-breaking is intentionally stable across refreshes. Never mistake a tie
   // or missing evidence for a statistically supported advantage.
   const predictedSide=combinedScore>1e-10?0:combinedScore< -1e-10?1:
