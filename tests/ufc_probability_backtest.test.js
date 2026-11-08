@@ -9,3 +9,21 @@ test('does not score missing or invalid probability',()=>{for(const value of [un
 test('does not score late predictions or leaked snapshots',()=>{const late=score([bout],snaps,{'1':{...pred['1'],frozen_at:'2025-08-01T21:00:00Z'}});assert.equal(late.scored,0);const leaked=score([bout],{'1':[{...p,fighter_id:'a',stats_as_of:'2025-08-01T19:30:00Z'},{...p,fighter_id:'b'}]},pred);assert.equal(leaked.scored,0)});
 test('scores wrong predictions and boundary probabilities without infinite log loss',()=>{const x=score([bout],snaps,{'1':{...pred['1'],winner_id:'b',winner_probability:1}});assert.equal(x.brier,1);assert.ok(Number.isFinite(x.logLoss));assert.equal(x.bins[9].count,1)});
 test('empty dataset never claims model performance',()=>{const x=score([],{},{});assert.equal(x.scored,0);assert.equal(x.logLoss,null);assert.equal(x.bettingEdgeVerified,false)});
+
+test('reports finite descriptive reliability error for a single scored prediction',()=>{
+ const x=score([bout],snaps,pred);
+ assert.ok(Math.abs(x.expectedCalibrationError-0.2)<1e-12);
+ assert.ok(Math.abs(x.maxCalibrationError-0.2)<1e-12);
+ assert.equal(x.calibrated,false);
+});
+test('empty reliability diagnostics remain null rather than fabricated zeros',()=>{
+ const x=score([],{},{});assert.equal(x.expectedCalibrationError,null);assert.equal(x.maxCalibrationError,null);
+});
+test('reliability error weights occupied bins and ignores empty bins',()=>{
+ const second={...bout,bout_id:'2',fighter_a:'c',fighter_b:'d',winner:'d'};
+ const s2=[{...p,fighter_id:'c'},{...p,fighter_id:'d'}];
+ const x=score([bout,second],{...snaps,'2':s2},{...pred,'2':{winner_id:'c',winner_probability:0.3,frozen_at:pred['1'].frozen_at}});
+ assert.equal(x.scored,2);
+ assert.ok(Math.abs(x.expectedCalibrationError-0.25)<1e-12);
+ assert.ok(Math.abs(x.maxCalibrationError-0.3)<1e-12);
+});
