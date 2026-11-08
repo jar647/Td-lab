@@ -190,6 +190,24 @@ class UFCRefreshTests(unittest.TestCase):
             self.assertEqual(calls.call_count, 2)
             self.assertEqual(pathlib.Path("ufc_fighter_data.json").read_bytes(), before)
 
+    def test_server_error_does_not_publish_partial_fighter_cache(self):
+        old = refresh.profile_data({"career_rates": self.rates}, "a", "Fighter A",
+                                   self.now - datetime.timedelta(days=8))
+        with self.workspace():
+            self.cache({"fighter a": old})
+            before = pathlib.Path("ufc_fighter_data.json").read_bytes()
+            for status in (500, 502, 503, 504):
+                with self.subTest(status=status):
+                    with mock.patch.object(refresh, "api", side_effect=[
+                        {"bouts": [self.bout]}, {"career_rates": self.rates},
+                        refresh.APIError(status)
+                    ]) as calls:
+                        with self.assertRaises(refresh.APIError) as caught:
+                            refresh.refresh_fighters(self.now, "test-key")
+                    self.assertEqual(caught.exception.status, status)
+                    self.assertEqual(calls.call_count, 3)
+                    self.assertEqual(pathlib.Path("ufc_fighter_data.json").read_bytes(), before)
+
     def test_http_errors_hide_response_and_retry_429_only(self):
         refresh._api_last_call = None
         refresh._api_remaining = None
