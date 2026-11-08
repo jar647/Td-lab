@@ -13,6 +13,9 @@
   if(cutoff===null)errors.push('missing_bout_timestamp');
   if(!Array.isArray(profiles)||profiles.length!==2)errors.push('missing_fighter_snapshots');
   else profiles.forEach((p,i)=>{
+   const expected=String(i===0?bout?.fighter_a||'':bout?.fighter_b||'');
+   const actual=String(p?.fighter_id||p?.id||'');
+   if(actual&&expected&&actual!==expected)errors.push('fighter_'+i+'_snapshot_identity_mismatch');
    const at=timestamp(p?.stats_as_of||p?.snapshot_at);
    if(at===null)errors.push('fighter_'+i+'_missing_stats_snapshot_timestamp');
    else if(cutoff!==null&&at>=cutoff)errors.push('fighter_'+i+'_stats_snapshot_after_bout');
