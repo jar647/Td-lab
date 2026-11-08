@@ -12,6 +12,10 @@ PERCENTAGES = {"strAcc", "strDef", "tdAcc", "tdDef"}
 def validate(data):
     fighters = data.get("fighters")
     assert isinstance(fighters, dict) and fighters, "Cache must contain fighter profiles"
+    generated = data.get("generated_at")
+    generated_at = datetime.datetime.fromisoformat(generated.replace("Z", "+00:00")) if isinstance(generated, str) else None
+    if generated_at is not None:
+        assert generated_at.tzinfo is not None, "Cache timestamp must include time zone"
     complete = 0
     for name, profile in fighters.items():
         assert isinstance(name, str) and name.strip() and name == name.strip().casefold(), "Invalid lookup key"
@@ -24,9 +28,18 @@ def validate(data):
             assert type(value) in (int, float) and math.isfinite(value) and 0 <= value <= (100 if key in PERCENTAGES else 1000), f"Invalid {key} for {name}"
             available += 1
         complete += available == len(REQUIRED)
-        if "fetched_at" in profile:
-            fetched = datetime.datetime.fromisoformat(profile["fetched_at"].replace("Z", "+00:00"))
-            assert fetched.tzinfo is not None, "Profile timestamp must include time zone"
+        timestamps = {}
+        for field in ("fetched_at", "checked_at"):
+            if field in profile:
+                value = profile[field]
+                assert isinstance(value, str), f"Invalid {field} for {name}"
+                parsed = datetime.datetime.fromisoformat(value.replace("Z", "+00:00"))
+                assert parsed.tzinfo is not None, f"{field} must include time zone"
+                if generated_at is not None:
+                    assert parsed <= generated_at, f"{field} is later than cache generation for {name}"
+                timestamps[field] = parsed
+        if "checked_at" in timestamps and "fetched_at" in timestamps:
+            assert timestamps["checked_at"] >= timestamps["fetched_at"], f"Check predates source fetch for {name}"
     coverage = data.get("coverage", {})
     if coverage:
         assert coverage.get("profiles") == len(fighters), "Coverage count mismatch"
