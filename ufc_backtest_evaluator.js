@@ -30,8 +30,9 @@
    const profiles=snapshotsByBout?.[id];
    if(before!==null&&Array.isArray(profiles)&&profiles.length===2){
     profiles.forEach((profile,i)=>{
-     const snapshotTime=time(profile?.stats_as_of||profile?.snapshot_at);
-     if(snapshotTime!==null&&snapshotTime>before)errors.push('fighter_'+i+'_snapshot_after_prediction');
+     const asOf=time(profile?.stats_as_of);
+     const collected=time(profile?.snapshot_at);
+     if((asOf!==null&&asOf>before)||(collected!==null&&collected>before))errors.push('fighter_'+i+'_snapshot_after_prediction');
     });
    }
    const a=String(bout?.fighter_a||''),b=String(bout?.fighter_b||'');
