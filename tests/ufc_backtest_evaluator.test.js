@@ -11,3 +11,15 @@ test('empty backtest never invents accuracy',()=>{const x=evaluate([],{},{});ass
 test('rejects snapshots without fighter identity',()=>{const x=evaluate([bout],{'101':[p,p]},pred);assert.equal(x.evaluated,0);assert.ok(x.rows[0].errors.includes('fighter_0_missing_snapshot_identity'));});
 
 test('rejects ambiguous date-only prediction timestamps',()=>{const x=evaluate([bout],snap,{'101':{winner_id:'a',frozen_at:'2025-07-31'}});assert.equal(x.evaluated,0);assert.ok(x.rows[0].errors.includes('missing_frozen_prediction_timestamp'));});
+
+test('rejects snapshot collected after prediction freeze even if before bout',()=>{
+ const later={'101':[{...p,fighter_id:'a',stats_as_of:'2025-08-01T19:30:00Z'},{...p,fighter_id:'b'}]};
+ const x=evaluate([bout],later,pred);
+ assert.equal(x.evaluated,0);
+ assert.ok(x.rows[0].errors.includes('fighter_0_snapshot_after_prediction'));
+ assert.equal(x.excludedByReason.fighter_0_snapshot_after_prediction,1);
+});
+test('permits snapshot at exact prediction freeze time',()=>{
+ const same={'101':[{...p,fighter_id:'a',stats_as_of:'2025-08-01T19:00:00Z'},{...p,fighter_id:'b'}]};
+ assert.equal(evaluate([bout],same,pred).evaluated,1);
+});
