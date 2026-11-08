@@ -98,8 +98,9 @@ function describe(a,b,options={}) {
     const known=rows.filter(f=>f&&f.winner&&f.method_display&&!/draw|no contest|overturned/i.test(String(f.winner)+' '+String(f.method_display))&&
       (String(f.fighter_a||'')===ownId||String(f.fighter_b||'')===ownId));
     const seen=new Set();
-    const unique=known.filter(f=>{const key=String(f.bout_id||[f.event_date,f.fighter_a,f.fighter_b].join('|'));if(seen.has(key))return false;seen.add(key);return true;}).slice(0,5);
-    unique.sort((a,b)=>Date.parse(b.starts_at||b.event_date||0)-Date.parse(a.starts_at||a.event_date||0));
+    const unique=known.filter(f=>{const key=String(f.bout_id||[f.event_date,f.fighter_a,f.fighter_b].join('|'));if(seen.has(key))return false;seen.add(key);return true;});
+    unique.sort((a,b)=>(Date.parse(b.starts_at||b.event_date)||0)-(Date.parse(a.starts_at||a.event_date)||0));
+    unique.length=Math.min(unique.length,5);
     const outcomes=unique.map(f=>{
       const winner=String(f.winner||'');
       const winnerId=winner.toLowerCase()==='a'?String(f.fighter_a):winner.toLowerCase()==='b'?String(f.fighter_b):winner;
@@ -111,6 +112,26 @@ function describe(a,b,options={}) {
   const recentEvidence=names.map((name,i)=>({
     name,...(histories[i]||{sample:0,wins:0,losses:0,koWins:0,submissionWins:0,decisionWins:0,koLosses:0,submissionLosses:0})
   }));
+  // Opponent quality is displayed only when an explicitly sourced opponent record exists.
+  // Never estimate strength of schedule from the fighter's own wins or rankings.
+  const opponentQuality=(options.profiles||[]).map(profile=>{
+    const ownId=String(profile?.id||'');
+    const seen=new Set();
+    const bouts=(Array.isArray(profile?.recent_fights)?profile.recent_fights:[])
+      .filter(f=>f&&String(f.fighter_a||'')!==String(f.fighter_b||'')&&
+        (String(f.fighter_a||'')===ownId||String(f.fighter_b||'')===ownId))
+      .sort((a,b)=>(Date.parse(b.starts_at||b.event_date)||0)-(Date.parse(a.starts_at||a.event_date)||0));
+    const records=[];
+    for(const f of bouts){
+      const key=String(f.bout_id||[f.event_date,f.fighter_a,f.fighter_b].join('|'));
+      if(seen.has(key))continue;seen.add(key);
+      const record=f.opponent_record;
+      if(!record||!Number.isInteger(record.wins)||!Number.isInteger(record.losses)||record.wins<0||record.losses<0||record.wins+record.losses===0||!f.opponent_record_source)continue;
+      records.push({opponent:String(f.fighter_a)===ownId?f.fighter_b_name:f.fighter_a_name,record:record.wins+'-'+record.losses,winRate:record.wins/(record.wins+record.losses),source:String(f.opponent_record_source)});
+      if(records.length===5)break;
+    }
+    return {verified:records.length,opponents:records,averageWinRate:records.length?records.reduce((sum,x)=>sum+x.winRate,0)/records.length:null};
+  });
   const contextualFlags=[];
   for(let i=0;i<2;i++){
     const h=recentEvidence[i],name=names[i];
@@ -122,7 +143,7 @@ function describe(a,b,options={}) {
     if(stats[i].slpm!==null&&stats[i].sapm!==null&&stats[i].sapm>stats[i].slpm)
       contextualFlags.push(name+': absorbs more significant strikes per minute than landed across career; opponent quality and fight context are unknown.');
   }
-  const unresolved=['Opponent quality: no verified strength-of-schedule or opponent-adjusted performance data','Cardio: no round-by-round output or pace decay supplied','Durability: recorded KO/TKO losses are not medical or chin assessments','Fighting style: striking and takedown rates do not reveal stance, cage control, clinch work or tactical tendencies'];
+  const unresolved=['Opponent quality: only explicitly sourced opponent records can be compared; no opponent-adjusted model is validated','Cardio: no round-by-round output or pace decay supplied','Durability: recorded KO/TKO losses are not medical or chin assessments','Fighting style: striking and takedown rates do not reveal stance, cage control, clinch work or tactical tendencies'];
   const finishRoutes=[];
   for(let i=0;i<2;i++){
     const own=recentEvidence[i],opp=recentEvidence[1-i];
@@ -147,7 +168,7 @@ function describe(a,b,options={}) {
     status, heading:status==='incomplete'?'Research incomplete':status==='balanced'?'No statistical lean':'Statistical lean: '+names[leanSide],
     leanSide,
     leanReason:status==='incomplete'?'The missing rates are listed separately for each fighter below.':status==='balanced'?'The underlying career-rate score is level; simulation noise is not used to break the tie.':'The rate-based score favors '+names[leanSide]+(supportive.length?', led by '+supportive.slice(0,2).map(x=>x.title.toLowerCase()).join(' and '):'')+'.',
-    areas,exploits,recentEvidence,contextualFlags,unresolved,finishRoutes,missing,paths,counterargument,cautions,modelProbability:probability
+    areas,exploits,recentEvidence,opponentQuality,contextualFlags,unresolved,finishRoutes,missing,paths,counterargument,cautions,modelProbability:probability
   };
 }
 return {describe,normalize,METRICS};
