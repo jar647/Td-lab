@@ -26,7 +26,12 @@
    const bin=bins[Math.min(9,Math.floor(p*10))];bin.count++;bin.probabilitySum+=p;bin.outcomeSum+=outcome;
    return {...row,probabilityScored:true,probability:p,outcome,brier,logLoss};
   });
-  // In-sample reliability diagnostics, not evidence of validated calibration.\n  const occupied=bins.filter(bin=>bin.count>0);\n  const expectedCalibrationError=scored?occupied.reduce((sum,bin)=>sum+(bin.count/scored)*Math.abs(bin.probabilitySum/bin.count-bin.outcomeSum/bin.count),0):null;\n  const maxCalibrationError=scored?Math.max(...occupied.map(bin=>Math.abs(bin.probabilitySum/bin.count-bin.outcomeSum/bin.count))):null;\n  return {eligible:audit.evaluated,scored,missingProbability:audit.evaluated-scored,\n   expectedCalibrationError,maxCalibrationError,
+  // In-sample reliability diagnostics, not evidence of validated calibration.
+  const occupied=bins.filter(bin=>bin.count>0);
+  const expectedCalibrationError=scored?occupied.reduce((sum,bin)=>sum+(bin.count/scored)*Math.abs(bin.probabilitySum/bin.count-bin.outcomeSum/bin.count),0):null;
+  const maxCalibrationError=scored?Math.max(...occupied.map(bin=>Math.abs(bin.probabilitySum/bin.count-bin.outcomeSum/bin.count))):null;
+  return {eligible:audit.evaluated,scored,missingProbability:audit.evaluated-scored,
+   expectedCalibrationError,maxCalibrationError,
    brier:scored?brierSum/scored:null,logLoss:scored?logSum/scored:null,
    bins:bins.map(({lower,upper,count,probabilitySum,outcomeSum})=>({lower,upper,count,meanProbability:count?probabilitySum/count:null,observedRate:count?outcomeSum/count:null})),
    rows,calibrated:false,bettingEdgeVerified:false};
