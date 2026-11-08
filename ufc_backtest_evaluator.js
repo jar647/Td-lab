@@ -10,11 +10,13 @@
  const time=v=>{if(typeof v!=='string'||!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(v))return null;const n=Date.parse(v);return Number.isFinite(n)?n:null;};
  function evaluate(bouts,snapshotsByBout,predictionsByBout){
   const rows=[];
+  const counts=new Map();
+  for(const bout of Array.isArray(bouts)?bouts:[]){const id=String(bout?.bout_id||'');if(id)counts.set(id,(counts.get(id)||0)+1);}
   const seen=new Set();
   for(const bout of Array.isArray(bouts)?bouts:[]){
    const id=String(bout?.bout_id||'');
    const errors=[];
-   if(!id||seen.has(id)){rows.push({bout_id:id,eligible:false,errors:['missing_or_duplicate_bout_id']});continue;}
+   if(!id||counts.get(id)>1||seen.has(id)){rows.push({bout_id:id,eligible:false,errors:['missing_or_duplicate_bout_id']});continue;}
    seen.add(id);
    const check=guard.inspect(bout,snapshotsByBout?.[id]);
    errors.push(...check.errors);
