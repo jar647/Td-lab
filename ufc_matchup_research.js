@@ -161,6 +161,20 @@ function describe(a,b,options={}) {
   const opposing = leanSide===null ? [] : ranked(1-leanSide);
   const counterargument = opposing.length ? {side:1-leanSide,title:opposing[0].title,summary:opposing[0].summary} : null;
   const paths = [0,1].map(side=>({side,summary:ranked(side)[0]?.route || 'No comparative advantage for '+names[side]+' is established by the available career rates. More matchup evidence is needed to describe a supported route.'}));
+  // A decision summary is a conditional scouting lean, not a calibrated win pick.
+  const evidenceCount=areas.filter(x=>x.complete).length;
+  const hasRecent=recentEvidence.every(x=>x.sample>=2);
+  const hasOpponentQuality=opponentQuality.length===2&&opponentQuality.every(x=>x.verified>=2);
+  const supportedSide=complete&&hasRecent&&hasOpponentQuality&&leanSide!==null?leanSide:null;
+  const decision={
+    status:supportedSide===null?'RESEARCH_ONLY':'CONDITIONAL_LEAN',
+    fighter:supportedSide===null?null:names[supportedSide],
+    reason:supportedSide===null?'A confident selection is withheld until both fighters have complete career rates, at least two verified recent results, and two sourced opponent records.':'Conditional statistical lean based on career rates, recent results and available opponent records; opponent quality is not yet included in the probability model.',
+    primaryRoute:supportedSide===null?null:exploits.find(x=>x.side===supportedSide)?.route||paths[supportedSide].summary,
+    counterRoute:supportedSide===null?null:exploits.find(x=>x.side===1-supportedSide)?.route||paths[1-supportedSide].summary,
+    evidence:{careerAreas:evidenceCount,recentResults:recentEvidence.map(x=>x.sample),sourcedOpponentRecords:opponentQuality.map(x=>x.verified)},
+    confidence:'UNVALIDATED'
+  };
   const cautions = ['This is an unvalidated career-rate heuristic. It has not been calibrated or backtested and does not establish a betting edge.', 'Career averages can hide differences in opponent quality, recent form, injuries, weight cuts and changes in fighting style. Those factors are not established by these rate comparisons.'];
   if (!complete) cautions.unshift('Incomplete data: the available facts can be compared, but a winner lean is withheld until both fighters have all required valid rates.');
   if (leanSide!==null&&!counterargument) cautions.push('No scored rate component favors the other fighter. That does not establish that the other fighter has no path to win.');
@@ -168,7 +182,7 @@ function describe(a,b,options={}) {
     status, heading:status==='incomplete'?'Research incomplete':status==='balanced'?'No statistical lean':'Statistical lean: '+names[leanSide],
     leanSide,
     leanReason:status==='incomplete'?'The missing rates are listed separately for each fighter below.':status==='balanced'?'The underlying career-rate score is level; simulation noise is not used to break the tie.':'The rate-based score favors '+names[leanSide]+(supportive.length?', led by '+supportive.slice(0,2).map(x=>x.title.toLowerCase()).join(' and '):'')+'.',
-    areas,exploits,recentEvidence,opponentQuality,contextualFlags,unresolved,finishRoutes,missing,paths,counterargument,cautions,modelProbability:probability
+    decision,areas,exploits,recentEvidence,opponentQuality,contextualFlags,unresolved,finishRoutes,missing,paths,counterargument,cautions,modelProbability:probability
   };
 }
 return {describe,normalize,METRICS};
