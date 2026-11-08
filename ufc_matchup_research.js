@@ -92,10 +92,10 @@ function describe(a,b,options={}) {
   }
   exploits.sort((x,y)=>y.score-x.score);
   // Historical finish tendencies are descriptive only; opponent quality and pace are not established.
+  const asOf=Number.isFinite(Date.parse(options.asOf))?Date.parse(options.asOf):null;
   const histories=(options.profiles||[]).map(profile=>{
     const rows=Array.isArray(profile?.recent_fights)?profile.recent_fights:[];
     const ownId=String(profile?.id||'');
-    const asOf=Number.isFinite(Date.parse(options.asOf))?Date.parse(options.asOf):null;
     const known=rows.filter(f=>{
       if(!f||!ownId||!f.winner||!f.method_display)return false;
       if(!/^(final|completed)$/i.test(String(f.status||'final')))return false;
