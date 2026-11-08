@@ -17,10 +17,12 @@ jobs:
         with:
           node-version: '22'
       - name: Fetch public cards and authenticated fighter statistics
+        id: fetch
         env:
           FIGHTERAPI_KEY: ${{ secrets.FIGHTERAPI_KEY }}
         run: python scripts/refresh_ufc.py
       - name: Refresh public finish records and durations
+        id: history
         if: ${{ !cancelled() }}
         run: python scripts/refresh_ufc_history.py
       - name: Validate cache and model integration
@@ -38,7 +40,7 @@ jobs:
           if [ -f ufc_schedule.json ]; then python -m json.tool ufc_schedule.json >/dev/null; fi
           if [ -f ufc_fighter_data.json ]; then python -m json.tool ufc_fighter_data.json >/dev/null; fi
       - name: Commit refreshed public statistics only
-        if: ${{ !cancelled() && steps.validate.outcome == 'success' }}
+        if: ${{ success() && steps.fetch.outcome == 'success' && steps.history.outcome == 'success' && steps.validate.outcome == 'success' }}
         run: |
           if [ -f ufc_fighter_data.json ] || [ -f ufc_schedule.json ] || [ -f ufc_history_data.json ]; then
             git config user.name "github-actions[bot]"
