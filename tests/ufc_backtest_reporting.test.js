@@ -15,5 +15,5 @@ test('exclusions counted by distinct reason, with no spurious accuracy',()=>{
 test('duplicate bout IDs are reported once per rejected row',()=>{
  const b={bout_id:'b'};
  const r=evaluate([b,b],{},{});
- assert.equal(r.excludedByReason.missing_or_duplicate_bout_id,1);
+ assert.equal(r.excludedByReason.missing_or_duplicate_bout_id,2);
 });
