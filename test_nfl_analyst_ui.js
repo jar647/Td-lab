@@ -36,16 +36,28 @@ const players=[
  player('B','bqb','QB',{p:34,py:265,r:4,ry:25}),
  player('B','brb','RB',{r:18,ry:84,t:4,c:3,y:30}),
  player('B','bwr','WR',{t:11,c:8,y:107}),
- player('B','bte','TE',{t:6,c:4,y:57})
+ player('B','bte','TE',{t:6,c:4,y:57}),
+ {...player('A','out','WR',{t:11,c:8,y:107}),availability:'OUT'},
+ {...player('A','unverified','WR',{t:11,c:8,y:107}),playerAppearancesVerified:false},
+ {...player('A','small-sample','WR',{t:11,c:8,y:107}),last5GamesPlayed:2},
+ {...player('A','backup','QB',{p:35,py:265}),qbRole:'BACKUP'},
+ {...player('C','other-game','WR',{t:11,c:8,y:107}),opp:'D'}
 ];
 const elements=new Map();
 function el(id){if(!elements.has(id))elements.set(id,{
  innerHTML:'',textContent:'',value:id==='simCount'?'10000':'',
- disabled:false,querySelectorAll:()=>[],scrollIntoView:()=>{},
+ disabled:false,querySelectorAll(selector){
+  if(this.queryHtml!==this.innerHTML){this.queryHtml=this.innerHTML;this.queryNodes=new Map()}
+  if(!this.queryNodes.has(selector))this.queryNodes.set(selector,selector==='.exclude'
+   ?[...this.innerHTML.matchAll(/class="exclude" data-key="([^"]+)"/g)].map(m=>({dataset:{key:m[1]}}))
+   :[]);
+  return this.queryNodes.get(selector);
+ },scrollIntoView:()=>{},
  click(){if(typeof this.onclick==='function')return this.onclick();}
 });return elements.get(id);}
+const tickets=[],workerRequests=[];
 class FakeWorker{
- postMessage(req){setTimeout(()=>{
+ postMessage(req){workerRequests.push(req);setTimeout(()=>{
   try{const result=engine.simulate(req.players,req.count,req.seed,req.selected);
    this.onmessage({data:{result}});
   }catch(err){this.onmessage({data:{error:err.message}})}
@@ -53,7 +65,9 @@ class FakeWorker{
  terminate(){}
 }
 function response(obj){return {ok:true,async json(){return obj}}}
-const context={document:{getElementById:el},Worker:FakeWorker,PropVaultGoal1:goal1,CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'},
+const context={document:{getElementById:el},Worker:FakeWorker,PropVaultGoal1:{...goal1,buildTicket(candidates,count){
+ const selected=goal1.buildTicket(candidates,count);tickets.push({candidates,selected,count});return selected;
+}},CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'},
  setTimeout,Date,console,fetch:async url=>{
   if(url.includes('matchups'))return response(players);
   if(url.includes('forward'))return response({graded:0,distinct_graded_weeks:0});
@@ -77,6 +91,48 @@ vm.runInContext(inline[0],context);
  assert(!el('results').innerHTML.includes('Hard Rock leg odds'));
  assert(el('results').innerHTML.includes('Projected game script'));
  assert(el('results').innerHTML.includes('4-leg SGP draft'));
+ for(let size=2;size<=10;size++)assert(el('results').innerHTML.includes('<option value="'+size+'"'),'ticket size option '+size);
+ for(const size of [6,8,10]){
+  el('legCount').value=String(size);await el('legCount').onchange();
+  const actual=tickets.at(-1);
+  assert.equal(actual.count,size,'requested player count reaches builder');
+  assert.equal(actual.selected.length,size,'supported fixture must produce '+size+' actual legs');
+  assert(el('results').innerHTML.includes(size+'-leg SGP draft'),'rendered ticket count');
+  assert.equal((el('results').innerHTML.match(/class="small">LEG /g)||[]).length,size,'every selected leg renders');
+  assert.equal(workerRequests.at(-1).selected.length,size,'joint simulation receives every selected leg');
+  assert.equal(new Set(actual.selected.map(goal1.marketId)).size,size,'no duplicate player-market lines');
+  assert(actual.selected.every(c=>['A','B'].includes(c.p.team)&&['A','B'].includes(c.p.opp)),'all legs belong to chosen game');
+  assert(actual.candidates.every(c=>!['out','unverified','small-sample','backup','other-game'].includes(c.p.player)),'larger size preserves eligibility filters');
+ }
+ const excluded=el('results').querySelectorAll('.exclude')[0];
+ const excludedKey=excluded.dataset.key;await excluded.onclick();
+ assert.equal(tickets.at(-1).selected.length,10,'supported replacement rebuilds full larger ticket');
+ assert(!tickets.at(-1).selected.some(c=>c.p.player+'|'+c.d.key===excludedKey),'excluded market stays out of rebuilt ticket');
+ // Exhaust supported markets through the same exclusion controls used in the UI.
+ while(tickets.at(-1).selected.length>2)await el('results').querySelectorAll('.exclude')[0].onclick();
+ assert.equal(tickets.at(-1).selected.length,2);
+ assert(el('results').innerHTML.includes('Requested 10 legs; only 2 supported legs are available. Showing 2; no filler legs added.'));
+ assert(el('results').innerHTML.includes('2-leg SGP draft'),'scarce pool displays actual count');
+ assert.equal(workerRequests.at(-1).selected.length,2,'scarce simulation receives only available props');
+ // A user-entered game leg occupies one slot, including at the new maximum.
+ el('marketType').value='ATS';el('marketSide').value='AWAY';el('marketLine').value='+3.5';
+ await el('applyGameMarket').onclick();
+ assert.equal(tickets.at(-1).count,9);
+ assert(el('results').innerHTML.includes('Requested 10 legs; only 3 supported legs are available.'));
+ assert(el('results').innerHTML.includes('3-leg SGP draft'));
+ // Restore the supported pool for the original control and handoff checks.
+ vm.runInContext('exclusions.clear()',context);
+ el('marketType').value='NONE';await el('applyGameMarket').onclick();
+ assert(el('results').innerHTML.includes('10-leg SGP draft'));
+ el('marketType').value='ATS';await el('applyGameMarket').onclick();
+ assert.equal(tickets.at(-1).selected.length,9,'game leg reserves one of ten slots');
+ assert(el('results').innerHTML.includes('10-leg SGP draft'));
+ assert.equal(workerRequests.at(-1).selected.length,9,'game leg remains outside player Monte Carlo');
+ el('marketType').value='NONE';await el('applyGameMarket').onclick();
+ for(const invalid of ['11','1','6.5']){
+  const previous=tickets.length;el('legCount').value=invalid;await el('legCount').onchange();
+  assert.equal(tickets.length,previous,'invalid ticket size rejected');
+ }
  el('legCount').value='3';await el('legCount').onchange();
  assert(el('results').innerHTML.includes('3-leg SGP draft'));
  el('marketType').value='ATS';el('marketSide').value='AWAY';el('marketLine').value='+3.5';
