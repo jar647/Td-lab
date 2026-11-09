@@ -37,7 +37,7 @@ test('historical opponent quality excludes records captured after prediction', (
   assert.deepEqual(report.opponentQuality.map(x => x.verified), [0, 0]);
 });
 test('historical opponent quality admits sourced records frozen before prediction', () => {
-  const report = describe({}, {}, options('2025-05-01T00:00:00Z'));
+  const report = describe({}, {}, options('2023-12-01T00:00:00Z'));
   assert.deepEqual(report.opponentQuality.map(x => x.verified), [1, 1]);
 });
 test('live scouting may display sourced records without historical snapshot date', () => {
@@ -45,4 +45,9 @@ test('live scouting may display sourced records without historical snapshot date
   delete opts.asOf;
   const report = describe({}, {}, opts);
   assert.deepEqual(report.opponentQuality.map(x => x.verified), [1, 1]);
+});
+
+test('historical opponent quality rejects a record captured after the opponent bout even if before prediction', () => {
+  const report = describe({}, {}, options('2025-05-01T00:00:00Z'));
+  assert.deepEqual(report.opponentQuality.map(x => x.verified), [0, 0]);
 });
