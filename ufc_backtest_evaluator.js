@@ -11,10 +11,10 @@
  function evaluate(bouts,snapshotsByBout,predictionsByBout){
   const rows=[];
   const counts=new Map();
-  for(const bout of Array.isArray(bouts)?bouts:[]){const id=String(bout?.bout_id||'');if(id)counts.set(id,(counts.get(id)||0)+1);}
+  for(const bout of Array.isArray(bouts)?bouts:[]){const id=String(bout?.bout_id||'').trim();if(id)counts.set(id,(counts.get(id)||0)+1);}
   const seen=new Set();
   for(const bout of Array.isArray(bouts)?bouts:[]){
-   const id=String(bout?.bout_id||'');
+   const id=String(bout?.bout_id||'').trim();
    const errors=[];
    if(!id||counts.get(id)>1||seen.has(id)){rows.push({bout_id:id,eligible:false,errors:['missing_or_duplicate_bout_id']});continue;}
    seen.add(id);
