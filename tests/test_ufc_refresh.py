@@ -152,7 +152,7 @@ class UFCRefreshTests(unittest.TestCase):
                     refresh.refresh_fighters(self.now, "test")
             self.assertEqual(pathlib.Path("ufc_fighter_data.json").read_text(), original)
             with mock.patch.object(refresh, "api", side_effect=[{"bouts": [self.bout]}, refresh.APIError(401)]):
-                with self.assertRaises(ValueError):
+                with self.assertRaisesRegex(refresh.APIError, "HTTP 401") as caught:
                     refresh.refresh_fighters(self.now, "test")
             self.assertEqual(pathlib.Path("ufc_fighter_data.json").read_text(), original)
 
