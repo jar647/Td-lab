@@ -32,6 +32,8 @@ on:
       - 'test_nba_contracts.py'
       - 'test_nba_ui.js'
       - 'test_nba_simulator.js'
+      - 'test_nba_score_shadow.js'
+      - 'scripts/nba_score_shadow.js'
       - 'nba.html'
       - 'nba_game_first.js'
       - 'nba_matchup_discovery.js'
@@ -81,6 +83,7 @@ jobs:
           node --test tests/nba_game_first.test.js
           node test_nba_ui.js
           node test_nba_simulator.js
+          node test_nba_score_shadow.js
           node test_nba_simulator_ui.js
           node test_nba_first_basket.js
       - name: Build research-only daily learning report from tracked results
@@ -122,6 +125,7 @@ jobs:
           node --test tests/nba_game_first.test.js
           node test_nba_ui.js
           node test_nba_simulator.js
+          node test_nba_score_shadow.js
           node test_nba_first_basket.js
           git add data/nba_simulator_report.json data/nba_simulator_locks.json
           git add data/nba_evidence_archive.json.gz data/nba_prospective_accuracy.json
