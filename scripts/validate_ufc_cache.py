@@ -51,8 +51,14 @@ def validate(data):
     assert isinstance(bouts, list), "Invalid scheduled bout collection"
     expected_ids = {}
     normalized_names = {}
+    seen_bout_ids = set()
     for bout in bouts:
         assert isinstance(bout, dict) and "lines" not in bout, "Invalid public bout metadata"
+        bout_id = bout.get("bout_id")
+        assert bout_id is not None and str(bout_id).strip(), "Missing scheduled bout ID"
+        bout_id = str(bout_id).strip()
+        assert bout_id not in seen_bout_ids, "Duplicate scheduled bout ID"
+        seen_bout_ids.add(bout_id)
         identities = []
         for side in ("a", "b"):
             fid = bout.get("fighter_" + side)
