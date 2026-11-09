@@ -172,6 +172,17 @@ class UFCRefreshTests(unittest.TestCase):
             self.assertNotIn("do-not-log-private-key", output.getvalue())
             self.assertIn("HTTP 402", output.getvalue())
 
+    def test_main_explains_provider_payment_blocker_without_leaking_key(self):
+        output = io.StringIO()
+        with mock.patch.object(refresh, "refresh_schedule"), \
+             mock.patch.object(refresh, "refresh_fighters", side_effect=refresh.APIError(402)), \
+             mock.patch.dict(os.environ, {"FIGHTERAPI_KEY": "private-test-token"}), \
+             contextlib.redirect_stdout(output):
+            self.assertEqual(refresh.main(), 1)
+        self.assertIn("HTTP 402", output.getvalue())
+        self.assertIn("credits/payment required", output.getvalue())
+        self.assertNotIn("private-test-token", output.getvalue())
+
     def test_rate_limit_preserves_verified_cache_without_partial_publish(self):
         old = refresh.profile_data({"career_rates": self.rates}, "a", "Fighter A",
                                    self.now - datetime.timedelta(days=8))
