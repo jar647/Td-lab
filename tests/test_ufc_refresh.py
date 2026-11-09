@@ -255,6 +255,30 @@ class UFCRefreshTests(unittest.TestCase):
                         self.assertEqual(calls.call_count, 1)
                         self.assertEqual(pathlib.Path("ufc_fighter_data.json").read_bytes(), before)
 
+    def test_validator_rejects_profile_identity_collisions_and_mismatches(self):
+        a = refresh.profile_data({"career_rates": self.rates}, "a", "Fighter A", self.now)
+        b = refresh.profile_data({"career_rates": self.rates}, "b", "Fighter B", self.now)
+        clean = {"fighters": {"fighter a": a, "fighter b": b}, "bouts": []}
+        self.assertEqual(validator.validate(clean), (2, 2))
+        for change, message in (
+            ({"id": "a"}, "Duplicate profile fighter ID"),
+            ({"id": " "}, "Missing profile fighter ID"),
+            ({"name": "Wrong Fighter"}, "Profile name and lookup key mismatch"),
+        ):
+            with self.subTest(change=change):
+                corrupted = dict(clean, fighters={"fighter a": a, "fighter b": {**b, **change}})
+                with self.assertRaisesRegex(AssertionError, message):
+                    validator.validate(corrupted)
+
+    def test_validator_normalizes_scheduled_fighter_ids(self):
+        a = refresh.profile_data({"career_rates": self.rates}, "a", "Fighter A", self.now)
+        b = refresh.profile_data({"career_rates": self.rates}, "b", "Fighter B", self.now)
+        bout = {k: v for k, v in self.bout.items() if k != "lines"}
+        bout["fighter_a"] = " a "
+        clean = {"fighters": {"fighter a": a, "fighter b": b},
+                 "bouts": [bout], "scheduled_bouts": 1}
+        self.assertEqual(validator.validate(clean), (2, 2))
+
     def test_http_errors_hide_response_and_retry_429_only(self):
         refresh._api_last_call = None
         refresh._api_remaining = None
