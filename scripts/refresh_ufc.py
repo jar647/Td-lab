@@ -265,7 +265,7 @@ def refresh_fighters(now, key):
         raise ValueError("Incomplete scheduled fighter coverage; preserving the previous cache")
     payload = {"generated_at": now.isoformat(), "source": SOURCE, "fighters": fighters,
                "scheduled_bouts": len(bouts),
-               "bouts": [{k: b[k] for k in BOUT_FIELDS if k in b and (b[k] is None or type(b[k]) in (str, int, float, bool))} for b in bouts if isinstance(b, dict)],
+               "bouts": [{k: (str(b[k]).strip() if k in ("fighter_a", "fighter_b", "bout_id") else b[k]) for k in BOUT_FIELDS if k in b and (b[k] is None or type(b[k]) in (str, int, float, bool))} for b in bouts if isinstance(b, dict)],
                "coverage": {"profiles": len(fighters), "complete_profiles": sum(valid_stats(p.get("stats")) for p in fighters.values()), "fighters_expected": len(candidates)}}
     payload["coverage"]["complete"] = payload["coverage"]["complete_profiles"] == len(candidates)
     # Validate the complete public snapshot before replacing the last known cache.
