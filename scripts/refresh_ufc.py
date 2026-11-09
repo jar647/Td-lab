@@ -240,6 +240,10 @@ def refresh_fighters(now, key):
             raise RuntimeError("Fighter research refresh incomplete") from exc
     if not fighters:
         raise ValueError("No source-backed fighter profiles; preserving the previous cache")
+    # A previously verified profile may have expired while its source request fails.
+    # Never publish a card that silently omits a scheduled fighter.
+    if len(fighters) != len(candidates):
+        raise ValueError("Incomplete scheduled fighter coverage; preserving the previous cache")
     payload = {"generated_at": now.isoformat(), "source": SOURCE, "fighters": fighters,
                "scheduled_bouts": len(bouts),
                "bouts": [{k: b[k] for k in BOUT_FIELDS if k in b and (b[k] is None or type(b[k]) in (str, int, float, bool))} for b in bouts if isinstance(b, dict)],
