@@ -270,6 +270,20 @@ class UFCRefreshTests(unittest.TestCase):
                 with self.assertRaisesRegex(AssertionError, message):
                     validator.validate(corrupted)
 
+    def test_validator_rejects_boolean_and_noncanonical_bout_identifiers(self):
+        a = refresh.profile_data({"career_rates": self.rates}, "a", "Fighter A", self.now)
+        b = refresh.profile_data({"career_rates": self.rates}, "b", "Fighter B", self.now)
+        clean = {"fighters": {"fighter a": a, "fighter b": b},
+                 "bouts": [{k: v for k, v in self.bout.items() if k != "lines"}],
+                 "scheduled_bouts": 1}
+        self.assertEqual(validator.validate(clean), (2, 2))
+        for field in ("bout_id", "fighter_a", "fighter_b"):
+            for invalid in (True, False, 1.5, [], {}):
+                with self.subTest(field=field, invalid=invalid):
+                    corrupted = dict(clean, bouts=[dict(clean["bouts"][0], **{field: invalid})])
+                    with self.assertRaisesRegex(AssertionError, "Missing scheduled"):
+                        validator.validate(corrupted)
+
     def test_validator_normalizes_scheduled_fighter_ids(self):
         a = refresh.profile_data({"career_rates": self.rates}, "a", "Fighter A", self.now)
         b = refresh.profile_data({"career_rates": self.rates}, "b", "Fighter B", self.now)
