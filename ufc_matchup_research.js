@@ -109,7 +109,7 @@ function describe(a,b,options={}) {
     const ownId=String(profile?.id||'');
     const known=rows.filter(f=>{
       if(!f||!ownId||!f.winner||!f.method_display)return false;
-      if(!/^(final|completed)$/i.test(String(f.status||'final')))return false;
+      if(!/^(final|completed)$/i.test(String(f.status||'')))return false;
       if(/draw|no contest|overturned/i.test(String(f.winner)+' '+String(f.method_display)))return false;
       const fighterA=String(f.fighter_a||''),fighterB=String(f.fighter_b||'');
       if(fighterA===fighterB||(fighterA!==ownId&&fighterB!==ownId))return false;
