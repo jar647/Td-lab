@@ -22,7 +22,17 @@ jobs:
       - name: All JavaScript contracts and NFL regressions
         run: |
           set -e
-          for file in test*.js tests/test*.js tests/*.test.js; do node "$file"; done
+          # Playwright-based UFC browser coverage runs in ufc-checks.yml's
+          # browser job, which installs Playwright. This generic Node job does not.
+          failures=()
+          for file in test*.js tests/test*.js tests/*.test.js; do
+            case "$file" in test_ufc_browser.js) continue ;; esac
+            if ! node "$file"; then failures+=("$file"); fi
+          done
+          if (("${#failures[@]}" > 0)); then
+            printf 'JavaScript regression failures (%s): %s\\n' "${#failures[@]}" "${failures[*]}"
+            exit 1
+          fi
 
   live-input-check:
     if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository

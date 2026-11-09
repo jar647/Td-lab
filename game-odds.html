@@ -87,7 +87,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
 <section id="results" hidden aria-live="polite"></section>
 <section class="panel"><h2>Important model limits</h2><p class="muted">NFL runs resample paired historical score errors. NBA runs generate player outcomes within shared estimated possessions and rotations. The sportsbook's lines and prices do not influence the simulated scores. Historical scoring patterns and 100,000 draws do not establish predictive calibration or a verified edge. Starter announcements and weather are shown only where sourced. Availability and starting-five confirmations apply only when explicitly sourced. Future injury and tactical changes remain unknown. Research-only estimates can be wrong, especially with changing rosters, limited samples, or stale feeds.</p></section>
 </main>
-<script src="./nba_game_context.js?v=nba-sim-availability-1"></script><script src="./nba_live_context.js?v=nba-sim-availability-1"></script><script src="./nba_possession_engine.js?v=nba-projection-audit-3"></script><script src="./nba_simulator_ui.js?v=nba-rotation-coverage-20261109"></script><script src="./quick_slip.js"></script><script src="./game_odds_engine.js?v=nba-rotation-coverage-20261109"></script>
+<script src="./nba_game_context.js?v=nba-sim-availability-1"></script><script src="./nba_live_context.js?v=nba-sim-availability-1"></script><script src="./nba_possession_engine.js?v=nba-projection-audit-3"></script><script src="./nba_simulator_ui.js?v=nba-score-bias-fallback-20261109"></script><script src="./quick_slip.js"></script><script src="./game_odds_engine.js?v=nba-rotation-coverage-20261109"></script>
 <script>
 (function(){
  'use strict';
@@ -342,8 +342,28 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
  $('run').onclick=async()=>{
   if(busy)return;
   if(!selected){$('runStatus').textContent='Select a matchup first.';return;}
-  // A network availability refresh must never block the actual game simulation.
-  // The pregame feed and injury snapshot were already loaded for this matchup.
+  // Each NBA run checks fresh injury/lineup information, including after a
+  // previously prepared model. A stalled source gets five seconds; the model's
+  // strict source-age and near-tipoff gates still reject unsafe stale data.
+  const requested=selected;
+  if(sport==='NBA'&&requested.nbaInputs&&typeof CookNBALiveContext!=='undefined'&&typeof CookNBALiveContext.latest==='function'){
+   busy=true;$('run').disabled=true;$('runStatus').textContent='Refreshing injury availability and lineups before simulation…';
+   let timer;
+   try{
+    const latest=await Promise.race([CookNBALiveContext.latest(),new Promise(resolve=>{timer=setTimeout(()=>resolve(null),5000)})]);
+    if(selected!==requested)return;
+    if(latest?.injuries){requested.nbaInputs.injuries=latest.injuries;requested.model=null;}
+    if(latest?.context){requested.nbaInputs.gameContext=latest.context;requested.model=null;}
+    source.NBA.injuryStatus=latest?.injuries?'NBA availability rechecked before this simulation; current-source age gates still apply.':'Fresh NBA availability could not be obtained; dated snapshots must pass the model freshness gates.';
+   }catch(_){
+    if(selected!==requested)return;
+    source.NBA.injuryStatus='NBA availability refresh failed; dated snapshots must pass the model freshness gates.';
+   }finally{
+    if(timer!==undefined&&typeof clearTimeout==='function')clearTimeout(timer);
+    if(selected===requested){busy=false;$('run').disabled=false;}
+   }
+  }
+  if(selected!==requested)return;
   if(sport==='NBA'&&!selected.model&&selected.nbaInputs){
    try{selected.model=CookGameOdds.nbaGame(selected.game,selected.nbaInputs.feed,{injuries:selected.nbaInputs.injuries,rosters:selected.nbaInputs.rosters,gameContext:selected.nbaInputs.gameContext,allowScoreFallback:true});}
    catch(e){$('runStatus').textContent='Cannot prepare NBA model: '+e.message;return;}
