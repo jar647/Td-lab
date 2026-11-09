@@ -37,6 +37,7 @@ class CacheIdentityTests(unittest.TestCase):
 
     def test_duplicate_source_id_rejected(self):
         self.data["bouts"][0]["fighter_b"] = "1"
+        self.data["bouts"][0]["fighter_b_name"] = "Alpha"
         with self.assertRaisesRegex(AssertionError, "Duplicate fighter IDs"):
             validator.validate(self.data)
 
