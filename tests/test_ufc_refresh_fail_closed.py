@@ -25,7 +25,7 @@ class RefreshFailClosedTests(unittest.TestCase):
                 cache = pathlib.Path("ufc_fighter_data.json")
                 original_bytes = b'{"previous":"verified"}\n'
                 cache.write_bytes(original_bytes)
-                schedule = {"bouts": [{"fighter_a": "1", "fighter_a_name": "Test A",
+                schedule = {"bouts": [{"bout_id": "bout-1", "fighter_a": "1", "fighter_a_name": "Test A",
                                        "fighter_b": "2", "fighter_b_name": "Test B"}]}
                 def fake_api(method, args, key):
                     if method == "get_schedule":
@@ -50,7 +50,7 @@ class RefreshFailClosedTests(unittest.TestCase):
                 cache.write_bytes(original_bytes)
                 def fake_api(method, args, key):
                     if method == "get_schedule":
-                        return {"bouts": [{"fighter_a": "1", "fighter_a_name": "Test A",
+                        return {"bouts": [{"bout_id": "bout-1", "fighter_a": "1", "fighter_a_name": "Test A",
                                            "fighter_b": "2", "fighter_b_name": "Test B"}]}
                     raise TimeoutError("timeout")
                 with mock.patch.object(module, "api", side_effect=fake_api):
