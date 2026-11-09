@@ -269,8 +269,12 @@ def refresh_fighters(now, key):
                "coverage": {"profiles": len(fighters), "complete_profiles": sum(valid_stats(p.get("stats")) for p in fighters.values()), "fighters_expected": len(candidates)}}
     payload["coverage"]["complete"] = payload["coverage"]["complete_profiles"] == len(candidates)
     # Validate the complete public snapshot before replacing the last known cache.
-    from validate_ufc_cache import validate
-    validate(payload)
+    import importlib.util
+    validator_path = pathlib.Path(__file__).with_name("validate_ufc_cache.py")
+    spec = importlib.util.spec_from_file_location("ufc_cache_validator", validator_path)
+    validator = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(validator)
+    validator.validate(payload)
     write_json(target, payload)
     print("Fighter profiles:", len(fighters), "complete:", payload["coverage"]["complete_profiles"], "fetched:", fetched)
     return payload
