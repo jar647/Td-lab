@@ -194,6 +194,11 @@ def refresh_fighters(now, key):
             candidates.setdefault(fid, name)
     if not candidates:
         raise ValueError("No scheduled fighter identities; preserving the previous cache")
+    # The published cache is keyed by normalized name. Two distinct source IDs
+    # with the same name would overwrite one another without warning.
+    lookup_keys = [name.casefold() for name in candidates.values()]
+    if len(set(lookup_keys)) != len(lookup_keys):
+        raise ValueError("Ambiguous scheduled fighter names; preserving the previous cache")
     old_by_id = {str(p.get("id")): p for p in old.values() if isinstance(p, dict) and p.get("id")}
     fighters, pending = {}, []
     for fid, name in candidates.items():
