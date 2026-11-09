@@ -1,14 +1,14 @@
 {
   "status": "PROSPECTIVE_RESEARCH_NOT_CALIBRATED",
-  "updated_at": "2026-11-09T04:25:44.584Z",
+  "updated_at": "2026-11-09T05:09:10.309Z",
   "method": "First audited baseline forecast per game/model frozen before verified scheduled kickoff. Existing predictions are never replaced. Results graded next calendar day from schedule finals; no historical backfill.",
   "summary": {
     "frozen": 28,
-    "graded": 14,
-    "non_tie_winner_games": 14,
-    "margin_mae": 12.657142857142857,
-    "total_mae": 12.214285714285714,
-    "brier": 0.20440185154529789,
+    "graded": 27,
+    "non_tie_winner_games": 27,
+    "margin_mae": 11.411111111111111,
+    "total_mae": 11.774074074074072,
+    "brier": 0.19766888531277557,
     "calibration": [
       {
         "range": [
@@ -24,8 +24,8 @@
           0.2,
           0.4
         ],
-        "games": 2,
-        "mean_forecast": 0.3695309998014118,
+        "games": 3,
+        "mean_forecast": 0.37413820836317074,
         "actual_home_win_rate": 0
       },
       {
@@ -33,17 +33,17 @@
           0.4,
           0.6
         ],
-        "games": 9,
-        "mean_forecast": 0.5435031566114413,
-        "actual_home_win_rate": 0.6666666666666666
+        "games": 18,
+        "mean_forecast": 0.5075761888228699,
+        "actual_home_win_rate": 0.4444444444444444
       },
       {
         "range": [
           0.6,
           0.8
         ],
-        "games": 3,
-        "mean_forecast": 0.6697805202338016,
+        "games": 6,
+        "mean_forecast": 0.6565694121460868,
         "actual_home_win_rate": 1
       },
       {
@@ -66,10 +66,10 @@
       },
       "6d9d4e285d034db9eb431e90002e957729227244df654b2b8f6932d849faaaaa": {
         "frozen": 15,
-        "graded": 1,
-        "margin_mae": 20,
-        "total_mae": 2,
-        "brier": 0.1247920668819111
+        "graded": 14,
+        "margin_mae": 10.778571428571428,
+        "total_mae": 10.635714285714288,
+        "brier": 0.1857304320494772
       }
     },
     "scope": "Aggregate research scorecard; compare per-signature groups when model code changes."
@@ -695,7 +695,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-09T05:09:10.309Z",
+        "home": 17,
+        "away": 34,
+        "margin_error": 15.2,
+        "total_error": -4.399999999999999,
+        "brier": 0.173259226507129,
+        "home_won": false
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_09_DEN_CAR",
@@ -729,7 +737,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-09T05:09:10.309Z",
+        "home": 21,
+        "away": 26,
+        "margin_error": 5.3,
+        "total_error": -0.29999999999999716,
+        "brier": 0.23890244547266354,
+        "home_won": false
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_09_DAL_IND",
@@ -763,7 +779,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-09T05:09:10.309Z",
+        "home": 23,
+        "away": 27,
+        "margin_error": 2.8,
+        "total_error": -1.6000000000000014,
+        "brier": 0.16335312776849115,
+        "home_won": false
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_09_NYJ_KC",
@@ -797,7 +821,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-09T05:09:10.309Z",
+        "home": 35,
+        "away": 12,
+        "margin_error": -18.9,
+        "total_error": -3.299999999999997,
+        "brier": 0.15496302086962288,
+        "home_won": true
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_09_DET_MIA",
@@ -831,7 +863,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-09T05:09:10.309Z",
+        "home": 9,
+        "away": 19,
+        "margin_error": 7.8,
+        "total_error": 19.200000000000003,
+        "brier": 0.14695923546753722,
+        "home_won": false
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_09_CLE_NO",
@@ -865,7 +905,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-09T05:09:10.309Z",
+        "home": 23,
+        "away": 22,
+        "margin_error": 0.3999999999999999,
+        "total_error": -0.6000000000000014,
+        "brier": 0.2253772377008983,
+        "home_won": true
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_09_NYG_PHI",
@@ -899,7 +947,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-09T05:09:10.309Z",
+        "home": 11,
+        "away": 19,
+        "margin_error": 7,
+        "total_error": 14.399999999999999,
+        "brier": 0.1746426273999777,
+        "home_won": false
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_09_LA_WAS",
@@ -933,7 +989,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-09T05:09:10.309Z",
+        "home": 13,
+        "away": 20,
+        "margin_error": 6.5,
+        "total_error": 13.100000000000001,
+        "brier": 0.21186703744758284,
+        "home_won": false
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_09_HOU_LAC",
@@ -967,7 +1031,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-09T05:09:10.309Z",
+        "home": 22,
+        "away": 44,
+        "margin_error": 20.2,
+        "total_error": -22.4,
+        "brier": 0.17373290198926997,
+        "home_won": false
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_09_LV_SF",
@@ -1001,7 +1073,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-09T05:09:10.309Z",
+        "home": 38,
+        "away": 17,
+        "margin_error": -16.5,
+        "total_error": -5.700000000000003,
+        "brier": 0.11894790156202029,
+        "home_won": true
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_09_GB_NE",
@@ -1035,7 +1115,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-09T05:09:10.309Z",
+        "home": 27,
+        "away": 45,
+        "margin_error": 20.7,
+        "total_error": -28.9,
+        "brier": 0.3537812710603069,
+        "home_won": false
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_09_ARI_SEA",
@@ -1069,7 +1157,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-09T05:09:10.309Z",
+        "home": 17,
+        "away": 3,
+        "margin_error": -8.5,
+        "total_error": 25.700000000000003,
+        "brier": 0.10981496802545833,
+        "home_won": true
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_09_TB_CHI",
@@ -1103,7 +1199,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-09T05:09:10.309Z",
+        "home": 27,
+        "away": 24,
+        "margin_error": -1.1,
+        "total_error": -7.299999999999997,
+        "brier": 0.2298329805398111,
+        "home_won": true
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_09_BUF_MIN",
