@@ -47,8 +47,31 @@ def validate(data):
         assert type(expected) is int and expected >= len(fighters), "Expected count smaller than profiles"
         assert coverage.get("complete_profiles", complete) == complete, "Complete profile count mismatch"
         assert coverage.get("complete") == (complete == expected), "Incorrect completeness flag"
-    for bout in data.get("bouts", []):
+    bouts = data.get("bouts", [])
+    assert isinstance(bouts, list), "Invalid scheduled bout collection"
+    expected_ids = {}
+    normalized_names = {}
+    for bout in bouts:
         assert isinstance(bout, dict) and "lines" not in bout, "Invalid public bout metadata"
+        identities = []
+        for side in ("a", "b"):
+            fid = bout.get("fighter_" + side)
+            name = bout.get("fighter_" + side + "_name")
+            assert fid is not None and str(fid).strip(), "Missing scheduled fighter ID"
+            assert isinstance(name, str) and name.strip(), "Missing scheduled fighter name"
+            fid, name = str(fid), name.strip()
+            key = name.casefold()
+            assert fid not in expected_ids or expected_ids[fid] == key, "Conflicting source fighter identity"
+            assert key not in normalized_names or normalized_names[key] == fid, "Ambiguous scheduled fighter name"
+            expected_ids[fid] = key
+            normalized_names[key] = fid
+            identities.append(fid)
+        assert identities[0] != identities[1], "Duplicate fighter IDs in bout"
+    if bouts:
+        assert data.get("scheduled_bouts") == len(bouts), "Scheduled bout count mismatch"
+        assert len(fighters) == len(expected_ids), "Scheduled fighter coverage mismatch"
+        for fid, key in expected_ids.items():
+            assert key in fighters and str(fighters[key].get("id")) == fid, "Scheduled fighter profile missing or mismatched"
     return len(fighters), complete
 
 
