@@ -23,3 +23,11 @@ test('permits snapshot at exact prediction freeze time',()=>{
  const same={'101':[{...p,fighter_id:'a',stats_as_of:'2025-08-01T19:00:00Z'},{...p,fighter_id:'b'}]};
  assert.equal(evaluate([bout],same,pred).evaluated,1);
 });
+
+test('rejects bout IDs that collide after whitespace normalization',()=>{
+ const padded={...bout,bout_id:' 101 '};
+ const result=evaluate([bout,padded],snap,pred);
+ assert.equal(result.evaluated,0);
+ assert.equal(result.excluded,2);
+ assert.equal(result.excludedByReason.missing_or_duplicate_bout_id,2);
+});
