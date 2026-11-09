@@ -193,7 +193,7 @@ def refresh_fighters(now, key):
         identities = []
         for side in ("a", "b"):
             fid, name = bout.get("fighter_" + side), bout.get("fighter_" + side + "_name")
-            if not fid or not isinstance(name, str) or not name.strip():
+            if fid is None or not str(fid).strip() or not isinstance(name, str) or not name.strip():
                 raise ValueError("Incomplete scheduled bout identities; preserving the previous cache")
             identities.append((str(fid), name.strip()))
         if identities[0][0] == identities[1][0]:
