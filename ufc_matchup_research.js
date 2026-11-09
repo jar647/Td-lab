@@ -158,7 +158,10 @@ function describe(a,b,options={}) {
       // before the prediction. Require a timestamped record snapshot as well.
       if(asOf!==null){
         const recordAsOf=Date.parse(f.opponent_record_as_of||'');
-        if(!Number.isFinite(recordAsOf)||recordAsOf>=asOf)continue;
+        const boutDate=Date.parse(f.starts_at||f.event_date);
+        // Opponent quality must reflect what was knowable at the earlier bout,
+        // not a later improved record captured before this prediction.
+        if(!Number.isFinite(recordAsOf)||!Number.isFinite(boutDate)||recordAsOf> boutDate||recordAsOf>=asOf)continue;
       }
       const record=f.opponent_record;
       if(!record||!Number.isInteger(record.wins)||!Number.isInteger(record.losses)||record.wins<0||record.losses<0||record.wins+record.losses===0||!f.opponent_record_source)continue;
