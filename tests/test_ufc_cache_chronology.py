@@ -10,6 +10,7 @@ class TestUFCCacheChronology(unittest.TestCase):
             "generated_at": "2026-11-08T20:00:00+00:00",
             "fighters": {
                 "test fighter": {
+                    "id": "fighter-1", "name": "Test Fighter",
                     "stats": {"slpm": None, "sapm": None, "strAcc": None,
                               "strDef": None, "tdAvg": None, "tdAcc": None,
                               "tdDef": None, "subAvg": None},
