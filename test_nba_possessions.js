@@ -29,10 +29,16 @@ assert.equal(scoredBias.all.margin_bias,1);
 assert.equal(scoredBias.all.projected_winner_accuracy,1);
 assert.equal(pub.scoreBias([]).all.total_bias,null,'Do not fake zero bias from empty history');
 assert.match(ui.validation({prospective:{games:2},prospective_bias:scoredBias}),/Prospective score bias/);
+const shadowSummary={status:'RESEARCH ONLY',replay:{games:2,raw_margin_mae:12,shadow_margin_mae:11,raw_total_mae:14,shadow_total_mae:13},frozen:{games:0}};
+assert.match(ui.validation({prospective:{games:2},shadow_score_calibration:shadowSummary}),/chronological replay/);
+assert.match(ui.validation({prospective:{games:2},shadow_score_calibration:shadowSummary}),/NOT applied/);
 assert.equal(pub.grade({locked_at:game.date,tipoff:game.date},final),null,'Never grade a post-tipoff capture');
 const os=require('os'),path=require('path'),tmp=fs.mkdtempSync(path.join(os.tmpdir(),'nba-archive-'));
 try{fs.mkdirSync(path.join(tmp,'data'));const write=(n,x)=>fs.writeFileSync(path.join(tmp,'data',n+'.json'),JSON.stringify(x));write('nba_games',{...feed,games:feed.games.filter(g=>g.status==='STATUS_FINAL'||g.id===game.id)});write('nba_injuries',inj);write('nba_rosters',roster);
-const report=pub.publish(tmp,now,0,1000);assert.equal(report.forecasts.length,1);const archive=JSON.parse(fs.readFileSync(path.join(tmp,'data/nba_simulator_locks.json')));assert.equal(archive.snapshots.length,1);const frozen=JSON.stringify(archive.snapshots[0]);pub.publish(tmp,now+1000,0,1000);assert.equal(JSON.stringify(JSON.parse(fs.readFileSync(path.join(tmp,'data/nba_simulator_locks.json'))).snapshots[0]),frozen);// A slate game must remain forecastable when a possible all-out combination
+const report=pub.publish(tmp,now,0,1000);
+assert.equal(report.shadow_score_calibration.approved,false);
+assert.equal(report.shadow_score_calibration.replay.games,0);
+assert.equal(report.forecasts.length,1);const archive=JSON.parse(fs.readFileSync(path.join(tmp,'data/nba_simulator_locks.json')));assert.equal(archive.snapshots.length,1);const frozen=JSON.stringify(archive.snapshots[0]);pub.publish(tmp,now+1000,0,1000);assert.equal(JSON.stringify(JSON.parse(fs.readFileSync(path.join(tmp,'data/nba_simulator_locks.json'))).snapshots[0]),frozen);// A slate game must remain forecastable when a possible all-out combination
 // lacks enough healthy rotation players; use score history, not fake player stats.
 const originalRotation=model.teams[game.home].players,homeIds=new Set(originalRotation.map(p=>String(p.id))),homeNames=new Set(originalRotation.map(p=>p.name.toLowerCase()));
 assert.ok(originalRotation.length>=6,'Fixture requires a supported rotation');
