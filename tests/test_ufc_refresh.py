@@ -205,6 +205,22 @@ class UFCRefreshTests(unittest.TestCase):
                     self.assertEqual(calls.call_count, 3)
                     self.assertEqual(pathlib.Path("ufc_fighter_data.json").read_bytes(), before)
 
+    def test_missing_or_duplicate_scheduled_bout_ids_preserve_cache(self):
+        with self.workspace():
+            self.cache({"fighter a": {"id": "a", "stats": {}}})
+            before = pathlib.Path("ufc_fighter_data.json").read_bytes()
+            for bouts in (
+                [dict(self.bout, bout_id="")],
+                [dict(self.bout, bout_id=None)],
+                [self.bout, dict(self.bout)],
+            ):
+                with self.subTest(bouts=bouts):
+                    with mock.patch.object(refresh, "api", return_value={"bouts": bouts}) as calls:
+                        with self.assertRaisesRegex(ValueError, "scheduled bout ID"):
+                            refresh.refresh_fighters(self.now, "test")
+                    self.assertEqual(calls.call_count, 1)
+                    self.assertEqual(pathlib.Path("ufc_fighter_data.json").read_bytes(), before)
+
     def test_http_errors_hide_response_and_retry_429_only(self):
         refresh._api_last_call = None
         refresh._api_remaining = None
