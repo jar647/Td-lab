@@ -50,7 +50,8 @@ class RefreshFailClosedTests(unittest.TestCase):
                 cache.write_bytes(original_bytes)
                 def fake_api(method, args, key):
                     if method == "get_schedule":
-                        return {"bouts": [{"fighter_a": "1", "fighter_a_name": "Test A"}]}
+                        return {"bouts": [{"fighter_a": "1", "fighter_a_name": "Test A",
+                                           "fighter_b": "2", "fighter_b_name": "Test B"}]}
                     raise TimeoutError("timeout")
                 with mock.patch.object(module, "api", side_effect=fake_api):
                     with self.assertRaises(RuntimeError):
