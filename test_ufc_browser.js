@@ -85,6 +85,10 @@ const profile={generated_at:new Date().toISOString(),source:'TEST FIXTURE ONLY',
 const two=event.competitions[0].competitors[1].athlete.displayName;profile.fighters[two]={fetched_at:new Date(Date.now()-60000).toISOString(),stats:{slpm:2,sapm:5,strAcc:35,strDef:35,tdAvg:0,tdAcc:0,tdDef:30,subAvg:0}};
 const test=await browser.newPage();await test.route('**/scoreboard?**',r=>r.fulfill({json:fixture}));await test.route('**/ufc_fighter_data.json',r=>r.fulfill({json:profile}));await test.goto(testUrl);
 await test.waitForSelector('article.fight');await test.locator('#event').selectOption(String(event.id));
+if(await test.locator('article.fight').count()!==3||await test.locator('article.fight .winner-prediction').count()!==3)throw Error('Every scheduled named fight needs a winner prediction, including limited-data fights');
+if(await test.locator('article.fight .pick-card').count()!==3)throw Error('Winner display must not create duplicate top picks');
+if(!(await test.locator('article.fight').nth(1).locator('.pick-winner').textContent()).includes('PREDICTED WINNER'))throw Error('Missing provisional winner on sparse-data fight');
+if(await test.evaluate(()=>document.documentElement.scrollWidth>innerWidth))throw Error('Winner display caused mobile overflow');
 await test.locator('[data-filter="early"]').click();if(await test.locator('article.fight').count()!==1)throw Error('Early filter failed');
 await test.locator('[data-section="analysis"] > summary').click();await test.getByText('EXPERIMENTAL · UNVALIDATED',{exact:true}).waitFor();
 await test.locator('.pick-card .pick-label').filter({hasText:fighter}).waitFor();
@@ -95,6 +99,7 @@ partial.fighters[two]={id:event.competitions[0].competitors[1].id,stats:{slpm:5,
 await test.route('**/ufc_fighter_data.json',r=>r.fulfill({json:partial}));await test.reload();await test.waitForSelector('article.fight');await test.locator('#event').selectOption(String(event.id));await test.locator('[data-filter="early"]').click();
 await test.locator('[data-section="analysis"] > summary').click();
 await test.getByText('PARTIAL RESEARCH · NO PICK',{exact:true}).waitFor();
+if(await test.locator('article.fight .winner-prediction').count()!==1)throw Error('Partial matchup lost its directional winner');
 await test.locator('.research-history summary').click();await test.getByText('vs Test Opponent',{exact:false}).waitFor();
 if(await test.locator('.fight-history strong').first().textContent()!=='W')throw Error('Winner side token did not resolve to fighter');
 if(await test.locator('[data-section="analysis"]').textContent().then(x=>!x.includes('5 significant strikes landed/min')))throw Error('Discarded partial striking stats');
@@ -112,6 +117,7 @@ if(!(await test.locator('.ufc-total-line').isDisabled()))throw Error('Unknown fo
 event.competitions[0].status={type:{state:'post',completed:true,description:'Final'}};
 await test.reload();await test.waitForSelector('article.fight');await test.locator('#event').selectOption(String(event.id));await test.locator('[data-filter="early"]').click();
 await test.locator('.pick-label').filter({hasText:'Fight completed'}).waitFor();
+if(await test.locator('article.fight .winner-prediction').count())throw Error('Completed fight received a fresh winner prediction');
 if(errors.length)throw Error(errors.join('\n'));
 console.log('Browser PASS: mobile overflow, search, persisted odds, refresh fallback, unavailable state, card filters, research rendering; no JS errors');
 await browser.close();
