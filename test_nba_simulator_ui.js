@@ -52,6 +52,15 @@ vm.createContext(sandbox);vm.runInContext(handler,sandbox);
  worker.onerror({message:'Worker unavailable'});
  assert.match(el('sim-results').innerHTML,/Worker unavailable/);
  assert.equal(sandbox.nbaSimBusy,false);assert.equal(el('run-sim').disabled,false);
+ model.rotationFallback={reason:'Team <A>: unresolved availability'};
+ let saves=0;sandbox.localStorage={getItem:()=>null,setItem:()=>{saves++}};
+ await sandbox.runNBASimulation();
+ worker.onmessage({data:{requestId:sent.requestId,result:{...complete,possession:null}}});
+ assert.match(el('sim-results').innerHTML,/Team-score history simulation/);
+ assert.match(el('sim-results').innerHTML,/Team &lt;A&gt;/);
+ assert.doesNotMatch(el('sim-results').innerHTML,/Possessions \+ player rotations|Your frozen simulations/);
+ assert.equal(saves,0,'Team-score fallback must not enter the possession forecast archive');
+ assert.equal(el('run-sim').disabled,false);
  console.log('NBA simulation UI: audit, optional tracking, no-odds button, load/refresh/worker failure recovery PASS');
 })().catch(error=>{console.error(error);process.exitCode=1});
 

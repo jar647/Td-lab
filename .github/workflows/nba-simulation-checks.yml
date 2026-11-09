@@ -10,6 +10,7 @@ on:
       - 'game_odds_engine.js'
       - 'nba_possession_engine.js'
       - 'test_nba_simulator_ui.js'
+      - 'test_nba_rotation_fallback.js'
       - '.github/workflows/nba-simulation-checks.yml'
   pull_request:
     branches: [main]
@@ -32,3 +33,5 @@ jobs:
           node test_nba_simulator_ui.js
           node test_nba_simulator.js
           node test_nba_possessions.js
+          node test_nba_rotation_fallback.js
+
