@@ -1,0 +1,34 @@
+name: NBA simulation button checks
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'nba.html'
+      - 'game-odds.html'
+      - 'nba_simulator_ui.js'
+      - 'game_odds_worker.js'
+      - 'game_odds_engine.js'
+      - 'nba_possession_engine.js'
+      - 'test_nba_simulator_ui.js'
+      - '.github/workflows/nba-simulation-checks.yml'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify simulation loading, rendering and failure recovery
+        run: |
+          node --check nba_simulator_ui.js
+          node --check game_odds_worker.js
+          node test_nba_simulator_ui.js
+          node test_nba_simulator.js
+          node test_nba_possessions.js
