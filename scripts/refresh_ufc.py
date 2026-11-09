@@ -195,7 +195,7 @@ def refresh_fighters(now, key):
             fid, name = bout.get("fighter_" + side), bout.get("fighter_" + side + "_name")
             if fid is None or not str(fid).strip() or not isinstance(name, str) or not name.strip():
                 raise ValueError("Incomplete scheduled bout identities; preserving the previous cache")
-            identities.append((str(fid), name.strip()))
+            identities.append((str(fid).strip(), name.strip()))
         if identities[0][0] == identities[1][0]:
             raise ValueError("Duplicate fighter IDs within scheduled bout; preserving the previous cache")
         for fid, name in identities:
@@ -268,6 +268,9 @@ def refresh_fighters(now, key):
                "bouts": [{k: b[k] for k in BOUT_FIELDS if k in b and (b[k] is None or type(b[k]) in (str, int, float, bool))} for b in bouts if isinstance(b, dict)],
                "coverage": {"profiles": len(fighters), "complete_profiles": sum(valid_stats(p.get("stats")) for p in fighters.values()), "fighters_expected": len(candidates)}}
     payload["coverage"]["complete"] = payload["coverage"]["complete_profiles"] == len(candidates)
+    # Validate the complete public snapshot before replacing the last known cache.
+    from validate_ufc_cache import validate
+    validate(payload)
     write_json(target, payload)
     print("Fighter profiles:", len(fighters), "complete:", payload["coverage"]["complete_profiles"], "fetched:", fetched)
     return payload
