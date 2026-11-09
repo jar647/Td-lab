@@ -154,6 +154,12 @@ function describe(a,b,options={}) {
         const boutDate=Date.parse(f.starts_at||f.event_date);
         if(!Number.isFinite(boutDate)||boutDate>=asOf)continue;
       }
+      // A historical bout alone does not prove its opponent record was known
+      // before the prediction. Require a timestamped record snapshot as well.
+      if(asOf!==null){
+        const recordAsOf=Date.parse(f.opponent_record_as_of||'');
+        if(!Number.isFinite(recordAsOf)||recordAsOf>=asOf)continue;
+      }
       const record=f.opponent_record;
       if(!record||!Number.isInteger(record.wins)||!Number.isInteger(record.losses)||record.wins<0||record.losses<0||record.wins+record.losses===0||!f.opponent_record_source)continue;
       records.push({opponent:String(f.fighter_a)===ownId?f.fighter_b_name:f.fighter_a_name,record:record.wins+'-'+record.losses,winRate:record.wins/(record.wins+record.losses),source:String(f.opponent_record_source)});
