@@ -179,9 +179,17 @@ def refresh_fighters(now, key):
     if not isinstance(bouts, list) or not bouts:
         raise ValueError("No scheduled bouts; preserving the previous cache")
     candidates = {}
+    seen_bout_ids = set()
     for bout in bouts:
         if not isinstance(bout, dict):
             raise ValueError("Malformed scheduled bout; preserving the previous cache")
+        bout_id = bout.get("bout_id")
+        if bout_id is None or not str(bout_id).strip():
+            raise ValueError("Missing scheduled bout ID; preserving the previous cache")
+        bout_id = str(bout_id).strip()
+        if bout_id in seen_bout_ids:
+            raise ValueError("Duplicate scheduled bout ID; preserving the previous cache")
+        seen_bout_ids.add(bout_id)
         identities = []
         for side in ("a", "b"):
             fid, name = bout.get("fighter_" + side), bout.get("fighter_" + side + "_name")
