@@ -127,24 +127,21 @@ class UFCRefreshTests(unittest.TestCase):
                 refresh.refresh_fighters(self.now + datetime.timedelta(days=1), "test")
             self.assertEqual(calls.call_count, 1)
 
-    def test_transient_profile_failure_preserves_recent_verified_profile(self):
+    def test_transient_profile_failure_preserves_recent_verified_cache_without_partial_publish(self):
         old = refresh.profile_data({"career_rates": self.rates}, "a", "Fighter A", self.now - datetime.timedelta(days=8))
         with self.workspace():
             self.cache({"fighter a": old})
+            before = pathlib.Path("ufc_fighter_data.json").read_bytes()
             def response(method, args, key):
                 if method == "get_schedule":
                     return {"bouts": [self.bout]}
-                if args["fighter_id"] == "a":
-                    raise TimeoutError("temporary")
-                self.assertEqual(args["fighter_id"], "b")
-                return {"career_rates": self.rates}
+                raise TimeoutError("temporary")
 
-            with mock.patch.object(refresh, "api", side_effect=response):
-                result = refresh.refresh_fighters(self.now, "test")
-            self.assertEqual(result["fighters"]["fighter a"]["stats"], old["stats"])
-            self.assertEqual(result["fighters"]["fighter a"]["fetched_at"], old["fetched_at"])
-            self.assertTrue(refresh.valid_stats(result["fighters"]["fighter b"]["stats"]))
-            self.assertEqual(result["coverage"]["complete_profiles"], 2)
+            with mock.patch.object(refresh, "api", side_effect=response) as calls:
+                with self.assertRaisesRegex(RuntimeError, "refresh incomplete"):
+                    refresh.refresh_fighters(self.now, "test")
+            self.assertEqual(calls.call_count, 2)
+            self.assertEqual(pathlib.Path("ufc_fighter_data.json").read_bytes(), before)
 
     def test_empty_or_failed_response_preserves_previous_file(self):
         with self.workspace():
