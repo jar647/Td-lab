@@ -221,6 +221,21 @@ class UFCRefreshTests(unittest.TestCase):
                     self.assertEqual(calls.call_count, 1)
                     self.assertEqual(pathlib.Path("ufc_fighter_data.json").read_bytes(), before)
 
+    def test_blank_fighter_source_ids_preserve_cache(self):
+        with self.workspace():
+            self.cache({"fighter a": {"id": "a", "stats": {}}})
+            before = pathlib.Path("ufc_fighter_data.json").read_bytes()
+            for invalid in ("", "   ", None):
+                for side in ("a", "b"):
+                    with self.subTest(invalid=invalid, side=side):
+                        bout = dict(self.bout)
+                        bout["fighter_" + side] = invalid
+                        with mock.patch.object(refresh, "api", return_value={"bouts": [bout]}) as calls:
+                            with self.assertRaisesRegex(ValueError, "Incomplete scheduled bout identities"):
+                                refresh.refresh_fighters(self.now, "test")
+                        self.assertEqual(calls.call_count, 1)
+                        self.assertEqual(pathlib.Path("ufc_fighter_data.json").read_bytes(), before)
+
     def test_http_errors_hide_response_and_retry_429_only(self):
         refresh._api_last_call = None
         refresh._api_remaining = None
