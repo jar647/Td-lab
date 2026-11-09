@@ -279,6 +279,19 @@ class UFCRefreshTests(unittest.TestCase):
                  "bouts": [bout], "scheduled_bouts": 1}
         self.assertEqual(validator.validate(clean), (2, 2))
 
+    def test_source_ids_are_normalized_before_fetch_and_publication(self):
+        a = refresh.profile_data({"career_rates": self.rates}, "a", "Fighter A", self.now)
+        b = refresh.profile_data({"career_rates": self.rates}, "b", "Fighter B", self.now)
+        bout = dict(self.bout, fighter_a=" a ", fighter_b=" b ")
+        with self.workspace():
+            self.cache({"fighter a": a, "fighter b": b})
+            with mock.patch.object(refresh, "api", return_value={"bouts": [bout]}) as calls:
+                output = refresh.refresh_fighters(self.now, "test")
+            self.assertEqual(calls.call_count, 1)
+            self.assertEqual(output["bouts"][0]["fighter_a"], "a")
+            self.assertEqual(output["bouts"][0]["fighter_b"], "b")
+            self.assertEqual(validator.validate(output), (2, 2))
+
     def test_http_errors_hide_response_and_retry_429_only(self):
         refresh._api_last_call = None
         refresh._api_remaining = None
