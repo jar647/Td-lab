@@ -191,6 +191,8 @@ def refresh_fighters(now, key):
         if identities[0][0] == identities[1][0]:
             raise ValueError("Duplicate fighter IDs within scheduled bout; preserving the previous cache")
         for fid, name in identities:
+            if fid in candidates and candidates[fid].casefold() != name.casefold():
+                raise ValueError("Conflicting fighter names for scheduled source ID; preserving the previous cache")
             candidates.setdefault(fid, name)
     if not candidates:
         raise ValueError("No scheduled fighter identities; preserving the previous cache")
