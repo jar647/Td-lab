@@ -23,6 +23,9 @@ class BoutIdentityTests(unittest.TestCase):
                 cache = pathlib.Path("ufc_fighter_data.json")
                 original_bytes = b'{"previous":"verified"}\n'
                 cache.write_bytes(original_bytes)
+                for index, bout in enumerate(bouts):
+                    if isinstance(bout, dict):
+                        bout.setdefault("bout_id", f"bout-{index + 1}")
                 with mock.patch.object(module, "api", return_value={"bouts": bouts}) as api:
                     with self.assertRaisesRegex(ValueError, expected_error):
                         module.refresh_fighters(now, "fake-key")
@@ -64,9 +67,9 @@ class BoutIdentityTests(unittest.TestCase):
 
     def test_same_source_id_consistent_names_across_bouts_is_not_identity_error(self):
         # Repeated source IDs with identical names must remain eligible for refresh.
-        bouts = [{"fighter_a": "101", "fighter_a_name": "Alpha",
+        bouts = [{"bout_id": "bout-1", "fighter_a": "101", "fighter_a_name": "Alpha",
                   "fighter_b": "102", "fighter_b_name": "Beta"},
-                 {"fighter_a": "101", "fighter_a_name": "ALPHA",
+                 {"bout_id": "bout-2", "fighter_a": "101", "fighter_a_name": "ALPHA",
                   "fighter_b": "103", "fighter_b_name": "Gamma"}]
         now = datetime.datetime(2026, 11, 8, tzinfo=datetime.timezone.utc)
         with tempfile.TemporaryDirectory() as temp:
