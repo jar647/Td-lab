@@ -11,11 +11,11 @@ class CacheIdentityTests(unittest.TestCase):
     def setUp(self):
         self.data = {
             "scheduled_bouts": 1,
-            "bouts": [{"fighter_a": "1", "fighter_a_name": "Alpha",
+            "bouts": [{"bout_id": "bout-1", "fighter_a": "1", "fighter_a_name": "Alpha",
                        "fighter_b": "2", "fighter_b_name": "Bravo"}],
             "fighters": {
-                "alpha": {"id": "1", "stats": {}},
-                "bravo": {"id": "2", "stats": {}},
+                "alpha": {"id": "1", "name": "Alpha", "stats": {}},
+                "bravo": {"id": "2", "name": "Bravo", "stats": {}},
             },
             "coverage": {"profiles": 2, "fighters_expected": 2,
                          "complete_profiles": 0, "complete": False},
@@ -42,7 +42,7 @@ class CacheIdentityTests(unittest.TestCase):
 
     def test_conflicting_name_to_id_rejected(self):
         self.data["bouts"].append({
-            "fighter_a": "3", "fighter_a_name": "Alpha",
+            "bout_id": "bout-2", "fighter_a": "3", "fighter_a_name": "Alpha",
             "fighter_b": "2", "fighter_b_name": "Bravo",
         })
         self.data["scheduled_bouts"] = 2
