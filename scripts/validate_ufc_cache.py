@@ -17,9 +17,16 @@ def validate(data):
     if generated_at is not None:
         assert generated_at.tzinfo is not None, "Cache timestamp must include time zone"
     complete = 0
+    profile_ids = set()
     for name, profile in fighters.items():
         assert isinstance(name, str) and name.strip() and name == name.strip().casefold(), "Invalid lookup key"
         assert isinstance(profile, dict) and isinstance(profile.get("stats"), dict), "Missing fighter stats"
+        fid = profile.get("id")
+        assert fid is not None and isinstance(fid, (str, int)) and not isinstance(fid, bool) and str(fid).strip(), "Missing profile fighter ID"
+        fid = str(fid).strip()
+        assert fid not in profile_ids, "Duplicate profile fighter ID"
+        profile_ids.add(fid)
+        assert isinstance(profile.get("name"), str) and profile["name"].strip().casefold() == name, "Profile name and lookup key mismatch"
         available = 0
         for key in REQUIRED:
             value = profile["stats"].get(key)
@@ -65,7 +72,7 @@ def validate(data):
             name = bout.get("fighter_" + side + "_name")
             assert fid is not None and str(fid).strip(), "Missing scheduled fighter ID"
             assert isinstance(name, str) and name.strip(), "Missing scheduled fighter name"
-            fid, name = str(fid), name.strip()
+            fid, name = str(fid).strip(), name.strip()
             key = name.casefold()
             assert fid not in expected_ids or expected_ids[fid] == key, "Conflicting source fighter identity"
             assert key not in normalized_names or normalized_names[key] == fid, "Ambiguous scheduled fighter name"
