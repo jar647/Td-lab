@@ -1,8 +1,8 @@
 {
   "season": 2026,
   "week": 9,
-  "generated_at": "2026-11-08T22:42:58.451860+00:00",
-  "matchups": 372,
+  "generated_at": "2026-11-09T04:25:32.740566+00:00",
+  "matchups": 26,
   "source": "nflverse play-by-play and rosters",
   "odds_source": null,
   "probability_model": null,
@@ -10,48 +10,21 @@
   "availability_diagnostics": {
     "injuries": {
       "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-      "rows_for_week": 334,
-      "matched_rows": 334,
-      "matched_ids": 147,
-      "practice_flags": 161,
-      "game_designations_reported": 147,
+      "rows_for_week": 32,
+      "matched_rows": 32,
+      "matched_ids": 11,
+      "practice_flags": 16,
+      "game_designations_reported": 11,
       "teams_with_injury_rows": [
-        "ARI",
-        "ATL",
         "BUF",
-        "CAR",
-        "CHI",
-        "CIN",
-        "CLE",
-        "DAL",
-        "DEN",
-        "DET",
-        "GB",
-        "HOU",
-        "IND",
-        "KC",
-        "LA",
-        "LAC",
-        "LV",
-        "MIA",
-        "MIN",
-        "NE",
-        "NO",
-        "NYG",
-        "NYJ",
-        "PHI",
-        "SEA",
-        "SF",
-        "TB",
-        "WAS"
+        "MIN"
       ],
       "teams_without_injury_rows": [],
       "stale_team_or_unmatched_id_rows": 0,
       "current_week_report_status_counts": {
-        "MISSING": 187,
-        "OUT": 72,
-        "QUESTIONABLE": 69,
-        "DOUBTFUL": 6
+        "MISSING": 21,
+        "QUESTIONABLE": 7,
+        "OUT": 4
       },
       "source_last_updated_utc": null,
       "official_game_day_active_confirmed": false,
@@ -76,10 +49,9 @@
         "practice_status"
       ],
       "report_status_counts": {
-        "MISSING": 187,
-        "OUT": 72,
-        "QUESTIONABLE": 69,
-        "DOUBTFUL": 6
+        "MISSING": 21,
+        "QUESTIONABLE": 7,
+        "OUT": 4
       }
     },
     "weekly_rosters": {
@@ -97,11 +69,11 @@
       }
     },
     "excluded": {
-      "out_report": 24,
+      "out_report": 4,
       "unavailable_roster": 0,
-      "nonactive_weekly_roster": 79
+      "nonactive_weekly_roster": 4
     },
-    "unverified_output": 2
+    "unverified_output": 0
   },
   "injury_policy": "Exact GSIS ID and current team required; official OUT excluded; questionable/doubtful and practice LIMITED/DNP flagged separately. No game designation can mean report not yet published. Weekly ACT is roster membership only, never game-day clearance. Official inactives are unverified.",
   "status": "ready",
