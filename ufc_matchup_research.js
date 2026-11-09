@@ -35,8 +35,7 @@ const allHave = (stats, keys) => stats.every(s => has(s,keys));
 function facts(stats, names, keys, describe) {
   return stats.map((s,i) => names[i]+': '+keys.filter(k=>s[k]!==null).map(k=>describe(k,s[k])).join(', ')+(keys.every(k=>s[k]===null)?'no supplied rates for this area':'')).join('. ')+'.';
 }
-function area(title, keys, stats, names, value, weight, observed, inference) {
-  const complete = allHave(stats, keys);
+function area(title, keys, stats, names, value, weight, observed, inference, complete=allHave(stats, keys)) {
   const side = complete ? signSide(value) : null;
   return {
     title, side, complete,
@@ -51,28 +50,36 @@ function describe(a,b,options={}) {
   // the bout. A pre-fight timestamp is required for each supplied profile.
   const cutoff=typeof options.asOf==='string'&&Number.isFinite(Date.parse(options.asOf))?Date.parse(options.asOf):null;
   const raw=[a,b];
-  const stats=raw.map((value,i)=>{
-    if(cutoff===null)return normalize(value);
+  const effectiveRaw=raw.map((value,i)=>{
+    if(cutoff===null)return value;
     const profile=options.profiles?.[i];
     const stamp=profile?.stats_as_of||profile?.snapshot_at||profile?.fetched_at;
     const timestamp=typeof stamp==='string'?Date.parse(stamp):NaN;
-    return Number.isFinite(timestamp)&&timestamp<cutoff?normalize(value):normalize(null);
+    return Number.isFinite(timestamp)&&timestamp<cutoff?value:null;
   });
+  const stats=effectiveRaw.map(normalize);
   const A=stats[0], B=stats[1];
   const missing = stats.map(s=>Object.keys(METRICS).filter(k=>s[k]===null).map(k=>METRICS[k]));
-  const complete = missing.every(list=>list.length===0);
+  // Preserve provided values for validation, but only after historical snapshots
+  // have been excluded. Normalizing first would hide malformed unused inputs.
+  const evaluated = engine?.evaluate ? engine.evaluate(effectiveRaw[0],effectiveRaw[1]) : null;
+  const complete = evaluated?.status==='experimental';
+  const unusedMissing = evaluated?.unusedMissing || [];
+  const dataQuality = evaluated?.dataQuality || {limited:missing.some(list=>list.length>0)};
+  const grapplingComplete = stats.every((s,side)=>['tdAvg','tdAcc','tdDef'].every(key=>s[key]!==null||unusedMissing.some(item=>item.side===side&&item.key===key)));
   const striking = allHave(stats,['slpm','strAcc','strDef']) ? A.slpm*(A.strAcc/50)*(1-B.strDef/130)-B.slpm*(B.strAcc/50)*(1-A.strDef/130) : 0;
   const absorption = allHave(stats,['sapm']) ? (B.sapm-A.sapm)*0.45 : 0;
-  const grappling = allHave(stats,['tdAvg','tdAcc','tdDef']) ? A.tdAvg*(A.tdAcc/50)*(1-B.tdDef/120)-B.tdAvg*(B.tdAcc/50)*(1-A.tdDef/120) : 0;
+  const takedownTerm=(fighter,opponent)=>fighter.tdAvg===0&&(fighter.tdAcc===null||opponent.tdDef===null)?0:fighter.tdAvg*(fighter.tdAcc/50)*(1-opponent.tdDef/120);
+  const grappling = grapplingComplete ? takedownTerm(A,B)-takedownTerm(B,A) : 0;
   const submissions = allHave(stats,['subAvg']) ? A.subAvg-B.subAvg : 0;
   const strikingFacts = facts(stats,names,['slpm','strAcc','strDef'],(k,v)=>k==='slpm'?format(v)+' significant strikes landed/min':k==='strAcc'?percent(v)+' striking accuracy':percent(v)+' striking defense');
   const defenseFacts = facts(stats,names,['sapm'],(_k,v)=>format(v)+' significant strikes absorbed/min');
-  const grapplingFacts = facts(stats,names,['tdAvg','tdAcc','tdDef'],(k,v)=>k==='tdAvg'?format(v)+' takedowns/15 min':k==='tdAcc'?percent(v)+' takedown accuracy':percent(v)+' takedown defense');
+  const grapplingFacts = facts(stats,names,['tdAvg','tdAcc','tdDef'],(k,v)=>k==='tdAvg'?format(v)+' takedowns/15 min':k==='tdAcc'?percent(v)+' takedown accuracy':percent(v)+' takedown defense')+(unusedMissing.length?' A verified zero takedown rate makes that fighter\'s takedown term zero. The unused missing accuracy/defense percentages remain unavailable; they are not treated as 0%.':'');
   const submissionFacts = facts(stats,names,['subAvg'],(_k,v)=>format(v)+' submission attempts/15 min');
   const areas = [
     area('Striking attack',['slpm','strAcc','strDef'],stats,names,striking,0.26,strikingFacts,i=>'Possible route (inference): '+names[i]+' could try to keep exchanges standing and sustain the striking advantage suggested by their '+format(stats[i].slpm)+' significant strikes landed/min and '+percent(stats[i].strAcc)+' accuracy. Their opponent\'s recorded striking defense is '+percent(stats[1-i].strDef)+'.'),
     area('Defense and damage absorbed',['sapm'],stats,names,absorption,0.18,defenseFacts,i=>'Possible route (inference): '+names[i]+' could try to limit exchanges and exploit the lower recorded damage rate: '+format(stats[i].sapm)+' significant strikes absorbed/min versus '+format(stats[1-i].sapm)+'/min. Absorbed strikes do not measure power or finishing ability.'),
-    area('Takedown matchup',['tdAvg','tdAcc','tdDef'],stats,names,grappling,0.24,grapplingFacts,i=>'Possible route (inference): '+names[i]+' could pursue takedowns, with '+format(stats[i].tdAvg)+' takedowns/15 min and '+percent(stats[i].tdAcc)+' accuracy against '+percent(stats[1-i].tdDef)+' opponent takedown defense. The career rates do not establish how much control time would follow.'),
+    area('Takedown matchup',['tdAvg','tdAcc','tdDef'],stats,names,grappling,0.24,grapplingFacts,i=>'Possible route (inference): '+names[i]+' could pursue takedowns, with '+format(stats[i].tdAvg)+' takedowns/15 min and '+percent(stats[i].tdAcc)+' accuracy against '+percent(stats[1-i].tdDef)+' opponent takedown defense. The career rates do not establish how much control time would follow.',grapplingComplete),
     area('Submission activity',['subAvg'],stats,names,submissions,0.16,submissionFacts,i=>'Possible route (inference): '+names[i]+' could seek grappling opportunities to use their higher submission activity: '+format(stats[i].subAvg)+' attempts/15 min versus '+format(stats[1-i].subAvg)+'/15 min. Attempts are not submission finishes.')
   ];
   // Cross-match attack against the opponent's specific defensive weakness.
@@ -205,7 +212,6 @@ function describe(a,b,options={}) {
       if(own.submissionWins>0&&opp.submissionLosses>0)finishRoutes.push(names[i]+' has '+own.submissionWins+' submission win(s) in '+own.sample+' verified recent fights; '+names[1-i]+' has '+opp.submissionLosses+' submission loss(es) in '+opp.sample+'. Potential submission route, not a probability.');
     }
   }
-  const evaluated = complete && engine?.evaluate ? engine.evaluate(A,B) : null;
   const probability = evaluated?.status==='experimental' ? evaluated.modelProbability : null;
   const leanSide = probability===null ? null : signSide(probability-0.5);
   const status = probability===null ? 'incomplete' : leanSide===null ? 'balanced' : 'experimental';
@@ -244,15 +250,17 @@ function describe(a,b,options={}) {
     calibratedProbability:null
   };
   const cautions = ['This is an unvalidated career-rate heuristic. It has not been calibrated or backtested and does not establish a betting edge.', 'Career averages can hide differences in opponent quality, recent form, injuries, weight cuts and changes in fighting style. Those factors are not established by these rate comparisons.'];
-  if (!complete) cautions.unshift('Incomplete data: the winner pick uses available comparisons only; missing career rates reduce reliability.');
+  if (!complete) cautions.unshift('Incomplete data: the available facts can be compared, but a winner lean is withheld until both fighters have all required valid rates.');
+  else if (dataQuality.limited) cautions.unshift('Limited source data: unavailable percentages are listed for each fighter. A verified zero takedown rate makes those specific percentage inputs unnecessary for this heuristic; no missing percentage was filled with zero.');
   if(cutoff!==null&&stats.some((_,i)=>{const p=options.profiles?.[i];const t=Date.parse(p?.stats_as_of||p?.snapshot_at||p?.fetched_at);return !Number.isFinite(t)||t>=cutoff;}))cautions.unshift('Historical safety: career statistics without a verified pre-fight snapshot were excluded to prevent future-data leakage.');
   if (leanSide!==null&&!counterargument) cautions.push('No scored rate component favors the other fighter. That does not establish that the other fighter has no path to win.');
   return {
     status, heading:status==='incomplete'?'Research incomplete':status==='balanced'?'No statistical lean':'Statistical lean: '+names[leanSide],
     leanSide,
     leanReason:status==='incomplete'?'The missing rates are listed separately for each fighter below.':status==='balanced'?'The underlying career-rate score is level; simulation noise is not used to break the tie.':'The rate-based score favors '+names[leanSide]+(supportive.length?', led by '+supportive.slice(0,2).map(x=>x.title.toLowerCase()).join(' and '):'')+'.',
-    decision,areas,exploits,recentEvidence,opponentQuality,styleEvidence,contextualFlags,unresolved,finishRoutes,missing,paths,counterargument,cautions,modelProbability:probability
+    decision,areas,exploits,recentEvidence,opponentQuality,styleEvidence,contextualFlags,unresolved,finishRoutes,missing,unusedMissing,dataQuality,paths,counterargument,cautions,modelProbability:probability
   };
 }
 return {describe,normalize,METRICS};
 });
+

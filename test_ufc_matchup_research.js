@@ -45,4 +45,42 @@ assert.equal(noData.missing[0].length,8);assert.equal(noData.missing[1].length,0
 assert.equal(noData.leanSide,null);
 assert.ok(noData.areas.every(x=>x.complete===false));
 assert.ok(!JSON.stringify(noData).includes('NaN'));
-console.log('UFC independent breakdown: odds independence, tradeoffs, partial data, zero rates, mirrored and balanced leans PASS');
+// Missing percentages do not erase a computable zero-volume takedown term.
+const sparseA=Object.freeze({...strong,tdAvg:0,tdAcc:null,tdDef:null});
+const sparseB=Object.freeze({...base,tdAvg:0,tdAcc:null,tdDef:null});
+const sparse=describe(sparseA,sparseB,{names});
+const supplied=describe({...sparseA,tdAcc:1,tdDef:99},{...sparseB,tdAcc:100,tdDef:0},{names});
+assert.equal(sparse.status,'experimental');assert.equal(sparse.leanSide,supplied.leanSide);
+assert.equal(sparse.modelProbability,supplied.modelProbability);
+assert.equal(sparse.dataQuality.limited,true);
+assert.deepEqual(sparse.missing,[['Takedown accuracy','Takedown defense'],['Takedown accuracy','Takedown defense']]);
+assert.equal(sparse.unusedMissing.length,4);
+const sparseGrappling=sparse.areas.find(x=>x.title==='Takedown matchup');
+assert.equal(sparseGrappling.complete,true);assert.equal(sparseGrappling.contribution,0);
+assert.match(sparseGrappling.summary,/verified zero takedown rate/);
+assert.match(sparseGrappling.summary,/remain unavailable/);assert.match(sparseGrappling.summary,/not treated as 0%/);
+assert.ok(sparse.cautions.some(text=>/Limited source data/.test(text)));
+assert.ok(sparse.cautions.every(text=>!text.includes('winner lean is withheld')));
+assert.equal(sparseA.tdAcc,null);assert.equal(normalize(sparseA).tdAcc,null);
+assert.equal(describe({...base,tdAvg:0,tdAcc:null,tdDef:null},{...base,tdAvg:0,tdAcc:null,tdDef:null}).status,'balanced');
+// Only the active side's offense and the opposing defense are needed.
+const inactive={...base,tdAvg:0,tdAcc:null};
+const active={...base,tdDef:null};
+const oneActive=describe(inactive,active,{names});
+assert.equal(oneActive.status,'experimental');
+assert.equal(oneActive.areas.find(x=>x.title==='Takedown matchup').complete,true);
+assert.match(oneActive.areas.find(x=>x.title==='Takedown matchup').route,/Bravo could pursue takedowns/);
+for(const [left,right] of [[{...inactive,tdDef:null},active],[inactive,{...active,tdAcc:null}],[{...sparseA,tdAvg:null},sparseB]]){
+ const result=describe(left,right,{names});
+ assert.equal(result.status,'incomplete');
+ assert.equal(result.areas.find(x=>x.title==='Takedown matchup').complete,false);
+ assert.ok(result.cautions.some(text=>text.includes('winner lean is withheld')));
+}
+for(const key of ['tdAcc','tdDef'])for(const value of [125,-1,true,false,[],{},NaN,Infinity,'unknown']){
+ const result=describe({...sparseA,[key]:value},sparseB,{names});
+ assert.equal(result.status,'incomplete');
+ assert.equal(result.areas.find(x=>x.title==='Takedown matchup').complete,false);
+ assert.ok(result.missing[0].includes(key==='tdAcc'?'Takedown accuracy':'Takedown defense'));
+}
+assert.equal(describe({...sparseA,subAvg:null},sparseB,{names}).status,'incomplete');
+console.log('UFC independent breakdown: conditional takedown inputs, transparent missing rates, odds independence, tradeoffs, mirrored and balanced leans PASS');
