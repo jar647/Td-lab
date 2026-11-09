@@ -49,7 +49,9 @@ function statsFrom(competitor) {
     }
     const parsed = numeric(value);
     // Bare provider fractions for percentage metrics use 0–1; explicit '%' values already use 0–100.
-    result[key] = parsed !== null && PERCENT.has(key) && parsed > 0 && parsed <= 1 && !(typeof value === 'string' && value.includes('%')) ? parsed * 100 : parsed;
+    const normalized = parsed !== null && PERCENT.has(key) && parsed > 0 && parsed <= 1 && !(typeof value === 'string' && value.includes('%')) ? parsed * 100 : parsed;
+    // Invalid provider values must never appear as verified fighter statistics.
+    result[key] = normalized === null || normalized < 0 || (PERCENT.has(key) && normalized > 100) ? null : normalized;
   }
   return result;
 }
@@ -92,7 +94,11 @@ function profileFor(c) {
 }
 function fighterStats(c) {
   const result = statsFrom(c);
-  for (const [key,value] of Object.entries(profileFor(c).stats || {})) if (numeric(value)!==null) result[key]=value;
+  for (const [key,value] of Object.entries(profileFor(c).stats || {})) {
+    if (!Object.hasOwn(METRICS, key)) continue;
+    const n = numeric(value);
+    if (n !== null && n >= 0 && (!PERCENT.has(key) || n <= 100)) result[key] = n;
+  }
   return result;
 }
 function freshHistorySource(value){const age=Date.now()-Date.parse(value);return Number.isFinite(age)&&age>=-86400000&&age<=7*86400000;}
