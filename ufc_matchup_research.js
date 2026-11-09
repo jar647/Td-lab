@@ -250,7 +250,7 @@ function describe(a,b,options={}) {
     calibratedProbability:null
   };
   const cautions = ['This is an unvalidated career-rate heuristic. It has not been calibrated or backtested and does not establish a betting edge.', 'Career averages can hide differences in opponent quality, recent form, injuries, weight cuts and changes in fighting style. Those factors are not established by these rate comparisons.'];
-  if (!complete) cautions.unshift('Incomplete data: the available facts can be compared, but a winner lean is withheld until both fighters have all required valid rates.');
+  if (!complete) cautions.unshift('Incomplete data: a provisional directional winner is shown from available comparisons, not a validated edge; missing career rates reduce reliability.');
   else if (dataQuality.limited) cautions.unshift('Limited source data: unavailable percentages are listed for each fighter. A verified zero takedown rate makes those specific percentage inputs unnecessary for this heuristic; no missing percentage was filled with zero.');
   if(cutoff!==null&&stats.some((_,i)=>{const p=options.profiles?.[i];const t=Date.parse(p?.stats_as_of||p?.snapshot_at||p?.fetched_at);return !Number.isFinite(t)||t>=cutoff;}))cautions.unshift('Historical safety: career statistics without a verified pre-fight snapshot were excluded to prevent future-data leakage.');
   if (leanSide!==null&&!counterargument) cautions.push('No scored rate component favors the other fighter. That does not establish that the other fighter has no path to win.');

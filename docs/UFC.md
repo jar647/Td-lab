@@ -4,6 +4,20 @@ Open `ufc.html` using a static HTTP server. The page keeps The Prop Shop's green
 palette and works without a build step. It uses `ufc.css`, `ufc_app.js` and
 `ufc_research_engine.js` and `ufc_matchup_research.js`.
 
+## Visible predicted winner for every scheduled bout
+
+For each scheduled fight with two named fighters and current pre-fight status,
+the card leads with a **Predicted winner**, independent of the selected betting
+market. It shows the directional matchup reason, path to victory, opposing
+counter-path, and an explicitly uncalibrated evidence label. When source
+evidence is tied or missing, a deterministic tiebreak still names a tentative
+winner but labels it a placeholder, not an evidence-backed pick or bet.
+Live, final, canceled, and stale-status bouts never receive a fresh prediction.
+
+The separate Top pick may be a winner, method, total, or PASS. It remains
+independent of optional sportsbook prices, and PASS does not erase the
+provisional winner. One fight still renders one top-pick card.
+
 ## One top pick per fight
 
 Each scheduled fight leads with one **Top pick**, its reason and its main risk.

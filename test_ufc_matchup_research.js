@@ -74,7 +74,7 @@ for(const [left,right] of [[{...inactive,tdDef:null},active],[inactive,{...activ
  const result=describe(left,right,{names});
  assert.equal(result.status,'incomplete');
  assert.equal(result.areas.find(x=>x.title==='Takedown matchup').complete,false);
- assert.ok(result.cautions.some(text=>text.includes('winner lean is withheld')));
+ assert.ok(result.cautions.some(text=>text.includes('provisional directional winner')));
 }
 for(const key of ['tdAcc','tdDef'])for(const value of [125,-1,true,false,[],{},NaN,Infinity,'unknown']){
  const result=describe({...sparseA,[key]:value},sparseB,{names});

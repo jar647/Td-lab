@@ -123,14 +123,21 @@ function fightPick(fighters,c) {
   const matchup=matchupReport(fighters,c.date||c.startDate||event?.date);
   const line=rounds===5?4.5:2.5;
   const propReports=root.UFCPropResearch?[root.UFCPropResearch.research(fighters.map(propProfileFor),{names:fighters.map(fighterName),rounds,line,boutId:c.id,eventDate:c.date||c.startDate||event?.date||null})]:[];
-  return root.UFCPickEngine?.choose({names:fighters.map(fighterName),matchup,propReports,rounds,status:c.status?.type||null,eventDate:c.date||c.startDate||event?.date||null});
+  const pick=root.UFCPickEngine?.choose({names:fighters.map(fighterName),matchup,propReports,rounds,status:c.status?.type||null,eventDate:c.date||c.startDate||event?.date||null});
+  return {pick,decision:matchup?.decision};
 }
 function topPick(fighters,c) {
-  const pick=fightPick(fighters,c);
+  const {pick,decision}=fightPick(fighters,c);
   if(!pick)return '<section class="pick-card pick-unavailable"><span class="pick-kicker">FIGHT PICK</span><h3 class="pick-label">Selection unavailable</h3><p class="muted">Refresh to load the selection engine.</p></section>';
   const market={winner:'FIGHT WINNER',method:'WIN METHOD',total:'TOTAL ROUNDS'}[pick.market]||'NO SELECTION';
   const basis=(pick.basis||[]).map(item=>'<li>'+escape(item)+'</li>').join('');
-  return '<section class="pick-card '+(pick.status==='pick'?'pick-selected':'pick-unavailable')+'" aria-label="Fight selection"><div class="row"><span class="pick-kicker">'+(pick.status==='pick'?'TOP PICK':'FIGHT PICK')+'</span><span class="pick-market">'+market+'</span></div><h3 class="pick-label">'+escape(pick.label)+'</h3><p class="pick-reason">'+escape(pick.reason)+'</p><p class="pick-risk"><strong>Main risk:</strong> '+escape(pick.risk)+'</p>'+(pick.dataQuality==='limited'&&pick.status==='pick'?'<span class="pick-note">Some source data is limited; the selection uses the available supported evidence.</span>':'')+(basis?'<details data-section="pick-basis" class="pick-basis"><summary>Why this pick?</summary><ul>'+basis+'</ul></details>':'')+'</section>';
+  const side=decision?.side, names=fighters.map(fighterName);
+  const scheduled=pick.status==='pick'||pick.status==='pass';
+  const named=names.length===2&&names.every(name=>name&&name!=='Fighter TBD')&&nameKey(names[0])!==nameKey(names[1]);
+  const validWinner=scheduled&&named&&(side===0||side===1)&&decision.fighter===names[side];
+  const evidence=decision?.status==='PREDICTED_WINNER'?'DIRECTIONAL LEAN':decision?.status==='TIEBREAK_LEAN'?'TIEBREAKER ONLY':'NO-DATA PLACEHOLDER';
+  const winnerHtml=validWinner?'<div class="pick-winner" aria-label="Predicted fight winner"><span class="pick-kicker">PREDICTED WINNER</span><span class="pick-market">'+escape(evidence)+'</span><h3 class="winner-prediction">'+escape(decision.fighter)+'</h3><p class="pick-reason">'+escape(decision.reason)+'</p><p class="pick-winner-route"><strong>Path to victory:</strong> '+escape(decision.primaryRoute)+'</p><p class="pick-winner-route"><strong>Opponent threat:</strong> '+escape(decision.counterRoute)+'</p><span class="pick-note">Evidence rating: '+escape(decision.confidence.replace(/_/g,' ').toLowerCase())+'. Not a calibrated win probability or verified betting edge.'+(decision.status==='NO_DATA_LEAN'||decision.status==='TIEBREAK_LEAN'?' This placeholder is not a supported bet.':'')+'</span></div>':'';
+  return '<section class="pick-card '+(pick.status==='pick'?'pick-selected':'pick-unavailable')+'" aria-label="Fight selection">'+winnerHtml+'<div class="pick-market-block"><div class="row"><span class="pick-kicker">'+(pick.status==='pick'?'TOP PICK':'FIGHT PICK')+'</span><span class="pick-market">'+market+'</span></div><h3 class="pick-label">'+escape(pick.label)+'</h3><p class="pick-reason">'+escape(pick.reason)+'</p><p class="pick-risk"><strong>Main risk:</strong> '+escape(pick.risk)+'</p>'+(pick.dataQuality==='limited'&&pick.status==='pick'?'<span class="pick-note">Some source data is limited; the selection uses the available supported evidence.</span>':'')+(basis?'<details data-section="pick-basis" class="pick-basis"><summary>Why this pick?</summary><ul>'+basis+'</ul></details>':'')+'</div></section>';
 }
 
 function recentHistory(c) {
