@@ -221,6 +221,25 @@ class UFCRefreshTests(unittest.TestCase):
                     self.assertEqual(calls.call_count, 1)
                     self.assertEqual(pathlib.Path("ufc_fighter_data.json").read_bytes(), before)
 
+    def test_published_cache_rejects_missing_and_duplicate_bout_ids(self):
+        profile_a = refresh.profile_data({"career_rates": self.rates}, "a", "Fighter A", self.now)
+        profile_b = refresh.profile_data({"career_rates": self.rates}, "b", "Fighter B", self.now)
+        clean = {
+            "generated_at": self.now.isoformat(),
+            "fighters": {"fighter a": profile_a, "fighter b": profile_b},
+            "scheduled_bouts": 1,
+            "bouts": [{key: value for key, value in self.bout.items() if key != "lines"}],
+        }
+        self.assertEqual(validator.validate(clean), (2, 2))
+        for invalid in ("", "  ", None):
+            with self.subTest(invalid=invalid):
+                corrupted = dict(clean, bouts=[dict(clean["bouts"][0], bout_id=invalid)])
+                with self.assertRaisesRegex(AssertionError, "Missing scheduled bout ID"):
+                    validator.validate(corrupted)
+        duplicate = dict(clean, scheduled_bouts=2, bouts=[clean["bouts"][0], dict(clean["bouts"][0])])
+        with self.assertRaisesRegex(AssertionError, "Duplicate scheduled bout ID"):
+            validator.validate(duplicate)
+
     def test_blank_fighter_source_ids_preserve_cache(self):
         with self.workspace():
             self.cache({"fighter a": {"id": "a", "stats": {}}})
