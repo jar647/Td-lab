@@ -294,6 +294,8 @@ def main():
             refresh_fighters(now, key)
         except APIError as exc:
             print("Research refresh failed:", f"HTTP {exc.status}")
+            if exc.status == 402:
+                print("FighterAPI credits/payment required; check provider account quota or billing. Existing fighter cache preserved.")
             failed = True
         except Exception as exc:
             print("Research refresh failed:", type(exc).__name__)
