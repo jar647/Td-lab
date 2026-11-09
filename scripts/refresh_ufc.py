@@ -243,6 +243,10 @@ def refresh_fighters(now, key):
             # incomplete refreshes too. Never publish a mixed/partial snapshot.
             print("Fighter refresh error:", name, type(exc).__name__)
             raise RuntimeError("Fighter research refresh incomplete") from exc
+    # Report the original provider failure before coverage checks. This keeps
+    # authentication and rate-limit errors actionable without publishing data.
+    if blocked is not None:
+        raise APIError(blocked)
     if not fighters:
         raise ValueError("No source-backed fighter profiles; preserving the previous cache")
     # A previously verified profile may have expired while its source request fails.
@@ -254,10 +258,6 @@ def refresh_fighters(now, key):
                "bouts": [{k: b[k] for k in BOUT_FIELDS if k in b and (b[k] is None or type(b[k]) in (str, int, float, bool))} for b in bouts if isinstance(b, dict)],
                "coverage": {"profiles": len(fighters), "complete_profiles": sum(valid_stats(p.get("stats")) for p in fighters.values()), "fighters_expected": len(candidates)}}
     payload["coverage"]["complete"] = payload["coverage"]["complete_profiles"] == len(candidates)
-    # Authentication or credit failures must not replace the last verified cache
-    # with a partially refreshed snapshot. The caller can retry safely later.
-    if blocked is not None:
-        raise APIError(blocked)
     write_json(target, payload)
     print("Fighter profiles:", len(fighters), "complete:", payload["coverage"]["complete_profiles"], "fetched:", fetched)
     return payload
