@@ -84,7 +84,7 @@ def validate(data):
         assert data.get("scheduled_bouts") == len(bouts), "Scheduled bout count mismatch"
         assert len(fighters) == len(expected_ids), "Scheduled fighter coverage mismatch"
         for fid, key in expected_ids.items():
-            assert key in fighters and str(fighters[key].get("id")) == fid, "Scheduled fighter profile missing or mismatched"
+            assert key in fighters and str(fighters[key].get("id")).strip() == fid, "Scheduled fighter profile missing or mismatched"
     return len(fighters), complete
 
 
