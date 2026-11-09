@@ -1,7 +1,7 @@
 const test=require('node:test');const assert=require('node:assert/strict');
 const {describe}=require('../ufc_matchup_research.js');
 const stats={slpm:4,sapm:3,strAcc:50,strDef:55,tdAvg:2,tdAcc:40,tdDef:65,subAvg:1};
-const fight=(id,opponent,winner,method,round)=>({bout_id:id+'-'+round,fighter_a:id,fighter_b:opponent,winner,method_display:method,event_date:'2026-10-01'});
+const fight=(id,opponent,winner,method,round)=>({bout_id:id+'-'+round,fighter_a:id,fighter_b:opponent,winner,status:'final',method_display:method,event_date:'2026-10-01'});
 test('recent finish evidence only uses verified participant IDs',()=>{
  const result=describe(stats,stats,{names:['A','B'],profiles:[
  {id:'a',recent_fights:[fight('a','b','a','KO/TKO',1),fight('a','c','c','Submission',2),fight('x','y','x','KO/TKO',3)]},
