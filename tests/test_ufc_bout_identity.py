@@ -48,6 +48,12 @@ class BoutIdentityTests(unittest.TestCase):
               "fighter_b": "101", "fighter_b_name": "Beta"}],
             "Duplicate fighter IDs")
 
+    def test_distinct_ids_with_colliding_lookup_names(self):
+        self.assert_preserves_cache(
+            [{"fighter_a": "101", "fighter_a_name": "Alpha",
+              "fighter_b": "102", "fighter_b_name": "ALPHA"}],
+            "Ambiguous scheduled fighter names")
+
     def test_malformed_bout(self):
         self.assert_preserves_cache([None], "Malformed scheduled bout")
 
