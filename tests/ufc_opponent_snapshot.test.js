@@ -131,3 +131,19 @@ test('newer duplicate of same bout wins independently of input ordering', () => 
   assert.deepEqual(report.recentEvidence.map(x => x.sample), [1, 1]);
   assert.deepEqual(report.recentEvidence.map(x => x.wins), [1, 1]);
 });
+
+test('recent form excludes undated results even when marked final', () => {
+  const opts = options('2023-12-01T00:00:00Z');
+  delete opts.asOf;
+  for (const p of opts.profiles) {
+    delete p.recent_fights[0].event_date;
+    delete p.recent_fights[0].starts_at;
+  }
+  assert.deepEqual(describe({}, {}, opts).recentEvidence.map(x => x.sample), [0, 0]);
+});
+test('recent form excludes implausible future results', () => {
+  const opts = options('2023-12-01T00:00:00Z');
+  delete opts.asOf;
+  for (const p of opts.profiles) p.recent_fights[0].event_date = '2099-01-01T00:00:00Z';
+  assert.deepEqual(describe({}, {}, opts).recentEvidence.map(x => x.sample), [0, 0]);
+});
