@@ -68,3 +68,23 @@ test('opponent quality accepts completed bouts with sourced pre-bout records', (
   for (const profile of opts.profiles) profile.recent_fights[0].status = 'completed';
   assert.deepEqual(describe({}, {}, opts).opponentQuality.map(x => x.verified), [1, 1]);
 });
+
+test('invalid duplicate does not hide a later sourced snapshot for the same bout', () => {
+  const opts = options('2023-12-01T00:00:00Z');
+  for (const p of opts.profiles) {
+    const valid = p.recent_fights[0];
+    p.recent_fights.unshift({...valid, bout_id: '  '+valid.bout_id+'  ', opponent_record_source: ''});
+  }
+  const report = describe({}, {}, opts);
+  assert.deepEqual(report.opponentQuality.map(x => x.verified), [1, 1]);
+});
+
+test('duplicate valid snapshots with whitespace count as only one opponent', () => {
+  const opts = options('2023-12-01T00:00:00Z');
+  for (const p of opts.profiles) {
+    const valid = p.recent_fights[0];
+    p.recent_fights.push({...valid, bout_id: ' '+valid.bout_id+' '});
+  }
+  const report = describe({}, {}, opts);
+  assert.deepEqual(report.opponentQuality.map(x => x.verified), [1, 1]);
+});
