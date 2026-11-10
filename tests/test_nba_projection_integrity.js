@@ -13,11 +13,22 @@ for(const t of Object.values(model.teams)){assert(t.liveRebound>0&&t.liveRebound
 const noPlayerRebounds=structuredClone(model);for(const t of Object.values(noPlayerRebounds.teams)){t.liveRebound=0;t.allowLiveRebound=0}
 assert(p.draws(noPlayerRebounds,1000,123,{availability:'in'}).players.every(p=>p.rebounds===0),'Dead-ball misses must never produce player rebounds even when all questionable players are available');
 const a=research.analyze(game,feed,injuries,rosters,context,now);
-assert.equal(a.reason,null,'Current fixture must be eligible for workload research');
-assert(a.rows.length,'At least one supported player opportunity is required');
-// Verify the integrity gate directly without relying on a specific player
-// remaining on a roster or one historic Knicks-Bulls game staying scheduled.
-const row=a.rows[0],held={...row,reviewRequired:true,reviewReasons:['Unsupported projected workload jump']};
+// The real upcoming NBA slate changes hourly. When uncertain rotations cannot
+// support six players, the correct behavior is NO invented player picks.
+if(a.reason){
+ assert.match(a.reason,/in\/out scenario lacks six supported rotation players|availability|Fresh|closed/i);
+ assert.equal(a.rows.length,0,'Unsupported live availability cannot produce player research');
+}else{
+ assert(a.rows.length,'Successful current-game research must contain supported opportunities');
+}
+// Check the workload gate independently with a fully eligible synthetic
+// research row rather than tying the test to whichever players happen to be
+// questionable on the next scheduled fixture.
+const row={key:'fixture|p|rebounds',gameId:'fixture',playerId:'p',name:'Fixture Player',
+ market:'rebounds',forecast:10,minutes:30,matchupBoost:.12,matchupGames:8,
+ eligible:true,samples:[4,8,9,10,11,12,13,14],reviewRequired:false};
+assert(research.candidate(row),'Healthy research fixture must otherwise be eligible');
+const held={...row,reviewRequired:true,reviewReasons:['Unsupported projected workload jump']};
 assert.equal(research.candidate({...held,line:1,probability:.99}),null,'An unsupported workload must not be ranked regardless of simulated hit rate');
 assert.equal(research.build([held]).picks.length,0);
 const final=feed.games.filter(g=>g.status==='STATUS_FINAL'&&g.season_type===2).sort((a,b)=>Date.parse(b.date)-Date.parse(a.date))[0];
