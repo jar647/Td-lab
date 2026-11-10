@@ -22,11 +22,12 @@ jobs:
       - name: All JavaScript contracts and NFL regressions
         run: |
           set -e
-          # Playwright-based UFC browser coverage runs in ufc-checks.yml's
-          # browser job, which installs Playwright. This generic Node job does not.
+          # UFC has its own ufc-tests.yml and ufc-checks.yml workflows,
+          # with independent dependency setup and validation. Keep this job
+          # restricted to NBA/NFL and shared non-UFC contracts.
           failures=()
           for file in test*.js tests/test*.js tests/*.test.js; do
-            case "$file" in test_ufc_browser.js) continue ;; esac
+            case "$file" in test_ufc*.js|tests/ufc*.test.js) continue ;; esac
             if ! node "$file"; then failures+=("$file"); fi
           done
           if (("${#failures[@]}" > 0)); then
