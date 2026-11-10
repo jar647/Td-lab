@@ -59,3 +59,18 @@ test('scores eligible historical bout with padded source ID without crashing',()
  assert.equal(x.rows[0].outcome,1);
  assert.ok(Math.abs(x.brier-0.04)<1e-12);
 });
+
+test('reports honest eligibility and probability coverage without counting invalid bouts as predictions',()=>{
+ const invalid={...bout,bout_id:'2',status:'scheduled'};
+ const validMissing={...bout,bout_id:'3',fighter_a:'c',fighter_b:'d',winner:'c'};
+ const result=score([bout,invalid,validMissing],{...snaps,'3':[{...p,fighter_id:'c'},{...p,fighter_id:'d'}]},pred);
+ assert.equal(result.totalBouts,3);
+ assert.equal(result.eligible,2);
+ assert.equal(result.excluded,1);
+ assert.equal(result.scored,1);
+ assert.equal(result.missingProbability,1);
+ assert.equal(result.probabilityCoverage,0.5);
+ assert.equal(result.excludedByReason.no_decisive_final_result,1);
+ const empty=score([],{},{});
+ assert.equal(empty.probabilityCoverage,null);
+});
