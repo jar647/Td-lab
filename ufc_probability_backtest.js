@@ -37,6 +37,15 @@
   for(const row of rows){if(coverageEligible(row))continue;
    for(const reason of new Set(row.errors.filter(error=>!missingPickErrors.has(error))))excludedByReason[reason]=(excludedByReason[reason]||0)+1;
   }
+  // Wilson intervals describe uncertainty in observed bin win rates, not model calibration.
+  // Empty bins have no interval; tiny bins must not imply precise reliability.
+  const wilson95=(wins,n)=>{
+   if(!n)return null;
+   const z=1.959963984540054,rate=wins/n,z2=z*z,denom=1+z2/n;
+   const center=(rate+z2/(2*n))/denom;
+   const margin=z*Math.sqrt(rate*(1-rate)/n+z2/(4*n*n))/denom;
+   return [Math.max(0,center-margin),Math.min(1,center+margin)];
+  };
   // In-sample reliability diagnostics, not evidence of validated calibration.
   const occupied=bins.filter(bin=>bin.count>0);
   const expectedCalibrationError=scored?occupied.reduce((sum,bin)=>sum+(bin.count/scored)*Math.abs(bin.probabilitySum/bin.count-bin.outcomeSum/bin.count),0):null;
@@ -50,7 +59,7 @@
    // Positive skill means improvement over that naive baseline, not betting profit.
    brierSkillVsEven:scored?1-(brierSum/scored)/0.25:null,
    logLossImprovementVsEven:scored?Math.LN2-logSum/scored:null,
-   bins:bins.map(({lower,upper,count,probabilitySum,outcomeSum})=>({lower,upper,count,meanProbability:count?probabilitySum/count:null,observedRate:count?outcomeSum/count:null})),
+   bins:bins.map(({lower,upper,count,probabilitySum,outcomeSum})=>({lower,upper,count,meanProbability:count?probabilitySum/count:null,observedRate:count?outcomeSum/count:null,observedRateInterval95:wilson95(outcomeSum,count)})),
    rows,calibrated:false,bettingEdgeVerified:false};
  }
  return {score};
