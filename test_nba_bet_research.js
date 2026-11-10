@@ -43,4 +43,10 @@ const revisedNear={...model,possessionModel:{...model.possessionModel,inputTimes
 assert.equal(research.analyze(result,revisedNear,near).status,'SHORTLIST');
 assert.deepEqual(model.baseline,{home:116,away:106},'No inputs are mutated');
 assert.equal(research.analyze(result,{...model,sport:'NFL'},now).status,'HOLD','Only NBA proposals');
+const fs=require('node:fs');
+const oddsPage=fs.readFileSync('game-odds.html','utf8'),nbaPage=fs.readFileSync('nba.html','utf8');
+assert.match(oddsPage,/nba_bet_research\.js\?v=nba-consensus-20261109/);
+assert.match(oddsPage,/CookNBABetResearch\.analyze\(result,model\)/);
+assert.match(nbaPage,/nba_bet_research\.js\?v=nba-consensus-20261109/);
+assert.match(nbaPage,/CookNBABetResearch\.analyze\(result,s\.upgraded\)/);
 console.log('NBA bet research shortlist: cross-model consensus, exact entered quotes, injury freshness, no unders/overpriced legs, no fabricated EV PASS');
