@@ -32,12 +32,22 @@ assert.match(ui.validation({prospective:{games:2},prospective_bias:scoredBias}),
 const shadowSummary={status:'RESEARCH ONLY',replay:{games:2,raw_margin_mae:12,shadow_margin_mae:11,raw_total_mae:14,shadow_total_mae:13},frozen:{games:0}};
 assert.match(ui.validation({prospective:{games:2},shadow_score_calibration:shadowSummary}),/chronological replay/);
 assert.match(ui.validation({prospective:{games:2},shadow_score_calibration:shadowSummary}),/NOT applied/);
+const ensembleSummary={retrospective:{weights:[{baseline_weight:0,games:2,margin_mae:12,total_mae:14},{baseline_weight:.5,games:2,margin_mae:11,total_mae:13},{baseline_weight:1,games:2,margin_mae:11.5,total_mae:13.5}]},frozen:{weights:[{baseline_weight:.5,games:0}]}};
+const ensembleHtml=ui.validation({prospective:{games:2},ensemble_score_audit:ensembleSummary});
+assert.match(ensembleHtml,/fixed-weight experiment/);
+assert.match(ensembleHtml,/50%/);
+assert.match(ensembleHtml,/forward-tested frozen 50\/50 blend: 0 graded games/);
+
 assert.equal(pub.grade({locked_at:game.date,tipoff:game.date},final),null,'Never grade a post-tipoff capture');
 const os=require('os'),path=require('path'),tmp=fs.mkdtempSync(path.join(os.tmpdir(),'nba-archive-'));
 try{fs.mkdirSync(path.join(tmp,'data'));const write=(n,x)=>fs.writeFileSync(path.join(tmp,'data',n+'.json'),JSON.stringify(x));write('nba_games',{...feed,games:feed.games.filter(g=>g.status==='STATUS_FINAL'||g.id===game.id)});write('nba_injuries',inj);write('nba_rosters',roster);
 const report=pub.publish(tmp,now,0,1000);
 assert.equal(report.shadow_score_calibration.approved,false);
 assert.equal(report.shadow_score_calibration.replay.games,0);
+assert.equal(report.ensemble_score_audit.approved,false);
+assert.equal(report.ensemble_score_audit.retrospective.weights[0].games,0);
+assert.equal(report.forecasts[0].ensemble_shadow.status,'SHADOW_ONLY');
+assert.deepEqual(report.forecasts[0].ensemble_shadow.scores.map(x=>x.baseline_weight),[0,.25,.5,.75,1]);
 assert.equal(report.forecasts.length,1);const archive=JSON.parse(fs.readFileSync(path.join(tmp,'data/nba_simulator_locks.json')));assert.equal(archive.snapshots.length,1);const frozen=JSON.stringify(archive.snapshots[0]);pub.publish(tmp,now+1000,0,1000);assert.equal(JSON.stringify(JSON.parse(fs.readFileSync(path.join(tmp,'data/nba_simulator_locks.json'))).snapshots[0]),frozen);// A slate game must remain forecastable when a possible all-out combination
 // lacks enough healthy rotation players; use score history, not fake player stats.
 const originalRotation=model.teams[game.home].players,homeIds=new Set(originalRotation.map(p=>String(p.id))),homeNames=new Set(originalRotation.map(p=>p.name.toLowerCase()));
@@ -53,10 +63,11 @@ const fallbackReport=pub.publish(tmp,now,0,1000);
 assert.equal(fallbackReport.fallback_forecasts,1);
 assert.equal(fallbackReport.failures.length,0);
 assert.equal(fallbackReport.forecasts[0].model,'nba-team-score-fallback-v1');
+assert.equal(fallbackReport.forecasts[0].ensemble_shadow,null,'Team-score fallback cannot masquerade as an independent ensemble');
 assert.equal(fallbackReport.forecasts[0].player_projections.length,0);
 assert.equal(fallbackReport.forecasts[0].rotation_fallback.teams[0].availablePlayers,5);
 assert.ok(fallbackReport.forecasts[0].detailed_game_runs===1000);
-write('nba_games',{...feed,games:[final]});const graded=pub.publish(tmp,Date.parse(game.date)+10800000,0,1000);assert.equal(graded.prospective.games,1);const lock=JSON.parse(fs.readFileSync(path.join(tmp,'data/nba_simulator_locks.json'))).snapshots[0];delete lock.grade;delete lock.graded_at;assert.equal(JSON.stringify(lock),frozen,'Grading must not rewrite the frozen forecast');}finally{fs.rmSync(tmp,{recursive:true,force:true})}
+write('nba_games',{...feed,games:[final]});const graded=pub.publish(tmp,Date.parse(game.date)+10800000,0,1000);assert.equal(graded.prospective.games,1);assert.equal(graded.ensemble_score_audit.frozen.weights[2].games,1,'Pregame frozen 50/50 score must be graded only after final');const lock=JSON.parse(fs.readFileSync(path.join(tmp,'data/nba_simulator_locks.json'))).snapshots[0];delete lock.grade;delete lock.graded_at;assert.equal(JSON.stringify(lock),frozen,'Grading must not rewrite the frozen forecast');}finally{fs.rmSync(tmp,{recursive:true,force:true})}
 console.log('NBA possessions: injuries, rotations, shared players/scores, market isolation, joints, immutable locks and grading PASS');
 
 Date.now=realNow;
