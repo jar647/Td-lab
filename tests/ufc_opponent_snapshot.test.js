@@ -88,3 +88,15 @@ test('duplicate valid snapshots with whitespace count as only one opponent', () 
   const report = describe({}, {}, opts);
   assert.deepEqual(report.opponentQuality.map(x => x.verified), [1, 1]);
 });
+
+test('recent-form evidence counts duplicate bout IDs with whitespace only once', () => {
+  const opts = options('2023-12-01T00:00:00Z');
+  delete opts.asOf;
+  for (const p of opts.profiles) {
+    const fight = p.recent_fights[0];
+    p.recent_fights.push({...fight, bout_id: '  ' + fight.bout_id + '  '});
+  }
+  const report = describe({}, {}, opts);
+  assert.deepEqual(report.recentEvidence.map(x => x.sample), [1, 1]);
+  assert.deepEqual(report.recentEvidence.map(x => x.wins), [1, 1]);
+});
