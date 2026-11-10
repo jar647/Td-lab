@@ -42,7 +42,7 @@ assert.equal(w50.total.hitRate,1);
 assert.deepEqual(JSON.parse(storage.getItem(ui.KEY))[0].ensemble,original.ensemble,'Grading must not modify frozen predictions');
 
 const csv=ui.exportCSV(storage);
-assert.match(csv,/nba-device/); // source version appears in no extra column? ensure this checks ledger presence via content below
+assert.match(csv,/"ledger-test-game"/);
 assert.match(csv,/222\.5/);
 assert.match(csv,/-175/);
 assert.match(csv,/blend75_home/);
