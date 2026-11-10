@@ -24,7 +24,7 @@ on:
 jobs:
   ufc-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -36,7 +36,15 @@ jobs:
       - name: Run UFC regression suite
         run: |
           node --test tests/ufc*.test.js
-          for file in test_ufc*.js; do node "$file"; done
+          for file in test_ufc*.js; do
+            if [ "$file" != "test_ufc_browser.js" ]; then node "$file"; fi
+          done
+      - name: Install browser test dependencies
+        run: |
+          npm install --no-save --no-package-lock playwright
+          npx playwright install --with-deps chromium
+      - name: Run UFC browser regression
+        run: UFC_CHROMIUM_PATH="$(node -e 'process.stdout.write(require("playwright").chromium.executablePath())')" node test_ufc_browser.js
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
