@@ -9,10 +9,10 @@ function candidate(row,excluded=[],lines={}){
  if(!row||!markets.includes(row.market)||excluded.includes(row.market)||/under/i.test(row.side||'')||row.reviewRequired||row.eligible!==true||!(Number(row.matchupGames)>=3)||!Number.isFinite(row.forecast)||row.forecast<=0||!row.samples?.length||!(row.matchupBoost>0))return null;
  const minimum={points:8,rebounds:3,assists:3}[row.market]||10;if(row.forecast<minimum)return null;
  const override=lines[row.key];const line=override===undefined?Math.max(.5,Math.floor(row.forecast*.84-.5)+.5):override;
- const probability=chance(row,line);if(probability===null||probability<.5)return null;
+ const probability=chance(row,line);if(probability===null)return null;
  const matchupQuality=Math.round(clamp(100*(.55*clamp(row.matchupBoost/.15,0,1)+.25*clamp(row.matchupGames/10,0,1)+.20*clamp(row.minutes/36,0,1)),0,100));
  const lineConfidence=Math.round(clamp(probability*100,0,100));
- const score=Math.round(clamp(probability*65+Math.min(15,row.matchupBoost*100)+Math.min(10,row.matchupGames)+Math.min(10,row.minutes/4),0,100));
+ const score=matchupQuality; // Matchup-only research rank: never use odds, value, or chosen line.
  return {...row,line,side:'over',probability,researchOnly:true,matchupQuality,lineConfidence,score};
 }
 function build(rows,options={}){
