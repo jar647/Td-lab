@@ -50,3 +50,12 @@ test('accepts consistent dual timestamps collected before freeze',()=>{
  const valid={'1':[{...p,fighter_id:'a',snapshot_at:'2025-07-31T12:00:00Z'},{...p,fighter_id:'b'}]};
  assert.equal(score([bout],valid,pred).scored,1);
 });
+
+test('scores eligible historical bout with padded source ID without crashing',()=>{
+ const padded={...bout,bout_id:' 1 '};
+ const x=score([padded],snaps,pred);
+ assert.equal(x.scored,1);
+ assert.equal(x.rows[0].bout_id,'1');
+ assert.equal(x.rows[0].outcome,1);
+ assert.ok(Math.abs(x.brier-0.04)<1e-12);
+});
