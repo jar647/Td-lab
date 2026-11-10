@@ -93,8 +93,11 @@ function methodEvidence(reports,winner,eventDate,now) {
       // Upstream already validates snapshots; reject any explicit future or
       // post-event record timestamp again at the selection boundary.
       if ([row.recordFetchedAt,row.opponentRecordFetchedAt].some(value=>{
+        // A supplied but invalid timestamp is not evidence of a valid pre-fight snapshot.
+        // Absent timestamps retain legacy support for explicitly scoped historical records.
+        if (value===undefined||value===null||value==='') return false;
         const timestamp=dateValue(value);
-        return Number.isFinite(timestamp)&&((Number.isFinite(eventDate)&&timestamp>eventDate)||timestamp>now);
+        return !Number.isFinite(timestamp)||((Number.isFinite(eventDate)&&timestamp>=eventDate)||timestamp>now);
       })) continue;
       eligible.push({side:winner.side,method:row.key,row,scope,concentration:Math.min(winShare,lossShare),sample:row.totalWins+row.totalOpponentLosses});
     }
