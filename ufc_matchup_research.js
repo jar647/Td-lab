@@ -129,9 +129,11 @@ function describe(a,b,options={}) {
       }
       return true;
     });
+    // Sort before deduplication so an older duplicate cannot displace a newer
+    // verified result. The last-five sample must not depend on feed ordering.
+    known.sort((a,b)=>(Date.parse(b.starts_at||b.event_date)||0)-(Date.parse(a.starts_at||a.event_date)||0));
     const seen=new Set();
     const unique=known.filter(f=>{const key=String(f.bout_id||[f.event_date,f.fighter_a,f.fighter_b].join('|')).trim();if(seen.has(key))return false;seen.add(key);return true;});
-    unique.sort((a,b)=>(Date.parse(b.starts_at||b.event_date)||0)-(Date.parse(a.starts_at||a.event_date)||0));
     unique.length=Math.min(unique.length,5);
     const outcomes=unique.map(f=>{
       const winner=String(f.winner||'');
