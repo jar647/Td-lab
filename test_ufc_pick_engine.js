@@ -62,7 +62,10 @@ for (const change of [
  row=>{row.totalWins=4;row.winCount=3;row.winShare=.75;row.totalOpponentLosses=4;row.opponentLossCount=3;row.opponentLossShare=.75;},
  row=>{row.winShare=.99;},
  row=>{row.recordFetchedAt='2026-11-08T00:00:00Z';},
- row=>{row.recordFetchedAt='2026-11-07T21:00:00Z';}
+ row=>{row.recordFetchedAt='2026-11-07T21:00:00Z';},
+ row=>{row.recordFetchedAt='not-a-date';},
+ row=>{row.opponentRecordFetchedAt='not-a-date';},
+ row=>{row.recordFetchedAt=eventDate;}
 ]) {
  const report=clone(methodReport);change(report.methods[0].rows[0]);
  assert.equal(select({propReports:[report]}).market,'winner');

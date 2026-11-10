@@ -53,9 +53,18 @@ function describe(a,b,options={}) {
   const effectiveRaw=raw.map((value,i)=>{
     if(cutoff===null)return value;
     const profile=options.profiles?.[i];
-    const stamp=profile?.stats_as_of||profile?.snapshot_at||profile?.fetched_at;
-    const timestamp=typeof stamp==='string'?Date.parse(stamp):NaN;
-    return Number.isFinite(timestamp)&&timestamp<cutoff?value:null;
+    // Every supplied provenance timestamp must precede the bout. Choosing
+    // stats_as_of first could silently accept a profile fetched after the fight.
+    const stamps=['stats_as_of','snapshot_at','fetched_at']
+      .filter(key=>profile?.[key]!==undefined&&profile?.[key]!==null)
+      .map(key=>profile[key]);
+    const times=stamps.map(stamp=>typeof stamp==='string'?Date.parse(stamp):NaN);
+    const statsTime=profile?.stats_as_of===undefined?null:Date.parse(profile.stats_as_of);
+    const collectionTimes=['snapshot_at','fetched_at']
+      .filter(key=>profile?.[key]!==undefined&&profile?.[key]!==null)
+      .map(key=>Date.parse(profile[key]));
+    const chronologyValid=statsTime===null||collectionTimes.every(t=>statsTime<=t);
+    return times.length>0&&times.every(t=>Number.isFinite(t)&&t<cutoff)&&chronologyValid?value:null;
   });
   const stats=effectiveRaw.map(normalize);
   const A=stats[0], B=stats[1];
