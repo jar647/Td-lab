@@ -51,3 +51,20 @@ test('historical opponent quality rejects a record captured after the opponent b
   const report = describe({}, {}, options('2025-05-01T00:00:00Z'));
   assert.deepEqual(report.opponentQuality.map(x => x.verified), [0, 0]);
 });
+
+test('opponent quality rejects scheduled and status-unknown bouts even with sourced records', () => {
+  for (const status of ['scheduled', 'cancelled', undefined]) {
+    const opts = options('2023-12-01T00:00:00Z');
+    for (const profile of opts.profiles) {
+      if (status === undefined) delete profile.recent_fights[0].status;
+      else profile.recent_fights[0].status = status;
+    }
+    const report = describe({}, {}, opts);
+    assert.deepEqual(report.opponentQuality.map(x => x.verified), [0, 0]);
+  }
+});
+test('opponent quality accepts completed bouts with sourced pre-bout records', () => {
+  const opts = options('2023-12-01T00:00:00Z');
+  for (const profile of opts.profiles) profile.recent_fights[0].status = 'completed';
+  assert.deepEqual(describe({}, {}, opts).opponentQuality.map(x => x.verified), [1, 1]);
+});
