@@ -155,8 +155,8 @@ function describe(a,b,options={}) {
       .sort((a,b)=>(Date.parse(b.starts_at||b.event_date)||0)-(Date.parse(a.starts_at||a.event_date)||0));
     const records=[];
     for(const f of bouts){
-      const key=String(f.bout_id||[f.event_date,f.fighter_a,f.fighter_b].join('|'));
-      if(seen.has(key))continue;seen.add(key);
+      const key=String(f.bout_id||[f.event_date,f.fighter_a,f.fighter_b].join('|')).trim();
+      if(seen.has(key))continue;
       // Scheduled, cancelled, and status-unknown bouts are not verified opponents.
       if(!/^(final|completed)$/i.test(String(f.status||'')))continue;
       if(asOf!==null){
@@ -174,6 +174,9 @@ function describe(a,b,options={}) {
       }
       const record=f.opponent_record;
       if(!record||!Number.isInteger(record.wins)||!Number.isInteger(record.losses)||record.wins<0||record.losses<0||record.wins+record.losses===0||!f.opponent_record_source)continue;
+      // Only a valid, source-qualified record can claim this bout ID. An
+      // incomplete duplicate must not suppress a later usable snapshot.
+      seen.add(key);
       records.push({opponent:String(f.fighter_a)===ownId?f.fighter_b_name:f.fighter_a_name,record:record.wins+'-'+record.losses,winRate:record.wins/(record.wins+record.losses),source:String(f.opponent_record_source)});
       if(records.length===5)break;
     }
