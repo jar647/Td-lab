@@ -66,9 +66,7 @@ report.scoreBenchmark.uncertainty=pairedBootstrap(scoredHold,'modelError','basel
 // Evidence inventory: do not confuse final-game box scores with a dated
 // pre-tip injury snapshot or an archived sportsbook closing market.
 const games=(feed.games||[]).filter(g=>g.status==='STATUS_FINAL');
-const isPresent=v=>v!==null&&v!==undefined&&v!==''&&!(Array.isArray(v)&&!v.length);
-const hasDatedInjuries=g=>isPresent(g.pretip_injury_snapshot?.captured_at)&&isPresent(g.pretip_injury_snapshot?.players);
-const hasClosingMarket=g=>isPresent(g.closing_market?.captured_at)&&Number.isFinite(Number(g.closing_market?.home_spread))&&Number.isFinite(Number(g.closing_market?.total))&&Number.isFinite(Number(g.closing_market?.home_moneyline))&&Number.isFinite(Number(g.closing_market?.away_moneyline));
+const {hasDatedInjuries,hasClosingMarket}=require('./nba_pretip_evidence.cjs');
 report.evidenceCoverage={
  completedGames:games.length,
  datedPretipInjurySnapshots:games.filter(hasDatedInjuries).length,

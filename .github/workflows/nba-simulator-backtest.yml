@@ -6,6 +6,8 @@ on:
     paths:
       - 'game_odds_engine.js'
       - 'scripts/run_nba_simulator_backtest.cjs'
+      - 'scripts/nba_pretip_evidence.cjs'
+      - 'scripts/nba_pretip_evidence.test.cjs'
       - 'data/nba_games.json'
       - '.github/workflows/nba-simulator-backtest.yml'
 permissions:
@@ -19,6 +21,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Test NBA pretip evidence gate
+        run: node --test scripts/nba_pretip_evidence.test.cjs
       - name: Run NBA simulator walk-forward test
         run: node scripts/run_nba_simulator_backtest.cjs
       - name: Upload accuracy report
