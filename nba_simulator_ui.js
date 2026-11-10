@@ -57,8 +57,8 @@ function winSide(pred,market,actual){
 function marketGrade(lock,score){
  const line=lock.market||{},h=lock.grade?.home,a=lock.grade?.away;
  if(![h,a].every(finite))return {ats:'NO RESULT',total:'NO RESULT'};
- return {ats:winSide(score.home-score.away,-line.homeSpread,h-a),
-  total:winSide(score.home+score.away,line.total,h+a)};
+ return {ats:finite(line.homeSpread)?winSide(score.home-score.away,-line.homeSpread,h-a):'NO LINE',
+  total:finite(line.total)?winSide(score.home+score.away,line.total,h+a):'NO LINE'};
 }
 function gradedEnsemble(rows){
  const withFrozen=rows.flatMap(x=>{const v=frozenBlend(x);return v?[{lock:x,scores:v}]:[]});
