@@ -11,7 +11,7 @@ const invalid=structuredClone(ny),bad=invalid.find(p=>p.stats?.MIN==='--'&&!p.di
 const model=p.build(game,feed,injuries,rosters,now,{context});
 for(const t of Object.values(model.teams)){assert(t.liveRebound>0&&t.liveRebound<=1);assert(t.allowLiveRebound>0&&t.allowLiveRebound<=1)}
 const noPlayerRebounds=structuredClone(model);for(const t of Object.values(noPlayerRebounds.teams)){t.liveRebound=0;t.allowLiveRebound=0}
-assert(p.draws(noPlayerRebounds,1000,123).players.every(p=>p.rebounds===0),'Dead-ball misses must never produce player rebounds');
+assert(p.draws(noPlayerRebounds,1000,123,{availability:'in'}).players.every(p=>p.rebounds===0),'Dead-ball misses must never produce player rebounds even when all questionable players are available');
 const a=research.analyze(game,feed,injuries,rosters,context,now);
 assert.equal(a.reason,null,'Current fixture must be eligible for workload research');
 assert(a.rows.length,'At least one supported player opportunity is required');
