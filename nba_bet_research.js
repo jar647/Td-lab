@@ -80,7 +80,7 @@ function analyze(result,model,now=Date.now()){
 function html(report){
  const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  if(report.status==='HOLD')return '<section class="panel"><h3>NBA bet research shortlist</h3><p class="warn">HOLD · '+esc(report.reason)+'</p><p class="muted">No player-availability assumptions are substituted for confirmed information.</p></section>';
- const rows=report.candidates.map((x,i)=>'<div class="breakdown"><strong>'+esc((i+1)+'. '+x.label+' · '+x.priceDisplay)+'</strong><p>Model consensus: 50/50 gap '+esc(x.gap50)+'; 75/25 gap '+esc(x.gap75)+(x.kind==='moneyline'?' probability points':' points')+'. '+esc(x.note)+'</p><p class="muted">'+esc(x.status)+'</p></div>').join('');
+ const rows=report.candidates.map((x,i)=>'<div class="breakdown"><strong>'+esc((i+1)+'. '+x.label+' · '+x.priceDisplay)+'</strong><p>Model consensus: 50/50 gap '+esc(x.kind==='moneyline'?round(x.gap50*100):x.gap50)+'; 75/25 gap '+esc(x.kind==='moneyline'?round(x.gap75*100):x.gap75)+(x.kind==='moneyline'?' percentage points':' points')+'. '+esc(x.note)+'</p><p class="muted">'+esc(x.status)+'</p></div>').join('');
  return '<section class="panel"><h3>NBA bet research shortlist · '+esc(report.status)+'</h3>'+ (rows||'<p class="warn">PASS · No qualifying price-backed consensus.</p>')+'<p class="muted">'+esc(report.reason)+'</p><p class="muted">These are screening candidates, NOT verified profitable bets or automatic approvals. Price and lineup must be rechecked at the sportsbook. No source is connected to Hard Rock Bet. The original game simulation remains unchanged.</p></section>';
 }
 return {analyze,pregameHealth,html};
