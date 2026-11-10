@@ -1,5 +1,5 @@
 /* Shared-outcome NBA matchup research; prices never change the simulation. */
-(function(root,factory){const api=factory(typeof module==='object'&&module.exports?require('./nba_possession_engine.js'):root.CookNBAPossessions);if(typeof module==='object'&&module.exports)module.exports=api;root.CookNBAGameFirst=api;})(typeof globalThis!=='undefined'?globalThis:this,function(possessions){
+(function(root,factory){const api=factory(typeof module==='object'&&module.exports?require('./nba_possession_engine.js'):root.CookNBAPossessions,typeof module==='object'&&module.exports?require('./nba_matchup_discovery.js'):root.CookNBAMatchups);if(typeof module==='object'&&module.exports)module.exports=api;root.CookNBAGameFirst=api;})(typeof globalThis!=='undefined'?globalThis:this,function(possessions,matchups){
 'use strict';
 const markets=['points','rebounds','assists','Points + Rebounds','Points + Assists','Rebounds + Assists','PRA'];
 const fields=m=>({'Points + Rebounds':['points','rebounds'],'Points + Assists':['points','assists'],'Rebounds + Assists':['rebounds','assists'],PRA:['points','rebounds','assists']}[m]||[m]);
@@ -9,12 +9,16 @@ function candidate(row,excluded=[],lines={}){
  if(!row||!markets.includes(row.market)||excluded.includes(row.market)||/under/i.test(row.side||'')||row.reviewRequired||row.eligible!==true||!(Number(row.matchupGames)>=3)||!Number.isFinite(row.forecast)||row.forecast<=0||!row.samples?.length||!(row.matchupBoost>0))return null;
  const minimum={points:8,rebounds:3,assists:3}[row.market]||10;if(row.forecast<minimum)return null;
  const override=lines[row.key];const line=override===undefined?Math.max(.5,Math.floor(row.forecast*.84-.5)+.5):override;
- const probability=chance(row,line);if(probability===null||probability<.5)return null;
- return {...row,line,side:'over',probability,researchOnly:true,score:Math.round(clamp(probability*65+Math.min(15,row.matchupBoost*100)+Math.min(10,row.matchupGames)+Math.min(10,row.minutes/4),0,100))};
+ const probability=chance(row,line);if(probability===null||probability===0)return null;
+ const matchupQuality=row.matchupRating?.score;if(!Number.isFinite(matchupQuality)||matchupQuality<75)return null;
+ const lineConfidence=Math.round(clamp(probability*100,0,100));
+ const score=matchupQuality; // Matchup-only research rank: never use odds, value, or chosen line.
+ return {...row,line,side:'over',probability,researchOnly:true,matchupQuality,lineConfidence,score};
 }
 function build(rows,options={}){
  const excluded=options.excludedMarkets||[],max=clamp(Math.trunc(Number(options.maxLegs)||5),1,5);
- const ranked=(rows||[]).map(r=>candidate(r,excluded,options.lines||{})).filter(Boolean).sort((a,b)=>b.score-a.score||b.matchupBoost-a.matchupBoost||a.key.localeCompare(b.key));
+ const minScore=Number.isFinite(Number(options.minScore))?clamp(Number(options.minScore),75,100):75;
+ const ranked=(rows||[]).map(r=>candidate(r,excluded,options.lines||{})).filter(r=>r&&r.score>=minScore).sort((a,b)=>b.score-a.score||b.matchupBoost-a.matchupBoost||a.key.localeCompare(b.key));
  const picks=[],seen=new Set(),correlations=[];let wins=null;
  for(const row of ranked){
   if(seen.has(String(row.playerId)))continue;
@@ -27,12 +31,14 @@ function build(rows,options={}){
   wins=wins?wins.map((v,i)=>v&&hit[i]):hit;seen.add(String(row.playerId));picks.push(row);if(picks.length>=max)break;
  }
  const unique=new Set(),topThree=ranked.filter(r=>!unique.has(r.playerId)&&unique.add(r.playerId)).slice(0,3);
- return {picks,bestSingle:ranked[0]||null,topThree,correlations,jointHitRate:wins?mean(wins.map(Number)):null,excludedMarkets:excluded,disclaimer:'Experimental simulation frequencies, not calibrated win probabilities or verified sportsbook edges. Ticket frequency is counted from shared game outcomes, never multiplied from individual percentages. Fewer legs are shown when evidence or compatibility is insufficient.'};
+ return {picks,bestSingle:ranked[0]||null,topThree,minScore,correlations,jointHitRate:wins?mean(wins.map(Number)):null,excludedMarkets:excluded,disclaimer:'Experimental simulation frequencies, not calibrated win probabilities or verified sportsbook edges. Ticket frequency is counted from shared game outcomes, never multiplied from individual percentages. Fewer legs are shown when evidence or compatibility is insufficient.'};
 }
 function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
  try{
   const model=possessions.build(game,feed,injuries,rosters,now,{context});
   const simulation=possessions.draws(model,options.count||1000,6472026,{collectPlayerOutcomes:true});
+  const positional=matchups.analyze(game,feed,rosters,injuries,now);
+  const ratings=new Map(positional.candidates.map(r=>[r.playerId+'|'+r.market,r]));
   const rows=[],playerReviews=new Map();
   for(const team of [game.away,game.home]){
    const own=model.teams[team],opponent=team===game.home?game.away:game.home,def=model.teams[opponent];
@@ -56,7 +62,10 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
      const reason='Prior sample average '+baseline.toFixed(1)+' '+market+' ('+player.sample+' games); simulated '+forecast.toFixed(1)+'. '+player.name+' vs '+opponent+': '+projected.minutes.toFixed(1)+' simulated minutes ('+player.baseline.toFixed(1)+' recent baseline), '+(100*shotShare).toFixed(1)+'% of projected team field-goal attempts. '+
       ks.map(k=>k==='rebounds'?'Rebound role: '+(player.orb*36).toFixed(1)+' offensive / '+(player.drb*36).toFixed(1)+' defensive boards per 36 observed minutes; opponent offensive-rebound rate '+(100*def.orb).toFixed(1)+'%. ':k==='assists'?'Creation role: '+(player.ast*36).toFixed(1)+' assists per 36 observed minutes; teammate shooting and opponent defense share the same simulation. ':'Player shooting mix: '+(100*(1-player.tpa/Math.max(.001,player.fga))).toFixed(0)+'% two-point attempts; opponent two-point defense delta '+(100*def.twoDefense).toFixed(1)+' percentage points. ').join('')+
       'Pace '+model.pace.toFixed(1)+' vs '+model.league.pace.toFixed(1)+' league sample possessions; '+player.sample+' player games / '+def.games+' opponent games.'+(own.absent.length?' Rotation redistributed with '+own.absent.join(', ')+' absent.':'')+' '+(100*simulation.blowoutRate).toFixed(1)+'% simulated blowouts; late-game minutes adjust in those outcomes.';
-     rows.push({key:[game.id,player.id,market].join('|'),gameId:String(game.id),game,playerId:player.id,name:player.name,team,opponent,market,forecast,baseline,observedMax,reviewRequired:reviewReasons.length>0,reviewReasons,minutes:projected.minutes,matchupGames:def.games,matchupBoost:boost,samples:values,reason:reason+' '+(model.context?.tracking==='fresh'&&Object.keys(player.defenderExposure||{}).length?'Fresh defender tracking incorporated; historical exposure '+Number(player.matchupSample||0).toFixed(0)+' possessions, not a confirmed assignment.':'Individual defender tracking unavailable or stale; that adjustment is omitted.'),eligible:true});
+     const positionRows=ks.map(k=>ratings.get(player.id+'|'+k));
+     const supported=positionRows.every(Boolean);
+     const matchupRating=supported?{score:Math.min(...positionRows.map(r=>r.researchScore)),factors:positionRows[0].matchupRating.factors}:null;
+     rows.push({matchupRating,position:supported?positionRows[0].position:null,key:[game.id,player.id,market].join('|'),gameId:String(game.id),game,playerId:player.id,name:player.name,team,opponent,market,forecast,baseline,observedMax,reviewRequired:reviewReasons.length>0,reviewReasons,minutes:projected.minutes,matchupGames:def.games,matchupBoost:boost,samples:values,reason:reason+' '+(model.context?.tracking==='fresh'&&Object.keys(player.defenderExposure||{}).length?'Fresh defender tracking incorporated; historical exposure '+Number(player.matchupSample||0).toFixed(0)+' possessions, not a confirmed assignment.':'Individual defender tracking unavailable or stale; that adjustment is omitted.'),eligible:supported});
     }
    }
   }
