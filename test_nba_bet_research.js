@@ -25,7 +25,7 @@ assert.match(research.html(a),/percentage points/);
 const blank={...result,markets:[],market:{homeSpread:null,total:null}};
 assert.equal(research.analyze(blank,model,now).status,'PASS','No odds means no pretend recommendation');
 assert.equal(research.analyze({...result,markets:result.markets.map(x=>x.key==='homeATS'?{...x,price:-250}:x)},model,now).candidates.some(x=>x.key==='homeATS'),false,'Reject worse-than--200 odds');
-const tight={...result,market:{homeSpread:-14,total:245}};
+const tight={...result,market:{homeSpread:-14,total:245},markets:result.markets.filter(x=>!['homeML','awayML'].includes(x.key))};
 assert.equal(research.analyze(tight,model,now).status,'PASS','Both models must clear the entered market line by threshold');
 assert.equal(research.analyze({...result,market:{homeSpread:-5.5,total:null},markets:result.markets.filter(x=>x.key==='over'||x.key==='under')},model,now).status,'PASS','No spread or total quote, and no ML pair, means PASS');
 
