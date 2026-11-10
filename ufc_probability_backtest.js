@@ -9,7 +9,7 @@
  'use strict';
  function score(bouts,snapshotsByBout,predictionsByBout){
   const audit=evaluator.evaluate(bouts,snapshotsByBout,predictionsByBout);
-  const byId=new Map((Array.isArray(bouts)?bouts:[]).map(b=>[String(b?.bout_id||''),b]));
+  const byId=new Map((Array.isArray(bouts)?bouts:[]).map(b=>[String(b?.bout_id||'').trim(),b]));
   let brierSum=0,logSum=0,scored=0;
   const bins=Array.from({length:10},(_,i)=>({lower:i/10,upper:(i+1)/10,count:0,probabilitySum:0,outcomeSum:0}));
   const rows=audit.rows.map(row=>{
