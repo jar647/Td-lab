@@ -90,3 +90,15 @@ test('separates missing frozen picks from invalid probability inputs without inf
  assert.equal(result.probabilityCoverage,1/3);
  const empty=score([],{},{});assert.equal(empty.missingFrozenPrediction,0);assert.equal(empty.invalidFrozenProbability,0);
 });
+
+test('reports Wilson uncertainty for observed reliability rates without claiming calibration',()=>{
+ const x=score([bout],snaps,pred);
+ assert.equal(x.bins[8].count,1);
+ const interval=x.bins[8].observedRateInterval95;
+ assert.ok(Array.isArray(interval));
+ assert.ok(interval[0]>0 && interval[0]<0.5);
+ assert.equal(interval[1],1);
+ assert.equal(x.bins[0].observedRateInterval95,null);
+ assert.equal(score([],{},{}).bins[8].observedRateInterval95,null);
+ assert.equal(x.calibrated,false);
+});
