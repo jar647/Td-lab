@@ -1,7 +1,7 @@
 /* Shared-outcome NBA matchup research; prices never change the simulation. */
 (function(root,factory){const api=factory(typeof module==='object'&&module.exports?require('./nba_possession_engine.js'):root.CookNBAPossessions,typeof module==='object'&&module.exports?require('./nba_matchup_discovery.js'):root.CookNBAMatchups);if(typeof module==='object'&&module.exports)module.exports=api;root.CookNBAGameFirst=api;})(typeof globalThis!=='undefined'?globalThis:this,function(possessions,matchups){
 'use strict';
-const markets=['points','rebounds','assists','Points + Rebounds','Points + Assists','Rebounds + Assists','PRA'];
+const markets=['points','rebounds','assists','threes','Points + Rebounds','Points + Assists','Rebounds + Assists','PRA'];
 const fields=m=>({'Points + Rebounds':['points','rebounds'],'Points + Assists':['points','assists'],'Rebounds + Assists':['rebounds','assists'],PRA:['points','rebounds','assists']}[m]||[m]);
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),mean=a=>a.reduce((s,x)=>s+x,0)/Math.max(1,a.length);
 const hits=(row,x,line)=>row.side==='under'?x<line:x>line;
@@ -10,10 +10,10 @@ function candidate(row,excluded=[],lines={}){
  if(row)row={...row,side:String(row.side||'over').toLowerCase()};
  if(row?.matchupRating?.side&&row.matchupRating.side!==row.side)return null;
  if(!row||!markets.includes(row.market)||excluded.includes(row.market)||!['over','under'].includes(String(row.side||'over').toLowerCase())||row.reviewRequired||row.eligible!==true||!(Number(row.matchupGames)>=3)||!Number.isFinite(row.forecast)||row.forecast<=0||!row.samples?.length||(row.side==='under'?!(row.matchupBoost<0):!(row.matchupBoost>0)))return null;
- const minimum={points:8,rebounds:3,assists:3}[row.market]||10;if(row.forecast<minimum)return null;
+ const minimum={points:8,rebounds:3,assists:3,threes:1}[row.market]||10;if(row.forecast<minimum)return null;
  const override=lines[row.key];const line=override===undefined?Math.max(.5,(row.side==='under'?Math.ceil(row.forecast*1.16-.5):Math.floor(row.forecast*.84-.5))+.5):override;
  const probability=chance(row,line);if(probability===null||probability===0)return null;
- const matchupQuality=row.matchupRating?.score;if(!Number.isFinite(matchupQuality)||matchupQuality<matchups.minimumScore(row.side)||matchupQuality>100)return null;
+ const matchupQuality=row.matchupRating?.score;if(!Number.isFinite(matchupQuality)||matchupQuality<matchups.minimumScore(row.side,row.market)||matchupQuality>100)return null;
  const lineConfidence=Math.round(clamp(probability*100,0,100));
  const score=matchupQuality; // Matchup-only research rank: never use odds, value, or chosen line.
  return {...row,line,side:row.side||'over',probability,researchOnly:true,matchupQuality,lineConfidence,score};

@@ -395,7 +395,7 @@ function nbaLegacySlateSelection(rows){
 }
 function nbaSlateSelection(rows){
  const upcoming=rows.filter(r=>r.game?.status==='STATUS_SCHEDULED'&&Date.parse(r.game.date)>Date.now());
- const ranked=upcoming.map(r=>CookNBAGameFirst.candidate(r)).filter(r=>r&&r.score>=75).sort((a,b)=>b.score-a.score||b.matchupBoost-a.matchupBoost||a.key.localeCompare(b.key));
+ const ranked=upcoming.map(r=>CookNBAGameFirst.candidate(r)).filter(r=>r&&r.score>=(r.market==='threes'?85:75)).sort((a,b)=>b.score-a.score||b.matchupBoost-a.matchupBoost||a.key.localeCompare(b.key));
  const seen=new Set(),picks=[];for(const r of ranked){const key=r.gameId+'|'+r.playerId;if(seen.has(key))continue;seen.add(key);picks.push(r);if(picks.length===5)break}return {picks,research:ranked};
 }
 function nbaSlateCurrent(){return nbaSlateRows}
@@ -476,7 +476,7 @@ function nbaGameFirstResearch(g){
  return nbaGameFirstCache.get(key);
 }
 function nbaGameFirstPick(key){
- const r=nbaGameFirstResult?.picks.find(p=>p.key===key);if(!r||r.score<(r.side==='under'?85:75))return;
+ const r=nbaGameFirstResult?.picks.find(p=>p.key===key);if(!r||r.score<(r.market==='threes'?85:(r.side==='under'?85:75)))return;
  const refreshed=CookNBAGameFirst.build(nbaGameFirstResearch(r.game).rows,{lines:nbaGameFirstLines}).picks.find(p=>p.key===key);if(!refreshed)return;
  if(Date.parse(r.game.date)<=Date.now()){$('nba-game-first-feedback').textContent='Game started; pregame ticket closed.';return}
  CookItUpQuickSlip.add({sport:'NBA',game:r.game.away+' @ '+r.game.home,gameId:r.gameId,player:r.name,position:nbaPlayerPosition(r),team:r.team,opponent:r.opponent,market:r.market,line:r.line,side:r.side,recommendation:(r.side==='under'?'Under ':'Over ')+r.line+' '+nbaMarketLabel(r.market),scenarioRate:r.probability,matchupBoost:r.matchupBoost,matchupGames:r.matchupGames,notes:r.reason+' Research-only simulation; not a priced edge.'});
