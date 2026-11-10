@@ -157,6 +157,8 @@ function describe(a,b,options={}) {
     for(const f of bouts){
       const key=String(f.bout_id||[f.event_date,f.fighter_a,f.fighter_b].join('|'));
       if(seen.has(key))continue;seen.add(key);
+      // Scheduled, cancelled, and status-unknown bouts are not verified opponents.
+      if(!/^(final|completed)$/i.test(String(f.status||'')))continue;
       if(asOf!==null){
         const boutDate=Date.parse(f.starts_at||f.event_date);
         if(!Number.isFinite(boutDate)||boutDate>=asOf)continue;
