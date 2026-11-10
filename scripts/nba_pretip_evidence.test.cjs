@@ -26,3 +26,10 @@ test('requires actual injury player array',()=>{
   assert.equal(hasDatedInjuries({date:tip,pretip_injury_snapshot:{...injuries,players}}),false);
  }
 });
+
+test('rejects whitespace and nonscalar market values',()=>{
+ for(const value of ['  ',[],{},'\\t'])assert.equal(hasClosingMarket({date:tip,closing_market:{...market,total:value}}),false);
+});
+test('does not bypass malformed primary game date using a fallback field',()=>{
+ assert.equal(hasClosingMarket({date:'invalid',tipoff:tip,closing_market:market}),false);
+});

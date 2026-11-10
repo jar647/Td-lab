@@ -1,6 +1,14 @@
 name: NBA simulator walk-forward validation
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'game_odds_engine.js'
+      - 'scripts/run_nba_simulator_backtest.cjs'
+      - 'scripts/nba_pretip_evidence.cjs'
+      - 'scripts/nba_pretip_evidence.test.cjs'
+      - 'data/nba_games.json'
+      - '.github/workflows/nba-simulator-backtest.yml'
   push:
     branches: [main]
     paths:
