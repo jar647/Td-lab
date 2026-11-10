@@ -100,3 +100,34 @@ test('recent-form evidence counts duplicate bout IDs with whitespace only once',
   assert.deepEqual(report.recentEvidence.map(x => x.sample), [1, 1]);
   assert.deepEqual(report.recentEvidence.map(x => x.wins), [1, 1]);
 });
+
+test('recent form selects five most recent results regardless of feed order', () => {
+  const opts = options('2023-12-01T00:00:00Z');
+  delete opts.asOf;
+  for (const p of opts.profiles) {
+    const template = p.recent_fights[0];
+    p.recent_fights = [1, 6, 2, 5, 3, 4].map(n => ({
+      ...template,
+      bout_id: 'bout-' + p.id + '-' + n,
+      event_date: '2024-01-' + String(n).padStart(2, '0') + 'T00:00:00Z',
+      winner: n === 1 ? 'opponent-' + p.id : p.id
+    }));
+  }
+  const report = describe({}, {}, opts);
+  assert.deepEqual(report.recentEvidence.map(x => x.sample), [5, 5]);
+  assert.deepEqual(report.recentEvidence.map(x => x.wins), [5, 5]);
+});
+test('newer duplicate of same bout wins independently of input ordering', () => {
+  const opts = options('2023-12-01T00:00:00Z');
+  delete opts.asOf;
+  for (const p of opts.profiles) {
+    const f = p.recent_fights[0];
+    p.recent_fights = [
+      {...f, event_date: '2024-01-01T00:00:00Z', winner: 'opponent-' + p.id},
+      {...f, event_date: '2024-01-02T00:00:00Z', winner: p.id}
+    ];
+  }
+  const report = describe({}, {}, opts);
+  assert.deepEqual(report.recentEvidence.map(x => x.sample), [1, 1]);
+  assert.deepEqual(report.recentEvidence.map(x => x.wins), [1, 1]);
+});
