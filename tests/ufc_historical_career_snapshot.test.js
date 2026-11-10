@@ -30,3 +30,14 @@ test('snapshot at fight start is not pre-fight evidence',()=>{
  const r=describe(strong,weak,{asOf,profiles:profiles(asOf,asOf)});
  assert.equal(r.areas.filter(x=>x.complete).length,0);
 });
+
+test('old stats_as_of cannot launder a snapshot fetched after the bout',()=>{
+ const r=describe(strong,weak,{asOf,profiles:[{id:'1',stats_as_of:'2026-05-01T00:00:00Z',snapshot_at:'2026-07-01T00:00:00Z'},{id:'2',stats_as_of:'2026-05-01T00:00:00Z',snapshot_at:'2026-05-02T00:00:00Z'}]});
+ assert.equal(r.missing[0].length,8);assert.equal(r.missing[1].length,0);assert.equal(r.decision.status,'NO_DATA_LEAN');
+});
+test('rejects impossible stats timestamp after collection and malformed secondary dates',()=>{
+ for(const profile of [{stats_as_of:'2026-05-10T00:00:00Z',snapshot_at:'2026-05-01T00:00:00Z'},{stats_as_of:'2026-05-01T00:00:00Z',fetched_at:'not-a-date'}]){
+  const r=describe(strong,weak,{asOf,profiles:[profile,{stats_as_of:'2026-05-01T00:00:00Z'}]});
+  assert.equal(r.missing[0].length,8);
+ }
+});
