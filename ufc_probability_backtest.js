@@ -30,7 +30,8 @@
   const occupied=bins.filter(bin=>bin.count>0);
   const expectedCalibrationError=scored?occupied.reduce((sum,bin)=>sum+(bin.count/scored)*Math.abs(bin.probabilitySum/bin.count-bin.outcomeSum/bin.count),0):null;
   const maxCalibrationError=scored?Math.max(...occupied.map(bin=>Math.abs(bin.probabilitySum/bin.count-bin.outcomeSum/bin.count))):null;
-  return {eligible:audit.evaluated,scored,missingProbability:audit.evaluated-scored,
+  return {totalBouts:audit.total,eligible:audit.evaluated,excluded:audit.excluded,excludedByReason:audit.excludedByReason,scored,missingProbability:audit.evaluated-scored,
+   probabilityCoverage:audit.evaluated?scored/audit.evaluated:null,
    expectedCalibrationError,maxCalibrationError,
    brier:scored?brierSum/scored:null,logLoss:scored?logSum/scored:null,
    // A 50/50 benchmark has Brier 0.25 and log loss ln(2) for every decisive bout.
