@@ -1,16 +1,16 @@
 {
   "method": "Earliest archived pre-tip simulator forecast per game; only final ESPN box scores; no backfilled forecasts",
   "captured_forecasts": 47,
-  "awaiting_final_games": 17,
+  "awaiting_final_games": 16,
   "unusable_final_boxes": 0,
-  "archive_snapshots": 94,
-  "candidate_locks": 580,
-  "graded_games": 30,
-  "score_mae": 10.286666666666667,
-  "margin_mae": 12.4,
-  "total_mae": 14.68,
-  "brier": 0.199470906,
-  "winner_accuracy": 0.7,
+  "archive_snapshots": 95,
+  "candidate_locks": 596,
+  "graded_games": 31,
+  "score_mae": 10.63225806451613,
+  "margin_mae": 13.35483870967742,
+  "total_mae": 14.258064516129032,
+  "brier": 0.1957698835483871,
+  "winner_accuracy": 0.7096774193548387,
   "validated_for_betting": false,
   "rows": [
     {
@@ -491,6 +491,22 @@
       "total_error": 15.699999999999989,
       "brier": 0.37675044,
       "correct_winner": false,
+      "model": "nba-possession-audit-v3"
+    },
+    {
+      "game_id": "401909959",
+      "tipoff": "2026-11-10T03:00Z",
+      "captured_at": "2026-11-08T03:57:38.483162+00:00",
+      "predicted_home": 117.8,
+      "predicted_away": 108.8,
+      "actual_home": 138.0,
+      "actual_away": 87.0,
+      "home_probability": 0.7089,
+      "score_mae": 21.0,
+      "margin_error": 42.0,
+      "total_error": 1.5999999999999943,
+      "brier": 0.08473921000000001,
+      "correct_winner": true,
       "model": "nba-possession-audit-v3"
     }
   ]
