@@ -117,6 +117,10 @@ function describe(a,b,options={}) {
     const known=rows.filter(f=>{
       if(!f||!ownId||!f.winner||!f.method_display)return false;
       if(!/^(final|completed)$/i.test(String(f.status||'')))return false;
+      // Undated results cannot be ordered reliably into a last-five sample.
+      const resultDate=Date.parse(f.starts_at||f.event_date);
+      if(!Number.isFinite(resultDate))return false;
+      if(resultDate>Date.now()+86400000)return false;
       if(/draw|no contest|overturned/i.test(String(f.winner)+' '+String(f.method_display)))return false;
       const fighterA=String(f.fighter_a||''),fighterB=String(f.fighter_b||'');
       if(fighterA===fighterB||(fighterA!==ownId&&fighterB!==ownId))return false;
