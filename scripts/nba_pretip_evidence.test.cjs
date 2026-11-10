@@ -33,3 +33,16 @@ test('rejects whitespace and nonscalar market values',()=>{
 test('does not bypass malformed primary game date using a fallback field',()=>{
  assert.equal(hasClosingMarket({date:'invalid',tipoff:tip,closing_market:market}),false);
 });
+
+test('market baseline requires source identity and timestamp, never silently trusts unverified odds',()=>{
+ const {hasVerifiedMarket,marketProbability}=require('./nba_pretip_evidence.cjs');
+ const g={date:tip,closing_market:{...market}};
+ assert.equal(hasVerifiedMarket(g),false);assert.equal(marketProbability(g),null);
+ const verified={...market,source:'archived-provider',source_event_id:'event-123',source_published_at:'2026-11-10T22:58:00Z',verified:true};
+ assert.equal(hasVerifiedMarket({date:tip,closing_market:verified}),true);
+ assert.ok(Math.abs(marketProbability({date:tip,closing_market:verified})-.5)<.03);
+ for(const change of [{source:''},{source_event_id:''},{verified:false},{source_published_at:'2026-11-10T23:01:00Z'}]){
+  const row={date:tip,closing_market:{...verified,...change}};
+  assert.equal(hasVerifiedMarket(row),false);assert.equal(marketProbability(row),null);
+ }
+});
