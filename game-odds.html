@@ -84,10 +84,16 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
 <button type="button" id="run" class="primary">🔥 Simulate 100,000 games</button>
 <p id="runStatus" class="muted" role="status">Select a matchup, enter the available prices, and simulate.</p>
 </section>
+<section class="panel" id="nbaLedgerCard" hidden>
+<h2>NBA pregame odds & forward-test ledger</h2>
+<p class="muted">Simulating before tipoff freezes your entered lines and odds with the 50/50 and 75/25 forecasts. This device automatically grades hypothetical spread and total leans after games finish. No real bets are placed.</p>
+<button type="button" id="nbaLedgerExport">Export frozen NBA odds & results (CSV)</button>
+<p class="muted" id="nbaLedgerStatus" role="status">Records stay in this browser until exported or site data is cleared. There is no online account sync.</p>
+</section>
 <section id="results" hidden aria-live="polite"></section>
 <section class="panel"><h2>Important model limits</h2><p class="muted">NFL runs resample paired historical score errors. NBA runs generate player outcomes within shared estimated possessions and rotations. The sportsbook's lines and prices do not influence the simulated scores. Historical scoring patterns and 100,000 draws do not establish predictive calibration or a verified edge. Starter announcements and weather are shown only where sourced. Availability and starting-five confirmations apply only when explicitly sourced. Future injury and tactical changes remain unknown. Research-only estimates can be wrong, especially with changing rosters, limited samples, or stale feeds.</p></section>
 </main>
-<script src="./nba_game_context.js?v=nba-sim-availability-1"></script><script src="./nba_live_context.js?v=nba-sim-availability-1"></script><script src="./nba_possession_engine.js?v=nba-projection-audit-3"></script><script src="./nba_simulator_ui.js?v=nba-frozen-ensemble-20261109"></script><script src="./quick_slip.js"></script><script src="./game_odds_engine.js?v=nba-rotation-coverage-20261109"></script>
+<script src="./nba_game_context.js?v=nba-sim-availability-1"></script><script src="./nba_live_context.js?v=nba-sim-availability-1"></script><script src="./nba_possession_engine.js?v=nba-projection-audit-3"></script><script src="./nba_simulator_ui.js?v=nba-market-ledger-20261109"></script><script src="./quick_slip.js"></script><script src="./game_odds_engine.js?v=nba-rotation-coverage-20261109"></script>
 <script>
 (function(){
  'use strict';
@@ -140,6 +146,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   $('runStatus').textContent='Ready for '+g.away+' @ '+g.home+'. '+(sport==='NBA'?'Latest availability will be checked when you simulate.':'100,000 outcomes will use only pregame information and earlier games.');
  }
  function refresh(){
+  $('nbaLedgerCard').hidden=sport!=='NBA';
   $('sportNFL').classList.toggle('current',sport==='NFL');
   $('sportNBA').classList.toggle('current',sport==='NBA');
   $('results').hidden=true;
@@ -157,6 +164,18 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
  $('game').onchange=choose;
  for(const key of fields)$(key).addEventListener('change',store);
  $('homeSpread').addEventListener('input',syncSpread);
+ $('nbaLedgerExport').onclick=()=>{
+  try{
+   if(typeof CookNBASimulatorUI==='undefined'||typeof localStorage==='undefined')throw Error('NBA tracker unavailable in this browser');
+   const count=JSON.parse(localStorage.getItem(CookNBASimulatorUI.KEY)||'[]').length;
+   if(!count){$('nbaLedgerStatus').textContent='No completed pregame simulations saved yet. Simulate a game before tipoff to start collecting.';return;}
+   const csv=CookNBASimulatorUI.exportCSV(localStorage),blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+   a.href=url;a.download='nba-pregame-market-ledger-'+new Date().toISOString().slice(0,10)+'.csv';
+   document.body.appendChild(a);a.click();a.remove();
+   setTimeout(()=>URL.revokeObjectURL(url),3000);
+   $('nbaLedgerStatus').textContent='CSV export prepared with '+count+' frozen pregame captures. Keep a backup; browser storage is not synced to your GitHub repository.';
+  }catch(e){$('nbaLedgerStatus').textContent='CSV export failed: '+e.message;}
+ };
  function upcomingNFL(g){
   if(!g?.gameday)return false;
   if(g.kickoff_at){const kickoff=Date.parse(g.kickoff_at);return Number.isFinite(kickoff)&&kickoff>Date.now();}
@@ -194,7 +213,10 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
     gamesBySport.NFL.push({id:key,title:g.away+' @ '+g.home+' · '+g.gameday,game:g,model});
    }catch(e){/* Never surface a game without a valid model */ }
   }
-  if(nba&&typeof CookNBASimulatorUI!=='undefined'&&typeof localStorage!=='undefined')source.nbaGrades=CookNBASimulatorUI.grade(nba,localStorage);
+  if(nba&&typeof CookNBASimulatorUI!=='undefined'&&typeof localStorage!=='undefined'){
+   source.nbaGrades=CookNBASimulatorUI.grade(nba,localStorage);
+   $('nbaLedgerStatus').textContent=(source.nbaGrades.totalLocks||0)+' stored pregame captures; '+(source.nbaGrades.ensemble?.games||0)+' completed forward-test games, '+(source.nbaGrades.ensemble?.quotedGames||0)+' with entered quotes. Export a backup; records are stored only in this browser.';
+  }
   if(nba)for(const g of (nba.games||[]).filter(upcomingNBA)){
    const t=Date.parse(g.date),date=Number.isFinite(t)?new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}).format(new Date(t))+' ET':'Date unverified';
    gamesBySport.NBA.push({id:String(g.id),title:g.away+' @ '+g.home+' · '+date,game:g,model:null,nbaInputs:{feed:nba,injuries:get(3),rosters:get(5),gameContext:get(7)}});
@@ -337,6 +359,10 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    '<p><strong>Verification:</strong> '+esc(result.verification)+'</p></div></div>';
   $('results').hidden=false;
   $('runStatus').textContent=runStatus;
+  if(model.sport==='NBA'&&saved?.saved&&typeof localStorage!=='undefined'){
+   const n=JSON.parse(localStorage.getItem(CookNBASimulatorUI.KEY)||'[]').length;
+   $('nbaLedgerStatus').textContent=n+' frozen pregame captures on this device. '+(saved.existing?'This exact model-and-quote capture was already saved and remains unchanged.':'This run froze your entered quotes and the 50/50 plus 75/25 shadow forecasts before tipoff.')+' Export CSV for backup.';
+  }
   $('results').scrollIntoView?.({behavior:'smooth',block:'start'});
  }
  $('run').onclick=async()=>{
