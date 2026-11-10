@@ -133,6 +133,7 @@ jobs:
         if: steps.paths.outputs.needed == 'true'
         run: |
           node --test tests/nba_game_first.test.js
+          node test_nba_game_first_threshold.js
           node test_nba_possessions.js
           node test_nba_game_context.js
           node scripts/verify_nba_matchup_discovery.js

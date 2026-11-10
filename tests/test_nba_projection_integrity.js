@@ -26,7 +26,7 @@ if(a.reason){
 // questionable on the next scheduled fixture.
 const row={key:'fixture|p|rebounds',gameId:'fixture',playerId:'p',name:'Fixture Player',
  market:'rebounds',forecast:10,minutes:30,matchupBoost:.12,matchupGames:8,
- eligible:true,samples:[4,8,9,10,11,12,13,14],reviewRequired:false};
+ eligible:true,matchupRating:{score:80,factors:[]},samples:[4,8,9,10,11,12,13,14],reviewRequired:false};
 assert(research.candidate(row),'Healthy research fixture must otherwise be eligible');
 const held={...row,reviewRequired:true,reviewReasons:['Unsupported projected workload jump']};
 assert.equal(research.candidate({...held,line:1,probability:.99}),null,'An unsupported workload must not be ranked regardless of simulated hit rate');

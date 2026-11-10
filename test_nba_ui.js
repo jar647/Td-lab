@@ -20,7 +20,7 @@ assert.ok(match[1].includes('Player recommendations · matchup opportunities'),'
 assert.match(match[1],/\$\('output'\)\.innerHTML=intro;renderNBAGameFirst\(g\)/,'Analyze must actually render the game-first player prop ticket after refreshing output');
 const elements=new Map();
 function element(id){if(!elements.has(id))elements.set(id,{value:'',textContent:'',innerHTML:'',onclick:null});return elements.get(id)}
-const sandbox={document:{getElementById:element},fetch:async()=>({ok:false}),console,Date,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl,CookNBAGameFirst:require('./nba_game_first'),CookNBAFirstBasket,CookItUpPricing,CookItUpProbability,CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'}};
+const sandbox={document:{getElementById:element},fetch:async()=>({ok:false}),console,Date,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl,CookNBAMatchups:require('./nba_matchup_discovery'),CookNBAGameFirst:require('./nba_game_first'),CookNBAFirstBasket,CookItUpPricing,CookItUpProbability,CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'}};
 vm.createContext(sandbox);vm.runInContext(match[1],sandbox,{timeout:2000});
 assert.equal(typeof element('show').onclick,'function','Analyze must be wired');
 assert.ok(match[1].includes('formatToParts'),'Eastern day comparison must use stable date parts');
@@ -61,7 +61,7 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  const fixtureTime=Date.parse(game.date)-4*3600000;
  assert.equal(easternDay(fixtureTime),easternDay(game.date),'Fixture test clock must remain on the same Eastern day');
  const FixedDate=class extends Date{constructor(...args){super(...(args.length?args:[fixtureTime]))}static now(){return fixtureTime}};
- const context={document:{getElementById:el,createElement:()=>({className:'',id:'',innerHTML:'',append(){el('output').innerHTML+=this.innerHTML}})},fetch:async url=>({ok:true,json:async()=>url.includes('nba_games')?data:url.includes('nba_injuries')?{generated_at:new Date().toISOString(),injuries:[]}:{snapshots:[]}}),console,Date:FixedDate,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl,CookNBAGameFirst:require('./nba_game_first'),CookNBAFirstBasket,CookItUpPricing,CookItUpProbability,CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'}};
+ const context={document:{getElementById:el,createElement:()=>({className:'',id:'',innerHTML:'',append(){el('output').innerHTML+=this.innerHTML}})},fetch:async url=>({ok:true,json:async()=>url.includes('nba_games')?data:url.includes('nba_injuries')?{generated_at:new Date().toISOString(),injuries:[]}:{snapshots:[]}}),console,Date:FixedDate,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl,CookNBAMatchups:require('./nba_matchup_discovery'),CookNBAGameFirst:require('./nba_game_first'),CookNBAFirstBasket,CookItUpPricing,CookItUpProbability,CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'}};
  vm.createContext(context);vm.runInContext(match[1],context,{timeout:2000});
  await new Promise(resolve=>setTimeout(resolve,50));
  assert.ok(el('games').innerHTML.includes(game.home),'Today-game selector must contain real matchup: '+el('status').textContent);
@@ -142,20 +142,20 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  console.log('NBA concise verdict and optional calculation details: PASS');
 }
 
-// Final two-sided price decisions, not the old matchup score, control the ranks.
+// Only supported 75+ OVER decisions can enter recommendation ranks.
 {
- const row=(key,playerId,decision,candidate,ev,quality=0,quote={line:5.5,over:-110,under:-110})=>({key,playerId,quality,quote,result:{decision,candidate,expectedValue:ev,estimatedEdge:ev/2}});
+ const row=(key,playerId,decision,candidate,ev,quality=0,quote={line:5.5,over:-110,under:-110})=>({key,playerId,market:'points',quality,quote,result:{decision,candidate,rating:{score:80},expectedValue:ev,estimatedEdge:ev/2}});
  const rows=[row('over','one','LEAN','OVER',.10),row('under','two','LEAN','UNDER',.30),row('pass','three','PASS',null,99,999),row('waiting','four','PASS',null,99,998,{}) ,row('second-market','two','LEAN','OVER',.20),row('third','five','LEAN','OVER',.08)];
  const groups=JSON.parse(vm.runInContext('JSON.stringify(nbaPropGroups('+JSON.stringify(rows)+'))',sandbox));
- assert.deepEqual(groups.recommended.map(r=>r.key),['under','over','third']);
- assert.deepEqual(groups.other.map(r=>r.key),['second-market']);
- assert.deepEqual(groups.passed.map(r=>r.key),['pass']);
+ assert.deepEqual(groups.recommended.map(r=>r.key),['over','second-market','third']);
+ assert.deepEqual(groups.other.map(r=>r.key),[]);
+ assert.deepEqual(groups.passed.map(r=>r.key),['pass','under']);
  assert.deepEqual(groups.awaiting.map(r=>r.key),['waiting']);
  assert.equal(new Set(groups.recommended.map(r=>r.playerId)).size,3);
  const changed=rows.map(r=>r.key==='under'?{...r,result:{decision:'PASS',candidate:null}}:r);
  const after=JSON.parse(vm.runInContext('JSON.stringify(nbaPropGroups('+JSON.stringify(changed)+'))',sandbox));
  assert(!after.recommended.some(r=>r.key==='under'));assert(after.passed.some(r=>r.key==='under'));
- console.log('NBA Over/Under ranking, PASS removal and awaiting-odds buckets: PASS');
+ console.log('NBA 75+ OVER ranking, PASS removal and awaiting-odds buckets: PASS');
 }
 
 // Current single-book prices can discover an Under. Manual edits win; a changed
@@ -168,7 +168,7 @@ console.log('NBA lineup/projections UI smoke test: PASS');
   {game_id:'other-game',player_id:'auto-player',market:'points',side:'under',line:99.5,american_odds:900,bookmaker:'hardrockbet',observed_at:now}
  ]};
  vm.runInContext('nbaQuoteContexts['+JSON.stringify(key)+']={history:[1,1,2,1,2,1],market:"points",availableGames:6,eligible:true,modelContext:{seasonAverage:1.33,recentAverage:1.4,seasonUsage:30,recentUsage:30,opponentRatio:1,injuryStatus:"NOT LISTED"}};nbaMarketData='+JSON.stringify(data)+';chooseNBAAutoQuote({id:"auto-game"},{id:"auto-player"},"points",1.3,'+JSON.stringify(key)+')',sandbox);
- assert.equal(vm.runInContext('nbaPriceReview('+JSON.stringify(key)+',1.3).candidate',sandbox),'UNDER');
+ assert.equal(vm.runInContext('nbaPriceReview('+JSON.stringify(key)+',1.3).candidate',sandbox),null);
  assert.equal(vm.runInContext('nbaQuoteFor('+JSON.stringify(key)+').line',sandbox),5.5);
  vm.runInContext('setNBAQuote('+JSON.stringify(key)+',"over","-120",1.3);nbaPlayerQuotes['+JSON.stringify(key)+']._autoAt='+JSON.stringify(old),sandbox);
  assert.equal(vm.runInContext('nbaQuoteFor('+JSON.stringify(key)+').under',sandbox),undefined);
@@ -179,7 +179,7 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  const stale={...data,markets:data.markets.map(q=>({...q,observed_at:old}))};
  vm.runInContext('delete nbaPlayerQuotes['+JSON.stringify(key)+'];nbaMarketData='+JSON.stringify(stale)+';chooseNBAAutoQuote({id:"auto-game"},{id:"auto-player"},"points",1.3,'+JSON.stringify(key)+')',sandbox);
  assert.equal(vm.runInContext('nbaQuoteFor('+JSON.stringify(key)+').line',sandbox),undefined);
- console.log('NBA fresh same-game odds, Under discovery and manual override: PASS');
+ console.log('NBA fresh same-game odds, Under exclusion and manual override: PASS');
 }
 
 // A qualified Under must be saved as Under rather than the organizer's default Over.
@@ -188,13 +188,13 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  const g={id:'slip-under',status:'STATUS_SCHEDULED',date:new Date(Date.now()+3600000).toISOString(),home:'Home',away:'Away'};
  const p={id:'slip-player',name:'Slip Player',team:'Home',rows:Array.from({length:10},(_,i)=>({points:1+i%2,minutes:30})),defenseDelta:0,paceDelta:0,opportunityFactor:1};
  vm.runInContext('injuryData='+JSON.stringify({generated_at:new Date().toISOString(),injuries:[]})+';nbaPlayerQuotes["slip-under|slip-player|points"]={line:5.5,over:100,under:-110};nbaPriceUI('+JSON.stringify(g)+','+JSON.stringify(p)+',"points",1.5)',sandbox);
- assert.equal(pick.side,'under');assert.equal(pick.recommendation,'Under 5.5 Points');assert.equal(pick.recommendationLine,null);
- console.log('NBA Under direction preserved in Quick Slip payload: PASS');
+ assert.equal(pick.side,undefined);assert.equal(pick.recommendation,'Research only · Points');assert.equal(pick.recommendationLine,null);
+ console.log('NBA unsupported Under withheld from Quick Slip recommendations: PASS');
 }
 
 // Matchup slate ignores sportsbook odds, allows same-game players, and caps at five.
 const slateNow=Date.now();
-sandbox.slateFixture=Array.from({length:9},(_,i)=>({key:'slate-'+i,playerId:'p'+i,name:'Player '+i,market:'points',forecast:20,quality:30,eligible:true,minutes:30,samples:[10,20,21,22,23,24,25,26],gameId:i<2?'same':String(i),matchupGames:8,matchupBoost:.2-i*.01,game:{id:i<2?'same':String(i),status:'STATUS_SCHEDULED',date:new Date(slateNow+3600000).toISOString()}}));
+sandbox.slateFixture=Array.from({length:9},(_,i)=>({key:'slate-'+i,playerId:'p'+i,name:'Player '+i,market:'points',forecast:20,quality:30,matchupRating:{score:80,factors:[]},eligible:true,minutes:30,samples:[10,20,21,22,23,24,25,26],gameId:i<2?'same':String(i),matchupGames:8,matchupBoost:.2-i*.01,game:{id:i<2?'same':String(i),status:'STATUS_SCHEDULED',date:new Date(slateNow+3600000).toISOString()}}));
 const slate=vm.runInContext('nbaSlateSelection(slateFixture)',sandbox);
 assert.equal(slate.picks.length,5);assert.equal(slate.picks[0].game.id,slate.picks[1].game.id);
 sandbox.slateFixture[0].matchupBoost=-.1;sandbox.slateFixture[2].game.date=new Date(slateNow-1000).toISOString();sandbox.slateFixture[3].market='threes';sandbox.slateFixture[4].matchupGames=0;
@@ -203,7 +203,7 @@ for(const i of [0,2,3,4])assert.ok(!filtered.picks.some(r=>r.key==='slate-'+i));
 console.log('NBA odds-free matchup slate, same-game selections and exclusions: PASS');
 
 // Shopping targets must clear the exact final verdict with hypothetical odds.
-vm.runInContext('nbaQuoteContexts["target"]={history:[18,19,20,20,21,22,20,19,20,21],market:"points",availableGames:10,eligible:true,modelContext:{seasonAverage:20,recentAverage:20,seasonUsage:30,recentUsage:30,opponentRatio:1,injuryStatus:"NOT LISTED"}}',sandbox);
+vm.runInContext('nbaQuoteContexts["target"]={matchupRating:{score:80,factors:[{label:"Position matchup",points:80,max:100}]},history:[18,19,20,20,21,22,20,19,20,21],market:"points",availableGames:10,eligible:true,modelContext:{seasonAverage:20,recentAverage:20,seasonUsage:30,recentUsage:30,opponentRatio:1,injuryStatus:"NOT LISTED"}}',sandbox);
 const target=vm.runInContext('nbaResearchTarget({key:"target",forecast:20})',sandbox);
 assert.ok(target);assert.ok(['OVER','UNDER'].includes(target.side));
 assert.equal(vm.runInContext('nbaPriceReview("target",20,'+JSON.stringify({line:target.line,[target.side.toLowerCase()]:-110})+').candidate',sandbox),target.side);
@@ -215,28 +215,23 @@ vm.runInContext('nbaQuoteContexts.target.eligible=false',sandbox);
 assert.equal(vm.runInContext('nbaResearchTarget({key:"target",forecast:20})',sandbox),null);
 console.log('NBA target lines match final price gates and exclude ineligible players: PASS');
 
-// Scores exist only after qualification, reward better prices and retain gates.
-sandbox.ratingContext={history:[18,19,20,20,21,22,20,19,20,21],modelContext:{seasonUsage:30,recentUsage:30}};
-sandbox.ratingResult={decision:'LEAN',candidate:'UNDER',sample:10,underSide:{edge:.10,ev:.12,conservative:.58,implied:.52}};
+// Matchup ratings are independent of odds, decisions, EV and implied probability.
+sandbox.ratingContext={matchupRating:{score:80,factors:[{label:'Opponent matchup',points:80,max:100}]}};
+sandbox.ratingResult={decision:'LEAN',candidate:'OVER',sample:10,overSide:{edge:.10,ev:.12,conservative:.58,implied:.52}};
 const score=vm.runInContext('nbaPropRating(ratingResult,ratingContext)',sandbox);
-assert.ok(score.score>=0&&score.score<=100);
-assert.equal(score.score,score.factors.reduce((sum,x)=>sum+x.points,0));
-const better=vm.runInContext('nbaPropRating({...ratingResult,underSide:{edge:.15,ev:.22,conservative:.58,implied:.47}},ratingContext)',sandbox);
-assert.ok(better.score>score.score,'Better price increases score at unchanged forecast');
-assert.equal(vm.runInContext('nbaPropRating({...ratingResult,decision:"PASS"},ratingContext)',sandbox),null);
-assert.equal(vm.runInContext('nbaPropRating({...ratingResult,candidate:null},ratingContext)',sandbox),null);
-assert.ok(vm.runInContext('nbaPropRating({...ratingResult,sample:20},ratingContext).score',sandbox)>score.score);
-assert.ok(vm.runInContext('nbaPropRating(ratingResult,{...ratingContext,modelContext:{seasonUsage:30,recentUsage:15}}).score',sandbox)<score.score);
-assert.equal(vm.runInContext('nbaRatingHTML({decision:"PASS"})',sandbox),'');
+assert.equal(score.score,80);
+const better=vm.runInContext('nbaPropRating({...ratingResult,overSide:{edge:.99,ev:4,implied:.01}},ratingContext)',sandbox);
+assert.equal(better.score,score.score);
+assert.equal(vm.runInContext('nbaPropRating(ratingResult,{})',sandbox),null);
 assert.ok(vm.runInContext('nbaRatingHTML({rating:nbaPropRating(ratingResult,ratingContext)})',sandbox).includes('not win probability'));
-console.log('NBA qualified-only score, price sensitivity, sample and role stability: PASS');
+console.log('NBA matchup score isolated from prices and implied probability: PASS');
 
 // Matchup research chooses three distinct players, excludes threes and weak/no targets.
-sandbox.matchupFixture=Array.from({length:7},(_,i)=>({key:'m'+i,playerId:i===1?'same':'p'+i,market:'points',quality:99-i,matchup:{strength:i/10},target:{side:i%2?'OVER':'UNDER',line:20.5}}));
+sandbox.matchupFixture=Array.from({length:7},(_,i)=>({key:'m'+i,playerId:i===1?'same':'p'+i,market:'points',quality:99-i,result:{rating:{score:80}},matchup:{strength:i/10},target:{side:i%2?'OVER':'UNDER',line:20.5}}));
 sandbox.matchupFixture[0].playerId='same';sandbox.matchupFixture[6].market='threes';sandbox.matchupFixture[5].target=null;
 const three=vm.runInContext('nbaMatchupThree(matchupFixture)',sandbox);
-assert.equal(three.length,3);assert.deepEqual(Array.from(three,r=>r.key),['m4','m3','m2']);
-assert.equal(new Set(three.map(r=>r.playerId)).size,3);
+assert.equal(three.length,2);assert.deepEqual(Array.from(three,r=>r.key),['m3','m1']);
+assert.equal(new Set(three.map(r=>r.playerId)).size,2);
 assert.ok(match[1].includes('outlookHTML+scoutHtml'));
 assert.ok(match[1].includes('row.target=nbaResearchTarget(row,side)'));
 assert.ok(match[1].includes('row.target.distance>.25')); 
@@ -254,9 +249,7 @@ CookItUpQuickSlip={getPicks:()=>[legacyLeg],recoverRatings:fn=>{restoredResult=f
 renderProjections=()=>[{key:'target',name:'Legacy Player',game:repairGame,market:'points',forecast:20}];
 recoverNBAQuickSlipRatings();
 `,sandbox);
-assert.equal(vm.runInContext('restoredResult.ratedSide',sandbox),'UNDER');
-assert.equal(vm.runInContext('restoredResult.ratedLine',sandbox),25.5);
-assert.equal(typeof vm.runInContext('restoredResult.propScore',sandbox),'number');
+assert.match(vm.runInContext('restoredResult.ratingNote',sandbox),/does not currently qualify/);
 vm.runInContext('delete legacyLeg.underOdds;recoverNBAQuickSlipRatings()',sandbox);
 assert.match(vm.runInContext('restoredResult.ratingNote',sandbox),/Enter odds/);
 vm.runInContext('legacyLeg.underOdds=-110;legacyLeg.recommendation="Over 25.5 Points";legacyLeg.overOdds=-110;recoverNBAQuickSlipRatings()',sandbox);

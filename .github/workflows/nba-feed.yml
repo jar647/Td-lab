@@ -86,6 +86,7 @@ jobs:
           node test_nba_pipeline_ui.js
           node tests/test_nba_matchup_discovery.js
           node --test tests/nba_game_first.test.js
+          node test_nba_game_first_threshold.js
           node test_nba_ui.js
           node test_nba_simulator.js
           node test_nba_score_shadow.js
@@ -131,6 +132,7 @@ jobs:
           node test_nba_pipeline_ui.js
           node tests/test_nba_matchup_discovery.js
           node --test tests/nba_game_first.test.js
+          node test_nba_game_first_threshold.js
           node test_nba_ui.js
           node test_nba_simulator.js
           node test_nba_score_shadow.js
