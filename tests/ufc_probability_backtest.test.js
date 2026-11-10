@@ -74,3 +74,19 @@ test('reports honest eligibility and probability coverage without counting inval
  const empty=score([],{},{});
  assert.equal(empty.probabilityCoverage,null);
 });
+
+test('separates missing frozen picks from invalid probability inputs without inflating coverage',()=>{
+ const missing={...bout,bout_id:'3',fighter_a:'c',fighter_b:'d',winner:'c'};
+ const invalid={...bout,bout_id:'4',fighter_a:'e',fighter_b:'f',winner:'e'};
+ const profiles={...snaps,'3':[{...p,fighter_id:'c'},{...p,fighter_id:'d'}],'4':[{...p,fighter_id:'e'},{...p,fighter_id:'f'}]};
+ const predictions={...pred,'4':{winner_id:'e',frozen_at:pred['1'].frozen_at,winner_probability:'0.8'}};
+ const result=score([bout,missing,invalid],profiles,predictions);
+ assert.equal(result.eligible,3);
+ assert.equal(result.scored,1);
+ assert.equal(result.missingProbability,2);
+ assert.equal(result.missingFrozenPrediction,1);
+ assert.equal(result.invalidFrozenProbability,1);
+ assert.equal(result.missingFrozenPrediction+result.invalidFrozenProbability,result.missingProbability);
+ assert.equal(result.probabilityCoverage,1/3);
+ const empty=score([],{},{});assert.equal(empty.missingFrozenPrediction,0);assert.equal(empty.invalidFrozenProbability,0);
+});
