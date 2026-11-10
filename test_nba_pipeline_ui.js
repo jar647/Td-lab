@@ -22,3 +22,7 @@ assert(!ui.render(a,null,now).includes('Sentinel'));
 assert(ui.render(a,null,now,[{...ratings[0],researchScore:75}]).includes('75/100'));
 for(const patch of [{side:'under'},{market:'threes'}]){const b={...a,best_single:{...a.best_single,...patch},top_players:[{...a.best_single,...patch}]};assert(!ui.render(b,null,now,ratings).includes('Sentinel'))}
 assert(!ui.render({...a,blockers:['availability']},null,now,ratings).includes('Sentinel'));
+const underRecord={...a,best_single:{...a.best_single,side:'under'},top_players:[{...a.best_single,side:'under'}]};
+for(const score of [75,84])assert(!ui.render(underRecord,null,now,[{...ratings[0],side:'under',researchScore:score}]).includes('Sentinel'));
+assert(ui.render(underRecord,null,now,[{...ratings[0],side:'under',researchScore:85}]).includes('85/100'));
+assert(!ui.render(underRecord,null,now,[{...ratings[0],side:'over',researchScore:99}]).includes('Sentinel'));

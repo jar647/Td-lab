@@ -12,3 +12,12 @@ const out={...injuries,injuries:[{player_id:'AC',player:'A C',status:'OUT'}]};as
 assert.equal(engine.analyze(game,feed,rosters,{...injuries,generated_at:'2000-01-01'},now).candidates.length,0);assert.equal(engine.analyze({...game,date:new Date(now-1).toISOString()},feed,rosters,injuries,now).candidates.length,0);
 const future=structuredClone(games[0]);future.id='future';future.date=new Date(now+86400000).toISOString();future.players[4].stats.REB='999';assert.deepEqual(engine.analyze(game,{...feed,games:[...games,future]},rosters,injuries,now),r,'Later games cannot change current matchup research');
 console.log('NBA position matchups: sourced positions, opponent/peer comparisons, baselines, exact hit rates, no simulation, injuries and cutoff PASS');
+// Low-production players facing strong position defenses have separate UNDER evidence.
+const suppressed=structuredClone(feed);for(const g of suppressed.games)for(const x of g.players)if(x.id==='AC'){x.stats.REB='3';x.stats.DREB='1'}
+const underAnalysis=engine.analyze(game,suppressed,rosters,injuries,now),under=underAnalysis.candidates.find(x=>x.playerId==='AC'&&x.market==='rebounds'&&x.side==='under');
+assert(under&&under.researchScore>=85);assert(under.weakness.allowed<under.weakness.leagueAverage);assert(under.baseline>3);
+assert.equal(engine.rate([4,5,6],5,3,'under').hits,1,'Under excludes an integer push');
+assert(underAnalysis.candidates.every(engine.qualifies));
+assert(!engine.qualifies({side:'under',researchScore:84}));assert(engine.qualifies({side:'under',researchScore:85}));assert(engine.qualifies({side:'over',researchScore:75}));
+assert.deepEqual(engine.analyze(game,{...suppressed,odds:999,impliedProbability:.01},rosters,injuries,now).candidates,underAnalysis.candidates);
+assert.equal(engine.analyze(game,suppressed,rosters,{...injuries,generated_at:'2000-01-01'},now).candidates.length,0);
