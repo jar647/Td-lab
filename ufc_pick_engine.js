@@ -126,6 +126,9 @@ function choose(options={}) {
   if (fightState!=='pre') return output('unavailable',fightState==='off'?'Fight unavailable':'Fight status unavailable','A scheduled pre-fight status is required before making a new selection.','Refresh the fight status.');
   const now=options.now===undefined?Date.now():dateValue(options.now), eventDate=dateValue(options.eventDate);
   if (!Number.isFinite(now)) return output('unavailable','Refresh fight data','The evaluation time is unavailable.','A valid evaluation time is needed to check the pre-fight data.');
+  // Never produce a new pre-fight pick without a trustworthy bout timestamp.
+  // A missing or malformed start time also defeats the post-start staleness gate.
+  if (!Number.isFinite(eventDate)) return output('unavailable','Confirm fight start time','A valid scheduled fight start time is required before selecting a pre-fight pick.','Refresh the event schedule and confirm the bout timestamp.');
   if (Number.isFinite(eventDate)&&now-eventDate>thresholds.staleHours*3600000) return output('unavailable','Refresh fight status','The listed start time is over 12 hours old, but the fight still appears scheduled.','Confirm the updated status before using a pre-fight pick.');
   const matchup=options.matchup, winner=winnerEvidence(matchup);
   const reports=Array.isArray(options.propReports)?options.propReports:[];

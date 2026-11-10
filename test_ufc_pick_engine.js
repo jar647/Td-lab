@@ -162,6 +162,13 @@ assert.equal(select({status:{type:{state:'pre'}}}).status,'pick');
 assert.equal(select({now:'2026-11-08T09:00:00Z'}).status,'pick','An 11-hour-old card date alone does not establish that a bout is live');
 assert.equal(select({now:'2026-11-08T10:00:00.001Z'}).label,'Refresh fight status');
 assert.equal(select({now:'bad-clock'}).status,'unavailable');
+for (const eventDate of [undefined,null,'', 'invalid-date']) {
+ const selection=select({eventDate});
+ assert.equal(selection.status,'unavailable','Missing or invalid event time must fail closed');
+ assert.equal(selection.label,'Confirm fight start time');
+ assert.equal(selection.market,null);
+}
+assert.equal(select({eventDate:'2026-11-07T22:00:00Z'}).market,'winner');
 assert.deepEqual(select({}),select({}), 'A supplied evaluation time makes repeated decisions deterministic');
 assert.deepEqual(select({propReports:[over,methodReport]}),select({propReports:[methodReport,over]}));
 assert.deepEqual(select({propReports:[methodReport,methodReport]}),method,'Duplicate reports do not amplify evidence');
