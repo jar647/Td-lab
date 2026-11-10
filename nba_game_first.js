@@ -10,11 +10,15 @@ function candidate(row,excluded=[],lines={}){
  const minimum={points:8,rebounds:3,assists:3}[row.market]||10;if(row.forecast<minimum)return null;
  const override=lines[row.key];const line=override===undefined?Math.max(.5,Math.floor(row.forecast*.84-.5)+.5):override;
  const probability=chance(row,line);if(probability===null||probability<.5)return null;
- return {...row,line,side:'over',probability,researchOnly:true,score:Math.round(clamp(probability*65+Math.min(15,row.matchupBoost*100)+Math.min(10,row.matchupGames)+Math.min(10,row.minutes/4),0,100))};
+ const matchupQuality=Math.round(clamp(100*(.55*clamp(row.matchupBoost/.15,0,1)+.25*clamp(row.matchupGames/10,0,1)+.20*clamp(row.minutes/36,0,1)),0,100));
+ const lineConfidence=Math.round(clamp(probability*100,0,100));
+ const score=Math.round(clamp(probability*65+Math.min(15,row.matchupBoost*100)+Math.min(10,row.matchupGames)+Math.min(10,row.minutes/4),0,100));
+ return {...row,line,side:'over',probability,researchOnly:true,matchupQuality,lineConfidence,score};
 }
 function build(rows,options={}){
  const excluded=options.excludedMarkets||[],max=clamp(Math.trunc(Number(options.maxLegs)||5),1,5);
- const ranked=(rows||[]).map(r=>candidate(r,excluded,options.lines||{})).filter(Boolean).sort((a,b)=>b.score-a.score||b.matchupBoost-a.matchupBoost||a.key.localeCompare(b.key));
+ const minScore=Number.isFinite(Number(options.minScore))?clamp(Number(options.minScore),0,100):75;
+ const ranked=(rows||[]).map(r=>candidate(r,excluded,options.lines||{})).filter(r=>r&&r.score>=minScore).sort((a,b)=>b.score-a.score||b.matchupBoost-a.matchupBoost||a.key.localeCompare(b.key));
  const picks=[],seen=new Set(),correlations=[];let wins=null;
  for(const row of ranked){
   if(seen.has(String(row.playerId)))continue;
@@ -27,7 +31,7 @@ function build(rows,options={}){
   wins=wins?wins.map((v,i)=>v&&hit[i]):hit;seen.add(String(row.playerId));picks.push(row);if(picks.length>=max)break;
  }
  const unique=new Set(),topThree=ranked.filter(r=>!unique.has(r.playerId)&&unique.add(r.playerId)).slice(0,3);
- return {picks,bestSingle:ranked[0]||null,topThree,correlations,jointHitRate:wins?mean(wins.map(Number)):null,excludedMarkets:excluded,disclaimer:'Experimental simulation frequencies, not calibrated win probabilities or verified sportsbook edges. Ticket frequency is counted from shared game outcomes, never multiplied from individual percentages. Fewer legs are shown when evidence or compatibility is insufficient.'};
+ return {picks,bestSingle:ranked[0]||null,topThree,minScore,correlations,jointHitRate:wins?mean(wins.map(Number)):null,excludedMarkets:excluded,disclaimer:'Experimental simulation frequencies, not calibrated win probabilities or verified sportsbook edges. Ticket frequency is counted from shared game outcomes, never multiplied from individual percentages. Fewer legs are shown when evidence or compatibility is insufficient.'};
 }
 function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
  try{
