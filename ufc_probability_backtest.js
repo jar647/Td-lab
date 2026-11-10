@@ -31,6 +31,8 @@
   const missingPickErrors=new Set(['missing_frozen_prediction_timestamp','invalid_predicted_winner']);
   const coverageEligible=row=>row.eligible||(!row.eligible&&row.errors.length>0&&row.errors.every(error=>missingPickErrors.has(error)));
   const eligibleCount=rows.filter(coverageEligible).length;
+  const missingFrozenPrediction=rows.filter(row=>coverageEligible(row)&&!row.eligible).length;
+  const invalidFrozenProbability=rows.filter(row=>row.eligible&&!row.probabilityScored).length;
   const excludedByReason={};
   for(const row of rows){if(coverageEligible(row))continue;
    for(const reason of new Set(row.errors.filter(error=>!missingPickErrors.has(error))))excludedByReason[reason]=(excludedByReason[reason]||0)+1;
@@ -41,6 +43,7 @@
   const maxCalibrationError=scored?Math.max(...occupied.map(bin=>Math.abs(bin.probabilitySum/bin.count-bin.outcomeSum/bin.count))):null;
   return {totalBouts:audit.total,eligible:eligibleCount,excluded:audit.total-eligibleCount,excludedByReason,scored,missingProbability:eligibleCount-scored,
    probabilityCoverage:eligibleCount?scored/eligibleCount:null,
+   missingFrozenPrediction,invalidFrozenProbability,
    expectedCalibrationError,maxCalibrationError,
    brier:scored?brierSum/scored:null,logLoss:scored?logSum/scored:null,
    // A 50/50 benchmark has Brier 0.25 and log loss ln(2) for every decisive bout.
