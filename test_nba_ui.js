@@ -257,3 +257,10 @@ assert.match(vm.runInContext('restoredResult.ratingNote',sandbox),/does not curr
 vm.runInContext('renderProjections=repairOriginalRenderer',sandbox);
 console.log('NBA legacy saved-side recovery, missing odds and failing quote: PASS');
 
+// High OVER ratings never qualify an UNDER; only the separate 85+ rating can.
+vm.runInContext('nbaQuoteContexts.target.eligible=true;nbaQuoteContexts.target.matchupRatings={under:{side:"under",score:85,factors:[]}}',sandbox);
+assert.equal(vm.runInContext('nbaPriceReview("target",20,{line:25.5,under:-110}).candidate',sandbox),'UNDER');
+vm.runInContext('nbaQuoteContexts.target.matchupRatings.under.score=84',sandbox);
+assert.equal(vm.runInContext('nbaPriceReview("target",20,{line:25.5,under:-110}).candidate',sandbox),null);
+vm.runInContext('delete nbaQuoteContexts.target.matchupRatings;nbaQuoteContexts.target.matchupRating.score=99',sandbox);
+assert.equal(vm.runInContext('nbaPriceReview("target",20,{line:25.5,under:-110}).candidate',sandbox),null);
