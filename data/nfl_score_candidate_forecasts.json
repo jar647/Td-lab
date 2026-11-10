@@ -549,6 +549,10 @@
         },
         "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet.",
         "generated_at": "2026-11-05T16:51:11.625002+00:00"
+      },
+      "actual": {
+        "home": 6.0,
+        "away": 23.0
       }
     },
     "2026_10_WAS_NYG|opponent-score-ridge-v1": {
@@ -1002,15 +1006,15 @@
   },
   "summary": {
     "frozen": 29,
-    "graded": 14,
+    "graded": 15,
     "models": {
       "baseline": {
-        "margin_mae": 10.8214,
-        "total_mae": 10.6643
+        "margin_mae": 11.3333,
+        "total_mae": 11.0667
       },
       "candidate": {
-        "margin_mae": 9.1214,
-        "total_mae": 11.0929
+        "margin_mae": 9.5133,
+        "total_mae": 11.4733
       }
     }
   },
