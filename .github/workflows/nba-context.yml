@@ -2,7 +2,7 @@ name: NBA pregame availability and lineups
 on:
   push:
     branches: [main]
-    paths: ['nba_game_context.py', '.github/workflows/nba-context.yml']
+    paths: ['nba_game_context.py', 'nba_injuries.py', '.github/workflows/nba-context.yml']
   workflow_dispatch:
   schedule:
     - cron: '*/5 * * * *'
@@ -31,7 +31,7 @@ jobs:
           import datetime,json,pathlib
           now=datetime.datetime.now(datetime.timezone.utc)
           games=json.loads(pathlib.Path('data/nba_games.json').read_text()).get('games',[])
-          due=any(g.get('status')=='STATUS_SCHEDULED' and -1<(datetime.datetime.fromisoformat(g['date'].replace('Z','+00:00'))-now).total_seconds()/3600<12 for g in games)
+          due=any(g.get('status')=='STATUS_SCHEDULED' and -1<(datetime.datetime.fromisoformat(g['date'].replace('Z','+00:00'))-now).total_seconds()/3600<24 for g in games)
           pathlib.Path('/tmp/nba-context-due').write_text(str(due))
           PY
             if [ "$(cat /tmp/nba-context-due)" != 'True' ]; then exit 0; fi
