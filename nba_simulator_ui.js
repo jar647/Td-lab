@@ -26,7 +26,7 @@ function selectedLocks(locks){
  for(const lock of locks){
   if(!lock||!String(lock.gameId||'')||!Number.isFinite(Date.parse(lock.lockedAt))||!(Date.parse(lock.lockedAt)<Date.parse(lock.tipoff)))continue;
   const key=String(lock.gameId),old=selected.get(key);
-  if(!old||Date.parse(lock.lockedAt)>Date.parse(old.lockedAt))selected.set(key,lock);
+  if(!old||Date.parse(lock.lockedAt)<Date.parse(old.lockedAt))selected.set(key,lock);
  }
  return [...selected.values()];
 }
@@ -36,7 +36,7 @@ function capture(result,model,storage,now=Date.now()){
   const locks=entries(storage),fingerprint=JSON.stringify([model.possessionModel.teams,model.possessionModel.pace]);
   let hash=2166136261;for(const c of fingerprint)hash=Math.imul(hash^c.charCodeAt(0),16777619);
   const id=JSON.stringify([model.id,result.possession.model,hash>>>0,result.market,result.markets.map(x=>x.price)]);
-  if(locks.some(x=>x.id===id))return {saved:true,existing:true};
+  if(locks.some(x=>String(x.gameId)===String(model.id)))return {saved:true,existing:true};
   const baseline=result.possession.baseline||model.baseline||null;
   const variantScores=blendScores(result.simulated.home,result.simulated.away,baseline);
   const lock={id,gameId:String(model.id),model:result.possession.model,home:model.home,away:model.away,tipoff:model.date,
@@ -76,7 +76,7 @@ function gradedEnsemble(rows){
  });
  const marketRecords=withFrozen.filter(x=>finite(x.lock.market?.total)||finite(x.lock.market?.homeSpread));
  return {games:withFrozen.length,quotedGames:marketRecords.length,weights,
-  methodology:'Only new device-local pregame captures with both model forecasts frozen are counted. Spread and total direction is a hypothetical model lean, NOT a placed bet or an approved edge. Pushes excluded from hit rate; no line means no evaluation.'};
+  methodology:'Only new device-local pregame captures with both model forecasts frozen are counted. Spread and total direction is a hypothetical model lean, NOT a placed bet or an approved edge. User-entered odds are unverified and excluded from market benchmark statistics. Pushes excluded from hit rate; no line means no evaluation.'};
 }
 function grade(feed,storage,now=Date.now()){
  if(!storage)return {graded:0};
@@ -102,8 +102,8 @@ function grade(feed,storage,now=Date.now()){
    total80Coverage:avg(rows.map(x=>Number(x.grade.home+x.grade.away>=x.projection.total.p10&&x.grade.home+x.grade.away<=x.projection.total.p90))),
    ensemble:gradedEnsemble(rows),totalLocks:locks.length};
   for(const weight of [0,.25,.5,1]){
-   const priced=rows.filter(x=>finite(x.market?.total)&&finite(x.market?.homeSpread));
-   const mlRows=rows.map(x=>{const hp=x.prices.find(p=>p.key==='homeML')?.price,ap=x.prices.find(p=>p.key==='awayML')?.price,prob=p=>p===null||p===undefined||!finite(p)?null:p>0?100/(100+p):-p/(100-p);const h=prob(hp),a=prob(ap);return h!==null&&a!==null?{...x,marketHome:h/(h+a)}:null}).filter(Boolean);
+   const priced=rows.filter(x=>x.lineSource==='verified-pregame-archive'&&finite(x.market?.total)&&finite(x.market?.homeSpread));
+   const mlRows=rows.filter(x=>x.lineSource==='verified-pregame-archive').map(x=>{const hp=x.prices.find(p=>p.key==='homeML')?.price,ap=x.prices.find(p=>p.key==='awayML')?.price,prob=p=>p===null||p===undefined||!finite(p)?null:p>0?100/(100+p):-p/(100-p);const h=prob(hp),a=prob(ap);return h!==null&&a!==null?{...x,marketHome:h/(h+a)}:null}).filter(Boolean);
    metrics['marketBlend'+weight]={games:priced.length,mlGames:mlRows.length,
     brier:avg(mlRows.map(x=>((1-weight)*x.projection.homeWin+weight*x.marketHome-Number(x.grade.home>x.grade.away))**2)),
     marginMAE:avg(priced.map(x=>Math.abs((1-weight)*(x.projection.home-x.projection.away)+weight*(-x.market.homeSpread)-(x.grade.home-x.grade.away)))),
