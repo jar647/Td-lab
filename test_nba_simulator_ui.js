@@ -64,3 +64,20 @@ vm.createContext(sandbox);vm.runInContext(handler,sandbox);
  console.log('NBA simulation UI: audit, optional tracking, no-odds button, load/refresh/worker failure recovery PASS');
 })().catch(error=>{console.error(error);process.exitCode=1});
 
+
+// Regression: grading cannot match a different fixture or a rescheduled tipoff.
+{
+ const memory={data:{},getItem(k){return this.data[k]||null},setItem(k,v){this.data[k]=v}};
+ const t=Date.parse('2026-11-12T00:00:00Z');
+ const make=(id,at)=>({id,gameId:'same',home:'Home',away:'Away',tipoff:'2026-11-12T00:00:00Z',lockedAt:at,projection:{home:110,away:100,homeWin:.7,margin:{p10:-20,p90:20},total:{p10:190,p90:240}},prices:[],market:{},grade:null});
+ memory.setItem('nba-possession-forecast-locks-v1',JSON.stringify([make('early','2026-11-11T19:00:00Z'),make('late','2026-11-11T23:00:00Z')]));
+ const game={id:'same',home:'Home',away:'Away',date:'2026-11-12T00:00:00Z',status:'STATUS_FINAL',players:[...Array.from({length:5},(_,i)=>({team:'Home',stats:{PTS:20}})),...Array.from({length:5},(_,i)=>({team:'Away',stats:{PTS:18}}))]};
+ for(const altered of [{...game,home:'Other'},{...game,date:'2026-11-13T00:00:00Z'}]){
+  assert.equal(ui.grade({games:[altered]},memory,t+3600000).graded,0);
+  assert.ok(JSON.parse(memory.getItem('nba-possession-forecast-locks-v1')).every(x=>!x.grade));
+ }
+ assert.equal(ui.grade({games:[game]},memory,t+3600000).graded,1,'Multiple pretip captures count as one game');
+ const graded=JSON.parse(memory.getItem('nba-possession-forecast-locks-v1'));
+ assert.ok(graded.every(x=>x.grade),'Only matching fixture may be graded');
+ assert.equal(graded[0].grade.home,100);
+}
