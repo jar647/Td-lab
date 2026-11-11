@@ -123,3 +123,17 @@ test('loss intervals use eligible frozen observations only and remain finite',()
  assert.ok(x.brier>=x.brierInterval95[0]&&x.brier<=x.brierInterval95[1]);
  assert.equal(x.calibrated,false);
 });
+
+test('Brier uncertainty interval respects the mathematically possible zero-to-one range',()=>{
+ const bouts=[],profiles={},predictions={};
+ for(let i=0;i<30;i++){
+  const id=String(i+100);bouts.push({...bout,bout_id:id});
+  profiles[id]=[{...p,fighter_id:'a'},{...p,fighter_id:'b'}];
+  predictions[id]={...pred['1'],winner_probability:i<15?0:1};
+ }
+ const result=score(bouts,profiles,predictions);
+ assert.equal(result.scored,30);
+ assert.ok(result.brierInterval95[0]>=0);
+ assert.ok(result.brierInterval95[1]<=1);
+ assert.ok(result.brierInterval95[1]>result.brierInterval95[0]);
+});
