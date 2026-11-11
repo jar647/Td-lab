@@ -10,7 +10,7 @@
  function score(bouts,snapshotsByBout,predictionsByBout){
   const audit=evaluator.evaluate(bouts,snapshotsByBout,predictionsByBout);
   const byId=new Map((Array.isArray(bouts)?bouts:[]).map(b=>[String(b?.bout_id||'').trim(),b]));
-  let brierSum=0,logSum=0,scored=0;
+  let brierSum=0,logSum=0,scored=0;const brierValues=[],logValues=[];
   const bins=Array.from({length:10},(_,i)=>({lower:i/10,upper:(i+1)/10,count:0,probabilitySum:0,outcomeSum:0}));
   const rows=audit.rows.map(row=>{
    if(!row.eligible)return {...row,probabilityScored:false};
@@ -22,7 +22,7 @@
    const brier=(p-outcome)**2;
    const eps=1e-15;
    const logLoss=-(outcome*Math.log(Math.max(eps,p))+(1-outcome)*Math.log(Math.max(eps,1-p)));
-   brierSum+=brier;logSum+=logLoss;scored++;
+   brierSum+=brier;logSum+=logLoss;scored++;brierValues.push(brier);logValues.push(logLoss);
    const bin=bins[Math.min(9,Math.floor(p*10))];bin.count++;bin.probabilitySum+=p;bin.outcomeSum+=outcome;
    return {...row,probabilityScored:true,probability:p,outcome,brier,logLoss};
   });
@@ -50,11 +50,22 @@
   const occupied=bins.filter(bin=>bin.count>0);
   const expectedCalibrationError=scored?occupied.reduce((sum,bin)=>sum+(bin.count/scored)*Math.abs(bin.probabilitySum/bin.count-bin.outcomeSum/bin.count),0):null;
   const maxCalibrationError=scored?Math.max(...occupied.map(bin=>Math.abs(bin.probabilitySum/bin.count-bin.outcomeSum/bin.count))):null;
+  // Descriptive normal-approximation intervals are suppressed for tiny samples.
+  // These are uncertainty estimates for observed backtest losses, not proof of
+  // calibration or forward performance. No resampling randomness is involved.
+  const meanInterval95=values=>{
+   const n=values.length;if(n<30)return null;
+   const avg=values.reduce((a,b)=>a+b,0)/n;
+   const variance=values.reduce((a,b)=>a+(b-avg)**2,0)/(n-1);
+   const margin=1.959963984540054*Math.sqrt(variance/n);
+   return [Math.max(0,avg-margin),avg+margin];
+  };
   return {totalBouts:audit.total,eligible:eligibleCount,excluded:audit.total-eligibleCount,excludedByReason,scored,missingProbability:eligibleCount-scored,
    probabilityCoverage:eligibleCount?scored/eligibleCount:null,
    missingFrozenPrediction,invalidFrozenProbability,
    expectedCalibrationError,maxCalibrationError,
    brier:scored?brierSum/scored:null,logLoss:scored?logSum/scored:null,
+   brierInterval95:meanInterval95(brierValues),logLossInterval95:meanInterval95(logValues),
    // A 50/50 benchmark has Brier 0.25 and log loss ln(2) for every decisive bout.
    // Positive skill means improvement over that naive baseline, not betting profit.
    brierSkillVsEven:scored?1-(brierSum/scored)/0.25:null,

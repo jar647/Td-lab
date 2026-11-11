@@ -102,3 +102,24 @@ test('reports Wilson uncertainty for observed reliability rates without claiming
  assert.equal(score([],{},{}).bins[8].observedRateInterval95,null);
  assert.equal(x.calibrated,false);
 });
+
+test('loss uncertainty intervals are withheld for small samples',()=>{
+ const x=score([bout],snaps,pred);
+ assert.equal(x.brierInterval95,null);
+ assert.equal(x.logLossInterval95,null);
+});
+test('loss intervals use eligible frozen observations only and remain finite',()=>{
+ const bouts=[],profiles={},predictions={};
+ for(let i=0;i<40;i++){
+  const id=String(i+100),a='a'+id,b='b'+id;
+  bouts.push({...bout,bout_id:id,fighter_a:a,fighter_b:b,winner:i%2?a:b});
+  profiles[id]=[{...p,fighter_id:a},{...p,fighter_id:b}];
+  predictions[id]={...pred['1'],winner_id:a,winner_probability:0.7};
+ }
+ const x=score(bouts,profiles,predictions);
+ assert.equal(x.scored,40);
+ assert.ok(x.brierInterval95[0]>=0&&x.brierInterval95[1]>=x.brierInterval95[0]);
+ assert.ok(x.logLossInterval95[0]>=0&&x.logLossInterval95[1]>=x.logLossInterval95[0]);
+ assert.ok(x.brier>=x.brierInterval95[0]&&x.brier<=x.brierInterval95[1]);
+ assert.equal(x.calibrated,false);
+});
