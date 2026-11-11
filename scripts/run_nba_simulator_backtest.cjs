@@ -20,9 +20,11 @@ function calibrationFit(rows){
 const calibrationRows=[];
 const minimumTraining=40;
 for(let i=minimumTraining;i<report.rows.length;i++){
- const past=report.rows.slice(0,i);
- const fit=calibrationFit(past);
  const game=report.rows[i];
+ // Same-day finals are not proven available before this game's tipoff.
+ const past=report.rows.slice(0,i).filter(r=>Date.parse(r.date)<Date.parse(game.date)-24*3600000);
+ if(past.length<minimumTraining)continue;
+ const fit=calibrationFit(past);
  const adjusted=clamp(.5+fit.intercept+fit.slope*(game.probability-.5),.05,.95);
  calibrationRows.push({date:game.date,raw:game.probability,calibrated:adjusted,outcome:game.outcome,rawBrier:(game.probability-game.outcome)**2,calibratedBrier:(adjusted-game.outcome)**2,coinFlipBrier:.25});
 }
@@ -33,14 +35,15 @@ const scored=report.rows.filter(r=>['actualHome','actualAway','projectedHome','p
 const hold=scored.slice(40);
 const priorMean=(rows,key)=>rows.reduce((sum,r)=>sum+r[key],0)/rows.length;
 const scoredHold=hold.map((r,i)=>{
- const prior=scored.slice(0,i+40);
+ const prior=scored.slice(0,i+40).filter(x=>Date.parse(x.date)<Date.parse(r.date)-24*3600000);
+ if(prior.length<40)return null;
  const homeBaseline=priorMean(prior,'actualHome'),awayBaseline=priorMean(prior,'actualAway');
  const modelError=(Math.abs(r.actualHome-r.projectedHome)+Math.abs(r.actualAway-r.projectedAway))/2;
  const baselineError=(Math.abs(r.actualHome-homeBaseline)+Math.abs(r.actualAway-awayBaseline))/2;
  return {date:r.date,modelError,baselineError};
-});
+}).filter(Boolean);
 report.scoreBenchmark={
- method:'Chronological expanding-window prior completed-game home/away scoring averages; 40-game initial history. No future results used.',
+ method:'Chronological expanding-window prior completed-game home/away scoring averages; 40-game initial history. At least 24 hours of result separation; same-day outcomes excluded.',
  holdoutGames:scoredHold.length,
  modelMAE:average(scoredHold.map(r=>r.modelError)),
  historicalMeanMAE:average(scoredHold.map(r=>r.baselineError)),
@@ -91,7 +94,7 @@ report.accuracyGate={
  reason:'Historical baseline evaluation does not validate the live injury-adjusted model or betting value; bootstrap uncertainty must also be considered.'
 };
 report.chronologicalCalibration={
- method:'Expanding-window, regularized linear probability calibration. Fit only to earlier completed predictions; 40-game minimum training. Evaluation is research-only.',
+ method:'Expanding-window, regularized linear probability calibration. Fit only to predictions at least 24 hours earlier; 40-game minimum training. Evaluation is research-only.',
  trainingMinimum:minimumTraining,
  holdoutGames:calibrationRows.length,
  rawBrier:average(calibrationRows.map(r=>r.rawBrier)),
