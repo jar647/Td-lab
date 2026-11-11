@@ -66,13 +66,14 @@ report.scoreBenchmark.uncertainty=pairedBootstrap(scoredHold,'modelError','basel
 // Evidence inventory: do not confuse final-game box scores with a dated
 // pre-tip injury snapshot or an archived sportsbook closing market.
 const games=(feed.games||[]).filter(g=>g.status==='STATUS_FINAL');
-const {hasDatedInjuries,hasClosingMarket}=require('./nba_pretip_evidence.cjs');
+const {hasDatedInjuries,hasClosingMarket,hasVerifiedMarket}=require('./nba_pretip_evidence.cjs');
 report.evidenceCoverage={
  completedGames:games.length,
  datedPretipInjurySnapshots:games.filter(hasDatedInjuries).length,
  archivedClosingMarkets:games.filter(hasClosingMarket).length,
+ verifiedClosingMarkets:games.filter(hasVerifiedMarket).length,
  injuryBacktestReady:games.filter(hasDatedInjuries).length>=50,
- marketBacktestReady:games.filter(hasClosingMarket).length>=50,
+ marketBacktestReady:games.filter(hasVerifiedMarket).length>=50,
  definitions:{
   datedPretipInjurySnapshots:'pretip_injury_snapshot with captured_at and players; must be verified to precede game tip',
   archivedClosingMarkets:'closing_market with captured_at, home_spread, total, home_moneyline and away_moneyline; must be verified as pre-tip'
@@ -85,7 +86,7 @@ report.accuracyGate={
  liveInjuryAdjustedModelBacktested:false,
  historicalInjurySnapshotCoverage:report.evidenceCoverage.datedPretipInjurySnapshots,
  historicalClosingMarketCoverage:report.evidenceCoverage.archivedClosingMarkets,
- sportsbookClosingLineBenchmarkAvailable:false,
+ sportsbookClosingLineBenchmarkAvailable:report.evidenceCoverage.marketBacktestReady,
  validatedForBetting:false,
  reason:'Historical baseline evaluation does not validate the live injury-adjusted model or betting value; bootstrap uncertainty must also be considered.'
 };
