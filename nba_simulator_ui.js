@@ -65,7 +65,7 @@ function gradedEnsemble(rows){
  const weights=ENSEMBLE_WEIGHTS.map((w,i)=>{
   const records=withFrozen.map(x=>({lock:x.lock,score:x.scores[i]}));
   const evalMarket=key=>{
-   const r=records.map(x=>x.lock.lineSource==='verified-pregame-archive'?marketGrade(x.lock,x.score)[key]:'UNVERIFIED');
+   const r=records.map(x=>marketGrade(x.lock,x.score)[key]);
    const wins=r.filter(s=>s==='WIN').length,losses=r.filter(s=>s==='LOSS').length,pushes=r.filter(s=>s==='PUSH').length;
    return {gamesWithLean:wins+losses+pushes,wins,losses,pushes,hitRate:wins+losses?wins/(wins+losses):null};
   };
@@ -74,7 +74,7 @@ function gradedEnsemble(rows){
    totalMAE:avg(records.map(x=>Math.abs(x.score.home+x.score.away-x.lock.grade.home-x.lock.grade.away))),
    ats:evalMarket('ats'),total:evalMarket('total')};
  });
- const marketRecords=withFrozen.filter(x=>x.lock.lineSource==='verified-pregame-archive'&&(finite(x.lock.market?.total)||finite(x.lock.market?.homeSpread)));
+ const marketRecords=withFrozen.filter(x=>finite(x.lock.market?.total)||finite(x.lock.market?.homeSpread));
  return {games:withFrozen.length,quotedGames:marketRecords.length,weights,
   methodology:'Only new device-local pregame captures with both model forecasts frozen are counted. Spread and total direction is a hypothetical model lean, NOT a placed bet or an approved edge. User-entered odds are unverified and excluded from market benchmark statistics. Pushes excluded from hit rate; no line means no evaluation.'};
 }
