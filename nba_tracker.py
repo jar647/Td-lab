@@ -95,6 +95,8 @@ for s in snapshots:
  # Only games with a final ESPN result may be graded.
  match=next((g for g in games if str(g["id"])==str(s["game_id"]) and g["status"]=="STATUS_FINAL"),None)
  if not match:continue
+ # A reused game ID or rescheduled tipoff must not silently grade a different event.
+ if not isinstance(match.get("date"),str) or match["date"]!=s.get("tipoff"):continue
  players={str(p.get("id")):p for p in match["players"]}
  for p in s["projections"]:
   if p["result"]!="pending":continue
