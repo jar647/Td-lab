@@ -10,7 +10,7 @@ class TrackerTipoffTests(unittest.TestCase):
             (root / "nba_tracker.py").write_text(SCRIPT.read_text())
             locked = "2026-11-10T18:00:00+00:00"
             tipoff = "2026-11-10T19:00:00+00:00"
-            snapshot = {"game_id": 123, "tipoff": tipoff, "locked_at": locked,
+            snapshot = {"game_id": 123, "tipoff": tipoff, "home_team":"AAA", "away_team":"BBB", "locked_at": locked,
                         "model": "test", "projections": [
                             {"player_id": "7", "market": "points", "projection": 20,
                              "result": "pending", "actual": None}]}

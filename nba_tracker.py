@@ -88,7 +88,7 @@ for g in games:
    projections.append({"player_id":pid,"player":rows[0]["name"],"team":rows[0]["team"],"market":market,"projection":projection,"baseline":round(baseline,2),"minute_factor":round(minute_factor,3),"sample":len(vals),"actual":None,"result":"pending"})
   projections.append({"player_id":pid,"player":rows[0]["name"],"team":rows[0]["team"],"market":"minutes","projection":round(avg_minutes,2),"sample":len(rows[:5]),"actual":None,"result":"pending"})
  if projections:
-  snapshots.append({"game_id":g["id"],"game":g["away"]+" @ "+g["home"],"tipoff":g["date"],"locked_at":now.isoformat(),"model":"nba-ui-season-recent-matchup-v5","projections":projections})
+  snapshots.append({"game_id":g["id"],"game":g["away"]+" @ "+g["home"],"home_team":g["home"],"away_team":g["away"],"tipoff":g["date"],"locked_at":now.isoformat(),"model":"nba-ui-season-recent-matchup-v5","projections":projections})
   seen.add(str(g["id"]))
 for s in snapshots:
  if not valid_lock(s):continue
@@ -97,6 +97,10 @@ for s in snapshots:
  if not match:continue
  # A reused game ID or rescheduled tipoff must not silently grade a different event.
  if not isinstance(match.get("date"),str) or match["date"]!=s.get("tipoff"):continue
+ # Require immutable participant identity, not merely a reused game ID and tipoff.
+ # Legacy snapshots without team IDs remain visible but cannot be graded safely.
+ if not s.get("home_team") or not s.get("away_team"):continue
+ if str(match.get("home"))!=str(s["home_team"]) or str(match.get("away"))!=str(s["away_team"]):continue
  players={str(p.get("id")):p for p in match["players"]}
  for p in s["projections"]:
   if p["result"]!="pending":continue
