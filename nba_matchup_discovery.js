@@ -22,7 +22,7 @@ function analyze(game,feed,rosters,injuries,now=Date.now()){
   for(const team of [g.home,g.away]){
    const opponents=(g.players||[]).filter(p=>p.team!==team&&!p.didNotPlay),observed=opponents.map(p=>({p,stats:recorded(p),position:pos(p)})).filter(x=>x.stats),totalMinutes=observed.reduce((s,x)=>s+x.stats.minutes,0),known=observed.filter(x=>x.position).reduce((s,x)=>s+x.stats.minutes,0);
    const bucket=defense.get(team)||[];
-   if(totalMinutes>0&&known/totalMinutes>=.98&&bucket.length<10){const byPosition=Object.fromEntries(positions.map(p=>[p,{points:0,rebounds:0,assists:0}]));for(const x of observed)if(x.position)for(const k of markets)byPosition[x.position][k]+=total(x.stats,k);bucket.push({game:g.id,values:byPosition});defense.set(team,bucket);coverage.games++;}else if(bucket.length<10)coverage.omittedTeamGames++;
+   if(totalMinutes>0&&known/totalMinutes>=.98&&bucket.length<10){const byPosition=Object.fromEntries(positions.map(p=>[p,Object.fromEntries(markets.map(k=>[k,0]))]));for(const x of observed)if(x.position)for(const k of markets)byPosition[x.position][k]+=total(x.stats,k);bucket.push({game:g.id,values:byPosition});defense.set(team,bucket);coverage.games++;}else if(bucket.length<10)coverage.omittedTeamGames++;
   }
   for(const p of g.players||[]){const stats=recorded(p),position=pos(p);if(!stats||!position||!Array.isArray(members[p.team])||!members[p.team].map(String).includes(String(p.id)))continue;
    const id=String(p.id);if(!profiles.has(id))profiles.set(id,{id,name:p.name,team:p.team,position,rows:[]});const row=profiles.get(id);if(row.team!==p.team||row.rows.length>=10)continue;row.rows.push({...stats,date:g.date,home:p.team===g.home});
