@@ -48,7 +48,7 @@ jobs:
       - name: Install browser test dependencies
         run: |
           npm install --no-save --no-package-lock playwright
-          npx playwright install --with-deps chromium
+          npx playwright install chromium
       - name: Run UFC browser regression
         run: UFC_CHROMIUM_PATH="$(node -e 'process.stdout.write(require("playwright").chromium.executablePath())')" node test_ufc_browser.js
       - uses: actions/setup-python@v5

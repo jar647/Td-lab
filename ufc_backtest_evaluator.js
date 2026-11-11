@@ -48,11 +48,10 @@
    if(!a||!b||a===b)errors.push('invalid_competitors');
    if(!picked||![a,b].includes(picked))errors.push('invalid_predicted_winner');
    const status=String(bout?.status||'').toLowerCase();
-   const method=String(bout?.method_display||bout?.method||'');
-   const result=String(bout?.result||bout?.result_type||'');
+   const resultFields=[bout?.method_display,bout?.method,bout?.result,bout?.result_type].filter(v=>v!==null&&v!==undefined).map(String);
    const nonDecisive=/(?:\b(?:draw|no[\s-]*contest|overturn(?:ed)?)\b|\bn\.?c\.?(?=\s|$))/i;
    const winner=String(bout?.winner||'');
-   if(status!=='final'||(nonDecisive.test(method)||nonDecisive.test(result))||![a,b].includes(winner))errors.push('no_decisive_final_result');
+   if(status!=='final'||(resultFields.some(value=>nonDecisive.test(value)))||![a,b].includes(winner))errors.push('no_decisive_final_result');
    const eligible=errors.length===0;
    rows.push({bout_id:id,eligible,errors,correct:eligible?picked===winner:null});
   }
