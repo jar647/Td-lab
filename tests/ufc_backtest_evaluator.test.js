@@ -31,3 +31,12 @@ test('rejects bout IDs that collide after whitespace normalization',()=>{
  assert.equal(result.excluded,2);
  assert.equal(result.excludedByReason.missing_or_duplicate_bout_id,2);
 });
+
+test('explicit no-contest or draw result overrides a misleading winner ID and decision method',()=>{
+ for(const result of ['Draw','NC','N.C.','No Contest','Overturned']){
+  const x=evaluate([{...bout,result}],snap,pred);
+  assert.equal(x.evaluated,0,result);
+  assert.ok(x.rows[0].errors.includes('no_decisive_final_result'),result);
+ }
+ assert.equal(evaluate([{...bout,result:'Win'}],snap,pred).evaluated,1);
+});
