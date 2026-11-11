@@ -18,7 +18,7 @@ test('grades matching final with original tipoff and teams',()=>{
  assert.equal(grade({games:[final()],generated_at:'2026-11-11T04:00:00Z'},s,Date.parse('2026-11-11T05:00:00Z')).graded,1);
 });
 test('rejects reused ID, changed tipoff and changed teams',()=>{
- for(const g of [final('2026-11-12T00:00:00Z'),final(tip,'Other','Away'),final(tip,'Home','Other'),final(undefined,'Home','Away')]){
+ for(const g of [final('2026-11-12T00:00:00Z'),final(tip,'Other','Away'),final(tip,'Home','Other'),{...final(),date:null}]){
   const s=storage(lock());g.date=g.date||null;
   assert.equal(grade({games:[g],generated_at:'2026-11-12T04:00:00Z'},s,Date.parse('2026-11-12T05:00:00Z')).graded,0);
   assert.equal(JSON.parse(s.getItem(KEY))[0].grade,undefined);
