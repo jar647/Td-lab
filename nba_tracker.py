@@ -94,7 +94,7 @@ for s in snapshots:
  if not valid_lock(s):continue
  # Only games with a final ESPN result may be graded.
  match=next((g for g in games if str(g["id"])==str(s["game_id"]) and g["status"]=="STATUS_FINAL"),None)
- if not match:continue
+ if not match or dt(match)>now:continue
  # A reused game ID or rescheduled tipoff must not silently grade a different event.
  if not isinstance(match.get("date"),str) or match["date"]!=s.get("tipoff"):continue
  # Require immutable participant identity, not merely a reused game ID and tipoff.
@@ -104,6 +104,9 @@ for s in snapshots:
  players={str(p.get("id")):p for p in match["players"]}
  for p in s["projections"]:
   if p["result"]!="pending":continue
+  # Player IDs alone are insufficient: require the same team as the frozen projection.
+  final_player=players.get(str(p.get("player_id")))
+  if not final_player or str(final_player.get("team"))!=str(p.get("team")):continue
   actual=(mins(players[p["player_id"]]) if p["market"]=="minutes" and p["player_id"] in players else value(players.get(p["player_id"],{}),{"points":"PTS","rebounds":"REB","assists":"AST","threes":"3PM"}.get(p["market"],"MIN")))
   if players.get(p["player_id"],{}).get("didNotPlay") or (p["player_id"] in players and mins(players[p["player_id"]])<1):
    p["result"]="dnp"

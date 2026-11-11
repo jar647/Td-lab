@@ -22,7 +22,7 @@ assert.deepEqual(JSON.parse(storage.getItem(ui.KEY))[0],original,'A duplicate ca
 assert.equal(ui.capture(result,model,storage,Date.parse(tip)+1000).saved,false,'No post-tipoff capture');
 
 const makePlayers=(team,points)=>Array.from({length:5},(_,i)=>({team,stats:{PTS:String(i===4?points-4*10:10)}}));
-const game={id:model.id,home:model.home,away:model.away,status:'STATUS_FINAL',
+const game={id:model.id,home:model.home,away:model.away,date:tip,status:'STATUS_FINAL',
  players:[...makePlayers('Home',110),...makePlayers('Away',105)]};
 const feed={games:[game],generated_at:'2026-12-11T06:00:00.000Z'};
 assert.equal(ui.grade(feed,storage,pregame).graded,0,'No final score before tipoff');

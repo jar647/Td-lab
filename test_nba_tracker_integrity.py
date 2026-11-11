@@ -17,7 +17,7 @@ class TrackerIntegrityTests(unittest.TestCase):
   after=(datetime.datetime.fromisoformat(past)+datetime.timedelta(hours=1)).isoformat()
   game={'id':101,'date':past,'home':'BOS','away':'MIA','status':'STATUS_FINAL','players':[{'id':7,'name':'Test Player','team':'BOS','stats':{'MIN':'30','PTS':20}}]}
   def snap(id_,locked):
-   return {'game_id':id_,'tipoff':past,'home_team':'BOS','away_team':'MIA','locked_at':locked,'model':'integrity-test','projections':[{'player_id':'7','market':'points','projection':19,'actual':None,'result':'pending'}]}
+   return {'game_id':id_,'tipoff':past,'home_team':'BOS','away_team':'MIA','locked_at':locked,'model':'integrity-test','projections':[{'player_id':'7','team':'BOS','market':'points','projection':19,'actual':None,'result':'pending'}]}
   output=self.run_tracker([game],[snap(101,before),snap(101,after),snap(101,None)])
   self.assertEqual([s['projections'][0]['result'] for s in output['snapshots']],['within_20pct','pending','pending'])
   self.assertEqual(output['accuracy_by_model']['integrity-test']['points']['count'],1)
@@ -25,7 +25,7 @@ class TrackerIntegrityTests(unittest.TestCase):
   past=(datetime.datetime.now(datetime.timezone.utc)-datetime.timedelta(days=2)).isoformat()
   before=(datetime.datetime.fromisoformat(past)-datetime.timedelta(hours=1)).isoformat()
   game={'id':101,'date':past,'home':'BOS','away':'MIA','status':'STATUS_FINAL','players':[{'id':7,'name':'Test Player','team':'BOS','stats':{'MIN':'30','PTS':20}}]}
-  lock={'game_id':'101','tipoff':past,'home_team':'BOS','away_team':'MIA','locked_at':before,'model':'integrity-test','projections':[{'player_id':'7','market':'points','projection':19,'actual':None,'result':'pending'}]}
+  lock={'game_id':'101','tipoff':past,'home_team':'BOS','away_team':'MIA','locked_at':before,'model':'integrity-test','projections':[{'player_id':'7','team':'BOS','market':'points','projection':19,'actual':None,'result':'pending'}]}
   output=self.run_tracker([game],[lock])
   self.assertEqual(len(output['snapshots']),1)
   self.assertEqual(output['snapshots'][0]['projections'][0]['result'],'within_20pct')
@@ -33,9 +33,20 @@ class TrackerIntegrityTests(unittest.TestCase):
   past=(datetime.datetime.now(datetime.timezone.utc)-datetime.timedelta(days=2)).isoformat()
   before=(datetime.datetime.fromisoformat(past)-datetime.timedelta(hours=1)).isoformat()
   game={'id':101,'date':past,'home':'BOS','away':'MIA','status':'STATUS_FINAL','players':[{'id':7,'name':'Test Player','team':'BOS','stats':{'MIN':'30','PTS':20}}]}
-  base={'game_id':101,'tipoff':past,'locked_at':before,'model':'integrity-test','projections':[{'player_id':'7','market':'points','projection':19,'actual':None,'result':'pending'}]}
+  base={'game_id':101,'tipoff':past,'locked_at':before,'model':'integrity-test','projections':[{'player_id':'7','team':'BOS','market':'points','projection':19,'actual':None,'result':'pending'}]}
   for identity in ({'home_team':'MIA','away_team':'BOS'},{'home_team':'BOS','away_team':'NYK'},{}):
    output=self.run_tracker([game],[{**base,**identity}])
+   self.assertEqual(output['snapshots'][0]['projections'][0]['result'],'pending')
+   self.assertEqual(output['accuracy_by_model'],{})
+ def test_player_team_mismatch_and_missing_team_do_not_grade(self):
+  past=(datetime.datetime.now(datetime.timezone.utc)-datetime.timedelta(days=2)).isoformat()
+  before=(datetime.datetime.fromisoformat(past)-datetime.timedelta(hours=1)).isoformat()
+  game={'id':101,'date':past,'home':'BOS','away':'MIA','status':'STATUS_FINAL','players':[{'id':7,'team':'MIA','stats':{'MIN':'30','PTS':20}}]}
+  base={'game_id':101,'tipoff':past,'home_team':'BOS','away_team':'MIA','locked_at':before,'model':'integrity-test'}
+  for team in ('BOS',None):
+   projection={'player_id':'7','market':'points','projection':19,'actual':None,'result':'pending'}
+   if team:projection['team']=team
+   output=self.run_tracker([game],[{**base,'projections':[projection]}])
    self.assertEqual(output['snapshots'][0]['projections'][0]['result'],'pending')
    self.assertEqual(output['accuracy_by_model'],{})
 if __name__=='__main__':unittest.main()
