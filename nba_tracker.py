@@ -15,6 +15,7 @@ seen={str(s["game_id"]) for s in snapshots}
 # Fail closed: legacy or manually modified post-tip locks cannot enter accuracy statistics.
 def valid_lock(s):
  try:
+  if not isinstance(s.get("locked_at"),str) or not isinstance(s.get("tipoff"),str):return False
   locked=datetime.datetime.fromisoformat(s["locked_at"].replace("Z","+00:00"))
   tip=datetime.datetime.fromisoformat(s["tipoff"].replace("Z","+00:00"))
   return locked.tzinfo is not None and tip.tzinfo is not None and locked<tip
