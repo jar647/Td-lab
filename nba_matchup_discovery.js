@@ -45,7 +45,7 @@ function analyze(game,feed,rosters,injuries,now=Date.now()){
     const injury=(injuries?.injuries||[]).find(p=>String(p.player_id||p.id||'')===player.id||norm(p.player||p.name)===norm(player.name)),status=String(injury?.status||'NOT LISTED').toUpperCase();if(!['NOT LISTED','ACTIVE','AVAILABLE','PROBABLE'].includes(status))continue;
     const threshold=baseline(history,market,side);if(threshold===null)continue;
     const ownHistory=teamHistory.get(attacking)||[],opponentHistory=teamHistory.get(opponent)||[],lastTeam=ownHistory[0],restDays=lastTeam?Math.max(0,Math.round((Date.parse(game.date)-Date.parse(lastTeam.date))/86400000)-1):null,backToBack=restDays===0;
-    const venueRows=player.rows.filter(r=>r.home===(attacking===game.home)),venueAverage=venueRows.length>=3?avg(venueRows.map(r=>r[market])):null;
+    const venueRows=player.rows.filter(r=>r.home===(attacking===game.home)),venueAverage=venueRows.length>=3?avg(venueRows.map(r=>total(r,market))):null;
     const projectedMinutes=Math.round(Math.min(40,Math.max(0,recentMinutes+(backToBack&&recentMinutes>32?-1:0)))*10)/10;
     const paceSample=rows=>rows.slice(0,5).map(g=>{const a=(g.players||[]).filter(p=>p.team===g.home),b=(g.players||[]).filter(p=>p.team===g.away);const possession=x=>{const sum=k=>x.reduce((v,p)=>v+(Number(p.stats?.[k])||0),0);return sum('FGA')+.44*sum('FTA')-sum('OREB')+sum('TO')};return (possession(a)+possession(b))/2}).filter(v=>v>70&&v<140);
     const paceValues=[...paceSample(ownHistory),...paceSample(opponentHistory)],paceEstimate=paceValues.length>=6?Math.round(avg(paceValues)*10)/10:null;
