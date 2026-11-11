@@ -86,7 +86,8 @@ function grade(feed,storage,now=Date.now()){
   for(const lock of locks){
    if(lock.grade||!Number.isFinite(Date.parse(lock.lockedAt))||Date.parse(lock.lockedAt)>=Date.parse(lock.tipoff)||now<Date.parse(lock.tipoff))continue;
    const g=(feed.games||[]).find(g=>String(g.id)===String(lock.gameId)&&g.status==='STATUS_FINAL');
-   if(!g)continue;
+   if(!g||typeof g.date!=='string'||g.date!==lock.tipoff||g.home!==lock.home||g.away!==lock.away)continue;
+   // Never grade a rescheduled/reused game ID against a different frozen matchup.
    const points=team=>{const ps=(g.players||[]).filter(p=>p.team===team&&!p.didNotPlay);return ps.length>=5&&ps.every(p=>p.stats?.PTS!==undefined)?ps.reduce((s,p)=>s+Number(p.stats.PTS),0):null};
    const h=points(g.home),a=points(g.away);
    if(h===null||a===null||h===a||!Number.isFinite(h+a))continue;
