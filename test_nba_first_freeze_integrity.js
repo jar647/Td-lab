@@ -16,5 +16,5 @@ assert.equal(graded.graded,1);
 assert.equal(graded.marketBlend0.mlGames,0,'Unverified moneyline prices cannot be a market baseline');
 assert.equal(graded.marketBlend0.games,0,'Unverified spread and total cannot be a market baseline');
 assert.equal(graded.ensemble.quotedGames,1,'Hypothetical leans remain visible but are not verified market benchmarks');
-assert.equal(graded.ensemble.weights[1].ats.gamesWithLean,1);
+assert.equal(graded.ensemble.weights[1].ats.gamesWithLean,0,'Exactly-on-the-spread 50/50 blend is NO LEAN');
 console.log('NBA immutable first snapshot and verified market gate PASS');
