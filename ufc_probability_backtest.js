@@ -53,19 +53,19 @@
   // Descriptive normal-approximation intervals are suppressed for tiny samples.
   // These are uncertainty estimates for observed backtest losses, not proof of
   // calibration or forward performance. No resampling randomness is involved.
-  const meanInterval95=values=>{
+  const meanInterval95=(values,upperBound=Infinity)=>{
    const n=values.length;if(n<30)return null;
    const avg=values.reduce((a,b)=>a+b,0)/n;
    const variance=values.reduce((a,b)=>a+(b-avg)**2,0)/(n-1);
    const margin=1.959963984540054*Math.sqrt(variance/n);
-   return [Math.max(0,avg-margin),avg+margin];
+   return [Math.max(0,avg-margin),Math.min(upperBound,avg+margin)];
   };
   return {totalBouts:audit.total,eligible:eligibleCount,excluded:audit.total-eligibleCount,excludedByReason,scored,missingProbability:eligibleCount-scored,
    probabilityCoverage:eligibleCount?scored/eligibleCount:null,
    missingFrozenPrediction,invalidFrozenProbability,
    expectedCalibrationError,maxCalibrationError,
    brier:scored?brierSum/scored:null,logLoss:scored?logSum/scored:null,
-   brierInterval95:meanInterval95(brierValues),logLossInterval95:meanInterval95(logValues),
+   brierInterval95:meanInterval95(brierValues,1),logLossInterval95:meanInterval95(logValues),
    // A 50/50 benchmark has Brier 0.25 and log loss ln(2) for every decisive bout.
    // Positive skill means improvement over that naive baseline, not betting profit.
    brierSkillVsEven:scored?1-(brierSum/scored)/0.25:null,
