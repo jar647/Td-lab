@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const guard = require('../ufc_backtest_guard.js');
 const evaluator = require('../ufc_backtest_evaluator.js');
 const bout = {bout_id:'calendar-check',fighter_a:'a',fighter_b:'b',starts_at:'2026-03-01T00:00:00Z',status:'final',winner:'a',method:'Decision'};
-const profiles = [{fighter_id:'a',stats_source:'historical archive',stats_as_of:'2026-02-27T00:00:00Z',stats:{wins:3}},{fighter_id:'b',stats_source:'historical archive',stats_as_of:'2026-02-27T00:00:00Z',stats:{wins:2}}];
+const profiles = [{fighter_id:'a',stats_source:'historical archive',stats_as_of:'2026-02-27T00:00:00Z',stats:{slpm:3}},{fighter_id:'b',stats_source:'historical archive',stats_as_of:'2026-02-27T00:00:00Z',stats:{slpm:2}}];
 const prediction = {winner_id:'a',frozen_at:'2026-02-28T00:00:00Z'};
 test('valid historical dates remain eligible',()=>{
  assert.equal(guard.inspect(bout,profiles).eligible,true);
