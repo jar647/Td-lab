@@ -499,9 +499,9 @@ async function nbaGameFirstRefresh(){
    nbaGameFirstCache.clear();
    if(Date.parse(g.date)>Date.now())renderNBAGameFirst(g);
    const status=$('nba-game-first-feedback');
-   if(status)status.textContent='Availability checked '+new Date(injuryData.generated_at).toLocaleTimeString()+'. Re-evaluate before placing a bet.';
+   if(status)status.textContent='Availability checked '+new Date(injuryData.generated_at).toLocaleTimeString()+'. '+(nbaGameFirstResult?.picks?.length?'Qualified recommendations refreshed.':'No qualifying recommendations after refresh; check matchup coverage and thresholds.')+' Re-evaluate before placing a bet.';
   }catch(e){
-   if(feedback)feedback.textContent='Live refresh unavailable: '+e.message+'. No unverified pregame recommendations.';
+   const status=$('nba-game-first-feedback');if(status)status.textContent='Live refresh unavailable: '+e.message+'. Published injury report: '+(injuryData?.generated_at?new Date(injuryData.generated_at).toLocaleString():'missing')+'. No unverified pregame recommendations.';
   }finally{nbaGameFirstRefreshing=null}
  })();
  return nbaGameFirstRefreshing;
