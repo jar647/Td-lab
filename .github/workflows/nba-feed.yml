@@ -27,6 +27,7 @@ on:
       - 'nba_daily_learning.py'
       - 'test_nba_daily_learning.py'
       - 'nba_tracker.py'
+      - 'test_nba_tracker_tipoff.py'
       - 'test_nba_tracker_integrity.py'
       - 'nba_injuries.py'
       - 'nba_rosters.py'
@@ -127,7 +128,7 @@ jobs:
           python scripts/archive_nba_evidence.py
           python scripts/check_nba_evidence_archive.py
           python scripts/grade_nba_prospective.py
-          python -m unittest -v test_nba_pipeline.py test_nba_odds.py test_nba_contracts.py test_nba_daily_learning.py test_nba_first_basket.py
+          python -m unittest -v test_nba_tracker_tipoff.py test_nba_pipeline.py test_nba_odds.py test_nba_contracts.py test_nba_daily_learning.py test_nba_first_basket.py
           node test_market_odds.js
           node test_player_probability.js
           node test_nba_pipeline_ui.js
