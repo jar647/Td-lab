@@ -35,6 +35,14 @@
      if((asOf!==null&&asOf>before)||(collected!==null&&collected>before))errors.push('fighter_'+i+'_snapshot_after_prediction');
     });
    }
+   // Optional model provenance must also predate the frozen pick. A timestamp
+   // after the pick can leak fight results into an apparently pre-fight record.
+   for(const field of ['model_as_of','features_as_of','model_trained_at']){
+    if(prediction?.[field]===undefined||prediction?.[field]===null)continue;
+    const at=time(prediction[field]);
+    if(at===null)errors.push('invalid_'+field+'_timestamp');
+    else if((before!==null&&at>before)||(cutoff!==null&&at>=cutoff))errors.push(field+'_after_prediction');
+   }
    const a=String(bout?.fighter_a||''),b=String(bout?.fighter_b||'');
    const picked=String(prediction?.winner_id||'');
    if(!a||!b||a===b)errors.push('invalid_competitors');
