@@ -8,8 +8,19 @@ from datetime import datetime, timezone
 root=Path(__file__).resolve().parents[1]
 p=root/'data/nba_evidence_archive.json.gz'
 if not p.exists(): raise SystemExit('Evidence archive missing')
-data=json.loads(gzip.decompress(p.read_bytes()).decode())
-rows=data.get('snapshots',[])
+manifest_path=root/'data/nba_evidence_manifest.json'
+if manifest_path.exists():
+    manifest=json.loads(manifest_path.read_text())
+    rows=[]
+    for name in manifest['shards']:
+        if not isinstance(name,str) or not name.startswith('nba_evidence_') or not name.endswith('.json.gz') or '/' in name:raise SystemExit('Invalid evidence shard')
+        part=root/'data'/name
+        if not part.exists() or part.stat().st_size>=20_000_000:raise SystemExit('Missing or oversized shard')
+        rows.extend(json.loads(gzip.decompress(part.read_bytes()).decode()).get('snapshots',[]))
+    if len(rows)!=manifest['snapshot_count']:raise SystemExit('Evidence count mismatch')
+else:
+    data=json.loads(gzip.decompress(p.read_bytes()).decode())
+    rows=data.get('snapshots',[])
 if not rows: raise SystemExit('No evidence snapshots')
 previous=None
 coverage={'snapshots':len(rows),'injury_snapshots':0,'market_snapshots':0,'lock_snapshots':0,'market_snapshots_with_game_lines':0}

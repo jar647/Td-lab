@@ -141,7 +141,7 @@ jobs:
           node test_nba_bet_research.js
           node test_nba_first_basket.js
           git add data/nba_simulator_report.json data/nba_simulator_locks.json
-          git add data/nba_evidence_archive.json.gz data/nba_prospective_accuracy.json
+          git add data/nba_evidence_archive.json.gz data/nba_evidence_manifest.json data/nba_evidence_*.json.gz data/nba_prospective_accuracy.json
           git rm -f --ignore-unmatch data/nba_evidence_archive.json
           git add data/nba_games.json data/nba_projection_tracker.json data/nba_daily_learning.json data/nba_analysis.json data/nba_pipeline_locks.json data/nba_market_status.json
           if test -f data/nba_market_odds.json; then git add data/nba_market_odds.json; fi

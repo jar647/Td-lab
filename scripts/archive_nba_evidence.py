@@ -37,6 +37,19 @@ def compact_sources(sources,seen):
     return result
 
 archive=load(OUT) or load(LEGACY) or {'schema_version':1,'snapshots':[]}
+manifest_path=ROOT/'data/nba_evidence_manifest.json'
+if manifest_path.exists():
+    manifest=load(manifest_path)
+    rows=[]
+    for name in manifest['shards']:
+        if not isinstance(name,str) or not name.startswith('nba_evidence_') or not name.endswith('.json.gz') or '/' in name:
+            raise SystemExit('Invalid evidence shard')
+        part=load(ROOT/'data'/name)
+        if not isinstance(part,dict) or not isinstance(part.get('snapshots'),list):
+            raise SystemExit('Missing evidence shard')
+        rows.extend(part['snapshots'])
+    if len(rows)!=manifest['snapshot_count']:raise SystemExit('Evidence count mismatch')
+    archive={'schema_version':3,'snapshots':rows}
 old=archive.get('snapshots',[])
 seen=set()
 snapshots=[]
@@ -54,11 +67,27 @@ if snapshots and snapshots[-1]['sources']==compact:
     print('No new evidence; compacted existing archive')
 else:
     snapshots.append({'captured_at':NOW,'sources':compact,'evidence_type':'capture_not_verified_closing_line'})
-archive={'schema_version':2,'snapshots':snapshots[-240:]}
-payload=json.dumps(archive,separators=(',',':'))+'\n'
-# Fail before writing/committing if archive would approach GitHub's 100 MB cap.
-compressed=gzip.compress(payload.encode(),compresslevel=9,mtime=0)
-if len(compressed)>=40_000_000:
-    raise SystemExit('Compressed evidence archive exceeds 40 MB safety limit; split archive before publishing')
-OUT.write_bytes(compressed)
-print(f"Compressed NBA evidence: {len(archive['snapshots'])} captures, {len(compressed)} bytes")
+snapshots=snapshots[-240:]
+def encode(rows):
+    return gzip.compress((json.dumps({'schema_version':3,'snapshots':rows},separators=(',',':'))+'\n').encode(),compresslevel=9,mtime=0)
+shards=[]
+current=[]
+for row in snapshots:
+    trial=current+[row]
+    if current and len(encode(trial))>=20_000_000:
+        shards.append(current)
+        current=[row]
+    else:current=trial
+    if len(encode(current))>=20_000_000:raise SystemExit('Single capture exceeds shard limit')
+if current:shards.append(current)
+if not shards:raise SystemExit('No evidence')
+names=[]
+for i,rows in enumerate(shards):
+    name=f'nba_evidence_{i:04d}.json.gz'
+    (ROOT/'data'/name).write_bytes(encode(rows))
+    names.append(name)
+OUT.write_bytes(encode(shards[0]))
+manifest_path.write_text(json.dumps({'schema_version':3,'shards':names,'snapshot_count':len(snapshots)},indent=2)+'\n')
+for old in (ROOT/'data').glob('nba_evidence_*.json.gz'):
+    if old.name not in names:old.unlink()
+print(f'NBA evidence: {len(snapshots)} captures in {len(names)} shards')

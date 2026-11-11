@@ -14,7 +14,16 @@ def when(value):
  try:return datetime.fromisoformat(str(value).replace('Z','+00:00'))
  except (ValueError,TypeError):return None
 games={str(g.get('id')):g for g in load('nba_games.json').get('games',[]) if g.get('status')=='STATUS_FINAL'}
-archive=json.loads(gzip.decompress((ROOT/'nba_evidence_archive.json.gz').read_bytes()).decode()).get('snapshots',[])
+manifest_path=ROOT/'nba_evidence_manifest.json'
+if manifest_path.exists():
+ manifest=json.loads(manifest_path.read_text())
+ archive=[]
+ for name in manifest['shards']:
+  if not isinstance(name,str) or not name.startswith('nba_evidence_') or '/' in name:raise SystemExit('Invalid evidence shard')
+  archive.extend(json.loads(gzip.decompress((ROOT/name).read_bytes()).decode()).get('snapshots',[]))
+ if len(archive)!=manifest['snapshot_count']:raise SystemExit('Incomplete evidence')
+else:
+ archive=json.loads(gzip.decompress((ROOT/'nba_evidence_archive.json.gz').read_bytes()).decode()).get('snapshots',[])
 candidates=[]
 for capture in archive:
  captured=when(capture.get('captured_at'))
