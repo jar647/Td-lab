@@ -27,6 +27,7 @@ on:
       - 'nba_daily_learning.py'
       - 'test_nba_daily_learning.py'
       - 'nba_tracker.py'
+      - 'test_nba_tracker_integrity.py'
       - 'nba_injuries.py'
       - 'nba_rosters.py'
       - 'test_nba_contracts.py'
@@ -76,7 +77,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Test locked NBA forecasts and daily learning
-        run: python -m unittest -v test_nba_pipeline.py test_nba_odds.py test_nba_contracts.py test_nba_daily_learning.py test_nba_first_basket.py
+        run: python -m unittest -v test_nba_tracker_integrity.py test_nba_pipeline.py test_nba_odds.py test_nba_contracts.py test_nba_daily_learning.py test_nba_first_basket.py
       - name: Test NBA UI and simulations
         run: |
           node test_market_odds.js
