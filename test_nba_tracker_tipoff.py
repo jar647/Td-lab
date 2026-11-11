@@ -12,7 +12,7 @@ class TrackerTipoffTests(unittest.TestCase):
             tipoff = "2026-11-10T19:00:00+00:00"
             snapshot = {"game_id": 123, "tipoff": tipoff, "home_team":"AAA", "away_team":"BBB", "locked_at": locked,
                         "model": "test", "projections": [
-                            {"player_id": "7", "market": "points", "projection": 20,
+                            {"player_id": "7", "team": "AAA", "market": "points", "projection": 20,
                              "result": "pending", "actual": None}]}
             (root / "data/nba_projection_tracker.json").write_text(json.dumps({"snapshots": [snapshot]}))
             (root / "data/nba_games.json").write_text(json.dumps({"games": [{
