@@ -27,7 +27,10 @@
    const source=typeof p?.stats_source==='string'?p.stats_source.trim():'';
    if(!source)errors.push('fighter_'+i+'_missing_stats_source');
    const stats=p?.stats;
-   if(!stats||typeof stats!=='object'||Array.isArray(stats)||!Object.values(stats).some(v=>typeof v==='number'&&Number.isFinite(v)))errors.push('fighter_'+i+'_missing_numeric_stats');
+   const knownMetrics=new Set(['slpm','sapm','strAcc','strDef','tdAvg','tdAcc','tdDef','subAvg','significantStrikeAccuracy','significantStrikeDefense','takedownAccuracy','takedownDefense']);
+   const hasNumeric=stats&&typeof stats==='object'&&!Array.isArray(stats)&&Object.values(stats).some(v=>typeof v==='number'&&Number.isFinite(v));
+   if(!hasNumeric)errors.push('fighter_'+i+'_missing_numeric_stats');
+   if(!stats||typeof stats!=='object'||Array.isArray(stats)||!Object.entries(stats).some(([key,value])=>knownMetrics.has(key)&&typeof value==='number'&&Number.isFinite(value)))errors.push('fighter_'+i+'_missing_recognized_numeric_stats');
    // A pre-fight snapshot is not valid evidence when it contains impossible
    // measurements. Missing metrics remain missing; do not impute them.
    const percentageKeys=new Set(['strAcc','strDef','tdAcc','tdDef','significantStrikeAccuracy','significantStrikeDefense','takedownAccuracy','takedownDefense']);
