@@ -92,7 +92,7 @@ for g in games:
 for s in snapshots:
  if not valid_lock(s):continue
  # Only games with a final ESPN result may be graded.
- match=next((g for g in games if g["id"]==s["game_id"] and g["status"]=="STATUS_FINAL"),None)
+ match=next((g for g in games if str(g["id"])==str(s["game_id"]) and g["status"]=="STATUS_FINAL"),None)
  if not match:continue
  players={str(p.get("id")):p for p in match["players"]}
  for p in s["projections"]:
