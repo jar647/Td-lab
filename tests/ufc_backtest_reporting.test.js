@@ -17,3 +17,19 @@ test('duplicate bout IDs are reported once per rejected row',()=>{
  const r=evaluate([b,b],{},{});
  assert.equal(r.excludedByReason.missing_or_duplicate_bout_id,2);
 });
+
+// Some result feeds abbreviate no contest as NC while retaining a winner ID.
+test('NC and overturned results cannot enter historical accuracy or probability scoring',()=>{
+ const {score}=require('../ufc_probability_backtest.js');
+ const base={bout_id:'nc',fighter_a:'a',fighter_b:'b',winner:'a',status:'final',starts_at:'2025-08-01T20:00:00Z'};
+ const p={stats_as_of:'2025-07-30T12:00:00Z',stats_source:'verified',stats:{slpm:4}};
+ const snaps={nc:[{...p,fighter_id:'a'},{...p,fighter_id:'b'}]};
+ const preds={nc:{winner_id:'a',winner_probability:0.9,frozen_at:'2025-07-31T12:00:00Z'}};
+ for(const method of ['NC','N.C.','No-Contest','Overturned','DRAW']){
+  const bout={...base,method};const a=evaluate([bout],snaps,preds);const b=score([bout],snaps,preds);
+  assert.equal(a.evaluated,0,method);assert.equal(b.scored,0,method);
+  assert.equal(b.excludedByReason.no_decisive_final_result,1,method);
+ }
+ const decisive=evaluate([{...base,method:'Decision'}],snaps,preds);
+ assert.equal(decisive.evaluated,1);
+});
