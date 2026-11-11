@@ -3,6 +3,10 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
+      - 'nba_simulator_ui.js'
+      - 'scripts/nba_simulator_final_integrity.test.cjs'
+      - 'nba_simulator_ui.js'
+      - 'scripts/nba_simulator_final_integrity.test.cjs'
       - 'game_odds_engine.js'
       - 'scripts/run_nba_simulator_backtest.cjs'
       - 'scripts/nba_pretip_evidence.cjs'
@@ -31,6 +35,8 @@ jobs:
           node-version: '22'
       - name: Test NBA pretip evidence gate
         run: node --test scripts/nba_pretip_evidence.test.cjs
+      - name: Test NBA browser final identity gate
+        run: node --test scripts/nba_simulator_final_integrity.test.cjs
       - name: Run NBA simulator walk-forward test
         run: node scripts/run_nba_simulator_backtest.cjs
       - name: Upload accuracy report
