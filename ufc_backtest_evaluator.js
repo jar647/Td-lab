@@ -42,7 +42,7 @@
    const status=String(bout?.status||'').toLowerCase();
    const method=String(bout?.method_display||bout?.method||'');
    const winner=String(bout?.winner||'');
-   if(status!=='final'||/draw|no contest|overturn/i.test(method)||![a,b].includes(winner))errors.push('no_decisive_final_result');
+   if(status!=='final'||/\b(?:draw|no[\s-]*contest|n\.?c\.?|overturn(?:ed)?)\b/i.test(method)||![a,b].includes(winner))errors.push('no_decisive_final_result');
    const eligible=errors.length===0;
    rows.push({bout_id:id,eligible,errors,correct:eligible?picked===winner:null});
   }
