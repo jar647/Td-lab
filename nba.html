@@ -481,6 +481,30 @@ function nbaGameFirstPick(key){
  if(Date.parse(r.game.date)<=Date.now()){$('nba-game-first-feedback').textContent='Game started; pregame ticket closed.';return}
  CookItUpQuickSlip.add({sport:'NBA',game:r.game.away+' @ '+r.game.home,gameId:r.gameId,player:r.name,position:nbaPlayerPosition(r),team:r.team,opponent:r.opponent,market:r.market,line:r.line,side:r.side,recommendation:(r.side==='under'?'Under ':'Over ')+r.line+' '+nbaMarketLabel(r.market),scenarioRate:r.probability,matchupBoost:r.matchupBoost,matchupGames:r.matchupGames,notes:r.reason+' Research-only simulation; not a priced edge.'});
 }
+let nbaGameFirstRefreshing=null;
+async function nbaGameFirstRefresh(){
+ const g=games[Number($('games').value)];
+ if(!g||Date.parse(g.date)<=Date.now())return;
+ if(nbaGameFirstRefreshing)return nbaGameFirstRefreshing;
+ const feedback=$('nba-game-first-feedback');
+ if(feedback)feedback.textContent='Refreshing current NBA injuries and lineup context…';
+ nbaGameFirstRefreshing=(async()=>{
+  try{
+   if(typeof CookNBALiveContext==='undefined')throw Error('Live availability provider unavailable');
+   const latest=await CookNBALiveContext.latest();
+   if(!latest?.injuries||!Number.isFinite(Date.parse(latest.injuries.generated_at))||Date.now()-Date.parse(latest.injuries.generated_at)>15*60000)throw Error('Fresh injury data unavailable');
+   injuryData=latest.injuries;
+   if(latest.context)nbaGameContext=latest.context;
+   nbaGameFirstCache.clear();
+   if(Date.parse(g.date)>Date.now())renderNBAGameFirst(g);
+   const status=$('nba-game-first-feedback');
+   if(status)status.textContent='Availability checked '+new Date(injuryData.generated_at).toLocaleTimeString()+'. Re-evaluate before placing a bet.';
+  }catch(e){
+   if(feedback)feedback.textContent='Live refresh unavailable: '+e.message+'. No unverified pregame recommendations.';
+  }finally{nbaGameFirstRefreshing=null}
+ })();
+ return nbaGameFirstRefreshing;
+}
 function nbaGameFirstRebuild(){const g=games[Number($('games').value)];if(g)renderNBAGameFirst(g);}
 function nbaGameFirstSetLine(key,value){const n=String(value).trim()===''?NaN:Number(value);if(!Number.isFinite(n)||n<.5){$('nba-game-first-feedback').textContent='Enter an alternate line of at least 0.5.';return}nbaGameFirstLines[key]=n;nbaGameFirstRebuild();}
 function renderNBAGameFirst(g){
@@ -489,7 +513,7 @@ function renderNBAGameFirst(g){
  const summary=r=>nbaPlayerTitle(r.name,r)+' · '+r.side.toUpperCase()+' '+r.line+' '+nbaMarketLabel(r.market)+' · '+r.score+'/100 matchup rank';
  const card=r=>'<article class="player"><strong>'+esc(summary(r))+'</strong><p>Matchup quality '+r.matchupQuality+'/100 · Simulated selection frequency '+r.lineConfidence+'% (uncalibrated)</p><p>Projection '+r.forecast.toFixed(1)+' · '+r.minutes.toFixed(1)+' MIN · '+(100*r.probability).toFixed(1)+'% experimental frequency</p><p class="muted">'+esc(r.reason)+'</p><label>Alternate line <input type="number" min="0.5" step="0.5" value="'+r.line+'" onchange="nbaGameFirstSetLine('+esc(JSON.stringify(r.key))+',this.value)"></label><button onclick="nbaGameFirstPick('+esc(JSON.stringify(r.key))+')">Add to Quick Slip</button><details><summary>Optional sportsbook price</summary><label>Over odds (American) <input type="number" placeholder="-110" oninput="nbaGameFirstPrice('+esc(JSON.stringify(r.key))+',this.value)"></label><p id="game-first-price-'+esc(r.key.replace(/[^a-zA-Z0-9]/g,'-'))+'">Odds are optional. No verified betting edge claimed.</p></details></article>';
  let section=$('nba-game-first');if(!section){section=document.createElement('section');section.id='nba-game-first';section.className='panel';target.append(section)}
- section.innerHTML='<h2>Game-first matchup research ticket</h2><p class="muted">Automatic player roles, injuries, rotations, possessions and opponent defense. OVER 75+ and UNDER 85+ player props. Odds are optional.</p><label>Maximum legs <select onchange="nbaGameFirstMax=Number(this.value);nbaGameFirstRebuild()">'+[1,2,3,4,5].map(n=>'<option '+(n===nbaGameFirstMax?'selected ':'')+'value="'+n+'">'+n+'</option>').join('')+'</select></label></div><div class="nba-market-grid">'+CookNBAGameFirst.markets.map(m=>'<button aria-pressed="'+nbaGameFirstExcluded.includes(m)+'" onclick="nbaGameFirstExcluded=nbaGameFirstExcluded.includes('+esc(JSON.stringify(m))+')?nbaGameFirstExcluded.filter(x=>x!=='+esc(JSON.stringify(m))+'):[...nbaGameFirstExcluded,'+esc(JSON.stringify(m))+'];nbaGameFirstRebuild()">'+(nbaGameFirstExcluded.includes(m)?'Include ':'Exclude ')+nbaMarketLabel(m)+'</button>').join('')+'</div><div class="nba-ticket-actions"><button onclick="nbaGameFirstRebuild()">Rebuild ticket</button><button onclick="nbaGameFirstLines={};nbaGameFirstRebuild()">Reset lines</button></div><p id="nba-game-first-feedback" role="status"></p>'+
+ section.innerHTML='<h2>Game-first matchup research ticket</h2><p class="muted">Automatic player roles, injuries, rotations, possessions and opponent defense. OVER 75+ and UNDER 85+ player props. Odds are optional.</p><label>Maximum legs <select onchange="nbaGameFirstMax=Number(this.value);nbaGameFirstRebuild()">'+[1,2,3,4,5].map(n=>'<option '+(n===nbaGameFirstMax?'selected ':'')+'value="'+n+'">'+n+'</option>').join('')+'</select></label></div><div class="nba-market-grid">'+CookNBAGameFirst.markets.map(m=>'<button aria-pressed="'+nbaGameFirstExcluded.includes(m)+'" onclick="nbaGameFirstExcluded=nbaGameFirstExcluded.includes('+esc(JSON.stringify(m))+')?nbaGameFirstExcluded.filter(x=>x!=='+esc(JSON.stringify(m))+'):[...nbaGameFirstExcluded,'+esc(JSON.stringify(m))+'];nbaGameFirstRebuild()">'+(nbaGameFirstExcluded.includes(m)?'Include ':'Exclude ')+nbaMarketLabel(m)+'</button>').join('')+'</div><div class="nba-ticket-actions"><button onclick="nbaGameFirstRebuild()">Rebuild ticket</button><button onclick="nbaGameFirstLines={};nbaGameFirstRebuild()">Reset lines</button></div><button onclick="nbaGameFirstRefresh()">Refresh injuries &amp; lineups now</button><p id="nba-game-first-feedback" role="status"></p>'+
  '<h3>Best single recommendation</h3><p>'+esc(result.bestSingle?summary(result.bestSingle):'No candidate meets OVER 75/100 or UNDER 85/100')+'</p><h3>Top three players</h3>'+result.topThree.map(r=>'<p>'+esc(summary(r))+'</p>').join('')+
  (result.picks.length?'<h3>'+result.picks.length+'-leg matchup SGP research</h3>'+result.picks.map(card).join('')+'<p>Shared-outcome ticket frequency: '+(100*result.jointHitRate).toFixed(1)+'%. Strongly conflicting pairs excluded.</p><button onclick="nbaGameFirstResult.picks.forEach(r=>nbaGameFirstPick(r.key))">Add ticket to Quick Slip</button>':'<p class="warn">PASS · '+esc(research.reason||'No supported OVER 75+ or UNDER 85+ opportunities with these exclusions and lines.')+'</p>')+
  '<p class="warn">'+(research.reviewedMarkets?research.reviewedMarkets+' player markets withheld: minutes or production exceed support from the limited prior sample.':'')+'</p><p class="muted">'+esc((research.warnings||[]).join(' · '))+'</p><p class="warn">'+esc(result.disclaimer)+'</p>';
@@ -728,7 +752,9 @@ async function dailyLearning(){
 }
 init();audit();dailyLearning();
 
-if(typeof CookNBALiveContext!=='undefined')CookNBALiveContext.watch(()=>typeof simulatorGame==='undefined'?null:simulatorGame,latest=>{nbaGameContext=latest.context;injuryData=latest.injuries||injuryData;nbaGameFirstCache.clear();if(nbaSimBusy)return;if(games[Number($('games').value)])$('show').click();nbaSimRequest++;if(nbaSimWorker){nbaSimWorker.terminate();nbaSimWorker=null}const button=$('run-sim');if(button)button.disabled=false;const out=$('sim-results');if(out)out.innerHTML='<p class="warn">Availability or lineup information changed. Run the simulation again; your entered odds are preserved.</p>';});</script>
+if(typeof CookNBALiveContext!=='undefined'){
+ setInterval(()=>{const g=games[Number($('games').value)];if(g&&Date.parse(g.date)>Date.now()&&Date.parse(g.date)-Date.now()<=90*60000)nbaGameFirstRefresh();},5*60000);
+ CookNBALiveContext.watch(()=>typeof simulatorGame==='undefined'?null:simulatorGame,latest=>{nbaGameContext=latest.context;injuryData=latest.injuries||injuryData;nbaGameFirstCache.clear();if(nbaSimBusy)return;if(games[Number($('games').value)])$('show').click();nbaSimRequest++;if(nbaSimWorker){nbaSimWorker.terminate();nbaSimWorker=null}const button=$('run-sim');if(button)button.disabled=false;const out=$('sim-results');if(out)out.innerHTML='<p class="warn">Availability or lineup information changed. Run the simulation again; your entered odds are preserved.</p>';});}</script>
 </html>
 
 
