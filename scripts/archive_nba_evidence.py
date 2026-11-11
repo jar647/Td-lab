@@ -89,5 +89,5 @@ for i,rows in enumerate(shards):
 OUT.write_bytes(encode(shards[0]))
 manifest_path.write_text(json.dumps({'schema_version':3,'shards':names,'snapshot_count':len(snapshots)},indent=2)+'\n')
 for old in (ROOT/'data').glob('nba_evidence_*.json.gz'):
-    if old.name not in names:old.unlink()
+    if old != OUT and old.name not in names:old.unlink()
 print(f'NBA evidence: {len(snapshots)} captures in {len(names)} shards')
