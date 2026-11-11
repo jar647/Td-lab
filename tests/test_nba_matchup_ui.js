@@ -7,9 +7,10 @@ assert.equal(saved.recommendationLine,6);assert.equal(saved.sampleHits,3);assert
 const card=vm.runInContext('nbaMatchupCard(row)',context);assert(card.includes('Center &lt;example&gt;'));assert(card.includes('16.0 rebounds'));assert(card.includes('6+ · 60% (3/5 recent games)'));assert.notEqual(card.match(/id="matchup-rate-([^"]+)/)[1],vm.runInContext('nbaMatchupCard(row)',context).match(/id="matchup-rate-([^"]+)/)[1]);assert(card.includes('12.0 league average'));assert(!card.includes('Over odds'));assert(source.includes('onclick="scanNBAMatchups()"'));assert(script.includes('renderNBAMatchups(g)'));assert(script.includes('Experimental simulator &amp; earlier projection tools'));
 console.log('NBA primary matchup UI: exact threshold hit rates, selected baseline in Quick Slip, no forecast probability or odds fields PASS');
 context.row={...row,researchScore:74};assert.equal(vm.runInContext('nbaMatchupCard(row)',context),'');
-context.row={...row,researchScore:75};assert(vm.runInContext('nbaMatchupCard(row)',context).includes('75/100'));
-context.row={...row,key:'g|c|rebounds|under',side:'under',researchScore:84};assert.equal(vm.runInContext('nbaMatchupCard(row)',context),'');
-context.row={...context.row,researchScore:85,baseline:6.5,thresholds:[5.5,6.5,7.5]};
+context.row={...row,researchScore:79};assert.equal(vm.runInContext('nbaMatchupCard(row)',context),'');
+context.row={...row,researchScore:80};assert(vm.runInContext('nbaMatchupCard(row)',context).includes('80/100'));
+context.row={...row,key:'g|c|rebounds|under',side:'under',researchScore:79};assert.equal(vm.runInContext('nbaMatchupCard(row)',context),'');
+context.row={...context.row,researchScore:80,baseline:6.5,thresholds:[5.5,6.5,7.5]};
 assert(vm.runInContext('nbaMatchupCard(row)',context).includes('UNDER 6.5'));
 context.CookNBAMatchups.analyze=()=>({candidates:[context.row]});vm.runInContext('nbaMatchupCache.clear();nbaMatchupSelect(row.key,"6.5");addNBAMatchupPick(row.key)',context);
 assert.equal(saved.side,'under');assert.equal(saved.line,6.5);assert.equal(saved.recommendation,'Under 6.5 rebounds');assert.equal(saved.sampleHits,3);
