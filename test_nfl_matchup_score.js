@@ -3,9 +3,9 @@
 const assert=require('node:assert/strict');
 const score=require('./nfl_goal1.js');
 
-assert.equal(score.MIN_SCORE,85);
-for(const value of [85,85.001,100,'85'])assert.equal(score.qualifies(value),true);
-for(const value of [84,84.999,100.001,-1,null,undefined,'',NaN,Infinity,'garbage',true,[85]])
+assert.equal(score.MIN_SCORE,70);
+for(const value of [70,70.001,84.999,85,100,'70'])assert.equal(score.qualifies(value),true);
+for(const value of [69,69.99,69.999,100.001,-1,null,undefined,'',NaN,Infinity,'garbage',true,[70]])
  assert.equal(score.qualifies(value),false,'reject invalid or below-minimum score '+value);
 
 const runner={defRushYardsAllowed:100,defRushAttemptsAllowed:20,playerRushYards:100,playerCarries:20};
@@ -32,7 +32,7 @@ assert.equal(score.matchupRating({...runner,scenarioRate:.01},'RUSH').score,
  'scenario frequency is independent of the matchup score');
 
 const candidate=(id,researchScore,rawRank)=>({p:{player_id:id},d:{key:'rushYards'},researchScore,score:rawRank});
-const candidates=[candidate('weak',84,999),candidate('boundary',85,100),candidate('strong',100,90),candidate('unrated',undefined,1000)];
+const candidates=[candidate('weak',69.99,999),candidate('boundary',70,100),candidate('strong',100,90),candidate('unrated',undefined,1000)];
 assert.deepEqual(score.rankPlayers(candidates,3).map(c=>c.p.player_id),['boundary','strong'],
  'high raw rank cannot bypass the independent matchup-score requirement');
 assert.deepEqual(score.buildTicket(candidates,10).map(c=>c.p.player_id),['boundary','strong']);
