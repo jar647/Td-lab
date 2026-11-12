@@ -4,11 +4,11 @@ const ROOT=path.resolve(__dirname,'..'),read=(file,fallback={})=>fs.existsSync(p
 const digest=text=>crypto.createHash('sha256').update(text).digest('hex').slice(0,12);
 const hash=files=>crypto.createHash('sha256').update(files.map(f=>fs.readFileSync(path.join(ROOT,f),'utf8')).join('\n')).digest('hex').slice(0,12);
 const fresh=(stamp,now,h=24)=>Number.isFinite(Date.parse(stamp))&&Date.parse(stamp)<=now+300000&&now-Date.parse(stamp)<=h*3600000;
-function captureSources(now=Date.now()){
- const picks=[],coverage=[];const attempt=(sport,run)=>{try{run()}catch(e){coverage.push({sport,status:'error',reason:e.message})}};
+function captureSources(now=Date.now(),overrides={}){
+ const picks=[],coverage=[];const attempt=(sport,run)=>{if(overrides.onlySport&&overrides.onlySport!==sport)return;try{run()}catch(e){coverage.push({sport,status:'error',reason:e.message})}};
  attempt('NBA',()=>{
-  const matchups=require('../nba_matchup_discovery'),first=require('../nba_first_basket'),gf=require('../nba_game_first');
-  const feed=read('data/nba_games.json'),rosters=read('data/nba_rosters.json'),injuries=read('data/nba_injuries.json'),context=read('data/nba_game_context.json');
+  const matchups=overrides.nbaMatchups||require('../nba_matchup_discovery'),first=require('../nba_first_basket'),gf=require('../nba_game_first');
+  const feed=overrides.nbaInputs?.feed||read('data/nba_games.json'),rosters=overrides.nbaInputs?.rosters||read('data/nba_rosters.json'),injuries=overrides.nbaInputs?.injuries||read('data/nba_injuries.json'),context=read('data/nba_game_context.json');
   const version='nba-matchup-'+hash(['nba_matchup_discovery.js']),firstVersion='nba-first-basket-'+hash(['nba_first_basket.js']);
   const nowDay=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(now);
   const games=(feed.games||[]).filter(g=>g.status==='STATUS_SCHEDULED'&&Date.parse(g.date)>now&&new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(g.date))===nowDay);
@@ -21,7 +21,7 @@ function captureSources(now=Date.now()){
   }
   const board=first.slate(feed,rosters,injuries,now);
   for(const r of board.picks)picks.push({sport:'NBA',board:'Top 5 first basket',gameId:String(r.game.id),startsAt:r.game.date,playerId:r.id,player:r.name,team:r.team,market:'first_basket',side:'winner',line:null,score:null,probability:r.probability,scoreKind:'Experimental frequency (not a score)',modelVersion:firstVersion,label:r.name+' first field goal',reason:r.firstGame+'/'+r.games+' prior game-first baskets; '+r.firstTeam+'/'+r.games+' team-first baskets',houseRule:'Must start; first field goal only; free throws excluded',inputs:{feed:feed.generated_at,rosters:rosters.generated_at,injuries:injuries.generated_at}});
-  coverage.push({sport:'NBA',status:!fresh(feed.generated_at,now,12)?'stale':'ok',games:games.length,firstBasketReason:board.reason});
+  coverage.push({sport:'NBA',status:!fresh(feed.generated_at,now,12)?'stale':'ok',games:games.length,bestPropsCandidates:picks.filter(p=>p.sport==='NBA'&&p.board==='Best Props').length,firstBasketReason:board.reason});
   const odds=read('data/nba_market_odds.json');for(const p of picks.filter(p=>p.sport==='NBA')){const names={pr:'points_rebounds',pa:'points_assists',ra:'rebounds_assists',pra:'pra','Points + Rebounds':'points_rebounds','Points + Assists':'points_assists','Rebounds + Assists':'rebounds_assists',PRA:'pra'},side=p.side==='at_least'?'over':p.side,quoted=p.side==='at_least'?p.line-.5:p.line;const q=(odds.markets||[]).find(q=>String(q.game_id)===p.gameId&&String(q.player_id)===p.playerId&&q.market===(names[p.market]||p.market)&&q.side===side&&q.line===quoted&&fresh(q.observed_at,now,1));if(q){p.americanOdds=q.american_odds;p.priceObservedAt=q.observed_at;p.bookmaker=q.bookmaker;p.quotedLine=q.line;}}
  });
  attempt('NFL',()=>{

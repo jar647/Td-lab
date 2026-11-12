@@ -55,3 +55,17 @@ const unknownTiming=structuredClone(ufcData);delete unknownTiming.ufc.bouts[0].e
 assert.equal(api.gradeOne({...ufc,market:'total',side:'under',line:2.5},unknownTiming,after).status,'awaiting_result');
 const negativeNBA=structuredClone(data);negativeNBA.nba.games[0].players[0].stats.PTS=-1;
 assert.equal(api.gradeOne(p,negativeNBA,after).status,'awaiting_result');
+// A late tracker launch must never be presented as a full-day results record.
+const day='2026-11-12',fixtureList=[{id:'early',date:new Date(now-3600000).toISOString(),home:'Earlier home',away:'Earlier away'},{id:'g',date:tip,home:'A',away:'B'}];
+const coverage=api.captureCoverage(graded.picks,fixtureList,day);
+assert(coverage.partialFirstDay);assert.equal(coverage.captureStartedAt,before);assert.equal(coverage.recorded,1);assert.equal(coverage.boards['Best Props'],1);assert.equal(coverage.scheduledGames,2);assert.equal(coverage.gamesWithPicks,1);assert.equal(coverage.earlierStartsWithoutPicks,1);
+assert(ui.coverageHTML([coverage]).includes('Partial-day record'));assert(ui.coverageHTML([coverage]).includes('not the full slate'));
+assert.equal(api.captureCoverage(graded.picks,[], '2026-11-13').partialFirstDay,false,'Later dates are not automatically marked partial just because tracking started yesterday');
+// The actual source adapter must save an entire 40+ candidate slate; no top-8
+// or top-three limit may leak from a different recommendation section.
+const fortyFive=Array.from({length:45},(_,i)=>({playerId:'full-slate-'+i,name:'Player '+i,team:'A',opponent:'B',market:'points',side:'over',baseline:20,researchScore:80,eligible:true,matchupRating:{factors:[]}}));
+const fullSource=require('./scripts/recommendation_sources.cjs').captureSources(now,{onlySport:'NBA',nbaInputs:{feed:{generated_at:before,games:[{id:'whole-slate',home:'A',away:'B',date:new Date(now+6*3600000).toISOString(),status:'STATUS_SCHEDULED'}]},rosters:{generated_at:before,teams:{A:[],B:[]}},injuries:{generated_at:before,status:'ok',injuries:[]}},nbaMatchups:{labels:{points:'points'},analyze:()=>({ready:true,candidates:fortyFive})}});
+assert(!fullSource.coverage.some(c=>c.status==='error'),JSON.stringify(fullSource.coverage));
+assert.equal(fullSource.picks.filter(p=>p.board==='Best Props').length,45);assert.equal(api.capture(null,fullSource.picks,now).added,45);assert.equal(fullSource.coverage.find(c=>c.sport==='NBA'&&!c.gameId).bestPropsCandidates,45);
+
+assert(api.captureCoverage(graded.picks,coverage.fixtures,day).partialFirstDay,'Stored fixture evidence preserves the partial-day warning when the live feed rolls over');

@@ -1,12 +1,27 @@
 name: Daily recommendation capture and results
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ['NBA data refresh', 'NBA pregame availability and lineups', 'TD LAB verified NFL feed', 'Refresh UFC fighter research']
+    types: [completed]
+    branches: [main]
   schedule:
     - cron: '7,17,27,37,47,57 * * * *'
   push:
     branches: [main]
     paths:
       - 'recommendation_ledger.js'
+      - 'nba_matchup_discovery.js'
+      - 'nba_game_first.js'
+      - 'nba_first_basket.js'
+      - 'nfl_game_engine.js'
+      - 'nfl_goal1.js'
+      - 'analyst.html'
+      - 'index.html'
+      - 'ufc_app.js'
+      - 'ufc_pick_engine.js'
+      - 'ufc_prop_research.js'
+      - 'ufc_matchup_research.js'
       - 'scripts/*recommendation*'
       - 'data/nba_games.json'
       - 'data/nba_rosters.json'
@@ -36,7 +51,7 @@ jobs:
           node-version: '22'
       - run: node test_recommendation_ledger.js
   capture-and-grade:
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
     needs: validate
     runs-on: ubuntu-latest
     timeout-minutes: 20
