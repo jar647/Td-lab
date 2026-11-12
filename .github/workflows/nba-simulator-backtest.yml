@@ -15,6 +15,9 @@ on:
   push:
     branches: [main]
     paths:
+      - 'nba_tracker.py'
+      - 'test_nba_tracker_integrity.py'
+      - 'test_nba_tracker_tipoff.py'
       - 'game_odds_engine.js'
       - 'scripts/run_nba_simulator_backtest.cjs'
       - 'scripts/nba_pretip_evidence.cjs'
