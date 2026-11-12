@@ -16,7 +16,7 @@ function capture(ledger,candidates,now=Date.now()){
  return {ledger:out,added,rejected};
 }
 function settle(p,actual){if(!num(actual))return {status:'awaiting_result',reason:'Official statistic unavailable'};const won=p.side==='under'?actual<p.line:p.side==='at_least'?actual>=p.line:actual>p.line;return {status:actual===p.line&&p.side!=='at_least'?'push':won?'win':'loss',actual};}
-const nbaFields={points:['PTS'],rebounds:['REB'],assists:['AST'],'Points + Rebounds':['PTS','REB'],'Points + Assists':['PTS','AST'],'Rebounds + Assists':['REB','AST'],PRA:['PTS','REB','AST']};
+const nbaFields={pr:['PTS','REB'],pa:['PTS','AST'],ra:['REB','AST'],pra:['PTS','REB','AST'],points_rebounds:['PTS','REB'],points_assists:['PTS','AST'],rebounds_assists:['REB','AST'],points:['PTS'],rebounds:['REB'],assists:['AST'],'Points + Rebounds':['PTS','REB'],'Points + Assists':['PTS','AST'],'Rebounds + Assists':['REB','AST'],PRA:['PTS','REB','AST']};
 function gradeOne(p,data,now){
  if(!valid(p,now))return {status:'excluded',reason:'Invalid or post-start capture'};
  if(now<time(p.startsAt))return {status:'pending',reason:'Awaiting scheduled start'};
