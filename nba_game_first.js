@@ -78,7 +78,7 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
       market:r.market,position:r.position,opponent:r.opponent,
       allowed:r.weakness.allowed,leagueAverage:r.weakness.leagueAverage,
       opponentGames:r.weakness.games,playerAverage:r.playerAverage,
-      peerAverage:r.peerAverage,playerGames:r.history.length,
+      peerAverage:r.peerAverage,playerGames:r.history.length,baseline:r.baseline,
       last5:r.last5,last10:r.last10
      })):[];
      rows.push({side,matchupRating,matchupEvidence,position:supported?positionRows[0].position:null,key:[game.id,player.id,market,...(side==='under'?['under']:[])].join('|'),gameId:String(game.id),game,playerId:player.id,name:player.name,team,opponent,market,forecast,baseline,observedMax,reviewRequired:reviewReasons.length>0,reviewReasons,minutes:projected.minutes,matchupGames:def.games,matchupBoost:boost,samples:values,reason:reason+' '+(model.context?.tracking==='fresh'&&Object.keys(player.defenderExposure||{}).length?'Fresh defender tracking incorporated; historical exposure '+Number(player.matchupSample||0).toFixed(0)+' possessions, not a confirmed assignment.':'Individual defender tracking unavailable or stale; that adjustment is omitted.'),eligible:supported});
