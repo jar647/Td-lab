@@ -20,7 +20,7 @@ const direction={available:true,offense_epa_per_play:.050853,defense_epa_allowed
  pass_epa_matchup_delta:-.053,rush_epa_matchup_delta:-.054,plays_per_game:60.9,turnovers_per_game:.7,
  defensive_sacks_per_game:1.8,score_adjustment:0,experimental_score_adjustment:-.57,adjustment_applied:false};
 const feed={season:2026,week:8,generated_at:new Date().toISOString(),games:[{
- game_id:'2026_08_BAL_BUF',home:'BUF',away:'BAL',gameday:'2099-11-01',model_version:'score-baseline-trust-v3',
+ game_id:'2026_08_BAL_BUF',home:'BUF',away:'BAL',gameday:'2099-11-01',kickoff_at:'2099-11-01T18:00:00Z',model_version:'score-baseline-trust-v3',
  projected_home_points:26.3,projected_away_points:23.8,
  model_inputs:{home:{games:6},away:{games:7},trust,
  matchup:{home_offense_vs_away_defense:direction,away_offense_vs_home_defense:direction}}

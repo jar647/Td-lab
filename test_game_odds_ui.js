@@ -3,7 +3,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const engine=require('./game_odds_engine.js');
 const html=fs.readFileSync('game-odds.html','utf8');
-assert.match(html,/<script src="\.\/game_odds_engine\.js\?v=nba-simulator-reliability-v4"><\/script>/,'Engine assets must be versioned with the worker');
+assert.match(html,/<script src="\.\/game_odds_engine\.js\?v=game-line-lineup-v1"><\/script>/,'Engine assets must be versioned with the worker');
 assert.match(html,/new Worker\('\.\/game_odds_worker\.js\?v=[^']+'\)/,'Game Odds must use a versioned simulation worker');
 assert.doesNotMatch(html,/Checking latest NBA availability and lineups/,'NBA simulation must not block on a live availability request');
 assert.match(html,/selected\.model=null;runId\+\+;if\(worker\)/,'Changed availability must invalidate an active forecast before it is displayed');
@@ -24,7 +24,7 @@ const backtest={records:Array.from({length:135},(_,i)=>({
  actual_home:22+Math.round(8*Math.sin(i)),actual_away:20+Math.round(9*Math.cos(i))
 }))};
 const feed={season:2026,week:8,generated_at:new Date().toISOString(),model_version:'score-baseline-v1',games:[{
- game_id:'2026_08_A_B',home:'B',away:'A',gameday:'2099-11-01',
+ game_id:'2026_08_A_B',home:'B',away:'A',gameday:'2099-11-01',kickoff_at:'2099-11-01T18:00:00Z',
  projected_home_points:25,projected_away_points:22,
  model_inputs:{home:{games:7,offense:25,defense_allowed:23},away:{games:7,offense:22,defense_allowed:26}}
 }]};

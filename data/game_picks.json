@@ -1,7 +1,7 @@
 {
   "season": 2026,
   "week": 10,
-  "generated_at": "2026-11-12T12:42:19.372559+00:00",
+  "generated_at": "2026-11-12T13:11:57.411133+00:00",
   "model_status": "AUDITED_BASELINE_UNCALIBRATED",
   "model_version": "score-baseline-trust-v3",
   "note": "Historical scoring research baseline; independently recomputed source rates; QB-led history separated; no unvalidated EPA point correction or verified betting recommendation.",
@@ -47,62 +47,62 @@
             "available": true,
             "offense_games": 8,
             "defense_games": 8,
-            "offense_epa_per_play": 0.020120946081438374,
-            "defense_epa_allowed_per_play": 0.02155882166015577,
+            "offense_epa_per_play": 0.020120946081438367,
+            "defense_epa_allowed_per_play": 0.021558821660155766,
             "offense_success_rate": 0.40880518780947644,
             "defense_success_allowed_rate": 0.4593269783877064,
             "offense_pass_rate": 0.5810222305094579,
             "defense_pass_rate_allowed": 0.6016599556249487,
             "expected_pass_rate": 0.5913410930672033,
-            "pass_epa_matchup_delta": 0.058145199172935175,
-            "rush_epa_matchup_delta": -0.0850749517004795,
+            "pass_epa_matchup_delta": 0.05814519917293516,
+            "rush_epa_matchup_delta": -0.08507495170047952,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": -0.000382991133744702,
+            "epa_per_play_delta": -0.0003829911337447159,
             "success_rate_delta": -0.050521790578229975,
             "explosive_rate_offense": 0.08670520231213873,
             "explosive_rate_defense_allowed": 0.07751937984496124,
-            "pass_epa_offense": 0.06335905709062385,
-            "pass_epa_defense_allowed": 0.005213857917688681,
-            "rush_epa_offense": -0.0391166642832496,
+            "pass_epa_offense": 0.06335905709062384,
+            "pass_epa_defense_allowed": 0.005213857917688677,
+            "rush_epa_offense": -0.03911666428324961,
             "rush_epa_defense_allowed": 0.045958287417229904,
             "plays_per_game": 64.875,
             "turnovers_per_game": 1.25,
             "defensive_sacks_per_game": 2.125,
             "score_adjustment": 0.0,
             "warning": "Play-by-play matchup adjustment is experimental and not calibrated.",
-            "experimental_score_adjustment": -0.6081764426074832,
+            "experimental_score_adjustment": -0.6081764426074833,
             "adjustment_applied": false
           },
           "away_offense_vs_home_defense": {
             "available": true,
             "offense_games": 8,
             "defense_games": 8,
-            "offense_epa_per_play": -0.021323465553127176,
+            "offense_epa_per_play": -0.02132346555312718,
             "defense_epa_allowed_per_play": -0.04725374735031196,
             "offense_success_rate": 0.41851250915942634,
             "defense_success_allowed_rate": 0.38359989156953106,
             "offense_pass_rate": 0.5913377996440908,
             "defense_pass_rate_allowed": 0.550365952832746,
             "expected_pass_rate": 0.5708518762384185,
-            "pass_epa_matchup_delta": 0.05862775315169458,
-            "rush_epa_matchup_delta": -0.006440111219409147,
+            "pass_epa_matchup_delta": 0.0586277531516946,
+            "rush_epa_matchup_delta": -0.0064401112194091385,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": 0.030704001239662354,
+            "epa_per_play_delta": 0.03070400123966237,
             "success_rate_delta": 0.03491261758989528,
             "explosive_rate_offense": 0.09146341463414634,
             "explosive_rate_defense_allowed": 0.09033613445378151,
-            "pass_epa_offense": -0.037761147482117674,
-            "pass_epa_defense_allowed": -0.09638890063381225,
-            "rush_epa_offense": 0.004396960478610143,
-            "rush_epa_defense_allowed": 0.01083707169801929,
+            "pass_epa_offense": -0.03776114748211768,
+            "pass_epa_defense_allowed": -0.09638890063381228,
+            "rush_epa_offense": 0.004396960478610153,
+            "rush_epa_defense_allowed": 0.010837071698019292,
             "plays_per_game": 61.5,
             "turnovers_per_game": 0.625,
             "defensive_sacks_per_game": 2.0,
             "score_adjustment": 0.0,
             "warning": "Play-by-play matchup adjustment is experimental and not calibrated.",
-            "experimental_score_adjustment": 0.5724714172770551,
+            "experimental_score_adjustment": 0.5724714172770552,
             "adjustment_applied": false
           }
         },
@@ -971,7 +971,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T12:42:16.694004+00:00",
+            "retrieved_at": "2026-11-12T13:11:54.663021+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -1011,7 +1011,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T12:42:16.247909+00:00",
+          "checked_at": "2026-11-12T13:11:53.749527+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -1178,21 +1178,21 @@
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.403382663847779,
-                "adjusted_mae": 10.383509513742075,
+                "baseline_mae": 10.40338266384778,
+                "adjusted_mae": 10.383509513742071,
                 "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
                   -0.1850840336134454,
-                  0.21941544885177466
+                  0.21941544885177458
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355184,
+                "baseline_mae": 10.458773784355179,
                 "adjusted_mae": 10.414376321353066,
                 "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
                   -0.11196581196581201,
-                  0.1885892116182571
+                  0.18858921161825706
                 ]
               }
             },
@@ -1237,6 +1237,127 @@
             }
           },
           "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "lineup_scenario": {
+          "version": "nfl-qb-lineup-scenario-v1",
+          "base_version": "opponent-score-ridge-v1",
+          "generated_at": "2026-11-12T13:11:54.663843+00:00",
+          "available": true,
+          "quarterbacks": {
+            "NYG": {
+              "player_id": "00-0039923",
+              "player": "J.J. McCarthy",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            },
+            "WAS": {
+              "player_id": "00-0039910",
+              "player": "Jayden Daniels",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            }
+          },
+          "training_games": 408,
+          "through_week": 9,
+          "status": "EXPERIMENTAL_SCENARIO",
+          "injuries": {
+            "NYG": {
+              "coverage": "REPORTED",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            },
+            "WAS": {
+              "coverage": "REPORTED",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [
+                    {
+                      "id": "00-0033082",
+                      "name": "Lucas Patrick",
+                      "status": "Out"
+                    },
+                    {
+                      "id": "00-0039686",
+                      "name": "Colson Yankoff",
+                      "status": "Out"
+                    }
+                  ],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "UNRESOLVED_PLAYER_ID",
+                  "reason": "A current-team player could not be uniquely joined to participation history."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            }
+          },
+          "limits": [
+            "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+            "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+            "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+            "No verified betting edge or calibrated probability is claimed."
+          ],
+          "before_absence_adjustment": {
+            "home": 24.4,
+            "away": 21.9
+          },
+          "home": 24.4,
+          "away": 21.9,
+          "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+          "score_source_check": {
+            "matching_training_games": 408,
+            "training_games": 408,
+            "checked_at": "2026-11-12T13:07:35.668270+00:00",
+            "source": "ESPN final scoreboards",
+            "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+            "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+          }
         },
         "residual_context": {
           "home_rest": 4.0,
@@ -1318,17 +1439,17 @@
             "defense_pass_rate_allowed": 0.5723065420560748,
             "expected_pass_rate": 0.5545853118005037,
             "pass_epa_matchup_delta": -0.011320069492774476,
-            "rush_epa_matchup_delta": 0.07178225537989272,
+            "rush_epa_matchup_delta": 0.07178225537989269,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": 0.02569492662903782,
+            "epa_per_play_delta": 0.025694926629037815,
             "success_rate_delta": 0.039690065211958225,
             "explosive_rate_offense": 0.10831721470019343,
             "explosive_rate_defense_allowed": 0.10093457943925234,
             "pass_epa_offense": 0.20118023746972336,
             "pass_epa_defense_allowed": 0.21250030696249783,
             "rush_epa_offense": -0.05348607629298296,
-            "rush_epa_defense_allowed": -0.12526833167287568,
+            "rush_epa_defense_allowed": -0.12526833167287565,
             "plays_per_game": 64.625,
             "turnovers_per_game": 0.625,
             "defensive_sacks_per_game": 2.7777777777777777,
@@ -1342,30 +1463,30 @@
             "offense_games": 9,
             "defense_games": 8,
             "offense_epa_per_play": 0.038330584237727436,
-            "defense_epa_allowed_per_play": 0.028905354704598457,
+            "defense_epa_allowed_per_play": 0.02890535470459845,
             "offense_success_rate": 0.456032125501961,
             "defense_success_allowed_rate": 0.41742996887505557,
             "offense_pass_rate": 0.5586118533102079,
             "defense_pass_rate_allowed": 0.6660145249740625,
             "expected_pass_rate": 0.6123131891421352,
             "pass_epa_matchup_delta": -0.005658549731717782,
-            "rush_epa_matchup_delta": 0.08292206883701225,
+            "rush_epa_matchup_delta": 0.08292206883701224,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": 0.028682987785010126,
+            "epa_per_play_delta": 0.02868298778501012,
             "success_rate_delta": 0.038602156626905415,
             "explosive_rate_offense": 0.11517367458866545,
             "explosive_rate_defense_allowed": 0.10982658959537572,
-            "pass_epa_offense": 0.09705125569659057,
-            "pass_epa_defense_allowed": 0.10270980542830835,
+            "pass_epa_offense": 0.09705125569659054,
+            "pass_epa_defense_allowed": 0.10270980542830832,
             "rush_epa_offense": -0.036133695928240644,
-            "rush_epa_defense_allowed": -0.1190557647652529,
+            "rush_epa_defense_allowed": -0.11905576476525288,
             "plays_per_game": 60.77777777777778,
             "turnovers_per_game": 2.111111111111111,
             "defensive_sacks_per_game": 3.375,
             "score_adjustment": 0.0,
             "warning": "Play-by-play matchup adjustment is experimental and not calibrated.",
-            "experimental_score_adjustment": 0.6066408184479156,
+            "experimental_score_adjustment": 0.6066408184479155,
             "adjustment_applied": false
           }
         },
@@ -2272,7 +2393,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T12:42:16.729499+00:00",
+            "retrieved_at": "2026-11-12T13:11:54.691935+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -2306,7 +2427,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T12:42:16.247909+00:00",
+          "checked_at": "2026-11-12T13:11:53.749527+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -2474,21 +2595,21 @@
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.403382663847779,
-                "adjusted_mae": 10.383509513742075,
+                "baseline_mae": 10.40338266384778,
+                "adjusted_mae": 10.383509513742071,
                 "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
                   -0.1850840336134454,
-                  0.21941544885177466
+                  0.21941544885177458
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355184,
+                "baseline_mae": 10.458773784355179,
                 "adjusted_mae": 10.414376321353066,
                 "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
                   -0.11196581196581201,
-                  0.1885892116182571
+                  0.18858921161825706
                 ]
               }
             },
@@ -2533,6 +2654,166 @@
             }
           },
           "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "lineup_scenario": {
+          "version": "nfl-qb-lineup-scenario-v1",
+          "base_version": "opponent-score-ridge-v1",
+          "generated_at": "2026-11-12T13:11:54.692505+00:00",
+          "available": true,
+          "quarterbacks": {
+            "DET": {
+              "player_id": "00-0033106",
+              "player": "Jared Goff",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            },
+            "NE": {
+              "player_id": "00-0039851",
+              "player": "Drake Maye",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            }
+          },
+          "training_games": 408,
+          "through_week": 9,
+          "status": "EXPERIMENTAL_SCENARIO",
+          "injuries": {
+            "DET": {
+              "coverage": "REPORTED",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            },
+            "NE": {
+              "coverage": "REPORTED",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [
+                    {
+                      "id": "00-0037413",
+                      "name": "Ben Brown",
+                      "status": "Out"
+                    },
+                    {
+                      "id": "00-0040734",
+                      "name": "TreVeyon Henderson",
+                      "status": "Out"
+                    }
+                  ],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "UNRESOLVED_PLAYER_ID",
+                  "reason": "A current-team player could not be uniquely joined to participation history."
+                },
+                {
+                  "side": "defense",
+                  "players": [
+                    {
+                      "id": "00-0034778",
+                      "name": "Carlton Davis III",
+                      "status": "Out"
+                    }
+                  ],
+                  "shift": -1.31,
+                  "applied": true,
+                  "absent_games": 4,
+                  "present_games": 22,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "absent_game_ids": [
+                    "2026_02_PIT_NE",
+                    "2026_05_LV_NE",
+                    "2026_06_NYJ_NE",
+                    "2026_07_NE_CHI"
+                  ],
+                  "present_game_ids": [
+                    "2025_01_LV_NE",
+                    "2025_02_NE_MIA",
+                    "2025_03_PIT_NE",
+                    "2025_04_CAR_NE",
+                    "2025_05_NE_BUF",
+                    "2025_06_NE_NO",
+                    "2025_07_NE_TEN",
+                    "2025_08_CLE_NE",
+                    "2025_09_ATL_NE",
+                    "2025_10_NE_TB",
+                    "2025_11_NYJ_NE",
+                    "2025_12_NE_CIN",
+                    "2025_13_NYG_NE",
+                    "2025_15_BUF_NE",
+                    "2025_16_NE_BAL",
+                    "2025_17_NE_NYJ",
+                    "2025_18_MIA_NE",
+                    "2026_01_NE_SEA",
+                    "2026_03_NE_JAX",
+                    "2026_04_NE_BUF",
+                    "2026_08_NE_MIA",
+                    "2026_09_GB_NE"
+                  ],
+                  "status": "OBSERVED_JOINT_ABSENCE_SCENARIO",
+                  "raw_difference": -3.93,
+                  "shrink_games": 8,
+                  "maximum_absolute_shift": 6,
+                  "reason": "A historical association is applied for this scenario. Opponents and other lineup changes can still confound it."
+                }
+              ]
+            }
+          },
+          "limits": [
+            "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+            "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+            "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+            "No verified betting edge or calibrated probability is claimed."
+          ],
+          "before_absence_adjustment": {
+            "home": 25.6,
+            "away": 25.4
+          },
+          "home": 24.3,
+          "away": 25.4,
+          "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+          "score_source_check": {
+            "matching_training_games": 408,
+            "training_games": 408,
+            "checked_at": "2026-11-12T13:07:35.668270+00:00",
+            "source": "ESPN final scoreboards",
+            "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+            "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+          }
         },
         "residual_context": {
           "home_rest": 7.0,
@@ -2606,31 +2887,31 @@
             "available": true,
             "offense_games": 9,
             "defense_games": 8,
-            "offense_epa_per_play": -0.10121612393951801,
+            "offense_epa_per_play": -0.10121612393951802,
             "defense_epa_allowed_per_play": -0.07442774765840704,
             "offense_success_rate": 0.41836959370904325,
             "defense_success_allowed_rate": 0.3982342629482072,
             "offense_pass_rate": 0.5480052424639581,
             "defense_pass_rate_allowed": 0.5694183266932271,
             "expected_pass_rate": 0.5587117845785926,
-            "pass_epa_matchup_delta": -0.12836191099484215,
-            "rush_epa_matchup_delta": 0.09950886910379354,
+            "pass_epa_matchup_delta": -0.12836191099484218,
+            "rush_epa_matchup_delta": 0.09950886910379353,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": -0.027805221098431247,
+            "epa_per_play_delta": -0.027805221098431268,
             "success_rate_delta": 0.020135330760836068,
             "explosive_rate_offense": 0.09523809523809523,
             "explosive_rate_defense_allowed": 0.07569721115537849,
-            "pass_epa_offense": -0.1734958106065936,
-            "pass_epa_defense_allowed": -0.04513389961175147,
-            "rush_epa_offense": -0.013725272755533435,
+            "pass_epa_offense": -0.17349581060659364,
+            "pass_epa_defense_allowed": -0.045133899611751474,
+            "rush_epa_offense": -0.013725272755533448,
             "rush_epa_defense_allowed": -0.11323414185932698,
             "plays_per_game": 58.333333333333336,
             "turnovers_per_game": 1.6666666666666667,
             "defensive_sacks_per_game": 1.75,
             "score_adjustment": 0.0,
             "warning": "Play-by-play matchup adjustment is experimental and not calibrated.",
-            "experimental_score_adjustment": 0.10259786363787657,
+            "experimental_score_adjustment": 0.10259786363787649,
             "adjustment_applied": false
           },
           "away_offense_vs_home_defense": {
@@ -2638,7 +2919,7 @@
             "offense_games": 8,
             "defense_games": 9,
             "offense_epa_per_play": 0.11377211515686869,
-            "defense_epa_allowed_per_play": 0.020922387249859474,
+            "defense_epa_allowed_per_play": 0.020922387249859477,
             "offense_success_rate": 0.4898060457801852,
             "defense_success_allowed_rate": 0.47047246577934776,
             "offense_pass_rate": 0.5774943211602306,
@@ -2655,7 +2936,7 @@
             "pass_epa_offense": 0.13204459809628766,
             "pass_epa_defense_allowed": 0.09229448880797624,
             "rush_epa_offense": 0.0886910681417227,
-            "rush_epa_defense_allowed": -0.05644926433981361,
+            "rush_epa_defense_allowed": -0.0564492643398136,
             "plays_per_game": 60.625,
             "turnovers_per_game": 0.75,
             "defensive_sacks_per_game": 2.2222222222222223,
@@ -3511,7 +3792,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T12:42:16.971270+00:00",
+            "retrieved_at": "2026-11-12T13:11:55.141339+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -3551,7 +3832,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T12:42:16.247909+00:00",
+          "checked_at": "2026-11-12T13:11:53.749527+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -3719,21 +4000,21 @@
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.403382663847779,
-                "adjusted_mae": 10.383509513742075,
+                "baseline_mae": 10.40338266384778,
+                "adjusted_mae": 10.383509513742071,
                 "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
                   -0.1850840336134454,
-                  0.21941544885177466
+                  0.21941544885177458
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355184,
+                "baseline_mae": 10.458773784355179,
                 "adjusted_mae": 10.414376321353066,
                 "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
                   -0.11196581196581201,
-                  0.1885892116182571
+                  0.18858921161825706
                 ]
               }
             },
@@ -3778,6 +4059,116 @@
             }
           },
           "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "lineup_scenario": {
+          "version": "nfl-qb-lineup-scenario-v1",
+          "base_version": "opponent-score-ridge-v1",
+          "generated_at": "2026-11-12T13:11:55.141897+00:00",
+          "available": true,
+          "quarterbacks": {
+            "ATL": {
+              "player_id": "00-0039917",
+              "player": "Michael Penix Jr.",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            },
+            "KC": {
+              "player_id": "00-0033873",
+              "player": "Patrick Mahomes",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            }
+          },
+          "training_games": 408,
+          "through_week": 9,
+          "status": "EXPERIMENTAL_SCENARIO",
+          "injuries": {
+            "ATL": {
+              "coverage": "REPORTED",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            },
+            "KC": {
+              "coverage": "REPORTED",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            }
+          },
+          "limits": [
+            "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+            "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+            "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+            "No verified betting edge or calibrated probability is claimed."
+          ],
+          "before_absence_adjustment": {
+            "home": 20.3,
+            "away": 23.4
+          },
+          "home": 20.3,
+          "away": 23.4,
+          "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+          "score_source_check": {
+            "matching_training_games": 408,
+            "training_games": 408,
+            "checked_at": "2026-11-12T13:07:35.668270+00:00",
+            "source": "ESPN final scoreboards",
+            "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+            "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+          }
         },
         "residual_context": {
           "home_rest": 7.0,
@@ -3851,14 +4242,14 @@
             "available": true,
             "offense_games": 9,
             "defense_games": 8,
-            "offense_epa_per_play": -0.08516443461924428,
-            "defense_epa_allowed_per_play": -0.010050794923547286,
+            "offense_epa_per_play": -0.08516443461924429,
+            "defense_epa_allowed_per_play": -0.010050794923547298,
             "offense_success_rate": 0.42309142184997806,
             "defense_success_allowed_rate": 0.4111918604651163,
             "offense_pass_rate": 0.5904085710641555,
             "defense_pass_rate_allowed": 0.5911518895348837,
             "expected_pass_rate": 0.5907802302995195,
-            "pass_epa_matchup_delta": -0.07191414907008137,
+            "pass_epa_matchup_delta": -0.07191414907008135,
             "rush_epa_matchup_delta": -0.07858279643898869,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
@@ -3867,7 +4258,7 @@
             "explosive_rate_offense": 0.08409506398537477,
             "explosive_rate_defense_allowed": 0.095703125,
             "pass_epa_offense": -0.05265220555214477,
-            "pass_epa_defense_allowed": 0.019261943517936603,
+            "pass_epa_defense_allowed": 0.019261943517936586,
             "rush_epa_offense": -0.13182017152639286,
             "rush_epa_defense_allowed": -0.05323737508740418,
             "plays_per_game": 60.77777777777778,
@@ -3883,7 +4274,7 @@
             "offense_games": 8,
             "defense_games": 9,
             "offense_epa_per_play": 0.09583604214553712,
-            "defense_epa_allowed_per_play": -0.01910098736314461,
+            "defense_epa_allowed_per_play": -0.019100987363144604,
             "offense_success_rate": 0.4350745693970275,
             "defense_success_allowed_rate": 0.41848438300051205,
             "offense_pass_rate": 0.5966065148753754,
@@ -3898,7 +4289,7 @@
             "explosive_rate_offense": 0.10224948875255624,
             "explosive_rate_defense_allowed": 0.1128747795414462,
             "pass_epa_offense": 0.21441113928204159,
-            "pass_epa_defense_allowed": -0.04980291040391577,
+            "pass_epa_defense_allowed": -0.049802910403915754,
             "rush_epa_offense": -0.07723762465555647,
             "rush_epa_defense_allowed": 0.019270398518333193,
             "plays_per_game": 61.125,
@@ -4819,7 +5210,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T12:42:17.249637+00:00",
+            "retrieved_at": "2026-11-12T13:11:55.495681+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -4859,7 +5250,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T12:42:16.247909+00:00",
+          "checked_at": "2026-11-12T13:11:53.749527+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -5027,21 +5418,21 @@
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.403382663847779,
-                "adjusted_mae": 10.383509513742075,
+                "baseline_mae": 10.40338266384778,
+                "adjusted_mae": 10.383509513742071,
                 "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
                   -0.1850840336134454,
-                  0.21941544885177466
+                  0.21941544885177458
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355184,
+                "baseline_mae": 10.458773784355179,
                 "adjusted_mae": 10.414376321353066,
                 "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
                   -0.11196581196581201,
-                  0.1885892116182571
+                  0.18858921161825706
                 ]
               }
             },
@@ -5086,6 +5477,116 @@
             }
           },
           "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "lineup_scenario": {
+          "version": "nfl-qb-lineup-scenario-v1",
+          "base_version": "opponent-score-ridge-v1",
+          "generated_at": "2026-11-12T13:11:55.496463+00:00",
+          "available": true,
+          "quarterbacks": {
+            "CLE": {
+              "player_id": "00-0040668",
+              "player": "Shedeur Sanders",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            },
+            "HOU": {
+              "player_id": "00-0039163",
+              "player": "C.J. Stroud",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            }
+          },
+          "training_games": 408,
+          "through_week": 9,
+          "status": "EXPERIMENTAL_SCENARIO",
+          "injuries": {
+            "CLE": {
+              "coverage": "REPORTED",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            },
+            "HOU": {
+              "coverage": "REPORTED",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            }
+          },
+          "limits": [
+            "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+            "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+            "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+            "No verified betting edge or calibrated probability is claimed."
+          ],
+          "before_absence_adjustment": {
+            "home": 18.6,
+            "away": 23.5
+          },
+          "home": 18.6,
+          "away": 23.5,
+          "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+          "score_source_check": {
+            "matching_training_games": 408,
+            "training_games": 408,
+            "checked_at": "2026-11-12T13:07:35.668270+00:00",
+            "source": "ESPN final scoreboards",
+            "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+            "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+          }
         },
         "residual_context": {
           "home_rest": 7.0,
@@ -5159,7 +5660,7 @@
             "available": true,
             "offense_games": 9,
             "defense_games": 8,
-            "offense_epa_per_play": 0.0635760944266858,
+            "offense_epa_per_play": 0.06357609442668581,
             "defense_epa_allowed_per_play": -0.1357195334513135,
             "offense_success_rate": 0.4125242223355431,
             "defense_success_allowed_rate": 0.39463208479601924,
@@ -5177,7 +5678,7 @@
             "pass_epa_offense": 0.2112363163071695,
             "pass_epa_defense_allowed": -0.20671959400025552,
             "rush_epa_offense": -0.1920550430197302,
-            "rush_epa_defense_allowed": -0.0613928406415733,
+            "rush_epa_defense_allowed": -0.061392840641573306,
             "plays_per_game": 61.666666666666664,
             "turnovers_per_game": 1.1111111111111112,
             "defensive_sacks_per_game": 3.625,
@@ -5191,14 +5692,14 @@
             "offense_games": 8,
             "defense_games": 9,
             "offense_epa_per_play": -0.18993143886556935,
-            "defense_epa_allowed_per_play": -0.09368668509739106,
+            "defense_epa_allowed_per_play": -0.09368668509739105,
             "offense_success_rate": 0.3751961433027696,
             "defense_success_allowed_rate": 0.4331282775312626,
             "offense_pass_rate": 0.5657497558055267,
             "defense_pass_rate_allowed": 0.6304255748285599,
             "expected_pass_rate": 0.5980876653170433,
             "pass_epa_matchup_delta": -0.10659627699812949,
-            "rush_epa_matchup_delta": -0.07513358991249645,
+            "rush_epa_matchup_delta": -0.07513358991249648,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
             "epa_per_play_delta": -0.0939510349761434,
@@ -5207,7 +5708,7 @@
             "explosive_rate_defense_allowed": 0.07432432432432433,
             "pass_epa_offense": -0.19442672974241731,
             "pass_epa_defense_allowed": -0.08783045274428783,
-            "rush_epa_offense": -0.18403130023975567,
+            "rush_epa_offense": -0.1840313002397557,
             "rush_epa_defense_allowed": -0.10889771032725921,
             "plays_per_game": 55.875,
             "turnovers_per_game": 1.0,
@@ -6136,7 +6637,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T12:42:17.515191+00:00",
+            "retrieved_at": "2026-11-12T13:11:55.802664+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -6176,7 +6677,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T12:42:16.247909+00:00",
+          "checked_at": "2026-11-12T13:11:53.749527+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -6344,21 +6845,21 @@
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.403382663847779,
-                "adjusted_mae": 10.383509513742075,
+                "baseline_mae": 10.40338266384778,
+                "adjusted_mae": 10.383509513742071,
                 "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
                   -0.1850840336134454,
-                  0.21941544885177466
+                  0.21941544885177458
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355184,
+                "baseline_mae": 10.458773784355179,
                 "adjusted_mae": 10.414376321353066,
                 "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
                   -0.11196581196581201,
-                  0.1885892116182571
+                  0.18858921161825706
                 ]
               }
             },
@@ -6403,6 +6904,116 @@
             }
           },
           "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "lineup_scenario": {
+          "version": "nfl-qb-lineup-scenario-v1",
+          "base_version": "opponent-score-ridge-v1",
+          "generated_at": "2026-11-12T13:11:55.803721+00:00",
+          "available": true,
+          "quarterbacks": {
+            "GB": {
+              "player_id": "00-0036264",
+              "player": "Jordan Love",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            },
+            "MIN": {
+              "player_id": "00-0032950",
+              "player": "Carson Wentz",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            }
+          },
+          "training_games": 408,
+          "through_week": 9,
+          "status": "EXPERIMENTAL_SCENARIO",
+          "injuries": {
+            "GB": {
+              "coverage": "REPORTED",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            },
+            "MIN": {
+              "coverage": "REPORTED",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            }
+          },
+          "limits": [
+            "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+            "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+            "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+            "No verified betting edge or calibrated probability is claimed."
+          ],
+          "before_absence_adjustment": {
+            "home": 19.9,
+            "away": 17.0
+          },
+          "home": 19.9,
+          "away": 17.0,
+          "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+          "score_source_check": {
+            "matching_training_games": 408,
+            "training_games": 408,
+            "checked_at": "2026-11-12T13:07:35.668270+00:00",
+            "source": "ESPN final scoreboards",
+            "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+            "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+          }
         },
         "residual_context": {
           "home_rest": 7.0,
@@ -6484,17 +7095,17 @@
             "defense_pass_rate_allowed": 0.5172511013215859,
             "expected_pass_rate": 0.543396777612762,
             "pass_epa_matchup_delta": -0.4918386153651363,
-            "rush_epa_matchup_delta": -0.04247903408863013,
+            "rush_epa_matchup_delta": -0.04247903408863012,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
             "epa_per_play_delta": -0.2866595825437036,
             "success_rate_delta": -0.07216404941259968,
             "explosive_rate_offense": 0.08027923211169284,
             "explosive_rate_defense_allowed": 0.09911894273127753,
-            "pass_epa_offense": -0.24727068599002855,
+            "pass_epa_offense": -0.24727068599002852,
             "pass_epa_defense_allowed": 0.24456792937510774,
-            "rush_epa_offense": -0.048889031117252374,
-            "rush_epa_defense_allowed": -0.006409997028622241,
+            "rush_epa_offense": -0.04888903111725237,
+            "rush_epa_defense_allowed": -0.006409997028622244,
             "plays_per_game": 63.666666666666664,
             "turnovers_per_game": 1.8888888888888888,
             "defensive_sacks_per_game": 1.5,
@@ -6507,8 +7118,8 @@
             "available": true,
             "offense_games": 8,
             "defense_games": 9,
-            "offense_epa_per_play": -0.036163451150092965,
-            "defense_epa_allowed_per_play": 0.06226122053770067,
+            "offense_epa_per_play": -0.03616345115009297,
+            "defense_epa_allowed_per_play": 0.062261220537700654,
             "offense_success_rate": 0.4022269514326974,
             "defense_success_allowed_rate": 0.4287464419508059,
             "offense_pass_rate": 0.5151478300524436,
@@ -6524,7 +7135,7 @@
             "explosive_rate_defense_allowed": 0.11089866156787763,
             "pass_epa_offense": -0.06660122797508203,
             "pass_epa_defense_allowed": 0.07202962904179999,
-            "rush_epa_offense": -0.003537881676195783,
+            "rush_epa_offense": -0.003537881676195785,
             "rush_epa_defense_allowed": 0.05297202450110372,
             "plays_per_game": 55.75,
             "turnovers_per_game": 1.25,
@@ -7393,7 +8004,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T12:42:17.782824+00:00",
+            "retrieved_at": "2026-11-12T13:11:56.098961+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -7433,7 +8044,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T12:42:16.247909+00:00",
+          "checked_at": "2026-11-12T13:11:53.749527+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -7601,21 +8212,21 @@
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.403382663847779,
-                "adjusted_mae": 10.383509513742075,
+                "baseline_mae": 10.40338266384778,
+                "adjusted_mae": 10.383509513742071,
                 "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
                   -0.1850840336134454,
-                  0.21941544885177466
+                  0.21941544885177458
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355184,
+                "baseline_mae": 10.458773784355179,
                 "adjusted_mae": 10.414376321353066,
                 "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
                   -0.11196581196581201,
-                  0.1885892116182571
+                  0.18858921161825706
                 ]
               }
             },
@@ -7660,6 +8271,49 @@
             }
           },
           "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "lineup_scenario": {
+          "version": "nfl-qb-lineup-scenario-v1",
+          "base_version": "opponent-score-ridge-v1",
+          "generated_at": "2026-11-12T13:11:56.099578+00:00",
+          "available": false,
+          "quarterbacks": {
+            "IND": {
+              "player_id": "00-0035710",
+              "player": "Daniel Jones",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            },
+            "MIA": {
+              "player_id": null,
+              "player": null,
+              "source": "UNRESOLVED",
+              "assumption": "No eligible last-observed or sourced expected quarterback. Choose the historical baseline.",
+              "effect_available": false
+            }
+          },
+          "training_games": 408,
+          "through_week": 9,
+          "status": "EXPERIMENTAL_SCENARIO",
+          "injuries": {},
+          "limits": [
+            "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+            "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+            "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+            "No verified betting edge or calibrated probability is claimed."
+          ],
+          "reason": "No supported quarterback scenario for MIA. Historical baseline remains available.",
+          "score_source_check": {
+            "matching_training_games": 408,
+            "training_games": 408,
+            "checked_at": "2026-11-12T13:07:35.668270+00:00",
+            "source": "ESPN final scoreboards",
+            "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+            "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+          }
         },
         "residual_context": {
           "home_rest": 7.0,
@@ -7733,8 +8387,8 @@
             "available": true,
             "offense_games": 8,
             "defense_games": 8,
-            "offense_epa_per_play": -0.050473822252636885,
-            "defense_epa_allowed_per_play": 0.03117942388334441,
+            "offense_epa_per_play": -0.0504738222526369,
+            "defense_epa_allowed_per_play": 0.031179423883344402,
             "offense_success_rate": 0.4080983622182332,
             "defense_success_allowed_rate": 0.44808257318217476,
             "offense_pass_rate": 0.6005941128814475,
@@ -7749,9 +8403,9 @@
             "explosive_rate_offense": 0.06994328922495274,
             "explosive_rate_defense_allowed": 0.07335907335907337,
             "pass_epa_offense": -0.0360500952718288,
-            "pass_epa_defense_allowed": 0.06057507348948597,
+            "pass_epa_defense_allowed": 0.060575073489485966,
             "rush_epa_offense": -0.07340284667379249,
-            "rush_epa_defense_allowed": -0.005865587265404809,
+            "rush_epa_defense_allowed": -0.005865587265404811,
             "plays_per_game": 66.125,
             "turnovers_per_game": 1.625,
             "defensive_sacks_per_game": 1.5,
@@ -7764,31 +8418,31 @@
             "available": true,
             "offense_games": 8,
             "defense_games": 8,
-            "offense_epa_per_play": 0.012298109011597336,
-            "defense_epa_allowed_per_play": 0.013434715416814357,
+            "offense_epa_per_play": 0.012298109011597332,
+            "defense_epa_allowed_per_play": 0.01343471541681435,
             "offense_success_rate": 0.42173951486928585,
             "defense_success_allowed_rate": 0.44722164007065657,
             "offense_pass_rate": 0.6460829968463556,
             "defense_pass_rate_allowed": 0.5612077482710098,
             "expected_pass_rate": 0.6036453725586828,
-            "pass_epa_matchup_delta": -0.04623336586780717,
+            "pass_epa_matchup_delta": -0.04623336586780715,
             "rush_epa_matchup_delta": 0.06320134196286448,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": -0.0028584130164319085,
+            "epa_per_play_delta": -0.002858413016431898,
             "success_rate_delta": -0.02548212520137072,
             "explosive_rate_offense": 0.09541984732824428,
             "explosive_rate_defense_allowed": 0.1062992125984252,
-            "pass_epa_offense": -0.00033696713258671296,
-            "pass_epa_defense_allowed": 0.04589639873522046,
-            "rush_epa_offense": 0.03504421166125783,
+            "pass_epa_offense": -0.000336967132586706,
+            "pass_epa_defense_allowed": 0.045896398735220445,
+            "rush_epa_offense": 0.03504421166125784,
             "rush_epa_defense_allowed": -0.028157130301606645,
             "plays_per_game": 65.5,
             "turnovers_per_game": 1.25,
             "defensive_sacks_per_game": 2.875,
             "score_adjustment": 0.0,
             "warning": "Play-by-play matchup adjustment is experimental and not calibrated.",
-            "experimental_score_adjustment": -0.32007756749860816,
+            "experimental_score_adjustment": -0.3200775674986081,
             "adjustment_applied": false
           }
         },
@@ -8671,7 +9325,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T12:42:17.817429+00:00",
+            "retrieved_at": "2026-11-12T13:11:56.140668+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -8705,7 +9359,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T12:42:16.247909+00:00",
+          "checked_at": "2026-11-12T13:11:53.749527+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -8872,21 +9526,21 @@
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.403382663847779,
-                "adjusted_mae": 10.383509513742075,
+                "baseline_mae": 10.40338266384778,
+                "adjusted_mae": 10.383509513742071,
                 "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
                   -0.1850840336134454,
-                  0.21941544885177466
+                  0.21941544885177458
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355184,
+                "baseline_mae": 10.458773784355179,
                 "adjusted_mae": 10.414376321353066,
                 "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
                   -0.11196581196581201,
-                  0.1885892116182571
+                  0.18858921161825706
                 ]
               }
             },
@@ -8931,6 +9585,116 @@
             }
           },
           "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "lineup_scenario": {
+          "version": "nfl-qb-lineup-scenario-v1",
+          "base_version": "opponent-score-ridge-v1",
+          "generated_at": "2026-11-12T13:11:56.141307+00:00",
+          "available": true,
+          "quarterbacks": {
+            "NO": {
+              "player_id": "00-0040743",
+              "player": "Tyler Shough",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            },
+            "CAR": {
+              "player_id": "00-0039150",
+              "player": "Bryce Young",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            }
+          },
+          "training_games": 408,
+          "through_week": 9,
+          "status": "EXPERIMENTAL_SCENARIO",
+          "injuries": {
+            "NO": {
+              "coverage": "REPORTED",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            },
+            "CAR": {
+              "coverage": "REPORTED",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            }
+          },
+          "limits": [
+            "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+            "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+            "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+            "No verified betting edge or calibrated probability is claimed."
+          ],
+          "before_absence_adjustment": {
+            "home": 23.9,
+            "away": 23.5
+          },
+          "home": 23.9,
+          "away": 23.5,
+          "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+          "score_source_check": {
+            "matching_training_games": 408,
+            "training_games": 408,
+            "checked_at": "2026-11-12T13:07:35.668270+00:00",
+            "source": "ESPN final scoreboards",
+            "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+            "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+          }
         },
         "residual_context": {
           "home_rest": 7.0,
@@ -9004,14 +9768,14 @@
             "available": true,
             "offense_games": 9,
             "defense_games": 8,
-            "offense_epa_per_play": 0.016703556630676568,
+            "offense_epa_per_play": 0.016703556630676564,
             "defense_epa_allowed_per_play": -0.06372561867288551,
             "offense_success_rate": 0.4603525835866262,
             "defense_success_allowed_rate": 0.4234161046392806,
             "offense_pass_rate": 0.5771914893617022,
             "defense_pass_rate_allowed": 0.6532495401594114,
             "expected_pass_rate": 0.6152205147605567,
-            "pass_epa_matchup_delta": 0.1312933034116214,
+            "pass_epa_matchup_delta": 0.13129330341162143,
             "rush_epa_matchup_delta": 0.03185916164816213,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
@@ -9019,8 +9783,8 @@
             "success_rate_delta": 0.036936478947345586,
             "explosive_rate_offense": 0.09904761904761905,
             "explosive_rate_defense_allowed": 0.09523809523809523,
-            "pass_epa_offense": 0.10576055144126684,
-            "pass_epa_defense_allowed": -0.025532751970354577,
+            "pass_epa_offense": 0.10576055144126685,
+            "pass_epa_defense_allowed": -0.025532751970354584,
             "rush_epa_offense": -0.10517451730708427,
             "rush_epa_defense_allowed": -0.1370336789552464,
             "plays_per_game": 58.333333333333336,
@@ -9035,7 +9799,7 @@
             "available": true,
             "offense_games": 8,
             "defense_games": 9,
-            "offense_epa_per_play": 0.12298044423505439,
+            "offense_epa_per_play": 0.1229804442350544,
             "defense_epa_allowed_per_play": 0.08920563023676378,
             "offense_success_rate": 0.476048858204992,
             "defense_success_allowed_rate": 0.4794873790804809,
@@ -9053,7 +9817,7 @@
             "pass_epa_offense": 0.177050482704744,
             "pass_epa_defense_allowed": 0.22625939689172475,
             "rush_epa_offense": 0.07064880556250835,
-            "rush_epa_defense_allowed": -0.03987072666188,
+            "rush_epa_defense_allowed": -0.03987072666187999,
             "plays_per_game": 63.0,
             "turnovers_per_game": 1.5,
             "defensive_sacks_per_game": 2.4444444444444446,
@@ -9918,7 +10682,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T12:42:17.852266+00:00",
+            "retrieved_at": "2026-11-12T13:11:56.172244+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -9958,7 +10722,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T12:42:16.247909+00:00",
+          "checked_at": "2026-11-12T13:11:53.749527+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -10126,21 +10890,21 @@
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.403382663847779,
-                "adjusted_mae": 10.383509513742075,
+                "baseline_mae": 10.40338266384778,
+                "adjusted_mae": 10.383509513742071,
                 "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
                   -0.1850840336134454,
-                  0.21941544885177466
+                  0.21941544885177458
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355184,
+                "baseline_mae": 10.458773784355179,
                 "adjusted_mae": 10.414376321353066,
                 "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
                   -0.11196581196581201,
-                  0.1885892116182571
+                  0.18858921161825706
                 ]
               }
             },
@@ -10185,6 +10949,116 @@
             }
           },
           "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "lineup_scenario": {
+          "version": "nfl-qb-lineup-scenario-v1",
+          "base_version": "opponent-score-ridge-v1",
+          "generated_at": "2026-11-12T13:11:56.172928+00:00",
+          "available": true,
+          "quarterbacks": {
+            "NYJ": {
+              "player_id": "00-0030565",
+              "player": "Geno Smith",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            },
+            "BUF": {
+              "player_id": "00-0034857",
+              "player": "Josh Allen",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            }
+          },
+          "training_games": 408,
+          "through_week": 9,
+          "status": "EXPERIMENTAL_SCENARIO",
+          "injuries": {
+            "NYJ": {
+              "coverage": "REPORTED",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            },
+            "BUF": {
+              "coverage": "REPORTED",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            }
+          },
+          "limits": [
+            "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+            "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+            "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+            "No verified betting edge or calibrated probability is claimed."
+          ],
+          "before_absence_adjustment": {
+            "home": 19.8,
+            "away": 30.4
+          },
+          "home": 19.8,
+          "away": 30.4,
+          "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+          "score_source_check": {
+            "matching_training_games": 408,
+            "training_games": 408,
+            "checked_at": "2026-11-12T13:07:35.668270+00:00",
+            "source": "ESPN final scoreboards",
+            "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+            "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+          }
         },
         "residual_context": {
           "home_rest": 7.0,
@@ -10259,13 +11133,13 @@
             "offense_games": 8,
             "defense_games": 8,
             "offense_epa_per_play": -0.08917346940346152,
-            "defense_epa_allowed_per_play": -0.15578493255335674,
+            "defense_epa_allowed_per_play": -0.1557849325533567,
             "offense_success_rate": 0.4203764811759412,
             "defense_success_allowed_rate": 0.39722709460720285,
             "offense_pass_rate": 0.581318434078296,
             "defense_pass_rate_allowed": 0.581000186601978,
             "expected_pass_rate": 0.581159310340137,
-            "pass_epa_matchup_delta": 0.03067246157570029,
+            "pass_epa_matchup_delta": 0.030672461575700277,
             "rush_epa_matchup_delta": 0.11671450110023249,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
@@ -10273,7 +11147,7 @@
             "success_rate_delta": 0.023149386568738328,
             "explosive_rate_offense": 0.07300884955752213,
             "explosive_rate_defense_allowed": 0.07081545064377683,
-            "pass_epa_offense": -0.11690301510351188,
+            "pass_epa_offense": -0.11690301510351189,
             "pass_epa_defense_allowed": -0.14757547667921217,
             "rush_epa_offense": -0.050647133898904934,
             "rush_epa_defense_allowed": -0.16736163499913742,
@@ -10289,31 +11163,31 @@
             "available": true,
             "offense_games": 8,
             "defense_games": 8,
-            "offense_epa_per_play": 0.1368085062842206,
+            "offense_epa_per_play": 0.13680850628422062,
             "defense_epa_allowed_per_play": 0.07106296393388532,
             "offense_success_rate": 0.46487125474406493,
             "defense_success_allowed_rate": 0.4817980184251695,
             "offense_pass_rate": 0.5217147072678631,
             "defense_pass_rate_allowed": 0.5851722579523727,
             "expected_pass_rate": 0.5534434826101179,
-            "pass_epa_matchup_delta": 0.10627681268113903,
+            "pass_epa_matchup_delta": 0.10627681268113909,
             "rush_epa_matchup_delta": 0.04969650131785497,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": 0.08101050588591573,
+            "epa_per_play_delta": 0.08101050588591575,
             "success_rate_delta": -0.016926763681104573,
             "explosive_rate_offense": 0.10151187904967603,
             "explosive_rate_defense_allowed": 0.10325047801147227,
-            "pass_epa_offense": 0.26935905104949703,
+            "pass_epa_offense": 0.2693590510494971,
             "pass_epa_defense_allowed": 0.163082238368358,
-            "rush_epa_offense": -0.007956236711729845,
+            "rush_epa_offense": -0.007956236711729844,
             "rush_epa_defense_allowed": -0.057652738029584816,
             "plays_per_game": 57.875,
             "turnovers_per_game": 0.75,
             "defensive_sacks_per_game": 2.5,
             "score_adjustment": 0.0,
             "warning": "Play-by-play matchup adjustment is experimental and not calibrated.",
-            "experimental_score_adjustment": 0.20193136525632377,
+            "experimental_score_adjustment": 0.20193136525632388,
             "adjustment_applied": false
           }
         },
@@ -11200,7 +12074,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T12:42:18.147279+00:00",
+            "retrieved_at": "2026-11-12T13:11:56.415911+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -11240,7 +12114,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T12:42:16.247909+00:00",
+          "checked_at": "2026-11-12T13:11:53.749527+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -11407,21 +12281,21 @@
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.403382663847779,
-                "adjusted_mae": 10.383509513742075,
+                "baseline_mae": 10.40338266384778,
+                "adjusted_mae": 10.383509513742071,
                 "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
                   -0.1850840336134454,
-                  0.21941544885177466
+                  0.21941544885177458
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355184,
+                "baseline_mae": 10.458773784355179,
                 "adjusted_mae": 10.414376321353066,
                 "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
                   -0.11196581196581201,
-                  0.1885892116182571
+                  0.18858921161825706
                 ]
               }
             },
@@ -11466,6 +12340,116 @@
             }
           },
           "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "lineup_scenario": {
+          "version": "nfl-qb-lineup-scenario-v1",
+          "base_version": "opponent-score-ridge-v1",
+          "generated_at": "2026-11-12T13:11:56.416446+00:00",
+          "available": true,
+          "quarterbacks": {
+            "TEN": {
+              "player_id": "00-0040676",
+              "player": "Cam Ward",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            },
+            "JAX": {
+              "player_id": "00-0036971",
+              "player": "Trevor Lawrence",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            }
+          },
+          "training_games": 408,
+          "through_week": 9,
+          "status": "EXPERIMENTAL_SCENARIO",
+          "injuries": {
+            "TEN": {
+              "coverage": "REPORTED",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            },
+            "JAX": {
+              "coverage": "REPORTED",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            }
+          },
+          "limits": [
+            "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+            "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+            "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+            "No verified betting edge or calibrated probability is claimed."
+          ],
+          "before_absence_adjustment": {
+            "home": 15.9,
+            "away": 28.5
+          },
+          "home": 15.9,
+          "away": 28.5,
+          "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+          "score_source_check": {
+            "matching_training_games": 408,
+            "training_games": 408,
+            "checked_at": "2026-11-12T13:07:35.668270+00:00",
+            "source": "ESPN final scoreboards",
+            "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+            "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+          }
         },
         "residual_context": {
           "home_rest": 14.0,
@@ -11540,23 +12524,23 @@
             "offense_games": 9,
             "defense_games": 9,
             "offense_epa_per_play": -0.04429555484191515,
-            "defense_epa_allowed_per_play": -0.14396634473048744,
+            "defense_epa_allowed_per_play": -0.14396634473048747,
             "offense_success_rate": 0.4208856088560886,
             "defense_success_allowed_rate": 0.393365225230465,
             "offense_pass_rate": 0.6234944649446494,
             "defense_pass_rate_allowed": 0.5886177916072934,
             "expected_pass_rate": 0.6060561282759714,
-            "pass_epa_matchup_delta": 0.07620571072719122,
-            "rush_epa_matchup_delta": 0.13933029889961707,
+            "pass_epa_matchup_delta": 0.07620571072719123,
+            "rush_epa_matchup_delta": 0.13933029889961704,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
             "epa_per_play_delta": 0.10107325539282147,
             "success_rate_delta": 0.02752038362562359,
             "explosive_rate_offense": 0.058333333333333334,
             "explosive_rate_defense_allowed": 0.07846715328467153,
-            "pass_epa_offense": -0.058241952335994426,
+            "pass_epa_offense": -0.05824195233599441,
             "pass_epa_defense_allowed": -0.13444766306318565,
-            "rush_epa_offense": -0.021697545022058076,
+            "rush_epa_offense": -0.021697545022058083,
             "rush_epa_defense_allowed": -0.16102784392167513,
             "plays_per_game": 66.66666666666667,
             "turnovers_per_game": 0.8888888888888888,
@@ -11570,31 +12554,31 @@
             "available": true,
             "offense_games": 9,
             "defense_games": 9,
-            "offense_epa_per_play": 0.02257577178712204,
-            "defense_epa_allowed_per_play": 0.04848748308977268,
+            "offense_epa_per_play": 0.022575771787122043,
+            "defense_epa_allowed_per_play": 0.048487483089772694,
             "offense_success_rate": 0.48120067067435485,
             "defense_success_allowed_rate": 0.42461059190031153,
             "offense_pass_rate": 0.5838792786161208,
             "defense_pass_rate_allowed": 0.5262305295950156,
             "expected_pass_rate": 0.5550549041055681,
-            "pass_epa_matchup_delta": -0.13785430212145602,
-            "rush_epa_matchup_delta": 0.09628346722757457,
+            "pass_epa_matchup_delta": -0.13785430212145605,
+            "rush_epa_matchup_delta": 0.09628346722757455,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": -0.033675849885943236,
+            "epa_per_play_delta": -0.03367584988594326,
             "success_rate_delta": 0.05659007877404332,
             "explosive_rate_offense": 0.08080808080808081,
             "explosive_rate_defense_allowed": 0.09158878504672897,
-            "pass_epa_offense": 0.010757358776469585,
-            "pass_epa_defense_allowed": 0.1486116608979256,
+            "pass_epa_offense": 0.010757358776469588,
+            "pass_epa_defense_allowed": 0.14861166089792563,
             "rush_epa_offense": 0.03484510126110061,
-            "rush_epa_defense_allowed": -0.06143836596647396,
+            "rush_epa_defense_allowed": -0.06143836596647395,
             "plays_per_game": 66.0,
             "turnovers_per_game": 1.5555555555555556,
             "defensive_sacks_per_game": 2.111111111111111,
             "score_adjustment": 0.0,
             "warning": "Play-by-play matchup adjustment is experimental and not calibrated.",
-            "experimental_score_adjustment": 0.5107016958588037,
+            "experimental_score_adjustment": 0.5107016958588035,
             "adjustment_applied": false
           }
         },
@@ -12482,7 +13466,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T12:42:18.430759+00:00",
+            "retrieved_at": "2026-11-12T13:11:56.649790+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -12522,7 +13506,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T12:42:16.247909+00:00",
+          "checked_at": "2026-11-12T13:11:53.749527+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -12691,21 +13675,21 @@
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.403382663847779,
-                "adjusted_mae": 10.383509513742075,
+                "baseline_mae": 10.40338266384778,
+                "adjusted_mae": 10.383509513742071,
                 "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
                   -0.1850840336134454,
-                  0.21941544885177466
+                  0.21941544885177458
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355184,
+                "baseline_mae": 10.458773784355179,
                 "adjusted_mae": 10.414376321353066,
                 "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
                   -0.11196581196581201,
-                  0.1885892116182571
+                  0.18858921161825706
                 ]
               }
             },
@@ -12750,6 +13734,49 @@
             }
           },
           "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "lineup_scenario": {
+          "version": "nfl-qb-lineup-scenario-v1",
+          "base_version": "opponent-score-ridge-v1",
+          "generated_at": "2026-11-12T13:11:56.650407+00:00",
+          "available": false,
+          "quarterbacks": {
+            "ARI": {
+              "player_id": null,
+              "player": null,
+              "source": "UNRESOLVED",
+              "assumption": "No eligible last-observed or sourced expected quarterback. Choose the historical baseline.",
+              "effect_available": false
+            },
+            "LA": {
+              "player_id": "00-0026498",
+              "player": "Matthew Stafford",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            }
+          },
+          "training_games": 408,
+          "through_week": 9,
+          "status": "EXPERIMENTAL_SCENARIO",
+          "injuries": {},
+          "limits": [
+            "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+            "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+            "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+            "No verified betting edge or calibrated probability is claimed."
+          ],
+          "reason": "No supported quarterback scenario for ARI. Historical baseline remains available.",
+          "score_source_check": {
+            "matching_training_games": 408,
+            "training_games": 408,
+            "checked_at": "2026-11-12T13:07:35.668270+00:00",
+            "source": "ESPN final scoreboards",
+            "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+            "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+          }
         },
         "residual_context": {
           "home_rest": 7.0,
@@ -12823,7 +13850,7 @@
             "available": true,
             "offense_games": 9,
             "defense_games": 9,
-            "offense_epa_per_play": -0.02464470963726799,
+            "offense_epa_per_play": -0.024644709637267996,
             "defense_epa_allowed_per_play": -0.07700867956540855,
             "offense_success_rate": 0.42079329187865083,
             "defense_success_allowed_rate": 0.39604293549581077,
@@ -12831,7 +13858,7 @@
             "defense_pass_rate_allowed": 0.572923045862916,
             "expected_pass_rate": 0.5990628042580078,
             "pass_epa_matchup_delta": 0.21167581818426687,
-            "rush_epa_matchup_delta": -0.2030568555700317,
+            "rush_epa_matchup_delta": -0.20305685557003172,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
             "epa_per_play_delta": 0.045394062986639894,
@@ -12840,8 +13867,8 @@
             "explosive_rate_defense_allowed": 0.055133079847908745,
             "pass_epa_offense": 0.10309305730395618,
             "pass_epa_defense_allowed": -0.10858276088031069,
-            "rush_epa_offense": -0.23706715749227208,
-            "rush_epa_defense_allowed": -0.03401030192224039,
+            "rush_epa_offense": -0.2370671574922721,
+            "rush_epa_defense_allowed": -0.034010301922240374,
             "plays_per_game": 61.0,
             "turnovers_per_game": 1.2222222222222223,
             "defensive_sacks_per_game": 2.3333333333333335,
@@ -12854,23 +13881,23 @@
             "available": true,
             "offense_games": 9,
             "defense_games": 9,
-            "offense_epa_per_play": -0.026086900427325657,
+            "offense_epa_per_play": -0.026086900427325654,
             "defense_epa_allowed_per_play": 0.13393328561488893,
             "offense_success_rate": 0.40988827758463564,
             "defense_success_allowed_rate": 0.49528666751668154,
             "offense_pass_rate": 0.5544226550106321,
             "defense_pass_rate_allowed": 0.5191338348421097,
             "expected_pass_rate": 0.5367782449263709,
-            "pass_epa_matchup_delta": -0.174981467207521,
+            "pass_epa_matchup_delta": -0.17498146720752103,
             "rush_epa_matchup_delta": -0.15336514532919443,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": -0.16496831664880607,
+            "epa_per_play_delta": -0.1649683166488061,
             "success_rate_delta": -0.0853983899320459,
             "explosive_rate_offense": 0.08407871198568873,
             "explosive_rate_defense_allowed": 0.11648745519713262,
-            "pass_epa_offense": 0.035283378747364216,
-            "pass_epa_defense_allowed": 0.2102648459548852,
+            "pass_epa_offense": 0.03528337874736421,
+            "pass_epa_defense_allowed": 0.21026484595488523,
             "rush_epa_offense": -0.10170692873913344,
             "rush_epa_defense_allowed": 0.051658216590061,
             "plays_per_game": 62.111111111111114,
@@ -13614,7 +14641,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T12:42:18.465765+00:00",
+            "retrieved_at": "2026-11-12T13:11:56.681681+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -13648,7 +14675,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T12:42:16.247909+00:00",
+          "checked_at": "2026-11-12T13:11:53.749527+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -13817,21 +14844,21 @@
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.403382663847779,
-                "adjusted_mae": 10.383509513742075,
+                "baseline_mae": 10.40338266384778,
+                "adjusted_mae": 10.383509513742071,
                 "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
                   -0.1850840336134454,
-                  0.21941544885177466
+                  0.21941544885177458
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355184,
+                "baseline_mae": 10.458773784355179,
                 "adjusted_mae": 10.414376321353066,
                 "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
                   -0.11196581196581201,
-                  0.1885892116182571
+                  0.18858921161825706
                 ]
               }
             },
@@ -13876,6 +14903,49 @@
             }
           },
           "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "lineup_scenario": {
+          "version": "nfl-qb-lineup-scenario-v1",
+          "base_version": "opponent-score-ridge-v1",
+          "generated_at": "2026-11-12T13:11:56.682376+00:00",
+          "available": false,
+          "quarterbacks": {
+            "LV": {
+              "player_id": null,
+              "player": null,
+              "source": "UNRESOLVED",
+              "assumption": "No eligible last-observed or sourced expected quarterback. Choose the historical baseline.",
+              "effect_available": false
+            },
+            "SEA": {
+              "player_id": "00-0035704",
+              "player": "Drew Lock",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            }
+          },
+          "training_games": 408,
+          "through_week": 9,
+          "status": "EXPERIMENTAL_SCENARIO",
+          "injuries": {},
+          "limits": [
+            "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+            "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+            "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+            "No verified betting edge or calibrated probability is claimed."
+          ],
+          "reason": "No supported quarterback scenario for LV. Historical baseline remains available.",
+          "score_source_check": {
+            "matching_training_games": 408,
+            "training_games": 408,
+            "checked_at": "2026-11-12T13:07:35.668270+00:00",
+            "source": "ESPN final scoreboards",
+            "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+            "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+          }
         },
         "residual_context": {
           "home_rest": 7.0,
@@ -13966,7 +15036,7 @@
             "explosive_rate_defense_allowed": 0.04781704781704782,
             "pass_epa_offense": 0.12455975949008305,
             "pass_epa_defense_allowed": -0.043421805953911735,
-            "rush_epa_offense": 0.023427572950365204,
+            "rush_epa_offense": 0.023427572950365197,
             "rush_epa_defense_allowed": -0.22848625965520375,
             "plays_per_game": 65.0,
             "turnovers_per_game": 0.8888888888888888,
@@ -13981,30 +15051,30 @@
             "offense_games": 8,
             "defense_games": 9,
             "offense_epa_per_play": 0.13967066346442752,
-            "defense_epa_allowed_per_play": 0.04452405291715199,
+            "defense_epa_allowed_per_play": 0.044524052917152016,
             "offense_success_rate": 0.523059039461609,
             "defense_success_allowed_rate": 0.43633958633958636,
             "offense_pass_rate": 0.5260831184722283,
             "defense_pass_rate_allowed": 0.575925925925926,
             "expected_pass_rate": 0.5510045221990771,
-            "pass_epa_matchup_delta": 0.07926270815151691,
-            "rush_epa_matchup_delta": 0.11367283720103004,
+            "pass_epa_matchup_delta": 0.07926270815151687,
+            "rush_epa_matchup_delta": 0.11367283720103002,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": 0.09471270048529447,
+            "epa_per_play_delta": 0.09471270048529444,
             "success_rate_delta": 0.08671945312202267,
             "explosive_rate_offense": 0.12633832976445397,
             "explosive_rate_defense_allowed": 0.10052910052910052,
-            "pass_epa_offense": 0.1556357095114617,
-            "pass_epa_defense_allowed": 0.07637300135994478,
+            "pass_epa_offense": 0.15563570951146172,
+            "pass_epa_defense_allowed": 0.07637300135994485,
             "rush_epa_offense": 0.12405745927557821,
-            "rush_epa_defense_allowed": 0.010384622074548175,
+            "rush_epa_defense_allowed": 0.010384622074548176,
             "plays_per_game": 58.375,
             "turnovers_per_game": 1.125,
             "defensive_sacks_per_game": 1.8888888888888888,
             "score_adjustment": 0.0,
             "warning": "Play-by-play matchup adjustment is experimental and not calibrated.",
-            "experimental_score_adjustment": 1.5141969398907444,
+            "experimental_score_adjustment": 1.5141969398907442,
             "adjustment_applied": false
           }
         },
@@ -14935,7 +16005,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T12:42:18.843646+00:00",
+            "retrieved_at": "2026-11-12T13:11:57.004038+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -14975,7 +16045,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T12:42:16.247909+00:00",
+          "checked_at": "2026-11-12T13:11:53.749527+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -15143,21 +16213,21 @@
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.403382663847779,
-                "adjusted_mae": 10.383509513742075,
+                "baseline_mae": 10.40338266384778,
+                "adjusted_mae": 10.383509513742071,
                 "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
                   -0.1850840336134454,
-                  0.21941544885177466
+                  0.21941544885177458
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355184,
+                "baseline_mae": 10.458773784355179,
                 "adjusted_mae": 10.414376321353066,
                 "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
                   -0.11196581196581201,
-                  0.1885892116182571
+                  0.18858921161825706
                 ]
               }
             },
@@ -15202,6 +16272,116 @@
             }
           },
           "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "lineup_scenario": {
+          "version": "nfl-qb-lineup-scenario-v1",
+          "base_version": "opponent-score-ridge-v1",
+          "generated_at": "2026-11-12T13:11:57.004609+00:00",
+          "available": true,
+          "quarterbacks": {
+            "DAL": {
+              "player_id": "00-0033077",
+              "player": "Dak Prescott",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            },
+            "SF": {
+              "player_id": "00-0037834",
+              "player": "Brock Purdy",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            }
+          },
+          "training_games": 408,
+          "through_week": 9,
+          "status": "EXPERIMENTAL_SCENARIO",
+          "injuries": {
+            "DAL": {
+              "coverage": "REPORTED",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            },
+            "SF": {
+              "coverage": "REPORTED",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            }
+          },
+          "limits": [
+            "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+            "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+            "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+            "No verified betting edge or calibrated probability is claimed."
+          ],
+          "before_absence_adjustment": {
+            "home": 25.3,
+            "away": 29.5
+          },
+          "home": 25.3,
+          "away": 29.5,
+          "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+          "score_source_check": {
+            "matching_training_games": 408,
+            "training_games": 408,
+            "checked_at": "2026-11-12T13:07:35.668270+00:00",
+            "source": "ESPN final scoreboards",
+            "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+            "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+          }
         },
         "residual_context": {
           "home_rest": 7.0,
@@ -15275,8 +16455,8 @@
             "available": true,
             "offense_games": 8,
             "defense_games": 8,
-            "offense_epa_per_play": 0.17785189339915347,
-            "defense_epa_allowed_per_play": -0.09916099941884722,
+            "offense_epa_per_play": 0.17785189339915344,
+            "defense_epa_allowed_per_play": -0.09916099941884723,
             "offense_success_rate": 0.5269519126826376,
             "defense_success_allowed_rate": 0.40328903967580815,
             "offense_pass_rate": 0.6331903616138369,
@@ -15292,7 +16472,7 @@
             "explosive_rate_defense_allowed": 0.09053497942386832,
             "pass_epa_offense": 0.31679591857021805,
             "pass_epa_defense_allowed": -0.08516210331251038,
-            "rush_epa_offense": -0.05910263768868786,
+            "rush_epa_offense": -0.05910263768868788,
             "rush_epa_defense_allowed": -0.12687365921582056,
             "plays_per_game": 60.5,
             "turnovers_per_game": 1.125,
@@ -15306,23 +16486,23 @@
             "available": true,
             "offense_games": 8,
             "defense_games": 8,
-            "offense_epa_per_play": 0.00528826727079015,
-            "defense_epa_allowed_per_play": 0.017717205230142356,
+            "offense_epa_per_play": 0.0052882672707901465,
+            "defense_epa_allowed_per_play": 0.017717205230142353,
             "offense_success_rate": 0.424762726488352,
             "defense_success_allowed_rate": 0.45179115853658536,
             "offense_pass_rate": 0.6093051038693834,
             "defense_pass_rate_allowed": 0.5816310975609756,
             "expected_pass_rate": 0.5954681007151795,
-            "pass_epa_matchup_delta": -0.07949116127428218,
+            "pass_epa_matchup_delta": -0.07949116127428217,
             "rush_epa_matchup_delta": 0.09943064443293198,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": -0.00711158338807321,
+            "epa_per_play_delta": -0.007111583388073196,
             "success_rate_delta": -0.027028432048233353,
             "explosive_rate_offense": 0.0951417004048583,
             "explosive_rate_defense_allowed": 0.11178861788617886,
             "pass_epa_offense": -0.10052169063867801,
-            "pass_epa_defense_allowed": -0.021030529364395832,
+            "pass_epa_defense_allowed": -0.02103052936439584,
             "rush_epa_offense": 0.16815787058688353,
             "rush_epa_defense_allowed": 0.06872722615395155,
             "plays_per_game": 61.75,
@@ -15330,7 +16510,7 @@
             "defensive_sacks_per_game": 2.875,
             "score_adjustment": 0.0,
             "warning": "Play-by-play matchup adjustment is experimental and not calibrated.",
-            "experimental_score_adjustment": -0.35989910151916626,
+            "experimental_score_adjustment": -0.3598991015191662,
             "adjustment_applied": false
           }
         },
@@ -16090,7 +17270,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T12:42:19.081310+00:00",
+            "retrieved_at": "2026-11-12T13:11:57.186488+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -16130,7 +17310,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T12:42:16.247909+00:00",
+          "checked_at": "2026-11-12T13:11:53.749527+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -16297,21 +17477,21 @@
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.403382663847779,
-                "adjusted_mae": 10.383509513742075,
+                "baseline_mae": 10.40338266384778,
+                "adjusted_mae": 10.383509513742071,
                 "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
                   -0.1850840336134454,
-                  0.21941544885177466
+                  0.21941544885177458
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355184,
+                "baseline_mae": 10.458773784355179,
                 "adjusted_mae": 10.414376321353066,
                 "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
                   -0.11196581196581201,
-                  0.1885892116182571
+                  0.18858921161825706
                 ]
               }
             },
@@ -16356,6 +17536,116 @@
             }
           },
           "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "lineup_scenario": {
+          "version": "nfl-qb-lineup-scenario-v1",
+          "base_version": "opponent-score-ridge-v1",
+          "generated_at": "2026-11-12T13:11:57.187155+00:00",
+          "available": true,
+          "quarterbacks": {
+            "CIN": {
+              "player_id": "00-0036442",
+              "player": "Joe Burrow",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            },
+            "PIT": {
+              "player_id": "00-0023459",
+              "player": "Aaron Rodgers",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            }
+          },
+          "training_games": 408,
+          "through_week": 9,
+          "status": "EXPERIMENTAL_SCENARIO",
+          "injuries": {
+            "CIN": {
+              "coverage": "NO_MATCHED_CURRENT_WEEK_REPORT",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            },
+            "PIT": {
+              "coverage": "REPORTED",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            }
+          },
+          "limits": [
+            "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+            "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+            "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+            "No verified betting edge or calibrated probability is claimed."
+          ],
+          "before_absence_adjustment": {
+            "home": 26.5,
+            "away": 23.4
+          },
+          "home": 26.5,
+          "away": 23.4,
+          "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+          "score_source_check": {
+            "matching_training_games": 408,
+            "training_games": 408,
+            "checked_at": "2026-11-12T13:07:35.668270+00:00",
+            "source": "ESPN final scoreboards",
+            "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+            "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+          }
         },
         "residual_context": {
           "home_rest": 7.0,
@@ -16429,24 +17719,24 @@
             "available": true,
             "offense_games": 9,
             "defense_games": 8,
-            "offense_epa_per_play": -0.10497687520235416,
-            "defense_epa_allowed_per_play": 0.0073567335486117505,
+            "offense_epa_per_play": -0.10497687520235414,
+            "defense_epa_allowed_per_play": 0.007356733548611746,
             "offense_success_rate": 0.4058441558441559,
             "defense_success_allowed_rate": 0.440266994100649,
             "offense_pass_rate": 0.5235389610389611,
             "defense_pass_rate_allowed": 0.5251511766389394,
             "expected_pass_rate": 0.5243450688389503,
             "pass_epa_matchup_delta": -0.15038253794476258,
-            "rush_epa_matchup_delta": -0.06908589366513479,
+            "rush_epa_matchup_delta": -0.06908589366513482,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
             "epa_per_play_delta": -0.11171338820631188,
             "success_rate_delta": -0.034422838256493116,
             "explosive_rate_offense": 0.09659090909090909,
             "explosive_rate_defense_allowed": 0.1014799154334038,
-            "pass_epa_offense": -0.08623485032268224,
-            "pass_epa_defense_allowed": 0.06414768762208034,
-            "rush_epa_offense": -0.1246856178060115,
+            "pass_epa_offense": -0.08623485032268223,
+            "pass_epa_defense_allowed": 0.06414768762208035,
+            "rush_epa_offense": -0.12468561780601152,
             "rush_epa_defense_allowed": -0.05559972414087671,
             "plays_per_game": 58.666666666666664,
             "turnovers_per_game": 1.1111111111111112,
@@ -16460,7 +17750,7 @@
             "available": true,
             "offense_games": 8,
             "defense_games": 9,
-            "offense_epa_per_play": -0.2783378323804813,
+            "offense_epa_per_play": -0.2783378323804814,
             "defense_epa_allowed_per_play": 0.03459233439714282,
             "offense_success_rate": 0.32910798122065726,
             "defense_success_allowed_rate": 0.4610986471378299,
@@ -16476,9 +17766,9 @@
             "explosive_rate_offense": 0.07847082494969819,
             "explosive_rate_defense_allowed": 0.07775768535262206,
             "pass_epa_offense": -0.30667836068551413,
-            "pass_epa_defense_allowed": 0.12290697679833229,
+            "pass_epa_defense_allowed": 0.12290697679833226,
             "rush_epa_offense": -0.24301119685795158,
-            "rush_epa_defense_allowed": -0.06750078313667784,
+            "rush_epa_defense_allowed": -0.06750078313667786,
             "plays_per_game": 62.125,
             "turnovers_per_game": 2.25,
             "defensive_sacks_per_game": 1.8888888888888888,
@@ -17179,7 +18469,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T12:42:19.371889+00:00",
+            "retrieved_at": "2026-11-12T13:11:57.410215+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -17219,7 +18509,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T12:42:16.247909+00:00",
+          "checked_at": "2026-11-12T13:11:53.749527+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -17387,21 +18677,21 @@
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.403382663847779,
-                "adjusted_mae": 10.383509513742075,
+                "baseline_mae": 10.40338266384778,
+                "adjusted_mae": 10.383509513742071,
                 "mean_improvement": 0.019873150105708254,
                 "improvement_95pct_week_cluster_interval": [
                   -0.1850840336134454,
-                  0.21941544885177466
+                  0.21941544885177458
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355184,
+                "baseline_mae": 10.458773784355179,
                 "adjusted_mae": 10.414376321353066,
                 "mean_improvement": 0.044397463002114106,
                 "improvement_95pct_week_cluster_interval": [
                   -0.11196581196581201,
-                  0.1885892116182571
+                  0.18858921161825706
                 ]
               }
             },
@@ -17446,6 +18736,116 @@
             }
           },
           "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+        },
+        "lineup_scenario": {
+          "version": "nfl-qb-lineup-scenario-v1",
+          "base_version": "opponent-score-ridge-v1",
+          "generated_at": "2026-11-12T13:11:57.411029+00:00",
+          "available": true,
+          "quarterbacks": {
+            "BAL": {
+              "player_id": "00-0040981",
+              "player": "Joe Fagnano",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            },
+            "LAC": {
+              "player_id": "00-0036355",
+              "player": "Justin Herbert",
+              "source": "ASSUMED_LAST_OBSERVED_QB",
+              "source_url": null,
+              "effect_available": true,
+              "assumption": "Assumes the last observed quarterback starts; this is not a confirmed lineup.",
+              "availability": "NOT_REPORTED"
+            }
+          },
+          "training_games": 408,
+          "through_week": 9,
+          "status": "EXPERIMENTAL_SCENARIO",
+          "injuries": {
+            "BAL": {
+              "coverage": "NO_MATCHED_CURRENT_WEEK_REPORT",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            },
+            "LAC": {
+              "coverage": "NO_MATCHED_CURRENT_WEEK_REPORT",
+              "official_inactives_confirmed": false,
+              "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "units": [
+                {
+                  "side": "offense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                },
+                {
+                  "side": "defense",
+                  "players": [],
+                  "shift": 0.0,
+                  "applied": false,
+                  "absent_games": 0,
+                  "present_games": 0,
+                  "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                  "status": "NO_KNOWN_OUTS",
+                  "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+                }
+              ]
+            }
+          },
+          "limits": [
+            "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+            "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+            "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+            "No verified betting edge or calibrated probability is claimed."
+          ],
+          "before_absence_adjustment": {
+            "home": 21.9,
+            "away": 19.9
+          },
+          "home": 21.9,
+          "away": 19.9,
+          "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+          "score_source_check": {
+            "matching_training_games": 408,
+            "training_games": 408,
+            "checked_at": "2026-11-12T13:07:35.668270+00:00",
+            "source": "ESPN final scoreboards",
+            "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+            "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+          }
         },
         "residual_context": {
           "home_rest": 11.0,

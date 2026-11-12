@@ -11,6 +11,7 @@ from nfl_weather import forecast_for_game, kickoff_utc
 from nfl_research import enrich_research, injury_research
 from game_trust import MODEL_VERSION, reconcile_contexts, quarterback_context, validation_report
 from nfl_score_model import fit as fit_score_candidate, candidate_card
+from nfl_lineup_scenarios import build_scenario
 
 ROOT=Path(__file__).resolve().parent
 LEAGUE_POINTS=22.0
@@ -156,6 +157,17 @@ def main():
     history_path=ROOT/'data/game_picks_backtest.json'
     evidence=validation_report(json.loads(history_path.read_text()) if history_path.exists() else {})
     candidate_model=fit_score_candidate(schedules,season,week)
+    try:
+        participation=frame(nflreadpy.load_snap_counts([season-1,season]))
+    except Exception as exc:
+        participation=None
+        print('Lineup participation source unavailable; unsupported effects remain unmodeled:',exc)
+    score_audit_path=ROOT/'docs/nfl-game-score-input-audit-2026-11-12.json'
+    score_audit=json.loads(score_audit_path.read_text()) if score_audit_path.exists() else {}
+    external_scores={g['game_id']:g for g in score_audit.get('games',[])}
+    training=schedules[(schedules.game_type=='REG') & schedules.home_score.notna() & schedules.away_score.notna() & ((schedules.season==season-1)|((schedules.season==season)&(schedules.week<week)))]
+    matched=sum(1 for g in training.itertuples() if g.game_id in external_scores and float(g.home_score)==external_scores[g.game_id]['espn_home'] and float(g.away_score)==external_scores[g.game_id]['espn_away'])
+    score_source_check={'matching_training_games':matched,'training_games':len(training),'checked_at':score_audit.get('generated_at'),'source':'ESPN final scoreboards','audit_path':'./docs/nfl-game-score-input-audit-2026-11-12.json','scope':'Final game scores only; this does not externally verify EPA, injuries or player identities.'}
     games=[]
     for _,r in slate.iterrows():
         # Exclude target week entirely, even if a game has already finished.
@@ -188,6 +200,8 @@ def main():
         weather=forecast_for_game(r,str(r["home_team"]),research["venue"].get("roof"))
         research=enrich_research(research,schedules,season,week,injury_reports)
         research["weather"]=weather
+        lineup=build_scenario(candidate_model,schedules,participation,rosters,str(r['home_team']),str(r['away_team']),player_feed,injury_reports,season,week,str(r.get('location','')).lower()=='neutral')
+        lineup['score_source_check']=score_source_check
         if weather.get("available"):
             research["venue"].update({"temperature_f":weather.get("temperature_f"),
                 "wind_mph":weather.get("wind_mph"),"wind_direction":weather.get("wind_direction"),
@@ -202,7 +216,7 @@ def main():
           "projected_home_points":hp,"projected_away_points":ap,
           "projected_margin_home":round(hp-ap,1),"projected_total":round(hp+ap,1),
           "model_inputs":{"home":h,"away":a,"baseline_home_points":baseline_home,"baseline_away_points":baseline_away,
-            "matchup":matchup,"research_context":research,"trust":trust,"score_candidate":candidate,
+            "matchup":matchup,"research_context":research,"trust":trust,"score_candidate":candidate,"lineup_scenario":lineup,
             "residual_context":sim_context,
             "prior_games":PRIOR_GAMES,"league_points_prior":LEAGUE_POINTS,"home_advantage_points":HOME_ADVANTAGE_POINTS},
           "ml":{"pick":None,"confidence":None,"status":"PASS"},
