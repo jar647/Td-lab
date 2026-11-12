@@ -1,5 +1,5 @@
 /* Game-only simulator runs 100k independent draws off the UI thread. */
-importScripts('./nba_game_context.js?v=nba-sim-availability-1','./nba_possession_engine.js?v=nba-simulator-reliability-v4','./game_odds_engine.js?v=nba-simulator-reliability-v4');
+importScripts('./nba_game_context.js?v=nba-sim-availability-1','./nba_possession_engine.js?v=nba-simulator-reliability-v4','./game_odds_engine.js?v=game-line-lineup-v1');
 self.onmessage=function(event){
  const data=event.data||{};
  try{
