@@ -78,3 +78,12 @@ const qb=(id,team,opp,quality)=>({player_id:id,player:id,team,opp,pos:'QB',avail
 const nflPlayers=[qb('qualified','A','B',300),qb('boundary-60','A','B',100),qb('below-60','B','A',95),qb('below-floor','B','A',90)];
 const nflSource=require('./scripts/recommendation_sources.cjs').captureSources(now,{onlySport:'NFL',nflInputs:{feed:nflPlayers,status:{generated_at:before},games:{generated_at:before,games:[{game_id:'nfl-g',home:'A',away:'B',kickoff_at:new Date(now+6*3600000).toISOString()}]}},nflEngine:{simulate:()=>({markets:nflPlayers.flatMap(p=>[150,175,200,225,250,275,300].map(line=>({id:p.player_id,market:'passYards',line,scenarioRate:.99,modeledMean:300})))})}});
 assert(!nflSource.coverage.some(c=>c.status==='error'),JSON.stringify(nflSource.coverage));assert(nflSource.picks.some(p=>p.playerId==='qualified'));assert(nflSource.picks.some(p=>p.playerId==='boundary-60'&&p.score===60));assert(!nflSource.picks.some(p=>['below-floor','below-60'].includes(p.playerId)));assert(nflSource.picks.every(p=>p.scoreKind==='NFL matchup score /100'&&p.score>=60&&p.score<=100));
+// Every eligible TD research row is captured; a positional top-three cap may
+// not silently lose players from the complete public board.
+const tdPlayers=Array.from({length:50},(_,i)=>({player_id:'td-'+i,player:'TD Player '+i,team:i%2?'B':'A',opp:i%2?'A':'B',pos:'RB',market:'ATD',availability:'ROSTER_ACTIVE',playerAppearancesVerified:true,games:5,last5GamesPlayed:5,tdallowed:1.2,rzallowed:3.5,playerRz:2.5,rzshare:35,goalLine5:.8,snapShare:.85,playerAnytimeTDs:1,recent3AnytimeTDs:1}));
+const tdWithheld=[{...tdPlayers[0],player_id:'td-out',availability:'OUT'},{...tdPlayers[0],player_id:'td-low',tdallowed:0,rzallowed:0,playerRz:0,rzshare:0,goalLine5:0,snapShare:0,playerAnytimeTDs:0,recent3AnytimeTDs:0}];
+const tdSource=require('./scripts/recommendation_sources.cjs').captureSources(now,{onlySport:'NFL',nflInputs:{feed:[...tdPlayers,...tdWithheld],status:{generated_at:before},games:{generated_at:before,games:[{game_id:'td-game',home:'A',away:'B',kickoff_at:new Date(now+6*3600000).toISOString()}]}},nflEngine:{simulate:()=>({markets:[]})}});
+assert(!tdSource.coverage.some(c=>c.status==='error'),JSON.stringify(tdSource.coverage));
+assert.equal(tdSource.picks.length,50,'all eligible TD rows are frozen without truncation');
+assert(tdSource.picks.every(p=>p.board==='Anytime TD research'&&p.score===100&&p.inputs.productionAvailable===true));
+assert(!tdSource.picks.some(p=>['td-out','td-low'].includes(p.playerId)));

@@ -5,7 +5,7 @@
 */
 (function(root){
 "use strict";
-const MODEL_VERSION='game-first-volume-v3-supported-qb-markets';
+const MODEL_VERSION='game-first-volume-v4-depth-chart-qb';
 const MARKETS={
  rushYards:[25,40,50,60,70,80,100],
  recYards:[20,25,30,40,50,60,70,80,100],
@@ -26,6 +26,16 @@ function blocked(p){
  return /^(OUT|INACTIVE|SUSPENDED|IR|PUP|RES|DEV|CUT|RET|EXE|TRD|TRT)$/.test(report)||
         /^(OUT|INACTIVE|SUSPENDED|IR|PUP|RES|DEV|CUT|RET|EXE|TRD|TRT)$/.test(roster);
 }
+const HTTPS_SOURCE=/^https:\/\/[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?(?::\d+)?(?:[/?#][^\s]*)?$/i;
+const sourceURL=v=>typeof v==='string'&&HTTPS_SOURCE.test(v.trim());
+const sourceNumber=v=>(typeof v==='number'||typeof v==='string'&&v.trim()!=='')&&Number.isFinite(Number(v))?Number(v):null;
+function citedStarter(p){return p.qbRole==='EXPECTED_STARTER'&&sourceURL(p.starterContext?.source)&&typeof p.starterContext?.note==='string'&&p.starterContext.note.trim()!==''}
+function firstUnitQuarterback(p,now){
+ const d=p.depthChart;if(p.pos!=='QB'||!d||d.order!==1||d.unit!=='first'||d.position!=='QB'||d.sourceStatus!=='ok'||!sourceURL(d.source)||typeof d.observedAt!=='string')return false;
+ const observed=Date.parse(d.observedAt),season=sourceNumber(d.season);
+ if(!Number.isFinite(observed)||observed>now+300000||now-observed>72*3600000||!Number.isInteger(season)||season<1900)return false;
+ return p.season===null||p.season===undefined||p.season===''||sourceNumber(p.season)===season;
+}
 function playerParams(p){
  const history=Array.isArray(p.seasonGameStats)?p.seasonGameStats:[];
  const fields=p.pos==='QB'?['passAttempts','rushAttempts','rushYards']:['targets','receptions','recYards','rushAttempts','rushYards'];
@@ -42,7 +52,9 @@ function playerParams(p){
  const usage=(field)=>.65*mean(history,field)+.35*mean(norm,field);
  const ratios=p.defenseOpponentRatio||{};
  return {id:key,name:String(p.player||key),team:String(p.team),pos:String(p.pos),
-  qbRole:p.qbRole,starterContext:p.starterContext,
+  qbRole:p.qbRole,starterContext:p.starterContext&&typeof p.starterContext==='object'?{...p.starterContext}:null,
+  season:p.season===undefined||p.season===null||p.season===''?null:sourceNumber(p.season)??NaN,
+  depthChart:p.depthChart&&typeof p.depthChart==='object'&&!Array.isArray(p.depthChart)?{...p.depthChart}:null,
   gameCount:history.length,history:history.map(r=>({...r})),sourceAvailability:{roster:p.availability||'UNVERIFIED',injury:p.injuryReportStatus||'UNVERIFIED',gameDay:p.gameDayAvailability||'UNVERIFIED'},historicalPassingYards:history.every(r=>finite(r.passYards)!==null)?mean(history,'passYards'):null,historicalPassAttempts:pass,questionable:/QUESTIONABLE|DOUBTFUL|UNVERIFIED|NOT_REPORTED|LIMITED|DNP_PRACTICE/.test(
    [p.injuryReportStatus,p.availability,p.injuryPracticeStatus].join('|').toUpperCase()),
   pass:usage('passAttempts'),targets:usage('targets'),carries:usage('rushAttempts'),
@@ -66,11 +78,17 @@ function build(records,options={}){
  if(teams.length!==2)throw Error('Exactly two teams are required for one game');
  for(const team of Object.keys(quarterbackChoices))if(!teams.includes(team))
   throw Error('Conditional quarterback team '+team+' is not in this matchup');
+ const sourceTime=Date.now();
  const league=teams.map(team=>{
   const roster=entries.filter(p=>p.team===team);
-  const qbs=roster.filter(p=>p.pos==='QB').sort((a,b)=>Number(b.qbRole==='EXPECTED_STARTER')-Number(a.qbRole==='EXPECTED_STARTER')||b.pass-a.pass);
+  const qbs=roster.filter(p=>p.pos==='QB').sort((a,b)=>Number(citedStarter(b))-Number(citedStarter(a))||Number(firstUnitQuarterback(b,sourceTime))-Number(firstUnitQuarterback(a,sourceTime))||b.pass-a.pass);
+  const sourceQuarterbacks=records.filter(p=>p&&String(p.team)===team&&p.pos==='QB');
+  const announced=sourceQuarterbacks.filter(citedStarter),charted=sourceQuarterbacks.filter(p=>firstUnitQuarterback(p,sourceTime));
+  const preferred=announced.length?announced:charted;
   const conditional=Object.prototype.hasOwnProperty.call(quarterbackChoices,team);
-  let chosenQuarterback=qbs[0];
+  // A cited first-unit player with missing/blocked history cannot silently be
+  // replaced by the quarterback with the largest earlier season workload.
+  let chosenQuarterback=preferred.length===1?qbs.find(p=>p.id===String(preferred[0].player_id||preferred[0].team+'|'+preferred[0].player)):preferred.length>1?undefined:qbs[0];
   if(conditional){
    const choice=quarterbackChoices[team];
    if(!['string','number'].includes(typeof choice)||String(choice).trim()==='')
@@ -91,6 +109,7 @@ function build(records,options={}){
   // An internal anonymous passer enables receiver-target simulations, but
   // MUST NOT generate a named player/QB passing-yard market or imply a starter.
   const fallbackAttempts=candidates.length?candidates[0]:null;
+  const fallbackWarning=preferred.length?'No supported individual scenario for the source-named quarterback'+(preferred.length>1?'s ':' ')+preferred.map(p=>String(p.player||p.player_id)).join(', ')+'. Team passing volume uses completed PBP. No QB props are projected.':'QB individual history is insufficient; team passing volume based on completed PBP. No QB props are projected.';
   if(!quarterbackVerified&&fallbackAttempts===null)
    throw Error(team+': no verified quarterback or historical team passing volume');
   const qb=quarterbackVerified?chosenQuarterback:{
@@ -115,13 +134,14 @@ function build(records,options={}){
   const targetPool=pool(receivers.map(p=>({p,weight:p.targets})),passAttempts,2.5);
   const carryPool=pool(runners.map(p=>({p,weight:p.carries})),rushAttempts,1);
   const quarterbackSelection=conditional?'CONDITIONAL_PLAYER_SCENARIO':!quarterbackVerified?'TEAM_VOLUME_FALLBACK':
-   qb.qbRole==='EXPECTED_STARTER'?'VERIFIED_EXPECTED_STARTER':'MODEL_INPUT_SELECTION';
+   citedStarter(qb)?'VERIFIED_EXPECTED_STARTER':firstUnitQuarterback(qb,sourceTime)?'SOURCED_DEPTH_CHART':'MODEL_INPUT_SELECTION';
   return {team,roster,qb,pace,passRate,targetPool,carryPool,
    outlook:{team,quarterback:quarterbackVerified?qb.name:null,quarterbackId:quarterbackVerified?qb.id:null,quarterbackSelection,
-    starterContext:qb.starterContext||null,passVolumeSource:quarterbackVerified?'VERIFIED_QB_PLAYER_HISTORY':'VERIFIED_TEAM_PBP_NO_QB_PROPS',
+    starterContext:qb.starterContext||null,depthChart:firstUnitQuarterback(qb,sourceTime)?{...qb.depthChart}:null,passVolumeSource:quarterbackVerified?'VERIFIED_QB_PLAYER_HISTORY':'VERIFIED_TEAM_PBP_NO_QB_PROPS',
     quarterbackPlayerPropsAvailable:quarterbackVerified,
     warning:conditional?'Conditional scenario: assumes '+qb.name+' starts at quarterback for '+team+'. Game-day starting status is not confirmed.':
-     quarterbackVerified?null:'QB individual history is insufficient; team passing volume based on completed PBP. No QB props are projected.',
+     quarterbackSelection==='SOURCED_DEPTH_CHART'?'Depth-chart scenario: assumes '+qb.name+' starts at quarterback for '+team+'. Game-day starting status is not confirmed.':
+     quarterbackVerified?null:fallbackWarning,
     estimatedPlays:Math.round(pace),estimatedPassAttempts:Math.round(passAttempts),
     estimatedRushAttempts:Math.round(rushAttempts),passingShare:Math.round(passRate*100),
     untrackedTargetShare:Math.round(targetPool.items[targetPool.items.length-1].weight/targetPool.sum*100),

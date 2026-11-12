@@ -81,7 +81,10 @@ for(const file of ['index.html','nba.html']){
  if(file==='nba.html')assert.ok(html.includes('CookItUpProbability.review'),file+' must keep its odds comparison engine');
 }
 const nflHome=fs.readFileSync('index.html','utf8');
-assert.ok(nflHome.includes('src="./nfl_game_engine.js?v=nfl-supported-qb-v3"'),'NFL player cards must load the matchup simulation engine');
+const tdModule=nflHome.indexOf('<script src="./nfl_td_matchup.js'),boardModule=nflHome.indexOf('<script src="./nfl_player_board.js');
+assert(tdModule>=0&&boardModule>tdModule,'NFL boards must load role-specific TD scoring and the shared visibility helper');
+assert(boardModule<nflHome.indexOf('<script>'),'board dependencies must load before the main controller');
+assert.ok(nflHome.includes('src="./nfl_game_engine.js?v=nfl-depth-chart-qb-v4"'),'NFL player cards must load the matchup simulation engine');
 assert.ok(nflHome.includes('function loadNFLPlayerScenarios(details)'),'NFL players must expose on-demand game-first scenario percentages');
 assert.ok(nflHome.includes("el.querySelectorAll('.pv-scenario-details').forEach(details=>details.addEventListener('toggle'"),'NFL scenario dropdowns must bind to the renderer-scoped loader');
 assert.ok(!nflHome.includes('ontoggle="loadNFLPlayerScenarios'),'NFL dropdowns must not call a non-global handler from inline markup');

@@ -29,7 +29,7 @@ function run(){
  const legs=[{id:'a-wr',market:'receptions',line:3},{id:'a-qb',market:'passYards',line:200}];
  const result=engine.simulate(lineup,1500,12,legs);
  assert.equal(result.status,'RESEARCH_ONLY_UNCALIBRATED');
- assert.equal(result.modelVersion,'game-first-volume-v3-supported-qb-markets');
+ assert.equal(result.modelVersion,'game-first-volume-v4-depth-chart-qb');
  assert.equal(result.teams.length,2);
  assert.equal(result.joint.legs,2);
  assert(!result.markets.some(m=>m.id==='a-out'),'OUT player must be excluded');
@@ -59,8 +59,86 @@ function run(){
  assert.throws(()=>engine.simulate(anonymous,1500,12),
    /no verified quarterback or historical team passing volume/);
 
+ // Current sourced first-unit depth evidence outranks earlier QB volume.
+ // It is a starting assumption, not official game-day active confirmation.
+ const chart={order:1,unit:'first',position:'QB',sourceStatus:'ok',season:2026,
+  observedAt:new Date(Date.now()-3600000).toISOString(),source:'https://www.espn.com/nfl/team/depth/_/name/nyg'};
+ const higherHistory=player('A','a-higher-history-qb','QB',{p:45,r:10,ry:45,py:310},
+  {season:2026,depthChart:{...chart,order:2,unit:'reserve'}});
+ const currentQB=player('A','a-qb','QB',{p:20,r:4,ry:17,py:160},{season:2026,depthChart:{...chart}});
+ const depthLineup=[...lineup.map(p=>p.player_id==='a-qb'?currentQB:p),higherHistory];
+ const depthBefore=JSON.stringify(depthLineup),depthModel=engine.build(depthLineup);
+ const depthTeam=depthModel.teams.find(t=>t.team==='A');
+ assert.equal(depthTeam.qb.id,'a-qb','first-unit lower-volume QB must beat the higher-volume reserve');
+ assert.equal(depthTeam.outlook.quarterbackSelection,'SOURCED_DEPTH_CHART');
+ assert.match(depthTeam.outlook.warning,/assumes a-qb starts/);
+ assert.match(depthTeam.outlook.warning,/Game-day starting status is not confirmed/);
+ assert.equal(depthTeam.outlook.estimatedPassAttempts,20,'selected source QB uses his own passing workload');
+ assert.equal(depthTeam.qb.qbRole,undefined,'depth evidence cannot manufacture a QB-role flag');
+ assert.equal(depthTeam.qb.season,2026);
+ assert.notStrictEqual(depthTeam.qb.depthChart,currentQB.depthChart,'parameters clone sourced depth metadata');
+ assert.notStrictEqual(depthTeam.outlook.depthChart,depthTeam.qb.depthChart,'published source metadata is also copied');
+ depthTeam.qb.depthChart.source='https://changed.example/depth';
+ assert.equal(currentQB.depthChart.source,chart.source,'mutating model metadata cannot mutate sourced records');
+ assert.equal(depthTeam.outlook.depthChart.source,chart.source);
+ const depthResult=engine.simulate(depthLineup,1000,42);
+ assert(depthResult.markets.some(m=>m.id==='a-qb'&&m.market==='passYards'&&m.line===175&&m.hits>0));
+ assert(!depthResult.markets.some(m=>m.id==='a-higher-history-qb'));
+ assert.equal(depthResult.inputAudit.find(p=>p.id==='a-qb').historicalPassAttempts,20);
+ assert.equal(depthResult.teams.find(t=>t.team==='B').quarterbackId,'b-qb','other team selection remains unchanged');
+ assert.equal(JSON.stringify(depthLineup),depthBefore);
+ const announcement=depthLineup.map(p=>p.player_id==='a-higher-history-qb'?{...p,qbRole:'EXPECTED_STARTER',
+  starterContext:{source:'https://team.example/announcement',note:'Cited current-game starter'}}:p);
+ assert.equal(engine.build(announcement).teams.find(t=>t.team==='A').qb.id,'a-higher-history-qb','cited starter announcement outranks the depth chart');
+ const uncited=announcement.map(p=>p.player_id==='a-higher-history-qb'?{...p,starterContext:{source:'#',note:'Unverified claim'}}:p);
+ assert.equal(engine.build(uncited).teams.find(t=>t.team==='A').qb.id,'a-qb','an uncited flag cannot override sourced depth evidence');
+ const depthOverride=engine.build(depthLineup,{quarterbacks:{A:'a-higher-history-qb'}}).teams.find(t=>t.team==='A');
+ assert.equal(depthOverride.qb.id,'a-higher-history-qb');
+ assert.equal(depthOverride.outlook.quarterbackSelection,'CONDITIONAL_PLAYER_SCENARIO','explicit conditional choices have highest priority');
+
+ const invalidDepths=[{...chart,order:2},{...chart,order:'1'},{...chart,unit:'reserve'},{...chart,position:'WR'},
+  {...chart,sourceStatus:'error'},{...chart,source:'http://team.example/depth'},{...chart,source:'#'},
+  {...chart,source:{}},{...chart,source:'https://bad host/depth'},{...chart,observedAt:'not-a-date'},
+  {...chart,observedAt:''},{...chart,observedAt:new Date(Date.now()-73*3600000).toISOString()},
+  {...chart,observedAt:new Date(Date.now()+6*60000).toISOString()},
+  {...chart,season:2025},{...chart,season:2026.5},{...chart,season:null},{...chart,season:[2026]}];
+ for(const invalid of invalidDepths){
+  const roster=depthLineup.map(p=>p.player_id==='a-qb'?{...p,depthChart:invalid}:p);
+  const team=engine.build(roster).teams.find(t=>t.team==='A');
+  assert.equal(team.qb.id,'a-higher-history-qb','invalid or stale depth evidence must not force QB selection');
+  assert.equal(team.outlook.quarterbackSelection,'MODEL_INPUT_SELECTION');
+ }
+ for(const season of [2025,2026.5,[2026],{},true]){
+  const roster=depthLineup.map(p=>p.player_id==='a-qb'?{...p,season}:p);
+  assert.equal(engine.build(roster).teams.find(t=>t.team==='A').qb.id,'a-higher-history-qb','record season must match the chart season when present');
+ }
+ for(const observedAt of [new Date(Date.now()-71*3600000).toISOString(),new Date(Date.now()+4*60000).toISOString()]){
+  const roster=depthLineup.map(p=>p.player_id==='a-qb'?{...p,depthChart:{...chart,observedAt}}:p);
+  assert.equal(engine.build(roster).teams.find(t=>t.team==='A').outlook.quarterbackSelection,'SOURCED_DEPTH_CHART');
+ }
+ // A current source naming an unavailable or unsupported QB cannot silently
+ // switch the offense to another named passer with more recorded volume.
+ for(const change of [{seasonGameStats:currentQB.seasonGameStats.slice(0,2)},
+  {playerAppearancesVerified:false},{injuryReportStatus:'OUT'},{qbRole:'BACKUP'},
+  {seasonGameStats:currentQB.seasonGameStats.map(g=>({...g,passAttempts:4}))}]){
+  const roster=depthLineup.map(p=>({...p,teamPassAttemptsPerGame:33,...(p.player_id==='a-qb'?change:{})}));
+  const outcome=engine.simulate(roster,1000,42),team=outcome.teams.find(t=>t.team==='A');
+  assert.equal(team.quarterback,null);assert.equal(team.quarterbackSelection,'TEAM_VOLUME_FALLBACK');
+  assert(!outcome.markets.some(m=>m.team==='A'&&m.market==='passYards'),'unsupported first-unit input cannot create reserve QB markets');
+  assert.match(team.warning,/source-named quarterback a-qb/,'missing source coverage identifies the QB instead of quietly modeling a reserve');
+  assert.match(team.warning,/No QB props/);
+  const conditional=engine.build(roster,{quarterbacks:{A:'a-higher-history-qb'}}).teams.find(t=>t.team==='A');
+  assert.equal(conditional.qb.id,'a-higher-history-qb','an explicit eligible conditional scenario remains available');
+  assert.equal(conditional.outlook.quarterbackSelection,'CONDITIONAL_PLAYER_SCENARIO');
+ }
+ const insufficient=depthLineup.map(p=>p.player_id==='a-qb'?{...p,seasonGameStats:currentQB.seasonGameStats.slice(0,2)}:p);
+ assert.throws(()=>engine.build(insufficient),/no verified quarterback or historical team passing volume/);
+ const metadataOnly=lineup.map(p=>p.player_id==='a-qb'?{...p,season:2026,depthChart:{...chart,observedAt:'invalid'}}:p);
+ assert.deepEqual(engine.simulate(metadataOnly,1500,12,legs).markets,result.markets,
+  'ignored source metadata must not alter established default seeded player outcomes');
+
  // A returning starter must beat a backup with more recent passing volume.
- const returned=lineup.map(p=>p.player_id==='a-qb'?{...p,qbRole:'EXPECTED_STARTER',starterContext:{source:'team announcement'}}:p);
+ const returned=lineup.map(p=>p.player_id==='a-qb'?{...p,qbRole:'EXPECTED_STARTER',starterContext:{source:'https://team.example/starter-announcement',note:'Team-announced starter'}}:p);
  returned.push(player('A','a-backup','QB',{p:45,r:7,ry:30,py:300},{qbRole:'BACKUP'}));
  const returnResult=engine.simulate(returned,1500,12);
  assert.equal(returnResult.teams.find(t=>t.team==='A').quarterback,'a-qb');
