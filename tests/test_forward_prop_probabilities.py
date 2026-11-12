@@ -84,6 +84,19 @@ class ForwardPropResearchTests(unittest.TestCase):
             self.assertEqual(result["graded"],0)
             self.assertGreater(result["skipped"].get("NO_OFFENSIVE_SNAPS",0),0)
 
+    def test_game_first_qb_fix_keeps_previous_version_separate(self):
+        with tempfile.TemporaryDirectory() as root:
+            doc=self.capture(Path(root))
+            old=json.loads(json.dumps(doc))
+            old["model_version"]="game-first-volume-v2-official-attempts"
+            new=json.loads(json.dumps(doc))
+            new["model_version"]="game-first-volume-v3-supported-qb-markets"
+            result=evaluate([old,new],self.schedules,self.appearances)
+            self.assertEqual(result["game_first_model_version"],new["model_version"])
+            self.assertGreater(result["version_reports"][old["model_version"]]["graded"],0)
+            self.assertEqual(result["game_first_graded"],result["version_reports"][new["model_version"]]["graded"])
+            self.assertLess(result["game_first_graded"],result["graded"])
+
     def test_not_final_kept_pending(self):
         with tempfile.TemporaryDirectory() as root:
             doc=self.capture(Path(root))
