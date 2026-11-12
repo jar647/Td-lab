@@ -69,7 +69,8 @@ report.scoreBenchmark.uncertainty=pairedBootstrap(scoredHold,'modelError','basel
 // Evidence inventory: do not confuse final-game box scores with a dated
 // pre-tip injury snapshot or an archived sportsbook closing market.
 const games=(feed.games||[]).filter(g=>g.status==='STATUS_FINAL');
-const {hasDatedInjuries,hasClosingMarket,hasVerifiedMarket}=require('./nba_pretip_evidence.cjs');
+const {hasDatedInjuries,hasClosingMarket,hasVerifiedMarket,pairedMarketBenchmark}=require('./nba_pretip_evidence.cjs');
+report.marketComparison=pairedMarketBenchmark(report.rows,feed.games||[]);
 report.evidenceCoverage={
  completedGames:games.length,
  datedPretipInjurySnapshots:games.filter(hasDatedInjuries).length,
@@ -108,4 +109,4 @@ if(calibrationRows.length<30)throw Error('Insufficient chronological calibration
 
 const out=path.join(__dirname,'../data/nba_simulator_backtest.json');
 fs.writeFileSync(out,JSON.stringify({...report,generatedAt:new Date().toISOString()},null,2)+'\n');
-console.log(JSON.stringify({games:report.games,brier:report.brier,benchmarkBrier:report.benchmarkBrier,beatsCoinFlip:report.beatsCoinFlip,scoreMAE:report.scoreMAE,scoreBenchmark:{...report.scoreBenchmark,rows:undefined},accuracyGate:report.accuracyGate,evidenceCoverage:report.evidenceCoverage,chronologicalCalibration:{...report.chronologicalCalibration,rows:undefined},skipped:report.skipped,calibration:report.calibration},null,2));
+console.log(JSON.stringify({games:report.games,brier:report.brier,benchmarkBrier:report.benchmarkBrier,beatsCoinFlip:report.beatsCoinFlip,scoreMAE:report.scoreMAE,scoreBenchmark:{...report.scoreBenchmark,rows:undefined},accuracyGate:report.accuracyGate,evidenceCoverage:report.evidenceCoverage,marketComparison:{...report.marketComparison,rows:undefined},chronologicalCalibration:{...report.chronologicalCalibration,rows:undefined},skipped:report.skipped,calibration:report.calibration},null,2));
