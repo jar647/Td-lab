@@ -75,7 +75,7 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
      // Only real observed position allowances and player histories enter the
      // evidence card. Never substitute simulated frequencies for observed hits.
      const matchupEvidence=supported?positionRows.map(r=>({
-      market:r.market,position:r.position,opponent:r.opponent,
+      market:r.market,position:r.position,opponent:r.opponent,componentScore:r.researchScore,
       allowed:r.weakness.allowed,leagueAverage:r.weakness.leagueAverage,
       opponentGames:r.weakness.games,playerAverage:r.playerAverage,
       peerAverage:r.peerAverage,playerGames:r.history.length,baseline:r.baseline,
