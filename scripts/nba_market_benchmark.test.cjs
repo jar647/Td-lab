@@ -20,3 +20,9 @@ test('rejects malformed forecast probability and outcome',()=>{
  assert.equal(pairedMarketBenchmark([{...row,probability:1.2}],[game]).pairedGames,0);
  assert.equal(pairedMarketBenchmark([{...row,outcome:null}],[game]).pairedGames,0);
 });
+
+test('duplicate model forecasts and markets cannot inflate accuracy sample',()=>{
+ assert.equal(pairedMarketBenchmark([row,row],[game]).pairedGames,0);
+ assert.equal(pairedMarketBenchmark([row,{...row,probability:.9}],[game]).pairedGames,0);
+ assert.equal(pairedMarketBenchmark([row],[game,game,game]).pairedGames,0);
+});
