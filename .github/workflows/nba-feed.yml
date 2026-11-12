@@ -62,7 +62,8 @@ on:
     # Includes morning completed-game grading and afternoon injury/rotation checks.
     - cron: '12,42 * * * *'
 concurrency:
-  group: nba-feed-writer
+  # Read-only PR validation must not wait behind the production feed writer.
+  group: nba-feed-${{ github.event_name == 'pull_request' && github.event.pull_request.number || 'writer' }}
   cancel-in-progress: false
 permissions:
   contents: write
