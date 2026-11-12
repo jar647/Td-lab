@@ -1,31 +1,25 @@
 {
   "season": 2026,
   "week": 10,
-  "generated_at": "2026-11-12T02:49:47.244258+00:00",
-  "matchups": 411,
+  "generated_at": "2026-11-12T12:15:50.312647+00:00",
+  "matchups": 399,
   "source": "nflverse play-by-play and rosters",
   "odds_source": null,
   "probability_model": null,
   "lookback_games": 5,
   "availability_diagnostics": {
     "injuries": {
-      "report_stage": "PRACTICE_ONLY_NO_GAME_DESIGNATIONS",
-      "rows_for_week": 20,
-      "matched_rows": 20,
-      "matched_ids": 0,
-      "practice_flags": 6,
-      "game_designations_reported": 0,
+      "report_stage": "GAME_DESIGNATIONS_PARTIAL",
+      "rows_for_week": 254,
+      "matched_rows": 254,
+      "matched_ids": 6,
+      "practice_flags": 182,
+      "game_designations_reported": 6,
       "teams_with_injury_rows": [
-        "NYG",
-        "WAS"
-      ],
-      "teams_without_injury_rows": [
         "ARI",
         "ATL",
-        "BAL",
         "BUF",
         "CAR",
-        "CIN",
         "CLE",
         "DAL",
         "DET",
@@ -35,26 +29,34 @@
         "JAX",
         "KC",
         "LA",
-        "LAC",
         "LV",
         "MIA",
         "MIN",
         "NE",
         "NO",
+        "NYG",
         "NYJ",
         "PIT",
-        "SEA",
         "SF",
-        "TEN"
+        "TEN",
+        "WAS"
+      ],
+      "teams_without_injury_rows": [
+        "BAL",
+        "CIN",
+        "LAC",
+        "SEA"
       ],
       "stale_team_or_unmatched_id_rows": 0,
       "current_week_report_status_counts": {
-        "MISSING": 20
+        "MISSING": 248,
+        "OUT": 5,
+        "QUESTIONABLE": 1
       },
       "source_last_updated_utc": null,
       "official_game_day_active_confirmed": false,
       "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-      "source_rows": 2841,
+      "source_rows": 3075,
       "columns": [
         "season",
         "season_type",
@@ -74,26 +76,29 @@
         "practice_status"
       ],
       "report_status_counts": {
-        "MISSING": 20
+        "MISSING": 248,
+        "OUT": 5,
+        "QUESTIONABLE": 1
       }
     },
     "weekly_rosters": {
-      "source_rows": 2253,
+      "source_rows": 2264,
       "latest_week": 10,
       "status_column": true,
       "status_counts": {
-        "ACT": 1479,
-        "DEV": 471,
-        "RES": 278,
+        "ACT": 1466,
+        "DEV": 466,
+        "RES": 284,
+        "CUT": 24,
         "RET": 21,
         "EXE": 2,
-        "CUT": 2
+        "TRC": 1
       }
     },
     "excluded": {
-      "out_report": 0,
+      "out_report": 2,
       "unavailable_roster": 0,
-      "nonactive_weekly_roster": 84
+      "nonactive_weekly_roster": 92
     },
     "unverified_output": 1
   },
