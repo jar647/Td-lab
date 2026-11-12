@@ -1,7 +1,7 @@
 {
   "season": 2026,
   "week": 10,
-  "generated_at": "2026-11-12T15:34:48.156184+00:00",
+  "generated_at": "2026-11-12T17:07:23.449743+00:00",
   "model_status": "AUDITED_BASELINE_UNCALIBRATED",
   "model_version": "score-baseline-trust-v3",
   "note": "Historical scoring research baseline; independently recomputed source rates; QB-led history separated; no unvalidated EPA point correction or verified betting recommendation.",
@@ -463,16 +463,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -490,6 +491,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -497,23 +499,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -873,16 +873,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -900,6 +901,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -907,23 +909,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -971,7 +971,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T15:34:45.369541+00:00",
+            "retrieved_at": "2026-11-12T17:07:19.839493+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -1011,7 +1011,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T15:34:44.745088+00:00",
+          "checked_at": "2026-11-12T17:07:19.410744+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -1241,7 +1241,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T15:34:45.370049+00:00",
+          "generated_at": "2026-11-12T17:07:19.840143+00:00",
           "available": true,
           "quarterbacks": {
             "NYG": {
@@ -1831,16 +1831,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -1858,6 +1859,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -1865,23 +1867,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -2303,16 +2303,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -2330,6 +2331,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -2337,23 +2339,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -2395,7 +2395,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T15:34:45.397874+00:00",
+            "retrieved_at": "2026-11-12T17:07:19.888480+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -2429,7 +2429,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T15:34:44.745088+00:00",
+          "checked_at": "2026-11-12T17:07:19.410744+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -2660,7 +2660,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T15:34:45.398406+00:00",
+          "generated_at": "2026-11-12T17:07:19.889126+00:00",
           "available": true,
           "quarterbacks": {
             "DET": {
@@ -3270,16 +3270,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -3297,6 +3298,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -3304,23 +3306,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -3698,16 +3698,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -3725,6 +3726,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -3732,23 +3734,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -3796,7 +3796,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T15:34:45.688894+00:00",
+            "retrieved_at": "2026-11-12T17:07:20.124483+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -3836,7 +3836,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T15:34:44.745088+00:00",
+          "checked_at": "2026-11-12T17:07:19.410744+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -4067,7 +4067,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T15:34:45.689409+00:00",
+          "generated_at": "2026-11-12T17:07:20.125111+00:00",
           "available": true,
           "quarterbacks": {
             "ATL": {
@@ -4672,16 +4672,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -4699,6 +4700,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -4706,23 +4708,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -5118,16 +5118,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -5145,6 +5146,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -5152,23 +5154,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -5216,7 +5216,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T15:34:45.990017+00:00",
+            "retrieved_at": "2026-11-12T17:07:20.574419+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -5256,7 +5256,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T15:34:44.745088+00:00",
+          "checked_at": "2026-11-12T17:07:19.410744+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -5487,7 +5487,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T15:34:45.990542+00:00",
+          "generated_at": "2026-11-12T17:07:20.575098+00:00",
           "available": true,
           "quarterbacks": {
             "CLE": {
@@ -6137,16 +6137,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -6164,6 +6165,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -6171,23 +6173,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -6547,16 +6547,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -6574,6 +6575,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -6581,23 +6583,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -6645,7 +6645,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T15:34:46.363835+00:00",
+            "retrieved_at": "2026-11-12T17:07:20.739318+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -6685,7 +6685,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T15:34:44.745088+00:00",
+          "checked_at": "2026-11-12T17:07:19.410744+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -6916,7 +6916,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T15:34:46.364356+00:00",
+          "generated_at": "2026-11-12T17:07:20.739991+00:00",
           "available": true,
           "quarterbacks": {
             "GB": {
@@ -7521,16 +7521,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -7548,6 +7549,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -7555,23 +7557,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -7916,16 +7916,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -7943,6 +7944,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -7950,23 +7952,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -8014,7 +8014,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T15:34:46.694738+00:00",
+            "retrieved_at": "2026-11-12T17:07:20.926074+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -8054,7 +8054,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T15:34:44.745088+00:00",
+          "checked_at": "2026-11-12T17:07:19.410744+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -8285,7 +8285,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T15:34:46.695217+00:00",
+          "generated_at": "2026-11-12T17:07:20.926746+00:00",
           "available": false,
           "quarterbacks": {
             "IND": {
@@ -8804,16 +8804,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -8831,6 +8832,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -8838,23 +8840,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -9241,16 +9241,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -9268,6 +9269,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -9275,23 +9277,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -9335,7 +9335,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T15:34:46.721369+00:00",
+            "retrieved_at": "2026-11-12T17:07:20.973818+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -9369,7 +9369,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T15:34:44.745088+00:00",
+          "checked_at": "2026-11-12T17:07:19.410744+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -9599,7 +9599,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T15:34:46.721787+00:00",
+          "generated_at": "2026-11-12T17:07:20.974494+00:00",
           "available": true,
           "quarterbacks": {
             "NO": {
@@ -10168,16 +10168,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -10195,6 +10196,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -10202,23 +10204,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -10596,16 +10596,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -10623,6 +10624,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -10630,23 +10632,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -10694,7 +10694,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T15:34:46.748378+00:00",
+            "retrieved_at": "2026-11-12T17:07:21.021163+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -10734,7 +10734,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T15:34:44.745088+00:00",
+          "checked_at": "2026-11-12T17:07:19.410744+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -10965,7 +10965,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T15:34:46.748808+00:00",
+          "generated_at": "2026-11-12T17:07:21.021813+00:00",
           "available": true,
           "quarterbacks": {
             "NYJ": {
@@ -11571,16 +11571,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -11598,6 +11599,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -11605,23 +11607,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -11990,16 +11990,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -12017,6 +12018,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -12024,23 +12026,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -12088,7 +12088,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T15:34:47.044679+00:00",
+            "retrieved_at": "2026-11-12T17:07:21.594615+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -12128,7 +12128,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T15:34:44.745088+00:00",
+          "checked_at": "2026-11-12T17:07:19.410744+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -12358,7 +12358,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T15:34:47.045195+00:00",
+          "generated_at": "2026-11-12T17:07:21.595254+00:00",
           "available": true,
           "quarterbacks": {
             "TEN": {
@@ -12879,6 +12879,15 @@
                     "source_updated_at": null
                   },
                   {
+                    "player_id": "00-0035378",
+                    "player": "Andrew Wingard",
+                    "position": "S",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
                     "player_id": "00-0036568",
                     "player": "Roy Lopez",
                     "position": "DT",
@@ -12951,22 +12960,23 @@
                     "source_updated_at": null
                   }
                 ],
-                "report_count": 13,
+                "report_count": 14,
                 "coverage": "REPORTED",
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -12984,6 +12994,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -12991,23 +13002,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -13384,16 +13393,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -13411,6 +13421,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -13418,23 +13429,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -13482,7 +13491,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T15:34:47.432141+00:00",
+            "retrieved_at": "2026-11-12T17:07:22.319763+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -13522,7 +13531,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T15:34:44.745088+00:00",
+          "checked_at": "2026-11-12T17:07:19.410744+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -13754,7 +13763,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T15:34:47.432647+00:00",
+          "generated_at": "2026-11-12T17:07:22.320376+00:00",
           "available": false,
           "quarterbacks": {
             "ARI": {
@@ -14227,16 +14236,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -14254,6 +14264,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -14261,23 +14272,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -14336,7 +14345,7 @@
                   "starter_context": null,
                   "games": 7,
                   "availability": "UNVERIFIED",
-                  "practice": "NOT_REPORTED",
+                  "practice": "DNP_PRACTICE",
                   "pass_attempts_per_game": 30.143,
                   "pass_yards_per_game": 211.143,
                   "carries_per_game": 1.571,
@@ -14556,23 +14565,160 @@
                 "scope": "Head coach records in available schedule history; assistant and college records excluded."
               },
               "injuries": {
-                "reports": [],
-                "report_count": 0,
-                "coverage": "NO_MATCHED_CURRENT_WEEK_REPORT",
+                "reports": [
+                  {
+                    "player_id": "00-0031933",
+                    "player": "Leonard Williams",
+                    "position": "DT",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0032387",
+                    "player": "Jarran Reed",
+                    "position": "DT",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0034342",
+                    "player": "Quenton Nelson",
+                    "position": "G",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0034350",
+                    "player": "Uchenna Nwosu",
+                    "position": "LB",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0034869",
+                    "player": "Sam Darnold",
+                    "position": "QB",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0035704",
+                    "player": "Drew Lock",
+                    "position": "QB",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0037545",
+                    "player": "Rashid Shaheed",
+                    "position": "WR",
+                    "designation": null,
+                    "practice": "Full Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0037821",
+                    "player": "Charles Cross",
+                    "position": "T",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0038543",
+                    "player": "Jaxon Smith-Njigba",
+                    "position": "WR",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0038694",
+                    "player": "Brandon Pili",
+                    "position": "DT",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0038764",
+                    "player": "Patrick O'Connell",
+                    "position": "LB",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0039020",
+                    "player": "Anthony Bradford",
+                    "position": "G",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0039047",
+                    "player": "Derick Hall",
+                    "position": "LB",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0039793",
+                    "player": "AJ Barner",
+                    "position": "TE",
+                    "designation": null,
+                    "practice": "Full Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0040061",
+                    "player": "Connor O'Toole",
+                    "position": "LB",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  }
+                ],
+                "report_count": 15,
+                "coverage": "REPORTED",
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -14590,6 +14736,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -14597,23 +14744,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -14657,7 +14802,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T15:34:47.459631+00:00",
+            "retrieved_at": "2026-11-12T17:07:22.367622+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -14691,7 +14836,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T15:34:44.745088+00:00",
+          "checked_at": "2026-11-12T17:07:19.410744+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -14923,7 +15068,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T15:34:47.460154+00:00",
+          "generated_at": "2026-11-12T17:07:22.368294+00:00",
           "available": false,
           "quarterbacks": {
             "LV": {
@@ -15504,16 +15649,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -15531,6 +15677,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -15538,23 +15685,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -15639,7 +15784,7 @@
                     "starter_context": null,
                     "games": 8,
                     "availability": "UNVERIFIED",
-                    "practice": "NOT_REPORTED",
+                    "practice": "DNP_PRACTICE",
                     "pass_attempts_per_game": null,
                     "pass_yards_per_game": null,
                     "carries_per_game": 12.75,
@@ -15854,11 +15999,29 @@
                     "source_updated_at": null
                   },
                   {
+                    "player_id": "00-0033280",
+                    "player": "Christian McCaffrey",
+                    "position": "RB",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
                     "player_id": "00-0034391",
                     "player": "Siran Neal",
                     "position": "S",
                     "designation": null,
                     "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0034982",
+                    "player": "Dre Greenlaw",
+                    "position": "LB",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
                     "injury": null,
                     "source_updated_at": null
                   },
@@ -15917,22 +16080,23 @@
                     "source_updated_at": null
                   }
                 ],
-                "report_count": 10,
+                "report_count": 12,
                 "coverage": "REPORTED",
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -15950,6 +16114,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -15957,23 +16122,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -16021,7 +16184,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T15:34:47.714760+00:00",
+            "retrieved_at": "2026-11-12T17:07:22.630418+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -16061,7 +16224,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T15:34:44.745088+00:00",
+          "checked_at": "2026-11-12T17:07:19.410744+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -16292,7 +16455,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T15:34:47.715279+00:00",
+          "generated_at": "2026-11-12T17:07:22.631119+00:00",
           "available": true,
           "quarterbacks": {
             "DAL": {
@@ -16782,23 +16945,61 @@
                 "scope": "Head coach records in available schedule history; assistant and college records excluded."
               },
               "injuries": {
-                "reports": [],
-                "report_count": 0,
-                "coverage": "NO_MATCHED_CURRENT_WEEK_REPORT",
+                "reports": [
+                  {
+                    "player_id": "00-0033523",
+                    "player": "Jonathan Allen",
+                    "position": "DT",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0036231",
+                    "player": "Kyle Dugger",
+                    "position": "S",
+                    "designation": null,
+                    "practice": "Did Not Participate In Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0038549",
+                    "player": "DJ Turner II",
+                    "position": "CB",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  },
+                  {
+                    "player_id": "00-0040140",
+                    "player": "Dylan Fairchild",
+                    "position": "G",
+                    "designation": null,
+                    "practice": "Limited Participation in Practice",
+                    "injury": null,
+                    "source_updated_at": null
+                  }
+                ],
+                "report_count": 4,
+                "coverage": "REPORTED",
                 "official_inactives_confirmed": false,
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -16816,6 +17017,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -16823,23 +17025,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -17190,16 +17390,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -17217,6 +17418,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -17224,23 +17426,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -17288,7 +17488,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T15:34:47.933786+00:00",
+            "retrieved_at": "2026-11-12T17:07:22.850358+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -17328,7 +17528,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T15:34:44.745088+00:00",
+          "checked_at": "2026-11-12T17:07:19.410744+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -17558,7 +17758,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T15:34:47.934327+00:00",
+          "generated_at": "2026-11-12T17:07:22.851035+00:00",
           "available": true,
           "quarterbacks": {
             "CIN": {
@@ -17585,7 +17785,7 @@
           "status": "EXPERIMENTAL_SCENARIO",
           "injuries": {
             "CIN": {
-              "coverage": "NO_MATCHED_CURRENT_WEEK_REPORT",
+              "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
               "other_out_reports": [],
@@ -18063,16 +18263,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -18090,6 +18291,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -18097,23 +18299,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -18391,16 +18591,17 @@
                 "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
                 "diagnostics": {
                   "report_stage": "GAME_DESIGNATIONS_PARTIAL",
-                  "rows_for_week": 254,
-                  "matched_rows": 254,
+                  "rows_for_week": 276,
+                  "matched_rows": 276,
                   "matched_ids": 6,
-                  "practice_flags": 182,
+                  "practice_flags": 202,
                   "game_designations_reported": 6,
                   "teams_with_injury_rows": [
                     "ARI",
                     "ATL",
                     "BUF",
                     "CAR",
+                    "CIN",
                     "CLE",
                     "DAL",
                     "DET",
@@ -18418,6 +18619,7 @@
                     "NYG",
                     "NYJ",
                     "PIT",
+                    "SEA",
                     "SF",
                     "TEN",
                     "WAS"
@@ -18425,23 +18627,21 @@
                   "teams_without_injury_rows": [
                     "BAL",
                     "CHI",
-                    "CIN",
                     "DEN",
                     "LAC",
                     "PHI",
-                    "SEA",
                     "TB"
                   ],
                   "stale_team_or_unmatched_id_rows": 0,
                   "current_week_report_status_counts": {
-                    "MISSING": 248,
+                    "MISSING": 270,
                     "OUT": 5,
                     "QUESTIONABLE": 1
                   },
                   "source_last_updated_utc": null,
                   "official_game_day_active_confirmed": false,
                   "note": "An injury designation is NOT a game-day active list; missing data never confirms healthy.",
-                  "source_rows": 3075,
+                  "source_rows": 3097,
                   "columns": [
                     "season",
                     "season_type",
@@ -18489,7 +18689,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T15:34:48.155604+00:00",
+            "retrieved_at": "2026-11-12T17:07:23.448942+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -18529,7 +18729,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T15:34:44.745088+00:00",
+          "checked_at": "2026-11-12T17:07:19.410744+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -18760,7 +18960,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T15:34:48.156085+00:00",
+          "generated_at": "2026-11-12T17:07:23.449622+00:00",
           "available": true,
           "quarterbacks": {
             "BAL": {
