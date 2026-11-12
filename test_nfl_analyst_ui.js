@@ -104,7 +104,7 @@ vm.runInContext(inline[0],context);
   assert.equal(workerRequests.at(-1).selected.length,size,'joint simulation receives every selected leg');
   assert.equal(new Set(actual.selected.map(goal1.marketId)).size,size,'no duplicate player-market lines');
   assert(actual.selected.every(c=>['A','B'].includes(c.p.team)&&['A','B'].includes(c.p.opp)),'all legs belong to chosen game');
-  assert(actual.candidates.every(c=>c.researchScore>=85&&c.researchScore<=100),'every analyst candidate meets the independent /100 minimum');
+  assert(actual.candidates.every(c=>c.researchScore>=70&&c.researchScore<=100),'every analyst candidate meets the independent /100 minimum');
   assert(actual.candidates.every(c=>!['out','unverified','small-sample','backup','other-game'].includes(c.p.player)),'larger size preserves eligibility filters');
  }
  const excluded=el('results').querySelectorAll('.exclude')[0];

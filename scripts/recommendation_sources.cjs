@@ -4,7 +4,7 @@ const ROOT=path.resolve(__dirname,'..'),read=(file,fallback={})=>fs.existsSync(p
 const digest=text=>crypto.createHash('sha256').update(text).digest('hex').slice(0,12);
 const hash=files=>crypto.createHash('sha256').update(files.map(f=>fs.readFileSync(path.join(ROOT,f),'utf8')).join('\n')).digest('hex').slice(0,12);
 const fresh=(stamp,now,h=24)=>Number.isFinite(Date.parse(stamp))&&Date.parse(stamp)<=now+300000&&now-Date.parse(stamp)<=h*3600000;
-const recommendationScore=score=>Number.isFinite(score)&&score>=85&&score<=100;
+const recommendationScore=(score,minimum=85)=>Number.isFinite(score)&&score>=minimum&&score<=100;
 function captureSources(now=Date.now(),overrides={}){
  const picks=[],coverage=[];const attempt=(sport,run)=>{if(overrides.onlySport&&overrides.onlySport!==sport)return;try{run()}catch(e){coverage.push({sport,status:'error',reason:e.message})}};
  attempt('NBA',()=>{
@@ -33,13 +33,13 @@ function captureSources(now=Date.now(),overrides={}){
   const index=fs.readFileSync(path.join(ROOT,'index.html'),'utf8'),scoreCode=index.slice(index.indexOf('function score(r)'),index.indexOf('function challengerPreviewScore'));if(!scoreCode)throw Error('NFL TD score source contract changed');vm.runInContext('function num(v){return Number(v)}'+scoreCode,sandbox);
   const due=(games.games||[]).filter(g=>Date.parse(g.kickoff_at)>now&&Date.parse(g.kickoff_at)<now+7*86400000);
   const tdPool=feed.filter(r=>r.availability==='ROSTER_ACTIVE'&&r.playerAppearancesVerified!==false&&r.qbRole!=='BACKUP'&&!/OUT|IR|PUP|SUSPENDED|INACTIVE/.test(String(r.injuryReportStatus||'')));
-  const leaders=new Set();for(const pos of ['RB','WR','TE','QB'])for(const r of tdPool.filter(r=>r.pos===pos&&recommendationScore(sandbox.score(r))).sort((a,b)=>sandbox.score(b)-sandbox.score(a)).slice(0,3))leaders.add(String(r.player_id));
+  const leaders=new Set();for(const pos of ['RB','WR','TE','QB'])for(const r of tdPool.filter(r=>r.pos===pos&&recommendationScore(sandbox.score(r),goal.MIN_SCORE)).sort((a,b)=>sandbox.score(b)-sandbox.score(a)).slice(0,3))leaders.add(String(r.player_id));
   for(const g of due){const pool=feed.filter(p=>[g.home,g.away].includes(p.team)&&[g.home,g.away].includes(p.opp));if(!pool.length)continue;
    const sim=engine.simulate(pool,10000,982451653,[]),lookup=new Map(sim.markets.map(x=>[x.id+'|'+x.market+'|'+x.line,x]));
    const candidates=pool.flatMap(p=>sandbox.definitions.map(d=>sandbox.choose(p,d,lookup)).filter(Boolean)).sort((a,b)=>b.score-a.score);
    const selected=new Map([...goal.rankPlayers(candidates,3),...goal.buildTicket(candidates,4)].map(c=>[goal.marketId(c),c]));
-   for(const c of [...selected.values()].filter(c=>recommendationScore(c.researchScore)))picks.push({sport:'NFL',board:'Game analyst (top 3/default ticket)',gameId:g.game_id,startsAt:g.kickoff_at,playerId:String(c.p.player_id),player:c.p.player,team:c.p.team,market:c.d.key,side:'at_least',line:c.line,score:c.researchScore,scoreKind:'NFL matchup score /100',modelVersion,label:c.p.player+' '+c.line+'+ '+c.d.label,reason:c.reasons.join(' '),probability:c.scenarioRate,inputs:{feed:status.generated_at,games:games.generated_at,rawRank:c.score}});
-   for(const r of tdPool.filter(r=>leaders.has(String(r.player_id))&&[g.home,g.away].includes(r.team)))picks.push({sport:'NFL',board:'TD position leaders',gameId:g.game_id,startsAt:g.kickoff_at,playerId:String(r.player_id),player:r.player,team:r.team,market:'anytime_td',side:'winner',line:null,score:sandbox.score(r),scoreKind:'TD opportunity /100',modelVersion:'nfl-td-'+digest(scoreCode+'|minimum-score-85'),label:r.player+' anytime rushing/receiving TD',reason:'Top three '+r.pos+' in the public default TD board; provisional roster availability',inputs:{feed:status.generated_at}});
+   for(const c of [...selected.values()].filter(c=>recommendationScore(c.researchScore,goal.MIN_SCORE)))picks.push({sport:'NFL',board:'Game analyst (top 3/default ticket)',gameId:g.game_id,startsAt:g.kickoff_at,playerId:String(c.p.player_id),player:c.p.player,team:c.p.team,market:c.d.key,side:'at_least',line:c.line,score:c.researchScore,scoreKind:'NFL matchup score /100',modelVersion,label:c.p.player+' '+c.line+'+ '+c.d.label,reason:c.reasons.join(' '),probability:c.scenarioRate,inputs:{feed:status.generated_at,games:games.generated_at,rawRank:c.score}});
+   for(const r of tdPool.filter(r=>leaders.has(String(r.player_id))&&[g.home,g.away].includes(r.team)))picks.push({sport:'NFL',board:'TD position leaders',gameId:g.game_id,startsAt:g.kickoff_at,playerId:String(r.player_id),player:r.player,team:r.team,market:'anytime_td',side:'winner',line:null,score:sandbox.score(r),scoreKind:'TD opportunity /100',modelVersion:'nfl-td-'+digest(scoreCode+'|minimum-score-'+goal.MIN_SCORE),label:r.player+' anytime rushing/receiving TD',reason:'Top three '+r.pos+' in the public default TD board; provisional roster availability',inputs:{feed:status.generated_at}});
   }
   const tdPrices=read('data/hardrock_anytime_td.json');
   if(fresh(tdPrices.retrieved_at_utc,now,1)){

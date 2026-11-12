@@ -27,8 +27,8 @@ for(const n of [6,8,10]){
 assert.equal(app.buildTicket(largePool,99).length,10,'maximum ticket size is bounded');
 assert.equal(app.buildTicket([...pool,pool[0]],10).length,5,'limited pools do not invent or duplicate legs');
 assert.equal(app.buildTicket([],10).length,0,'empty pools stay empty');
-const thresholds=[{...candidate('below',999),researchScore:84},{...candidate('boundary',50),researchScore:85},{...candidate('missing',999),researchScore:null}];
-assert.deepEqual(app.buildTicket(thresholds,10).map(x=>x.p.player_id),['boundary'],'84 and unrated are excluded; 85 qualifies independently of raw utility');
+const thresholds=[{...candidate('below',999),researchScore:69.99},{...candidate('boundary',50),researchScore:70},{...candidate('missing',999),researchScore:null}];
+assert.deepEqual(app.buildTicket(thresholds,10).map(x=>x.p.player_id),['boundary'],'69.99 and unrated are excluded; 70 qualifies independently of raw utility');
 assert.deepEqual(app.rankPlayers(thresholds).map(x=>x.p.player_id),['boundary']);
 assert.equal(app.americanDecimal('+400'),5);
 assert.equal(app.americanDecimal('-125'),1.8);

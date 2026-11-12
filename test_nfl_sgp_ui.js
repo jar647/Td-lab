@@ -77,7 +77,7 @@ function mount(records,manualInactives=[]){
   assert.equal(picks.length,requested,'all rendered legs are usable Quick Slip picks');
   assert.equal(new Set(picks.map(x=>x.player)).size,requested,'no player is duplicated across main-ticket markets');
   assert(picks.every(x=>x.game==='A|B'&&['A','B'].includes(x.team)),'same-game picks only');
-  assert(picks.every(x=>x.researchScore>=85&&x.researchScore<=100),'every rendered player leg meets the /100 minimum');
+  assert(picks.every(x=>x.researchScore>=70&&x.researchScore<=100),'every rendered player leg meets the /100 minimum');
   assert(picks.every(x=>/^(strong|later)/.test(x.player)),'all availability and evidence filters stay active');
   assert.match(view.notice.textContent,new RegExp('Showing '+requested+' screened candidates'));
   assert.match(view.notice.textContent,new RegExp(requested+' legs compound failure risk'));
@@ -92,7 +92,9 @@ function mount(records,manualInactives=[]){
  assert.match(sparse.notice.textContent,/Only 3 of 10 legs passed the filters; no filler added/);
  await sparse.copy.emit('click');
  assert.match(sparse.state.copied,/3-LEG AUTO SGP/,'copy reports actual count when the requested size cannot be filled');
- const lowScore=mount([player('low','A','RB',{playerRushYards:50,playerCarries:10,playerRecYards:30,playerReceptions:2,playerTargets:3})]);
+ const weak=player('low','A','RB',{playerRushYards:48,playerCarries:5,recent3Carries:5,playerRecYards:30,playerReceptions:2,playerTargets:3,recent3Targets:3});
+ assert.equal(require('./nfl_goal1.js').matchupScore(weak,'RUSH'),69);
+ const lowScore=mount([weak]);
  await lowScore.choose(10);assert.equal(lowScore.list.children.length,0,'raw research quality cannot bypass matchup score');
  const empty=mount([]);await empty.choose(10);
  assert.equal(empty.list.children.length,0);

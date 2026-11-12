@@ -6,7 +6,7 @@
 'use strict';
 const MIN_ALT={rushYards:40,recYards:30,receptions:3,passYards:200};
 const LABEL={rushYards:'rushing yards',recYards:'receiving yards',receptions:'receptions',passYards:'passing yards'};
-const MIN_SCORE=85;
+const MIN_SCORE=70;
 // The same bounded matchup rating used by the main NFL prop board. The
 // analyst's line-selection utility remains a separate, unbounded raw rank.
 const SPECS={
