@@ -28,7 +28,7 @@ for(const [name,html] of [['NFL',nfl],['NBA',nba]]){
   assert.ok(html.includes('src="./player_probability.js"'),name+' must load the model probability research engine');
   assert.ok(html.includes('Over odds')&&html.includes('Under odds'),name+' must retain both-sided pricing');
  }else{
-  assert.ok(html.includes('src="./nfl_game_engine.js?v=nfl-official-attempts-v2"'),'NFL must load matchup simulations');
+  assert.ok(html.includes('src="./nfl_game_engine.js?v=nfl-supported-qb-v3"'),'NFL must load matchup simulations');
   assert.ok(html.includes('UNCALIBRATED'),'NFL scenario frequencies must be identified as uncalibrated');
   assert.ok(!html.includes('Over odds')&&!html.includes('Under odds'),'NFL player cards must not request sportsbook prices');
   assert.ok(!html.includes('setPropOdds('),'NFL player odds must not be stored from cards');

@@ -9,7 +9,7 @@ const assert=require('node:assert/strict');
 const engine=require('./nfl_game_engine.js');
 const goal1=require('./nfl_goal1.js');
 const html=fs.readFileSync('analyst.html','utf8');
-assert.match(html,/<script src="\.\/nfl_game_engine\.js\?v=nfl-official-attempts-v2"><\/script>/,
+assert.match(html,/<script src="\.\/nfl_game_engine\.js\?v=nfl-supported-qb-v3"><\/script>/,
   'The analyst must load the current game-first simulator');
 assert.ok(html.includes("nfl_game_worker.js"),'Long simulations must run off the page thread');
 const inline=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)]

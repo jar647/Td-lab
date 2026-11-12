@@ -5,7 +5,7 @@
 */
 (function(root){
 "use strict";
-const MODEL_VERSION='game-first-volume-v2-official-attempts';
+const MODEL_VERSION='game-first-volume-v3-supported-qb-markets';
 const MARKETS={
  rushYards:[25,40,50,60,70,80,100],
  recYards:[20,25,30,40,50,60,70,80,100],
@@ -54,16 +54,37 @@ function playerParams(p){
   output:{passYards:0,rushYards:0,recYards:0,receptions:0}
  };
 }
-function build(records){
+function build(records,options={}){
  if(!Array.isArray(records)||!records.length)throw Error('No matchup player records');
+ if(!options||typeof options!=='object'||Array.isArray(options))throw Error('Simulation options must be an object');
+ const quarterbackChoices=options.quarterbacks===undefined?{}:options.quarterbacks;
+ if(!quarterbackChoices||typeof quarterbackChoices!=='object'||Array.isArray(quarterbackChoices))
+  throw Error('Conditional quarterbacks must be an object mapping teams to player IDs');
  const entries=records.filter(p=>p&&p.team&&p.opp&&!blocked(p)).map(playerParams).filter(Boolean);
  if(new Set(entries.map(p=>p.id)).size!==entries.length)throw Error('Duplicate player identity in matchup inputs');
  const teams=[...new Set(records.map(p=>String(p.team)))].sort();
  if(teams.length!==2)throw Error('Exactly two teams are required for one game');
+ for(const team of Object.keys(quarterbackChoices))if(!teams.includes(team))
+  throw Error('Conditional quarterback team '+team+' is not in this matchup');
  const league=teams.map(team=>{
   const roster=entries.filter(p=>p.team===team);
   const qbs=roster.filter(p=>p.pos==='QB').sort((a,b)=>Number(b.qbRole==='EXPECTED_STARTER')-Number(a.qbRole==='EXPECTED_STARTER')||b.pass-a.pass);
-  const quarterbackVerified=qbs.length>0&&qbs[0].pass>=12;
+  const conditional=Object.prototype.hasOwnProperty.call(quarterbackChoices,team);
+  let chosenQuarterback=qbs[0];
+  if(conditional){
+   const choice=quarterbackChoices[team];
+   if(!['string','number'].includes(typeof choice)||String(choice).trim()==='')
+    throw Error(team+': conditional quarterback requires a player ID');
+   const id=String(choice),source=records.find(p=>p&&String(p.player_id||p.team+'|'+p.player)===id);
+   if(!source)throw Error(team+': conditional quarterback '+id+' is not in the matchup inputs');
+   if(String(source.team)!==team)throw Error(team+': conditional quarterback '+id+' belongs to another team');
+   if(source.pos!=='QB')throw Error(team+': conditional player '+id+' is not a quarterback');
+   if(blocked(source))throw Error(team+': conditional quarterback '+id+' is blocked by roster, injury or backup status');
+   chosenQuarterback=qbs.find(p=>p.id===id);
+   if(!chosenQuarterback)throw Error(team+': conditional quarterback '+id+' requires at least three complete verified player-history games');
+   if(chosenQuarterback.pass<12)throw Error(team+': conditional quarterback '+id+' has insufficient verified passing workload (minimum 12 attempts per game)');
+  }
+  const quarterbackVerified=!!chosenQuarterback&&chosenQuarterback.pass>=12;
   const candidates=roster.map(p=>p.verifiedTeamPass).filter(x=>x!==null&&x>=12&&x<=65);
   // If the QB's individual history is unavailable (injury, return, change of
   // starter), use verified historical TEAM passing attempts instead.
@@ -72,13 +93,14 @@ function build(records){
   const fallbackAttempts=candidates.length?candidates[0]:null;
   if(!quarterbackVerified&&fallbackAttempts===null)
    throw Error(team+': no verified quarterback or historical team passing volume');
-  const qb=quarterbackVerified?qbs[0]:{
+  const qb=quarterbackVerified?chosenQuarterback:{
    id:'UNVERIFIED_TEAM_QB_'+team,team,pos:'TEAM_PASSER_UNVERIFIED',
    pass:fallbackAttempts,passMatch:1,
    output:{passYards:0,rushYards:0,recYards:0,receptions:0}
   };
   const receivers=roster.filter(p=>['WR','TE','RB'].includes(p.pos)&&p.targets>=.25);
-  const runners=roster.filter(p=>['RB','QB','WR'].includes(p.pos)&&p.carries>=.15);
+  const runners=roster.filter(p=>['RB','QB','WR'].includes(p.pos)&&p.carries>=.15&&
+   (p.pos!=='QB'||quarterbackVerified&&p.id===qb.id));
   const passAttempts=clamp(qb.pass,20,48);
   const rushAttempts=clamp(runners.reduce((a,p)=>a+p.carries,0),12,44);
   const pace=clamp(passAttempts+rushAttempts,42,83);
@@ -92,10 +114,14 @@ function build(records){
   }
   const targetPool=pool(receivers.map(p=>({p,weight:p.targets})),passAttempts,2.5);
   const carryPool=pool(runners.map(p=>({p,weight:p.carries})),rushAttempts,1);
+  const quarterbackSelection=conditional?'CONDITIONAL_PLAYER_SCENARIO':!quarterbackVerified?'TEAM_VOLUME_FALLBACK':
+   qb.qbRole==='EXPECTED_STARTER'?'VERIFIED_EXPECTED_STARTER':'MODEL_INPUT_SELECTION';
   return {team,roster,qb,pace,passRate,targetPool,carryPool,
-   outlook:{team,quarterback:quarterbackVerified?qb.name:null,starterContext:qb.starterContext||null,passVolumeSource:quarterbackVerified?'VERIFIED_QB_PLAYER_HISTORY':'VERIFIED_TEAM_PBP_NO_QB_PROPS',
+   outlook:{team,quarterback:quarterbackVerified?qb.name:null,quarterbackId:quarterbackVerified?qb.id:null,quarterbackSelection,
+    starterContext:qb.starterContext||null,passVolumeSource:quarterbackVerified?'VERIFIED_QB_PLAYER_HISTORY':'VERIFIED_TEAM_PBP_NO_QB_PROPS',
     quarterbackPlayerPropsAvailable:quarterbackVerified,
-    warning:quarterbackVerified?null:'QB individual history is insufficient; team passing volume based on completed PBP. No QB props are projected.',
+    warning:conditional?'Conditional scenario: assumes '+qb.name+' starts at quarterback for '+team+'. Game-day starting status is not confirmed.':
+     quarterbackVerified?null:'QB individual history is insufficient; team passing volume based on completed PBP. No QB props are projected.',
     estimatedPlays:Math.round(pace),estimatedPassAttempts:Math.round(passAttempts),
     estimatedRushAttempts:Math.round(rushAttempts),passingShare:Math.round(passRate*100),
     untrackedTargetShare:Math.round(targetPool.items[targetPool.items.length-1].weight/targetPool.sum*100),
@@ -106,19 +132,45 @@ function build(records){
   throw Error('Not enough position-verified offensive players for complete matchup');
  return {teams:league,players:entries};
 }
-function simulate(records,count=10000,seed=1307,selected=[]){
+function simulate(records,count=10000,seed=1307,selected=[],options={}){
  if(!Number.isInteger(count)||count<1000||count>100000)throw Error('Simulation count must be 1,000 to 100,000');
- const model=build(records),random=rng(seed);
+ const model=build(records,options),random=rng(seed);
  const hits=new Map(),totals=new Map(),samples=new Map();
- const selections=selected.map(x=>({id:String(x.id),market:String(x.market),line:Number(x.line)}));
+ if(!Array.isArray(selected))throw Error('Selected player props must be an array');
+ const selections=selected.map(x=>({id:String(x?.id),market:String(x?.market),
+  line:typeof x?.line==='number'||typeof x?.line==='string'?finite(x.line):null}));
  const byId=new Map(model.players.map(p=>[p.id,p]));
+ const supportedMarkets=new Set(),unavailableMarkets=[];
+ const teamsByName=new Map(model.teams.map(t=>[t.team,t]));
+ const marketKey=(id,market)=>JSON.stringify([id,market]);
  const allStats={};
  for(const p of model.players){allStats[p.id]={rushYards:0,recYards:0,receptions:0,passYards:0};}
  for(const p of model.players)for(const [market,lines] of Object.entries(MARKETS)){
   if(market==='passYards'&&p.pos!=='QB')continue;
   if(['recYards','receptions'].includes(market)&&!['RB','WR','TE'].includes(p.pos))continue;
   if(market==='rushYards'&&!['QB','RB','WR'].includes(p.pos))continue;
+  const team=teamsByName.get(p.team);
+  const selectedQuarterback=team.outlook.quarterbackPlayerPropsAvailable&&team.qb.id===p.id;
+  let reason=null;
+  if(p.pos==='QB'&&!selectedQuarterback)
+   reason=p.name+' is not the modeled quarterback for '+p.team+'. Named QB passing and rushing scenarios are unavailable; game-day starting status is not confirmed.';
+  else if(market==='rushYards'&&!team.carryPool.items.some(x=>x.p?.id===p.id))
+   reason='No supported rushing opportunity for '+p.name+' in the verified workload inputs. A rushing frequency is unavailable.';
+  else if(['recYards','receptions'].includes(market)&&!team.targetPool.items.some(x=>x.p?.id===p.id))
+   reason='No supported receiving opportunity for '+p.name+' in the verified workload inputs. A receiving frequency is unavailable.';
+  if(reason){unavailableMarkets.push({id:p.id,market,reason});continue}
+  supportedMarkets.add(marketKey(p.id,market));
   for(const line of lines)hits.set(JSON.stringify([p.id,market,line]),0);
+ }
+ // Unsupported selections are missing model coverage, not zero-probability
+ // outcomes. Custom positive thresholds remain valid for supported markets.
+ for(const leg of selections){
+  if(leg.line===null||leg.line<=0)throw Error('Cannot simulate '+leg.id+' '+leg.market+': the selected threshold must be a positive finite number');
+  if(!byId.has(leg.id))throw Error('Cannot simulate '+leg.id+' '+leg.market+': player has no eligible verified history in this matchup');
+  if(!supportedMarkets.has(marketKey(leg.id,leg.market))){
+   const unavailable=unavailableMarkets.find(x=>x.id===leg.id&&x.market===leg.market);
+   throw Error('Cannot simulate '+leg.id+' '+leg.market+': '+(unavailable?.reason||'This market is not supported for the selected player'));
+  }
  }
  let joint=0;
  const sumScores={};
@@ -189,8 +241,8 @@ function simulate(records,count=10000,seed=1307,selected=[]){
   scenarioAvgPasses:Math.round(sumScores[t.team].passes/count*10)/10,
   scenarioAvgRushes:Math.round(sumScores[t.team].rushes/count*10)/10
  }));
- return {status:'RESEARCH_ONLY_UNCALIBRATED',modelVersion:MODEL_VERSION,inputAudit:model.players.map(p=>({id:p.id,name:p.name,team:p.team,games:p.gameCount,history:p.history,sourceAvailability:p.sourceAvailability,historicalPassingYards:p.historicalPassingYards,historicalPassAttempts:p.historicalPassAttempts,modeledPassAttempts:p.pass,passingMatchupFactor:p.passMatch,receivingMatchupFactor:p.recMatch,rushingMatchupFactor:p.rushMatch,participationAssumption:'Assumes listed eligible player participates; game-day active status is not confirmed'})),audit:{passingReceivingConservation:true},
-  count,seed,teams:summary,markets,
+ return {status:'RESEARCH_ONLY_UNCALIBRATED',modelVersion:MODEL_VERSION,inputAudit:model.players.map(p=>({id:p.id,name:p.name,team:p.team,games:p.gameCount,history:p.history,sourceAvailability:p.sourceAvailability,historicalPassingYards:p.historicalPassingYards,historicalPassAttempts:p.historicalPassAttempts,modeledPassAttempts:p.pos==='QB'&&!supportedMarkets.has(marketKey(p.id,'passYards'))?null:p.pass,passingMatchupFactor:p.passMatch,receivingMatchupFactor:p.recMatch,rushingMatchupFactor:p.rushMatch,participationAssumption:p.pos==='QB'&&!supportedMarkets.has(marketKey(p.id,'passYards'))?'Not selected as the modeled quarterback; named QB passing and rushing scenarios are unavailable. Game-day starting status is not confirmed.':'Assumes listed eligible player participates; game-day active status is not confirmed'})),audit:{passingReceivingConservation:true},
+  count,seed,teams:summary,markets,unavailableMarkets,
   joint:selections.length?{legs:selections.length,hits:joint,scenarioRate:joint/count}:null,
   assumptions:['Generative team play volume and pass/rush split','Player targets and carries compete for team opportunities',
    'Receptions require target and completion','Quarterback passing yards derive from completed receiver outcomes',

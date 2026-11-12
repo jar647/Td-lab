@@ -29,6 +29,7 @@ function run(){
  const legs=[{id:'a-wr',market:'receptions',line:3},{id:'a-qb',market:'passYards',line:200}];
  const result=engine.simulate(lineup,1500,12,legs);
  assert.equal(result.status,'RESEARCH_ONLY_UNCALIBRATED');
+ assert.equal(result.modelVersion,'game-first-volume-v3-supported-qb-markets');
  assert.equal(result.teams.length,2);
  assert.equal(result.joint.legs,2);
  assert(!result.markets.some(m=>m.id==='a-out'),'OUT player must be excluded');
@@ -69,6 +70,124 @@ function run(){
  const outResult=engine.simulate(returnOut,1500,12);
  assert.equal(outResult.teams.find(t=>t.team==='A').quarterback,null);
  assert(!outResult.markets.some(m=>m.id==='a-qb'||m.id==='a-backup'));
+
+ // Missing depth-chart roles must not turn every roster QB into a starter.
+ // Even with more historical passing/rushing volume, an unselected QB has
+ // no simulated workload and must not receive misleading zero-hit markets.
+ const secondQuarterback=player('A','a-unselected','QB',{p:45,r:12,ry:60,py:310});
+ const twoQuarterbacks=[...returned,secondQuarterback];
+ const twoModel=engine.build(twoQuarterbacks),baseModel=engine.build(returned);
+ const teamA=twoModel.teams.find(t=>t.team==='A');
+ assert.equal(teamA.qb.id,'a-qb','announced starter wins over higher-volume unlabeled quarterback');
+ assert(!teamA.carryPool.items.some(x=>x.p?.id==='a-unselected'),
+  'unselected quarterback cannot steal carries from the modeled offense');
+ assert.equal(teamA.outlook.estimatedRushAttempts,baseModel.teams.find(t=>t.team==='A').outlook.estimatedRushAttempts,
+  'unselected QB carries must not inflate team volume or pace');
+ const twoResult=engine.simulate(twoQuarterbacks,1500,12);
+ assert(!twoResult.markets.some(m=>m.id==='a-unselected'),
+  'unselected quarterback receives no passing or rushing market rows');
+ for(const market of ['passYards','rushYards']){
+  const unavailable=twoResult.unavailableMarkets.find(m=>m.id==='a-unselected'&&m.market===market);
+  assert(unavailable&&/not the modeled quarterback/.test(unavailable.reason));
+  assert.throws(()=>engine.simulate(twoQuarterbacks,1500,12,[{id:'a-unselected',market,line:175}]),
+   /not the modeled quarterback/,'unsupported QB legs must fail before simulations, not return a joint zero');
+ }
+ const selectedStarter=twoResult.markets.find(m=>m.id==='a-qb'&&m.market==='passYards'&&m.line===175);
+ assert(selectedStarter&&selectedStarter.hits>0&&selectedStarter.modeledMean>0);
+ assert.deepEqual(twoResult.markets,returnResult.markets,
+  'adding an unselected QB cannot change supported seeded player outcomes');
+ const excludedAudit=twoResult.inputAudit.find(p=>p.id==='a-unselected');
+ assert.equal(excludedAudit.modeledPassAttempts,null);
+ assert.match(excludedAudit.participationAssumption,/Not selected/);
+
+ // An explicit player scenario can model a different eligible QB without
+ // changing depth-chart data or claiming that the player is confirmed to start.
+ const sourceBefore=JSON.stringify(twoQuarterbacks);
+ const conditionalOptions={quarterbacks:{A:'a-unselected'}};
+ const conditionalBefore=JSON.stringify(conditionalOptions);
+ const conditionalModel=engine.build(twoQuarterbacks,conditionalOptions);
+ const conditionalTeam=conditionalModel.teams.find(t=>t.team==='A');
+ assert.equal(conditionalTeam.qb.id,'a-unselected');
+ assert.equal(conditionalTeam.qb.qbRole,undefined,'a conditional choice must not manufacture an expected-starter role');
+ assert(conditionalTeam.carryPool.items.some(x=>x.p?.id==='a-unselected'));
+ assert(!conditionalTeam.carryPool.items.some(x=>x.p?.id==='a-qb'));
+ const conditionalLegs=[{id:'a-unselected',market:'passYards',line:175},{id:'a-unselected',market:'rushYards',line:25}];
+ const conditionalResult=engine.simulate(twoQuarterbacks,1000,42,conditionalLegs,conditionalOptions);
+ const conditionalOutlook=conditionalResult.teams.find(t=>t.team==='A');
+ assert.equal(conditionalOutlook.quarterbackId,'a-unselected');
+ assert.equal(conditionalOutlook.quarterbackSelection,'CONDITIONAL_PLAYER_SCENARIO');
+ assert.match(conditionalOutlook.warning,/assumes a-unselected starts/);
+ assert.match(conditionalOutlook.warning,/Game-day starting status is not confirmed/);
+ assert.equal(conditionalResult.teams.find(t=>t.team==='B').quarterbackSelection,'MODEL_INPUT_SELECTION');
+ assert.equal(conditionalResult.teams.find(t=>t.team==='B').quarterbackId,'b-qb');
+ for(const market of ['passYards','rushYards']){
+  assert(conditionalResult.markets.some(m=>m.id==='a-unselected'&&m.market===market&&m.hits>0&&m.modeledMean>0));
+  assert(!conditionalResult.markets.some(m=>m.id==='a-qb'&&m.market===market));
+  assert(conditionalResult.unavailableMarkets.some(m=>m.id==='a-qb'&&m.market===market));
+ }
+ const conditionalAudit=conditionalResult.inputAudit.find(p=>p.id==='a-unselected');
+ assert.equal(conditionalAudit.history[0].passAttempts,45,'conditional scenario uses the selected QB history');
+ assert.equal(conditionalAudit.modeledPassAttempts,45);
+ assert(conditionalResult.joint.hits>0,'supported conditional QB legs must be jointly simulated');
+ assert.equal(conditionalResult.audit.passingReceivingConservation,true);
+ assert.equal(JSON.stringify(twoQuarterbacks),sourceBefore,'conditional modeling must not mutate roster records');
+ assert.equal(JSON.stringify(conditionalOptions),conditionalBefore);
+ assert.deepEqual(engine.simulate(twoQuarterbacks,1500,12),twoResult,'a conditional run cannot change later default seeded outcomes');
+ assert.equal(twoResult.teams.find(t=>t.team==='A').quarterbackSelection,'VERIFIED_EXPECTED_STARTER');
+ assert.equal(engine.build(twoQuarterbacks,{quarterbacks:{A:'a-qb'}}).teams.find(t=>t.team==='A').outlook.quarterbackSelection,
+  'CONDITIONAL_PLAYER_SCENARIO','an explicit choice remains conditional even when it matches the default QB');
+ const invalidConditional=(records,team,id,reason)=>assert.throws(()=>engine.build(records,{quarterbacks:{[team]:id}}),reason);
+ invalidConditional(twoQuarterbacks,'A','b-qb',/belongs to another team/);
+ invalidConditional(twoQuarterbacks,'A','missing-qb',/not in the matchup inputs/);
+ invalidConditional(twoQuarterbacks,'C','a-qb',/not in this matchup/);
+ invalidConditional(twoQuarterbacks,'A','a-rb',/not a quarterback/);
+ invalidConditional(twoQuarterbacks,'A','a-backup',/blocked by roster, injury or backup status/);
+ invalidConditional([...twoQuarterbacks,player('A','a-injured-qb','QB',{p:30},{injuryReportStatus:'OUT'})],
+  'A','a-injured-qb',/blocked by roster, injury or backup status/);
+ const shortQB=player('A','a-short-qb','QB',{p:30});shortQB.seasonGameStats=shortQB.seasonGameStats.slice(0,2);
+ invalidConditional([...twoQuarterbacks,shortQB],'A','a-short-qb',/three complete verified/);
+ invalidConditional([...twoQuarterbacks,player('A','a-unverified-qb','QB',{p:30},{playerAppearancesVerified:false})],
+  'A','a-unverified-qb',/three complete verified/);
+ invalidConditional([...twoQuarterbacks,player('A','a-low-pass-qb','QB',{p:4})],
+  'A','a-low-pass-qb',/insufficient verified passing workload/);
+ for(const id of [null,undefined,'',{}])invalidConditional(twoQuarterbacks,'A',id,/requires a player ID/);
+ assert.throws(()=>engine.build(twoQuarterbacks,{quarterbacks:[]}),/mapping teams to player IDs/);
+
+ // Anonymous team-passing fallback must not create props for a low-volume
+ // named QB merely because that player's history passes the sample checks.
+ const lowPassFallback=[...unverified,player('B','b-low-pass','QB',{p:4,r:3,ry:10,py:20},{teamPassAttemptsPerGame:33})];
+ const fallbackResult=engine.simulate(lowPassFallback,1000,42);
+ assert.equal(fallbackResult.teams.find(t=>t.team==='B').quarterbackPlayerPropsAvailable,false);
+ assert(!fallbackResult.markets.some(m=>m.id==='b-low-pass'));
+ assert.deepEqual(fallbackResult.unavailableMarkets.filter(m=>m.id==='b-low-pass').map(m=>m.market).sort(),
+  ['passYards','rushYards']);
+ assert(fallbackResult.markets.some(m=>m.id==='b-wr'&&m.market==='recYards'&&m.hits>0));
+ assert.throws(()=>engine.simulate(lowPassFallback,1000,42,[{id:'b-low-pass',market:'rushYards',line:10}]),
+  /not the modeled quarterback/);
+
+ // A market with no allocated opportunity is unavailable, while a supported
+ // market remains valid when its difficult threshold has no simulated hits.
+ const opportunityLineup=[...lineup,
+  player('A','a-no-targets','WR',{}),
+  player('B','b-no-carries','RB',{t:2,c:1,y:8}),
+  player('B','b-rare-target','WR',{t:.25,c:.125,y:1.5})];
+ const opportunityResult=engine.simulate(opportunityLineup,1000,42);
+ for(const [id,market] of [['a-no-targets','recYards'],['a-no-targets','receptions'],['b-no-carries','rushYards']]){
+  assert(!opportunityResult.markets.some(m=>m.id===id&&m.market===market));
+  assert(opportunityResult.unavailableMarkets.some(m=>m.id===id&&m.market===market&&/No supported/.test(m.reason)));
+  assert.throws(()=>engine.simulate(opportunityLineup,1000,42,[{id,market,line:20}]),/No supported/);
+ }
+ assert(opportunityResult.markets.some(m=>m.id==='b-rare-target'&&m.market==='recYards'&&m.hits===0&&m.modeledMean>0),
+  'genuine zero-hit tail thresholds stay visible for a supported receiving market');
+ const highThreshold=engine.simulate(lineup,1000,42,[{id:'a-qb',market:'passYards',line:100000}]);
+ assert.equal(highThreshold.joint.hits,0,'a valid extreme threshold may have zero hits');
+ assert.equal(highThreshold.joint.scenarioRate,0);
+ const customThreshold=engine.simulate(lineup,1000,42,[{id:'a-rb',market:'rushYards',line:49.5}]);
+ assert(customThreshold.joint.hits>0,'supported custom thresholds need not be on the display ladder');
+ assert.throws(()=>engine.simulate(lineup,1000,42,[{id:'missing',market:'passYards',line:175}]),/no eligible verified history/);
+ assert.throws(()=>engine.simulate(lineup,1000,42,[{id:'a-qb',market:'recYards',line:20}]),/not supported/);
+ for(const line of [null,undefined,NaN,Infinity,0,-1,true,[175],''])
+  assert.throws(()=>engine.simulate(lineup,1000,42,[{id:'a-qb',market:'passYards',line}]),/positive finite number/);
 
  // A QB matchup factor can affect untracked receiver assumptions, but must
  // never rescale yards already credited to named receivers a second time.
