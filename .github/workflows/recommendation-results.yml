@@ -1,0 +1,74 @@
+name: Daily recommendation capture and results
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '7,17,27,37,47,57 * * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'recommendation_ledger.js'
+      - 'scripts/*recommendation*'
+      - 'data/nba_games.json'
+      - 'data/nba_rosters.json'
+      - 'data/nba_injuries.json'
+      - 'data/matchups.json'
+      - 'data/game_picks.json'
+      - 'ufc_schedule.json'
+      - 'ufc_fighter_data.json'
+      - 'ufc_history_data.json'
+      - '.github/workflows/recommendation-results.yml'
+  pull_request:
+    branches: [main]
+permissions:
+  contents: write
+concurrency:
+  group: recommendation-results-${{ github.event_name == 'pull_request' && github.event.pull_request.number || 'writer' }}
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node test_recommendation_ledger.js
+  capture-and-grade:
+    if: github.event_name != 'pull_request'
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - name: Capture original public picks, then grade from available final results
+        run: |
+          node scripts/update_recommendation_results.cjs
+          python scripts/refresh_recommendation_nfl_results.py || echo 'NFL result refresh failed; retained prior official cache, unresolved picks remain ungraded'
+          node scripts/update_recommendation_results.cjs
+      - name: Publish immutable ledger and dashboard report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/recommendations/
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Capture public NBA NFL UFC recommendations and grade official results"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            if ! git rebase origin/main; then git rebase --abort; exit 1; fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 2
+          done
+          exit 1
