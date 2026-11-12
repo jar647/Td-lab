@@ -31,7 +31,7 @@ function pairedMarketBenchmark(rows,games){
  for(const g of games||[]){
   if(!hasVerifiedMarket(g))continue;
   const key=[String(g.date),String(g.home),String(g.away)].join('|');
-  if(lookup.has(key)){lookup.set(key,null);continue;} // Ambiguous event identity must not be graded.
+  if(lookup.has(key)){lookup.set(key,null);continue;} // Null is a permanent ambiguity tombstone, including for 3+ matching records.
   lookup.set(key,g);
  }
  const paired=[];
