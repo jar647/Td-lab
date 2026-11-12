@@ -1,12 +1,12 @@
 {
   "schema": 1,
-  "generatedAt": "2026-11-12T18:00:12.235Z",
+  "generatedAt": "2026-11-12T18:15:01.954Z",
   "startedAt": "2026-11-12T00:52:14.113Z",
   "overall": {
     "probabilitySample": 9,
     "meanEstimate": 0.1209784751309743,
     "brier": 0.10709778865440951,
-    "tracked": 368,
+    "tracked": 369,
     "wins": 10,
     "losses": 10,
     "settled": 20,
@@ -15,7 +15,7 @@
       0.2992949144298199,
       0.7007050855701801
     ],
-    "pending": 348,
+    "pending": 349,
     "awaiting": 0,
     "voids": 0,
     "pushes": 0,
@@ -102,13 +102,13 @@
       "probabilitySample": 0,
       "meanEstimate": null,
       "brier": null,
-      "tracked": 69,
+      "tracked": 70,
       "wins": 0,
       "losses": 0,
       "settled": 0,
       "hitRate": null,
       "interval": null,
-      "pending": 69,
+      "pending": 70,
       "awaiting": 0,
       "voids": 0,
       "pushes": 0,
@@ -7379,6 +7379,110 @@
         "difference": null,
         "reason": "Need at least 30 settled picks on each side of 60, 30 distinct games and 10 dates within the same market, side and model version. No evidence claim yet."
       }
+    },
+    {
+      "key": "NBA|Game-first recommendations|nba-game-first-72759a6ded80|assists|over|Matchup score /100",
+      "sport": "NBA",
+      "board": "Game-first recommendations",
+      "modelVersion": "nba-game-first-72759a6ded80",
+      "market": "assists",
+      "side": "over",
+      "scoreKind": "Matchup score /100",
+      "probabilitySample": 0,
+      "meanEstimate": null,
+      "brier": null,
+      "tracked": 1,
+      "wins": 0,
+      "losses": 0,
+      "settled": 0,
+      "hitRate": null,
+      "interval": null,
+      "pending": 1,
+      "awaiting": 0,
+      "voids": 0,
+      "pushes": 0,
+      "excluded": 0,
+      "playerGames": 0,
+      "games": 0,
+      "days": 0,
+      "priced": 0,
+      "units": null,
+      "roi": null,
+      "bands": [
+        {
+          "band": "85–89",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 1,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 1,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        }
+      ],
+      "scoreTest": {
+        "cutoff": 90,
+        "status": "INSUFFICIENT_EVIDENCE",
+        "high": {
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 0,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 0,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        "low": {
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 0,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 0,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        "difference": null,
+        "reason": "Need at least 30 settled picks on each side of 90, 30 distinct games and 10 dates within the same market, side and model version. No evidence claim yet."
+      }
     }
   ],
   "picks": [
@@ -7410,7 +7514,7 @@
       "outcome": {
         "status": "loss",
         "actual": 4,
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -7441,7 +7545,7 @@
       "outcome": {
         "status": "win",
         "actual": 7,
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -7472,7 +7576,7 @@
       "outcome": {
         "status": "loss",
         "actual": 7,
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -7503,7 +7607,7 @@
       "outcome": {
         "status": "win",
         "actual": 31,
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -7534,7 +7638,7 @@
       "outcome": {
         "status": "win",
         "actual": 35,
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -7573,7 +7677,7 @@
       "outcome": {
         "status": "win",
         "actual": 33,
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -7612,7 +7716,7 @@
       "outcome": {
         "status": "win",
         "actual": 37,
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -7651,7 +7755,7 @@
       "outcome": {
         "status": "win",
         "actual": 6,
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -7681,7 +7785,7 @@
       "outcome": {
         "status": "win",
         "actual": 31,
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -7719,7 +7823,7 @@
       "outcome": {
         "status": "win",
         "actual": 6,
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -7751,7 +7855,7 @@
       "outcome": {
         "status": "loss",
         "actual": "4431736",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -7783,7 +7887,7 @@
       "outcome": {
         "status": "loss",
         "actual": "4432639",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -7815,7 +7919,7 @@
       "outcome": {
         "status": "loss",
         "actual": "4432639",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -7847,7 +7951,7 @@
       "outcome": {
         "status": "loss",
         "actual": "4431736",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -7879,7 +7983,7 @@
       "outcome": {
         "status": "loss",
         "actual": "4431736",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -7909,7 +8013,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -7947,7 +8051,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -7985,7 +8089,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -8023,7 +8127,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -8059,7 +8163,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -8097,7 +8201,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -8135,7 +8239,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -8173,7 +8277,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -8211,7 +8315,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -8249,7 +8353,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -8279,7 +8383,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -8309,7 +8413,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -8339,7 +8443,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -8367,7 +8471,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -8397,7 +8501,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -8427,7 +8531,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -8457,7 +8561,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -8487,7 +8591,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -8517,7 +8621,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -8547,7 +8651,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -8577,7 +8681,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -8607,7 +8711,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -8637,7 +8741,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -8675,7 +8779,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -8713,7 +8817,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -8751,7 +8855,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -8781,7 +8885,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -8819,7 +8923,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -8857,7 +8961,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -8895,7 +8999,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -8923,7 +9027,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -8953,7 +9057,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -8983,7 +9087,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9013,7 +9117,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9043,7 +9147,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9071,7 +9175,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -9107,7 +9211,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -9145,7 +9249,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9175,7 +9279,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9205,7 +9309,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9235,7 +9339,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9263,7 +9367,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9293,7 +9397,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -9331,7 +9435,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -9369,7 +9473,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9399,7 +9503,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -9437,7 +9541,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -9475,7 +9579,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -9513,7 +9617,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -9551,7 +9655,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -9587,7 +9691,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9615,7 +9719,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9645,7 +9749,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9675,7 +9779,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9705,7 +9809,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9735,7 +9839,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9763,7 +9867,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -9801,7 +9905,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9831,7 +9935,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9861,7 +9965,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9891,7 +9995,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9919,7 +10023,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9949,7 +10053,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -9979,7 +10083,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10009,7 +10113,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10039,7 +10143,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10067,7 +10171,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10095,7 +10199,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10127,7 +10231,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10158,7 +10262,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10189,7 +10293,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10221,7 +10325,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10252,7 +10356,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10284,7 +10388,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10315,7 +10419,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10347,7 +10451,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10378,7 +10482,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10410,7 +10514,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10441,7 +10545,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10473,7 +10577,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10504,7 +10608,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10536,7 +10640,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10567,7 +10671,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10598,7 +10702,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10629,7 +10733,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10661,7 +10765,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10692,7 +10796,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10724,7 +10828,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10755,7 +10859,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10787,7 +10891,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10818,7 +10922,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10850,7 +10954,7 @@
       "outcome": {
         "status": "win",
         "actual": "4431736",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10882,7 +10986,7 @@
       "outcome": {
         "status": "loss",
         "actual": "4431736",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10913,7 +11017,7 @@
       "outcome": {
         "status": "win",
         "actual": 7,
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10945,7 +11049,7 @@
       "outcome": {
         "status": "loss",
         "actual": "4433627",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -10977,7 +11081,7 @@
       "outcome": {
         "status": "loss",
         "actual": "4433627",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -11008,7 +11112,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -11039,7 +11143,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -11070,7 +11174,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -11101,7 +11205,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -11132,7 +11236,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -11163,7 +11267,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -11194,7 +11298,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -11233,7 +11337,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -11272,7 +11376,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -11311,7 +11415,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -11342,7 +11446,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -11387,7 +11491,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -11426,7 +11530,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -11465,7 +11569,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -11504,7 +11608,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -11543,7 +11647,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -11574,7 +11678,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -11605,7 +11709,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -11644,7 +11748,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -11683,7 +11787,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -11728,7 +11832,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -11767,7 +11871,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -11806,7 +11910,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -11836,7 +11940,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -11875,7 +11979,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -11906,7 +12010,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -11937,7 +12041,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -11968,7 +12072,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -12007,7 +12111,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12038,7 +12142,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -12076,7 +12180,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       },
       "revisions": [
         {
@@ -12116,7 +12220,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12148,7 +12252,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12180,7 +12284,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12212,7 +12316,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12244,7 +12348,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12274,7 +12378,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12304,7 +12408,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12334,7 +12438,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12364,7 +12468,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12394,7 +12498,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12424,7 +12528,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12454,7 +12558,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12484,7 +12588,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12514,7 +12618,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12544,7 +12648,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12574,7 +12678,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12604,7 +12708,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12634,7 +12738,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12664,7 +12768,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12694,7 +12798,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12724,7 +12828,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12754,7 +12858,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12784,7 +12888,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12814,7 +12918,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12844,7 +12948,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12874,7 +12978,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12904,7 +13008,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12934,7 +13038,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12964,7 +13068,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -12994,7 +13098,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13024,7 +13128,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13054,7 +13158,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13084,7 +13188,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13114,7 +13218,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13144,7 +13248,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13174,7 +13278,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13204,7 +13308,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13234,7 +13338,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13264,7 +13368,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13294,7 +13398,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13324,7 +13428,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13354,7 +13458,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13384,7 +13488,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13414,7 +13518,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13444,7 +13548,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13474,7 +13578,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13504,7 +13608,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13534,7 +13638,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13564,7 +13668,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13594,7 +13698,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13624,7 +13728,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13654,7 +13758,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13684,7 +13788,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13714,7 +13818,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13744,7 +13848,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13774,7 +13878,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13804,7 +13908,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13834,7 +13938,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13864,7 +13968,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13894,7 +13998,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13924,7 +14028,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13954,7 +14058,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -13984,7 +14088,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14014,7 +14118,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14042,7 +14146,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14073,7 +14177,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14104,7 +14208,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14135,7 +14239,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14166,7 +14270,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14197,7 +14301,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14228,7 +14332,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14259,7 +14363,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14290,7 +14394,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14321,7 +14425,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14352,7 +14456,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14383,7 +14487,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14414,7 +14518,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14445,7 +14549,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14475,7 +14579,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14506,7 +14610,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14537,7 +14641,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14568,7 +14672,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14599,7 +14703,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14630,7 +14734,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14661,7 +14765,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14692,7 +14796,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14723,7 +14827,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14754,7 +14858,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14785,7 +14889,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14816,7 +14920,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14847,7 +14951,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14875,7 +14979,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14906,7 +15010,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14937,7 +15041,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14968,7 +15072,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -14999,7 +15103,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15030,7 +15134,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15061,7 +15165,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15092,7 +15196,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15123,7 +15227,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15154,7 +15258,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15185,7 +15289,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15216,7 +15320,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15247,7 +15351,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15278,7 +15382,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15309,7 +15413,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15340,7 +15444,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15371,7 +15475,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15402,7 +15506,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15433,7 +15537,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15464,7 +15568,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15495,7 +15599,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15526,7 +15630,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15557,7 +15661,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15588,7 +15692,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15619,7 +15723,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15650,7 +15754,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15678,7 +15782,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15709,7 +15813,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15740,7 +15844,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15771,7 +15875,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15802,7 +15906,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15833,7 +15937,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15864,7 +15968,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15895,7 +15999,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15926,7 +16030,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15957,7 +16061,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -15988,7 +16092,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16019,7 +16123,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16050,7 +16154,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16081,7 +16185,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16112,7 +16216,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16143,7 +16247,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16174,7 +16278,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16205,7 +16309,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16236,7 +16340,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16267,7 +16371,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16298,7 +16402,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16329,7 +16433,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16360,7 +16464,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16391,7 +16495,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16422,7 +16526,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16453,7 +16557,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16484,7 +16588,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16515,7 +16619,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16546,7 +16650,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16577,7 +16681,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16608,7 +16712,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16639,7 +16743,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16670,7 +16774,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16701,7 +16805,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16732,7 +16836,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16763,7 +16867,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16794,7 +16898,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16825,7 +16929,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16856,7 +16960,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16887,7 +16991,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16918,7 +17022,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16949,7 +17053,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -16980,7 +17084,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17011,7 +17115,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17042,7 +17146,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17073,7 +17177,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17104,7 +17208,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17135,7 +17239,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17166,7 +17270,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17197,7 +17301,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17228,7 +17332,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17259,7 +17363,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17290,7 +17394,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17321,7 +17425,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17352,7 +17456,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17383,7 +17487,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17414,7 +17518,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17445,7 +17549,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17476,7 +17580,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17507,7 +17611,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17538,7 +17642,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17569,7 +17673,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17597,7 +17701,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17628,7 +17732,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17659,7 +17763,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17690,7 +17794,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17721,7 +17825,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17752,7 +17856,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17783,7 +17887,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17814,7 +17918,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17845,7 +17949,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17876,7 +17980,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17907,7 +18011,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17938,7 +18042,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -17969,7 +18073,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18000,7 +18104,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18031,7 +18135,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18062,7 +18166,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18093,7 +18197,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18124,7 +18228,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18155,7 +18259,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18186,7 +18290,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18217,7 +18321,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18248,7 +18352,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18279,7 +18383,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18310,7 +18414,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18341,7 +18445,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18372,7 +18476,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18403,7 +18507,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18434,7 +18538,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18465,7 +18569,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18496,7 +18600,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18527,7 +18631,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18558,7 +18662,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18589,7 +18693,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18620,7 +18724,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18651,7 +18755,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18682,7 +18786,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18713,7 +18817,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18741,7 +18845,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18772,7 +18876,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18803,7 +18907,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18834,7 +18938,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18865,7 +18969,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18896,7 +19000,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18927,7 +19031,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18958,7 +19062,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -18989,7 +19093,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     },
     {
@@ -19017,7 +19121,37 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:00:12.235Z"
+        "checkedAt": "2026-11-12T18:15:01.954Z"
+      }
+    },
+    {
+      "sport": "NBA",
+      "board": "Game-first recommendations",
+      "gameId": "401909976",
+      "startsAt": "2026-11-13T00:00Z",
+      "playerId": "4432241",
+      "player": "Jamal Shead",
+      "team": "Toronto Raptors",
+      "market": "assists",
+      "side": "over",
+      "line": 5.5,
+      "score": 88,
+      "scoreKind": "Matchup score /100",
+      "modelVersion": "nba-game-first-72759a6ded80",
+      "label": "Jamal Shead OVER 5.5 assists",
+      "reason": "Prior sample average 6.9 assists (11 games); simulated 7.2. Jamal Shead vs Philadelphia 76ers: 27.1 simulated minutes (26.4 recent baseline), 8.8% of projected team field-goal attempts. Creation role: 10.3 assists per 36 observed minutes; teammate shooting and opponent defense share the same simulation. Pace 101.5 vs 101.1 league sample possessions; 11 player games / 12 opponent games. Rotation redistributed with Trayce Jackson-Davis, Scottie Barnes absent. 31.2% simulated blowouts; late-game minutes adjust in those outcomes. Individual defender tracking unavailable or stale; that adjustment is omitted.",
+      "inputs": {
+        "games": "2026-11-12T15:42:15.995320+00:00",
+        "injuries": "2026-11-12T18:11:59.676263+00:00",
+        "rosters": "2026-11-12T15:42:19.558155+00:00"
+      },
+      "capturedAt": "2026-11-12T18:14:37.339Z",
+      "id": "NBA|Game-first recommendations|401909976|4432241|assists|over|nba-game-first-72759a6ded80",
+      "day": "2026-11-12",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:15:01.954Z"
       }
     }
   ],
@@ -19195,10 +19329,10 @@
       "captureStartedAt": "2026-11-12T00:52:14.113Z",
       "firstCaptureDay": "2026-11-11",
       "partialFirstDay": false,
-      "recorded": 52,
+      "recorded": 53,
       "boards": {
         "Best Props": 44,
-        "Game-first recommendations": 3,
+        "Game-first recommendations": 4,
         "Top 5 first basket": 5
       },
       "scheduledGames": 4,
