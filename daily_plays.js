@@ -1,0 +1,10 @@
+(function(root){'use strict';
+function select(picks,day){return picks.filter(p=>p.sport==='NBA'&&(day==='ALL'||p.day===day)).sort((a,b)=>a.startsAt.localeCompare(b.startsAt)||a.label.localeCompare(b.label));}
+if(typeof module==='object'&&module.exports)module.exports={select};
+if(typeof document==='undefined')return;
+const date=document.getElementById('saved-plays-date');if(!date)return;
+const list=document.getElementById('saved-plays-list'),status=document.getElementById('saved-plays-status'),refresh=document.getElementById('saved-plays-refresh');let report=null;
+function render(){const picks=select(report.picks,date.value);list.innerHTML=picks.length?root.PropShopResultsView.rows(picks):'<p>No saved NBA plays for this date yet.</p>';status.textContent='All '+picks.length+' saved plays shown · Updated '+new Date(report.generatedAt).toLocaleString()+'. Started and settled plays stay listed.';}
+async function load(){refresh.disabled=true;try{const response=await fetch('./data/recommendations/report.json',{cache:'no-store'});if(!response.ok)throw Error('Saved plays unavailable');const next=await response.json();if(!Array.isArray(next.picks))throw Error('Invalid saved-play report');const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());const selected=report?date.value:today;report=next;const days=[...new Set([today,...report.picks.filter(p=>p.sport==='NBA').map(p=>p.day)])].sort().reverse();date.replaceChildren(...['ALL',...days].map(day=>{const option=document.createElement('option');option.value=day;option.textContent=day==='ALL'?'All recorded dates':day;return option}));date.value=['ALL',...days].includes(selected)?selected:today;render();}catch(e){status.textContent='Could not refresh saved plays. '+(report?'Previously loaded plays remain visible.':'Try Refresh saved plays.');}finally{refresh.disabled=false;}}
+date.onchange=render;refresh.onclick=load;load();
+})(typeof globalThis!=='undefined'?globalThis:this);
