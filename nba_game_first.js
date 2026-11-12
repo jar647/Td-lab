@@ -68,8 +68,20 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
       'Pace '+model.pace.toFixed(1)+' vs '+model.league.pace.toFixed(1)+' league sample possessions; '+player.sample+' player games / '+def.games+' opponent games.'+(own.absent.length?' Rotation redistributed with '+own.absent.join(', ')+' absent.':'')+' '+(100*simulation.blowoutRate).toFixed(1)+'% simulated blowouts; late-game minutes adjust in those outcomes.';
      const positionRows=ks.map(k=>ratings.get(player.id+'|'+k+'|'+side));
      const supported=positionRows.every(Boolean);
-     const matchupRating=supported?{side,score:Math.min(...positionRows.map(r=>r.researchScore)),factors:positionRows[0].matchupRating.factors}:null;
-     rows.push({side,matchupRating,position:supported?positionRows[0].position:null,key:[game.id,player.id,market,...(side==='under'?['under']:[])].join('|'),gameId:String(game.id),game,playerId:player.id,name:player.name,team,opponent,market,forecast,baseline,observedMax,reviewRequired:reviewReasons.length>0,reviewReasons,minutes:projected.minutes,matchupGames:def.games,matchupBoost:boost,samples:values,reason:reason+' '+(model.context?.tracking==='fresh'&&Object.keys(player.defenderExposure||{}).length?'Fresh defender tracking incorporated; historical exposure '+Number(player.matchupSample||0).toFixed(0)+' possessions, not a confirmed assignment.':'Individual defender tracking unavailable or stale; that adjustment is omitted.'),eligible:supported});
+     // A combination's rating is constrained by its weakest supported stat.
+     // Use that SAME stat's score factors so the displayed breakdown sums to the score.
+     const limiting=supported?positionRows.reduce((lowest,r)=>r.researchScore<lowest.researchScore?r:lowest):null;
+     const matchupRating=limiting?{side,score:limiting.researchScore,factors:limiting.matchupRating.factors,limitingMarket:limiting.market}:null;
+     // Only real observed position allowances and player histories enter the
+     // evidence card. Never substitute simulated frequencies for observed hits.
+     const matchupEvidence=supported?positionRows.map(r=>({
+      market:r.market,position:r.position,opponent:r.opponent,
+      allowed:r.weakness.allowed,leagueAverage:r.weakness.leagueAverage,
+      opponentGames:r.weakness.games,playerAverage:r.playerAverage,
+      peerAverage:r.peerAverage,playerGames:r.history.length,
+      last5:r.last5,last10:r.last10
+     })):[];
+     rows.push({side,matchupRating,matchupEvidence,position:supported?positionRows[0].position:null,key:[game.id,player.id,market,...(side==='under'?['under']:[])].join('|'),gameId:String(game.id),game,playerId:player.id,name:player.name,team,opponent,market,forecast,baseline,observedMax,reviewRequired:reviewReasons.length>0,reviewReasons,minutes:projected.minutes,matchupGames:def.games,matchupBoost:boost,samples:values,reason:reason+' '+(model.context?.tracking==='fresh'&&Object.keys(player.defenderExposure||{}).length?'Fresh defender tracking incorporated; historical exposure '+Number(player.matchupSample||0).toFixed(0)+' possessions, not a confirmed assignment.':'Individual defender tracking unavailable or stale; that adjustment is omitted.'),eligible:supported});
     }
    }
   }
