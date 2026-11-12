@@ -32,11 +32,12 @@ def main():
         snaps=frame(nflreadpy.load_snap_counts([season]))
         rosters=frame(nflreadpy.load_rosters([season]))
         appearances=snap_verified_weekly(weekly,rosters,snaps,schedules,season)
-        # A player with independently verified snaps and no weekly box may have
-        # zero prop counts, as in the existing NFL forward probability grader.
+        # The participation helper may fill missing weekly boxes with zeros.
+        # This public pick ledger is stricter: absent boxes stay unresolved.
         for _,g in final.iterrows():
             players=[]
             for _,p in appearances.loc[appearances.game_id.eq(g.game_id)].iterrows():
+                if not bool(p.boxscore_row_present):continue
                 tdrows=weekly.loc[weekly.game_id.eq(g.game_id)&weekly.player_id.eq(p.player_id)]
                 td=None
                 if len(tdrows)==1 and all(k in tdrows for k in ['rushing_tds','receiving_tds']):

@@ -64,7 +64,7 @@ priced ROI. First-basket/scenario frequencies use separate estimate bands.
 Mean estimate and Brier scores use only settled predictions. These are
 uncalibrated forecasts, not interpreted as /100 matchup scores.
 
-The >=90 versus <90 comparison requires thirty settled picks in each group,
+Predeclared comparison splits are NBA matchup score 90, NFL TD score 60, and NFL raw analyst rank 100. Each comparison requires thirty settled picks in each group,
 thirty distinct games and ten dates before even a descriptive comparison.
 It never asserts statistical significance or promotes a model. Shared games,
 player exposure, source selection and line difficulty confound raw hit-rate

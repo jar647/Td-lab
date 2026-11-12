@@ -27,3 +27,6 @@ const split=api.summarize({picks:[...graded.picks,{...graded.picks[0],side:'unde
 // not an independently rewritten scoring approximation. Stale inputs are explicit.
 const sources=require('./scripts/recommendation_sources.cjs').captureSources();assert(!sources.coverage.some(c=>c.status==='error'),JSON.stringify(sources.coverage));assert(sources.coverage.some(c=>c.sport==='NBA'));assert(sources.coverage.some(c=>c.sport==='NFL'));assert(sources.coverage.some(c=>c.sport==='UFC'));
 console.log('Forward public recommendation capture, immutable line/score, all-sport grading, missing outcomes, score groups, ROI and dashboard contracts PASS');
+const testCutoff=(scoreKind,cutoff)=>{const r=api.summarize({picks:[{...graded.picks[0],scoreKind}]}).groups[0];assert.equal(r.scoreTest.cutoff,cutoff)};
+testCutoff('TD opportunity /100',60);testCutoff('NFL analyst raw rank (not /100)',100);testCutoff('Matchup score /100',90);
+assert.equal(api.summarize({picks:[{...graded.picks[0],score:null,probability:.2}]}).groups[0].scoreTest.status,'NOT_NUMERIC_SCORE');
