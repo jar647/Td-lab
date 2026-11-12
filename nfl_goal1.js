@@ -6,14 +6,55 @@
 'use strict';
 const MIN_ALT={rushYards:40,recYards:30,receptions:3,passYards:200};
 const LABEL={rushYards:'rushing yards',recYards:'receiving yards',receptions:'receptions',passYards:'passing yards'};
+const MIN_SCORE=85;
+// The same bounded matchup rating used by the main NFL prop board. The
+// analyst's line-selection utility remains a separate, unbounded raw rank.
+const SPECS={
+ PTD:{pos:['QB'],def:'defPassTDsAllowed',volume:'defPassAttemptsAllowed',player:'playerPassTDs',usage:'playerPassAttempts',defCap:3,volumeCap:40,playerCap:3,usageCap:40,unit:'passing touchdowns'},
+ PASS:{pos:['QB'],def:'defPassYardsAllowed',volume:'defPassAttemptsAllowed',player:'playerPassYards',usage:'playerPassAttempts',defCap:300,volumeCap:40,playerCap:300,usageCap:40,unit:'passing yards'},
+ RUSH:{pos:['QB','RB','WR','TE'],def:'defRushYardsAllowed',volume:'defRushAttemptsAllowed',player:'playerRushYards',usage:'playerCarries',defCap:100,volumeCap:20,playerCap:100,usageCap:20,unit:'rushing yards'},
+ REC:{pos:['RB','WR','TE'],def:'defRecYardsAllowed',volume:'defTargetsAllowed',player:'playerRecYards',usage:'playerTargets',defCap:130,volumeCap:13,playerCap:100,usageCap:10,unit:'receiving yards'},
+ CATCH:{pos:['RB','WR','TE'],def:'defReceptionsAllowed',volume:'defTargetsAllowed',player:'playerReceptions',usage:'playerTargets',defCap:9,volumeCap:13,playerCap:8,usageCap:10,unit:'receptions'}
+};
 function finite(value){
  if(value===null||value===undefined||value==='')return null;
  const n=Number(value);return Number.isFinite(n)?n:null;
 }
+function qualifies(score){
+ if(typeof score!=='number'&&typeof score!=='string')return false;
+ const value=finite(score);
+ return value!==null&&value>=MIN_SCORE&&value<=100;
+}
+function matchupRating(r,category){
+ const cfg=SPECS[category];
+ if(!r||!cfg||[cfg.def,cfg.volume,cfg.player,cfg.usage].some(key=>finite(r[key])===null||Number(r[key])<0))return null;
+ const cap=(v,m)=>Math.min(1,Math.max(0,Number(v)/m));
+ const d=.6*cap(r[cfg.def],cfg.defCap)+.4*cap(r[cfg.volume],cfg.volumeCap);
+ const o=.6*cap(r[cfg.player],cfg.playerCap)+.4*cap(r[cfg.usage],cfg.usageCap);
+ const score=Math.round(100*(.5*d+.5*o));
+ const trendKey={PTD:'recent3PassAttempts',PASS:'recent3PassAttempts',RUSH:'recent3Carries',REC:'recent3Targets',CATCH:'recent3Targets'}[category];
+ const trend=finite(r[trendKey]),base=Number(r[cfg.usage]);
+ const trendRatio=trend!==null&&base>0?trend/base:null;
+ const trendAdjustment=trendRatio===null?0:Math.max(-6,Math.min(6,Math.round((trendRatio-1)*20)));
+ const snap=finite(r.snapShare),target=finite(r.playerTargetShare);
+ const snapPct=snap!==null?(snap<=1?snap*100:snap):null;
+ const roleBonus=(snapPct!==null?Math.max(-3,Math.min(3,(snapPct-65)/12)):0)
+   +((category==='REC'||category==='CATCH')&&target!==null?Math.max(-3,Math.min(3,(target-20)/7)):0);
+ const air=finite(r.airYardsPerGame);
+ const airBonus=category==='REC'&&air!==null&&air>0?Math.max(-2,Math.min(2,(air-55)/35)):0;
+ const adjustedScore=Math.max(0,Math.min(100,Math.round(score+trendAdjustment+roleBonus+airBonus)));
+ const playerRate=Number(r[cfg.player]),defenseRate=Number(r[cfg.def]);
+ const matchupSupportsPrime=playerRate>0&&defenseRate>=playerRate;
+ const matchupSupportsStrong=playerRate>0&&defenseRate>=playerRate*.9;
+ const label=d>=.45&&o>=.45&&adjustedScore>=65&&matchupSupportsPrime?'🔥 PRIME MATCHUP':d>=.45&&o>=.45&&matchupSupportsStrong?'STRONG MATCHUP':o>=.45?'LEAN':'LOW PRIORITY';
+ return {score:adjustedScore,trendRatio,defense:d,offense:o,label};
+}
+function matchupScore(r,category){return matchupRating(r,category)?.score??null}
+function eligibleCandidate(c){return !!c&&qualifies(c.researchScore)}
 function identity(c){return String(c.p.player_id||c.p.team+'|'+c.p.player)}
 function marketId(c){return identity(c)+'|'+c.d.key}
 function rankPlayers(candidates,max=3){
- const ordered=[...candidates].sort((a,b)=>b.score-a.score);
+ const ordered=candidates.filter(eligibleCandidate).sort((a,b)=>b.score-a.score);
  const seen=new Set(),result=[];
  for(const c of ordered){
   const id=identity(c);
@@ -25,7 +66,7 @@ function buildTicket(candidates,count=4){
  const maximum=Math.max(1,Math.min(10,Math.trunc(count)||4));
  // One threshold per player/market; duplicate feed rows must not fill a ticket.
  const seenMarkets=new Set();
- const pool=[...candidates].sort((a,b)=>b.score-a.score).filter(c=>{
+ const pool=candidates.filter(eligibleCandidate).sort((a,b)=>b.score-a.score).filter(c=>{
   const key=marketId(c);
   if(seenMarkets.has(key))return false;
   seenMarkets.add(key);return true;
@@ -155,7 +196,7 @@ function gameMarketDraft(type,side,line,odds,game){
  return {ok:true,leg:{type:kind,side:direction,line:kind==='ML'?null:numeric,odds:String(odds||'').trim(),
   name,team,source:'USER_ENTERED_NOT_MODELED'}};
 }
-const api={MIN_ALT,LABEL,rankPlayers,buildTicket,alternatives,applyAlternative,script,americanDecimal,singlePrice,priceReview,gameMarketDraft,marketId,identity};
+const api={MIN_ALT,LABEL,MIN_SCORE,SPECS,matchupRating,matchupScore,qualifies,eligibleCandidate,rankPlayers,buildTicket,alternatives,applyAlternative,script,americanDecimal,singlePrice,priceReview,gameMarketDraft,marketId,identity};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;
 root.PropVaultGoal1=api;
 })(typeof self!=='undefined'?self:typeof globalThis!=='undefined'?globalThis:this);

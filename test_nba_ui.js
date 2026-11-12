@@ -142,9 +142,9 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  console.log('NBA concise verdict and optional calculation details: PASS');
 }
 
-// Only supported 75+ OVER decisions can enter recommendation ranks.
+// Both sides need 85+ before entering recommendation ranks.
 {
- const row=(key,playerId,decision,candidate,ev,quality=0,quote={line:5.5,over:-110,under:-110})=>({key,playerId,market:'points',quality,quote,result:{decision,candidate,rating:{score:80},expectedValue:ev,estimatedEdge:ev/2}});
+ const row=(key,playerId,decision,candidate,ev,quality=0,quote={line:5.5,over:-110,under:-110})=>({key,playerId,market:'points',quality,quote,result:{decision,candidate,rating:{score:candidate==='UNDER'?84.99:85},expectedValue:ev,estimatedEdge:ev/2}});
  const rows=[row('over','one','LEAN','OVER',.10),row('under','two','LEAN','UNDER',.30),row('pass','three','PASS',null,99,999),row('waiting','four','PASS',null,99,998,{}) ,row('second-market','two','LEAN','OVER',.20),row('third','five','LEAN','OVER',.08)];
  const groups=JSON.parse(vm.runInContext('JSON.stringify(nbaPropGroups('+JSON.stringify(rows)+'))',sandbox));
  assert.deepEqual(groups.recommended.map(r=>r.key),['over','second-market','third']);
@@ -155,7 +155,7 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  const changed=rows.map(r=>r.key==='under'?{...r,result:{decision:'PASS',candidate:null}}:r);
  const after=JSON.parse(vm.runInContext('JSON.stringify(nbaPropGroups('+JSON.stringify(changed)+'))',sandbox));
  assert(!after.recommended.some(r=>r.key==='under'));assert(after.passed.some(r=>r.key==='under'));
- console.log('NBA 75+ OVER ranking, PASS removal and awaiting-odds buckets: PASS');
+ console.log('NBA 85+ OVER / UNDER ranking, PASS removal and awaiting-odds buckets: PASS');
 }
 
 // Current single-book prices can discover an Under. Manual edits win; a changed
@@ -194,7 +194,7 @@ console.log('NBA lineup/projections UI smoke test: PASS');
 
 // Matchup slate ignores sportsbook odds, allows same-game players, and caps at five.
 const slateNow=Date.now();
-sandbox.slateFixture=Array.from({length:9},(_,i)=>({key:'slate-'+i,playerId:'p'+i,name:'Player '+i,market:'points',forecast:20,quality:30,matchupRating:{score:80,factors:[]},eligible:true,minutes:30,samples:[10,20,21,22,23,24,25,26],gameId:i<2?'same':String(i),matchupGames:8,matchupBoost:.2-i*.01,game:{id:i<2?'same':String(i),status:'STATUS_SCHEDULED',date:new Date(slateNow+3600000).toISOString()}}));
+sandbox.slateFixture=Array.from({length:9},(_,i)=>({key:'slate-'+i,playerId:'p'+i,name:'Player '+i,market:'points',forecast:20,quality:30,matchupRating:{score:85,factors:[]},eligible:true,minutes:30,samples:[10,20,21,22,23,24,25,26],gameId:i<2?'same':String(i),matchupGames:8,matchupBoost:.2-i*.01,game:{id:i<2?'same':String(i),status:'STATUS_SCHEDULED',date:new Date(slateNow+3600000).toISOString()}}));
 const slate=vm.runInContext('nbaSlateSelection(slateFixture)',sandbox);
 assert.equal(slate.picks.length,5);assert.equal(slate.picks[0].game.id,slate.picks[1].game.id);
 sandbox.slateFixture[0].matchupBoost=-.1;sandbox.slateFixture[2].game.date=new Date(slateNow-1000).toISOString();sandbox.slateFixture[3].market='threes';sandbox.slateFixture[4].matchupGames=0;
@@ -203,7 +203,7 @@ for(const i of [0,2,3,4])assert.ok(!filtered.picks.some(r=>r.key==='slate-'+i));
 console.log('NBA odds-free matchup slate, same-game selections and exclusions: PASS');
 
 // Shopping targets must clear the exact final verdict with hypothetical odds.
-vm.runInContext('nbaQuoteContexts["target"]={matchupRating:{score:80,factors:[{label:"Position matchup",points:80,max:100}]},history:[18,19,20,20,21,22,20,19,20,21],market:"points",availableGames:10,eligible:true,modelContext:{seasonAverage:20,recentAverage:20,seasonUsage:30,recentUsage:30,opponentRatio:1,injuryStatus:"NOT LISTED"}}',sandbox);
+vm.runInContext('nbaQuoteContexts["target"]={matchupRating:{score:85,factors:[{label:"Position matchup",points:85,max:100}]},history:[18,19,20,20,21,22,20,19,20,21],market:"points",availableGames:10,eligible:true,modelContext:{seasonAverage:20,recentAverage:20,seasonUsage:30,recentUsage:30,opponentRatio:1,injuryStatus:"NOT LISTED"}}',sandbox);
 const target=vm.runInContext('nbaResearchTarget({key:"target",forecast:20})',sandbox);
 assert.ok(target);assert.ok(['OVER','UNDER'].includes(target.side));
 assert.equal(vm.runInContext('nbaPriceReview("target",20,'+JSON.stringify({line:target.line,[target.side.toLowerCase()]:-110})+').candidate',sandbox),target.side);
@@ -216,10 +216,10 @@ assert.equal(vm.runInContext('nbaResearchTarget({key:"target",forecast:20})',san
 console.log('NBA target lines match final price gates and exclude ineligible players: PASS');
 
 // Matchup ratings are independent of odds, decisions, EV and implied probability.
-sandbox.ratingContext={matchupRating:{score:80,factors:[{label:'Opponent matchup',points:80,max:100}]}};
+sandbox.ratingContext={matchupRating:{score:85,factors:[{label:'Opponent matchup',points:85,max:100}]}};
 sandbox.ratingResult={decision:'LEAN',candidate:'OVER',sample:10,overSide:{edge:.10,ev:.12,conservative:.58,implied:.52}};
 const score=vm.runInContext('nbaPropRating(ratingResult,ratingContext)',sandbox);
-assert.equal(score.score,80);
+assert.equal(score.score,85);
 const better=vm.runInContext('nbaPropRating({...ratingResult,overSide:{edge:.99,ev:4,implied:.01}},ratingContext)',sandbox);
 assert.equal(better.score,score.score);
 assert.equal(vm.runInContext('nbaPropRating(ratingResult,{})',sandbox),null);
@@ -227,11 +227,11 @@ assert.ok(vm.runInContext('nbaRatingHTML({rating:nbaPropRating(ratingResult,rati
 console.log('NBA matchup score isolated from prices and implied probability: PASS');
 
 // Matchup research chooses three distinct players, excludes threes and weak/no targets.
-sandbox.matchupFixture=Array.from({length:7},(_,i)=>({key:'m'+i,playerId:i===1?'same':'p'+i,market:'points',quality:99-i,result:{rating:{score:80}},matchup:{strength:i/10},target:{side:i%2?'OVER':'UNDER',line:20.5}}));
+sandbox.matchupFixture=Array.from({length:7},(_,i)=>({key:'m'+i,playerId:i===1?'same':'p'+i,market:'points',quality:99-i,result:{rating:{score:85}},matchup:{strength:i/10},target:{side:i%2?'OVER':'UNDER',line:20.5}}));
 sandbox.matchupFixture[0].playerId='same';sandbox.matchupFixture[6].market='threes';sandbox.matchupFixture[5].target=null;
 const three=vm.runInContext('nbaMatchupThree(matchupFixture)',sandbox);
-assert.equal(three.length,2);assert.deepEqual(Array.from(three,r=>r.key),['m3','m1']);
-assert.equal(new Set(three.map(r=>r.playerId)).size,2);
+assert.equal(three.length,3);assert.deepEqual(Array.from(three,r=>r.key),['m4','m3','m2']);
+assert.equal(new Set(three.map(r=>r.playerId)).size,3);
 assert.ok(match[1].includes('outlookHTML+scoutHtml'));
 assert.ok(match[1].includes('row.target=nbaResearchTarget(row,side)'));
 assert.ok(match[1].includes('row.target.distance>.25')); 

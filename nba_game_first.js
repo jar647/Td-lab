@@ -13,14 +13,14 @@ function candidate(row,excluded=[],lines={}){
  const minimum={points:8,rebounds:3,assists:3}[row.market]||10;if(row.forecast<minimum)return null;
  const override=lines[row.key];const line=override===undefined?Math.max(.5,(row.side==='under'?Math.ceil(row.forecast*1.16-.5):Math.floor(row.forecast*.84-.5))+.5):override;
  const probability=chance(row,line);if(probability===null||probability===0)return null;
- const matchupQuality=row.matchupRating?.score;if(!Number.isFinite(matchupQuality)||matchupQuality<(row.side==='under'?85:75)||matchupQuality>100)return null;
+ const matchupQuality=row.matchupRating?.score;if(!Number.isFinite(matchupQuality)||matchupQuality<85||matchupQuality>100)return null;
  const lineConfidence=Math.round(clamp(probability*100,0,100));
  const score=matchupQuality; // Matchup-only research rank: never use odds, value, or chosen line.
  return {...row,line,side:row.side||'over',probability,researchOnly:true,matchupQuality,lineConfidence,score};
 }
 function build(rows,options={}){
  const excluded=options.excludedMarkets||[],max=clamp(Math.trunc(Number(options.maxLegs)||5),1,5);
- const minScore=Number.isFinite(Number(options.minScore))?clamp(Number(options.minScore),75,100):75;
+ const minScore=Number.isFinite(Number(options.minScore))?clamp(Number(options.minScore),85,100):85;
  const ranked=(rows||[]).map(r=>candidate(r,excluded,options.lines||{})).filter(r=>r&&r.score>=minScore).sort((a,b)=>b.score-a.score||b.matchupBoost-a.matchupBoost||a.key.localeCompare(b.key));
  const picks=[],seen=new Set(),correlations=[];let wins=null;
  for(const row of ranked){

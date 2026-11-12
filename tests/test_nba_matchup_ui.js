@@ -1,6 +1,6 @@
 'use strict';const assert=require('node:assert/strict'),fs=require('fs'),vm=require('vm'),engine=require('../nba_matchup_discovery'),source=fs.readFileSync('nba.html','utf8'),script=source.match(/<script>([\s\S]*?)<\/script>/)[1];
 const elements=new Map(),el=id=>{if(!elements.has(id))elements.set(id,{value:'',textContent:'',innerHTML:'',append(x){elements.set(x.id,x);this.innerHTML+=x.innerHTML}});return elements.get(id)};
-const game={id:'g',home:'A',away:'B',date:new Date(Date.now()+6*3600000).toISOString(),status:'STATUS_SCHEDULED'},row={key:'g|c|rebounds',game,playerId:'c',name:'Center <example>',team:'A',opponent:'B',position:'C',market:'rebounds',history:[4,5,6,7,8],playerAverage:6,peerAverage:4,recentMinutes:30,projectedMinutes:30,paceEstimate:null,restDays:null,backToBack:false,venueAverage:null,venueGames:0,researchScore:80,status:'NOT LISTED',baseline:4,thresholds:[4,5,6,7,8],weakness:{team:'B',allowed:16,leagueAverage:12,games:7}};let saved;
+const game={id:'g',home:'A',away:'B',date:new Date(Date.now()+6*3600000).toISOString(),status:'STATUS_SCHEDULED'},row={key:'g|c|rebounds',game,playerId:'c',name:'Center <example>',team:'A',opponent:'B',position:'C',market:'rebounds',history:[4,5,6,7,8],playerAverage:6,peerAverage:4,recentMinutes:30,projectedMinutes:30,paceEstimate:null,restDays:null,backToBack:false,venueAverage:null,venueGames:0,researchScore:85,status:'NOT LISTED',baseline:4,thresholds:[4,5,6,7,8],weakness:{team:'B',allowed:16,leagueAverage:12,games:7}};let saved;
 const context={document:{getElementById:el,createElement:()=>({innerHTML:'',id:'',className:''})},fetch:async()=>({ok:false}),console,Date,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl,CookNBAMatchups:{...engine,analyze:()=>({weaknesses:[],topThree:[row],candidates:[row],bestSingle:row,method:'Recorded data'})},CookItUpQuickSlip:{add:x=>{saved=x}}};vm.createContext(context);vm.runInContext(script,context);
 context.row=row;vm.runInContext('nbaMatchupCard(row);nbaMatchupSelect(row.key,"6");addNBAMatchupPick(row.key)',context);
 assert.equal(saved.recommendationLine,6);assert.equal(saved.sampleHits,3);assert.equal(saved.sampleSize,5);assert.equal(saved.line,null);assert.equal(saved.recommendation,'6+ rebounds');assert(!('scenarioRate' in saved));assert(el('matchup-rate-g-c-rebounds').innerHTML.includes('3/5 (60%)'));
@@ -8,9 +8,11 @@ const card=vm.runInContext('nbaMatchupCard(row)',context);assert(card.includes('
 console.log('NBA primary matchup UI: exact threshold hit rates, selected baseline in Quick Slip, no forecast probability or odds fields PASS');
 context.row={...row,researchScore:74};assert.equal(vm.runInContext('nbaMatchupCard(row)',context),'');
 context.row={...row,researchScore:79};assert.equal(vm.runInContext('nbaMatchupCard(row)',context),'');
-context.row={...row,researchScore:80};assert(vm.runInContext('nbaMatchupCard(row)',context).includes('80/100'));
+context.row={...row,researchScore:85};assert(vm.runInContext('nbaMatchupCard(row)',context).includes('85/100'));
 context.row={...row,key:'g|c|rebounds|under',side:'under',researchScore:79};assert.equal(vm.runInContext('nbaMatchupCard(row)',context),'');
-context.row={...context.row,researchScore:80,baseline:6.5,thresholds:[5.5,6.5,7.5]};
+context.row={...context.row,researchScore:85,baseline:6.5,thresholds:[5.5,6.5,7.5]};
 assert(vm.runInContext('nbaMatchupCard(row)',context).includes('UNDER 6.5'));
 context.CookNBAMatchups.analyze=()=>({candidates:[context.row]});vm.runInContext('nbaMatchupCache.clear();nbaMatchupSelect(row.key,"6.5");addNBAMatchupPick(row.key)',context);
 assert.equal(saved.side,'under');assert.equal(saved.line,6.5);assert.equal(saved.recommendation,'Under 6.5 rebounds');assert.equal(saved.sampleHits,3);
+
+for(const side of ['over','under'])for(const researchScore of [84,84.99,100.01,NaN,Infinity,null,'85']){context.row={...row,side,researchScore};assert.equal(vm.runInContext('nbaMatchupCard(row)',context),'');}

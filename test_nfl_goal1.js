@@ -4,7 +4,7 @@ const assert=require('node:assert/strict');
 const app=require('./nfl_goal1.js');
 const candidate=(id,score,team='A',key='recYards')=>({
  p:{player_id:id,player:id,team,opp:team==='A'?'B':'A'},
- d:{key,label:'receiving yards'},score,line:40,scenarioRate:.68,risks:[],reasons:['game script']
+ d:{key,label:'receiving yards'},score,researchScore:95,line:40,scenarioRate:.68,risks:[],reasons:['game script']
 });
 const pool=[candidate('a',95),candidate('a',90,'A','receptions'),candidate('b',86),candidate('c',84,'B'),candidate('d',81,'B')];
 assert.equal(app.rankPlayers(pool,3).length,3);
@@ -27,6 +27,9 @@ for(const n of [6,8,10]){
 assert.equal(app.buildTicket(largePool,99).length,10,'maximum ticket size is bounded');
 assert.equal(app.buildTicket([...pool,pool[0]],10).length,5,'limited pools do not invent or duplicate legs');
 assert.equal(app.buildTicket([],10).length,0,'empty pools stay empty');
+const thresholds=[{...candidate('below',999),researchScore:84},{...candidate('boundary',50),researchScore:85},{...candidate('missing',999),researchScore:null}];
+assert.deepEqual(app.buildTicket(thresholds,10).map(x=>x.p.player_id),['boundary'],'84 and unrated are excluded; 85 qualifies independently of raw utility');
+assert.deepEqual(app.rankPlayers(thresholds).map(x=>x.p.player_id),['boundary']);
 assert.equal(app.americanDecimal('+400'),5);
 assert.equal(app.americanDecimal('-125'),1.8);
 assert.equal(app.americanDecimal('-600'),1+100/600);
