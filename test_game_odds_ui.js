@@ -3,11 +3,11 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const engine=require('./game_odds_engine.js');
 const html=fs.readFileSync('game-odds.html','utf8');
-assert.match(html,/<script src="\.\/game_odds_engine\.js\?v=nba-rotation-coverage-20261109"><\/script>/,'Engine assets must be versioned with the worker');
+assert.match(html,/<script src="\.\/game_odds_engine\.js\?v=nba-simulator-reliability-v4"><\/script>/,'Engine assets must be versioned with the worker');
 assert.match(html,/new Worker\('\.\/game_odds_worker\.js\?v=[^']+'\)/,'Game Odds must use a versioned simulation worker');
 assert.doesNotMatch(html,/Checking latest NBA availability and lineups/,'NBA simulation must not block on a live availability request');
-assert.match(html,/if\(busy\)return;runId\+\+/,'Background availability updates must not interrupt active simulations');
-assert.ok(fs.readFileSync('game_odds_worker.js','utf8').includes("nba_possession_engine.js?v=nba-projection-audit-3"),'Worker imports must match the page model version');
+assert.match(html,/selected\.model=null;runId\+\+;if\(worker\)/,'Changed availability must invalidate an active forecast before it is displayed');
+assert.ok(fs.readFileSync('game_odds_worker.js','utf8').includes("nba_possession_engine.js?v=nba-simulator-reliability-v4"),'Worker imports must match the page model version');
 for(const field of ['game','homeML','awayML','homeSpread','homeATS','awayATS','total','over','under','run','results','sportNFL','sportNBA'])
  assert.ok(html.includes('id="'+field+'"'),'Missing '+field);
 assert.ok(html.indexOf('id="game"')<html.indexOf('id="homeML"'),'Game selector must appear before odds');

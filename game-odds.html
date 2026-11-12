@@ -93,7 +93,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
 <section id="results" hidden aria-live="polite"></section>
 <section class="panel"><h2>Important model limits</h2><p class="muted">NFL runs resample paired historical score errors. NBA runs generate player outcomes within shared estimated possessions and rotations. The sportsbook's lines and prices do not influence the simulated scores. Historical scoring patterns and 100,000 draws do not establish predictive calibration or a verified edge. Starter announcements and weather are shown only where sourced. Availability and starting-five confirmations apply only when explicitly sourced. Future injury and tactical changes remain unknown. Research-only estimates can be wrong, especially with changing rosters, limited samples, or stale feeds.</p></section>
 </main>
-<script src="./nba_game_context.js?v=nba-sim-availability-1"></script><script src="./nba_live_context.js?v=nba-sim-availability-1"></script><script src="./nba_possession_engine.js?v=nba-projection-audit-3"></script><script src="./nba_simulator_ui.js?v=nba-market-ledger-20261109"></script><script src="./nba_bet_research.js?v=nba-consensus-20261109"></script><script src="./quick_slip.js"></script><script src="./game_odds_engine.js?v=nba-rotation-coverage-20261109"></script>
+<script src="./nba_game_context.js?v=nba-sim-availability-1"></script><script src="./nba_live_context.js?v=nba-simulator-reliability-v4"></script><script src="./nba_possession_engine.js?v=nba-simulator-reliability-v4"></script><script src="./nba_simulator_ui.js?v=nba-simulator-reliability-v4"></script><script src="./nba_bet_research.js?v=nba-consensus-20261109"></script><script src="./quick_slip.js"></script><script src="./game_odds_engine.js?v=nba-simulator-reliability-v4"></script>
 <script>
 (function(){
  'use strict';
@@ -330,18 +330,18 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    highest?'This is NOT an approved wager. The outcome model has not demonstrated independently calibrated, profitable forecasts.':
    'A model projection is not evidence of a profitable sportsbook edge. Passing is a valid outcome.';
   const date=model.sport==='NFL'?model.date:new Date(model.date).toLocaleString('en-US',{timeZone:'America/New_York',dateStyle:'medium',timeStyle:'short'});
-  const runStatus=result.possession?'100,000 paired score outcomes complete from '+result.detailedGameCount+' detailed possession simulations. Published pregame availability used. Sportsbook execution remains unverified.':model.sport==='NBA'?'100,000 team-score history outcomes complete. Rotation coverage is incomplete; tonight’s lineup changes are not modeled.':'100,000 score outcomes complete. Kickoffs use the published Eastern-time schedule. Official game-day active lists and sportsbook execution remain unverified.';
+  const runStatus=result.possession?result.detailedGameCount.toLocaleString()+' complete possession and player-rotation simulations. Published pregame availability used. Sportsbook execution remains unverified.':model.sport==='NBA'?'100,000 team-score history outcomes complete. Rotation coverage is incomplete; tonight’s lineup changes are not modeled.':'100,000 score outcomes complete. Kickoffs use the published Eastern-time schedule. Official game-day active lists and sportsbook execution remain unverified.';
   $('results').innerHTML=
    '<div class="panel"><h2>🎲 '+esc(model.away)+' @ '+esc(model.home)+' · '+esc(model.sport)+'</h2>'+
    '<p class="muted">Date: '+esc(date)+' · '+esc(result.simulationMethod||'100,000 score outcomes')+' · Score model: <strong>RESEARCH ONLY</strong></p>'+
-   (saved&&!saved.saved?'<p class="warn">'+esc(saved.reason)+'. This run was not saved for grading.</p>':'')+trustPanel(model)+(typeof CookNBASimulatorUI!=='undefined'?CookNBASimulatorUI.modelNote(model):'')+'<div class="scoreboard"><div class="score"><span>'+esc(model.away)+' · projected</span><b>'+num(p.away)+'</b></div>'+
+   (model.sport==='NBA'&&typeof CookNBASimulatorUI!=='undefined'?CookNBASimulatorUI.reliability(source.nbaValidation,result.possession?.model):'')+(saved&&!saved.saved?'<p class="warn">'+esc(saved.reason)+'. This run was not saved for grading.</p>':'')+trustPanel(model)+(typeof CookNBASimulatorUI!=='undefined'?CookNBASimulatorUI.modelNote(model):'')+'<div class="scoreboard"><div class="score"><span>'+esc(model.away)+' · projected</span><b>'+num(p.away)+'</b></div>'+
    '<div class="score"><span>'+esc(model.home)+' · projected</span><b>'+num(p.home)+'</b></div></div>'+
    '<div class="kpis"><div class="kpi"><span>'+esc(model.home)+' win</span><b>'+pct(s.homeWin)+'</b></div>'+
    '<div class="kpi"><span>'+esc(model.away)+' win</span><b>'+pct(s.awayWin)+'</b></div>'+
    '<div class="kpi"><span>Sim median total</span><b>'+num(s.total.median)+'</b></div>'+
    '<div class="kpi"><span>Sim median home margin</span><b>'+num(s.margin.median)+'</b></div></div>'+
    (s.tie>0?'<p class="muted">Tie rate: '+pct(s.tie)+' (treated as a moneyline push).</p>':'')+
-   scoreComparison(model,result)+nbaScreenHtml+'<h3>Estimated market pricing</h3>'+marketTable(result.markets)+(typeof CookNBASimulatorUI!=='undefined'?CookNBASimulatorUI.detail(result,model)+(result.possession?CookNBASimulatorUI.validation(source.nbaValidation)+CookNBASimulatorUI.localValidation(source.nbaGrades||{graded:0}):''):'')+matchupPanel(model)+contextPanel(model)+
+   scoreComparison(model,result)+nbaScreenHtml+'<h3>Estimated market pricing</h3>'+(model.sport==='NBA'?'<p class="warn"><strong>All NBA simulator markets are unvalidated:</strong> moneyline, spread, total and player frequencies are model estimates, not established real-world win probabilities. Calculated EV does not establish a betting edge. The ATS warning below is an additional spread-specific limitation.</p>':'')+marketTable(result.markets)+(typeof CookNBASimulatorUI!=='undefined'?CookNBASimulatorUI.detail(result,model)+(result.possession?CookNBASimulatorUI.validation(source.nbaValidation)+CookNBASimulatorUI.localValidation(source.nbaGrades||{graded:0}):''):'')+matchupPanel(model)+contextPanel(model)+
    '<div class="breakdown"><h3>Decision summary</h3><strong class="warn">'+esc(headline)+'</strong>'+
    '<p>'+esc(details)+'</p><p class="muted">Only entered odds are evaluated. A 100,000-draw research result is not a calibrated probability or a guaranteed bet.</p></div></div>'+
    '<div class="panel"><h2>🔬 Deep game breakdown</h2><div class="grid2">'+
@@ -419,8 +419,8 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    render(result,model);
   };
   if(typeof Worker==='function'){
-   try{worker=new Worker('./game_odds_worker.js?v=nba-rotation-coverage-20261109');const activeWorker=worker;const workerTimer=setTimeout(()=>{if(worker===activeWorker)done('Simulation worker timed out after 30 seconds. Please retry.');},30000);
-    worker.onmessage=e=>{if(e.data?.requestId===thisId){clearTimeout(workerTimer);done(e.data.error,e.data.result);}};
+   try{worker=new Worker('./game_odds_worker.js?v=nba-simulator-reliability-v4');const activeWorker=worker;const workerTimer=setTimeout(()=>{if(worker===activeWorker)done('Simulation worker timed out after two minutes. Please retry.');},120000);
+    worker.onmessage=e=>{if(e.data?.requestId===thisId){if(e.data.progress){$('runStatus').textContent='Complete games simulated: '+e.data.progress.completed.toLocaleString()+' / '+e.data.progress.total.toLocaleString();return}clearTimeout(workerTimer);done(e.data.error,e.data.result);}};
     worker.onerror=e=>{clearTimeout(workerTimer);done(e.message||'Worker failed');};worker.onmessageerror=()=>{clearTimeout(workerTimer);done('Worker response could not be read');};
     worker.postMessage({requestId:thisId,game:model,market,seed:6472026});
     return;
@@ -428,7 +428,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   }
   setTimeout(()=>{try{done(null,CookGameOdds.simulate(model,market,100000,6472026));}catch(e){done(e.message);}},20);
  };
- if(typeof CookNBALiveContext!=='undefined')CookNBALiveContext.watch(()=>sport==='NBA'?selected?.game:null,latest=>{if(!selected?.nbaInputs)return;selected.nbaInputs.gameContext=latest.context;selected.nbaInputs.injuries=latest.injuries||selected.nbaInputs.injuries;selected.model=null;if(busy)return;runId++;if(worker){worker.terminate();worker=null}busy=false;$('run').disabled=false;$('run').textContent='🔥 Simulate 100,000 games';$('results').hidden=true;$('runStatus').textContent='Availability or lineup information changed. Simulate again; your entered odds are preserved.';});
+ if(typeof CookNBALiveContext!=='undefined')CookNBALiveContext.watch(()=>sport==='NBA'?selected?.game:null,latest=>{if(!selected?.nbaInputs)return;selected.nbaInputs.gameContext=latest.context;selected.nbaInputs.injuries=latest.injuries||selected.nbaInputs.injuries;selected.model=null;runId++;if(worker){worker.terminate();worker=null}busy=false;$('run').disabled=false;$('run').textContent='🔥 Simulate 100,000 games';$('results').hidden=true;$('runStatus').textContent='Availability or lineup information changed. Simulate again; your entered odds are preserved.';});
  load().catch(e=>{$('feedStatus').textContent='Could not load game feeds: '+e.message;});
 })();
 </script></body></html>

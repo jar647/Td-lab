@@ -24,7 +24,7 @@ const timers=new Map();let timerId=0;
 const sandbox={Date,console,$:el,esc:x=>String(x),oddsFormat:'american',fromOdds:()=>null,
  simulatorStats:state,simulatorGame:{home:'Home',away:'Away'},nbaSimBusy:false,nbaSimRequest:0,nbaSimWorker:null,
  historicalGames:[],generatedAt:new Date().toISOString(),injuryData:{},rosterData:{},nbaGameContext:{},
- CookNBAPossessions:{},CookNBASimulatorUI:ui,Worker,
+ CookNBAPossessions:{},CookNBASimulatorUI:ui,nbaSimulatorReport:null,Worker,
  CookNBALiveContext:{latest:async()=>{if(refreshFails)throw Error('Refresh failed');return {context:{},injuries:{}}}},
  CookGameOdds:{nbaGame:()=>model,marketInput:()=>{}},
  setTimeout:fn=>{timers.set(++timerId,fn);return timerId},clearTimeout:id=>timers.delete(id)};
@@ -43,6 +43,7 @@ vm.createContext(sandbox);vm.runInContext(handler,sandbox);
  assert.ok(sent,'No-odds simulation must reach the worker');
  assert.equal(sent.market.total,null);assert.equal(sent.market.homeSpread,null);
  assert.equal(sandbox.nbaSimBusy,true);assert.equal(el('run-sim').disabled,true);
+ worker.onmessage({data:{requestId:sent.requestId,progress:{completed:500,total:10000}}});assert.match(el('sim-results').textContent,/500 \/ 10,000/);assert.equal(sandbox.nbaSimBusy,true,'Progress must not complete the run');
  const complete={...result,runCount:10000,markets:[],simulated:{...result.simulated,homeWin:.55,awayWin:.45,margin:{p10:-10,p90:12},total:{p10:200,p90:240}}};
  worker.onmessage({data:{requestId:sent.requestId,result:complete}});
  assert.match(el('sim-results').innerHTML,/Simulation Results · 10,000 runs/);
