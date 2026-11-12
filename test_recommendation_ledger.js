@@ -30,3 +30,28 @@ console.log('Forward public recommendation capture, immutable line/score, all-sp
 const testCutoff=(scoreKind,cutoff)=>{const r=api.summarize({picks:[{...graded.picks[0],scoreKind}]}).groups[0];assert.equal(r.scoreTest.cutoff,cutoff)};
 testCutoff('TD opportunity /100',60);testCutoff('NFL analyst raw rank (not /100)',100);testCutoff('Matchup score /100',90);
 assert.equal(api.summarize({picks:[{...graded.picks[0],score:null,probability:.2}]}).groups[0].scoreTest.status,'NOT_NUMERIC_SCORE');
+
+// Contract: every market emitted by either deployed NBA recommendation engine
+// must have a supported settlement path, including the short combo keys.
+const expectedNBA={points:20,rebounds:4,assists:3,pr:24,pa:23,ra:7,pra:27,'Points + Rebounds':24,'Points + Assists':23,'Rebounds + Assists':7,PRA:27};
+for(const market of new Set([...require('./nba_matchup_discovery').markets,...require('./nba_game_first').markets])){
+ assert(Object.hasOwn(expectedNBA,market),'New NBA market needs an explicit grading contract: '+market);
+ const record={...p,market,line:expectedNBA[market],side:'at_least'};
+ assert.equal(api.gradeOne(record,data,after).status,'win',market);
+ assert.equal(api.gradeOne({...record,side:'under'},data,after).status,'push',market);
+ assert.equal(api.gradeOne({...record,side:'over'},data,after).status,'push',market);
+ const missingPart=structuredClone(data);delete missingPart.nba.games[0].players[0].stats.REB;
+ if(['rebounds','pr','ra','pra','Points + Rebounds','Rebounds + Assists','PRA'].includes(market))assert.equal(api.gradeOne(record,missingPart,after).status,'awaiting_result',market);
+}
+assert(ui.rows([{...p,market:'pr',label:'Player 24+ pr',line:24,outcome:{status:'pending'}}]).includes('24+ points + rebounds'));
+
+// A scoreboard clock may be time remaining, not elapsed finish time. Total-round
+// grading needs verified historical finish fields, and rejects invalid values.
+for(const bad of [{end_round:0},{end_round:6},{end_clock:'6:00'},{end_clock:'2:60'}]){
+ const badTiming=structuredClone(ufcData);Object.assign(badTiming.ufc.bouts[0],bad);
+ assert.equal(api.gradeOne({...ufc,market:'total',side:'under',line:2.5},badTiming,after).status,'awaiting_result');
+}
+const unknownTiming=structuredClone(ufcData);delete unknownTiming.ufc.bouts[0].end_clock;
+assert.equal(api.gradeOne({...ufc,market:'total',side:'under',line:2.5},unknownTiming,after).status,'awaiting_result');
+const negativeNBA=structuredClone(data);negativeNBA.nba.games[0].players[0].stats.PTS=-1;
+assert.equal(api.gradeOne(p,negativeNBA,after).status,'awaiting_result');
