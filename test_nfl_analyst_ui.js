@@ -13,7 +13,9 @@ const inline=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)]
 assert.equal(inline.length,1,'exactly one analyst inline controller');
 new vm.Script(inline[0],{filename:'analyst-inline.js'});
 const def={playerAppearancesVerified:true,availability:'ROSTER_ACTIVE',injuryReportStatus:'NOT_REPORTED',
- defenseOpponentRatio:{PASS:1,RUSH:1,REC:1,CATCH:1}};
+ defenseOpponentRatio:{PASS:1,RUSH:1,REC:1,CATCH:1},
+ defPassYardsAllowed:300,defPassAttemptsAllowed:40,defRushYardsAllowed:100,defRushAttemptsAllowed:20,
+ defRecYardsAllowed:130,defTargetsAllowed:13,defReceptionsAllowed:9};
 const player=(team,id,pos,vals)=>{
  const history=Array.from({length:8},(_,i)=>({week:i+1,
   passYards:vals.py||0,passAttempts:vals.p||0,
@@ -32,11 +34,11 @@ const players=[
  player('A','aqb','QB',{p:35,py:265,r:4,ry:25}),
  player('A','arb','RB',{r:18,ry:84,t:4,c:3,y:30}),
  player('A','awr','WR',{t:11,c:8,y:107}),
- player('A','ate','TE',{t:6,c:4,y:57}),
+ player('A','ate','TE',{t:10,c:8,y:95}),
  player('B','bqb','QB',{p:34,py:265,r:4,ry:25}),
  player('B','brb','RB',{r:18,ry:84,t:4,c:3,y:30}),
  player('B','bwr','WR',{t:11,c:8,y:107}),
- player('B','bte','TE',{t:6,c:4,y:57}),
+ player('B','bte','TE',{t:10,c:8,y:95}),
  {...player('A','out','WR',{t:11,c:8,y:107}),availability:'OUT'},
  {...player('A','unverified','WR',{t:11,c:8,y:107}),playerAppearancesVerified:false},
  {...player('A','small-sample','WR',{t:11,c:8,y:107}),last5GamesPlayed:2},
@@ -102,6 +104,7 @@ vm.runInContext(inline[0],context);
   assert.equal(workerRequests.at(-1).selected.length,size,'joint simulation receives every selected leg');
   assert.equal(new Set(actual.selected.map(goal1.marketId)).size,size,'no duplicate player-market lines');
   assert(actual.selected.every(c=>['A','B'].includes(c.p.team)&&['A','B'].includes(c.p.opp)),'all legs belong to chosen game');
+  assert(actual.candidates.every(c=>c.researchScore>=85&&c.researchScore<=100),'every analyst candidate meets the independent /100 minimum');
   assert(actual.candidates.every(c=>!['out','unverified','small-sample','backup','other-game'].includes(c.p.player)),'larger size preserves eligibility filters');
  }
  const excluded=el('results').querySelectorAll('.exclude')[0];

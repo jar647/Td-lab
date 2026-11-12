@@ -17,6 +17,8 @@ on:
       - 'nfl_game_engine.js'
       - 'nfl_goal1.js'
       - 'test_nfl_goal1.js'
+      - 'test_nfl_matchup_score.js'
+      - 'test_nfl_min_score_ui.js'
       - 'test_nfl_real_matchup.js'
       - 'nfl_game_worker.js'
       - 'test_analyst_ui.js'
@@ -42,5 +44,7 @@ jobs:
       - run: node test_analyst_ui.js
       - run: node test_nfl_game_engine.js
       - run: node test_nfl_goal1.js
+      - run: node test_nfl_matchup_score.js
+      - run: node test_nfl_min_score_ui.js
       - run: node test_nfl_analyst_ui.js
       - run: node test_nfl_real_matchup.js
