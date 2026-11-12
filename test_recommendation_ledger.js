@@ -44,3 +44,14 @@ for(const market of new Set([...require('./nba_matchup_discovery').markets,...re
  if(['rebounds','pr','ra','pra','Points + Rebounds','Rebounds + Assists','PRA'].includes(market))assert.equal(api.gradeOne(record,missingPart,after).status,'awaiting_result',market);
 }
 assert(ui.rows([{...p,market:'pr',label:'Player 24+ pr',line:24,outcome:{status:'pending'}}]).includes('24+ points + rebounds'));
+
+// A scoreboard clock may be time remaining, not elapsed finish time. Total-round
+// grading needs verified historical finish fields, and rejects invalid values.
+for(const bad of [{end_round:0},{end_round:6},{end_clock:'6:00'},{end_clock:'2:60'}]){
+ const badTiming=structuredClone(ufcData);Object.assign(badTiming.ufc.bouts[0],bad);
+ assert.equal(api.gradeOne({...ufc,market:'total',side:'under',line:2.5},badTiming,after).status,'awaiting_result');
+}
+const unknownTiming=structuredClone(ufcData);delete unknownTiming.ufc.bouts[0].end_clock;
+assert.equal(api.gradeOne({...ufc,market:'total',side:'under',line:2.5},unknownTiming,after).status,'awaiting_result');
+const negativeNBA=structuredClone(data);negativeNBA.nba.games[0].players[0].stats.PTS=-1;
+assert.equal(api.gradeOne(p,negativeNBA,after).status,'awaiting_result');

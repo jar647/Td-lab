@@ -33,7 +33,7 @@ function gradeOne(p,data,now){
    const won=String(g.first_basket.first_game.player_id)===p.playerId&&g.first_basket.first_game.team===p.team;return {status:won?'win':'loss',actual:g.first_basket.first_game.player_id};
   }
   const fields=nbaFields[p.market];if(!fields)return {status:'awaiting_result',reason:'Unsupported market'};
-  const values=fields.map(k=>r.stats?.[k]);if(values.some(v=>v===null||v===undefined||v===''||!Number.isFinite(Number(v))))return {status:'awaiting_result',reason:'Official statistic missing'};
+  const values=fields.map(k=>r.stats?.[k]);if(values.some(v=>v===null||v===undefined||v===''||(!Number.isFinite(Number(v))||Number(v)<0)))return {status:'awaiting_result',reason:'Official statistic missing'};
   return settle(p,values.reduce((s,v)=>s+Number(v),0));
  }
  if(p.sport==='NFL'){
@@ -51,7 +51,7 @@ function gradeOne(p,data,now){
   if(/draw|no.?contest/i.test(g.method_display||g.method||''))return {status:'void',reason:'Draw/no contest (house rule)'};if(!g.winner)return {status:'awaiting_result',reason:'Official winner missing; no draw inferred'};
   if(p.market==='winner')return {status:String(g.winner)===p.playerId?'win':'loss',actual:g.winner};
   if(p.market==='method'){const m=String(g.method_display||g.method||'');const method=/submission/i.test(m)?'submission':/decision/i.test(m)?'decision':/\bko\b|tko|kotko|knockout/i.test(m)?'ko':null;if(!method)return {status:'awaiting_result',reason:'Finish method unavailable'};return {status:String(g.winner)===p.playerId&&method===p.method?'win':'loss',actual:method};}
-  const clock=/^(\d+):(\d{2})$/.exec(String(g.end_clock||''));if(!clock||!num(g.end_round)||Number(clock[2])>=60)return {status:'awaiting_result',reason:'Finish round/time unavailable'};
+  const clock=/^(\d+):(\d{2})$/.exec(String(g.end_clock||''));if(!clock||!Number.isInteger(g.end_round)||g.end_round<1||g.end_round>5||Number(clock[2])>=60||Number(clock[1])*60+Number(clock[2])>300)return {status:'awaiting_result',reason:'Finish round/time unavailable'};
   return settle(p,(g.end_round-1)+(Number(clock[1])*60+Number(clock[2]))/300);
  }
  return {status:'awaiting_result',reason:'Unsupported sport'};

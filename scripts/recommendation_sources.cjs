@@ -72,7 +72,7 @@ function captureSources(now=Date.now()){
 }
 function resultSources(){const nba=read('data/nba_games.json'),nfl=read('data/recommendations/nfl_results.json'),history=read('ufc_history_data.json'),schedule=read('ufc_schedule.json');const bouts=new Map();
  for(const p of Object.values(history.fighters||{}))for(const b of p.recent_fights||[])if(/final|complete|post/i.test(b.status||''))bouts.set(String(b.bout_id),b);
- for(const event of schedule.events||[])for(const b of event.competitions||[]){if(bouts.has(String(b.id)))continue;const winner=(b.competitors||[]).find(c=>c.winner);if(b.status?.type?.completed||/CANCEL|POSTPON/i.test(b.status?.type?.name||''))bouts.set(String(b.id),{bout_id:String(b.id),status:b.status?.type?.completed?'final':b.status?.type?.name,winner:winner?.id||null,method_display:b.details?.text||b.status?.type?.detail||'',end_round:b.status?.period,end_clock:b.status?.displayClock});}
+ for(const event of schedule.events||[])for(const b of event.competitions||[]){if(bouts.has(String(b.id)))continue;const winner=(b.competitors||[]).find(c=>c.winner);if(b.status?.type?.completed||/CANCEL|POSTPON/i.test(b.status?.type?.name||''))bouts.set(String(b.id),{bout_id:String(b.id),status:b.status?.type?.completed?'final':b.status?.type?.name,winner:winner?.id||null,method_display:b.details?.text||b.status?.type?.detail||''});}
  return {nba,nfl,ufc:{bouts:[...bouts.values()]}};
 }
 module.exports={captureSources,resultSources,hash};
