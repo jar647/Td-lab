@@ -161,25 +161,24 @@
   const decimal=(win+lose)/win;
   return Math.round(decimal>=2?100*(decimal-1):-100/(decimal-1));
  }
- function simulate(game,rawMarket={},count=100000,seed=6472026){
+ function simulate(game,rawMarket={},count=100000,seed=6472026,options={}){
   if(!game||!game.possessionModel&&(!Array.isArray(game.residuals)||game.residuals.length<8))throw Error('Historical score distribution unavailable');
   if(!Number.isInteger(count)||count<1000||count>100000)throw Error('Simulation count must be between 1,000 and 100,000');
-  if(game.possessionModel&&!game.possessionModel.historical){const m=game.possessionModel,now=Date.now();if(now>=Date.parse(game.date)||[['games',12],['injuries',12],['rosters',72]].some(([key,hours])=>!Number.isFinite(Date.parse(m.inputTimes[key]))||now-Date.parse(m.inputTimes[key])>hours*3600000))throw Error('Pregame inputs are stale or the game has started; reload the feeds');}
+  if(game.possessionModel&&!game.possessionModel.historical){const m=game.possessionModel,now=Date.now();if(now>=Date.parse(game.date)||[['games',12],['injuries',12],['rosters',72]].some(([key,hours])=>!Number.isFinite(Date.parse(m.inputTimes[key]))||Date.parse(m.inputTimes[key])>now+300000||now-Date.parse(m.inputTimes[key])>hours*3600000))throw Error('Pregame inputs are stale or the game has started; reload the feeds');if(Date.parse(game.date)-now<=90*60000&&now-Date.parse(m.inputTimes.injuries)>15*60000)throw Error('Inside 90 minutes of tipoff, availability must be refreshed within 15 minutes');}
   if(game.rotationFallback){const now=Date.now(),tip=Date.parse(game.date),times=game.pregameInputTimes||{};if(!Number.isFinite(tip)||now>=tip||[['games',12],['injuries',12],['rosters',72]].some(([key,hours])=>!Number.isFinite(Date.parse(times[key]))||Date.parse(times[key])>now+300000||now-Date.parse(times[key])>hours*3600000))throw Error('Pregame inputs are stale or the game has started; reload the feeds');if(tip-now<=90*60000&&now-Date.parse(times.injuries)>15*60000)throw Error('Inside 90 minutes of tipoff, availability must be refreshed within 15 minutes');}
   const market=marketInput(rawMarket);
   const engine=game.possessionModel?(typeof module==='object'&&module.exports?require('./nba_possession_engine.js'):globalThis.CookNBAPossessions):null;
-  // Detailed possession simulation is expensive on mobile. Sample a bounded
-  // number of complete games, then bootstrap paired final scores to preserve
-  // home/away correlation for the requested market-outcome count.
-  const detailedCount=engine?Math.min(count,1500):count;
-  const possession=engine?engine.draws(game.possessionModel,detailedCount,seed,{legs:game.slipLegs||[]}):null;
+  // Each requested NBA run is a full shared player/team outcome. Resampling
+  // a capped pool overstated simulation precision and disconnected player means.
+  const detailedCount=count;
+  const possession=engine?engine.draws(game.possessionModel,count,seed,{legs:game.slipLegs||[],onProgress:options.onProgress}):null;
   const random=rng(seed>>>0),residuals=game.residuals,homeScores=[],awayScores=[],margins=[],totals=[];
   const keys=['homeML','awayML','homeATS','awayATS','over','under'];
   const counts={};for(const key of keys)counts[key]={win:0,loss:0,push:0};
   let homeWin=0,awayWin=0,ties=0,homePoints=0,awayPoints=0;
   for(let i=0;i<count;i++){
    const err=possession?null:residuals[Math.floor(random()*residuals.length)];
-   const sampledIndex=possession?Math.floor(random()*detailedCount):i;
+   const sampledIndex=i;
    let h=possession?possession.home[sampledIndex]:Math.max(0,Math.round(game.projectedHome+err.homeError));
    let a=possession?possession.away[sampledIndex]:Math.max(0,Math.round(game.projectedAway+err.awayError));
    if(game.sport==='NBA'&&h===a){if(random()<.5)h++;else a++;}
@@ -202,7 +201,7 @@
    const sum=x&&y?x.implied+y.implied:0;
    if(sum){noVig[a]=x.implied/sum;noVig[b]=y.implied/sum;}
   }
-  const simulationMethod=possession?`${detailedCount.toLocaleString('en-US')} detailed possession simulations; ${count.toLocaleString('en-US')} paired score bootstrap outcomes`:`${count.toLocaleString('en-US')} historical score bootstrap outcomes`;
+  const simulationMethod=possession?`${count.toLocaleString('en-US')} complete possession and player-rotation simulations`:`${count.toLocaleString('en-US')} historical score bootstrap outcomes`;
   const markets=keys.filter(key=>(!key.endsWith('ATS')||market.homeSpread!==null)&&(!['over','under'].includes(key)||market.total!==null)).map(key=>{
    const c=counts[key],price=market.prices[key],win=c.win/count,loss=c.loss/count,push=c.push/count;
    const breakeven=price?price.implied*(1-push):null;
@@ -250,10 +249,12 @@
    spreadSymmetry:market.homeSpread===null||reconciles('homeATS','awayATS'),
    totalSymmetry:market.total===null||reconciles('over','under'),
    finiteScores:Number.isFinite(homePoints)&&Number.isFinite(awayPoints),
+   playerScoreConservation:!possession||[[game.home,homePoints/count],[game.away,awayPoints/count]].every(([team,score])=>Math.abs(possession.players.filter(p=>p.team===team).reduce((sum,p)=>sum+p.points,0)-score)<1e-7),
+   playerMinuteConservation:!possession||[game.home,game.away].every(team=>Math.abs(possession.players.filter(p=>p.team===team).reduce((sum,p)=>sum+p.minutes,0)-(240+25*possession.overtimePeriods))<1e-6),
    calibrationVerified:!game.rotationFallback&&(game.possessionModel?game.possessionModel.calibrationVerified===true:game.trust?.calibration_status==='VERIFIED'),
    historicalValidationRequired:true
   };
-  audit.passed=audit.winLossConservation&&audit.moneylineSymmetry&&audit.spreadSymmetry&&audit.totalSymmetry&&audit.finiteScores;
+  audit.passed=audit.winLossConservation&&audit.moneylineSymmetry&&audit.spreadSymmetry&&audit.totalSymmetry&&audit.finiteScores&&audit.playerScoreConservation&&audit.playerMinuteConservation;
   if(!audit.passed)throw Error('Simulation integrity check failed; predictions withheld');
   const candidates=markets.filter(m=>m.eligible).sort((a,b)=>b.ev-a.ev);
   return {possession:possession?{context:game.possessionModel.context,model:possession.model,players:possession.players,overtimeRate:possession.overtimeRate,overtimePeriods:possession.overtimePeriods,blowoutRate:possession.blowoutRate,legs:possession.legs,jointHitRate:possession.jointHitRate,pairHitRates:possession.pairHitRates,pace:game.possessionModel.pace,uncertain:game.possessionModel.uncertain,rotation:game.possessionModel.teams,baseline:game.baseline}:null,rotationFallback:game.rotationFallback||null,sport:game.sport,home:game.home,away:game.away,runCount:count,detailedGameCount:detailedCount,simulationMethod,seed,modelStatus:'RESEARCH ONLY · NOT CALIBRATED',

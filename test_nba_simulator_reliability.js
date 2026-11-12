@@ -1,0 +1,19 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),engine=require('./game_odds_engine'),poss=require('./nba_possession_engine'),ui=require('./nba_simulator_ui');
+const read=n=>JSON.parse(fs.readFileSync('data/'+n+'.json'));const feed=read('nba_games'),inj=read('nba_injuries'),rosters=read('nba_rosters');const realNow=Date.now,now=Date.parse(feed.generated_at);Date.now=()=>now;
+try{
+ inj.generated_at=rosters.generated_at=new Date(now).toISOString();
+ const game=feed.games.find(g=>g.status==='STATUS_SCHEDULED'&&Date.parse(g.date)>now+90*60000);assert.ok(game);
+ const model=engine.nbaGame(game,feed,{injuries:inj,rosters,now});const player=model.possessionModel.teams[game.home].players.find(p=>!p.pending);model.slipLegs=[{player:player.name,market:'pr',line:10.5,side:'over'},{player:player.name,market:'Points + Rebounds',line:10.5,side:'over'},{player:player.name,market:'pa',line:10.5,side:'over'},{player:player.name,market:'Points + Assists',line:10.5,side:'over'},{player:player.name,market:'ra',line:5.5,side:'over'}];
+ const progress=[],r=engine.simulate(model,{},2000,123,{onProgress:(completed,total)=>progress.push({completed,total})});
+ const raw=poss.draws(model.possessionModel,2000,123,{legs:model.slipLegs,collectPlayerOutcomes:true});const avg=a=>a.reduce((s,x)=>s+x,0)/a.length,round=n=>Math.round(n*10)/10;
+ assert.equal(r.detailedGameCount,2000,'Requested draws must not be capped at 1500');assert.equal(r.simulated.home,round(avg(raw.home)));assert.equal(r.simulated.away,round(avg(raw.away)));assert.equal(r.simulated.homeWin,raw.home.filter((h,i)=>h>raw.away[i]).length/2000);
+ for(const team of [game.home,game.away]){const scores=team===game.home?raw.home:raw.away;const sum=r.possession.players.filter(p=>p.team===team).reduce((s,p)=>s+p.points,0);assert.ok(Math.abs(sum-avg(scores))<1e-8,'Player points must reconcile with displayed team-score sample');}
+ assert.equal(r.possession.legs[0].hitRate,r.possession.legs[1].hitRate);assert.equal(r.possession.legs[2].hitRate,r.possession.legs[3].hitRate);assert.ok(r.possession.legs[0].hitRate>0);const samples=raw.playerOutcomes[player.id];assert.equal(r.possession.legs[4].hitRate,samples.rebounds.filter((v,i)=>v+samples.assists[i]>5.5).length/2000);assert.throws(()=>poss.draws(model.possessionModel,1000,123,{legs:[{player:player.name,market:'unsupported',side:'over',line:1.5}]}),/unsupported/);assert.equal(progress.at(-1).completed,1500);assert.ok(progress.every(p=>p.total===2000));assert.ok(r.markets.every(m=>!m.eligible));
+ const stale=structuredClone(model);stale.date=new Date(now+30*60000).toISOString();stale.possessionModel.inputTimes.injuries=new Date(now-16*60000).toISOString();assert.throws(()=>engine.simulate(stale,{},1000),/15 minutes/);
+ const future=structuredClone(model);future.possessionModel.inputTimes.games=new Date(now+6*60000).toISOString();assert.throws(()=>engine.simulate(future,{},1000),/stale/);
+ const values=new Map([['sim-total',{value:'224.5'}],['sim-over-odds',{value:'-115'}],['sim-count',{value:'2000'}],['sim-count-label',{}]]),doc={getElementById:id=>values.get(id)};const saved=ui.readControls(doc);values.get('sim-total').value='';ui.restoreControls(doc,saved);assert.equal(values.get('sim-total').value,'224.5');assert.equal(values.get('sim-count-label').textContent,'2,000');
+ const h=ui.reliability({model:'old',prospective:{games:999}},poss.VERSION);assert.match(h,/No matching model-version report/);assert.ok(!h.includes('999'));
+ assert.equal(ui.slipLegs({...game,id:'new'},{getPicks:()=>[{sport:'NBA',game:game.away+' @ '+game.home,gameId:'old',player:player.name,market:'points',side:'over',line:20.5}]}).length,0);
+ console.log('NBA reliability: full requested games, identical player/team samples, combo aliases, freshness, control persistence, version-specific accuracy PASS');
+}finally{Date.now=realNow}

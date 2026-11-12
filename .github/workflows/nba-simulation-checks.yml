@@ -6,6 +6,9 @@ on:
       - 'nba.html'
       - 'game-odds.html'
       - 'nba_simulator_ui.js'
+      - 'nba_live_context.js'
+      - 'test_nba_live_refresh.js'
+      - 'test_nba_simulator_reliability.js'
       - 'game_odds_worker.js'
       - 'game_odds_engine.js'
       - 'nba_possession_engine.js'
@@ -30,6 +33,8 @@ jobs:
         run: |
           node --check nba_simulator_ui.js
           node --check game_odds_worker.js
+          node test_nba_live_refresh.js
+          node test_nba_simulator_reliability.js
           node test_nba_simulator_ui.js
           node test_nba_simulator.js
           node test_nba_possessions.js

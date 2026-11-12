@@ -3,9 +3,10 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.CookNBAPossessions=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
 'use strict';
 const contextAPI=typeof module==='object'&&module.exports?require('./nba_game_context.js'):globalThis.CookNBAGameContext;
-const VERSION='nba-possession-audit-v3',clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),mean=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:0;
+const VERSION='nba-possession-audit-v4',clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),mean=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:0;
 const finite=x=>x!==null&&x!==undefined&&x!==''&&Number.isFinite(Number(x))?Number(x):null;
 const norm=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+const LEG_FIELDS={points:['points'],rebounds:['rebounds'],assists:['assists'],pra:['points','rebounds','assists'],pr:['points','rebounds'],pa:['points','assists'],ra:['rebounds','assists'],pointsrebounds:['points','rebounds'],pointsassists:['points','assists'],reboundsassists:['rebounds','assists']};
 function min(p){const x=p.stats?.MIN;if(String(x).includes(':')){const [m,s]=String(x).split(':').map(Number);return m+s/60}return finite(x)}
 function pair(x){if(typeof x!=='string'||!/^\d+-\d+$/.test(x))return null;return x.split('-').map(Number)}
 function box(players){const out={pts:0,fgm:0,fga:0,tpm:0,tpa:0,ftm:0,fta:0,orb:0,drb:0,ast:0,to:0,minutes:0};let n=0;
@@ -82,7 +83,9 @@ function draws(model,count=10000,seed=6472026,options={}){
  if(!Number.isInteger(count)||count<1000||count>100000)throw Error('Runs must be between 1000 and 100000');
  const rng=random(seed),gauss=()=>Math.sqrt(-2*Math.log(Math.max(1e-12,rng())))*Math.cos(2*Math.PI*rng()),g=model.game,home=[],away=[],players=Object.values(model.teams).flatMap(t=>t.players),sums=Object.fromEntries(players.map(p=>[p.id,{points:0,rebounds:0,assists:0,minutes:0,played:0}])),legs=(options.legs||[]).slice(0,5),legWins=legs.map(()=>0),pairWins=legs.map(()=>legs.map(()=>0));const playerOutcomes=options.collectPlayerOutcomes?{}:null;let allWin=0,overtime=0,overtimePeriods=0,blowouts=0;
  const choose=(ps,weight,exclude)=>{const values=ps.map(p=>p.id===exclude?0:Math.max(0,weight(p))),sum=values.reduce((a,b)=>a+b,0);if(!sum)return null;let n=rng()*sum;for(let i=0;i<ps.length;i++){n-=values[i];if(n<=0)return ps[i]}return ps.at(-1)};
+ const legPlayers=legs.map(leg=>{const matches=players.filter(p=>leg.player_id?String(p.id)===String(leg.player_id):norm(p.name)===norm(leg.player));if(matches.length!==1||!LEG_FIELDS[norm(leg.market)]||!['over','under'].includes(String(leg.side).toLowerCase())||!Number.isFinite(Number(leg.line))||leg.line===null||String(leg.line).trim()==='')throw Error('Saved simulator leg has an unsupported player, market, side or line');return matches[0]});
  for(let run=0;run<count;run++){
+  if(run%500===0&&typeof options.onProgress==='function')options.onProgress(run,count);
   const states={};for(const team of [g.home,g.away]){const t=model.teams[team],active=t.players.filter(p=>!p.pending||options.availability==='in'||options.availability!=='out'&&rng()<.5),weights=Object.fromEntries(active.map(p=>[p.id,p.weight]));const minutes=allocate(weights);if(!minutes)throw Error(team+': in/out scenario lacks six supported rotation players');const weighted=key=>active.reduce((sum,p)=>sum+minutes[p.id]*p[key],0);states[team]={...t,turnover:clamp((t.turnover+weighted('to')/t.pace)/2,.05,.25),ftTrips:clamp((t.ftTrips+.5*weighted('fta')/t.pace)/2,.04,.3),orb:clamp(t.orb*weighted('orb')/Math.max(1,t.historicalOrb),.08,.4),assist:clamp(t.assist*weighted('ast')/Math.max(1,t.historicalAst),.2,.85),active,minutes,stats:Object.fromEntries(t.players.map(p=>[p.id,{points:0,rebounds:0,assists:0,minutes:0}])),score:0,heat:gauss()*.018};}
   const sampled=model.paceSamples[Math.floor(rng()*model.paceSamples.length)],pace=clamp(model.pace+.65*(sampled-model.league.pace)+gauss()*1.5,70,130),sharedHeat=gauss()*.008;
   const period=(duration,late,qIndex=-1)=>{
@@ -109,7 +112,7 @@ function draws(model,count=10000,seed=6472026,options={}){
   if(ot)overtime++;overtimePeriods+=ot;
   const stats={...states[g.home].stats,...states[g.away].stats};home.push(states[g.home].score);away.push(states[g.away].score);
   for(const p of players){const x=stats[p.id],sum=sums[p.id];if(playerOutcomes){const samples=playerOutcomes[p.id]??={points:[],rebounds:[],assists:[]};for(const k of ['points','rebounds','assists'])samples[k].push(x[k]);}for(const k of ['points','rebounds','assists','minutes'])sum[k]+=x[k];if(x.minutes>0)sum.played++;}
-  const won=legs.map((leg,i)=>{const p=players.find(p=>p.id===String(leg.player_id)||norm(p.name)===norm(leg.player)),x=p&&stats[p.id],fields={points:['points'],rebounds:['rebounds'],assists:['assists'],pra:['points','rebounds','assists'],pointsrebounds:['points','rebounds'],pointsassists:['points','assists'],reboundsassists:['rebounds','assists']}[norm(leg.market)],value=x&&fields?fields.reduce((s,k)=>s+x[k],0):null;const win=value!==null&&x.minutes>0&&(String(leg.side).toLowerCase()==='under'?value<Number(leg.line):value>Number(leg.line));if(win)legWins[i]++;return win;});
+  const won=legs.map((leg,i)=>{const p=legPlayers[i],x=stats[p.id],fields=LEG_FIELDS[norm(leg.market)],value=x&&fields?fields.reduce((s,k)=>s+x[k],0):null;const win=value!==null&&x.minutes>0&&(String(leg.side).toLowerCase()==='under'?value<Number(leg.line):value>Number(leg.line));if(win)legWins[i]++;return win;});
   if(won.length&&won.every(Boolean))allWin++;for(let i=0;i<won.length;i++)for(let j=0;j<won.length;j++)if(won[i]&&won[j])pairWins[i][j]++;
  }
  return {playerOutcomes,home,away,players:players.map(p=>({id:p.id,player:p.name,team:p.team,status:p.status,...Object.fromEntries(Object.entries(sums[p.id]).map(([k,v])=>[k,v/count]))})),overtimeRate:overtime/count,overtimePeriods:overtimePeriods/count,blowoutRate:blowouts/count,legs:legs.map((l,i)=>({...l,hitRate:legWins[i]/count})),jointHitRate:legs.length?allWin/count:null,pairHitRates:pairWins.map(r=>r.map(n=>n/count)),model:VERSION,runCount:count};
