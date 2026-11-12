@@ -10,6 +10,7 @@ on:
       - 'scripts/run_nba_simulator_backtest.cjs'
       - 'scripts/nba_pretip_evidence.cjs'
       - 'scripts/nba_pretip_evidence.test.cjs'
+      - 'scripts/nba_market_benchmark.test.cjs'
       - 'data/nba_games.json'
       - '.github/workflows/nba-simulator-backtest.yml'
   push:
@@ -22,6 +23,7 @@ on:
       - 'scripts/run_nba_simulator_backtest.cjs'
       - 'scripts/nba_pretip_evidence.cjs'
       - 'scripts/nba_pretip_evidence.test.cjs'
+      - 'scripts/nba_market_benchmark.test.cjs'
       - 'data/nba_games.json'
       - '.github/workflows/nba-simulator-backtest.yml'
 permissions:
@@ -41,7 +43,7 @@ jobs:
       - name: Test immutable NBA player forecast identity and tipoff
         run: python -m unittest -v test_nba_tracker_integrity test_nba_tracker_tipoff
       - name: Test NBA pretip evidence gate
-        run: node --test scripts/nba_pretip_evidence.test.cjs
+        run: node --test scripts/nba_pretip_evidence.test.cjs scripts/nba_market_benchmark.test.cjs
       - name: Run NBA simulator walk-forward test
         run: node scripts/run_nba_simulator_backtest.cjs
       - name: Upload accuracy report
