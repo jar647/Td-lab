@@ -9,7 +9,7 @@ const assert=require('node:assert/strict');
 const engine=require('./nfl_game_engine.js');
 const goal1=require('./nfl_goal1.js');
 const html=fs.readFileSync('analyst.html','utf8');
-assert.match(html,/<script src="\.\/nfl_game_engine\.js"><\/script>/,
+assert.match(html,/<script src="\.\/nfl_game_engine\.js\?v=nfl-official-attempts-v2"><\/script>/,
   'The analyst must load the current game-first simulator');
 assert.ok(html.includes("nfl_game_worker.js"),'Long simulations must run off the page thread');
 const inline=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)]
@@ -25,7 +25,7 @@ const document={getElementById(id){
  return elements.get(id);
 }};
 const context=vm.createContext({
- document,console,setTimeout,Date,PropVaultGoal1:goal1,CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'},
+ document,console,setTimeout,Date,PropVaultGameEngine:engine,PropVaultGoal1:goal1,CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'},
  fetch:async url=>({ok:true,json:async()=>
   url.includes('matchups.json')?[]:
   url.includes('prop_probability_performance.json')?{graded:0,distinct_graded_weeks:0}:

@@ -21,6 +21,32 @@ def required(df, columns, label):
     missing = set(columns) - set(df.columns)
     if missing: raise RuntimeError(f'{label}: missing required columns {sorted(missing)}; no feed published')
 
+def official_stat_plays(plays):
+    """Keep stat-bearing spikes/kneels even when the general play flag is zero."""
+    required(plays, ['qb_spike', 'qb_kneel', 'two_point_attempt'], 'official stat plays')
+    mask = pd.to_numeric(plays.two_point_attempt, errors='coerce').eq(0)
+    if 'play' in plays:
+        mask &= (pd.to_numeric(plays.play, errors='coerce').fillna(1).eq(1) |
+                 pd.to_numeric(plays.qb_spike, errors='coerce').eq(1) |
+                 pd.to_numeric(plays.qb_kneel, errors='coerce').eq(1))
+    if 'no_play' in plays:
+        mask &= pd.to_numeric(plays.no_play, errors='coerce').fillna(0).eq(0)
+    return plays[mask].copy()
+
+def official_pass_attempts(plays):
+    """NFL pass attempts exclude sacks and two-point tries; spikes still count."""
+    required(plays, ['pass_attempt', 'qb_spike', 'sack', 'two_point_attempt'], 'official pass attempts')
+    return plays[(pd.to_numeric(plays.pass_attempt, errors='coerce').eq(1) | pd.to_numeric(plays.qb_spike, errors='coerce').eq(1)) &
+                 pd.to_numeric(plays.sack, errors='coerce').eq(0) &
+                 pd.to_numeric(plays.two_point_attempt, errors='coerce').eq(0)].copy()
+
+def official_rush_attempts(plays):
+    """Official rushing totals include QB kneeldowns, excluding two-point tries."""
+    required(plays, ['rush_attempt', 'qb_kneel', 'two_point_attempt'], 'official rush attempts')
+    return plays[(pd.to_numeric(plays.rush_attempt, errors='coerce').eq(1) |
+                  pd.to_numeric(plays.qb_kneel, errors='coerce').eq(1)) &
+                 pd.to_numeric(plays.two_point_attempt, errors='coerce').eq(0)].copy()
+
 def mean(x): return round(float(x), 3)
 
 def add_pbp_verified_skill_appearances(appearance_games, player_stats, position_by_id):
@@ -89,7 +115,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     now = now or datetime.now(timezone.utc)
     required(pbp, ['season','week','game_id','posteam','defteam','yardline_100','play_type',
                    'rush_attempt','pass_attempt','rusher_player_id','receiver_player_id',
-                   'rusher_player_name','receiver_player_name','touchdown','td_team'], 'play-by-play')
+                   'rusher_player_name','receiver_player_name','touchdown','td_team','sack','qb_kneel','qb_spike','two_point_attempt'], 'play-by-play')
     required(schedules,['season','week','game_type','home_team','away_team','gameday'], 'schedules')
     required(rosters,['gsis_id','position','team'], 'rosters')
     sch = schedules[(pd.to_numeric(schedules.season,errors='coerce') == SEASON) &
@@ -106,7 +132,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     # games outside the window used for their game-by-game charts.
     eligible = pbp[(pd.to_numeric(pbp.season,errors='coerce') == SEASON) &
                    (pd.to_numeric(pbp.week,errors='coerce') < week)].copy()
-    eligible = eligible[eligible.posteam.notna() & eligible.defteam.notna()]
+    eligible = official_stat_plays(eligible[eligible.posteam.notna() & eligible.defteam.notna()])
     completed = eligible[['defteam','game_id','week']].drop_duplicates()
     completed['week'] = pd.to_numeric(completed.week,errors='coerce')
     completed = completed.dropna(subset=['week']).sort_values(['week','game_id'])
@@ -161,8 +187,6 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     unavailable_roster={'INJURED RESERVE','INJURED_RESERVE','RESERVE/INJURED','RESERVE-INJURED','IR','RESERVE/PUP','RESERVE/NFI','PUP','NFI','SUSPENDED','RESERVE/SUSPENDED'}
     # An opportunity is a documented red-zone rush or an intended target inside the 20.
     # Exclude penalties/no-plays and pass plays without a recorded intended receiver.
-    if 'play' in plays: plays=plays[pd.to_numeric(plays.play,errors='coerce').fillna(1)==1]
-    if 'no_play' in plays: plays=plays[pd.to_numeric(plays.no_play,errors='coerce').fillna(0)==0]
     rz = plays[pd.to_numeric(plays.yardline_100,errors='coerce').between(1,20)].copy()
     if rz.empty: raise RuntimeError('No valid red-zone plays in current lookback')
     rows=[]
@@ -188,7 +212,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     # Team-level REAL passing attempts, averaged over jointly completed
     # offensive games. Used only when an individual QB has insufficient
     # verified history. This never supplies an invented quarterback identity.
-    prior_passes=plays[pd.to_numeric(plays.pass_attempt,errors='coerce').eq(1)]
+    prior_passes=official_pass_attempts(plays)
     team_pass_attempts=prior_passes.groupby('posteam').size().to_dict()
     defense_games=played.groupby('defteam').game_id.nunique().to_dict()
     team_events=events.groupby('team').size().to_dict()
@@ -248,7 +272,8 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     # positional splits. These are historical per-game averages, not betting lines.
     def metric_group(data, keys, col):
         return data.groupby(keys)[col].sum().to_dict() if not data.empty else {}
-    rushes=plays[(pd.to_numeric(plays.rush_attempt,errors='coerce')==1)&plays.rusher_player_id.notna()].copy()
+    rushes=official_rush_attempts(plays)
+    rushes=rushes[rushes.rusher_player_id.notna()].copy()
     rushes['pid']=rushes.rusher_player_id.astype(str)
     rushes['pos']=[play_position(pid,w) for pid,w in zip(rushes.pid,rushes.week)]
     unknown_rushes=rushes[~rushes.pos.isin(['QB','RB','WR','TE'])]
@@ -266,7 +291,8 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     player_rec_yards=metric_group(targets,['posteam','pid'],'yards')
     player_receptions=metric_group(targets,['posteam','pid'],'receptions')
     defense_receptions=metric_group(targets,['defteam','pos'],'receptions')
-    passes=plays[(pd.to_numeric(plays.pass_attempt,errors='coerce')==1)&plays.passer_player_id.notna()].copy() if 'passer_player_id' in plays else pd.DataFrame()
+    passes=official_pass_attempts(plays)
+    passes=passes[passes.passer_player_id.notna()].copy() if 'passer_player_id' in passes else pd.DataFrame()
     if not passes.empty:
         passes['pid']=passes.passer_player_id.astype(str)
         passes['yards']=pd.to_numeric(passes.passing_yards,errors='coerce').fillna(0) if 'passing_yards' in passes else 0
@@ -467,17 +493,14 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
             appearance_games[(str(tm),str(pid))]=set(int(w) for w in group.week)
     # Independently aggregate all completed season games for player statistics.
     season_plays=eligible.copy()
-    if 'play' in season_plays:
-        season_plays=season_plays[pd.to_numeric(season_plays.play,errors='coerce').fillna(1)==1]
-    if 'no_play' in season_plays:
-        season_plays=season_plays[pd.to_numeric(season_plays.no_play,errors='coerce').fillna(0)==0]
     season_player_stats={}
     for pid_col,flag,yards_col,yards_key,attempt_key in (
         ('passer_player_id','pass_attempt','passing_yards','passYards','passAttempts'),
         ('rusher_player_id','rush_attempt','rushing_yards','rushYards','rushAttempts'),
         ('receiver_player_id','pass_attempt','receiving_yards','recYards','targets')):
         required(season_plays,[pid_col,flag,yards_col],'season player statistics')
-        sub=season_plays[(pd.to_numeric(season_plays[flag],errors='coerce')==1)&season_plays[pid_col].notna()].copy()
+        source=official_pass_attempts(season_plays) if attempt_key=='passAttempts' else official_rush_attempts(season_plays) if attempt_key=='rushAttempts' else season_plays[pd.to_numeric(season_plays[flag],errors='coerce').eq(1)]
+        sub=source[source[pid_col].notna()].copy()
         sub['pid']=sub[pid_col].astype(str)
         sub['yards']=pd.to_numeric(sub[yards_col],errors='coerce').fillna(0)
         sub['attempts']=1
@@ -654,6 +677,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     'routeParticipation':None,  # Not available in current PBP + roster inputs.
 
                     'last5GameStats':last_series,
+                    'statDefinitions':'NFL official attempts: sacks excluded from pass attempts; QB kneeldowns included in rushing; two-point tries excluded',
                     'seasonGameStats':season_series,  # All completed player appearances; pregame only.
                     'seasonGamesPlayed':len(season_series),'last5GamesPlayed':len(last_series),
                     'seasonAverages':{k:avg(k,season_series) for k in ('passYards','passAttempts','rushYards','rushAttempts','recYards','receptions','targets','passTDs')},

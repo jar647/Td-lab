@@ -1,5 +1,5 @@
 /* Worker keeps 10k–100k correlated game simulations off the page thread. */
-importScripts('./nfl_game_engine.js');
+importScripts('./nfl_game_engine.js?v=nfl-official-attempts-v2');
 self.onmessage=function(event){
  const {players,count,seed,selected,requestId}=event.data||{};
  try{

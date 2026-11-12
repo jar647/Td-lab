@@ -69,6 +69,16 @@ function run(){
  const outResult=engine.simulate(returnOut,1500,12);
  assert.equal(outResult.teams.find(t=>t.team==='A').quarterback,null);
  assert(!outResult.markets.some(m=>m.id==='a-qb'||m.id==='a-backup'));
+
+ // A QB matchup factor can affect untracked receiver assumptions, but must
+ // never rescale yards already credited to named receivers a second time.
+ const neutral=engine.simulate(lineup,1000,77),boosted=engine.simulate(lineup.map(p=>p.player_id==='a-qb'?{...p,defenseOpponentRatio:{...p.defenseOpponentRatio,PASS:1.12}}:p),1000,77);
+ const na=neutral.teams.find(t=>t.team==='A'),ba=boosted.teams.find(t=>t.team==='A');
+ assert.ok(Math.abs((ba.scenarioAvgPassYards-na.scenarioAvgPassYards)-(ba.scenarioAvgUntrackedReceivingYards-na.scenarioAvgUntrackedReceivingYards))<1e-7);
+ assert.equal(neutral.audit.passingReceivingConservation,true);
+ assert.deepEqual(neutral.markets.filter(p=>p.team==='A'&&p.market==='recYards'),boosted.markets.filter(p=>p.team==='A'&&p.market==='recYards'));
+ assert.throws(()=>engine.build([...lineup,lineup[0]]),/Duplicate player identity/);
+ const audit=neutral.inputAudit.find(p=>p.id==='a-qb');assert.equal(audit.games,8);assert.equal(audit.history[0].passAttempts,35);assert.equal(audit.sourceAvailability.gameDay,'UNVERIFIED');
  console.log('NFL game-first simulator tests passed');
 }
 run();

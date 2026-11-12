@@ -5,6 +5,7 @@
 */
 (function(root){
 "use strict";
+const MODEL_VERSION='game-first-volume-v2-official-attempts';
 const MARKETS={
  rushYards:[25,40,50,60,70,80,100],
  recYards:[20,25,30,40,50,60,70,80,100],
@@ -27,6 +28,9 @@ function blocked(p){
 }
 function playerParams(p){
  const history=Array.isArray(p.seasonGameStats)?p.seasonGameStats:[];
+ const fields=p.pos==='QB'?['passAttempts','rushAttempts','rushYards']:['targets','receptions','recYards','rushAttempts','rushYards'];
+ if(history.some(r=>!r||fields.some(k=>finite(r[k])===null)))return null;
+ const gameIds=history.map(r=>r.gameId).filter(Boolean);if(new Set(gameIds).size!==gameIds.length)return null;
  if(history.length<3||p.playerAppearancesVerified===false)return null;
  const key=String(p.player_id||p.team+'|'+p.player);
  const rec=mean(history,'receptions'),targets=mean(history,'targets'),carries=mean(history,'rushAttempts');
@@ -34,12 +38,12 @@ function playerParams(p){
  const yardsPerCatch=clamp((mean(history,'recYards')+35)/(rec+3),3,23);
  const rushPerCarry=clamp((mean(history,'rushYards')+18)/(carries+4),1.7,7);
  const targetRate=clamp((rec+3)/(targets+6),.28,.88);
- const norm=Array.isArray(p.last5GameStats)&&p.last5GameStats.length>=3?p.last5GameStats:history.slice(-5);
+ const norm=history.slice(-5);
  const usage=(field)=>.65*mean(history,field)+.35*mean(norm,field);
  const ratios=p.defenseOpponentRatio||{};
  return {id:key,name:String(p.player||key),team:String(p.team),pos:String(p.pos),
   qbRole:p.qbRole,starterContext:p.starterContext,
-  gameCount:history.length,questionable:/QUESTIONABLE|DOUBTFUL|UNVERIFIED|NOT_REPORTED|LIMITED|DNP_PRACTICE/.test(
+  gameCount:history.length,history:history.map(r=>({...r})),sourceAvailability:{roster:p.availability||'UNVERIFIED',injury:p.injuryReportStatus||'UNVERIFIED',gameDay:p.gameDayAvailability||'UNVERIFIED'},historicalPassingYards:history.every(r=>finite(r.passYards)!==null)?mean(history,'passYards'):null,historicalPassAttempts:pass,questionable:/QUESTIONABLE|DOUBTFUL|UNVERIFIED|NOT_REPORTED|LIMITED|DNP_PRACTICE/.test(
    [p.injuryReportStatus,p.availability,p.injuryPracticeStatus].join('|').toUpperCase()),
   pass:usage('passAttempts'),targets:usage('targets'),carries:usage('rushAttempts'),
   verifiedTeamPass:finite(p.teamPassAttemptsPerGame),
@@ -53,6 +57,7 @@ function playerParams(p){
 function build(records){
  if(!Array.isArray(records)||!records.length)throw Error('No matchup player records');
  const entries=records.filter(p=>p&&p.team&&p.opp&&!blocked(p)).map(playerParams).filter(Boolean);
+ if(new Set(entries.map(p=>p.id)).size!==entries.length)throw Error('Duplicate player identity in matchup inputs');
  const teams=[...new Set(records.map(p=>String(p.team)))].sort();
  if(teams.length!==2)throw Error('Exactly two teams are required for one game');
  const league=teams.map(team=>{
@@ -126,7 +131,7 @@ function simulate(records,count=10000,seed=1307,selected=[]){
    const plays=clamp(Math.round(t.pace*Math.exp(paceShock+normal(random)*.07)),35,90);
    const passRate=clamp(t.passRate+(ti===0?1:-1)*scriptShock*.032+normal(random)*.043,.33,.84);
    const attempts=randCount(plays,passRate,random),rushes=plays-attempts;
-   let qbYards=0;
+   let qbYards=0,knownReceiving=0,untrackedPassing=0;
    const teamRecFactor=clamp(Math.exp(normal(random)*.12),.68,1.42);
    const teamRushFactor=clamp(Math.exp(normal(random)*.14),.65,1.47);
    for(let a=0;a<attempts;a++){
@@ -135,11 +140,12 @@ function simulate(records,count=10000,seed=1307,selected=[]){
      const p=to.p;
      if(random()<p.catchRate){
       const yards=clamp(p.ypc*p.recMatch*teamRecFactor*Math.exp(normal(random)*.55-.55*.55/2),0,85);
-      p.output.receptions+=1;p.output.recYards+=yards;qbYards+=yards;
+      p.output.receptions+=1;p.output.recYards+=yards;qbYards+=yards;knownReceiving+=yards;
      }
-    }else if(random()<.65)qbYards+=clamp(9.5*teamRecFactor*Math.exp(normal(random)*.55-.15),0,70);
+    }else if(random()<.65){const yards=clamp(9.5*t.qb.passMatch*teamRecFactor*Math.exp(normal(random)*.55-.15),0,70);qbYards+=yards;untrackedPassing+=yards;}
    }
-   t.qb.output.passYards+=qbYards*t.qb.passMatch;
+   t.qb.output.passYards=qbYards;
+   if(Math.abs(qbYards-knownReceiving-untrackedPassing)>1e-7)throw Error('Passing/receiving yard conservation failed');
    for(let c=0;c<rushes;c++){
     const to=weighted(t.carryPool.items,t.carryPool.sum,random);
     if(!to.p)continue;
@@ -147,8 +153,8 @@ function simulate(records,count=10000,seed=1307,selected=[]){
     const yards=clamp(p.ypcarry*p.rushMatch*teamRushFactor*Math.exp(normal(random)*.68-.68*.68/2),0,55);
     p.output.rushYards+=yards;
    }
-   const scores=sumScores[t.team]||(sumScores[t.team]={plays:0,passes:0,rushes:0});
-   scores.plays+=plays;scores.passes+=attempts;scores.rushes+=rushes;
+   const scores=sumScores[t.team]||(sumScores[t.team]={plays:0,passes:0,rushes:0,passingYards:0,untrackedPassingYards:0});
+   scores.plays+=plays;scores.passes+=attempts;scores.rushes+=rushes;scores.passingYards+=qbYards;scores.untrackedPassingYards+=untrackedPassing;
   }
   for(const p of model.players){
    for(const [market,lines] of Object.entries(MARKETS)){
@@ -179,18 +185,18 @@ function simulate(records,count=10000,seed=1307,selected=[]){
    modeledMean:Math.round(allStats[p.id][market]/count*10)/10});
  }
  const summary=model.teams.map(t=>({
-  ...t.outlook,scenarioAvgPlays:Math.round(sumScores[t.team].plays/count*10)/10,
+  ...t.outlook,scenarioAvgPassYards:sumScores[t.team].passingYards/count,scenarioAvgUntrackedReceivingYards:sumScores[t.team].untrackedPassingYards/count,scenarioAvgPlays:Math.round(sumScores[t.team].plays/count*10)/10,
   scenarioAvgPasses:Math.round(sumScores[t.team].passes/count*10)/10,
   scenarioAvgRushes:Math.round(sumScores[t.team].rushes/count*10)/10
  }));
- return {status:'RESEARCH_ONLY_UNCALIBRATED',modelVersion:'game-first-volume-v1',
+ return {status:'RESEARCH_ONLY_UNCALIBRATED',modelVersion:MODEL_VERSION,inputAudit:model.players.map(p=>({id:p.id,name:p.name,team:p.team,games:p.gameCount,history:p.history,sourceAvailability:p.sourceAvailability,historicalPassingYards:p.historicalPassingYards,historicalPassAttempts:p.historicalPassAttempts,modeledPassAttempts:p.pass,passingMatchupFactor:p.passMatch,receivingMatchupFactor:p.recMatch,rushingMatchupFactor:p.rushMatch,participationAssumption:'Assumes listed eligible player participates; game-day active status is not confirmed'})),audit:{passingReceivingConservation:true},
   count,seed,teams:summary,markets,
   joint:selections.length?{legs:selections.length,hits:joint,scenarioRate:joint/count}:null,
   assumptions:['Generative team play volume and pass/rush split','Player targets and carries compete for team opportunities',
    'Receptions require target and completion','Quarterback passing yards derive from completed receiver outcomes',
    'Pace/game script drive within-game dependencies','Distribution parameters and correlations are NOT calibrated']};
 }
-const api={build,simulate,MARKETS,blocked};
+const api={build,simulate,MARKETS,blocked,MODEL_VERSION};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;
 root.PropVaultGameEngine=api;
 })(typeof self!=='undefined'?self:typeof globalThis!=='undefined'?globalThis:this);
