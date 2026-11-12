@@ -541,7 +541,7 @@ function renderNBAGameFirst(g){
    const excess=100*(x.allowed/x.leagueAverage-1);
    const milestone=r.side==='under'?'under '+x.baseline:x.baseline+'+';
    const hits=x.last5?.games?x.last5.hits+'/'+x.last5.games:'unavailable';
-   return '<p><strong>'+esc(x.market.toUpperCase())+' · '+esc(x.position)+'</strong>: '+esc(x.opponent)+' allowed '+x.allowed.toFixed(1)+' per game vs '+x.leagueAverage.toFixed(1)+' league position average ('+(excess>=0?'+':'')+excess.toFixed(1)+'%; '+x.opponentGames+' games). '+esc(r.name)+' recorded '+x.playerAverage.toFixed(1)+' per game vs '+x.peerAverage.toFixed(1)+' position-player average ('+x.playerGames+' games). Recent milestone '+esc(milestone)+' '+esc(x.market)+': '+hits+' prior appearances.</p>';
+   return '<p><strong>'+esc(x.market.toUpperCase())+' · '+esc(x.position)+'</strong> · '+x.componentScore+'/100 component rank: '+esc(x.opponent)+' allowed '+x.allowed.toFixed(1)+' per game vs '+x.leagueAverage.toFixed(1)+' league position average ('+(excess>=0?'+':'')+excess.toFixed(1)+'%; '+x.opponentGames+' games). '+esc(r.name)+' recorded '+x.playerAverage.toFixed(1)+' per game vs '+x.peerAverage.toFixed(1)+' position-player average ('+x.playerGames+' games). Recent milestone '+esc(milestone)+' '+esc(x.market)+': '+hits+' prior appearances.</p>';
   }).join('');
   const rating=r.matchupRating||{};
   const factors=(rating.factors||[]).map(f=>esc(f.label)+': '+f.points+'/'+f.max).join(' · ');
