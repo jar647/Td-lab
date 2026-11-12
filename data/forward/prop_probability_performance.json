@@ -4,7 +4,7 @@
   "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
   "graded": 6616,
   "current_model_graded": 1269,
-  "game_first_model_version": "game-first-volume-v2-official-attempts",
+  "game_first_model_version": "game-first-volume-v3-supported-qb-markets",
   "game_first_graded": 0,
   "game_first_distinct_weeks": 0,
   "game_first_research_review_ready": false,
@@ -36,6 +36,13 @@
       "final_games": 0,
       "missing_fixture": 0,
       "forecast_rows": 1088
+    },
+    "game-first-volume-v3-supported-qb-markets": {
+      "snapshots": 13,
+      "pending_final": 13,
+      "final_games": 0,
+      "missing_fixture": 0,
+      "forecast_rows": 1089
     },
     "game-first-volume-v1": {
       "snapshots": 43,
@@ -741,6 +748,66 @@
         }
       }
     },
+    "game-first-volume-v3-supported-qb-markets": {
+      "graded": 0,
+      "distinct_weeks": 0,
+      "distinct_player_games": 0,
+      "distinct_games": 0,
+      "markets": {
+        "PASS": {
+          "n": 0,
+          "model_brier": null,
+          "baseline_brier": null,
+          "beats_baseline": false,
+          "distinct_weeks": 0,
+          "model_log_loss": null,
+          "baseline_log_loss": null,
+          "calibration_bins": [],
+          "expected_calibration_error": null,
+          "distinct_player_games": 0,
+          "distinct_game_market_players": 0
+        },
+        "RUSH": {
+          "n": 0,
+          "model_brier": null,
+          "baseline_brier": null,
+          "beats_baseline": false,
+          "distinct_weeks": 0,
+          "model_log_loss": null,
+          "baseline_log_loss": null,
+          "calibration_bins": [],
+          "expected_calibration_error": null,
+          "distinct_player_games": 0,
+          "distinct_game_market_players": 0
+        },
+        "REC": {
+          "n": 0,
+          "model_brier": null,
+          "baseline_brier": null,
+          "beats_baseline": false,
+          "distinct_weeks": 0,
+          "model_log_loss": null,
+          "baseline_log_loss": null,
+          "calibration_bins": [],
+          "expected_calibration_error": null,
+          "distinct_player_games": 0,
+          "distinct_game_market_players": 0
+        },
+        "CATCH": {
+          "n": 0,
+          "model_brier": null,
+          "baseline_brier": null,
+          "beats_baseline": false,
+          "distinct_weeks": 0,
+          "model_log_loss": null,
+          "baseline_log_loss": null,
+          "calibration_bins": [],
+          "expected_calibration_error": null,
+          "distinct_player_games": 0,
+          "distinct_game_market_players": 0
+        }
+      }
+    },
     "opportunity-2024-trained-blend-v1": {
       "graded": 2428,
       "distinct_weeks": 1,
@@ -1279,7 +1346,7 @@
     }
   },
   "skipped": {
-    "GAME_NOT_FINAL": 41,
+    "GAME_NOT_FINAL": 54,
     "NO_OFFENSIVE_SNAPS": 685
   },
   "records": [
