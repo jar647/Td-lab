@@ -24,7 +24,7 @@ boards may produce more than five distinct records over the whole day.
 
 The first committed seed contains actual new pregame captures. Earlier
 unrecorded recommendations are deliberately not reconstructed from final data.
-Ten-minute scheduled runs and source-file pushes continue capture and grading.
+Ten-minute scheduled runs, direct source/model changes, and successful completion of NBA/NFL/UFC source-refresh workflows continue capture and grading. Completion hooks also cover data commits created with GITHUB_TOKEN, which do not normally trigger another push workflow.
 GitHub can delay schedules; coverage is not guaranteed for a game missed before
 start. The report shows stale/failed source coverage explicitly. Source dates
 remain real when data refreshes fail.
@@ -73,3 +73,18 @@ and may understate uncertainty under correlation. A high hit rate alone does
 not demonstrate profitability, especially without observed prices.
 
 Run `node test_recommendation_ledger.js` and the normal NFL/NBA/UFC regressions.
+
+## Partial first day and coverage counts
+
+The NBA ledger began on November 11, 2026 at 7:52 p.m. Eastern, after part of
+that day's slate had started. Earlier morning recommendations were not saved by
+this new ledger. Its initial eight Best Props are a partial-day capture, not a
+statement that only eight recommendations existed. Other NBA boards are counted
+separately. The dashboard prominently shows the first NBA capture time, per-board
+counts and games without saved picks; unknown prior picks are not inferred from
+final outcomes. Archived source replays are audits, not forward ledger entries.
+
+Coverage retains the day's fixture list so an incomplete first-day record stays
+marked partial even after old source fixtures roll out of the live feed. A source
+adapter regression test supplies 45 eligible Best Props and verifies all 45 are
+captured; top-three/ticket/first-basket limits must never truncate Best Props.
