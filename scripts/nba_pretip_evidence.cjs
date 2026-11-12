@@ -25,4 +25,26 @@ function marketProbability(game){
  const home=implied(m.home_moneyline),away=implied(m.away_moneyline),total=home+away;
  return total>0&&Number.isFinite(total)?home/total:null;
 }
-module.exports={hasDatedInjuries,hasClosingMarket,hasVerifiedMarket,marketProbability};
+
+function pairedMarketBenchmark(rows,games){
+ const lookup=new Map();
+ for(const g of games||[]){
+  if(!hasVerifiedMarket(g))continue;
+  const key=[String(g.date),String(g.home),String(g.away)].join('|');
+  if(lookup.has(key)){lookup.set(key,null);continue;} // Ambiguous event identity must not be graded.
+  lookup.set(key,g);
+ }
+ const paired=[];
+ const clip=p=>Math.max(1e-12,Math.min(1-1e-12,p));
+ for(const r of rows||[]){
+  const g=lookup.get([String(r.date),String(r.home),String(r.away)].join('|'));
+  if(!g||![r.probability,r.outcome].every(Number.isFinite)||![0,1].includes(r.outcome)||r.probability<0||r.probability>1)continue;
+  const market=marketProbability(g);if(market===null)continue;
+  const brier=p=>(p-r.outcome)**2;
+  const logloss=p=>-(r.outcome*Math.log(clip(p))+(1-r.outcome)*Math.log(1-clip(p)));
+  paired.push({date:r.date,home:r.home,away:r.away,modelBrier:brier(r.probability),marketBrier:brier(market),modelLogLoss:logloss(r.probability),marketLogLoss:logloss(market)});
+ }
+ const avg=k=>paired.length?paired.reduce((a,r)=>a+r[k],0)/paired.length:null;
+ return {pairedGames:paired.length,modelBrier:avg('modelBrier'),marketBrier:avg('marketBrier'),modelLogLoss:avg('modelLogLoss'),marketLogLoss:avg('marketLogLoss'),beatsMarketBrier:paired.length>=30?avg('modelBrier')<avg('marketBrier'):null,validatedForBetting:false,method:'Exact tipoff/team identity; verified pre-tip two-sided moneylines; no-vig market probability; paired historical research only. No ROI without archived executable odds.',rows:paired};
+}
+module.exports={hasDatedInjuries,hasClosingMarket,hasVerifiedMarket,marketProbability,pairedMarketBenchmark};
