@@ -1,42 +1,42 @@
 {
   "status": "NOT_CALIBRATED",
   "experimental_adjustment_enabled": false,
-  "games": 473,
+  "games": 488,
   "model_version_evaluated": "score-baseline-pbp-v2",
   "metrics": {
     "margin": {
-      "baseline_mae": 10.403382663847779,
-      "adjusted_mae": 10.383509513742075,
-      "mean_improvement": 0.019873150105708254,
+      "baseline_mae": 10.431967213114753,
+      "adjusted_mae": 10.402254098360656,
+      "mean_improvement": 0.02971311475409836,
       "improvement_95pct_week_cluster_interval": [
-        -0.1850840336134454,
-        0.21941544885177466
+        -0.1672199170124482,
+        0.2207818930041152
       ]
     },
     "total": {
-      "baseline_mae": 10.458773784355184,
-      "adjusted_mae": 10.414376321353066,
-      "mean_improvement": 0.044397463002114106,
+      "baseline_mae": 10.477459016393444,
+      "adjusted_mae": 10.434221311475412,
+      "mean_improvement": 0.043237704918032735,
       "improvement_95pct_week_cluster_interval": [
-        -0.11196581196581201,
-        0.1885892116182571
+        -0.10991902834008091,
+        0.20020576131687234
       ]
     }
   },
   "reported_scores": {
     "matchup_adjusted": {
-      "games": 473,
-      "total_mae": 10.41,
-      "margin_mae": 10.38,
-      "winner_accuracy": 0.6017,
-      "total_bias": -1.06
+      "games": 488,
+      "total_mae": 10.43,
+      "margin_mae": 10.4,
+      "winner_accuracy": 0.6099,
+      "total_bias": -0.99
     },
     "scoring_baseline": {
-      "games": 473,
-      "total_mae": 10.46,
-      "margin_mae": 10.4,
-      "winner_accuracy": 0.6144,
-      "total_bias": -1.08
+      "games": 488,
+      "total_mae": 10.48,
+      "margin_mae": 10.43,
+      "winner_accuracy": 0.6201,
+      "total_bias": -1.01
     }
   },
   "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",

@@ -1,7 +1,7 @@
 {
   "season": 2026,
   "week": 10,
-  "generated_at": "2026-11-12T13:11:57.411133+00:00",
+  "generated_at": "2026-11-12T13:30:50.679918+00:00",
   "model_status": "AUDITED_BASELINE_UNCALIBRATED",
   "model_version": "score-baseline-trust-v3",
   "note": "Historical scoring research baseline; independently recomputed source rates; QB-led history separated; no unvalidated EPA point correction or verified betting recommendation.",
@@ -47,62 +47,62 @@
             "available": true,
             "offense_games": 8,
             "defense_games": 8,
-            "offense_epa_per_play": 0.020120946081438367,
-            "defense_epa_allowed_per_play": 0.021558821660155766,
+            "offense_epa_per_play": 0.020120946081438374,
+            "defense_epa_allowed_per_play": 0.02155882166015577,
             "offense_success_rate": 0.40880518780947644,
             "defense_success_allowed_rate": 0.4593269783877064,
             "offense_pass_rate": 0.5810222305094579,
             "defense_pass_rate_allowed": 0.6016599556249487,
             "expected_pass_rate": 0.5913410930672033,
-            "pass_epa_matchup_delta": 0.05814519917293516,
-            "rush_epa_matchup_delta": -0.08507495170047952,
+            "pass_epa_matchup_delta": 0.058145199172935175,
+            "rush_epa_matchup_delta": -0.0850749517004795,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": -0.0003829911337447159,
+            "epa_per_play_delta": -0.000382991133744702,
             "success_rate_delta": -0.050521790578229975,
             "explosive_rate_offense": 0.08670520231213873,
             "explosive_rate_defense_allowed": 0.07751937984496124,
-            "pass_epa_offense": 0.06335905709062384,
-            "pass_epa_defense_allowed": 0.005213857917688677,
-            "rush_epa_offense": -0.03911666428324961,
+            "pass_epa_offense": 0.06335905709062385,
+            "pass_epa_defense_allowed": 0.005213857917688681,
+            "rush_epa_offense": -0.0391166642832496,
             "rush_epa_defense_allowed": 0.045958287417229904,
             "plays_per_game": 64.875,
             "turnovers_per_game": 1.25,
             "defensive_sacks_per_game": 2.125,
             "score_adjustment": 0.0,
             "warning": "Play-by-play matchup adjustment is experimental and not calibrated.",
-            "experimental_score_adjustment": -0.6081764426074833,
+            "experimental_score_adjustment": -0.6081764426074832,
             "adjustment_applied": false
           },
           "away_offense_vs_home_defense": {
             "available": true,
             "offense_games": 8,
             "defense_games": 8,
-            "offense_epa_per_play": -0.02132346555312718,
+            "offense_epa_per_play": -0.021323465553127176,
             "defense_epa_allowed_per_play": -0.04725374735031196,
             "offense_success_rate": 0.41851250915942634,
             "defense_success_allowed_rate": 0.38359989156953106,
             "offense_pass_rate": 0.5913377996440908,
             "defense_pass_rate_allowed": 0.550365952832746,
             "expected_pass_rate": 0.5708518762384185,
-            "pass_epa_matchup_delta": 0.0586277531516946,
-            "rush_epa_matchup_delta": -0.0064401112194091385,
+            "pass_epa_matchup_delta": 0.05862775315169458,
+            "rush_epa_matchup_delta": -0.006440111219409147,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": 0.03070400123966237,
+            "epa_per_play_delta": 0.030704001239662354,
             "success_rate_delta": 0.03491261758989528,
             "explosive_rate_offense": 0.09146341463414634,
             "explosive_rate_defense_allowed": 0.09033613445378151,
-            "pass_epa_offense": -0.03776114748211768,
-            "pass_epa_defense_allowed": -0.09638890063381228,
-            "rush_epa_offense": 0.004396960478610153,
-            "rush_epa_defense_allowed": 0.010837071698019292,
+            "pass_epa_offense": -0.037761147482117674,
+            "pass_epa_defense_allowed": -0.09638890063381225,
+            "rush_epa_offense": 0.004396960478610143,
+            "rush_epa_defense_allowed": 0.01083707169801929,
             "plays_per_game": 61.5,
             "turnovers_per_game": 0.625,
             "defensive_sacks_per_game": 2.0,
             "score_adjustment": 0.0,
             "warning": "Play-by-play matchup adjustment is experimental and not calibrated.",
-            "experimental_score_adjustment": 0.5724714172770552,
+            "experimental_score_adjustment": 0.5724714172770551,
             "adjustment_applied": false
           }
         },
@@ -971,7 +971,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T13:11:54.663021+00:00",
+            "retrieved_at": "2026-11-12T13:30:48.196791+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -1011,7 +1011,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T13:11:53.749527+00:00",
+          "checked_at": "2026-11-12T13:30:47.793143+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -1174,42 +1174,42 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 473,
+            "games": 488,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.40338266384778,
-                "adjusted_mae": 10.383509513742071,
-                "mean_improvement": 0.019873150105708254,
+                "baseline_mae": 10.431967213114753,
+                "adjusted_mae": 10.402254098360656,
+                "mean_improvement": 0.02971311475409836,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1850840336134454,
-                  0.21941544885177458
+                  -0.1672199170124482,
+                  0.2207818930041152
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355179,
-                "adjusted_mae": 10.414376321353066,
-                "mean_improvement": 0.044397463002114106,
+                "baseline_mae": 10.477459016393444,
+                "adjusted_mae": 10.434221311475412,
+                "mean_improvement": 0.043237704918032735,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.11196581196581201,
-                  0.18858921161825706
+                  -0.10991902834008091,
+                  0.20020576131687234
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 473,
-                "total_mae": 10.41,
-                "margin_mae": 10.38,
-                "winner_accuracy": 0.6017,
-                "total_bias": -1.06
+                "games": 488,
+                "total_mae": 10.43,
+                "margin_mae": 10.4,
+                "winner_accuracy": 0.6099,
+                "total_bias": -0.99
               },
               "scoring_baseline": {
-                "games": 473,
-                "total_mae": 10.46,
-                "margin_mae": 10.4,
-                "winner_accuracy": 0.6144,
-                "total_bias": -1.08
+                "games": 488,
+                "total_mae": 10.48,
+                "margin_mae": 10.43,
+                "winner_accuracy": 0.6201,
+                "total_bias": -1.01
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
@@ -1241,7 +1241,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T13:11:54.663843+00:00",
+          "generated_at": "2026-11-12T13:30:48.197263+00:00",
           "available": true,
           "quarterbacks": {
             "NYG": {
@@ -1271,6 +1271,7 @@
               "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -1300,6 +1301,7 @@
               "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -1439,17 +1441,17 @@
             "defense_pass_rate_allowed": 0.5723065420560748,
             "expected_pass_rate": 0.5545853118005037,
             "pass_epa_matchup_delta": -0.011320069492774476,
-            "rush_epa_matchup_delta": 0.07178225537989269,
+            "rush_epa_matchup_delta": 0.07178225537989272,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": 0.025694926629037815,
+            "epa_per_play_delta": 0.02569492662903782,
             "success_rate_delta": 0.039690065211958225,
             "explosive_rate_offense": 0.10831721470019343,
             "explosive_rate_defense_allowed": 0.10093457943925234,
             "pass_epa_offense": 0.20118023746972336,
             "pass_epa_defense_allowed": 0.21250030696249783,
             "rush_epa_offense": -0.05348607629298296,
-            "rush_epa_defense_allowed": -0.12526833167287565,
+            "rush_epa_defense_allowed": -0.12526833167287568,
             "plays_per_game": 64.625,
             "turnovers_per_game": 0.625,
             "defensive_sacks_per_game": 2.7777777777777777,
@@ -1463,30 +1465,30 @@
             "offense_games": 9,
             "defense_games": 8,
             "offense_epa_per_play": 0.038330584237727436,
-            "defense_epa_allowed_per_play": 0.02890535470459845,
+            "defense_epa_allowed_per_play": 0.028905354704598457,
             "offense_success_rate": 0.456032125501961,
             "defense_success_allowed_rate": 0.41742996887505557,
             "offense_pass_rate": 0.5586118533102079,
             "defense_pass_rate_allowed": 0.6660145249740625,
             "expected_pass_rate": 0.6123131891421352,
             "pass_epa_matchup_delta": -0.005658549731717782,
-            "rush_epa_matchup_delta": 0.08292206883701224,
+            "rush_epa_matchup_delta": 0.08292206883701225,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": 0.02868298778501012,
+            "epa_per_play_delta": 0.028682987785010126,
             "success_rate_delta": 0.038602156626905415,
             "explosive_rate_offense": 0.11517367458866545,
             "explosive_rate_defense_allowed": 0.10982658959537572,
-            "pass_epa_offense": 0.09705125569659054,
-            "pass_epa_defense_allowed": 0.10270980542830832,
+            "pass_epa_offense": 0.09705125569659057,
+            "pass_epa_defense_allowed": 0.10270980542830835,
             "rush_epa_offense": -0.036133695928240644,
-            "rush_epa_defense_allowed": -0.11905576476525288,
+            "rush_epa_defense_allowed": -0.1190557647652529,
             "plays_per_game": 60.77777777777778,
             "turnovers_per_game": 2.111111111111111,
             "defensive_sacks_per_game": 3.375,
             "score_adjustment": 0.0,
             "warning": "Play-by-play matchup adjustment is experimental and not calibrated.",
-            "experimental_score_adjustment": 0.6066408184479155,
+            "experimental_score_adjustment": 0.6066408184479156,
             "adjustment_applied": false
           }
         },
@@ -2393,7 +2395,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T13:11:54.691935+00:00",
+            "retrieved_at": "2026-11-12T13:30:48.224272+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -2427,7 +2429,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T13:11:53.749527+00:00",
+          "checked_at": "2026-11-12T13:30:47.793143+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -2591,42 +2593,42 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 473,
+            "games": 488,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.40338266384778,
-                "adjusted_mae": 10.383509513742071,
-                "mean_improvement": 0.019873150105708254,
+                "baseline_mae": 10.431967213114753,
+                "adjusted_mae": 10.402254098360656,
+                "mean_improvement": 0.02971311475409836,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1850840336134454,
-                  0.21941544885177458
+                  -0.1672199170124482,
+                  0.2207818930041152
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355179,
-                "adjusted_mae": 10.414376321353066,
-                "mean_improvement": 0.044397463002114106,
+                "baseline_mae": 10.477459016393444,
+                "adjusted_mae": 10.434221311475412,
+                "mean_improvement": 0.043237704918032735,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.11196581196581201,
-                  0.18858921161825706
+                  -0.10991902834008091,
+                  0.20020576131687234
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 473,
-                "total_mae": 10.41,
-                "margin_mae": 10.38,
-                "winner_accuracy": 0.6017,
-                "total_bias": -1.06
+                "games": 488,
+                "total_mae": 10.43,
+                "margin_mae": 10.4,
+                "winner_accuracy": 0.6099,
+                "total_bias": -0.99
               },
               "scoring_baseline": {
-                "games": 473,
-                "total_mae": 10.46,
-                "margin_mae": 10.4,
-                "winner_accuracy": 0.6144,
-                "total_bias": -1.08
+                "games": 488,
+                "total_mae": 10.48,
+                "margin_mae": 10.43,
+                "winner_accuracy": 0.6201,
+                "total_bias": -1.01
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
@@ -2658,7 +2660,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T13:11:54.692505+00:00",
+          "generated_at": "2026-11-12T13:30:48.224692+00:00",
           "available": true,
           "quarterbacks": {
             "DET": {
@@ -2688,6 +2690,7 @@
               "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -2717,6 +2720,7 @@
               "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -2887,31 +2891,31 @@
             "available": true,
             "offense_games": 9,
             "defense_games": 8,
-            "offense_epa_per_play": -0.10121612393951802,
+            "offense_epa_per_play": -0.10121612393951801,
             "defense_epa_allowed_per_play": -0.07442774765840704,
             "offense_success_rate": 0.41836959370904325,
             "defense_success_allowed_rate": 0.3982342629482072,
             "offense_pass_rate": 0.5480052424639581,
             "defense_pass_rate_allowed": 0.5694183266932271,
             "expected_pass_rate": 0.5587117845785926,
-            "pass_epa_matchup_delta": -0.12836191099484218,
-            "rush_epa_matchup_delta": 0.09950886910379353,
+            "pass_epa_matchup_delta": -0.12836191099484215,
+            "rush_epa_matchup_delta": 0.09950886910379354,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": -0.027805221098431268,
+            "epa_per_play_delta": -0.027805221098431247,
             "success_rate_delta": 0.020135330760836068,
             "explosive_rate_offense": 0.09523809523809523,
             "explosive_rate_defense_allowed": 0.07569721115537849,
-            "pass_epa_offense": -0.17349581060659364,
-            "pass_epa_defense_allowed": -0.045133899611751474,
-            "rush_epa_offense": -0.013725272755533448,
+            "pass_epa_offense": -0.1734958106065936,
+            "pass_epa_defense_allowed": -0.04513389961175147,
+            "rush_epa_offense": -0.013725272755533435,
             "rush_epa_defense_allowed": -0.11323414185932698,
             "plays_per_game": 58.333333333333336,
             "turnovers_per_game": 1.6666666666666667,
             "defensive_sacks_per_game": 1.75,
             "score_adjustment": 0.0,
             "warning": "Play-by-play matchup adjustment is experimental and not calibrated.",
-            "experimental_score_adjustment": 0.10259786363787649,
+            "experimental_score_adjustment": 0.10259786363787657,
             "adjustment_applied": false
           },
           "away_offense_vs_home_defense": {
@@ -2919,7 +2923,7 @@
             "offense_games": 8,
             "defense_games": 9,
             "offense_epa_per_play": 0.11377211515686869,
-            "defense_epa_allowed_per_play": 0.020922387249859477,
+            "defense_epa_allowed_per_play": 0.020922387249859474,
             "offense_success_rate": 0.4898060457801852,
             "defense_success_allowed_rate": 0.47047246577934776,
             "offense_pass_rate": 0.5774943211602306,
@@ -2936,7 +2940,7 @@
             "pass_epa_offense": 0.13204459809628766,
             "pass_epa_defense_allowed": 0.09229448880797624,
             "rush_epa_offense": 0.0886910681417227,
-            "rush_epa_defense_allowed": -0.0564492643398136,
+            "rush_epa_defense_allowed": -0.05644926433981361,
             "plays_per_game": 60.625,
             "turnovers_per_game": 0.75,
             "defensive_sacks_per_game": 2.2222222222222223,
@@ -3792,7 +3796,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T13:11:55.141339+00:00",
+            "retrieved_at": "2026-11-12T13:30:48.566494+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -3832,7 +3836,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T13:11:53.749527+00:00",
+          "checked_at": "2026-11-12T13:30:47.793143+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -3996,42 +4000,42 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 473,
+            "games": 488,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.40338266384778,
-                "adjusted_mae": 10.383509513742071,
-                "mean_improvement": 0.019873150105708254,
+                "baseline_mae": 10.431967213114753,
+                "adjusted_mae": 10.402254098360656,
+                "mean_improvement": 0.02971311475409836,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1850840336134454,
-                  0.21941544885177458
+                  -0.1672199170124482,
+                  0.2207818930041152
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355179,
-                "adjusted_mae": 10.414376321353066,
-                "mean_improvement": 0.044397463002114106,
+                "baseline_mae": 10.477459016393444,
+                "adjusted_mae": 10.434221311475412,
+                "mean_improvement": 0.043237704918032735,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.11196581196581201,
-                  0.18858921161825706
+                  -0.10991902834008091,
+                  0.20020576131687234
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 473,
-                "total_mae": 10.41,
-                "margin_mae": 10.38,
-                "winner_accuracy": 0.6017,
-                "total_bias": -1.06
+                "games": 488,
+                "total_mae": 10.43,
+                "margin_mae": 10.4,
+                "winner_accuracy": 0.6099,
+                "total_bias": -0.99
               },
               "scoring_baseline": {
-                "games": 473,
-                "total_mae": 10.46,
-                "margin_mae": 10.4,
-                "winner_accuracy": 0.6144,
-                "total_bias": -1.08
+                "games": 488,
+                "total_mae": 10.48,
+                "margin_mae": 10.43,
+                "winner_accuracy": 0.6201,
+                "total_bias": -1.01
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
@@ -4063,7 +4067,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T13:11:55.141897+00:00",
+          "generated_at": "2026-11-12T13:30:48.566967+00:00",
           "available": true,
           "quarterbacks": {
             "ATL": {
@@ -4093,6 +4097,7 @@
               "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -4122,6 +4127,7 @@
               "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -4242,14 +4248,14 @@
             "available": true,
             "offense_games": 9,
             "defense_games": 8,
-            "offense_epa_per_play": -0.08516443461924429,
-            "defense_epa_allowed_per_play": -0.010050794923547298,
+            "offense_epa_per_play": -0.08516443461924428,
+            "defense_epa_allowed_per_play": -0.010050794923547286,
             "offense_success_rate": 0.42309142184997806,
             "defense_success_allowed_rate": 0.4111918604651163,
             "offense_pass_rate": 0.5904085710641555,
             "defense_pass_rate_allowed": 0.5911518895348837,
             "expected_pass_rate": 0.5907802302995195,
-            "pass_epa_matchup_delta": -0.07191414907008135,
+            "pass_epa_matchup_delta": -0.07191414907008137,
             "rush_epa_matchup_delta": -0.07858279643898869,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
@@ -4258,7 +4264,7 @@
             "explosive_rate_offense": 0.08409506398537477,
             "explosive_rate_defense_allowed": 0.095703125,
             "pass_epa_offense": -0.05265220555214477,
-            "pass_epa_defense_allowed": 0.019261943517936586,
+            "pass_epa_defense_allowed": 0.019261943517936603,
             "rush_epa_offense": -0.13182017152639286,
             "rush_epa_defense_allowed": -0.05323737508740418,
             "plays_per_game": 60.77777777777778,
@@ -4274,7 +4280,7 @@
             "offense_games": 8,
             "defense_games": 9,
             "offense_epa_per_play": 0.09583604214553712,
-            "defense_epa_allowed_per_play": -0.019100987363144604,
+            "defense_epa_allowed_per_play": -0.01910098736314461,
             "offense_success_rate": 0.4350745693970275,
             "defense_success_allowed_rate": 0.41848438300051205,
             "offense_pass_rate": 0.5966065148753754,
@@ -4289,7 +4295,7 @@
             "explosive_rate_offense": 0.10224948875255624,
             "explosive_rate_defense_allowed": 0.1128747795414462,
             "pass_epa_offense": 0.21441113928204159,
-            "pass_epa_defense_allowed": -0.049802910403915754,
+            "pass_epa_defense_allowed": -0.04980291040391577,
             "rush_epa_offense": -0.07723762465555647,
             "rush_epa_defense_allowed": 0.019270398518333193,
             "plays_per_game": 61.125,
@@ -5210,7 +5216,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T13:11:55.495681+00:00",
+            "retrieved_at": "2026-11-12T13:30:48.772557+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -5250,7 +5256,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T13:11:53.749527+00:00",
+          "checked_at": "2026-11-12T13:30:47.793143+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -5414,42 +5420,42 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 473,
+            "games": 488,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.40338266384778,
-                "adjusted_mae": 10.383509513742071,
-                "mean_improvement": 0.019873150105708254,
+                "baseline_mae": 10.431967213114753,
+                "adjusted_mae": 10.402254098360656,
+                "mean_improvement": 0.02971311475409836,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1850840336134454,
-                  0.21941544885177458
+                  -0.1672199170124482,
+                  0.2207818930041152
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355179,
-                "adjusted_mae": 10.414376321353066,
-                "mean_improvement": 0.044397463002114106,
+                "baseline_mae": 10.477459016393444,
+                "adjusted_mae": 10.434221311475412,
+                "mean_improvement": 0.043237704918032735,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.11196581196581201,
-                  0.18858921161825706
+                  -0.10991902834008091,
+                  0.20020576131687234
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 473,
-                "total_mae": 10.41,
-                "margin_mae": 10.38,
-                "winner_accuracy": 0.6017,
-                "total_bias": -1.06
+                "games": 488,
+                "total_mae": 10.43,
+                "margin_mae": 10.4,
+                "winner_accuracy": 0.6099,
+                "total_bias": -0.99
               },
               "scoring_baseline": {
-                "games": 473,
-                "total_mae": 10.46,
-                "margin_mae": 10.4,
-                "winner_accuracy": 0.6144,
-                "total_bias": -1.08
+                "games": 488,
+                "total_mae": 10.48,
+                "margin_mae": 10.43,
+                "winner_accuracy": 0.6201,
+                "total_bias": -1.01
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
@@ -5481,7 +5487,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T13:11:55.496463+00:00",
+          "generated_at": "2026-11-12T13:30:48.773042+00:00",
           "available": true,
           "quarterbacks": {
             "CLE": {
@@ -5511,6 +5517,7 @@
               "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -5540,6 +5547,7 @@
               "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -5660,7 +5668,7 @@
             "available": true,
             "offense_games": 9,
             "defense_games": 8,
-            "offense_epa_per_play": 0.06357609442668581,
+            "offense_epa_per_play": 0.0635760944266858,
             "defense_epa_allowed_per_play": -0.1357195334513135,
             "offense_success_rate": 0.4125242223355431,
             "defense_success_allowed_rate": 0.39463208479601924,
@@ -5678,7 +5686,7 @@
             "pass_epa_offense": 0.2112363163071695,
             "pass_epa_defense_allowed": -0.20671959400025552,
             "rush_epa_offense": -0.1920550430197302,
-            "rush_epa_defense_allowed": -0.061392840641573306,
+            "rush_epa_defense_allowed": -0.0613928406415733,
             "plays_per_game": 61.666666666666664,
             "turnovers_per_game": 1.1111111111111112,
             "defensive_sacks_per_game": 3.625,
@@ -5692,14 +5700,14 @@
             "offense_games": 8,
             "defense_games": 9,
             "offense_epa_per_play": -0.18993143886556935,
-            "defense_epa_allowed_per_play": -0.09368668509739105,
+            "defense_epa_allowed_per_play": -0.09368668509739106,
             "offense_success_rate": 0.3751961433027696,
             "defense_success_allowed_rate": 0.4331282775312626,
             "offense_pass_rate": 0.5657497558055267,
             "defense_pass_rate_allowed": 0.6304255748285599,
             "expected_pass_rate": 0.5980876653170433,
             "pass_epa_matchup_delta": -0.10659627699812949,
-            "rush_epa_matchup_delta": -0.07513358991249648,
+            "rush_epa_matchup_delta": -0.07513358991249645,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
             "epa_per_play_delta": -0.0939510349761434,
@@ -5708,7 +5716,7 @@
             "explosive_rate_defense_allowed": 0.07432432432432433,
             "pass_epa_offense": -0.19442672974241731,
             "pass_epa_defense_allowed": -0.08783045274428783,
-            "rush_epa_offense": -0.1840313002397557,
+            "rush_epa_offense": -0.18403130023975567,
             "rush_epa_defense_allowed": -0.10889771032725921,
             "plays_per_game": 55.875,
             "turnovers_per_game": 1.0,
@@ -6637,7 +6645,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T13:11:55.802664+00:00",
+            "retrieved_at": "2026-11-12T13:30:49.005753+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -6677,7 +6685,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T13:11:53.749527+00:00",
+          "checked_at": "2026-11-12T13:30:47.793143+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -6841,42 +6849,42 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 473,
+            "games": 488,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.40338266384778,
-                "adjusted_mae": 10.383509513742071,
-                "mean_improvement": 0.019873150105708254,
+                "baseline_mae": 10.431967213114753,
+                "adjusted_mae": 10.402254098360656,
+                "mean_improvement": 0.02971311475409836,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1850840336134454,
-                  0.21941544885177458
+                  -0.1672199170124482,
+                  0.2207818930041152
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355179,
-                "adjusted_mae": 10.414376321353066,
-                "mean_improvement": 0.044397463002114106,
+                "baseline_mae": 10.477459016393444,
+                "adjusted_mae": 10.434221311475412,
+                "mean_improvement": 0.043237704918032735,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.11196581196581201,
-                  0.18858921161825706
+                  -0.10991902834008091,
+                  0.20020576131687234
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 473,
-                "total_mae": 10.41,
-                "margin_mae": 10.38,
-                "winner_accuracy": 0.6017,
-                "total_bias": -1.06
+                "games": 488,
+                "total_mae": 10.43,
+                "margin_mae": 10.4,
+                "winner_accuracy": 0.6099,
+                "total_bias": -0.99
               },
               "scoring_baseline": {
-                "games": 473,
-                "total_mae": 10.46,
-                "margin_mae": 10.4,
-                "winner_accuracy": 0.6144,
-                "total_bias": -1.08
+                "games": 488,
+                "total_mae": 10.48,
+                "margin_mae": 10.43,
+                "winner_accuracy": 0.6201,
+                "total_bias": -1.01
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
@@ -6908,7 +6916,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T13:11:55.803721+00:00",
+          "generated_at": "2026-11-12T13:30:49.006222+00:00",
           "available": true,
           "quarterbacks": {
             "GB": {
@@ -6938,6 +6946,7 @@
               "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -6967,6 +6976,7 @@
               "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -7095,17 +7105,17 @@
             "defense_pass_rate_allowed": 0.5172511013215859,
             "expected_pass_rate": 0.543396777612762,
             "pass_epa_matchup_delta": -0.4918386153651363,
-            "rush_epa_matchup_delta": -0.04247903408863012,
+            "rush_epa_matchup_delta": -0.04247903408863013,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
             "epa_per_play_delta": -0.2866595825437036,
             "success_rate_delta": -0.07216404941259968,
             "explosive_rate_offense": 0.08027923211169284,
             "explosive_rate_defense_allowed": 0.09911894273127753,
-            "pass_epa_offense": -0.24727068599002852,
+            "pass_epa_offense": -0.24727068599002855,
             "pass_epa_defense_allowed": 0.24456792937510774,
-            "rush_epa_offense": -0.04888903111725237,
-            "rush_epa_defense_allowed": -0.006409997028622244,
+            "rush_epa_offense": -0.048889031117252374,
+            "rush_epa_defense_allowed": -0.006409997028622241,
             "plays_per_game": 63.666666666666664,
             "turnovers_per_game": 1.8888888888888888,
             "defensive_sacks_per_game": 1.5,
@@ -7118,8 +7128,8 @@
             "available": true,
             "offense_games": 8,
             "defense_games": 9,
-            "offense_epa_per_play": -0.03616345115009297,
-            "defense_epa_allowed_per_play": 0.062261220537700654,
+            "offense_epa_per_play": -0.036163451150092965,
+            "defense_epa_allowed_per_play": 0.06226122053770067,
             "offense_success_rate": 0.4022269514326974,
             "defense_success_allowed_rate": 0.4287464419508059,
             "offense_pass_rate": 0.5151478300524436,
@@ -7135,7 +7145,7 @@
             "explosive_rate_defense_allowed": 0.11089866156787763,
             "pass_epa_offense": -0.06660122797508203,
             "pass_epa_defense_allowed": 0.07202962904179999,
-            "rush_epa_offense": -0.003537881676195785,
+            "rush_epa_offense": -0.003537881676195783,
             "rush_epa_defense_allowed": 0.05297202450110372,
             "plays_per_game": 55.75,
             "turnovers_per_game": 1.25,
@@ -8004,7 +8014,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T13:11:56.098961+00:00",
+            "retrieved_at": "2026-11-12T13:30:49.220269+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -8044,7 +8054,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T13:11:53.749527+00:00",
+          "checked_at": "2026-11-12T13:30:47.793143+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -8208,42 +8218,42 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 473,
+            "games": 488,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.40338266384778,
-                "adjusted_mae": 10.383509513742071,
-                "mean_improvement": 0.019873150105708254,
+                "baseline_mae": 10.431967213114753,
+                "adjusted_mae": 10.402254098360656,
+                "mean_improvement": 0.02971311475409836,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1850840336134454,
-                  0.21941544885177458
+                  -0.1672199170124482,
+                  0.2207818930041152
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355179,
-                "adjusted_mae": 10.414376321353066,
-                "mean_improvement": 0.044397463002114106,
+                "baseline_mae": 10.477459016393444,
+                "adjusted_mae": 10.434221311475412,
+                "mean_improvement": 0.043237704918032735,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.11196581196581201,
-                  0.18858921161825706
+                  -0.10991902834008091,
+                  0.20020576131687234
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 473,
-                "total_mae": 10.41,
-                "margin_mae": 10.38,
-                "winner_accuracy": 0.6017,
-                "total_bias": -1.06
+                "games": 488,
+                "total_mae": 10.43,
+                "margin_mae": 10.4,
+                "winner_accuracy": 0.6099,
+                "total_bias": -0.99
               },
               "scoring_baseline": {
-                "games": 473,
-                "total_mae": 10.46,
-                "margin_mae": 10.4,
-                "winner_accuracy": 0.6144,
-                "total_bias": -1.08
+                "games": 488,
+                "total_mae": 10.48,
+                "margin_mae": 10.43,
+                "winner_accuracy": 0.6201,
+                "total_bias": -1.01
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
@@ -8275,7 +8285,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T13:11:56.099578+00:00",
+          "generated_at": "2026-11-12T13:30:49.220758+00:00",
           "available": false,
           "quarterbacks": {
             "IND": {
@@ -8387,8 +8397,8 @@
             "available": true,
             "offense_games": 8,
             "defense_games": 8,
-            "offense_epa_per_play": -0.0504738222526369,
-            "defense_epa_allowed_per_play": 0.031179423883344402,
+            "offense_epa_per_play": -0.050473822252636885,
+            "defense_epa_allowed_per_play": 0.03117942388334441,
             "offense_success_rate": 0.4080983622182332,
             "defense_success_allowed_rate": 0.44808257318217476,
             "offense_pass_rate": 0.6005941128814475,
@@ -8403,9 +8413,9 @@
             "explosive_rate_offense": 0.06994328922495274,
             "explosive_rate_defense_allowed": 0.07335907335907337,
             "pass_epa_offense": -0.0360500952718288,
-            "pass_epa_defense_allowed": 0.060575073489485966,
+            "pass_epa_defense_allowed": 0.06057507348948597,
             "rush_epa_offense": -0.07340284667379249,
-            "rush_epa_defense_allowed": -0.005865587265404811,
+            "rush_epa_defense_allowed": -0.005865587265404809,
             "plays_per_game": 66.125,
             "turnovers_per_game": 1.625,
             "defensive_sacks_per_game": 1.5,
@@ -8418,31 +8428,31 @@
             "available": true,
             "offense_games": 8,
             "defense_games": 8,
-            "offense_epa_per_play": 0.012298109011597332,
-            "defense_epa_allowed_per_play": 0.01343471541681435,
+            "offense_epa_per_play": 0.012298109011597336,
+            "defense_epa_allowed_per_play": 0.013434715416814357,
             "offense_success_rate": 0.42173951486928585,
             "defense_success_allowed_rate": 0.44722164007065657,
             "offense_pass_rate": 0.6460829968463556,
             "defense_pass_rate_allowed": 0.5612077482710098,
             "expected_pass_rate": 0.6036453725586828,
-            "pass_epa_matchup_delta": -0.04623336586780715,
+            "pass_epa_matchup_delta": -0.04623336586780717,
             "rush_epa_matchup_delta": 0.06320134196286448,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": -0.002858413016431898,
+            "epa_per_play_delta": -0.0028584130164319085,
             "success_rate_delta": -0.02548212520137072,
             "explosive_rate_offense": 0.09541984732824428,
             "explosive_rate_defense_allowed": 0.1062992125984252,
-            "pass_epa_offense": -0.000336967132586706,
-            "pass_epa_defense_allowed": 0.045896398735220445,
-            "rush_epa_offense": 0.03504421166125784,
+            "pass_epa_offense": -0.00033696713258671296,
+            "pass_epa_defense_allowed": 0.04589639873522046,
+            "rush_epa_offense": 0.03504421166125783,
             "rush_epa_defense_allowed": -0.028157130301606645,
             "plays_per_game": 65.5,
             "turnovers_per_game": 1.25,
             "defensive_sacks_per_game": 2.875,
             "score_adjustment": 0.0,
             "warning": "Play-by-play matchup adjustment is experimental and not calibrated.",
-            "experimental_score_adjustment": -0.3200775674986081,
+            "experimental_score_adjustment": -0.32007756749860816,
             "adjustment_applied": false
           }
         },
@@ -9325,7 +9335,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T13:11:56.140668+00:00",
+            "retrieved_at": "2026-11-12T13:30:49.247085+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -9359,7 +9369,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T13:11:53.749527+00:00",
+          "checked_at": "2026-11-12T13:30:47.793143+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -9522,42 +9532,42 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 473,
+            "games": 488,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.40338266384778,
-                "adjusted_mae": 10.383509513742071,
-                "mean_improvement": 0.019873150105708254,
+                "baseline_mae": 10.431967213114753,
+                "adjusted_mae": 10.402254098360656,
+                "mean_improvement": 0.02971311475409836,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1850840336134454,
-                  0.21941544885177458
+                  -0.1672199170124482,
+                  0.2207818930041152
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355179,
-                "adjusted_mae": 10.414376321353066,
-                "mean_improvement": 0.044397463002114106,
+                "baseline_mae": 10.477459016393444,
+                "adjusted_mae": 10.434221311475412,
+                "mean_improvement": 0.043237704918032735,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.11196581196581201,
-                  0.18858921161825706
+                  -0.10991902834008091,
+                  0.20020576131687234
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 473,
-                "total_mae": 10.41,
-                "margin_mae": 10.38,
-                "winner_accuracy": 0.6017,
-                "total_bias": -1.06
+                "games": 488,
+                "total_mae": 10.43,
+                "margin_mae": 10.4,
+                "winner_accuracy": 0.6099,
+                "total_bias": -0.99
               },
               "scoring_baseline": {
-                "games": 473,
-                "total_mae": 10.46,
-                "margin_mae": 10.4,
-                "winner_accuracy": 0.6144,
-                "total_bias": -1.08
+                "games": 488,
+                "total_mae": 10.48,
+                "margin_mae": 10.43,
+                "winner_accuracy": 0.6201,
+                "total_bias": -1.01
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
@@ -9589,7 +9599,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T13:11:56.141307+00:00",
+          "generated_at": "2026-11-12T13:30:49.247507+00:00",
           "available": true,
           "quarterbacks": {
             "NO": {
@@ -9619,6 +9629,7 @@
               "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -9648,6 +9659,7 @@
               "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -9768,14 +9780,14 @@
             "available": true,
             "offense_games": 9,
             "defense_games": 8,
-            "offense_epa_per_play": 0.016703556630676564,
+            "offense_epa_per_play": 0.016703556630676568,
             "defense_epa_allowed_per_play": -0.06372561867288551,
             "offense_success_rate": 0.4603525835866262,
             "defense_success_allowed_rate": 0.4234161046392806,
             "offense_pass_rate": 0.5771914893617022,
             "defense_pass_rate_allowed": 0.6532495401594114,
             "expected_pass_rate": 0.6152205147605567,
-            "pass_epa_matchup_delta": 0.13129330341162143,
+            "pass_epa_matchup_delta": 0.1312933034116214,
             "rush_epa_matchup_delta": 0.03185916164816213,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
@@ -9783,8 +9795,8 @@
             "success_rate_delta": 0.036936478947345586,
             "explosive_rate_offense": 0.09904761904761905,
             "explosive_rate_defense_allowed": 0.09523809523809523,
-            "pass_epa_offense": 0.10576055144126685,
-            "pass_epa_defense_allowed": -0.025532751970354584,
+            "pass_epa_offense": 0.10576055144126684,
+            "pass_epa_defense_allowed": -0.025532751970354577,
             "rush_epa_offense": -0.10517451730708427,
             "rush_epa_defense_allowed": -0.1370336789552464,
             "plays_per_game": 58.333333333333336,
@@ -9799,7 +9811,7 @@
             "available": true,
             "offense_games": 8,
             "defense_games": 9,
-            "offense_epa_per_play": 0.1229804442350544,
+            "offense_epa_per_play": 0.12298044423505439,
             "defense_epa_allowed_per_play": 0.08920563023676378,
             "offense_success_rate": 0.476048858204992,
             "defense_success_allowed_rate": 0.4794873790804809,
@@ -9817,7 +9829,7 @@
             "pass_epa_offense": 0.177050482704744,
             "pass_epa_defense_allowed": 0.22625939689172475,
             "rush_epa_offense": 0.07064880556250835,
-            "rush_epa_defense_allowed": -0.03987072666187999,
+            "rush_epa_defense_allowed": -0.03987072666188,
             "plays_per_game": 63.0,
             "turnovers_per_game": 1.5,
             "defensive_sacks_per_game": 2.4444444444444446,
@@ -10682,7 +10694,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T13:11:56.172244+00:00",
+            "retrieved_at": "2026-11-12T13:30:49.274013+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -10722,7 +10734,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T13:11:53.749527+00:00",
+          "checked_at": "2026-11-12T13:30:47.793143+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -10886,42 +10898,42 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 473,
+            "games": 488,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.40338266384778,
-                "adjusted_mae": 10.383509513742071,
-                "mean_improvement": 0.019873150105708254,
+                "baseline_mae": 10.431967213114753,
+                "adjusted_mae": 10.402254098360656,
+                "mean_improvement": 0.02971311475409836,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1850840336134454,
-                  0.21941544885177458
+                  -0.1672199170124482,
+                  0.2207818930041152
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355179,
-                "adjusted_mae": 10.414376321353066,
-                "mean_improvement": 0.044397463002114106,
+                "baseline_mae": 10.477459016393444,
+                "adjusted_mae": 10.434221311475412,
+                "mean_improvement": 0.043237704918032735,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.11196581196581201,
-                  0.18858921161825706
+                  -0.10991902834008091,
+                  0.20020576131687234
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 473,
-                "total_mae": 10.41,
-                "margin_mae": 10.38,
-                "winner_accuracy": 0.6017,
-                "total_bias": -1.06
+                "games": 488,
+                "total_mae": 10.43,
+                "margin_mae": 10.4,
+                "winner_accuracy": 0.6099,
+                "total_bias": -0.99
               },
               "scoring_baseline": {
-                "games": 473,
-                "total_mae": 10.46,
-                "margin_mae": 10.4,
-                "winner_accuracy": 0.6144,
-                "total_bias": -1.08
+                "games": 488,
+                "total_mae": 10.48,
+                "margin_mae": 10.43,
+                "winner_accuracy": 0.6201,
+                "total_bias": -1.01
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
@@ -10953,7 +10965,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T13:11:56.172928+00:00",
+          "generated_at": "2026-11-12T13:30:49.274407+00:00",
           "available": true,
           "quarterbacks": {
             "NYJ": {
@@ -10983,6 +10995,7 @@
               "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -11012,6 +11025,7 @@
               "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -11133,13 +11147,13 @@
             "offense_games": 8,
             "defense_games": 8,
             "offense_epa_per_play": -0.08917346940346152,
-            "defense_epa_allowed_per_play": -0.1557849325533567,
+            "defense_epa_allowed_per_play": -0.15578493255335674,
             "offense_success_rate": 0.4203764811759412,
             "defense_success_allowed_rate": 0.39722709460720285,
             "offense_pass_rate": 0.581318434078296,
             "defense_pass_rate_allowed": 0.581000186601978,
             "expected_pass_rate": 0.581159310340137,
-            "pass_epa_matchup_delta": 0.030672461575700277,
+            "pass_epa_matchup_delta": 0.03067246157570029,
             "rush_epa_matchup_delta": 0.11671450110023249,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
@@ -11147,7 +11161,7 @@
             "success_rate_delta": 0.023149386568738328,
             "explosive_rate_offense": 0.07300884955752213,
             "explosive_rate_defense_allowed": 0.07081545064377683,
-            "pass_epa_offense": -0.11690301510351189,
+            "pass_epa_offense": -0.11690301510351188,
             "pass_epa_defense_allowed": -0.14757547667921217,
             "rush_epa_offense": -0.050647133898904934,
             "rush_epa_defense_allowed": -0.16736163499913742,
@@ -11163,31 +11177,31 @@
             "available": true,
             "offense_games": 8,
             "defense_games": 8,
-            "offense_epa_per_play": 0.13680850628422062,
+            "offense_epa_per_play": 0.1368085062842206,
             "defense_epa_allowed_per_play": 0.07106296393388532,
             "offense_success_rate": 0.46487125474406493,
             "defense_success_allowed_rate": 0.4817980184251695,
             "offense_pass_rate": 0.5217147072678631,
             "defense_pass_rate_allowed": 0.5851722579523727,
             "expected_pass_rate": 0.5534434826101179,
-            "pass_epa_matchup_delta": 0.10627681268113909,
+            "pass_epa_matchup_delta": 0.10627681268113903,
             "rush_epa_matchup_delta": 0.04969650131785497,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": 0.08101050588591575,
+            "epa_per_play_delta": 0.08101050588591573,
             "success_rate_delta": -0.016926763681104573,
             "explosive_rate_offense": 0.10151187904967603,
             "explosive_rate_defense_allowed": 0.10325047801147227,
-            "pass_epa_offense": 0.2693590510494971,
+            "pass_epa_offense": 0.26935905104949703,
             "pass_epa_defense_allowed": 0.163082238368358,
-            "rush_epa_offense": -0.007956236711729844,
+            "rush_epa_offense": -0.007956236711729845,
             "rush_epa_defense_allowed": -0.057652738029584816,
             "plays_per_game": 57.875,
             "turnovers_per_game": 0.75,
             "defensive_sacks_per_game": 2.5,
             "score_adjustment": 0.0,
             "warning": "Play-by-play matchup adjustment is experimental and not calibrated.",
-            "experimental_score_adjustment": 0.20193136525632388,
+            "experimental_score_adjustment": 0.20193136525632377,
             "adjustment_applied": false
           }
         },
@@ -12074,7 +12088,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T13:11:56.415911+00:00",
+            "retrieved_at": "2026-11-12T13:30:49.496383+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -12114,7 +12128,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T13:11:53.749527+00:00",
+          "checked_at": "2026-11-12T13:30:47.793143+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -12277,42 +12291,42 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 473,
+            "games": 488,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.40338266384778,
-                "adjusted_mae": 10.383509513742071,
-                "mean_improvement": 0.019873150105708254,
+                "baseline_mae": 10.431967213114753,
+                "adjusted_mae": 10.402254098360656,
+                "mean_improvement": 0.02971311475409836,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1850840336134454,
-                  0.21941544885177458
+                  -0.1672199170124482,
+                  0.2207818930041152
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355179,
-                "adjusted_mae": 10.414376321353066,
-                "mean_improvement": 0.044397463002114106,
+                "baseline_mae": 10.477459016393444,
+                "adjusted_mae": 10.434221311475412,
+                "mean_improvement": 0.043237704918032735,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.11196581196581201,
-                  0.18858921161825706
+                  -0.10991902834008091,
+                  0.20020576131687234
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 473,
-                "total_mae": 10.41,
-                "margin_mae": 10.38,
-                "winner_accuracy": 0.6017,
-                "total_bias": -1.06
+                "games": 488,
+                "total_mae": 10.43,
+                "margin_mae": 10.4,
+                "winner_accuracy": 0.6099,
+                "total_bias": -0.99
               },
               "scoring_baseline": {
-                "games": 473,
-                "total_mae": 10.46,
-                "margin_mae": 10.4,
-                "winner_accuracy": 0.6144,
-                "total_bias": -1.08
+                "games": 488,
+                "total_mae": 10.48,
+                "margin_mae": 10.43,
+                "winner_accuracy": 0.6201,
+                "total_bias": -1.01
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
@@ -12344,7 +12358,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T13:11:56.416446+00:00",
+          "generated_at": "2026-11-12T13:30:49.496843+00:00",
           "available": true,
           "quarterbacks": {
             "TEN": {
@@ -12374,6 +12388,7 @@
               "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -12403,6 +12418,7 @@
               "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -12524,23 +12540,23 @@
             "offense_games": 9,
             "defense_games": 9,
             "offense_epa_per_play": -0.04429555484191515,
-            "defense_epa_allowed_per_play": -0.14396634473048747,
+            "defense_epa_allowed_per_play": -0.14396634473048744,
             "offense_success_rate": 0.4208856088560886,
             "defense_success_allowed_rate": 0.393365225230465,
             "offense_pass_rate": 0.6234944649446494,
             "defense_pass_rate_allowed": 0.5886177916072934,
             "expected_pass_rate": 0.6060561282759714,
-            "pass_epa_matchup_delta": 0.07620571072719123,
-            "rush_epa_matchup_delta": 0.13933029889961704,
+            "pass_epa_matchup_delta": 0.07620571072719122,
+            "rush_epa_matchup_delta": 0.13933029889961707,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
             "epa_per_play_delta": 0.10107325539282147,
             "success_rate_delta": 0.02752038362562359,
             "explosive_rate_offense": 0.058333333333333334,
             "explosive_rate_defense_allowed": 0.07846715328467153,
-            "pass_epa_offense": -0.05824195233599441,
+            "pass_epa_offense": -0.058241952335994426,
             "pass_epa_defense_allowed": -0.13444766306318565,
-            "rush_epa_offense": -0.021697545022058083,
+            "rush_epa_offense": -0.021697545022058076,
             "rush_epa_defense_allowed": -0.16102784392167513,
             "plays_per_game": 66.66666666666667,
             "turnovers_per_game": 0.8888888888888888,
@@ -12554,31 +12570,31 @@
             "available": true,
             "offense_games": 9,
             "defense_games": 9,
-            "offense_epa_per_play": 0.022575771787122043,
-            "defense_epa_allowed_per_play": 0.048487483089772694,
+            "offense_epa_per_play": 0.02257577178712204,
+            "defense_epa_allowed_per_play": 0.04848748308977268,
             "offense_success_rate": 0.48120067067435485,
             "defense_success_allowed_rate": 0.42461059190031153,
             "offense_pass_rate": 0.5838792786161208,
             "defense_pass_rate_allowed": 0.5262305295950156,
             "expected_pass_rate": 0.5550549041055681,
-            "pass_epa_matchup_delta": -0.13785430212145605,
-            "rush_epa_matchup_delta": 0.09628346722757455,
+            "pass_epa_matchup_delta": -0.13785430212145602,
+            "rush_epa_matchup_delta": 0.09628346722757457,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": -0.03367584988594326,
+            "epa_per_play_delta": -0.033675849885943236,
             "success_rate_delta": 0.05659007877404332,
             "explosive_rate_offense": 0.08080808080808081,
             "explosive_rate_defense_allowed": 0.09158878504672897,
-            "pass_epa_offense": 0.010757358776469588,
-            "pass_epa_defense_allowed": 0.14861166089792563,
+            "pass_epa_offense": 0.010757358776469585,
+            "pass_epa_defense_allowed": 0.1486116608979256,
             "rush_epa_offense": 0.03484510126110061,
-            "rush_epa_defense_allowed": -0.06143836596647395,
+            "rush_epa_defense_allowed": -0.06143836596647396,
             "plays_per_game": 66.0,
             "turnovers_per_game": 1.5555555555555556,
             "defensive_sacks_per_game": 2.111111111111111,
             "score_adjustment": 0.0,
             "warning": "Play-by-play matchup adjustment is experimental and not calibrated.",
-            "experimental_score_adjustment": 0.5107016958588035,
+            "experimental_score_adjustment": 0.5107016958588037,
             "adjustment_applied": false
           }
         },
@@ -13466,7 +13482,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T13:11:56.649790+00:00",
+            "retrieved_at": "2026-11-12T13:30:49.779167+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -13506,7 +13522,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T13:11:53.749527+00:00",
+          "checked_at": "2026-11-12T13:30:47.793143+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -13671,42 +13687,42 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 473,
+            "games": 488,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.40338266384778,
-                "adjusted_mae": 10.383509513742071,
-                "mean_improvement": 0.019873150105708254,
+                "baseline_mae": 10.431967213114753,
+                "adjusted_mae": 10.402254098360656,
+                "mean_improvement": 0.02971311475409836,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1850840336134454,
-                  0.21941544885177458
+                  -0.1672199170124482,
+                  0.2207818930041152
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355179,
-                "adjusted_mae": 10.414376321353066,
-                "mean_improvement": 0.044397463002114106,
+                "baseline_mae": 10.477459016393444,
+                "adjusted_mae": 10.434221311475412,
+                "mean_improvement": 0.043237704918032735,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.11196581196581201,
-                  0.18858921161825706
+                  -0.10991902834008091,
+                  0.20020576131687234
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 473,
-                "total_mae": 10.41,
-                "margin_mae": 10.38,
-                "winner_accuracy": 0.6017,
-                "total_bias": -1.06
+                "games": 488,
+                "total_mae": 10.43,
+                "margin_mae": 10.4,
+                "winner_accuracy": 0.6099,
+                "total_bias": -0.99
               },
               "scoring_baseline": {
-                "games": 473,
-                "total_mae": 10.46,
-                "margin_mae": 10.4,
-                "winner_accuracy": 0.6144,
-                "total_bias": -1.08
+                "games": 488,
+                "total_mae": 10.48,
+                "margin_mae": 10.43,
+                "winner_accuracy": 0.6201,
+                "total_bias": -1.01
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
@@ -13738,7 +13754,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T13:11:56.650407+00:00",
+          "generated_at": "2026-11-12T13:30:49.779631+00:00",
           "available": false,
           "quarterbacks": {
             "ARI": {
@@ -13850,7 +13866,7 @@
             "available": true,
             "offense_games": 9,
             "defense_games": 9,
-            "offense_epa_per_play": -0.024644709637267996,
+            "offense_epa_per_play": -0.02464470963726799,
             "defense_epa_allowed_per_play": -0.07700867956540855,
             "offense_success_rate": 0.42079329187865083,
             "defense_success_allowed_rate": 0.39604293549581077,
@@ -13858,7 +13874,7 @@
             "defense_pass_rate_allowed": 0.572923045862916,
             "expected_pass_rate": 0.5990628042580078,
             "pass_epa_matchup_delta": 0.21167581818426687,
-            "rush_epa_matchup_delta": -0.20305685557003172,
+            "rush_epa_matchup_delta": -0.2030568555700317,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
             "epa_per_play_delta": 0.045394062986639894,
@@ -13867,8 +13883,8 @@
             "explosive_rate_defense_allowed": 0.055133079847908745,
             "pass_epa_offense": 0.10309305730395618,
             "pass_epa_defense_allowed": -0.10858276088031069,
-            "rush_epa_offense": -0.2370671574922721,
-            "rush_epa_defense_allowed": -0.034010301922240374,
+            "rush_epa_offense": -0.23706715749227208,
+            "rush_epa_defense_allowed": -0.03401030192224039,
             "plays_per_game": 61.0,
             "turnovers_per_game": 1.2222222222222223,
             "defensive_sacks_per_game": 2.3333333333333335,
@@ -13881,23 +13897,23 @@
             "available": true,
             "offense_games": 9,
             "defense_games": 9,
-            "offense_epa_per_play": -0.026086900427325654,
+            "offense_epa_per_play": -0.026086900427325657,
             "defense_epa_allowed_per_play": 0.13393328561488893,
             "offense_success_rate": 0.40988827758463564,
             "defense_success_allowed_rate": 0.49528666751668154,
             "offense_pass_rate": 0.5544226550106321,
             "defense_pass_rate_allowed": 0.5191338348421097,
             "expected_pass_rate": 0.5367782449263709,
-            "pass_epa_matchup_delta": -0.17498146720752103,
+            "pass_epa_matchup_delta": -0.174981467207521,
             "rush_epa_matchup_delta": -0.15336514532919443,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": -0.1649683166488061,
+            "epa_per_play_delta": -0.16496831664880607,
             "success_rate_delta": -0.0853983899320459,
             "explosive_rate_offense": 0.08407871198568873,
             "explosive_rate_defense_allowed": 0.11648745519713262,
-            "pass_epa_offense": 0.03528337874736421,
-            "pass_epa_defense_allowed": 0.21026484595488523,
+            "pass_epa_offense": 0.035283378747364216,
+            "pass_epa_defense_allowed": 0.2102648459548852,
             "rush_epa_offense": -0.10170692873913344,
             "rush_epa_defense_allowed": 0.051658216590061,
             "plays_per_game": 62.111111111111114,
@@ -14641,7 +14657,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T13:11:56.681681+00:00",
+            "retrieved_at": "2026-11-12T13:30:49.805816+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -14675,7 +14691,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T13:11:53.749527+00:00",
+          "checked_at": "2026-11-12T13:30:47.793143+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -14840,42 +14856,42 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 473,
+            "games": 488,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.40338266384778,
-                "adjusted_mae": 10.383509513742071,
-                "mean_improvement": 0.019873150105708254,
+                "baseline_mae": 10.431967213114753,
+                "adjusted_mae": 10.402254098360656,
+                "mean_improvement": 0.02971311475409836,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1850840336134454,
-                  0.21941544885177458
+                  -0.1672199170124482,
+                  0.2207818930041152
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355179,
-                "adjusted_mae": 10.414376321353066,
-                "mean_improvement": 0.044397463002114106,
+                "baseline_mae": 10.477459016393444,
+                "adjusted_mae": 10.434221311475412,
+                "mean_improvement": 0.043237704918032735,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.11196581196581201,
-                  0.18858921161825706
+                  -0.10991902834008091,
+                  0.20020576131687234
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 473,
-                "total_mae": 10.41,
-                "margin_mae": 10.38,
-                "winner_accuracy": 0.6017,
-                "total_bias": -1.06
+                "games": 488,
+                "total_mae": 10.43,
+                "margin_mae": 10.4,
+                "winner_accuracy": 0.6099,
+                "total_bias": -0.99
               },
               "scoring_baseline": {
-                "games": 473,
-                "total_mae": 10.46,
-                "margin_mae": 10.4,
-                "winner_accuracy": 0.6144,
-                "total_bias": -1.08
+                "games": 488,
+                "total_mae": 10.48,
+                "margin_mae": 10.43,
+                "winner_accuracy": 0.6201,
+                "total_bias": -1.01
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
@@ -14907,7 +14923,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T13:11:56.682376+00:00",
+          "generated_at": "2026-11-12T13:30:49.806202+00:00",
           "available": false,
           "quarterbacks": {
             "LV": {
@@ -15036,7 +15052,7 @@
             "explosive_rate_defense_allowed": 0.04781704781704782,
             "pass_epa_offense": 0.12455975949008305,
             "pass_epa_defense_allowed": -0.043421805953911735,
-            "rush_epa_offense": 0.023427572950365197,
+            "rush_epa_offense": 0.023427572950365204,
             "rush_epa_defense_allowed": -0.22848625965520375,
             "plays_per_game": 65.0,
             "turnovers_per_game": 0.8888888888888888,
@@ -15051,30 +15067,30 @@
             "offense_games": 8,
             "defense_games": 9,
             "offense_epa_per_play": 0.13967066346442752,
-            "defense_epa_allowed_per_play": 0.044524052917152016,
+            "defense_epa_allowed_per_play": 0.04452405291715199,
             "offense_success_rate": 0.523059039461609,
             "defense_success_allowed_rate": 0.43633958633958636,
             "offense_pass_rate": 0.5260831184722283,
             "defense_pass_rate_allowed": 0.575925925925926,
             "expected_pass_rate": 0.5510045221990771,
-            "pass_epa_matchup_delta": 0.07926270815151687,
-            "rush_epa_matchup_delta": 0.11367283720103002,
+            "pass_epa_matchup_delta": 0.07926270815151691,
+            "rush_epa_matchup_delta": 0.11367283720103004,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": 0.09471270048529444,
+            "epa_per_play_delta": 0.09471270048529447,
             "success_rate_delta": 0.08671945312202267,
             "explosive_rate_offense": 0.12633832976445397,
             "explosive_rate_defense_allowed": 0.10052910052910052,
-            "pass_epa_offense": 0.15563570951146172,
-            "pass_epa_defense_allowed": 0.07637300135994485,
+            "pass_epa_offense": 0.1556357095114617,
+            "pass_epa_defense_allowed": 0.07637300135994478,
             "rush_epa_offense": 0.12405745927557821,
-            "rush_epa_defense_allowed": 0.010384622074548176,
+            "rush_epa_defense_allowed": 0.010384622074548175,
             "plays_per_game": 58.375,
             "turnovers_per_game": 1.125,
             "defensive_sacks_per_game": 1.8888888888888888,
             "score_adjustment": 0.0,
             "warning": "Play-by-play matchup adjustment is experimental and not calibrated.",
-            "experimental_score_adjustment": 1.5141969398907442,
+            "experimental_score_adjustment": 1.5141969398907444,
             "adjustment_applied": false
           }
         },
@@ -16005,7 +16021,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T13:11:57.004038+00:00",
+            "retrieved_at": "2026-11-12T13:30:50.221891+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -16045,7 +16061,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T13:11:53.749527+00:00",
+          "checked_at": "2026-11-12T13:30:47.793143+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -16209,42 +16225,42 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 473,
+            "games": 488,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.40338266384778,
-                "adjusted_mae": 10.383509513742071,
-                "mean_improvement": 0.019873150105708254,
+                "baseline_mae": 10.431967213114753,
+                "adjusted_mae": 10.402254098360656,
+                "mean_improvement": 0.02971311475409836,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1850840336134454,
-                  0.21941544885177458
+                  -0.1672199170124482,
+                  0.2207818930041152
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355179,
-                "adjusted_mae": 10.414376321353066,
-                "mean_improvement": 0.044397463002114106,
+                "baseline_mae": 10.477459016393444,
+                "adjusted_mae": 10.434221311475412,
+                "mean_improvement": 0.043237704918032735,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.11196581196581201,
-                  0.18858921161825706
+                  -0.10991902834008091,
+                  0.20020576131687234
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 473,
-                "total_mae": 10.41,
-                "margin_mae": 10.38,
-                "winner_accuracy": 0.6017,
-                "total_bias": -1.06
+                "games": 488,
+                "total_mae": 10.43,
+                "margin_mae": 10.4,
+                "winner_accuracy": 0.6099,
+                "total_bias": -0.99
               },
               "scoring_baseline": {
-                "games": 473,
-                "total_mae": 10.46,
-                "margin_mae": 10.4,
-                "winner_accuracy": 0.6144,
-                "total_bias": -1.08
+                "games": 488,
+                "total_mae": 10.48,
+                "margin_mae": 10.43,
+                "winner_accuracy": 0.6201,
+                "total_bias": -1.01
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
@@ -16276,7 +16292,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T13:11:57.004609+00:00",
+          "generated_at": "2026-11-12T13:30:50.222357+00:00",
           "available": true,
           "quarterbacks": {
             "DAL": {
@@ -16306,6 +16322,7 @@
               "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -16335,6 +16352,7 @@
               "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -16455,8 +16473,8 @@
             "available": true,
             "offense_games": 8,
             "defense_games": 8,
-            "offense_epa_per_play": 0.17785189339915344,
-            "defense_epa_allowed_per_play": -0.09916099941884723,
+            "offense_epa_per_play": 0.17785189339915347,
+            "defense_epa_allowed_per_play": -0.09916099941884722,
             "offense_success_rate": 0.5269519126826376,
             "defense_success_allowed_rate": 0.40328903967580815,
             "offense_pass_rate": 0.6331903616138369,
@@ -16472,7 +16490,7 @@
             "explosive_rate_defense_allowed": 0.09053497942386832,
             "pass_epa_offense": 0.31679591857021805,
             "pass_epa_defense_allowed": -0.08516210331251038,
-            "rush_epa_offense": -0.05910263768868788,
+            "rush_epa_offense": -0.05910263768868786,
             "rush_epa_defense_allowed": -0.12687365921582056,
             "plays_per_game": 60.5,
             "turnovers_per_game": 1.125,
@@ -16486,23 +16504,23 @@
             "available": true,
             "offense_games": 8,
             "defense_games": 8,
-            "offense_epa_per_play": 0.0052882672707901465,
-            "defense_epa_allowed_per_play": 0.017717205230142353,
+            "offense_epa_per_play": 0.00528826727079015,
+            "defense_epa_allowed_per_play": 0.017717205230142356,
             "offense_success_rate": 0.424762726488352,
             "defense_success_allowed_rate": 0.45179115853658536,
             "offense_pass_rate": 0.6093051038693834,
             "defense_pass_rate_allowed": 0.5816310975609756,
             "expected_pass_rate": 0.5954681007151795,
-            "pass_epa_matchup_delta": -0.07949116127428217,
+            "pass_epa_matchup_delta": -0.07949116127428218,
             "rush_epa_matchup_delta": 0.09943064443293198,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
-            "epa_per_play_delta": -0.007111583388073196,
+            "epa_per_play_delta": -0.00711158338807321,
             "success_rate_delta": -0.027028432048233353,
             "explosive_rate_offense": 0.0951417004048583,
             "explosive_rate_defense_allowed": 0.11178861788617886,
             "pass_epa_offense": -0.10052169063867801,
-            "pass_epa_defense_allowed": -0.02103052936439584,
+            "pass_epa_defense_allowed": -0.021030529364395832,
             "rush_epa_offense": 0.16815787058688353,
             "rush_epa_defense_allowed": 0.06872722615395155,
             "plays_per_game": 61.75,
@@ -16510,7 +16528,7 @@
             "defensive_sacks_per_game": 2.875,
             "score_adjustment": 0.0,
             "warning": "Play-by-play matchup adjustment is experimental and not calibrated.",
-            "experimental_score_adjustment": -0.3598991015191662,
+            "experimental_score_adjustment": -0.35989910151916626,
             "adjustment_applied": false
           }
         },
@@ -17270,7 +17288,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T13:11:57.186488+00:00",
+            "retrieved_at": "2026-11-12T13:30:50.451882+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -17310,7 +17328,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T13:11:53.749527+00:00",
+          "checked_at": "2026-11-12T13:30:47.793143+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -17473,42 +17491,42 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 473,
+            "games": 488,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.40338266384778,
-                "adjusted_mae": 10.383509513742071,
-                "mean_improvement": 0.019873150105708254,
+                "baseline_mae": 10.431967213114753,
+                "adjusted_mae": 10.402254098360656,
+                "mean_improvement": 0.02971311475409836,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1850840336134454,
-                  0.21941544885177458
+                  -0.1672199170124482,
+                  0.2207818930041152
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355179,
-                "adjusted_mae": 10.414376321353066,
-                "mean_improvement": 0.044397463002114106,
+                "baseline_mae": 10.477459016393444,
+                "adjusted_mae": 10.434221311475412,
+                "mean_improvement": 0.043237704918032735,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.11196581196581201,
-                  0.18858921161825706
+                  -0.10991902834008091,
+                  0.20020576131687234
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 473,
-                "total_mae": 10.41,
-                "margin_mae": 10.38,
-                "winner_accuracy": 0.6017,
-                "total_bias": -1.06
+                "games": 488,
+                "total_mae": 10.43,
+                "margin_mae": 10.4,
+                "winner_accuracy": 0.6099,
+                "total_bias": -0.99
               },
               "scoring_baseline": {
-                "games": 473,
-                "total_mae": 10.46,
-                "margin_mae": 10.4,
-                "winner_accuracy": 0.6144,
-                "total_bias": -1.08
+                "games": 488,
+                "total_mae": 10.48,
+                "margin_mae": 10.43,
+                "winner_accuracy": 0.6201,
+                "total_bias": -1.01
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
@@ -17540,7 +17558,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T13:11:57.187155+00:00",
+          "generated_at": "2026-11-12T13:30:50.452338+00:00",
           "available": true,
           "quarterbacks": {
             "CIN": {
@@ -17570,6 +17588,7 @@
               "coverage": "NO_MATCHED_CURRENT_WEEK_REPORT",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -17599,6 +17618,7 @@
               "coverage": "REPORTED",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -17719,24 +17739,24 @@
             "available": true,
             "offense_games": 9,
             "defense_games": 8,
-            "offense_epa_per_play": -0.10497687520235414,
-            "defense_epa_allowed_per_play": 0.007356733548611746,
+            "offense_epa_per_play": -0.10497687520235416,
+            "defense_epa_allowed_per_play": 0.0073567335486117505,
             "offense_success_rate": 0.4058441558441559,
             "defense_success_allowed_rate": 0.440266994100649,
             "offense_pass_rate": 0.5235389610389611,
             "defense_pass_rate_allowed": 0.5251511766389394,
             "expected_pass_rate": 0.5243450688389503,
             "pass_epa_matchup_delta": -0.15038253794476258,
-            "rush_epa_matchup_delta": -0.06908589366513482,
+            "rush_epa_matchup_delta": -0.06908589366513479,
             "recent_form_games": 4,
             "recent_form_weight": 0.4,
             "epa_per_play_delta": -0.11171338820631188,
             "success_rate_delta": -0.034422838256493116,
             "explosive_rate_offense": 0.09659090909090909,
             "explosive_rate_defense_allowed": 0.1014799154334038,
-            "pass_epa_offense": -0.08623485032268223,
-            "pass_epa_defense_allowed": 0.06414768762208035,
-            "rush_epa_offense": -0.12468561780601152,
+            "pass_epa_offense": -0.08623485032268224,
+            "pass_epa_defense_allowed": 0.06414768762208034,
+            "rush_epa_offense": -0.1246856178060115,
             "rush_epa_defense_allowed": -0.05559972414087671,
             "plays_per_game": 58.666666666666664,
             "turnovers_per_game": 1.1111111111111112,
@@ -17750,7 +17770,7 @@
             "available": true,
             "offense_games": 8,
             "defense_games": 9,
-            "offense_epa_per_play": -0.2783378323804814,
+            "offense_epa_per_play": -0.2783378323804813,
             "defense_epa_allowed_per_play": 0.03459233439714282,
             "offense_success_rate": 0.32910798122065726,
             "defense_success_allowed_rate": 0.4610986471378299,
@@ -17766,9 +17786,9 @@
             "explosive_rate_offense": 0.07847082494969819,
             "explosive_rate_defense_allowed": 0.07775768535262206,
             "pass_epa_offense": -0.30667836068551413,
-            "pass_epa_defense_allowed": 0.12290697679833226,
+            "pass_epa_defense_allowed": 0.12290697679833229,
             "rush_epa_offense": -0.24301119685795158,
-            "rush_epa_defense_allowed": -0.06750078313667786,
+            "rush_epa_defense_allowed": -0.06750078313667784,
             "plays_per_game": 62.125,
             "turnovers_per_game": 2.25,
             "defensive_sacks_per_game": 1.8888888888888888,
@@ -18469,7 +18489,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-12T13:11:57.410215+00:00",
+            "retrieved_at": "2026-11-12T13:30:50.679361+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -18509,7 +18529,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
-          "checked_at": "2026-11-12T13:11:53.749527+00:00",
+          "checked_at": "2026-11-12T13:30:47.793143+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -18673,42 +18693,42 @@
           "validation": {
             "status": "NOT_CALIBRATED",
             "experimental_adjustment_enabled": false,
-            "games": 473,
+            "games": 488,
             "model_version_evaluated": "score-baseline-pbp-v2",
             "metrics": {
               "margin": {
-                "baseline_mae": 10.40338266384778,
-                "adjusted_mae": 10.383509513742071,
-                "mean_improvement": 0.019873150105708254,
+                "baseline_mae": 10.431967213114753,
+                "adjusted_mae": 10.402254098360656,
+                "mean_improvement": 0.02971311475409836,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.1850840336134454,
-                  0.21941544885177458
+                  -0.1672199170124482,
+                  0.2207818930041152
                 ]
               },
               "total": {
-                "baseline_mae": 10.458773784355179,
-                "adjusted_mae": 10.414376321353066,
-                "mean_improvement": 0.044397463002114106,
+                "baseline_mae": 10.477459016393444,
+                "adjusted_mae": 10.434221311475412,
+                "mean_improvement": 0.043237704918032735,
                 "improvement_95pct_week_cluster_interval": [
-                  -0.11196581196581201,
-                  0.18858921161825706
+                  -0.10991902834008091,
+                  0.20020576131687234
                 ]
               }
             },
             "reported_scores": {
               "matchup_adjusted": {
-                "games": 473,
-                "total_mae": 10.41,
-                "margin_mae": 10.38,
-                "winner_accuracy": 0.6017,
-                "total_bias": -1.06
+                "games": 488,
+                "total_mae": 10.43,
+                "margin_mae": 10.4,
+                "winner_accuracy": 0.6099,
+                "total_bias": -0.99
               },
               "scoring_baseline": {
-                "games": 473,
-                "total_mae": 10.46,
-                "margin_mae": 10.4,
-                "winner_accuracy": 0.6144,
-                "total_bias": -1.08
+                "games": 488,
+                "total_mae": 10.48,
+                "margin_mae": 10.43,
+                "winner_accuracy": 0.6201,
+                "total_bias": -1.01
               }
             },
             "reason": "No established improvement across seasons or probability calibration. Experimental EPA correction is descriptive only; scoring baseline is the production research estimate.",
@@ -18740,7 +18760,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-12T13:11:57.411029+00:00",
+          "generated_at": "2026-11-12T13:30:50.679824+00:00",
           "available": true,
           "quarterbacks": {
             "BAL": {
@@ -18770,6 +18790,7 @@
               "coverage": "NO_MATCHED_CURRENT_WEEK_REPORT",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
@@ -18799,6 +18820,7 @@
               "coverage": "NO_MATCHED_CURRENT_WEEK_REPORT",
               "official_inactives_confirmed": false,
               "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+              "other_out_reports": [],
               "units": [
                 {
                   "side": "offense",
