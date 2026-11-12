@@ -35,9 +35,13 @@ function pairedMarketBenchmark(rows,games){
   lookup.set(key,g);
  }
  const paired=[];
+ const rowCounts=new Map();
+ for(const r of rows||[]){const key=[String(r.date),String(r.home),String(r.away)].join('|');rowCounts.set(key,(rowCounts.get(key)||0)+1);}
  const clip=p=>Math.max(1e-12,Math.min(1-1e-12,p));
  for(const r of rows||[]){
-  const g=lookup.get([String(r.date),String(r.home),String(r.away)].join('|'));
+  const key=[String(r.date),String(r.home),String(r.away)].join('|');
+  if(rowCounts.get(key)!==1)continue; // Duplicate model forecasts cannot multiply a game's weight.
+  const g=lookup.get(key);
   if(!g||![r.probability,r.outcome].every(Number.isFinite)||![0,1].includes(r.outcome)||r.probability<0||r.probability>1)continue;
   const market=marketProbability(g);if(market===null)continue;
   const brier=p=>(p-r.outcome)**2;
