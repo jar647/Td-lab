@@ -9,7 +9,7 @@ const fs=require('node:fs');
 const path=require('node:path');
 const gameEngine=require('./nfl_game_engine.js');
 const ROOT=__dirname;
-const MODEL_VERSION='game-first-volume-v1';
+const MODEL_VERSION=gameEngine.MODEL_VERSION;
 const CODE_TO_KEY={PASS:'passYards',RUSH:'rushYards',REC:'recYards',CATCH:'receptions'};
 const KEY_TO_CODE=Object.fromEntries(Object.entries(CODE_TO_KEY).map(([k,v])=>[v,k]));
 const toNumber=x=>Number.isFinite(Number(x))?Number(x):null;
@@ -21,7 +21,7 @@ function freezeGame(game,allPlayers,prior,now,outputDir,runSim=gameEngine.simula
  if(!Number.isFinite(cutoff.getTime())||!(now instanceof Date)||!Number.isFinite(now.getTime()))
   return {status:'INVALID_DATE'};
  if(now>=cutoff)return {status:'TOO_LATE_FOR_PREGAME_SNAPSHOT'};
- const target=path.join(outputDir,season+'-week-'+week+'-game-'+gameId+'.json');
+ const target=path.join(outputDir,season+'-week-'+week+'-game-'+gameId+'-'+MODEL_VERSION+'.json');
  if(fs.existsSync(target))return {status:'ALREADY_FROZEN'};
  if(!prior||prior.game_id!==gameId||!Array.isArray(prior.predictions)||!prior.predictions.length)
   return {status:'BASELINE_SNAPSHOT_MISSING'};

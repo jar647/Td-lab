@@ -81,7 +81,7 @@ for(const file of ['index.html','nba.html']){
  if(file==='nba.html')assert.ok(html.includes('CookItUpProbability.review'),file+' must keep its odds comparison engine');
 }
 const nflHome=fs.readFileSync('index.html','utf8');
-assert.ok(nflHome.includes('src="./nfl_game_engine.js"'),'NFL player cards must load the matchup simulation engine');
+assert.ok(nflHome.includes('src="./nfl_game_engine.js?v=nfl-official-attempts-v2"'),'NFL player cards must load the matchup simulation engine');
 assert.ok(nflHome.includes('function loadNFLPlayerScenarios(details)'),'NFL players must expose on-demand game-first scenario percentages');
 assert.ok(nflHome.includes("el.querySelectorAll('.pv-scenario-details').forEach(details=>details.addEventListener('toggle'"),'NFL scenario dropdowns must bind to the renderer-scoped loader');
 assert.ok(!nflHome.includes('ontoggle="loadNFLPlayerScenarios'),'NFL dropdowns must not call a non-global handler from inline markup');
