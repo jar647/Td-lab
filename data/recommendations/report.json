@@ -1,12 +1,12 @@
 {
   "schema": 1,
-  "generatedAt": "2026-11-12T18:17:28.807Z",
+  "generatedAt": "2026-11-12T18:28:59.677Z",
   "startedAt": "2026-11-12T00:52:14.113Z",
   "overall": {
     "probabilitySample": 9,
     "meanEstimate": 0.1209784751309743,
     "brier": 0.10709778865440951,
-    "tracked": 369,
+    "tracked": 428,
     "wins": 10,
     "losses": 10,
     "settled": 20,
@@ -15,7 +15,7 @@
       0.2992949144298199,
       0.7007050855701801
     ],
-    "pending": 349,
+    "pending": 408,
     "awaiting": 0,
     "voids": 0,
     "pushes": 0,
@@ -33,13 +33,13 @@
       "probabilitySample": 0,
       "meanEstimate": null,
       "brier": null,
-      "tracked": 22,
+      "tracked": 27,
       "wins": 0,
       "losses": 0,
       "settled": 0,
       "hitRate": null,
       "interval": null,
-      "pending": 22,
+      "pending": 27,
       "awaiting": 0,
       "voids": 0,
       "pushes": 0,
@@ -56,13 +56,13 @@
       "probabilitySample": 0,
       "meanEstimate": null,
       "brier": null,
-      "tracked": 234,
+      "tracked": 284,
       "wins": 0,
       "losses": 0,
       "settled": 0,
       "hitRate": null,
       "interval": null,
-      "pending": 234,
+      "pending": 284,
       "awaiting": 0,
       "voids": 0,
       "pushes": 0,
@@ -102,13 +102,13 @@
       "probabilitySample": 0,
       "meanEstimate": null,
       "brier": null,
-      "tracked": 70,
+      "tracked": 74,
       "wins": 0,
       "losses": 0,
       "settled": 0,
       "hitRate": null,
       "interval": null,
-      "pending": 70,
+      "pending": 74,
       "awaiting": 0,
       "voids": 0,
       "pushes": 0,
@@ -7483,6 +7483,917 @@
         "difference": null,
         "reason": "Need at least 30 settled picks on each side of 90, 30 distinct games and 10 dates within the same market, side and model version. No evidence claim yet."
       }
+    },
+    {
+      "key": "NFL|Game analyst (top 3/default ticket)|nfl-analyst-4772cc157a1c|receptions|at_least|NFL matchup score /100",
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "market": "receptions",
+      "side": "at_least",
+      "scoreKind": "NFL matchup score /100",
+      "probabilitySample": 0,
+      "meanEstimate": null,
+      "brier": null,
+      "tracked": 28,
+      "wins": 0,
+      "losses": 0,
+      "settled": 0,
+      "hitRate": null,
+      "interval": null,
+      "pending": 28,
+      "awaiting": 0,
+      "voids": 0,
+      "pushes": 0,
+      "excluded": 0,
+      "playerGames": 0,
+      "games": 0,
+      "days": 0,
+      "priced": 0,
+      "units": null,
+      "roi": null,
+      "bands": [
+        {
+          "band": "60–64",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 1,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 1,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        {
+          "band": "70–74",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 3,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 3,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        {
+          "band": "75–79",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 8,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 8,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        {
+          "band": "80–84",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 1,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 1,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        {
+          "band": "85–89",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 7,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 7,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        {
+          "band": "90–94",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 1,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 1,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        {
+          "band": "95–100",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 7,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 7,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        }
+      ],
+      "scoreTest": {
+        "cutoff": 90,
+        "status": "INSUFFICIENT_EVIDENCE",
+        "high": {
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 0,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 0,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        "low": {
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 0,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 0,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        "difference": null,
+        "reason": "Need at least 30 settled picks on each side of 90, 30 distinct games and 10 dates within the same market, side and model version. No evidence claim yet."
+      }
+    },
+    {
+      "key": "NFL|Game analyst (top 3/default ticket)|nfl-analyst-4772cc157a1c|rushYards|at_least|NFL matchup score /100",
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "market": "rushYards",
+      "side": "at_least",
+      "scoreKind": "NFL matchup score /100",
+      "probabilitySample": 0,
+      "meanEstimate": null,
+      "brier": null,
+      "tracked": 21,
+      "wins": 0,
+      "losses": 0,
+      "settled": 0,
+      "hitRate": null,
+      "interval": null,
+      "pending": 21,
+      "awaiting": 0,
+      "voids": 0,
+      "pushes": 0,
+      "excluded": 0,
+      "playerGames": 0,
+      "games": 0,
+      "days": 0,
+      "priced": 0,
+      "units": null,
+      "roi": null,
+      "bands": [
+        {
+          "band": "65–69",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 3,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 3,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        {
+          "band": "70–74",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 1,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 1,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        {
+          "band": "75–79",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 3,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 3,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        {
+          "band": "80–84",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 3,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 3,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        {
+          "band": "85–89",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 6,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 6,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        {
+          "band": "90–94",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 2,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 2,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        {
+          "band": "95–100",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 3,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 3,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        }
+      ],
+      "scoreTest": {
+        "cutoff": 90,
+        "status": "INSUFFICIENT_EVIDENCE",
+        "high": {
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 0,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 0,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        "low": {
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 0,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 0,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        "difference": null,
+        "reason": "Need at least 30 settled picks on each side of 90, 30 distinct games and 10 dates within the same market, side and model version. No evidence claim yet."
+      }
+    },
+    {
+      "key": "NFL|Game analyst (top 3/default ticket)|nfl-analyst-4772cc157a1c|passYards|at_least|NFL matchup score /100",
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "market": "passYards",
+      "side": "at_least",
+      "scoreKind": "NFL matchup score /100",
+      "probabilitySample": 0,
+      "meanEstimate": null,
+      "brier": null,
+      "tracked": 6,
+      "wins": 0,
+      "losses": 0,
+      "settled": 0,
+      "hitRate": null,
+      "interval": null,
+      "pending": 6,
+      "awaiting": 0,
+      "voids": 0,
+      "pushes": 0,
+      "excluded": 0,
+      "playerGames": 0,
+      "games": 0,
+      "days": 0,
+      "priced": 0,
+      "units": null,
+      "roi": null,
+      "bands": [
+        {
+          "band": "80–84",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 2,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 2,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        {
+          "band": "85–89",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 2,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 2,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        {
+          "band": "90–94",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 1,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 1,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        {
+          "band": "95–100",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 1,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 1,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        }
+      ],
+      "scoreTest": {
+        "cutoff": 90,
+        "status": "INSUFFICIENT_EVIDENCE",
+        "high": {
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 0,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 0,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        "low": {
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 0,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 0,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        "difference": null,
+        "reason": "Need at least 30 settled picks on each side of 90, 30 distinct games and 10 dates within the same market, side and model version. No evidence claim yet."
+      }
+    },
+    {
+      "key": "NFL|TD position leaders|nfl-td-eaffeb5f9f94|anytime_td|winner|TD opportunity /100",
+      "sport": "NFL",
+      "board": "TD position leaders",
+      "modelVersion": "nfl-td-eaffeb5f9f94",
+      "market": "anytime_td",
+      "side": "winner",
+      "scoreKind": "TD opportunity /100",
+      "probabilitySample": 0,
+      "meanEstimate": null,
+      "brier": null,
+      "tracked": 3,
+      "wins": 0,
+      "losses": 0,
+      "settled": 0,
+      "hitRate": null,
+      "interval": null,
+      "pending": 3,
+      "awaiting": 0,
+      "voids": 0,
+      "pushes": 0,
+      "excluded": 0,
+      "playerGames": 0,
+      "games": 0,
+      "days": 0,
+      "priced": 0,
+      "units": null,
+      "roi": null,
+      "bands": [
+        {
+          "band": "80–84",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 1,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 1,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        {
+          "band": "85–89",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 1,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 1,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        {
+          "band": "95–100",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 1,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 1,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        }
+      ],
+      "scoreTest": {
+        "cutoff": 60,
+        "status": "INSUFFICIENT_EVIDENCE",
+        "high": {
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 0,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 0,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        "low": {
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 0,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 0,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        "difference": null,
+        "reason": "Need at least 30 settled picks on each side of 60, 30 distinct games and 10 dates within the same market, side and model version. No evidence claim yet."
+      }
+    },
+    {
+      "key": "NFL|Game analyst (top 3/default ticket)|nfl-analyst-4772cc157a1c|recYards|at_least|NFL matchup score /100",
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "market": "recYards",
+      "side": "at_least",
+      "scoreKind": "NFL matchup score /100",
+      "probabilitySample": 0,
+      "meanEstimate": null,
+      "brier": null,
+      "tracked": 1,
+      "wins": 0,
+      "losses": 0,
+      "settled": 0,
+      "hitRate": null,
+      "interval": null,
+      "pending": 1,
+      "awaiting": 0,
+      "voids": 0,
+      "pushes": 0,
+      "excluded": 0,
+      "playerGames": 0,
+      "games": 0,
+      "days": 0,
+      "priced": 0,
+      "units": null,
+      "roi": null,
+      "bands": [
+        {
+          "band": "90–94",
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 1,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 1,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        }
+      ],
+      "scoreTest": {
+        "cutoff": 90,
+        "status": "INSUFFICIENT_EVIDENCE",
+        "high": {
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 0,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 0,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        "low": {
+          "probabilitySample": 0,
+          "meanEstimate": null,
+          "brier": null,
+          "tracked": 0,
+          "wins": 0,
+          "losses": 0,
+          "settled": 0,
+          "hitRate": null,
+          "interval": null,
+          "pending": 0,
+          "awaiting": 0,
+          "voids": 0,
+          "pushes": 0,
+          "excluded": 0,
+          "playerGames": 0,
+          "games": 0,
+          "days": 0,
+          "priced": 0,
+          "units": null,
+          "roi": null
+        },
+        "difference": null,
+        "reason": "Need at least 30 settled picks on each side of 90, 30 distinct games and 10 dates within the same market, side and model version. No evidence claim yet."
+      }
     }
   ],
   "picks": [
@@ -7514,7 +8425,7 @@
       "outcome": {
         "status": "loss",
         "actual": 4,
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -7545,7 +8456,7 @@
       "outcome": {
         "status": "win",
         "actual": 7,
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -7576,7 +8487,7 @@
       "outcome": {
         "status": "loss",
         "actual": 7,
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -7607,7 +8518,7 @@
       "outcome": {
         "status": "win",
         "actual": 31,
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -7638,7 +8549,7 @@
       "outcome": {
         "status": "win",
         "actual": 35,
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -7677,7 +8588,7 @@
       "outcome": {
         "status": "win",
         "actual": 33,
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -7716,7 +8627,7 @@
       "outcome": {
         "status": "win",
         "actual": 37,
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -7755,7 +8666,7 @@
       "outcome": {
         "status": "win",
         "actual": 6,
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -7785,7 +8696,7 @@
       "outcome": {
         "status": "win",
         "actual": 31,
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -7823,7 +8734,7 @@
       "outcome": {
         "status": "win",
         "actual": 6,
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -7855,7 +8766,7 @@
       "outcome": {
         "status": "loss",
         "actual": "4431736",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -7887,7 +8798,7 @@
       "outcome": {
         "status": "loss",
         "actual": "4432639",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -7919,7 +8830,7 @@
       "outcome": {
         "status": "loss",
         "actual": "4432639",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -7951,7 +8862,7 @@
       "outcome": {
         "status": "loss",
         "actual": "4431736",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -7983,7 +8894,7 @@
       "outcome": {
         "status": "loss",
         "actual": "4431736",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -8013,7 +8924,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -8051,7 +8962,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -8089,7 +9000,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -8127,7 +9038,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -8163,7 +9074,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -8201,7 +9112,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -8239,7 +9150,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -8277,7 +9188,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -8315,7 +9226,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -8353,7 +9264,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -8383,7 +9294,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -8413,7 +9324,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -8443,7 +9354,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -8471,7 +9382,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -8501,7 +9412,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -8531,7 +9442,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -8561,7 +9472,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -8591,7 +9502,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -8621,7 +9532,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -8651,7 +9562,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -8681,7 +9592,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -8711,7 +9622,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -8741,7 +9652,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -8779,7 +9690,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -8817,7 +9728,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -8855,7 +9766,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -8885,7 +9796,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -8923,7 +9834,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -8961,7 +9872,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -8999,7 +9910,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9027,7 +9938,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9057,7 +9968,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9087,7 +9998,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9117,7 +10028,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9147,7 +10058,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9175,7 +10086,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -9211,7 +10122,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -9249,7 +10160,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9279,7 +10190,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9309,7 +10220,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9339,7 +10250,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9367,7 +10278,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9397,7 +10308,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -9435,7 +10346,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -9473,7 +10384,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9503,7 +10414,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -9541,7 +10452,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -9579,7 +10490,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -9617,7 +10528,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -9655,7 +10566,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -9691,7 +10602,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9719,7 +10630,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9749,7 +10660,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9779,7 +10690,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9809,7 +10720,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9839,7 +10750,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9867,7 +10778,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -9905,7 +10816,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9935,7 +10846,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9965,7 +10876,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -9995,7 +10906,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10023,7 +10934,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10053,7 +10964,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10083,7 +10994,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10113,7 +11024,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10143,7 +11054,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10171,7 +11082,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10199,7 +11110,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10231,7 +11142,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10262,7 +11173,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10293,7 +11204,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10325,7 +11236,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10356,7 +11267,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10388,7 +11299,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10419,7 +11330,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10451,7 +11362,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10482,7 +11393,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10514,7 +11425,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10545,7 +11456,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10577,7 +11488,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10608,7 +11519,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10640,7 +11551,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10671,7 +11582,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10702,7 +11613,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10733,7 +11644,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10765,7 +11676,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10796,7 +11707,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10828,7 +11739,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10859,7 +11770,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10891,7 +11802,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10922,7 +11833,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10954,7 +11865,7 @@
       "outcome": {
         "status": "win",
         "actual": "4431736",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -10986,7 +11897,7 @@
       "outcome": {
         "status": "loss",
         "actual": "4431736",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -11017,7 +11928,7 @@
       "outcome": {
         "status": "win",
         "actual": 7,
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -11049,7 +11960,7 @@
       "outcome": {
         "status": "loss",
         "actual": "4433627",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -11081,7 +11992,7 @@
       "outcome": {
         "status": "loss",
         "actual": "4433627",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -11112,7 +12023,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -11143,7 +12054,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -11174,7 +12085,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -11205,7 +12116,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -11236,7 +12147,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -11267,7 +12178,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -11298,7 +12209,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -11337,7 +12248,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -11376,7 +12287,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -11415,7 +12326,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -11446,7 +12357,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -11491,7 +12402,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -11530,7 +12441,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -11569,7 +12480,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -11608,7 +12519,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -11647,7 +12558,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -11678,7 +12589,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -11709,7 +12620,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -11748,7 +12659,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -11787,7 +12698,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -11832,7 +12743,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -11871,7 +12782,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -11910,7 +12821,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -11940,7 +12851,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -11979,7 +12890,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12010,7 +12921,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12041,7 +12952,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12072,7 +12983,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -12111,7 +13022,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12142,7 +13053,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -12180,7 +13091,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       },
       "revisions": [
         {
@@ -12220,7 +13131,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12252,7 +13163,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12284,7 +13195,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12316,7 +13227,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12348,7 +13259,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12378,7 +13289,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12408,7 +13319,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12438,7 +13349,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12468,7 +13379,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12498,7 +13409,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12528,7 +13439,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12558,7 +13469,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12588,7 +13499,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12618,7 +13529,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12648,7 +13559,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12678,7 +13589,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12708,7 +13619,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12738,7 +13649,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12768,7 +13679,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12798,7 +13709,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12828,7 +13739,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12858,7 +13769,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12888,7 +13799,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12918,7 +13829,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12948,7 +13859,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -12978,7 +13889,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13008,7 +13919,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13038,7 +13949,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13068,7 +13979,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13098,7 +14009,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13128,7 +14039,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13158,7 +14069,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13188,7 +14099,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13218,7 +14129,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13248,7 +14159,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13278,7 +14189,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13308,7 +14219,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13338,7 +14249,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13368,7 +14279,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13398,7 +14309,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13428,7 +14339,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13458,7 +14369,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13488,7 +14399,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13518,7 +14429,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13548,7 +14459,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13578,7 +14489,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13608,7 +14519,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13638,7 +14549,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13668,7 +14579,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13698,7 +14609,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13728,7 +14639,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13758,7 +14669,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13788,7 +14699,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13818,7 +14729,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13848,7 +14759,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13878,7 +14789,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13908,7 +14819,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13938,7 +14849,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13968,7 +14879,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -13998,7 +14909,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14028,7 +14939,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14058,7 +14969,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14088,7 +14999,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14118,7 +15029,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14146,7 +15057,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14177,7 +15088,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14208,7 +15119,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14239,7 +15150,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14270,7 +15181,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14301,7 +15212,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14332,7 +15243,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14363,7 +15274,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14394,7 +15305,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14425,7 +15336,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14456,7 +15367,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14487,7 +15398,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14518,7 +15429,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14549,7 +15460,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14579,7 +15490,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14610,7 +15521,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14641,7 +15552,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14672,7 +15583,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14703,7 +15614,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14734,7 +15645,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14765,7 +15676,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14796,7 +15707,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14827,7 +15738,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14858,7 +15769,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14889,7 +15800,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14920,7 +15831,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14951,7 +15862,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -14979,7 +15890,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15010,7 +15921,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15041,7 +15952,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15072,7 +15983,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15103,7 +16014,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15134,7 +16045,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15165,7 +16076,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15196,7 +16107,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15227,7 +16138,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15258,7 +16169,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15289,7 +16200,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15320,7 +16231,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15351,7 +16262,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15382,7 +16293,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15413,7 +16324,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15444,7 +16355,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15475,7 +16386,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15506,7 +16417,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15537,7 +16448,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15568,7 +16479,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15599,7 +16510,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15630,7 +16541,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15661,7 +16572,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15692,7 +16603,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15723,7 +16634,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15754,7 +16665,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15782,7 +16693,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15813,7 +16724,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15844,7 +16755,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15875,7 +16786,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15906,7 +16817,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15937,7 +16848,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15968,7 +16879,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -15999,7 +16910,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16030,7 +16941,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16061,7 +16972,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16092,7 +17003,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16123,7 +17034,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16154,7 +17065,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16185,7 +17096,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16216,7 +17127,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16247,7 +17158,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16278,7 +17189,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16309,7 +17220,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16340,7 +17251,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16371,7 +17282,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16402,7 +17313,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16433,7 +17344,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16464,7 +17375,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16495,7 +17406,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16526,7 +17437,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16557,7 +17468,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16588,7 +17499,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16619,7 +17530,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16650,7 +17561,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16681,7 +17592,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16712,7 +17623,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16743,7 +17654,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16774,7 +17685,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16805,7 +17716,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16836,7 +17747,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16867,7 +17778,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16898,7 +17809,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16929,7 +17840,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16960,7 +17871,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -16991,7 +17902,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17022,7 +17933,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17053,7 +17964,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17084,7 +17995,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17115,7 +18026,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17146,7 +18057,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17177,7 +18088,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17208,7 +18119,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17239,7 +18150,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17270,7 +18181,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17301,7 +18212,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17332,7 +18243,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17363,7 +18274,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17394,7 +18305,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17425,7 +18336,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17456,7 +18367,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17487,7 +18398,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17518,7 +18429,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17549,7 +18460,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17580,7 +18491,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17611,7 +18522,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17642,7 +18553,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17673,7 +18584,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17701,7 +18612,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17732,7 +18643,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17763,7 +18674,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17794,7 +18705,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17825,7 +18736,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17856,7 +18767,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17887,7 +18798,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17918,7 +18829,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17949,7 +18860,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -17980,7 +18891,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18011,7 +18922,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18042,7 +18953,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18073,7 +18984,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18104,7 +19015,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18135,7 +19046,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18166,7 +19077,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18197,7 +19108,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18228,7 +19139,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18259,7 +19170,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18290,7 +19201,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18321,7 +19232,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18352,7 +19263,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18383,7 +19294,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18414,7 +19325,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18445,7 +19356,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18476,7 +19387,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18507,7 +19418,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18538,7 +19449,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18569,7 +19480,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18600,7 +19511,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18631,7 +19542,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18662,7 +19573,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18693,7 +19604,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18724,7 +19635,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18755,7 +19666,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18786,7 +19697,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18817,7 +19728,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18845,7 +19756,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18876,7 +19787,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18907,7 +19818,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18938,7 +19849,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -18969,7 +19880,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -19000,7 +19911,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -19031,7 +19942,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -19062,7 +19973,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -19093,7 +20004,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -19121,7 +20032,7 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     },
     {
@@ -19151,7 +20062,1827 @@
       "outcome": {
         "status": "pending",
         "reason": "Awaiting scheduled start",
-        "checkedAt": "2026-11-12T18:17:28.807Z"
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_WAS_NYG",
+      "startsAt": "2026-11-13T01:15:00+00:00",
+      "playerId": "00-0039337",
+      "player": "Malik Nabers",
+      "team": "NYG",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 100,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Malik Nabers 3+ receptions",
+      "reason": "Game-first scenario frequency: 79.3% at this line (UNCALIBRATED). Recent form: 8.0 receptions/game over the latest three recorded games versus 6.6 season average. Cleared 3+ in 5 of the last 5 recorded games. Workload: 9.8 targets/game. Opponent matchup factor: 0.99× its opponents' baseline in this category (roughly neutral).",
+      "probability": 0.7926,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 98.88262790697675
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_WAS_NYG|00-0039337|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-12",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_WAS_NYG",
+      "startsAt": "2026-11-13T01:15:00+00:00",
+      "playerId": "00-0031588",
+      "player": "Stefon Diggs",
+      "team": "WAS",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 76,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Stefon Diggs 3+ receptions",
+      "reason": "Game-first scenario frequency: 69.8% at this line (UNCALIBRATED). Recent form: 4.0 receptions/game over the latest three recorded games versus 4.3 season average. Cleared 3+ in 5 of the last 5 recorded games. Workload: 7.0 targets/game. Opponent matchup factor: 0.79× its opponents' baseline in this category (challenging).",
+      "probability": 0.6985,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 96.03916666666666
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_WAS_NYG|00-0031588|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-12",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_WAS_NYG",
+      "startsAt": "2026-11-13T01:15:00+00:00",
+      "playerId": "00-0040715",
+      "player": "Cam Skattebo",
+      "team": "NYG",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 40,
+      "score": 69,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Cam Skattebo 40+ rushing yards",
+      "reason": "Game-first scenario frequency: 74.2% at this line (UNCALIBRATED). Recent form: 41 rushing yards/game over the latest three recorded games versus 60 season average. Cleared 40+ in 4 of the last 5 recorded games. Workload: 14.0 carries/game. Opponent matchup factor: 0.93× its opponents' baseline in this category (challenging).",
+      "probability": 0.7415,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 95.96867647058825
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_WAS_NYG|00-0040715|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-12",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_WAS_NYG",
+      "startsAt": "2026-11-13T01:15:00+00:00",
+      "playerId": "00-0037838",
+      "player": "Isaiah Likely",
+      "team": "NYG",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 77,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Isaiah Likely 3+ receptions",
+      "reason": "Game-first scenario frequency: 68.2% at this line (UNCALIBRATED). Recent form: 4.3 receptions/game over the latest three recorded games versus 5.8 season average. Cleared 3+ in 4 of the last 5 recorded games. Workload: 8.6 targets/game. Opponent matchup factor: 1.17× its opponents' baseline in this category (favorable).",
+      "probability": 0.6822,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 95.55842857142858
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_WAS_NYG|00-0037838|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-12",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_NE_DET",
+      "startsAt": "2026-11-15T14:30:00+00:00",
+      "playerId": "00-0039139",
+      "player": "Jahmyr Gibbs",
+      "team": "DET",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 60,
+      "score": 97,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Jahmyr Gibbs 60+ rushing yards",
+      "reason": "Game-first scenario frequency: 92.2% at this line (UNCALIBRATED). Recent form: 114 rushing yards/game over the latest three recorded games versus 106 season average. Cleared 60+ in 4 of the last 5 recorded games. Workload: 22.1 carries/game. Opponent matchup factor: 1.00× its opponents' baseline in this category (roughly neutral).",
+      "probability": 0.9223,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 105.36081791907515
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_NE_DET|00-0039139|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_NE_DET",
+      "startsAt": "2026-11-15T14:30:00+00:00",
+      "playerId": "00-0036963",
+      "player": "Amon-Ra St. Brown",
+      "team": "DET",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 4,
+      "score": 100,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Amon-Ra St. Brown 4+ receptions",
+      "reason": "Game-first scenario frequency: 87.6% at this line (UNCALIBRATED). Recent form: 8.0 receptions/game over the latest three recorded games versus 7.6 season average. Cleared 4+ in 5 of the last 5 recorded games. Workload: 10.8 targets/game. Opponent matchup factor: 1.15× its opponents' baseline in this category (favorable).",
+      "probability": 0.8764,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 103.244
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_NE_DET|00-0036963|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_NE_DET",
+      "startsAt": "2026-11-15T14:30:00+00:00",
+      "playerId": "00-0033106",
+      "player": "Jared Goff",
+      "team": "DET",
+      "market": "passYards",
+      "side": "at_least",
+      "line": 200,
+      "score": 87,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Jared Goff 200+ passing yards",
+      "reason": "Game-first scenario frequency: 70.2% at this line (UNCALIBRATED). Recent form: 216 passing yards/game over the latest three recorded games versus 267 season average. Cleared 200+ in 3 of the last 5 recorded games. Workload: 34.1 attempts/game. Opponent matchup factor: 1.14× its opponents' baseline in this category (favorable).",
+      "probability": 0.7021,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 95.72425163398692
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_NE_DET|00-0033106|passYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_NE_DET",
+      "startsAt": "2026-11-15T14:30:00+00:00",
+      "playerId": "00-0039065",
+      "player": "Sam LaPorta",
+      "team": "DET",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 60,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Sam LaPorta 3+ receptions",
+      "reason": "Game-first scenario frequency: 68.0% at this line (UNCALIBRATED). Recent form: 2.7 receptions/game over the latest three recorded games versus 4.4 season average. Cleared 3+ in 4 of the last 5 recorded games. Workload: 6.1 targets/game. Opponent matchup factor: 1.01× its opponents' baseline in this category (roughly neutral).",
+      "probability": 0.6795,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 95.32892857142858
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_NE_DET|00-0039065|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_KC_ATL",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0038542",
+      "player": "Bijan Robinson",
+      "team": "ATL",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 40,
+      "score": 93,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Bijan Robinson 40+ rushing yards",
+      "reason": "Game-first scenario frequency: 94.3% at this line (UNCALIBRATED). Recent form: 80 rushing yards/game over the latest three recorded games versus 98 season average. Cleared 40+ in 5 of the last 5 recorded games. Workload: 18.8 carries/game. Opponent matchup factor: 0.87× its opponents' baseline in this category (challenging).",
+      "probability": 0.9427,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 104.66677506426736
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_KC_ATL|00-0038542|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_KC_ATL",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0038134",
+      "player": "Kenneth Walker III",
+      "team": "KC",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 60,
+      "score": 99,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Kenneth Walker III 60+ rushing yards",
+      "reason": "Game-first scenario frequency: 93.4% at this line (UNCALIBRATED). Recent form: 69 rushing yards/game over the latest three recorded games versus 109 season average. Cleared 60+ in 4 of the last 5 recorded games. Workload: 19.9 carries/game. Opponent matchup factor: 1.44× its opponents' baseline in this category (favorable).",
+      "probability": 0.9339,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 104.29416375545851
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_KC_ATL|00-0038134|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_KC_ATL",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0037238",
+      "player": "Drake London",
+      "team": "ATL",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 86,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Drake London 3+ receptions",
+      "reason": "Game-first scenario frequency: 80.3% at this line (UNCALIBRATED). Recent form: 4.3 receptions/game over the latest three recorded games versus 4.9 season average. Cleared 3+ in 4 of the last 5 recorded games. Workload: 7.4 targets/game. Opponent matchup factor: 0.98× its opponents' baseline in this category (roughly neutral).",
+      "probability": 0.8031,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 99.77512790697675
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_KC_ATL|00-0037238|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_KC_ATL",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0039894",
+      "player": "Xavier Worthy",
+      "team": "KC",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 79,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Xavier Worthy 3+ receptions",
+      "reason": "Game-first scenario frequency: 68.6% at this line (UNCALIBRATED). Recent form: 4.0 receptions/game over the latest three recorded games versus 4.1 season average. Cleared 3+ in 5 of the last 5 recorded games. Workload: 5.9 targets/game. Opponent matchup factor: 1.00× its opponents' baseline in this category (roughly neutral).",
+      "probability": 0.6862,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 94.99366666666667
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_KC_ATL|00-0039894|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "TD position leaders",
+      "gameId": "2026_10_KC_ATL",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0038134",
+      "player": "Kenneth Walker III",
+      "team": "KC",
+      "market": "anytime_td",
+      "side": "winner",
+      "line": null,
+      "score": 98,
+      "scoreKind": "TD opportunity /100",
+      "modelVersion": "nfl-td-eaffeb5f9f94",
+      "label": "Kenneth Walker III anytime rushing/receiving TD",
+      "reason": "Top three RB in the public default TD board; provisional roster availability",
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00"
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|TD position leaders|2026_10_KC_ATL|00-0038134|anytime_td|winner|nfl-td-eaffeb5f9f94",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_HOU_CLE",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0040784",
+      "player": "Quinshon Judkins",
+      "team": "CLE",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 40,
+      "score": 77,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Quinshon Judkins 40+ rushing yards",
+      "reason": "Game-first scenario frequency: 78.1% at this line (UNCALIBRATED). Recent form: 55 rushing yards/game over the latest three recorded games versus 48 season average. Cleared 40+ in 4 of the last 5 recorded games. Workload: 14.5 carries/game. Opponent matchup factor: 1.25× its opponents' baseline in this category (favorable).",
+      "probability": 0.7814,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 97.76215424610051
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_HOU_CLE|00-0040784|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_HOU_CLE",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0036554",
+      "player": "Nico Collins",
+      "team": "HOU",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 75,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Nico Collins 3+ receptions",
+      "reason": "Game-first scenario frequency: 73.9% at this line (UNCALIBRATED). Recent form: 3.0 receptions/game over the latest three recorded games versus 4.7 season average. Cleared 3+ in 4 of the last 5 recorded games. Workload: 6.5 targets/game. Opponent matchup factor: 0.96× its opponents' baseline in this category (roughly neutral).",
+      "probability": 0.7388,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 97.02876923076923
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_HOU_CLE|00-0036554|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_HOU_CLE",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0040583",
+      "player": "Woody Marks",
+      "team": "HOU",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 40,
+      "score": 82,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Woody Marks 40+ rushing yards",
+      "reason": "Game-first scenario frequency: 71.1% at this line (UNCALIBRATED). Recent form: 64 rushing yards/game over the latest three recorded games versus 43 season average. Cleared 40+ in 4 of the last 5 recorded games. Workload: 11.9 carries/game. Opponent matchup factor: 1.18× its opponents' baseline in this category (favorable).",
+      "probability": 0.7112,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 93.75740037243948
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_HOU_CLE|00-0040583|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_HOU_CLE",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0033537",
+      "player": "Deshaun Watson",
+      "team": "CLE",
+      "market": "passYards",
+      "side": "at_least",
+      "line": 200,
+      "score": 84,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Deshaun Watson 200+ passing yards",
+      "reason": "Game-first scenario frequency: 62.3% at this line (UNCALIBRATED). Recent form: 265 passing yards/game over the latest three recorded games versus 226 season average. Cleared 200+ in 3 of the last 5 recorded games. Workload: 31.1 attempts/game. Opponent matchup factor: 1.00× its opponents' baseline in this category (roughly neutral).",
+      "probability": 0.6226,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 91.16684426946631
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_HOU_CLE|00-0033537|passYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_MIN_GB",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0040667",
+      "player": "Matthew Golden",
+      "team": "GB",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 97,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Matthew Golden 3+ receptions",
+      "reason": "Game-first scenario frequency: 88.6% at this line (UNCALIBRATED). Recent form: 7.7 receptions/game over the latest three recorded games versus 5.9 season average. Cleared 3+ in 5 of the last 5 recorded games. Workload: 10.2 targets/game. Opponent matchup factor: 0.79× its opponents' baseline in this category (challenging).",
+      "probability": 0.8856,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 102.62894117647059
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_MIN_GB|00-0040667|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_MIN_GB",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0038124",
+      "player": "Christian Watson",
+      "team": "GB",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 88,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Christian Watson 3+ receptions",
+      "reason": "Game-first scenario frequency: 81.0% at this line (UNCALIBRATED). Recent form: 6.7 receptions/game over the latest three recorded games versus 5.4 season average. Cleared 3+ in 5 of the last 5 recorded games. Workload: 8.2 targets/game. Opponent matchup factor: 0.79× its opponents' baseline in this category (challenging).",
+      "probability": 0.8105,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 99.80159090909092
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_MIN_GB|00-0038124|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_MIN_GB",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0036322",
+      "player": "Justin Jefferson",
+      "team": "MIN",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 89,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Justin Jefferson 3+ receptions",
+      "reason": "Game-first scenario frequency: 66.4% at this line (UNCALIBRATED). Recent form: 4.0 receptions/game over the latest three recorded games versus 4.4 season average. Cleared 3+ in 4 of the last 5 recorded games. Workload: 7.3 targets/game. Opponent matchup factor: 1.13× its opponents' baseline in this category (favorable).",
+      "probability": 0.6639,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 94.00292857142857
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_MIN_GB|00-0036322|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_MIN_GB",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0033293",
+      "player": "Aaron Jones",
+      "team": "MIN",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 40,
+      "score": 66,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Aaron Jones 40+ rushing yards",
+      "reason": "Game-first scenario frequency: 63.6% at this line (UNCALIBRATED). Recent form: 21 rushing yards/game over the latest three recorded games versus 59 season average. Cleared 40+ in 2 of the last 5 recorded games. Workload: 14.4 carries/game. Opponent matchup factor: 0.75× its opponents' baseline in this category (challenging).",
+      "probability": 0.6364,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 90.56397929606625
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_MIN_GB|00-0033293|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_MIA_IND",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0036223",
+      "player": "Jonathan Taylor",
+      "team": "IND",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 40,
+      "score": 85,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Jonathan Taylor 40+ rushing yards",
+      "reason": "Game-first scenario frequency: 91.5% at this line (UNCALIBRATED). Recent form: 55 rushing yards/game over the latest three recorded games versus 73 season average. Cleared 40+ in 4 of the last 5 recorded games. Workload: 17.9 carries/game. Opponent matchup factor: 1.07× its opponents' baseline in this category (favorable).",
+      "probability": 0.9146,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 103.39317391304348
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_MIA_IND|00-0036223|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_MIA_IND",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0040198",
+      "player": "Ollie Gordon II",
+      "team": "MIA",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 40,
+      "score": 88,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Ollie Gordon II 40+ rushing yards",
+      "reason": "Game-first scenario frequency: 89.2% at this line (UNCALIBRATED). Recent form: 76 rushing yards/game over the latest three recorded games versus 58 season average. Cleared 40+ in 5 of the last 5 recorded games. Workload: 13.4 carries/game. Opponent matchup factor: 1.17× its opponents' baseline in this category (favorable).",
+      "probability": 0.8923,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 102.52880955777461
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_MIA_IND|00-0040198|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_MIA_IND",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0040128",
+      "player": "Tyler Warren",
+      "team": "IND",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 70,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Tyler Warren 3+ receptions",
+      "reason": "Game-first scenario frequency: 85.8% at this line (UNCALIBRATED). Recent form: 2.7 receptions/game over the latest three recorded games versus 5.4 season average. Cleared 3+ in 5 of the last 5 recorded games. Workload: 7.6 targets/game. Opponent matchup factor: 1.27× its opponents' baseline in this category (favorable).",
+      "probability": 0.8575,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 101.152806122449
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_MIA_IND|00-0040128|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_MIA_IND",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0039880",
+      "player": "Malik Washington",
+      "team": "MIA",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 72,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Malik Washington 3+ receptions",
+      "reason": "Game-first scenario frequency: 58.3% at this line (UNCALIBRATED). Recent form: 3.3 receptions/game over the latest three recorded games versus 4.1 season average. Cleared 3+ in 4 of the last 5 recorded games. Workload: 6.0 targets/game. Opponent matchup factor: 0.77× its opponents' baseline in this category (challenging).",
+      "probability": 0.5833,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 91.3546935483871
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_MIA_IND|00-0039880|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_CAR_NO",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0036555",
+      "player": "Chuba Hubbard",
+      "team": "CAR",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 40,
+      "score": 86,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Chuba Hubbard 40+ rushing yards",
+      "reason": "Game-first scenario frequency: 91.6% at this line (UNCALIBRATED). Recent form: 64 rushing yards/game over the latest three recorded games versus 77 season average. Cleared 40+ in 4 of the last 5 recorded games. Workload: 16.8 carries/game. Opponent matchup factor: 0.95× its opponents' baseline in this category (challenging).",
+      "probability": 0.9164,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 103.40682051282052
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_CAR_NO|00-0036555|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_CAR_NO",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0037239",
+      "player": "Chris Olave",
+      "team": "NO",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 4,
+      "score": 97,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Chris Olave 4+ receptions",
+      "reason": "Game-first scenario frequency: 86.4% at this line (UNCALIBRATED). Recent form: 5.7 receptions/game over the latest three recorded games versus 7.0 season average. Cleared 4+ in 5 of the last 5 recorded games. Workload: 10.4 targets/game. Opponent matchup factor: 1.17× its opponents' baseline in this category (favorable).",
+      "probability": 0.8643,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 102.98162903225807
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_CAR_NO|00-0037239|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_CAR_NO",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0040124",
+      "player": "Tetairoa McMillan",
+      "team": "CAR",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 88,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Tetairoa McMillan 3+ receptions",
+      "reason": "Game-first scenario frequency: 90.5% at this line (UNCALIBRATED). Recent form: 4.7 receptions/game over the latest three recorded games versus 5.8 season average. Cleared 3+ in 5 of the last 5 recorded games. Workload: 8.9 targets/game. Opponent matchup factor: 1.06× its opponents' baseline in this category (favorable).",
+      "probability": 0.9053,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 102.67777272727272
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_CAR_NO|00-0040124|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_CAR_NO",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0039150",
+      "player": "Bryce Young",
+      "team": "CAR",
+      "market": "passYards",
+      "side": "at_least",
+      "line": 200,
+      "score": 93,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Bryce Young 200+ passing yards",
+      "reason": "Game-first scenario frequency: 82.1% at this line (UNCALIBRATED). Recent form: 216 passing yards/game over the latest three recorded games versus 275 season average. Cleared 200+ in 4 of the last 5 recorded games. Workload: 38.5 attempts/game. Opponent matchup factor: 1.19× its opponents' baseline in this category (favorable).",
+      "probability": 0.8211,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 102.46004532216965
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_CAR_NO|00-0039150|passYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_BUF_NYJ",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0037248",
+      "player": "James Cook",
+      "team": "BUF",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 60,
+      "score": 100,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "James Cook 60+ rushing yards",
+      "reason": "Game-first scenario frequency: 94.9% at this line (UNCALIBRATED). Recent form: 94 rushing yards/game over the latest three recorded games versus 102 season average. Cleared 60+ in 5 of the last 5 recorded games. Workload: 21.1 carries/game. Opponent matchup factor: 1.28× its opponents' baseline in this category (favorable).",
+      "probability": 0.9486,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 105.82586271036317
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_BUF_NYJ|00-0037248|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_BUF_NYJ",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0039794",
+      "player": "Braelon Allen",
+      "team": "NYJ",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 40,
+      "score": 74,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Braelon Allen 40+ rushing yards",
+      "reason": "Game-first scenario frequency: 81.9% at this line (UNCALIBRATED). Recent form: 95 rushing yards/game over the latest three recorded games versus 66 season average. Cleared 40+ in 4 of the last 5 recorded games. Workload: 13.3 carries/game. Opponent matchup factor: 0.72× its opponents' baseline in this category (challenging).",
+      "probability": 0.8194,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 99.77296694214877
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_BUF_NYJ|00-0039794|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_BUF_NYJ",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0037740",
+      "player": "Garrett Wilson",
+      "team": "NYJ",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 82,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Garrett Wilson 3+ receptions",
+      "reason": "Game-first scenario frequency: 67.1% at this line (UNCALIBRATED). Recent form: 2.7 receptions/game over the latest three recorded games versus 5.4 season average. Cleared 3+ in 4 of the last 5 recorded games. Workload: 7.9 targets/game. Opponent matchup factor: 0.94× its opponents' baseline in this category (challenging).",
+      "probability": 0.6707,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 94.58092857142857
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_BUF_NYJ|00-0037740|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_BUF_NYJ",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0037261",
+      "player": "Khalil Shakir",
+      "team": "BUF",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 74,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Khalil Shakir 3+ receptions",
+      "reason": "Game-first scenario frequency: 61.8% at this line (UNCALIBRATED). Recent form: 4.3 receptions/game over the latest three recorded games versus 3.9 season average. Cleared 3+ in 5 of the last 5 recorded games. Workload: 5.3 targets/game. Opponent matchup factor: 0.94× its opponents' baseline in this category (challenging).",
+      "probability": 0.6177,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 93.1295
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_BUF_NYJ|00-0037261|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_JAX_TEN",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0035261",
+      "player": "Tony Pollard",
+      "team": "TEN",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 40,
+      "score": 86,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Tony Pollard 40+ rushing yards",
+      "reason": "Game-first scenario frequency: 89.5% at this line (UNCALIBRATED). Recent form: 107 rushing yards/game over the latest three recorded games versus 74 season average. Cleared 40+ in 5 of the last 5 recorded games. Workload: 16.6 carries/game. Opponent matchup factor: 0.91× its opponents' baseline in this category (challenging).",
+      "probability": 0.8947,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 102.98312193362194
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_JAX_TEN|00-0035261|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_JAX_TEN",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0040719",
+      "player": "Bhayshul Tuten",
+      "team": "JAX",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 40,
+      "score": 81,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Bhayshul Tuten 40+ rushing yards",
+      "reason": "Game-first scenario frequency: 91.0% at this line (UNCALIBRATED). Recent form: 57 rushing yards/game over the latest three recorded games versus 65 season average. Cleared 40+ in 3 of the last 5 recorded games. Workload: 15.3 carries/game. Opponent matchup factor: 1.24× its opponents' baseline in this category (favorable).",
+      "probability": 0.9098,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 102.95715196743555
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_JAX_TEN|00-0040719|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_JAX_TEN",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0041438",
+      "player": "Carnell Tate",
+      "team": "TEN",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 78,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Carnell Tate 3+ receptions",
+      "reason": "Game-first scenario frequency: 77.4% at this line (UNCALIBRATED). Recent form: 3.7 receptions/game over the latest three recorded games versus 4.9 season average. Cleared 3+ in 4 of the last 5 recorded games. Workload: 7.3 targets/game. Opponent matchup factor: 1.06× its opponents' baseline in this category (favorable).",
+      "probability": 0.774,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 98.5948780487805
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_JAX_TEN|00-0041438|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_JAX_TEN",
+      "startsAt": "2026-11-15T18:00:00+00:00",
+      "playerId": "00-0038606",
+      "player": "Parker Washington",
+      "team": "JAX",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 77,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Parker Washington 3+ receptions",
+      "reason": "Game-first scenario frequency: 61.4% at this line (UNCALIBRATED). Recent form: 2.3 receptions/game over the latest three recorded games versus 3.6 season average. Cleared 3+ in 2 of the last 5 recorded games. Workload: 6.9 targets/game. Opponent matchup factor: 1.31× its opponents' baseline in this category (favorable).",
+      "probability": 0.6137,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 92.7895
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_JAX_TEN|00-0038606|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_LA_ARI",
+      "startsAt": "2026-11-15T21:05:00+00:00",
+      "playerId": "00-0039075",
+      "player": "Puka Nacua",
+      "team": "LA",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 6,
+      "score": 100,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Puka Nacua 6+ receptions",
+      "reason": "Game-first scenario frequency: 89.3% at this line (UNCALIBRATED). Recent form: 11.0 receptions/game over the latest three recorded games versus 10.0 season average. Cleared 6+ in 5 of the last 5 recorded games. Workload: 13.3 targets/game. Opponent matchup factor: 0.79× its opponents' baseline in this category (challenging).",
+      "probability": 0.8926,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 105.12631914893618
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_LA_ARI|00-0039075|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_LA_ARI",
+      "startsAt": "2026-11-15T21:05:00+00:00",
+      "playerId": "00-0037744",
+      "player": "Trey McBride",
+      "team": "ARI",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 4,
+      "score": 89,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Trey McBride 4+ receptions",
+      "reason": "Game-first scenario frequency: 91.2% at this line (UNCALIBRATED). Recent form: 8.0 receptions/game over the latest three recorded games versus 8.1 season average. Cleared 4+ in 5 of the last 5 recorded games. Workload: 10.4 targets/game. Opponent matchup factor: 0.90× its opponents' baseline in this category (challenging).",
+      "probability": 0.9119,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 104.54048550724639
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_LA_ARI|00-0037744|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_LA_ARI",
+      "startsAt": "2026-11-15T21:05:00+00:00",
+      "playerId": "00-0037840",
+      "player": "Kyren Williams",
+      "team": "LA",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 40,
+      "score": 86,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Kyren Williams 40+ rushing yards",
+      "reason": "Game-first scenario frequency: 84.2% at this line (UNCALIBRATED). Recent form: 67 rushing yards/game over the latest three recorded games versus 66 season average. Cleared 40+ in 5 of the last 5 recorded games. Workload: 14.1 carries/game. Opponent matchup factor: 0.99× its opponents' baseline in this category (roughly neutral).",
+      "probability": 0.8417,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 100.1469844720497
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_LA_ARI|00-0037840|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_LA_ARI",
+      "startsAt": "2026-11-15T21:05:00+00:00",
+      "playerId": "00-0026498",
+      "player": "Matthew Stafford",
+      "team": "LA",
+      "market": "passYards",
+      "side": "at_least",
+      "line": 200,
+      "score": 82,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Matthew Stafford 200+ passing yards",
+      "reason": "Game-first scenario frequency: 63.8% at this line (UNCALIBRATED). Recent form: 193 passing yards/game over the latest three recorded games versus 264 season average. Cleared 200+ in 3 of the last 5 recorded games. Workload: 38.4 attempts/game. Opponent matchup factor: 0.93× its opponents' baseline in this category (challenging).",
+      "probability": 0.6379,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 92.4382832167832
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_LA_ARI|00-0026498|passYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_SEA_LV",
+      "startsAt": "2026-11-15T21:05:00+00:00",
+      "playerId": "00-0038797",
+      "player": "Emanuel Wilson",
+      "team": "SEA",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 40,
+      "score": 75,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Emanuel Wilson 40+ rushing yards",
+      "reason": "Game-first scenario frequency: 89.5% at this line (UNCALIBRATED). Recent form: 33 rushing yards/game over the latest three recorded games versus 58 season average. Cleared 40+ in 4 of the last 5 recorded games. Workload: 15.9 carries/game. Opponent matchup factor: 1.34× its opponents' baseline in this category (favorable).",
+      "probability": 0.8945,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 103.12552325581395
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_SEA_LV|00-0038797|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_SEA_LV",
+      "startsAt": "2026-11-15T21:05:00+00:00",
+      "playerId": "00-0039338",
+      "player": "Brock Bowers",
+      "team": "LV",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 79,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Brock Bowers 3+ receptions",
+      "reason": "Game-first scenario frequency: 90.0% at this line (UNCALIBRATED). Recent form: 6.7 receptions/game over the latest three recorded games versus 6.9 season average. Cleared 3+ in 5 of the last 5 recorded games. Workload: 9.9 targets/game. Opponent matchup factor: 0.91× its opponents' baseline in this category (challenging).",
+      "probability": 0.9001,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 102.6196111111111
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_SEA_LV|00-0039338|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_SEA_LV",
+      "startsAt": "2026-11-15T21:05:00+00:00",
+      "playerId": "00-0038543",
+      "player": "Jaxon Smith-Njigba",
+      "team": "SEA",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 4,
+      "score": 100,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Jaxon Smith-Njigba 4+ receptions",
+      "reason": "Game-first scenario frequency: 86.3% at this line (UNCALIBRATED). Recent form: 7.3 receptions/game over the latest three recorded games versus 7.9 season average. Cleared 4+ in 5 of the last 5 recorded games. Workload: 11.0 targets/game. Opponent matchup factor: 1.07× its opponents' baseline in this category (favorable).",
+      "probability": 0.8626,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 102.44798412698412
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_SEA_LV|00-0038543|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_SEA_LV",
+      "startsAt": "2026-11-15T21:05:00+00:00",
+      "playerId": "00-0034869",
+      "player": "Sam Darnold",
+      "team": "SEA",
+      "market": "passYards",
+      "side": "at_least",
+      "line": 200,
+      "score": 86,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Sam Darnold 200+ passing yards",
+      "reason": "Game-first scenario frequency: 62.3% at this line (UNCALIBRATED). Recent form: 241 passing yards/game over the latest three recorded games versus 211 season average. Cleared 200+ in 2 of the last 5 recorded games. Workload: 30.1 attempts/game. Opponent matchup factor: 1.07× its opponents' baseline in this category (favorable).",
+      "probability": 0.6225,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 90.99913474096648
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_SEA_LV|00-0034869|passYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_SF_DAL",
+      "startsAt": "2026-11-15T21:25:00+00:00",
+      "playerId": "00-0036358",
+      "player": "CeeDee Lamb",
+      "team": "DAL",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 4,
+      "score": 100,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "CeeDee Lamb 4+ receptions",
+      "reason": "Game-first scenario frequency: 89.3% at this line (UNCALIBRATED). Recent form: 7.3 receptions/game over the latest three recorded games versus 7.8 season average. Cleared 4+ in 4 of the last 5 recorded games. Workload: 12.0 targets/game. Opponent matchup factor: 0.99× its opponents' baseline in this category (roughly neutral).",
+      "probability": 0.8929,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 103.58306716417911
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_SF_DAL|00-0036358|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_SF_DAL",
+      "startsAt": "2026-11-15T21:25:00+00:00",
+      "playerId": "00-0036997",
+      "player": "Javonte Williams",
+      "team": "DAL",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 40,
+      "score": 78,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Javonte Williams 40+ rushing yards",
+      "reason": "Game-first scenario frequency: 83.0% at this line (UNCALIBRATED). Recent form: 104 rushing yards/game over the latest three recorded games versus 70 season average. Cleared 40+ in 5 of the last 5 recorded games. Workload: 17.1 carries/game. Opponent matchup factor: 0.68× its opponents' baseline in this category (challenging).",
+      "probability": 0.8295,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 100.46644909688014
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_SF_DAL|00-0036997|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_SF_DAL",
+      "startsAt": "2026-11-15T21:25:00+00:00",
+      "playerId": "00-0033280",
+      "player": "Christian McCaffrey",
+      "team": "SF",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 40,
+      "score": 82,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Christian McCaffrey 40+ rushing yards",
+      "reason": "Game-first scenario frequency: 83.3% at this line (UNCALIBRATED). Recent form: 57 rushing yards/game over the latest three recorded games versus 57 season average. Cleared 40+ in 4 of the last 5 recorded games. Workload: 12.8 carries/game. Opponent matchup factor: 1.27× its opponents' baseline in this category (favorable).",
+      "probability": 0.8334,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 99.55194851794073
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_SF_DAL|00-0033280|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_SF_DAL",
+      "startsAt": "2026-11-15T21:25:00+00:00",
+      "playerId": "00-0037247",
+      "player": "George Pickens",
+      "team": "DAL",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 78,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "George Pickens 3+ receptions",
+      "reason": "Game-first scenario frequency: 76.3% at this line (UNCALIBRATED). Recent form: 2.0 receptions/game over the latest three recorded games versus 4.9 season average. Cleared 3+ in 3 of the last 5 recorded games. Workload: 7.8 targets/game. Opponent matchup factor: 0.99× its opponents' baseline in this category (roughly neutral).",
+      "probability": 0.7629,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 97.65137804878049
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_SF_DAL|00-0037247|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "TD position leaders",
+      "gameId": "2026_10_SF_DAL",
+      "startsAt": "2026-11-15T21:25:00+00:00",
+      "playerId": "00-0033280",
+      "player": "Christian McCaffrey",
+      "team": "SF",
+      "market": "anytime_td",
+      "side": "winner",
+      "line": null,
+      "score": 88,
+      "scoreKind": "TD opportunity /100",
+      "modelVersion": "nfl-td-eaffeb5f9f94",
+      "label": "Christian McCaffrey anytime rushing/receiving TD",
+      "reason": "Top three RB in the public default TD board; provisional roster availability",
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00"
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|TD position leaders|2026_10_SF_DAL|00-0033280|anytime_td|winner|nfl-td-eaffeb5f9f94",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_PIT_CIN",
+      "startsAt": "2026-11-16T01:20:00+00:00",
+      "playerId": "00-0036442",
+      "player": "Joe Burrow",
+      "team": "CIN",
+      "market": "passYards",
+      "side": "at_least",
+      "line": 200,
+      "score": 96,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Joe Burrow 200+ passing yards",
+      "reason": "Game-first scenario frequency: 86.1% at this line (UNCALIBRATED). Recent form: 342 passing yards/game over the latest three recorded games versus 298 season average. Cleared 200+ in 4 of the last 5 recorded games. Workload: 37.0 attempts/game. Opponent matchup factor: 1.34× its opponents' baseline in this category (favorable).",
+      "probability": 0.8614,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 104.71830264993028
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_PIT_CIN|00-0036442|passYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_PIT_CIN",
+      "startsAt": "2026-11-16T01:20:00+00:00",
+      "playerId": "00-0036410",
+      "player": "Tee Higgins",
+      "team": "CIN",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 90,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Tee Higgins 3+ receptions",
+      "reason": "Game-first scenario frequency: 89.7% at this line (UNCALIBRATED). Recent form: 7.0 receptions/game over the latest three recorded games versus 6.0 season average. Cleared 3+ in 4 of the last 5 recorded games. Workload: 8.4 targets/game. Opponent matchup factor: 1.22× its opponents' baseline in this category (favorable).",
+      "probability": 0.8967,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 102.72893396226415
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_PIT_CIN|00-0036410|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_PIT_CIN",
+      "startsAt": "2026-11-16T01:20:00+00:00",
+      "playerId": "00-0037228",
+      "player": "Jaylen Warren",
+      "team": "PIT",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 50,
+      "score": 93,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Jaylen Warren 50+ rushing yards",
+      "reason": "Game-first scenario frequency: 89.5% at this line (UNCALIBRATED). Recent form: 98 rushing yards/game over the latest three recorded games versus 88 season average. Cleared 50+ in 5 of the last 5 recorded games. Workload: 14.9 carries/game. Opponent matchup factor: 1.05× its opponents' baseline in this category (favorable).",
+      "probability": 0.8953,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 102.44881460674156
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_PIT_CIN|00-0037228|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_PIT_CIN",
+      "startsAt": "2026-11-16T01:20:00+00:00",
+      "playerId": "00-0035640",
+      "player": "DK Metcalf",
+      "team": "PIT",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 87,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "DK Metcalf 3+ receptions",
+      "reason": "Game-first scenario frequency: 76.8% at this line (UNCALIBRATED). Recent form: 4.7 receptions/game over the latest three recorded games versus 4.1 season average. Cleared 3+ in 3 of the last 5 recorded games. Workload: 8.0 targets/game. Opponent matchup factor: 1.13× its opponents' baseline in this category (favorable).",
+      "probability": 0.7683,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 98.11037804878049
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_PIT_CIN|00-0035640|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-15",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_LAC_BAL",
+      "startsAt": "2026-11-17T01:15:00+00:00",
+      "playerId": "00-0032764",
+      "player": "Derrick Henry",
+      "team": "BAL",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 50,
+      "score": 86,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Derrick Henry 50+ rushing yards",
+      "reason": "Game-first scenario frequency: 88.9% at this line (UNCALIBRATED). Recent form: 52 rushing yards/game over the latest three recorded games versus 77 season average. Cleared 50+ in 4 of the last 5 recorded games. Workload: 19.4 carries/game. Opponent matchup factor: 1.16× its opponents' baseline in this category (favorable).",
+      "probability": 0.8891,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 103.65976974483597
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_LAC_BAL|00-0032764|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-16",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_LAC_BAL",
+      "startsAt": "2026-11-17T01:15:00+00:00",
+      "playerId": "00-0039064",
+      "player": "Zay Flowers",
+      "team": "BAL",
+      "market": "receptions",
+      "side": "at_least",
+      "line": 3,
+      "score": 87,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Zay Flowers 3+ receptions",
+      "reason": "Game-first scenario frequency: 82.8% at this line (UNCALIBRATED). Recent form: 3.7 receptions/game over the latest three recorded games versus 5.4 season average. Cleared 3+ in 4 of the last 5 recorded games. Workload: 8.0 targets/game. Opponent matchup factor: 1.00× its opponents' baseline in this category (roughly neutral).",
+      "probability": 0.8276,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 100.67933333333332
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_LAC_BAL|00-0039064|receptions|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-16",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_LAC_BAL",
+      "startsAt": "2026-11-17T01:15:00+00:00",
+      "playerId": "00-0040666",
+      "player": "Omarion Hampton",
+      "team": "LAC",
+      "market": "rushYards",
+      "side": "at_least",
+      "line": 25,
+      "score": 65,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Omarion Hampton 25+ rushing yards",
+      "reason": "Game-first scenario frequency: 85.0% at this line (UNCALIBRATED). Recent form: 33 rushing yards/game over the latest three recorded games versus 46 season average. Cleared 25+ in 3 of the last 5 recorded games. Workload: 12.8 carries/game. Opponent matchup factor: 0.95× its opponents' baseline in this category (challenging).",
+      "probability": 0.8503,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 66.62844117647059
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_LAC_BAL|00-0040666|rushYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-16",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "Game analyst (top 3/default ticket)",
+      "gameId": "2026_10_LAC_BAL",
+      "startsAt": "2026-11-17T01:15:00+00:00",
+      "playerId": "00-0039064",
+      "player": "Zay Flowers",
+      "team": "BAL",
+      "market": "recYards",
+      "side": "at_least",
+      "line": 30,
+      "score": 90,
+      "scoreKind": "NFL matchup score /100",
+      "modelVersion": "nfl-analyst-4772cc157a1c",
+      "label": "Zay Flowers 30+ receiving yards",
+      "reason": "Game-first scenario frequency: 84.9% at this line (UNCALIBRATED). Recent form: 48 receiving yards/game over the latest three recorded games versus 77 season average. Cleared 30+ in 3 of the last 5 recorded games. Workload: 8.0 targets/game. Opponent matchup factor: 1.18× its opponents' baseline in this category (favorable).",
+      "probability": 0.8491,
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00",
+        "games": "2026-11-12T17:57:40.207310+00:00",
+        "rawRank": 93.88904252199413
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|Game analyst (top 3/default ticket)|2026_10_LAC_BAL|00-0039064|recYards|at_least|nfl-analyst-4772cc157a1c",
+      "day": "2026-11-16",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
+      }
+    },
+    {
+      "sport": "NFL",
+      "board": "TD position leaders",
+      "gameId": "2026_10_LAC_BAL",
+      "startsAt": "2026-11-17T01:15:00+00:00",
+      "playerId": "00-0032764",
+      "player": "Derrick Henry",
+      "team": "BAL",
+      "market": "anytime_td",
+      "side": "winner",
+      "line": null,
+      "score": 81,
+      "scoreKind": "TD opportunity /100",
+      "modelVersion": "nfl-td-eaffeb5f9f94",
+      "label": "Derrick Henry anytime rushing/receiving TD",
+      "reason": "Top three RB in the public default TD board; provisional roster availability",
+      "inputs": {
+        "feed": "2026-11-12T17:57:20.586577+00:00"
+      },
+      "capturedAt": "2026-11-12T18:28:40.637Z",
+      "id": "NFL|TD position leaders|2026_10_LAC_BAL|00-0032764|anytime_td|winner|nfl-td-eaffeb5f9f94",
+      "day": "2026-11-16",
+      "outcome": {
+        "status": "pending",
+        "reason": "Awaiting scheduled start",
+        "checkedAt": "2026-11-12T18:28:59.677Z"
       }
     }
   ],
