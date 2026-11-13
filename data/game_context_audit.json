@@ -1,9 +1,9 @@
 {
   "status": "RECONCILED",
-  "checked_at": "2026-11-13T14:02:08.991608+00:00",
+  "checked_at": "2026-11-13T18:48:24.514411+00:00",
   "season": 2026,
   "through_week": 9,
-  "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
+  "source_sha256": "fa2ddcc04d859be29b420d934ad88a5552100606c0ac74aca2e78a590835ffb3",
   "source": "https://github.com/nflverse/nflverse-data/releases/tag/pbp",
   "source_last_updated_at": null,
   "external_verification": false,
@@ -21,6 +21,267 @@
     "audit": "Independent pandas aggregation of the same nflverse source. Reconciliation does not mean independent external verification or predictive calibration."
   },
   "teams": {
+    "DET": {
+      "status": "RECONCILED",
+      "completed_game_ids": [
+        "2026_01_NO_DET",
+        "2026_02_DET_BUF",
+        "2026_03_NYJ_DET",
+        "2026_04_DET_CAR",
+        "2026_05_DET_ARI",
+        "2026_07_GB_DET",
+        "2026_08_MIN_DET",
+        "2026_09_DET_MIA"
+      ],
+      "recent_game_ids": [
+        "2026_05_DET_ARI",
+        "2026_07_GB_DET",
+        "2026_08_MIN_DET",
+        "2026_09_DET_MIA"
+      ],
+      "counts": {
+        "offense": {
+          "games": 8,
+          "plays": 517,
+          "epa_per_play": 0.10200376680447894,
+          "success_rate": 0.4874274661508704,
+          "explosive_rate": 0.10831721470019343,
+          "pass_rate": 0.5667311411992263,
+          "pass_epa": 0.22158663872575574,
+          "rush_epa": -0.05441490048540544,
+          "turnovers_per_game": 0.625
+        },
+        "defense": {
+          "games": 8,
+          "plays": 519,
+          "epa_per_play": 0.07953163463785629,
+          "success_rate": 0.4393063583815029,
+          "explosive_rate": 0.10982658959537572,
+          "pass_rate": 0.6570327552986512,
+          "pass_epa": 0.14891961866176612,
+          "rush_epa": -0.053397031385476544,
+          "sacks_per_game": 3.375
+        },
+        "recent_offense": {
+          "games": 4,
+          "plays": 252,
+          "epa_per_play": 0.057471727349472125,
+          "success_rate": 0.4801587301587302,
+          "explosive_rate": 0.12301587301587301,
+          "pass_rate": 0.49206349206349204,
+          "pass_epa": 0.1705706355856748,
+          "rush_epa": -0.052092840004349245,
+          "turnovers_per_game": 1.0
+        },
+        "recent_defense": {
+          "games": 4,
+          "plays": 234,
+          "epa_per_play": -0.04703406519528829,
+          "success_rate": 0.38461538461538464,
+          "explosive_rate": 0.08974358974358974,
+          "pass_rate": 0.6794871794871795,
+          "pass_epa": 0.03339508557812167,
+          "rush_epa": -0.21754386483491742,
+          "sacks_per_game": 3.0
+        }
+      }
+    },
+    "SF": {
+      "status": "RECONCILED",
+      "completed_game_ids": [
+        "2026_01_SF_LA",
+        "2026_02_MIA_SF",
+        "2026_03_ARI_SF",
+        "2026_04_DEN_SF",
+        "2026_05_SF_SEA",
+        "2026_06_WAS_SF",
+        "2026_07_SF_ATL",
+        "2026_09_LV_SF"
+      ],
+      "recent_game_ids": [
+        "2026_05_SF_SEA",
+        "2026_06_WAS_SF",
+        "2026_07_SF_ATL",
+        "2026_09_LV_SF"
+      ],
+      "counts": {
+        "offense": {
+          "games": 8,
+          "plays": 467,
+          "epa_per_play": 0.17982283177598754,
+          "success_rate": 0.5289079229122056,
+          "explosive_rate": 0.12633832976445397,
+          "pass_rate": 0.5203426124197003,
+          "pass_epa": 0.25065061196043187,
+          "rush_epa": 0.10298733809375557,
+          "turnovers_per_game": 1.125
+        },
+        "defense": {
+          "games": 8,
+          "plays": 481,
+          "epa_per_play": -0.07293504500713877,
+          "success_rate": 0.4365904365904366,
+          "explosive_rate": 0.04781704781704782,
+          "pass_rate": 0.604989604989605,
+          "pass_epa": -0.011915668264665821,
+          "rush_epa": -0.16639103780745254,
+          "sacks_per_game": 1.875
+        },
+        "recent_offense": {
+          "games": 4,
+          "plays": 245,
+          "epa_per_play": 0.07944241099708753,
+          "success_rate": 0.5142857142857142,
+          "explosive_rate": 0.11428571428571428,
+          "pass_rate": 0.5346938775510204,
+          "pass_epa": 0.013113355838006524,
+          "rush_epa": 0.15566264104831218,
+          "turnovers_per_game": 2.0
+        },
+        "recent_defense": {
+          "games": 4,
+          "plays": 224,
+          "epa_per_play": -0.1762555242509107,
+          "success_rate": 0.41517857142857145,
+          "explosive_rate": 0.0625,
+          "pass_rate": 0.6294642857142857,
+          "pass_epa": -0.09068101248778057,
+          "rush_epa": -0.3216290924268306,
+          "sacks_per_game": 2.25
+        }
+      }
+    },
+    "ARI": {
+      "status": "RECONCILED",
+      "completed_game_ids": [
+        "2026_01_ARI_LAC",
+        "2026_02_SEA_ARI",
+        "2026_03_ARI_SF",
+        "2026_04_ARI_NYG",
+        "2026_05_DET_ARI",
+        "2026_06_ARI_LA",
+        "2026_07_DEN_ARI",
+        "2026_08_ARI_DAL",
+        "2026_09_ARI_SEA"
+      ],
+      "recent_game_ids": [
+        "2026_06_ARI_LA",
+        "2026_07_DEN_ARI",
+        "2026_08_ARI_DAL",
+        "2026_09_ARI_SEA"
+      ],
+      "counts": {
+        "offense": {
+          "games": 9,
+          "plays": 600,
+          "epa_per_play": -0.035812562767349,
+          "success_rate": 0.43333333333333335,
+          "explosive_rate": 0.058333333333333334,
+          "pass_rate": 0.6283333333333333,
+          "pass_epa": -0.03980786412738898,
+          "rush_epa": -0.029058174369433917,
+          "turnovers_per_game": 0.8888888888888888
+        },
+        "defense": {
+          "games": 9,
+          "plays": 535,
+          "epa_per_play": 0.07335437413003926,
+          "success_rate": 0.42990654205607476,
+          "explosive_rate": 0.09158878504672897,
+          "pass_rate": 0.5214953271028038,
+          "pass_epa": 0.214884104696762,
+          "rush_epa": -0.08089091816728747,
+          "sacks_per_game": 2.111111111111111
+        },
+        "recent_offense": {
+          "games": 4,
+          "plays": 271,
+          "epa_per_play": -0.05702004295376436,
+          "success_rate": 0.4022140221402214,
+          "explosive_rate": 0.07749077490774908,
+          "pass_rate": 0.6162361623616236,
+          "pass_epa": -0.08589308464890258,
+          "rush_epa": -0.01065660100099433,
+          "turnovers_per_game": 0.75
+        },
+        "recent_defense": {
+          "games": 4,
+          "plays": 240,
+          "epa_per_play": 0.011187146529372844,
+          "success_rate": 0.4166666666666667,
+          "explosive_rate": 0.058333333333333334,
+          "pass_rate": 0.5333333333333333,
+          "pass_epa": 0.04920299519967104,
+          "rush_epa": -0.03225953766525367,
+          "sacks_per_game": 2.0
+        }
+      }
+    },
+    "NYG": {
+      "status": "RECONCILED",
+      "completed_game_ids": [
+        "2026_01_DAL_NYG",
+        "2026_02_NYG_LA",
+        "2026_03_TEN_NYG",
+        "2026_04_ARI_NYG",
+        "2026_05_NYG_WAS",
+        "2026_06_NO_NYG",
+        "2026_07_NYG_HOU",
+        "2026_09_NYG_PHI"
+      ],
+      "recent_game_ids": [
+        "2026_05_NYG_WAS",
+        "2026_06_NO_NYG",
+        "2026_07_NYG_HOU",
+        "2026_09_NYG_PHI"
+      ],
+      "counts": {
+        "offense": {
+          "games": 8,
+          "plays": 519,
+          "epa_per_play": 0.0028163673705512535,
+          "success_rate": 0.40655105973025046,
+          "explosive_rate": 0.08670520231213873,
+          "pass_rate": 0.5645472061657033,
+          "pass_epa": 0.05277987570351761,
+          "rush_epa": -0.06195933148590513,
+          "turnovers_per_game": 1.25
+        },
+        "defense": {
+          "games": 8,
+          "plays": 476,
+          "epa_per_play": -0.030301310760463475,
+          "success_rate": 0.4054621848739496,
+          "explosive_rate": 0.09033613445378151,
+          "pass_rate": 0.5651260504201681,
+          "pass_epa": -0.05880743064983289,
+          "rush_epa": 0.006742874023306427,
+          "sacks_per_game": 2.0
+        },
+        "recent_offense": {
+          "games": 4,
+          "plays": 279,
+          "epa_per_play": 0.04607781414776904,
+          "success_rate": 0.4121863799283154,
+          "explosive_rate": 0.10752688172043011,
+          "pass_rate": 0.6057347670250897,
+          "pass_epa": 0.07922782917128318,
+          "rush_epa": -0.004852663479266329,
+          "turnovers_per_game": 1.25
+        },
+        "recent_defense": {
+          "games": 4,
+          "plays": 248,
+          "epa_per_play": -0.07268240223508465,
+          "success_rate": 0.35080645161290325,
+          "explosive_rate": 0.0967741935483871,
+          "pass_rate": 0.5282258064516129,
+          "pass_epa": -0.15276110560978134,
+          "rush_epa": 0.016978368210088583,
+          "sacks_per_game": 3.25
+        }
+      }
+    },
     "MIA": {
       "status": "RECONCILED",
       "completed_game_ids": [
@@ -83,661 +344,6 @@
           "pass_epa": 0.21757661419035265,
           "rush_epa": 0.04306081195680348,
           "sacks_per_game": 2.0
-        }
-      }
-    },
-    "BAL": {
-      "status": "RECONCILED",
-      "completed_game_ids": [
-        "2026_01_BAL_IND",
-        "2026_02_NO_BAL",
-        "2026_03_BAL_DAL",
-        "2026_04_TEN_BAL",
-        "2026_05_BAL_ATL",
-        "2026_06_BAL_CLE",
-        "2026_07_CIN_BAL",
-        "2026_08_BAL_BUF",
-        "2026_09_JAX_BAL"
-      ],
-      "recent_game_ids": [
-        "2026_06_BAL_CLE",
-        "2026_07_CIN_BAL",
-        "2026_08_BAL_BUF",
-        "2026_09_JAX_BAL"
-      ],
-      "counts": {
-        "offense": {
-          "games": 9,
-          "plays": 528,
-          "epa_per_play": -0.014786101460769476,
-          "success_rate": 0.4412878787878788,
-          "explosive_rate": 0.09659090909090909,
-          "pass_rate": 0.509469696969697,
-          "pass_epa": 0.013877736698065947,
-          "rush_epa": -0.04455665151762944,
-          "turnovers_per_game": 1.1111111111111112
-        },
-        "defense": {
-          "games": 9,
-          "plays": 553,
-          "epa_per_play": 0.017063350939532144,
-          "success_rate": 0.4448462929475588,
-          "explosive_rate": 0.07775768535262206,
-          "pass_rate": 0.5551537070524413,
-          "pass_epa": 0.09231550761929325,
-          "rush_epa": -0.0768488933722022,
-          "sacks_per_game": 1.8888888888888888
-        },
-        "recent_offense": {
-          "games": 4,
-          "plays": 224,
-          "epa_per_play": -0.24026303581473113,
-          "success_rate": 0.35267857142857145,
-          "explosive_rate": 0.049107142857142856,
-          "pass_rate": 0.5446428571428571,
-          "pass_epa": -0.23640373085380448,
-          "rush_epa": -0.2448790672385846,
-          "turnovers_per_game": 1.75
-        },
-        "recent_defense": {
-          "games": 4,
-          "plays": 241,
-          "epa_per_play": 0.06088580958355881,
-          "success_rate": 0.4854771784232365,
-          "explosive_rate": 0.058091286307053944,
-          "pass_rate": 0.5145228215767634,
-          "pass_epa": 0.16879418056689083,
-          "rush_epa": -0.05347861778339134,
-          "sacks_per_game": 1.75
-        }
-      }
-    },
-    "ATL": {
-      "status": "RECONCILED",
-      "completed_game_ids": [
-        "2026_01_ATL_PIT",
-        "2026_02_CAR_ATL",
-        "2026_03_ATL_GB",
-        "2026_04_ATL_NO",
-        "2026_05_BAL_ATL",
-        "2026_06_CHI_ATL",
-        "2026_07_SF_ATL",
-        "2026_08_ATL_TB",
-        "2026_09_CIN_ATL"
-      ],
-      "recent_game_ids": [
-        "2026_06_CHI_ATL",
-        "2026_07_SF_ATL",
-        "2026_08_ATL_TB",
-        "2026_09_CIN_ATL"
-      ],
-      "counts": {
-        "offense": {
-          "games": 9,
-          "plays": 525,
-          "epa_per_play": -0.07308678291239189,
-          "success_rate": 0.4342857142857143,
-          "explosive_rate": 0.09523809523809523,
-          "pass_rate": 0.5219047619047619,
-          "pass_epa": -0.15025680723697546,
-          "rush_epa": 0.011154598222810862,
-          "turnovers_per_game": 1.6666666666666667
-        },
-        "defense": {
-          "games": 9,
-          "plays": 573,
-          "epa_per_play": 0.0016106735033098998,
-          "success_rate": 0.4467713787085515,
-          "explosive_rate": 0.09598603839441536,
-          "pass_rate": 0.5898778359511344,
-          "pass_epa": 0.04613117781371355,
-          "rush_epa": -0.06242307312186641,
-          "sacks_per_game": 2.2222222222222223
-        },
-        "recent_offense": {
-          "games": 4,
-          "plays": 218,
-          "epa_per_play": -0.1434101354802072,
-          "success_rate": 0.3944954128440367,
-          "explosive_rate": 0.08256880733944955,
-          "pass_rate": 0.5871559633027523,
-          "pass_epa": -0.20835431566102092,
-          "rush_epa": -0.0510450792230499,
-          "turnovers_per_game": 1.5
-        },
-        "recent_defense": {
-          "games": 4,
-          "plays": 249,
-          "epa_per_play": 0.04988995786968384,
-          "success_rate": 0.5060240963855421,
-          "explosive_rate": 0.12449799196787148,
-          "pass_rate": 0.46586345381526106,
-          "pass_epa": 0.16153945529937028,
-          "rush_epa": -0.04748855116673438,
-          "sacks_per_game": 2.25
-        }
-      }
-    },
-    "DAL": {
-      "status": "RECONCILED",
-      "completed_game_ids": [
-        "2026_01_DAL_NYG",
-        "2026_02_WAS_DAL",
-        "2026_03_BAL_DAL",
-        "2026_04_DAL_HOU",
-        "2026_05_TB_DAL",
-        "2026_06_DAL_GB",
-        "2026_07_DAL_PHI",
-        "2026_08_ARI_DAL",
-        "2026_09_DAL_IND"
-      ],
-      "recent_game_ids": [
-        "2026_06_DAL_GB",
-        "2026_07_DAL_PHI",
-        "2026_08_ARI_DAL",
-        "2026_09_DAL_IND"
-      ],
-      "counts": {
-        "offense": {
-          "games": 9,
-          "plays": 585,
-          "epa_per_play": 0.09685678040960119,
-          "success_rate": 0.46495726495726497,
-          "explosive_rate": 0.08205128205128205,
-          "pass_rate": 0.6034188034188034,
-          "pass_epa": 0.15121970644494695,
-          "rush_epa": 0.01414077657133802,
-          "turnovers_per_game": 0.8888888888888888
-        },
-        "defense": {
-          "games": 9,
-          "plays": 567,
-          "epa_per_play": 0.09118279728519119,
-          "success_rate": 0.4620811287477954,
-          "explosive_rate": 0.10052910052910052,
-          "pass_rate": 0.5432098765432098,
-          "pass_epa": 0.15730162239172094,
-          "rush_epa": 0.012555005266615253,
-          "sacks_per_game": 1.8888888888888888
-        },
-        "recent_offense": {
-          "games": 4,
-          "plays": 278,
-          "epa_per_play": 0.06334138962483701,
-          "success_rate": 0.44964028776978415,
-          "explosive_rate": 0.08992805755395683,
-          "pass_rate": 0.5503597122302158,
-          "pass_epa": 0.08456983905778724,
-          "rush_epa": 0.03735776751890599,
-          "turnovers_per_game": 1.0
-        },
-        "recent_defense": {
-          "games": 4,
-          "plays": 264,
-          "epa_per_play": -0.025464063634906713,
-          "success_rate": 0.3977272727272727,
-          "explosive_rate": 0.07575757575757576,
-          "pass_rate": 0.625,
-          "pass_epa": -0.04501993018771928,
-          "rush_epa": 0.0071290472864475605,
-          "sacks_per_game": 3.0
-        }
-      }
-    },
-    "MIN": {
-      "status": "RECONCILED",
-      "completed_game_ids": [
-        "2026_01_GB_MIN",
-        "2026_02_MIN_CHI",
-        "2026_03_MIN_TB",
-        "2026_04_MIA_MIN",
-        "2026_05_MIN_NO",
-        "2026_07_IND_MIN",
-        "2026_08_MIN_DET",
-        "2026_09_BUF_MIN"
-      ],
-      "recent_game_ids": [
-        "2026_05_MIN_NO",
-        "2026_07_IND_MIN",
-        "2026_08_MIN_DET",
-        "2026_09_BUF_MIN"
-      ],
-      "counts": {
-        "offense": {
-          "games": 8,
-          "plays": 447,
-          "epa_per_play": -0.1617807035767175,
-          "success_rate": 0.3624161073825503,
-          "explosive_rate": 0.087248322147651,
-          "pass_rate": 0.5548098434004475,
-          "pass_epa": -0.1658951700867763,
-          "rush_epa": -0.1566531272224734,
-          "turnovers_per_game": 1.0
-        },
-        "defense": {
-          "games": 8,
-          "plays": 481,
-          "epa_per_play": -0.14927247509061323,
-          "success_rate": 0.3762993762993763,
-          "explosive_rate": 0.08731808731808732,
-          "pass_rate": 0.5446985446985447,
-          "pass_epa": -0.2066262041153125,
-          "rush_epa": -0.08065751159987711,
-          "sacks_per_game": 3.625
-        },
-        "recent_offense": {
-          "games": 4,
-          "plays": 213,
-          "epa_per_play": -0.23215754179884704,
-          "success_rate": 0.39436619718309857,
-          "explosive_rate": 0.10328638497652583,
-          "pass_rate": 0.5821596244131455,
-          "pass_epa": -0.23722406922587883,
-          "rush_epa": -0.22509855976567913,
-          "turnovers_per_game": 1.5
-        },
-        "recent_defense": {
-          "games": 4,
-          "plays": 244,
-          "epa_per_play": -0.11539012099236388,
-          "success_rate": 0.42213114754098363,
-          "explosive_rate": 0.0778688524590164,
-          "pass_rate": 0.47540983606557374,
-          "pass_epa": -0.2068596788276701,
-          "rush_epa": -0.03249583420411763,
-          "sacks_per_game": 3.25
-        }
-      }
-    },
-    "NO": {
-      "status": "RECONCILED",
-      "completed_game_ids": [
-        "2026_01_NO_DET",
-        "2026_02_NO_BAL",
-        "2026_03_LV_NO",
-        "2026_04_ATL_NO",
-        "2026_05_MIN_NO",
-        "2026_06_NO_NYG",
-        "2026_07_PIT_NO",
-        "2026_09_CLE_NO"
-      ],
-      "recent_game_ids": [
-        "2026_05_MIN_NO",
-        "2026_06_NO_NYG",
-        "2026_07_PIT_NO",
-        "2026_09_CLE_NO"
-      ],
-      "counts": {
-        "offense": {
-          "games": 8,
-          "plays": 529,
-          "epa_per_play": -0.03707398097141425,
-          "success_rate": 0.41965973534971646,
-          "explosive_rate": 0.06994328922495274,
-          "pass_rate": 0.6200378071833649,
-          "pass_epa": -0.016430228810422373,
-          "rush_epa": -0.07076129793064476,
-          "turnovers_per_game": 1.625
-        },
-        "defense": {
-          "games": 8,
-          "plays": 508,
-          "epa_per_play": 0.04945213439990729,
-          "success_rate": 0.46653543307086615,
-          "explosive_rate": 0.1062992125984252,
-          "pass_rate": 0.5551181102362205,
-          "pass_epa": 0.08081767728497079,
-          "rush_epa": 0.010314598587571406,
-          "sacks_per_game": 2.875
-        },
-        "recent_offense": {
-          "games": 4,
-          "plays": 238,
-          "epa_per_play": -0.07057358417447085,
-          "success_rate": 0.3907563025210084,
-          "explosive_rate": 0.06722689075630252,
-          "pass_rate": 0.5714285714285714,
-          "pass_epa": -0.06547989496393845,
-          "rush_epa": -0.07736516978851408,
-          "turnovers_per_game": 1.25
-        },
-        "recent_defense": {
-          "games": 4,
-          "plays": 263,
-          "epa_per_play": -0.04059141305782505,
-          "success_rate": 0.41825095057034223,
-          "explosive_rate": 0.10646387832699619,
-          "pass_rate": 0.5703422053231939,
-          "pass_epa": -0.006485519089405069,
-          "rush_epa": -0.08586472363537372,
-          "sacks_per_game": 3.75
-        }
-      }
-    },
-    "KC": {
-      "status": "RECONCILED",
-      "completed_game_ids": [
-        "2026_01_DEN_KC",
-        "2026_02_IND_KC",
-        "2026_03_KC_MIA",
-        "2026_04_KC_LV",
-        "2026_06_LAC_KC",
-        "2026_07_KC_SEA",
-        "2026_08_KC_DEN",
-        "2026_09_NYJ_KC"
-      ],
-      "recent_game_ids": [
-        "2026_06_LAC_KC",
-        "2026_07_KC_SEA",
-        "2026_08_KC_DEN",
-        "2026_09_NYJ_KC"
-      ],
-      "counts": {
-        "offense": {
-          "games": 8,
-          "plays": 485,
-          "epa_per_play": 0.1309125854764119,
-          "success_rate": 0.488659793814433,
-          "explosive_rate": 0.10927835051546392,
-          "pass_rate": 0.5670103092783505,
-          "pass_epa": 0.14845541358395328,
-          "rush_epa": 0.10793983438320294,
-          "turnovers_per_game": 0.75
-        },
-        "defense": {
-          "games": 8,
-          "plays": 502,
-          "epa_per_play": -0.06739555686172136,
-          "success_rate": 0.40239043824701193,
-          "explosive_rate": 0.07569721115537849,
-          "pass_rate": 0.5756972111553785,
-          "pass_epa": -0.037199899182968954,
-          "rush_epa": -0.10836525202209434,
-          "sacks_per_game": 1.75
-        },
-        "recent_offense": {
-          "games": 4,
-          "plays": 236,
-          "epa_per_play": 0.08806140967755387,
-          "success_rate": 0.4915254237288136,
-          "explosive_rate": 0.09745762711864407,
-          "pass_rate": 0.5932203389830508,
-          "pass_epa": 0.10742837486478919,
-          "rush_epa": 0.05981791877950235,
-          "turnovers_per_game": 1.0
-        },
-        "recent_defense": {
-          "games": 4,
-          "plays": 250,
-          "epa_per_play": -0.08497603385343555,
-          "success_rate": 0.392,
-          "explosive_rate": 0.064,
-          "pass_rate": 0.56,
-          "pass_epa": -0.05703490025492526,
-          "rush_epa": -0.12053747661517594,
-          "sacks_per_game": 2.5
-        }
-      }
-    },
-    "BUF": {
-      "status": "RECONCILED",
-      "completed_game_ids": [
-        "2026_01_BUF_HOU",
-        "2026_02_DET_BUF",
-        "2026_03_LAC_BUF",
-        "2026_04_NE_BUF",
-        "2026_05_BUF_LA",
-        "2026_06_BUF_LV",
-        "2026_08_BAL_BUF",
-        "2026_09_BUF_MIN"
-      ],
-      "recent_game_ids": [
-        "2026_05_BUF_LA",
-        "2026_06_BUF_LV",
-        "2026_08_BAL_BUF",
-        "2026_09_BUF_MIN"
-      ],
-      "counts": {
-        "offense": {
-          "games": 8,
-          "plays": 504,
-          "epa_per_play": 0.1404802964846384,
-          "success_rate": 0.47619047619047616,
-          "explosive_rate": 0.1349206349206349,
-          "pass_rate": 0.5099206349206349,
-          "pass_epa": 0.18579959991396736,
-          "rush_epa": 0.09332620344278598,
-          "turnovers_per_game": 1.5
-        },
-        "defense": {
-          "games": 8,
-          "plays": 504,
-          "epa_per_play": -0.009946171055270653,
-          "success_rate": 0.44246031746031744,
-          "explosive_rate": 0.09523809523809523,
-          "pass_rate": 0.6309523809523809,
-          "pass_epa": 0.026015451959655562,
-          "rush_epa": -0.07142894588724122,
-          "sacks_per_game": 2.125
-        },
-        "recent_offense": {
-          "games": 4,
-          "plays": 269,
-          "epa_per_play": 0.0967306658606784,
-          "success_rate": 0.4758364312267658,
-          "explosive_rate": 0.11895910780669144,
-          "pass_rate": 0.4721189591078067,
-          "pass_epa": 0.16392680689090897,
-          "rush_epa": 0.03663270874209191,
-          "turnovers_per_game": 1.25
-        },
-        "recent_defense": {
-          "games": 4,
-          "plays": 233,
-          "epa_per_play": -0.1443947900993078,
-          "success_rate": 0.3948497854077253,
-          "explosive_rate": 0.07296137339055794,
-          "pass_rate": 0.6866952789699571,
-          "pass_epa": -0.10285505786536979,
-          "rush_epa": -0.23544077855725418,
-          "sacks_per_game": 1.75
-        }
-      }
-    },
-    "SEA": {
-      "status": "RECONCILED",
-      "completed_game_ids": [
-        "2026_01_NE_SEA",
-        "2026_02_SEA_ARI",
-        "2026_03_SEA_WAS",
-        "2026_04_LAC_SEA",
-        "2026_05_SF_SEA",
-        "2026_06_SEA_DEN",
-        "2026_07_KC_SEA",
-        "2026_08_CHI_SEA",
-        "2026_09_ARI_SEA"
-      ],
-      "recent_game_ids": [
-        "2026_06_SEA_DEN",
-        "2026_07_KC_SEA",
-        "2026_08_CHI_SEA",
-        "2026_09_ARI_SEA"
-      ],
-      "counts": {
-        "offense": {
-          "games": 9,
-          "plays": 559,
-          "epa_per_play": -0.04043469105346,
-          "success_rate": 0.41144901610017887,
-          "explosive_rate": 0.08407871198568873,
-          "pass_rate": 0.5491949910554562,
-          "pass_epa": 0.04032165781059804,
-          "rush_epa": -0.13881643351880055,
-          "turnovers_per_game": 1.5555555555555556
-        },
-        "defense": {
-          "games": 9,
-          "plays": 526,
-          "epa_per_play": -0.0964826992220708,
-          "success_rate": 0.3916349809885932,
-          "explosive_rate": 0.055133079847908745,
-          "pass_rate": 0.5684410646387833,
-          "pass_epa": -0.11107033959534869,
-          "rush_epa": -0.07726814207841401,
-          "sacks_per_game": 2.3333333333333335
-        },
-        "recent_offense": {
-          "games": 4,
-          "plays": 265,
-          "epa_per_play": -0.004565214488124116,
-          "success_rate": 0.4075471698113208,
-          "explosive_rate": 0.07169811320754717,
-          "pass_rate": 0.5622641509433962,
-          "pass_epa": 0.027725960152513496,
-          "rush_epa": -0.04604267156963277,
-          "turnovers_per_game": 1.25
-        },
-        "recent_defense": {
-          "games": 4,
-          "plays": 226,
-          "epa_per_play": -0.04779765008041515,
-          "success_rate": 0.4026548672566372,
-          "explosive_rate": 0.03982300884955752,
-          "pass_rate": 0.5796460176991151,
-          "pass_epa": -0.10485139280775368,
-          "rush_epa": 0.03087645831202007,
-          "sacks_per_game": 1.75
-        }
-      }
-    },
-    "WAS": {
-      "status": "RECONCILED",
-      "completed_game_ids": [
-        "2026_01_WAS_PHI",
-        "2026_02_WAS_DAL",
-        "2026_03_SEA_WAS",
-        "2026_04_IND_WAS",
-        "2026_05_NYG_WAS",
-        "2026_06_WAS_SF",
-        "2026_08_PHI_WAS",
-        "2026_09_LA_WAS"
-      ],
-      "recent_game_ids": [
-        "2026_05_NYG_WAS",
-        "2026_06_WAS_SF",
-        "2026_08_PHI_WAS",
-        "2026_09_LA_WAS"
-      ],
-      "counts": {
-        "offense": {
-          "games": 8,
-          "plays": 492,
-          "epa_per_play": -0.02853614405200625,
-          "success_rate": 0.40853658536585363,
-          "explosive_rate": 0.09146341463414634,
-          "pass_rate": 0.5792682926829268,
-          "pass_epa": -0.02789701784063047,
-          "rush_epa": -0.029416100429987393,
-          "turnovers_per_game": 0.625
-        },
-        "defense": {
-          "games": 8,
-          "plays": 516,
-          "epa_per_play": 0.024080850868167802,
-          "success_rate": 0.45930232558139533,
-          "explosive_rate": 0.07751937984496124,
-          "pass_rate": 0.6046511627906976,
-          "pass_epa": 0.018090304987183458,
-          "rush_epa": 0.033242862215555606,
-          "sacks_per_game": 2.125
-        },
-        "recent_offense": {
-          "games": 4,
-          "plays": 233,
-          "epa_per_play": -0.01050444780480857,
-          "success_rate": 0.4334763948497854,
-          "explosive_rate": 0.1072961373390558,
-          "pass_rate": 0.6094420600858369,
-          "pass_epa": -0.052557341944348475,
-          "rush_epa": 0.05511655184150647,
-          "turnovers_per_game": 0.75
-        },
-        "recent_defense": {
-          "games": 4,
-          "plays": 283,
-          "epa_per_play": 0.017775777848137723,
-          "success_rate": 0.45936395759717313,
-          "explosive_rate": 0.06713780918727916,
-          "pass_rate": 0.5971731448763251,
-          "pass_epa": -0.014100812686553483,
-          "rush_epa": 0.06503142521974135,
-          "sacks_per_game": 2.5
-        }
-      }
-    },
-    "NYJ": {
-      "status": "RECONCILED",
-      "completed_game_ids": [
-        "2026_01_NYJ_TEN",
-        "2026_02_GB_NYJ",
-        "2026_03_NYJ_DET",
-        "2026_04_NYJ_CHI",
-        "2026_05_CLE_NYJ",
-        "2026_06_NYJ_NE",
-        "2026_07_MIA_NYJ",
-        "2026_08_LV_NYJ",
-        "2026_09_NYJ_KC"
-      ],
-      "recent_game_ids": [
-        "2026_06_NYJ_NE",
-        "2026_07_MIA_NYJ",
-        "2026_08_LV_NYJ",
-        "2026_09_NYJ_KC"
-      ],
-      "counts": {
-        "offense": {
-          "games": 9,
-          "plays": 525,
-          "epa_per_play": 0.003076848171395828,
-          "success_rate": 0.44952380952380955,
-          "explosive_rate": 0.09904761904761905,
-          "pass_rate": 0.5733333333333334,
-          "pass_epa": 0.0836280773950217,
-          "rush_epa": -0.10516386609785143,
-          "turnovers_per_game": 0.7777777777777778
-        },
-        "defense": {
-          "games": 9,
-          "plays": 563,
-          "epa_per_play": 0.039004399056432854,
-          "success_rate": 0.46714031971580816,
-          "explosive_rate": 0.09236234458259325,
-          "pass_rate": 0.5186500888099467,
-          "pass_epa": 0.13376622036889263,
-          "rush_epa": -0.06310058922119907,
-          "sacks_per_game": 2.4444444444444446
-        },
-        "recent_offense": {
-          "games": 4,
-          "plays": 235,
-          "epa_per_play": 0.037143619319597664,
-          "success_rate": 0.4765957446808511,
-          "explosive_rate": 0.10638297872340426,
-          "pass_rate": 0.5829787234042553,
-          "pass_epa": 0.1389592625106346,
-          "rush_epa": -0.10519049412093354,
-          "turnovers_per_game": 1.0
-        },
-        "recent_defense": {
-          "games": 4,
-          "plays": 251,
-          "epa_per_play": 0.16450747700726018,
-          "success_rate": 0.49800796812749004,
-          "explosive_rate": 0.09561752988047809,
-          "pass_rate": 0.4581673306772908,
-          "pass_epa": 0.36499916167597296,
-          "rush_epa": -0.005025932822901359,
-          "sacks_per_game": 1.25
         }
       }
     },
@@ -807,6 +413,465 @@
         }
       }
     },
+    "BAL": {
+      "status": "RECONCILED",
+      "completed_game_ids": [
+        "2026_01_BAL_IND",
+        "2026_02_NO_BAL",
+        "2026_03_BAL_DAL",
+        "2026_04_TEN_BAL",
+        "2026_05_BAL_ATL",
+        "2026_06_BAL_CLE",
+        "2026_07_CIN_BAL",
+        "2026_08_BAL_BUF",
+        "2026_09_JAX_BAL"
+      ],
+      "recent_game_ids": [
+        "2026_06_BAL_CLE",
+        "2026_07_CIN_BAL",
+        "2026_08_BAL_BUF",
+        "2026_09_JAX_BAL"
+      ],
+      "counts": {
+        "offense": {
+          "games": 9,
+          "plays": 528,
+          "epa_per_play": -0.014786101460769476,
+          "success_rate": 0.4412878787878788,
+          "explosive_rate": 0.09659090909090909,
+          "pass_rate": 0.509469696969697,
+          "pass_epa": 0.013877736698065947,
+          "rush_epa": -0.04455665151762944,
+          "turnovers_per_game": 1.1111111111111112
+        },
+        "defense": {
+          "games": 9,
+          "plays": 553,
+          "epa_per_play": 0.017063350939532144,
+          "success_rate": 0.4448462929475588,
+          "explosive_rate": 0.07775768535262206,
+          "pass_rate": 0.5551537070524413,
+          "pass_epa": 0.09231550761929325,
+          "rush_epa": -0.0768488933722022,
+          "sacks_per_game": 1.8888888888888888
+        },
+        "recent_offense": {
+          "games": 4,
+          "plays": 224,
+          "epa_per_play": -0.24026303581473113,
+          "success_rate": 0.35267857142857145,
+          "explosive_rate": 0.049107142857142856,
+          "pass_rate": 0.5446428571428571,
+          "pass_epa": -0.23640373085380448,
+          "rush_epa": -0.2448790672385846,
+          "turnovers_per_game": 1.75
+        },
+        "recent_defense": {
+          "games": 4,
+          "plays": 241,
+          "epa_per_play": 0.06088580958355881,
+          "success_rate": 0.4854771784232365,
+          "explosive_rate": 0.058091286307053944,
+          "pass_rate": 0.5145228215767634,
+          "pass_epa": 0.16879418056689083,
+          "rush_epa": -0.05347861778339134,
+          "sacks_per_game": 1.75
+        }
+      }
+    },
+    "HOU": {
+      "status": "RECONCILED",
+      "completed_game_ids": [
+        "2026_01_BUF_HOU",
+        "2026_02_CIN_HOU",
+        "2026_03_HOU_IND",
+        "2026_04_DAL_HOU",
+        "2026_05_HOU_TEN",
+        "2026_06_HOU_JAX",
+        "2026_07_NYG_HOU",
+        "2026_09_HOU_LAC"
+      ],
+      "recent_game_ids": [
+        "2026_05_HOU_TEN",
+        "2026_06_HOU_JAX",
+        "2026_07_NYG_HOU",
+        "2026_09_HOU_LAC"
+      ],
+      "counts": {
+        "offense": {
+          "games": 8,
+          "plays": 489,
+          "epa_per_play": 0.05981133856829877,
+          "success_rate": 0.4294478527607362,
+          "explosive_rate": 0.10224948875255624,
+          "pass_rate": 0.6094069529652352,
+          "pass_epa": 0.15489230823670863,
+          "rush_epa": -0.08853488635937738,
+          "turnovers_per_game": 0.5
+        },
+        "defense": {
+          "games": 8,
+          "plays": 512,
+          "epa_per_play": 0.0028002358824644295,
+          "success_rate": 0.40625,
+          "explosive_rate": 0.095703125,
+          "pass_rate": 0.59765625,
+          "pass_epa": 0.04551548855443515,
+          "rush_epa": -0.06065057633900664,
+          "sacks_per_game": 3.625
+        },
+        "recent_offense": {
+          "games": 4,
+          "plays": 239,
+          "epa_per_play": 0.14987309751139463,
+          "success_rate": 0.4435146443514644,
+          "explosive_rate": 0.100418410041841,
+          "pass_rate": 0.5774058577405857,
+          "pass_epa": 0.30368938585004096,
+          "rush_epa": -0.06029173209982512,
+          "turnovers_per_game": 0.5
+        },
+        "recent_defense": {
+          "games": 4,
+          "plays": 258,
+          "epa_per_play": -0.0293273411325649,
+          "success_rate": 0.4186046511627907,
+          "explosive_rate": 0.09302325581395349,
+          "pass_rate": 0.5813953488372093,
+          "pass_epa": -0.020118374036811257,
+          "rush_epa": -0.042117573210000495,
+          "sacks_per_game": 3.75
+        }
+      }
+    },
+    "SEA": {
+      "status": "RECONCILED",
+      "completed_game_ids": [
+        "2026_01_NE_SEA",
+        "2026_02_SEA_ARI",
+        "2026_03_SEA_WAS",
+        "2026_04_LAC_SEA",
+        "2026_05_SF_SEA",
+        "2026_06_SEA_DEN",
+        "2026_07_KC_SEA",
+        "2026_08_CHI_SEA",
+        "2026_09_ARI_SEA"
+      ],
+      "recent_game_ids": [
+        "2026_06_SEA_DEN",
+        "2026_07_KC_SEA",
+        "2026_08_CHI_SEA",
+        "2026_09_ARI_SEA"
+      ],
+      "counts": {
+        "offense": {
+          "games": 9,
+          "plays": 559,
+          "epa_per_play": -0.04043469105346,
+          "success_rate": 0.41144901610017887,
+          "explosive_rate": 0.08407871198568873,
+          "pass_rate": 0.5491949910554562,
+          "pass_epa": 0.04032165781059804,
+          "rush_epa": -0.13881643351880055,
+          "turnovers_per_game": 1.5555555555555556
+        },
+        "defense": {
+          "games": 9,
+          "plays": 526,
+          "epa_per_play": -0.0964826992220708,
+          "success_rate": 0.3916349809885932,
+          "explosive_rate": 0.055133079847908745,
+          "pass_rate": 0.5684410646387833,
+          "pass_epa": -0.11107033959534869,
+          "rush_epa": -0.07726814207841401,
+          "sacks_per_game": 2.3333333333333335
+        },
+        "recent_offense": {
+          "games": 4,
+          "plays": 265,
+          "epa_per_play": -0.004565214488124116,
+          "success_rate": 0.4075471698113208,
+          "explosive_rate": 0.07169811320754717,
+          "pass_rate": 0.5622641509433962,
+          "pass_epa": 0.027725960152513496,
+          "rush_epa": -0.04604267156963277,
+          "turnovers_per_game": 1.25
+        },
+        "recent_defense": {
+          "games": 4,
+          "plays": 226,
+          "epa_per_play": -0.04779765008041515,
+          "success_rate": 0.4026548672566372,
+          "explosive_rate": 0.03982300884955752,
+          "pass_rate": 0.5796460176991151,
+          "pass_epa": -0.10485139280775368,
+          "rush_epa": 0.03087645831202007,
+          "sacks_per_game": 1.75
+        }
+      }
+    },
+    "NE": {
+      "status": "RECONCILED",
+      "completed_game_ids": [
+        "2026_01_NE_SEA",
+        "2026_02_PIT_NE",
+        "2026_03_NE_JAX",
+        "2026_04_NE_BUF",
+        "2026_05_LV_NE",
+        "2026_06_NYJ_NE",
+        "2026_07_NE_CHI",
+        "2026_08_NE_MIA",
+        "2026_09_GB_NE"
+      ],
+      "recent_game_ids": [
+        "2026_06_NYJ_NE",
+        "2026_07_NE_CHI",
+        "2026_08_NE_MIA",
+        "2026_09_GB_NE"
+      ],
+      "counts": {
+        "offense": {
+          "games": 9,
+          "plays": 547,
+          "epa_per_play": 0.04096274797205417,
+          "success_rate": 0.45521023765996343,
+          "explosive_rate": 0.11517367458866545,
+          "pass_rate": 0.5521023765996343,
+          "pass_epa": 0.09760738453804405,
+          "rush_epa": -0.028860436692961913,
+          "turnovers_per_game": 2.111111111111111
+        },
+        "defense": {
+          "games": 9,
+          "plays": 535,
+          "epa_per_play": 0.04272858581461328,
+          "success_rate": 0.4373831775700935,
+          "explosive_rate": 0.10093457943925234,
+          "pass_rate": 0.5831775700934579,
+          "pass_epa": 0.13800499267619265,
+          "rush_epa": -0.09057293409934528,
+          "sacks_per_game": 2.7777777777777777
+        },
+        "recent_offense": {
+          "games": 4,
+          "plays": 234,
+          "epa_per_play": 0.03438233863623733,
+          "success_rate": 0.45726495726495725,
+          "explosive_rate": 0.11538461538461539,
+          "pass_rate": 0.5683760683760684,
+          "pass_epa": 0.0962170624344103,
+          "rush_epa": -0.047043584781158755,
+          "turnovers_per_game": 2.0
+        },
+        "recent_defense": {
+          "games": 4,
+          "plays": 250,
+          "epa_per_play": 0.10155298873919935,
+          "success_rate": 0.456,
+          "explosive_rate": 0.12,
+          "pass_rate": 0.556,
+          "pass_epa": 0.3242432783919557,
+          "rush_epa": -0.1773114280331712,
+          "sacks_per_game": 3.5
+        }
+      }
+    },
+    "MIN": {
+      "status": "RECONCILED",
+      "completed_game_ids": [
+        "2026_01_GB_MIN",
+        "2026_02_MIN_CHI",
+        "2026_03_MIN_TB",
+        "2026_04_MIA_MIN",
+        "2026_05_MIN_NO",
+        "2026_07_IND_MIN",
+        "2026_08_MIN_DET",
+        "2026_09_BUF_MIN"
+      ],
+      "recent_game_ids": [
+        "2026_05_MIN_NO",
+        "2026_07_IND_MIN",
+        "2026_08_MIN_DET",
+        "2026_09_BUF_MIN"
+      ],
+      "counts": {
+        "offense": {
+          "games": 8,
+          "plays": 447,
+          "epa_per_play": -0.1617807035767175,
+          "success_rate": 0.3624161073825503,
+          "explosive_rate": 0.087248322147651,
+          "pass_rate": 0.5548098434004475,
+          "pass_epa": -0.16589517008677632,
+          "rush_epa": -0.1566531272224734,
+          "turnovers_per_game": 1.0
+        },
+        "defense": {
+          "games": 8,
+          "plays": 481,
+          "epa_per_play": -0.14927247509061323,
+          "success_rate": 0.3762993762993763,
+          "explosive_rate": 0.08731808731808732,
+          "pass_rate": 0.5446985446985447,
+          "pass_epa": -0.2066262041153125,
+          "rush_epa": -0.08065751159987711,
+          "sacks_per_game": 3.625
+        },
+        "recent_offense": {
+          "games": 4,
+          "plays": 213,
+          "epa_per_play": -0.23215754179884704,
+          "success_rate": 0.39436619718309857,
+          "explosive_rate": 0.10328638497652583,
+          "pass_rate": 0.5821596244131455,
+          "pass_epa": -0.23722406922587885,
+          "rush_epa": -0.22509855976567913,
+          "turnovers_per_game": 1.5
+        },
+        "recent_defense": {
+          "games": 4,
+          "plays": 244,
+          "epa_per_play": -0.11539012099236388,
+          "success_rate": 0.42213114754098363,
+          "explosive_rate": 0.0778688524590164,
+          "pass_rate": 0.47540983606557374,
+          "pass_epa": -0.2068596788276701,
+          "rush_epa": -0.03249583420411763,
+          "sacks_per_game": 3.25
+        }
+      }
+    },
+    "CLE": {
+      "status": "RECONCILED",
+      "completed_game_ids": [
+        "2026_01_CLE_JAX",
+        "2026_02_CLE_TB",
+        "2026_03_CAR_CLE",
+        "2026_04_PIT_CLE",
+        "2026_05_CLE_NYJ",
+        "2026_06_BAL_CLE",
+        "2026_07_CLE_TEN",
+        "2026_08_CLE_PIT",
+        "2026_09_CLE_NO"
+      ],
+      "recent_game_ids": [
+        "2026_06_BAL_CLE",
+        "2026_07_CLE_TEN",
+        "2026_08_CLE_PIT",
+        "2026_09_CLE_NO"
+      ],
+      "counts": {
+        "offense": {
+          "games": 9,
+          "plays": 547,
+          "epa_per_play": -0.08366690091132864,
+          "success_rate": 0.41316270566727603,
+          "explosive_rate": 0.08409506398537477,
+          "pass_rate": 0.5886654478976234,
+          "pass_epa": -0.037618930170094926,
+          "rush_epa": -0.14956666348322756,
+          "turnovers_per_game": 1.1111111111111112
+        },
+        "defense": {
+          "games": 9,
+          "plays": 567,
+          "epa_per_play": -0.020203201783082426,
+          "success_rate": 0.42328042328042326,
+          "explosive_rate": 0.1128747795414462,
+          "pass_rate": 0.5679012345679012,
+          "pass_epa": -0.05442007347424899,
+          "rush_epa": 0.024767543868165053,
+          "sacks_per_game": 2.888888888888889
+        },
+        "recent_offense": {
+          "games": 4,
+          "plays": 258,
+          "epa_per_play": -0.08741073518111774,
+          "success_rate": 0.437984496124031,
+          "explosive_rate": 0.08527131782945736,
+          "pass_rate": 0.5930232558139535,
+          "pass_epa": -0.07520211862521951,
+          "rush_epa": -0.10520043359114085,
+          "turnovers_per_game": 1.0
+        },
+        "recent_defense": {
+          "games": 4,
+          "plays": 248,
+          "epa_per_play": -0.017447665733237867,
+          "success_rate": 0.4112903225806452,
+          "explosive_rate": 0.10887096774193548,
+          "pass_rate": 0.5282258064516129,
+          "pass_epa": -0.0428771657984159,
+          "rush_epa": 0.011024680493585378,
+          "sacks_per_game": 2.5
+        }
+      }
+    },
+    "CIN": {
+      "status": "RECONCILED",
+      "completed_game_ids": [
+        "2026_01_TB_CIN",
+        "2026_02_CIN_HOU",
+        "2026_03_CIN_PIT",
+        "2026_04_JAX_CIN",
+        "2026_05_CIN_MIA",
+        "2026_07_CIN_BAL",
+        "2026_08_TEN_CIN",
+        "2026_09_CIN_ATL"
+      ],
+      "recent_game_ids": [
+        "2026_05_CIN_MIA",
+        "2026_07_CIN_BAL",
+        "2026_08_TEN_CIN",
+        "2026_09_CIN_ATL"
+      ],
+      "counts": {
+        "offense": {
+          "games": 8,
+          "plays": 484,
+          "epa_per_play": 0.14167916741428022,
+          "success_rate": 0.5041322314049587,
+          "explosive_rate": 0.09297520661157024,
+          "pass_rate": 0.6446280991735537,
+          "pass_epa": 0.2532899196963525,
+          "rush_epa": -0.060777546027618284,
+          "turnovers_per_game": 1.125
+        },
+        "defense": {
+          "games": 8,
+          "plays": 492,
+          "epa_per_play": 0.00508845630270163,
+          "success_rate": 0.44308943089430897,
+          "explosive_rate": 0.11178861788617886,
+          "pass_rate": 0.5995934959349594,
+          "pass_epa": -0.01307924830576583,
+          "rush_epa": 0.032293902290000634,
+          "sacks_per_game": 2.875
+        },
+        "recent_offense": {
+          "games": 4,
+          "plays": 237,
+          "epa_per_play": 0.23211098237646327,
+          "success_rate": 0.5611814345991561,
+          "explosive_rate": 0.0970464135021097,
+          "pass_rate": 0.6160337552742616,
+          "pass_epa": 0.41205491688101636,
+          "rush_epa": -0.056590275180292235,
+          "turnovers_per_game": 1.25
+        },
+        "recent_defense": {
+          "games": 4,
+          "plays": 256,
+          "epa_per_play": 0.03666032862130342,
+          "success_rate": 0.46484375,
+          "explosive_rate": 0.11328125,
+          "pass_rate": 0.5546875,
+          "pass_epa": -0.03295745095234088,
+          "rush_epa": 0.1233772119498779,
+          "sacks_per_game": 2.25
+        }
+      }
+    },
     "LAC": {
       "status": "RECONCILED",
       "completed_game_ids": [
@@ -844,7 +909,7 @@
           "success_rate": 0.4397463002114165,
           "explosive_rate": 0.1014799154334038,
           "pass_rate": 0.5200845665961945,
-          "pass_epa": 0.05594463985458304,
+          "pass_epa": 0.055944639854583034,
           "rush_epa": -0.05446536456825362,
           "sacks_per_game": 1.625
         },
@@ -862,78 +927,13 @@
         "recent_defense": {
           "games": 4,
           "plays": 229,
-          "epa_per_play": 0.01395607177670743,
+          "epa_per_play": 0.013956071776707414,
           "success_rate": 0.4410480349344978,
           "explosive_rate": 0.10480349344978165,
           "pass_rate": 0.5327510917030568,
-          "pass_epa": 0.07645225927332637,
+          "pass_epa": 0.07645225927332636,
           "rush_epa": -0.05730126349981134,
           "sacks_per_game": 0.75
-        }
-      }
-    },
-    "SF": {
-      "status": "RECONCILED",
-      "completed_game_ids": [
-        "2026_01_SF_LA",
-        "2026_02_MIA_SF",
-        "2026_03_ARI_SF",
-        "2026_04_DEN_SF",
-        "2026_05_SF_SEA",
-        "2026_06_WAS_SF",
-        "2026_07_SF_ATL",
-        "2026_09_LV_SF"
-      ],
-      "recent_game_ids": [
-        "2026_05_SF_SEA",
-        "2026_06_WAS_SF",
-        "2026_07_SF_ATL",
-        "2026_09_LV_SF"
-      ],
-      "counts": {
-        "offense": {
-          "games": 8,
-          "plays": 467,
-          "epa_per_play": 0.17982283177598754,
-          "success_rate": 0.5289079229122056,
-          "explosive_rate": 0.12633832976445397,
-          "pass_rate": 0.5203426124197003,
-          "pass_epa": 0.25065061196043187,
-          "rush_epa": 0.10298733809375557,
-          "turnovers_per_game": 1.125
-        },
-        "defense": {
-          "games": 8,
-          "plays": 481,
-          "epa_per_play": -0.07293504500713877,
-          "success_rate": 0.4365904365904366,
-          "explosive_rate": 0.04781704781704782,
-          "pass_rate": 0.604989604989605,
-          "pass_epa": -0.011915668264665821,
-          "rush_epa": -0.16639103780745254,
-          "sacks_per_game": 1.875
-        },
-        "recent_offense": {
-          "games": 4,
-          "plays": 245,
-          "epa_per_play": 0.07944241099708753,
-          "success_rate": 0.5142857142857142,
-          "explosive_rate": 0.11428571428571428,
-          "pass_rate": 0.5346938775510204,
-          "pass_epa": 0.013113355838006524,
-          "rush_epa": 0.15566264104831218,
-          "turnovers_per_game": 2.0
-        },
-        "recent_defense": {
-          "games": 4,
-          "plays": 224,
-          "epa_per_play": -0.1762555242509107,
-          "success_rate": 0.41517857142857145,
-          "explosive_rate": 0.0625,
-          "pass_rate": 0.6294642857142857,
-          "pass_epa": -0.09068101248778057,
-          "rush_epa": -0.3216290924268306,
-          "sacks_per_game": 2.25
         }
       }
     },
@@ -1002,68 +1002,133 @@
         }
       }
     },
-    "DET": {
+    "CAR": {
       "status": "RECONCILED",
       "completed_game_ids": [
-        "2026_01_NO_DET",
-        "2026_02_DET_BUF",
-        "2026_03_NYJ_DET",
+        "2026_01_CHI_CAR",
+        "2026_02_CAR_ATL",
+        "2026_03_CAR_CLE",
         "2026_04_DET_CAR",
-        "2026_05_DET_ARI",
-        "2026_07_GB_DET",
-        "2026_08_MIN_DET",
-        "2026_09_DET_MIA"
+        "2026_06_CAR_PHI",
+        "2026_07_TB_CAR",
+        "2026_08_CAR_GB",
+        "2026_09_DEN_CAR"
       ],
       "recent_game_ids": [
-        "2026_05_DET_ARI",
-        "2026_07_GB_DET",
-        "2026_08_MIN_DET",
-        "2026_09_DET_MIA"
+        "2026_06_CAR_PHI",
+        "2026_07_TB_CAR",
+        "2026_08_CAR_GB",
+        "2026_09_DEN_CAR"
       ],
       "counts": {
         "offense": {
           "games": 8,
-          "plays": 517,
-          "epa_per_play": 0.10200376680447894,
-          "success_rate": 0.4874274661508704,
-          "explosive_rate": 0.10831721470019343,
-          "pass_rate": 0.5667311411992263,
-          "pass_epa": 0.22158663872575574,
-          "rush_epa": -0.05441490048540544,
-          "turnovers_per_game": 0.625
+          "plays": 524,
+          "epa_per_play": 0.04215575070051352,
+          "success_rate": 0.42748091603053434,
+          "explosive_rate": 0.09541984732824428,
+          "pass_rate": 0.6469465648854962,
+          "pass_epa": 0.060483454780969566,
+          "rush_epa": 0.00857147133146157,
+          "turnovers_per_game": 1.25
         },
         "defense": {
           "games": 8,
-          "plays": 519,
-          "epa_per_play": 0.07953163463785629,
-          "success_rate": 0.4393063583815029,
-          "explosive_rate": 0.10982658959537572,
-          "pass_rate": 0.6570327552986512,
-          "pass_epa": 0.14891961866176612,
-          "rush_epa": -0.053397031385476544,
-          "sacks_per_game": 3.375
+          "plays": 518,
+          "epa_per_play": 0.030316366392503343,
+          "success_rate": 0.444015444015444,
+          "explosive_rate": 0.07335907335907337,
+          "pass_rate": 0.5637065637065637,
+          "pass_epa": 0.048725133149362436,
+          "rush_epa": 0.006531588104880087,
+          "sacks_per_game": 1.5
         },
         "recent_offense": {
           "games": 4,
-          "plays": 252,
-          "epa_per_play": 0.057471727349472125,
-          "success_rate": 0.4801587301587302,
-          "explosive_rate": 0.12301587301587301,
-          "pass_rate": 0.49206349206349204,
-          "pass_epa": 0.1705706355856748,
-          "rush_epa": -0.052092840004349245,
-          "turnovers_per_game": 1.0
+          "plays": 259,
+          "epa_per_play": -0.032488353521776925,
+          "success_rate": 0.41312741312741313,
+          "explosive_rate": 0.08108108108108109,
+          "pass_rate": 0.6447876447876448,
+          "pass_epa": -0.09156760000292112,
+          "rush_epa": 0.07475332215595223,
+          "turnovers_per_game": 1.75
         },
         "recent_defense": {
           "games": 4,
-          "plays": 234,
-          "epa_per_play": -0.04703406519528829,
-          "success_rate": 0.38461538461538464,
-          "explosive_rate": 0.08974358974358974,
-          "pass_rate": 0.6794871794871795,
-          "pass_epa": 0.03339508557812168,
-          "rush_epa": -0.21754386483491742,
-          "sacks_per_game": 3.0
+          "plays": 251,
+          "epa_per_play": 0.032474010119605996,
+          "success_rate": 0.4541832669322709,
+          "explosive_rate": 0.05976095617529881,
+          "pass_rate": 0.5537848605577689,
+          "pass_epa": 0.07834998399967127,
+          "rush_epa": -0.024461350320832156,
+          "sacks_per_game": 1.0
+        }
+      }
+    },
+    "PIT": {
+      "status": "RECONCILED",
+      "completed_game_ids": [
+        "2026_01_ATL_PIT",
+        "2026_02_PIT_NE",
+        "2026_03_CIN_PIT",
+        "2026_04_PIT_CLE",
+        "2026_05_IND_PIT",
+        "2026_06_PIT_TB",
+        "2026_07_PIT_NO",
+        "2026_08_CLE_PIT"
+      ],
+      "recent_game_ids": [
+        "2026_05_IND_PIT",
+        "2026_06_PIT_TB",
+        "2026_07_PIT_NO",
+        "2026_08_CLE_PIT"
+      ],
+      "counts": {
+        "offense": {
+          "games": 8,
+          "plays": 494,
+          "epa_per_play": -0.02694831951800091,
+          "success_rate": 0.42105263157894735,
+          "explosive_rate": 0.0951417004048583,
+          "pass_rate": 0.6275303643724697,
+          "pass_epa": -0.11560276682859104,
+          "rush_epa": 0.12241515149440634,
+          "turnovers_per_game": 1.0
+        },
+        "defense": {
+          "games": 8,
+          "plays": 486,
+          "epa_per_play": -0.07408925913935692,
+          "success_rate": 0.4176954732510288,
+          "explosive_rate": 0.09053497942386832,
+          "pass_rate": 0.6296296296296297,
+          "pass_epa": -0.062104247994594484,
+          "rush_epa": -0.09446377808545299,
+          "sacks_per_game": 3.25
+        },
+        "recent_offense": {
+          "games": 4,
+          "plays": 244,
+          "epa_per_play": 0.05364314745397671,
+          "success_rate": 0.430327868852459,
+          "explosive_rate": 0.09836065573770492,
+          "pass_rate": 0.5819672131147541,
+          "pass_epa": -0.07790007635380852,
+          "rush_epa": 0.23677194922559927,
+          "turnovers_per_game": 0.5
+        },
+        "recent_defense": {
+          "games": 4,
+          "plays": 262,
+          "epa_per_play": -0.13676860983808273,
+          "success_rate": 0.3816793893129771,
+          "explosive_rate": 0.07251908396946564,
+          "pass_rate": 0.6946564885496184,
+          "pass_epa": -0.11974888628938417,
+          "rush_epa": -0.17548848091137187,
+          "sacks_per_game": 4.0
         }
       }
     },
@@ -1198,460 +1263,133 @@
         }
       }
     },
-    "NE": {
-      "status": "RECONCILED",
-      "completed_game_ids": [
-        "2026_01_NE_SEA",
-        "2026_02_PIT_NE",
-        "2026_03_NE_JAX",
-        "2026_04_NE_BUF",
-        "2026_05_LV_NE",
-        "2026_06_NYJ_NE",
-        "2026_07_NE_CHI",
-        "2026_08_NE_MIA",
-        "2026_09_GB_NE"
-      ],
-      "recent_game_ids": [
-        "2026_06_NYJ_NE",
-        "2026_07_NE_CHI",
-        "2026_08_NE_MIA",
-        "2026_09_GB_NE"
-      ],
-      "counts": {
-        "offense": {
-          "games": 9,
-          "plays": 547,
-          "epa_per_play": 0.04096274797205417,
-          "success_rate": 0.45521023765996343,
-          "explosive_rate": 0.11517367458866545,
-          "pass_rate": 0.5521023765996343,
-          "pass_epa": 0.09760738453804405,
-          "rush_epa": -0.028860436692961913,
-          "turnovers_per_game": 2.111111111111111
-        },
-        "defense": {
-          "games": 9,
-          "plays": 535,
-          "epa_per_play": 0.04272858581461328,
-          "success_rate": 0.4373831775700935,
-          "explosive_rate": 0.10093457943925234,
-          "pass_rate": 0.5831775700934579,
-          "pass_epa": 0.13800499267619265,
-          "rush_epa": -0.09057293409934528,
-          "sacks_per_game": 2.7777777777777777
-        },
-        "recent_offense": {
-          "games": 4,
-          "plays": 234,
-          "epa_per_play": 0.03438233863623733,
-          "success_rate": 0.45726495726495725,
-          "explosive_rate": 0.11538461538461539,
-          "pass_rate": 0.5683760683760684,
-          "pass_epa": 0.0962170624344103,
-          "rush_epa": -0.047043584781158755,
-          "turnovers_per_game": 2.0
-        },
-        "recent_defense": {
-          "games": 4,
-          "plays": 250,
-          "epa_per_play": 0.10155298873919935,
-          "success_rate": 0.456,
-          "explosive_rate": 0.12,
-          "pass_rate": 0.556,
-          "pass_epa": 0.3242432783919557,
-          "rush_epa": -0.1773114280331712,
-          "sacks_per_game": 3.5
-        }
-      }
-    },
-    "LA": {
-      "status": "RECONCILED",
-      "completed_game_ids": [
-        "2026_01_SF_LA",
-        "2026_02_NYG_LA",
-        "2026_03_LA_DEN",
-        "2026_04_LA_PHI",
-        "2026_05_BUF_LA",
-        "2026_06_ARI_LA",
-        "2026_07_LA_LV",
-        "2026_08_LAC_LA",
-        "2026_09_LA_WAS"
-      ],
-      "recent_game_ids": [
-        "2026_06_ARI_LA",
-        "2026_07_LA_LV",
-        "2026_08_LAC_LA",
-        "2026_09_LA_WAS"
-      ],
-      "counts": {
-        "offense": {
-          "games": 9,
-          "plays": 594,
-          "epa_per_play": 0.04062993395974641,
-          "success_rate": 0.4781144781144781,
-          "explosive_rate": 0.08080808080808081,
-          "pass_rate": 0.6060606060606061,
-          "pass_epa": 0.052393620434239264,
-          "rush_epa": 0.022531954768218926,
-          "turnovers_per_game": 1.5555555555555556
-        },
-        "defense": {
-          "games": 9,
-          "plays": 548,
-          "epa_per_play": -0.11106908052101876,
-          "success_rate": 0.4032846715328467,
-          "explosive_rate": 0.07846715328467153,
-          "pass_rate": 0.5693430656934306,
-          "pass_epa": -0.12071300284189153,
-          "rush_epa": -0.09831948830020387,
-          "sacks_per_game": 1.7777777777777777
-        },
-        "recent_offense": {
-          "games": 4,
-          "plays": 247,
-          "epa_per_play": -0.00450547147181451,
-          "success_rate": 0.48582995951417,
-          "explosive_rate": 0.05668016194331984,
-          "pass_rate": 0.5506072874493927,
-          "pass_epa": -0.05169703371018492,
-          "rush_epa": 0.053314821000423125,
-          "turnovers_per_game": 1.5
-        },
-        "recent_defense": {
-          "games": 4,
-          "plays": 251,
-          "epa_per_play": -0.19331224104469055,
-          "success_rate": 0.3784860557768924,
-          "explosive_rate": 0.06772908366533864,
-          "pass_rate": 0.6175298804780877,
-          "pass_epa": -0.15504965339512683,
-          "rush_epa": -0.255090377353882,
-          "sacks_per_game": 2.0
-        }
-      }
-    },
-    "PIT": {
-      "status": "RECONCILED",
-      "completed_game_ids": [
-        "2026_01_ATL_PIT",
-        "2026_02_PIT_NE",
-        "2026_03_CIN_PIT",
-        "2026_04_PIT_CLE",
-        "2026_05_IND_PIT",
-        "2026_06_PIT_TB",
-        "2026_07_PIT_NO",
-        "2026_08_CLE_PIT"
-      ],
-      "recent_game_ids": [
-        "2026_05_IND_PIT",
-        "2026_06_PIT_TB",
-        "2026_07_PIT_NO",
-        "2026_08_CLE_PIT"
-      ],
-      "counts": {
-        "offense": {
-          "games": 8,
-          "plays": 494,
-          "epa_per_play": -0.02694831951800091,
-          "success_rate": 0.42105263157894735,
-          "explosive_rate": 0.0951417004048583,
-          "pass_rate": 0.6275303643724697,
-          "pass_epa": -0.11560276682859104,
-          "rush_epa": 0.12241515149440634,
-          "turnovers_per_game": 1.0
-        },
-        "defense": {
-          "games": 8,
-          "plays": 486,
-          "epa_per_play": -0.07408925913935692,
-          "success_rate": 0.4176954732510288,
-          "explosive_rate": 0.09053497942386832,
-          "pass_rate": 0.6296296296296297,
-          "pass_epa": -0.062104247994594484,
-          "rush_epa": -0.09446377808545299,
-          "sacks_per_game": 3.25
-        },
-        "recent_offense": {
-          "games": 4,
-          "plays": 244,
-          "epa_per_play": 0.05364314745397671,
-          "success_rate": 0.430327868852459,
-          "explosive_rate": 0.09836065573770492,
-          "pass_rate": 0.5819672131147541,
-          "pass_epa": -0.07790007635380852,
-          "rush_epa": 0.23677194922559927,
-          "turnovers_per_game": 0.5
-        },
-        "recent_defense": {
-          "games": 4,
-          "plays": 262,
-          "epa_per_play": -0.13676860983808273,
-          "success_rate": 0.3816793893129771,
-          "explosive_rate": 0.07251908396946564,
-          "pass_rate": 0.6946564885496184,
-          "pass_epa": -0.11974888628938417,
-          "rush_epa": -0.17548848091137187,
-          "sacks_per_game": 4.0
-        }
-      }
-    },
-    "NYG": {
+    "DAL": {
       "status": "RECONCILED",
       "completed_game_ids": [
         "2026_01_DAL_NYG",
-        "2026_02_NYG_LA",
-        "2026_03_TEN_NYG",
-        "2026_04_ARI_NYG",
-        "2026_05_NYG_WAS",
-        "2026_06_NO_NYG",
-        "2026_07_NYG_HOU",
-        "2026_09_NYG_PHI"
-      ],
-      "recent_game_ids": [
-        "2026_05_NYG_WAS",
-        "2026_06_NO_NYG",
-        "2026_07_NYG_HOU",
-        "2026_09_NYG_PHI"
-      ],
-      "counts": {
-        "offense": {
-          "games": 8,
-          "plays": 519,
-          "epa_per_play": 0.0028163673705512535,
-          "success_rate": 0.40655105973025046,
-          "explosive_rate": 0.08670520231213873,
-          "pass_rate": 0.5645472061657033,
-          "pass_epa": 0.05277987570351761,
-          "rush_epa": -0.06195933148590513,
-          "turnovers_per_game": 1.25
-        },
-        "defense": {
-          "games": 8,
-          "plays": 476,
-          "epa_per_play": -0.030301310760463475,
-          "success_rate": 0.4054621848739496,
-          "explosive_rate": 0.09033613445378151,
-          "pass_rate": 0.5651260504201681,
-          "pass_epa": -0.05880743064983289,
-          "rush_epa": 0.006742874023306427,
-          "sacks_per_game": 2.0
-        },
-        "recent_offense": {
-          "games": 4,
-          "plays": 279,
-          "epa_per_play": 0.04607781414776904,
-          "success_rate": 0.4121863799283154,
-          "explosive_rate": 0.10752688172043011,
-          "pass_rate": 0.6057347670250897,
-          "pass_epa": 0.07922782917128318,
-          "rush_epa": -0.004852663479266329,
-          "turnovers_per_game": 1.25
-        },
-        "recent_defense": {
-          "games": 4,
-          "plays": 248,
-          "epa_per_play": -0.07268240223508465,
-          "success_rate": 0.35080645161290325,
-          "explosive_rate": 0.0967741935483871,
-          "pass_rate": 0.5282258064516129,
-          "pass_epa": -0.15276110560978134,
-          "rush_epa": 0.016978368210088583,
-          "sacks_per_game": 3.25
-        }
-      }
-    },
-    "HOU": {
-      "status": "RECONCILED",
-      "completed_game_ids": [
-        "2026_01_BUF_HOU",
-        "2026_02_CIN_HOU",
-        "2026_03_HOU_IND",
+        "2026_02_WAS_DAL",
+        "2026_03_BAL_DAL",
         "2026_04_DAL_HOU",
-        "2026_05_HOU_TEN",
-        "2026_06_HOU_JAX",
-        "2026_07_NYG_HOU",
-        "2026_09_HOU_LAC"
+        "2026_05_TB_DAL",
+        "2026_06_DAL_GB",
+        "2026_07_DAL_PHI",
+        "2026_08_ARI_DAL",
+        "2026_09_DAL_IND"
       ],
       "recent_game_ids": [
-        "2026_05_HOU_TEN",
-        "2026_06_HOU_JAX",
-        "2026_07_NYG_HOU",
-        "2026_09_HOU_LAC"
-      ],
-      "counts": {
-        "offense": {
-          "games": 8,
-          "plays": 489,
-          "epa_per_play": 0.05981133856829878,
-          "success_rate": 0.4294478527607362,
-          "explosive_rate": 0.10224948875255624,
-          "pass_rate": 0.6094069529652352,
-          "pass_epa": 0.15489230823670863,
-          "rush_epa": -0.08853488635937737,
-          "turnovers_per_game": 0.5
-        },
-        "defense": {
-          "games": 8,
-          "plays": 512,
-          "epa_per_play": 0.002800235882464433,
-          "success_rate": 0.40625,
-          "explosive_rate": 0.095703125,
-          "pass_rate": 0.59765625,
-          "pass_epa": 0.04551548855443516,
-          "rush_epa": -0.06065057633900664,
-          "sacks_per_game": 3.625
-        },
-        "recent_offense": {
-          "games": 4,
-          "plays": 239,
-          "epa_per_play": 0.14987309751139463,
-          "success_rate": 0.4435146443514644,
-          "explosive_rate": 0.100418410041841,
-          "pass_rate": 0.5774058577405857,
-          "pass_epa": 0.30368938585004096,
-          "rush_epa": -0.06029173209982512,
-          "turnovers_per_game": 0.5
-        },
-        "recent_defense": {
-          "games": 4,
-          "plays": 258,
-          "epa_per_play": -0.0293273411325649,
-          "success_rate": 0.4186046511627907,
-          "explosive_rate": 0.09302325581395349,
-          "pass_rate": 0.5813953488372093,
-          "pass_epa": -0.020118374036811257,
-          "rush_epa": -0.042117573210000495,
-          "sacks_per_game": 3.75
-        }
-      }
-    },
-    "CAR": {
-      "status": "RECONCILED",
-      "completed_game_ids": [
-        "2026_01_CHI_CAR",
-        "2026_02_CAR_ATL",
-        "2026_03_CAR_CLE",
-        "2026_04_DET_CAR",
-        "2026_06_CAR_PHI",
-        "2026_07_TB_CAR",
-        "2026_08_CAR_GB",
-        "2026_09_DEN_CAR"
-      ],
-      "recent_game_ids": [
-        "2026_06_CAR_PHI",
-        "2026_07_TB_CAR",
-        "2026_08_CAR_GB",
-        "2026_09_DEN_CAR"
-      ],
-      "counts": {
-        "offense": {
-          "games": 8,
-          "plays": 524,
-          "epa_per_play": 0.04215575070051352,
-          "success_rate": 0.42748091603053434,
-          "explosive_rate": 0.09541984732824428,
-          "pass_rate": 0.6469465648854962,
-          "pass_epa": 0.060483454780969566,
-          "rush_epa": 0.00857147133146157,
-          "turnovers_per_game": 1.25
-        },
-        "defense": {
-          "games": 8,
-          "plays": 518,
-          "epa_per_play": 0.030316366392503343,
-          "success_rate": 0.444015444015444,
-          "explosive_rate": 0.07335907335907337,
-          "pass_rate": 0.5637065637065637,
-          "pass_epa": 0.048725133149362436,
-          "rush_epa": 0.006531588104880087,
-          "sacks_per_game": 1.5
-        },
-        "recent_offense": {
-          "games": 4,
-          "plays": 259,
-          "epa_per_play": -0.032488353521776925,
-          "success_rate": 0.41312741312741313,
-          "explosive_rate": 0.08108108108108109,
-          "pass_rate": 0.6447876447876448,
-          "pass_epa": -0.09156760000292112,
-          "rush_epa": 0.07475332215595223,
-          "turnovers_per_game": 1.75
-        },
-        "recent_defense": {
-          "games": 4,
-          "plays": 251,
-          "epa_per_play": 0.032474010119605996,
-          "success_rate": 0.4541832669322709,
-          "explosive_rate": 0.05976095617529881,
-          "pass_rate": 0.5537848605577689,
-          "pass_epa": 0.07834998399967127,
-          "rush_epa": -0.024461350320832156,
-          "sacks_per_game": 1.0
-        }
-      }
-    },
-    "CLE": {
-      "status": "RECONCILED",
-      "completed_game_ids": [
-        "2026_01_CLE_JAX",
-        "2026_02_CLE_TB",
-        "2026_03_CAR_CLE",
-        "2026_04_PIT_CLE",
-        "2026_05_CLE_NYJ",
-        "2026_06_BAL_CLE",
-        "2026_07_CLE_TEN",
-        "2026_08_CLE_PIT",
-        "2026_09_CLE_NO"
-      ],
-      "recent_game_ids": [
-        "2026_06_BAL_CLE",
-        "2026_07_CLE_TEN",
-        "2026_08_CLE_PIT",
-        "2026_09_CLE_NO"
+        "2026_06_DAL_GB",
+        "2026_07_DAL_PHI",
+        "2026_08_ARI_DAL",
+        "2026_09_DAL_IND"
       ],
       "counts": {
         "offense": {
           "games": 9,
-          "plays": 547,
-          "epa_per_play": -0.08366690091132864,
-          "success_rate": 0.41316270566727603,
-          "explosive_rate": 0.08409506398537477,
-          "pass_rate": 0.5886654478976234,
-          "pass_epa": -0.037618930170094926,
-          "rush_epa": -0.14956666348322756,
-          "turnovers_per_game": 1.1111111111111112
+          "plays": 585,
+          "epa_per_play": 0.09685678040960119,
+          "success_rate": 0.46495726495726497,
+          "explosive_rate": 0.08205128205128205,
+          "pass_rate": 0.6034188034188034,
+          "pass_epa": 0.15121970644494695,
+          "rush_epa": 0.01414077657133802,
+          "turnovers_per_game": 0.8888888888888888
         },
         "defense": {
           "games": 9,
           "plays": 567,
-          "epa_per_play": -0.020203201783082426,
-          "success_rate": 0.42328042328042326,
-          "explosive_rate": 0.1128747795414462,
-          "pass_rate": 0.5679012345679012,
-          "pass_epa": -0.05442007347424899,
-          "rush_epa": 0.024767543868165053,
-          "sacks_per_game": 2.888888888888889
+          "epa_per_play": 0.09118279728519119,
+          "success_rate": 0.4620811287477954,
+          "explosive_rate": 0.10052910052910052,
+          "pass_rate": 0.5432098765432098,
+          "pass_epa": 0.15730162239172094,
+          "rush_epa": 0.012555005266615253,
+          "sacks_per_game": 1.8888888888888888
         },
         "recent_offense": {
           "games": 4,
-          "plays": 258,
-          "epa_per_play": -0.08741073518111774,
-          "success_rate": 0.437984496124031,
-          "explosive_rate": 0.08527131782945736,
-          "pass_rate": 0.5930232558139535,
-          "pass_epa": -0.07520211862521951,
-          "rush_epa": -0.10520043359114085,
+          "plays": 278,
+          "epa_per_play": 0.06334138962483701,
+          "success_rate": 0.44964028776978415,
+          "explosive_rate": 0.08992805755395683,
+          "pass_rate": 0.5503597122302158,
+          "pass_epa": 0.08456983905778724,
+          "rush_epa": 0.03735776751890599,
           "turnovers_per_game": 1.0
         },
         "recent_defense": {
           "games": 4,
-          "plays": 248,
-          "epa_per_play": -0.017447665733237867,
-          "success_rate": 0.4112903225806452,
-          "explosive_rate": 0.10887096774193548,
-          "pass_rate": 0.5282258064516129,
-          "pass_epa": -0.0428771657984159,
-          "rush_epa": 0.011024680493585378,
+          "plays": 264,
+          "epa_per_play": -0.025464063634906713,
+          "success_rate": 0.3977272727272727,
+          "explosive_rate": 0.07575757575757576,
+          "pass_rate": 0.625,
+          "pass_epa": -0.04501993018771928,
+          "rush_epa": 0.0071290472864475605,
+          "sacks_per_game": 3.0
+        }
+      }
+    },
+    "KC": {
+      "status": "RECONCILED",
+      "completed_game_ids": [
+        "2026_01_DEN_KC",
+        "2026_02_IND_KC",
+        "2026_03_KC_MIA",
+        "2026_04_KC_LV",
+        "2026_06_LAC_KC",
+        "2026_07_KC_SEA",
+        "2026_08_KC_DEN",
+        "2026_09_NYJ_KC"
+      ],
+      "recent_game_ids": [
+        "2026_06_LAC_KC",
+        "2026_07_KC_SEA",
+        "2026_08_KC_DEN",
+        "2026_09_NYJ_KC"
+      ],
+      "counts": {
+        "offense": {
+          "games": 8,
+          "plays": 485,
+          "epa_per_play": 0.1309125854764119,
+          "success_rate": 0.488659793814433,
+          "explosive_rate": 0.10927835051546392,
+          "pass_rate": 0.5670103092783505,
+          "pass_epa": 0.14845541358395328,
+          "rush_epa": 0.10793983438320294,
+          "turnovers_per_game": 0.75
+        },
+        "defense": {
+          "games": 8,
+          "plays": 502,
+          "epa_per_play": -0.06739555686172136,
+          "success_rate": 0.40239043824701193,
+          "explosive_rate": 0.07569721115537849,
+          "pass_rate": 0.5756972111553785,
+          "pass_epa": -0.037199899182968954,
+          "rush_epa": -0.10836525202209434,
+          "sacks_per_game": 1.75
+        },
+        "recent_offense": {
+          "games": 4,
+          "plays": 236,
+          "epa_per_play": 0.08806140967755387,
+          "success_rate": 0.4915254237288136,
+          "explosive_rate": 0.09745762711864407,
+          "pass_rate": 0.5932203389830508,
+          "pass_epa": 0.10742837486478919,
+          "rush_epa": 0.05981791877950235,
+          "turnovers_per_game": 1.0
+        },
+        "recent_defense": {
+          "games": 4,
+          "plays": 250,
+          "epa_per_play": -0.08497603385343555,
+          "success_rate": 0.392,
+          "explosive_rate": 0.064,
+          "pass_rate": 0.56,
+          "pass_epa": -0.05703490025492526,
+          "rush_epa": -0.12053747661517594,
           "sacks_per_game": 2.5
         }
       }
@@ -1722,134 +1460,396 @@
         }
       }
     },
-    "ARI": {
+    "BUF": {
       "status": "RECONCILED",
       "completed_game_ids": [
-        "2026_01_ARI_LAC",
-        "2026_02_SEA_ARI",
-        "2026_03_ARI_SF",
-        "2026_04_ARI_NYG",
-        "2026_05_DET_ARI",
-        "2026_06_ARI_LA",
-        "2026_07_DEN_ARI",
-        "2026_08_ARI_DAL",
-        "2026_09_ARI_SEA"
+        "2026_01_BUF_HOU",
+        "2026_02_DET_BUF",
+        "2026_03_LAC_BUF",
+        "2026_04_NE_BUF",
+        "2026_05_BUF_LA",
+        "2026_06_BUF_LV",
+        "2026_08_BAL_BUF",
+        "2026_09_BUF_MIN"
       ],
       "recent_game_ids": [
-        "2026_06_ARI_LA",
-        "2026_07_DEN_ARI",
-        "2026_08_ARI_DAL",
-        "2026_09_ARI_SEA"
-      ],
-      "counts": {
-        "offense": {
-          "games": 9,
-          "plays": 600,
-          "epa_per_play": -0.035812562767349,
-          "success_rate": 0.43333333333333335,
-          "explosive_rate": 0.058333333333333334,
-          "pass_rate": 0.6283333333333333,
-          "pass_epa": -0.03980786412738898,
-          "rush_epa": -0.029058174369433917,
-          "turnovers_per_game": 0.8888888888888888
-        },
-        "defense": {
-          "games": 9,
-          "plays": 535,
-          "epa_per_play": 0.07335437413003926,
-          "success_rate": 0.42990654205607476,
-          "explosive_rate": 0.09158878504672897,
-          "pass_rate": 0.5214953271028038,
-          "pass_epa": 0.214884104696762,
-          "rush_epa": -0.08089091816728747,
-          "sacks_per_game": 2.111111111111111
-        },
-        "recent_offense": {
-          "games": 4,
-          "plays": 271,
-          "epa_per_play": -0.05702004295376436,
-          "success_rate": 0.4022140221402214,
-          "explosive_rate": 0.07749077490774908,
-          "pass_rate": 0.6162361623616236,
-          "pass_epa": -0.08589308464890258,
-          "rush_epa": -0.01065660100099433,
-          "turnovers_per_game": 0.75
-        },
-        "recent_defense": {
-          "games": 4,
-          "plays": 240,
-          "epa_per_play": 0.011187146529372844,
-          "success_rate": 0.4166666666666667,
-          "explosive_rate": 0.058333333333333334,
-          "pass_rate": 0.5333333333333333,
-          "pass_epa": 0.04920299519967104,
-          "rush_epa": -0.03225953766525367,
-          "sacks_per_game": 2.0
-        }
-      }
-    },
-    "CIN": {
-      "status": "RECONCILED",
-      "completed_game_ids": [
-        "2026_01_TB_CIN",
-        "2026_02_CIN_HOU",
-        "2026_03_CIN_PIT",
-        "2026_04_JAX_CIN",
-        "2026_05_CIN_MIA",
-        "2026_07_CIN_BAL",
-        "2026_08_TEN_CIN",
-        "2026_09_CIN_ATL"
-      ],
-      "recent_game_ids": [
-        "2026_05_CIN_MIA",
-        "2026_07_CIN_BAL",
-        "2026_08_TEN_CIN",
-        "2026_09_CIN_ATL"
+        "2026_05_BUF_LA",
+        "2026_06_BUF_LV",
+        "2026_08_BAL_BUF",
+        "2026_09_BUF_MIN"
       ],
       "counts": {
         "offense": {
           "games": 8,
-          "plays": 484,
-          "epa_per_play": 0.14167916741428022,
-          "success_rate": 0.5041322314049587,
-          "explosive_rate": 0.09297520661157024,
-          "pass_rate": 0.6446280991735537,
-          "pass_epa": 0.2532899196963525,
-          "rush_epa": -0.060777546027618284,
-          "turnovers_per_game": 1.125
+          "plays": 504,
+          "epa_per_play": 0.1404802964846384,
+          "success_rate": 0.47619047619047616,
+          "explosive_rate": 0.1349206349206349,
+          "pass_rate": 0.5099206349206349,
+          "pass_epa": 0.18579959991396736,
+          "rush_epa": 0.09332620344278598,
+          "turnovers_per_game": 1.5
         },
         "defense": {
           "games": 8,
-          "plays": 492,
-          "epa_per_play": 0.005088456302701637,
-          "success_rate": 0.44308943089430897,
-          "explosive_rate": 0.11178861788617886,
-          "pass_rate": 0.5995934959349594,
-          "pass_epa": -0.01307924830576583,
-          "rush_epa": 0.03229390229000065,
-          "sacks_per_game": 2.875
+          "plays": 504,
+          "epa_per_play": -0.009946171055270653,
+          "success_rate": 0.44246031746031744,
+          "explosive_rate": 0.09523809523809523,
+          "pass_rate": 0.6309523809523809,
+          "pass_epa": 0.026015451959655562,
+          "rush_epa": -0.07142894588724122,
+          "sacks_per_game": 2.125
         },
         "recent_offense": {
           "games": 4,
-          "plays": 237,
-          "epa_per_play": 0.23211098237646327,
-          "success_rate": 0.5611814345991561,
-          "explosive_rate": 0.0970464135021097,
-          "pass_rate": 0.6160337552742616,
-          "pass_epa": 0.41205491688101636,
-          "rush_epa": -0.056590275180292235,
+          "plays": 269,
+          "epa_per_play": 0.0967306658606784,
+          "success_rate": 0.4758364312267658,
+          "explosive_rate": 0.11895910780669144,
+          "pass_rate": 0.4721189591078067,
+          "pass_epa": 0.16392680689090897,
+          "rush_epa": 0.03663270874209191,
           "turnovers_per_game": 1.25
         },
         "recent_defense": {
           "games": 4,
-          "plays": 256,
-          "epa_per_play": 0.03666032862130342,
-          "success_rate": 0.46484375,
-          "explosive_rate": 0.11328125,
-          "pass_rate": 0.5546875,
-          "pass_epa": -0.03295745095234088,
-          "rush_epa": 0.1233772119498779,
+          "plays": 233,
+          "epa_per_play": -0.1443947900993078,
+          "success_rate": 0.3948497854077253,
+          "explosive_rate": 0.07296137339055794,
+          "pass_rate": 0.6866952789699571,
+          "pass_epa": -0.10285505786536979,
+          "rush_epa": -0.23544077855725418,
+          "sacks_per_game": 1.75
+        }
+      }
+    },
+    "LA": {
+      "status": "RECONCILED",
+      "completed_game_ids": [
+        "2026_01_SF_LA",
+        "2026_02_NYG_LA",
+        "2026_03_LA_DEN",
+        "2026_04_LA_PHI",
+        "2026_05_BUF_LA",
+        "2026_06_ARI_LA",
+        "2026_07_LA_LV",
+        "2026_08_LAC_LA",
+        "2026_09_LA_WAS"
+      ],
+      "recent_game_ids": [
+        "2026_06_ARI_LA",
+        "2026_07_LA_LV",
+        "2026_08_LAC_LA",
+        "2026_09_LA_WAS"
+      ],
+      "counts": {
+        "offense": {
+          "games": 9,
+          "plays": 594,
+          "epa_per_play": 0.04062993395974641,
+          "success_rate": 0.4781144781144781,
+          "explosive_rate": 0.08080808080808081,
+          "pass_rate": 0.6060606060606061,
+          "pass_epa": 0.052393620434239264,
+          "rush_epa": 0.022531954768218926,
+          "turnovers_per_game": 1.5555555555555556
+        },
+        "defense": {
+          "games": 9,
+          "plays": 548,
+          "epa_per_play": -0.11106908052101876,
+          "success_rate": 0.4032846715328467,
+          "explosive_rate": 0.07846715328467153,
+          "pass_rate": 0.5693430656934306,
+          "pass_epa": -0.12071300284189153,
+          "rush_epa": -0.09831948830020387,
+          "sacks_per_game": 1.7777777777777777
+        },
+        "recent_offense": {
+          "games": 4,
+          "plays": 247,
+          "epa_per_play": -0.00450547147181451,
+          "success_rate": 0.48582995951417,
+          "explosive_rate": 0.05668016194331984,
+          "pass_rate": 0.5506072874493927,
+          "pass_epa": -0.05169703371018492,
+          "rush_epa": 0.053314821000423125,
+          "turnovers_per_game": 1.5
+        },
+        "recent_defense": {
+          "games": 4,
+          "plays": 251,
+          "epa_per_play": -0.19331224104469055,
+          "success_rate": 0.3784860557768924,
+          "explosive_rate": 0.06772908366533864,
+          "pass_rate": 0.6175298804780877,
+          "pass_epa": -0.15504965339512683,
+          "rush_epa": -0.255090377353882,
+          "sacks_per_game": 2.0
+        }
+      }
+    },
+    "NO": {
+      "status": "RECONCILED",
+      "completed_game_ids": [
+        "2026_01_NO_DET",
+        "2026_02_NO_BAL",
+        "2026_03_LV_NO",
+        "2026_04_ATL_NO",
+        "2026_05_MIN_NO",
+        "2026_06_NO_NYG",
+        "2026_07_PIT_NO",
+        "2026_09_CLE_NO"
+      ],
+      "recent_game_ids": [
+        "2026_05_MIN_NO",
+        "2026_06_NO_NYG",
+        "2026_07_PIT_NO",
+        "2026_09_CLE_NO"
+      ],
+      "counts": {
+        "offense": {
+          "games": 8,
+          "plays": 529,
+          "epa_per_play": -0.03707398097141425,
+          "success_rate": 0.41965973534971646,
+          "explosive_rate": 0.06994328922495274,
+          "pass_rate": 0.6200378071833649,
+          "pass_epa": -0.016430228810422373,
+          "rush_epa": -0.07076129793064476,
+          "turnovers_per_game": 1.625
+        },
+        "defense": {
+          "games": 8,
+          "plays": 508,
+          "epa_per_play": 0.04945213439990729,
+          "success_rate": 0.46653543307086615,
+          "explosive_rate": 0.1062992125984252,
+          "pass_rate": 0.5551181102362205,
+          "pass_epa": 0.08081767728497079,
+          "rush_epa": 0.010314598587571406,
+          "sacks_per_game": 2.875
+        },
+        "recent_offense": {
+          "games": 4,
+          "plays": 238,
+          "epa_per_play": -0.07057358417447085,
+          "success_rate": 0.3907563025210084,
+          "explosive_rate": 0.06722689075630252,
+          "pass_rate": 0.5714285714285714,
+          "pass_epa": -0.06547989496393845,
+          "rush_epa": -0.07736516978851408,
+          "turnovers_per_game": 1.25
+        },
+        "recent_defense": {
+          "games": 4,
+          "plays": 263,
+          "epa_per_play": -0.04059141305782505,
+          "success_rate": 0.41825095057034223,
+          "explosive_rate": 0.10646387832699619,
+          "pass_rate": 0.5703422053231939,
+          "pass_epa": -0.006485519089405069,
+          "rush_epa": -0.08586472363537372,
+          "sacks_per_game": 3.75
+        }
+      }
+    },
+    "ATL": {
+      "status": "RECONCILED",
+      "completed_game_ids": [
+        "2026_01_ATL_PIT",
+        "2026_02_CAR_ATL",
+        "2026_03_ATL_GB",
+        "2026_04_ATL_NO",
+        "2026_05_BAL_ATL",
+        "2026_06_CHI_ATL",
+        "2026_07_SF_ATL",
+        "2026_08_ATL_TB",
+        "2026_09_CIN_ATL"
+      ],
+      "recent_game_ids": [
+        "2026_06_CHI_ATL",
+        "2026_07_SF_ATL",
+        "2026_08_ATL_TB",
+        "2026_09_CIN_ATL"
+      ],
+      "counts": {
+        "offense": {
+          "games": 9,
+          "plays": 525,
+          "epa_per_play": -0.07308678291239189,
+          "success_rate": 0.4342857142857143,
+          "explosive_rate": 0.09523809523809523,
+          "pass_rate": 0.5219047619047619,
+          "pass_epa": -0.15025680723697546,
+          "rush_epa": 0.011154598222810862,
+          "turnovers_per_game": 1.6666666666666667
+        },
+        "defense": {
+          "games": 9,
+          "plays": 573,
+          "epa_per_play": 0.0016106735033098998,
+          "success_rate": 0.4467713787085515,
+          "explosive_rate": 0.09598603839441536,
+          "pass_rate": 0.5898778359511344,
+          "pass_epa": 0.04613117781371355,
+          "rush_epa": -0.06242307312186641,
+          "sacks_per_game": 2.2222222222222223
+        },
+        "recent_offense": {
+          "games": 4,
+          "plays": 218,
+          "epa_per_play": -0.1434101354802072,
+          "success_rate": 0.3944954128440367,
+          "explosive_rate": 0.08256880733944955,
+          "pass_rate": 0.5871559633027523,
+          "pass_epa": -0.20835431566102092,
+          "rush_epa": -0.0510450792230499,
+          "turnovers_per_game": 1.5
+        },
+        "recent_defense": {
+          "games": 4,
+          "plays": 249,
+          "epa_per_play": 0.04988995786968384,
+          "success_rate": 0.5060240963855421,
+          "explosive_rate": 0.12449799196787148,
+          "pass_rate": 0.46586345381526106,
+          "pass_epa": 0.16153945529937028,
+          "rush_epa": -0.04748855116673438,
           "sacks_per_game": 2.25
+        }
+      }
+    },
+    "NYJ": {
+      "status": "RECONCILED",
+      "completed_game_ids": [
+        "2026_01_NYJ_TEN",
+        "2026_02_GB_NYJ",
+        "2026_03_NYJ_DET",
+        "2026_04_NYJ_CHI",
+        "2026_05_CLE_NYJ",
+        "2026_06_NYJ_NE",
+        "2026_07_MIA_NYJ",
+        "2026_08_LV_NYJ",
+        "2026_09_NYJ_KC"
+      ],
+      "recent_game_ids": [
+        "2026_06_NYJ_NE",
+        "2026_07_MIA_NYJ",
+        "2026_08_LV_NYJ",
+        "2026_09_NYJ_KC"
+      ],
+      "counts": {
+        "offense": {
+          "games": 9,
+          "plays": 525,
+          "epa_per_play": 0.003076848171395828,
+          "success_rate": 0.44952380952380955,
+          "explosive_rate": 0.09904761904761905,
+          "pass_rate": 0.5733333333333334,
+          "pass_epa": 0.0836280773950217,
+          "rush_epa": -0.10516386609785143,
+          "turnovers_per_game": 0.7777777777777778
+        },
+        "defense": {
+          "games": 9,
+          "plays": 563,
+          "epa_per_play": 0.039004399056432854,
+          "success_rate": 0.46714031971580816,
+          "explosive_rate": 0.09236234458259325,
+          "pass_rate": 0.5186500888099467,
+          "pass_epa": 0.13376622036889263,
+          "rush_epa": -0.06310058922119907,
+          "sacks_per_game": 2.4444444444444446
+        },
+        "recent_offense": {
+          "games": 4,
+          "plays": 235,
+          "epa_per_play": 0.037143619319597664,
+          "success_rate": 0.4765957446808511,
+          "explosive_rate": 0.10638297872340426,
+          "pass_rate": 0.5829787234042553,
+          "pass_epa": 0.1389592625106346,
+          "rush_epa": -0.10519049412093354,
+          "turnovers_per_game": 1.0
+        },
+        "recent_defense": {
+          "games": 4,
+          "plays": 251,
+          "epa_per_play": 0.16450747700726018,
+          "success_rate": 0.49800796812749004,
+          "explosive_rate": 0.09561752988047809,
+          "pass_rate": 0.4581673306772908,
+          "pass_epa": 0.36499916167597296,
+          "rush_epa": -0.005025932822901359,
+          "sacks_per_game": 1.25
+        }
+      }
+    },
+    "WAS": {
+      "status": "RECONCILED",
+      "completed_game_ids": [
+        "2026_01_WAS_PHI",
+        "2026_02_WAS_DAL",
+        "2026_03_SEA_WAS",
+        "2026_04_IND_WAS",
+        "2026_05_NYG_WAS",
+        "2026_06_WAS_SF",
+        "2026_08_PHI_WAS",
+        "2026_09_LA_WAS"
+      ],
+      "recent_game_ids": [
+        "2026_05_NYG_WAS",
+        "2026_06_WAS_SF",
+        "2026_08_PHI_WAS",
+        "2026_09_LA_WAS"
+      ],
+      "counts": {
+        "offense": {
+          "games": 8,
+          "plays": 492,
+          "epa_per_play": -0.02853614405200625,
+          "success_rate": 0.40853658536585363,
+          "explosive_rate": 0.09146341463414634,
+          "pass_rate": 0.5792682926829268,
+          "pass_epa": -0.02789701784063047,
+          "rush_epa": -0.029416100429987393,
+          "turnovers_per_game": 0.625
+        },
+        "defense": {
+          "games": 8,
+          "plays": 516,
+          "epa_per_play": 0.024080850868167802,
+          "success_rate": 0.45930232558139533,
+          "explosive_rate": 0.07751937984496124,
+          "pass_rate": 0.6046511627906976,
+          "pass_epa": 0.018090304987183458,
+          "rush_epa": 0.033242862215555606,
+          "sacks_per_game": 2.125
+        },
+        "recent_offense": {
+          "games": 4,
+          "plays": 233,
+          "epa_per_play": -0.01050444780480857,
+          "success_rate": 0.4334763948497854,
+          "explosive_rate": 0.1072961373390558,
+          "pass_rate": 0.6094420600858369,
+          "pass_epa": -0.052557341944348475,
+          "rush_epa": 0.05511655184150647,
+          "turnovers_per_game": 0.75
+        },
+        "recent_defense": {
+          "games": 4,
+          "plays": 283,
+          "epa_per_play": 0.017775777848137723,
+          "success_rate": 0.45936395759717313,
+          "explosive_rate": 0.06713780918727916,
+          "pass_rate": 0.5971731448763251,
+          "pass_epa": -0.014100812686553483,
+          "rush_epa": 0.06503142521974135,
+          "sacks_per_game": 2.5
         }
       }
     }
