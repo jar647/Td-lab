@@ -8,6 +8,7 @@ from pathlib import Path
 import pandas as pd
 from injury_readiness import diagnose_injury_feed, trusted_injury_rows
 from nfl_starters import apply_starter_context
+from nfl_depth_charts import apply_depth_chart_context, fetch_depth_charts
 
 SEASON = int(os.getenv('TDLAB_SEASON', datetime.now(timezone.utc).year))
 WINDOW = int(os.getenv('TDLAB_WINDOW', '5'))
@@ -48,6 +49,99 @@ def official_rush_attempts(plays):
                  pd.to_numeric(plays.two_point_attempt, errors='coerce').eq(0)].copy()
 
 def mean(x): return round(float(x), 3)
+
+def add_anytime_touchdowns(player_stats, plays):
+    """Credit rushing/receiving touchdowns to the scorer, never the passer.
+
+    The caller supplies completed, pregame-only season plays. Reapply official
+    stat filtering so conversions and nullified plays cannot become TD history.
+    """
+    source=official_stat_plays(plays)
+    required(source,['touchdown','td_team','posteam','week','receiver_player_id',
+                     'rusher_player_id','pass_touchdown','rush_touchdown'],'anytime touchdown statistics')
+    scores=source[pd.to_numeric(source.touchdown,errors='coerce').eq(1) &
+                  source.td_team.astype(str).eq(source.posteam.astype(str))]
+    rush=official_rush_attempts(scores[pd.to_numeric(scores.rush_touchdown,errors='coerce').eq(1)])
+    received=scores[pd.to_numeric(scores.pass_touchdown,errors='coerce').eq(1)]
+    for data,identity,field in ((rush,'rusher_player_id','rushTDs'),
+                                (received,'receiver_player_id','recTDs')):
+        data=data[data[identity].notna()].copy()
+        data['scorer_id']=data[identity].astype(str)
+        for (team,pid,week),group in data.groupby(['posteam','scorer_id','week']):
+            player_stats.setdefault((str(team),str(pid),int(week)),{})[field]=int(len(group))
+    return player_stats
+
+def display_roster_players(rosters, weekly_rosters, slate, season, week, now,
+                          existing_records=(), injury_status=None, practice_status=None):
+    """Display-only roster identities omitted from the verified model feed.
+
+    Roster membership is not game-day clearance or a confirmed starting role.
+    No appearance, zero stat, projection or score is fabricated for these rows.
+    """
+    injury_status=injury_status or {};practice_status=practice_status or {}
+    existing={str(p['player_id']) for p in existing_records}
+    roster=rosters.copy()
+    if 'season' in roster:roster=roster[pd.to_numeric(roster.season,errors='coerce').eq(season)]
+    if 'week' in roster:
+        roster=roster[pd.to_numeric(roster.week,errors='coerce').le(week)].sort_values('week')
+    roster=roster.dropna(subset=['gsis_id','team','position']).drop_duplicates('gsis_id',keep='last')
+    current={str(row.gsis_id):row.to_dict() for _,row in roster.iterrows()}
+    weekly={}
+    if weekly_rosters is not None and not weekly_rosters.empty and {'gsis_id','week'}.issubset(weekly_rosters.columns):
+        rows=weekly_rosters.copy()
+        if 'season' in rows:rows=rows[pd.to_numeric(rows.season,errors='coerce').eq(season)]
+        rows=rows[pd.to_numeric(rows.week,errors='coerce').le(week)].sort_values('week')
+        for _,row in rows.dropna(subset=['gsis_id']).drop_duplicates('gsis_id',keep='last').iterrows():
+            pid=str(row.gsis_id);weekly[pid]=row.to_dict()
+            # Old weekly team/status records cannot overwrite current annual
+            # transfers or releases; the current-week snapshot can.
+            base=current.get(pid,{})
+            clean={k:v for k,v in row.items() if pd.notna(v)}
+            current[pid]={**base,**clean} if int(row.week)==week or not base else {**clean,**base}
+    opponents={str(team):str(opp) for _,game in slate.iterrows()
+               for team,opp in ((game.home_team,game.away_team),(game.away_team,game.home_team))}
+    records=[]
+    removed={'CUT','RET','RETIRED','EXE','TRD','TRT','TRADED','RELEASED'}
+    reserved={'IR','RES','RESERVE/INJURED','INJURED RESERVE','INJURED_RESERVE','RESERVE-INJURED',
+              'PUP','RESERVE/PUP','NFI','RESERVE/NFI','SUSPENDED','RESERVE/SUSPENDED','DEV'}
+    null_fields=('tdallowed','rzallowed','rzshare','playerRz','goalLine5','recentRz2',
+        'playerPassTDs','recent3PassTDs','playerPassYards','playerPassAttempts',
+        'playerRushYards','playerCarries','playerRecYards','playerReceptions',
+        'playerTargets','playerTargetShare','playerRzTargets','snapShare','airYardsPerGame',
+        'playerAnytimeTDs','recent3AnytimeTDs','playerRushTDs','playerRecTDs',
+        'defPassTDsAllowed','defPassYardsAllowed','defPassAttemptsAllowed',
+        'defRushYardsAllowed','defRushAttemptsAllowed','defRecYardsAllowed',
+        'defReceptionsAllowed','defTargetsAllowed','defRzTargetsAllowed',
+        'recent3PassAttempts','recent3PassYards','recent3Carries','recent3RushYards',
+        'recent3Targets','recent3RecYards','recent3Receptions')
+    for pid,row in current.items():
+        team=str(row.get('team',''));pos=str(row.get('position','')).upper()
+        if pid in existing or team not in opponents or pos not in {'QB','RB','WR','TE'}:continue
+        status=str(row.get('status','')).strip().upper()
+        if status in removed:continue
+        name=next((str(row[k]).strip() for k in ('player_name','full_name','display_name')
+                   if k in row and pd.notna(row[k]) and str(row[k]).strip()),None)
+        if not name:continue
+        reserve_status='DEV' if status=='DEV' else 'PUP' if 'PUP' in status else 'NFI' if 'NFI' in status else 'SUSPENDED' if 'SUSPEND' in status else 'RES' if status=='RES' else 'IR'
+        health=injury_status.get(pid,reserve_status if status in reserved else
+                                  'ROSTER_ACTIVE' if status in {'ACT','ACTIVE','ROSTER_ACTIVE'} else 'UNVERIFIED')
+        source_week=int(weekly[pid]['week']) if pid in weekly else None
+        if source_week is not None and source_week<week and health=='ROSTER_ACTIVE':health='UNVERIFIED'
+        number=row.get('jersey_number');number=int(number) if pd.notna(number) and str(number).replace('.','',1).isdigit() and float(number).is_integer() and 0<=float(number)<=99 else None
+        records.append({**dict.fromkeys(null_fields),
+            'player_id':pid,'player':name,'team':team,'opp':opponents[team],'pos':pos,
+            'jersey_number':number,'market':'ATD','availability':health,
+            'games':0,'seasonGamesPlayed':0,'last5GamesPlayed':0,
+            'playerAppearancesVerified':False,'displayOnly':True,
+            'seasonGameStats':[],'last5GameStats':[],'seasonAverages':{},'last5Averages':{},
+            'injuryReportStatus':injury_status.get(pid,'NOT_REPORTED'),
+            'injuryPracticeStatus':practice_status.get(pid,'NOT_REPORTED'),
+            'gameDayAvailability':'UNVERIFIED','odds':'','prob':'',
+            'coverageReason':'Roster-listed player is not covered by the verified matchup sample. No score or simulation is inferred.',
+            'rosterSource':{'provider':'nflverse','dataset':'rosters_weekly' if pid in weekly else 'rosters',
+                            'season':season,'week':source_week,'generated_at':now.isoformat()},
+            'notes':'Display-only roster entry. Starting role, verified appearance history and model inputs are unavailable.'})
+    return sorted(records,key=lambda p:(p['team'],p['pos'],p['player']))
 
 def add_pbp_verified_skill_appearances(appearance_games, player_stats, position_by_id):
     """Count skill-player appearances proven by an actual rush or target.
@@ -111,7 +205,7 @@ def practice_flags(injuries, week):
             result.pop(pid,None)
     return result
 
-def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None, snap_counts=None):
+def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None, snap_counts=None, depth_charts=None):
     now = now or datetime.now(timezone.utc)
     required(pbp, ['season','week','game_id','posteam','defteam','yardline_100','play_type',
                    'rush_attempt','pass_attempt','rusher_player_id','receiver_player_id',
@@ -517,6 +611,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     for (tm,pid,w),g in td_plays.groupby(['posteam','pid','week']):
         entry=season_player_stats.setdefault((str(tm),str(pid),int(w)),{})
         entry['passTDs']=int(len(g))
+    add_anytime_touchdowns(season_player_stats,season_plays)
     defense_pass_tds=td_plays.groupby('defteam').size().to_dict()
     # Optional nflverse air-yards signal: target-level air yards, not routes run.
     # Missing columns remain unavailable instead of being filled with invented zeroes.
@@ -648,7 +743,7 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     return {'week':w,'gameId':game_lookup[(team,w)],
                             **{k:metrics.get(k,0) for k in
                             ('passYards','passAttempts','rushYards','rushAttempts',
-                             'recYards','receptions','targets','passTDs')}}
+                             'recYards','receptions','targets','passTDs','rushTDs','recTDs')}}
                 season_series=[game_record(w) for w in weeks]
                 last_series=season_series[-WINDOW:]
                 def avg(key,series):
@@ -680,10 +775,14 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     'statDefinitions':'NFL official attempts: sacks excluded from pass attempts; QB kneeldowns included in rushing; two-point tries excluded',
                     'seasonGameStats':season_series,  # All completed player appearances; pregame only.
                     'seasonGamesPlayed':len(season_series),'last5GamesPlayed':len(last_series),
-                    'seasonAverages':{k:avg(k,season_series) for k in ('passYards','passAttempts','rushYards','rushAttempts','recYards','receptions','targets','passTDs')},
-                    'last5Averages':{k:avg(k,last_series) for k in ('passYards','passAttempts','rushYards','rushAttempts','recYards','receptions','targets')},
+                    'seasonAverages':{k:avg(k,season_series) for k in ('passYards','passAttempts','rushYards','rushAttempts','recYards','receptions','targets','passTDs','rushTDs','recTDs')},
+                    'last5Averages':{k:avg(k,last_series) for k in ('passYards','passAttempts','rushYards','rushAttempts','recYards','receptions','targets','rushTDs','recTDs')},
                     'gameSampleDefinition':'snap_verified_player_appearances',
                     'playerPassTDs':avg('passTDs',season_series) if position=='QB' else None,
+                    'playerRushTDs':avg('rushTDs',season_series),
+                    'playerRecTDs':avg('recTDs',season_series),
+                    'playerAnytimeTDs':mean(sum(g['rushTDs']+g['recTDs'] for g in season_series)/pg),
+                    'recent3AnytimeTDs':mean(sum(g['rushTDs']+g['recTDs'] for g in season_series[-3:])/len(season_series[-3:])),
                     'defPassTDsAllowed':mean(defense_pass_tds.get(opp,0)/dg) if position=='QB' else None,
                     'recent3PassTDs':avg('passTDs',last_series[-3:]) if position=='QB' else None,
                     'playerPassYards':avg('passYards',season_series) if position=='QB' else None,
@@ -724,10 +823,24 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
                     'notes':f'Availability: {health} (ROSTER_ACTIVE means listed on active roster, NOT cleared for game day; UNVERIFIED does not mean active). nflverse play-by-play; {SEASON} weeks {max(1,week-WINDOW)}-{week-1}; red-zone rushes + intended targets; position verified by roster; no odds or calibrated TD probability. Player RZ share is share of recorded team red-zone rushes and intended targets (not all plays). Goal-line metric counts recorded rushes and intended targets from opponent 5 or closer per played team game; informational only, not part of the ranking score.'})
     if not result: raise RuntimeError('No matchup records passed source and sample validation')
     apply_starter_context(result,SEASON,week)
+    roster_players=display_roster_players(roster,weekly_rosters,slate,SEASON,week,now,
+        existing_records=result,injury_status=injury_status,practice_status=practice_status)
+    # A sourced starter may be a roster-only player with no model history.
+    # Apply that same game-scoped confirmation across both display cohorts.
+    apply_starter_context(result+roster_players,SEASON,week)
+    depth_rosters=roster.to_dict('records')
+    if weekly_rosters is not None and not weekly_rosters.empty and {'gsis_id','week','team'}.issubset(weekly_rosters.columns):
+        current_weekly=weekly_rosters.copy()
+        if 'season' in current_weekly:current_weekly=current_weekly[pd.to_numeric(current_weekly.season,errors='coerce').eq(SEASON)]
+        current_weekly=current_weekly[pd.to_numeric(current_weekly.week,errors='coerce').eq(week)]
+        depth_rosters+=current_weekly.to_dict('records')
+    depth_diagnostics=apply_depth_chart_context(result+roster_players,depth_rosters,depth_charts,SEASON)
     result.sort(key=lambda r:(r['team'],r['pos'],r['player']))
     (OUT/'defense_stats_audit.json.tmp').write_text(json.dumps(audit,indent=2))
     return result, {'season':SEASON,'week':week,'generated_at':now.isoformat(),
                     'matchups':len(result),'source':'nflverse play-by-play and rosters',
+                    'rosterPlayers':roster_players,'display_roster_count':len(roster_players),
+                    'depthChartDiagnostics':depth_diagnostics,
                     'odds_source':None,'probability_model':None,
                     'lookback_games':WINDOW,'availability_diagnostics':{'injuries':injury_diagnostics,'weekly_rosters':weekly_diagnostics,'excluded':excluded,'unverified_output':sum(r['availability']=='UNVERIFIED' for r in result)},'injury_policy':'Exact GSIS ID and current team required; official OUT excluded; questionable/doubtful and practice LIMITED/DNP flagged separately. No game designation can mean report not yet published. Weekly ACT is roster membership only, never game-day clearance. Official inactives are unverified.','status':'ready'}
 
@@ -752,7 +865,14 @@ def main():
     except Exception as exc:
         print(f'Snap counts unavailable; leaving snap share blank: {exc}',file=sys.stderr)
         snap_counts=None
-    result,meta=build(pbp,schedules,rosters,injuries=injuries,weekly_rosters=weekly_rosters,snap_counts=snap_counts)
+    upcoming=schedules[(pd.to_numeric(schedules.season,errors='coerce')==SEASON)&
+        schedules.game_type.astype(str).str.upper().eq('REG')&
+        pd.to_datetime(schedules.gameday,errors='coerce',utc=True).ge(pd.Timestamp(now).normalize())].copy()
+    upcoming=upcoming.sort_values(['gameday','week'])
+    target_week=int(upcoming.iloc[0].week) if not upcoming.empty else None
+    target=upcoming[pd.to_numeric(upcoming.week,errors='coerce').eq(target_week)] if target_week is not None else upcoming
+    depth_charts=fetch_depth_charts(set(target.home_team.astype(str))|set(target.away_team.astype(str)),SEASON,now=now)
+    result,meta=build(pbp,schedules,rosters,injuries=injuries,weekly_rosters=weekly_rosters,snap_counts=snap_counts,depth_charts=depth_charts)
     print('AVAILABILITY DIAGNOSTICS: '+json.dumps(meta['availability_diagnostics']))
     # Freeze each week's first published candidate set for honest, forward-only grading.
     # Never replace snapshots as subsequent results become known.

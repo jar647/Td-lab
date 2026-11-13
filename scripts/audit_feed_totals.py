@@ -5,6 +5,7 @@ A team-game denominator is NOT proof of player participation. We audit it as
 a team-game rate and require player appearances before calling it per-game.
 """
 import json
+import math
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -50,6 +51,24 @@ def audit(records, defense):
             expected=p.get("seasonAverages",{}).get(metric)
             if not close(p[field],expected):
                 errors.append(f"{who}: {field} differs from season average")
+        # New TD inputs are verified appearance statistics. Older immutable
+        # feeds without them remain valid; partial or inconsistent new inputs
+        # cannot silently enter the scorer.
+        if p.get('playerAnytimeTDs') is not None:
+            history=p.get('seasonGameStats') or []
+            if len(history)!=denom or not history or any(
+                    any(not isinstance(g.get(k),(int,float)) or isinstance(g.get(k),bool)
+                        or not math.isfinite(g[k]) or g[k]<0 or int(g[k])!=g[k] for k in ('rushTDs','recTDs')) for g in history):
+                errors.append(f'{who}: invalid anytime-TD appearance history')
+            else:
+                rush=sum(g['rushTDs'] for g in history)/denom
+                receiving=sum(g['recTDs'] for g in history)/denom
+                recent=history[-3:]
+                recent_total=sum(g['rushTDs']+g['recTDs'] for g in recent)/len(recent)
+                for field,value in (('playerRushTDs',rush),('playerRecTDs',receiving),
+                                    ('playerAnytimeTDs',rush+receiving),('recent3AnytimeTDs',recent_total)):
+                    if not close(p.get(field),round(value,3)):
+                        errors.append(f'{who}: {field} differs from verified rushing/receiving TD history')
         d=rows.get((p["opp"],p["pos"]))
         if d is None: errors.append(f"{who}: missing defense audit row");continue
         for field,metric in defense_metrics.items():

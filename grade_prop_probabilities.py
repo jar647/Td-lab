@@ -119,7 +119,7 @@ def evaluate(snapshots, schedules, appearances):
     # Never pool different frozen model versions and call the result a new
     # independent validation set. Legacy exploratory snapshots remain auditable.
     current_version = "opportunity-2024-trained-eligible-fullseason-v2"
-    game_first_version = "game-first-volume-v3-supported-qb-markets"
+    game_first_version = "game-first-volume-v4-depth-chart-qb"
     by_version = {}
     for version in sorted({r["model_version"] for r in graded} | {
         str(doc.get("model_version", "UNKNOWN")) for doc in snapshots

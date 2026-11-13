@@ -199,7 +199,7 @@ const slate=vm.runInContext('nbaSlateSelection(slateFixture)',sandbox);
 assert.equal(slate.picks.length,5);assert.equal(slate.picks[0].game.id,slate.picks[1].game.id);
 sandbox.slateFixture[0].matchupBoost=-.1;sandbox.slateFixture[2].game.date=new Date(slateNow-1000).toISOString();sandbox.slateFixture[3].market='threes';sandbox.slateFixture[4].matchupGames=0;
 const filtered=vm.runInContext('nbaSlateSelection(slateFixture)',sandbox);
-for(const i of [0,2,3,4])assert.ok(!filtered.picks.some(r=>r.key==='slate-'+i));
+for(const i of [0,2,4])assert.ok(!filtered.picks.some(r=>r.key==='slate-'+i));
 console.log('NBA odds-free matchup slate, same-game selections and exclusions: PASS');
 
 // Shopping targets must clear the exact final verdict with hypothetical odds.
@@ -226,12 +226,12 @@ assert.equal(vm.runInContext('nbaPropRating(ratingResult,{})',sandbox),null);
 assert.ok(vm.runInContext('nbaRatingHTML({rating:nbaPropRating(ratingResult,ratingContext)})',sandbox).includes('not win probability'));
 console.log('NBA matchup score isolated from prices and implied probability: PASS');
 
-// Matchup research chooses three distinct players, excludes threes and weak/no targets.
+// Matchup research chooses up to three distinct OVER players; unsupported directions are excluded.
 sandbox.matchupFixture=Array.from({length:7},(_,i)=>({key:'m'+i,playerId:i===1?'same':'p'+i,market:'points',quality:99-i,result:{rating:{score:85}},matchup:{strength:i/10},target:{side:i%2?'OVER':'UNDER',line:20.5}}));
 sandbox.matchupFixture[0].playerId='same';sandbox.matchupFixture[6].market='threes';sandbox.matchupFixture[5].target=null;
 const three=vm.runInContext('nbaMatchupThree(matchupFixture)',sandbox);
-assert.equal(three.length,3);assert.deepEqual(Array.from(three,r=>r.key),['m4','m3','m2']);
-assert.equal(new Set(three.map(r=>r.playerId)).size,3);
+assert.equal(three.length,2);assert.deepEqual(Array.from(three,r=>r.key),['m3','m1']);
+assert.equal(new Set(three.map(r=>r.playerId)).size,2);
 assert.ok(match[1].includes('outlookHTML+scoutHtml'));
 assert.ok(match[1].includes('row.target=nbaResearchTarget(row,side)'));
 assert.ok(match[1].includes('row.target.distance>.25')); 
@@ -257,9 +257,9 @@ assert.match(vm.runInContext('restoredResult.ratingNote',sandbox),/does not curr
 vm.runInContext('renderProjections=repairOriginalRenderer',sandbox);
 console.log('NBA legacy saved-side recovery, missing odds and failing quote: PASS');
 
-// High OVER ratings never qualify an UNDER; only the separate 85+ rating can.
+// A new UNDER cannot qualify even with its own 85+ rating; saved history remains.
 vm.runInContext('nbaQuoteContexts.target.eligible=true;nbaQuoteContexts.target.matchupRatings={under:{side:"under",score:85,factors:[]}}',sandbox);
-assert.equal(vm.runInContext('nbaPriceReview("target",20,{line:25.5,under:-110}).candidate',sandbox),'UNDER');
+assert.equal(vm.runInContext('nbaPriceReview("target",20,{line:25.5,under:-110}).candidate',sandbox),null);
 vm.runInContext('nbaQuoteContexts.target.matchupRatings.under.score=84',sandbox);
 assert.equal(vm.runInContext('nbaPriceReview("target",20,{line:25.5,under:-110}).candidate',sandbox),null);
 vm.runInContext('delete nbaQuoteContexts.target.matchupRatings;nbaQuoteContexts.target.matchupRating.score=99',sandbox);

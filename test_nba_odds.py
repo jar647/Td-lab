@@ -6,6 +6,7 @@ import tempfile
 import unittest
 from scripts.build_nba_odds import parse_props,match_fixture,classify_market,main,collect
 from nba_model import UTC
+from scripts.odds_provider import ProviderRateLimit
 class NBAOddsTests(unittest.TestCase):
  def setUp(self):
   self.now=dt.datetime(2026,11,1,12,tzinfo=UTC)
@@ -33,6 +34,18 @@ class NBAOddsTests(unittest.TestCase):
   self.assertEqual(classify_market('Over/Under - Player - Points'), 'points')
   self.assertEqual(classify_market('Total Player Rebounds',{'sportId':11,'period':'fulltime','playerProp':True,'outcomes':[{'outcomeName':'Over'},{'outcomeName':'Under'}]}),'rebounds')
   self.assertIsNone(classify_market('Player Points (Over/Under)',{'sportId':11,'period':'1sthalf'}))
+ def test_made_threes_aliases_are_full_game_and_conservative(self):
+  for name in ['Over Under Player Three Pointers Made','Over Under Player 3-Point Field Goals Made','Player 3PM (Over/Under)','Over Under Player Threes Made','Over Under Player 3PT']:
+   with self.subTest(name=name):self.assertEqual(classify_market(name),'threes')
+  meta={'sportId':11,'period':'result','playerProp':True,'outcomes':[{'outcomeName':'Over'},{'outcomeName':'Under'}]}
+  self.assertEqual(classify_market('Over Under Player Three Pointers (incl. overtime)',meta),'threes')
+  for name in ['Over Under Player Three Pointers Attempted','Over Under Player 3PM First Quarter','Player 3+ Three Pointers','Over Under Player 3PM Excluding Overtime']:
+   with self.subTest(name=name):self.assertIsNone(classify_market(name))
+  self.assertIsNone(classify_market('Over Under Player 3PM',{'sportId':11,'period':'1sthalf'}))
+ def test_made_threes_quotes_keep_canonical_market_and_real_side(self):
+  self.catalog[0].update(marketName='Over Under Player 3-Point Field Goals Made',handicap=2.5)
+  rows=parse_props(self.game,self.catalog,self.response,self.game['players'],self.now)
+  self.assertEqual([(r['market'],r['side'],r['line']) for r in rows],[('threes','over',2.5)])
  def test_ambiguous_player_does_not_guess(self):
   players=self.game['players']+[{'id':'espn2','name':'Jose Smith','team':'LA Clippers'}]
   self.assertEqual(parse_props(self.game,self.catalog,self.response,players,self.now),[])
@@ -50,4 +63,15 @@ class NBAOddsTests(unittest.TestCase):
    result=main(root,fail,self.now)
    self.assertEqual(json.loads((root/'data/nba_market_odds.json').read_text()),{'old':'retained'})
    self.assertNotIn('NEVER_OUTPUT',json.dumps(result));self.assertEqual(result['status'],'unavailable')
+ def test_rate_limit_has_safe_cooldown_and_keeps_last_prices_byte_for_byte(self):
+  with tempfile.TemporaryDirectory() as tmp:
+   root=pathlib.Path(tmp);(root/'data').mkdir()
+   for name,value in [('nba_games',{'generated_at':self.now.isoformat(),'games':[self.game]}),('nba_rosters',{'generated_at':self.now.isoformat()})]:
+    (root/'data'/f'{name}.json').write_text(json.dumps(value))
+   prices=root/'data/nba_market_odds.json';prices.write_bytes(b'{"old": "retained"}\n')
+   def limited(*a,**k):raise ProviderRateLimit((self.now+dt.timedelta(minutes=15)).isoformat(),'fixtures')
+   status=main(root,limited,self.now)
+   self.assertEqual(prices.read_bytes(),b'{"old": "retained"}\n')
+   self.assertEqual(status['reason_code'],'provider_rate_limit');self.assertFalse(status['live_price_verified'])
+   self.assertEqual(status['rate_limit_source'],'http_429');self.assertEqual(status['diagnostics']['provider_phase'],'fixtures')
 if __name__=='__main__':unittest.main()

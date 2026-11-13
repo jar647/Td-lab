@@ -17,6 +17,7 @@ function capture(ledger,candidates,now=Date.now()){
 }
 function settle(p,actual){if(!num(actual))return {status:'awaiting_result',reason:'Official statistic unavailable'};const won=p.side==='under'?actual<p.line:p.side==='at_least'?actual>=p.line:actual>p.line;return {status:actual===p.line&&p.side!=='at_least'?'push':won?'win':'loss',actual};}
 const nbaFields={pr:['PTS','REB'],pa:['PTS','AST'],ra:['REB','AST'],pra:['PTS','REB','AST'],points_rebounds:['PTS','REB'],points_assists:['PTS','AST'],rebounds_assists:['REB','AST'],points:['PTS'],rebounds:['REB'],assists:['AST'],'Points + Rebounds':['PTS','REB'],'Points + Assists':['PTS','AST'],'Rebounds + Assists':['REB','AST'],PRA:['PTS','REB','AST']};
+function nbaMadeThrees(stats={}){if(!stats||typeof stats!=='object'||Array.isArray(stats))return null;const values=[];for(const key of ['3PM','3PTM'])if(Object.hasOwn(stats,key)){const raw=stats[key],n=Number(raw);if(!['number','string'].includes(typeof raw)||String(raw).trim()===''||!Number.isInteger(n)||n<0)return null;values.push(n)}if(Object.hasOwn(stats,'3PT')){const pair=/^(\d+)-(\d+)$/.exec(String(stats['3PT']).trim());if(!pair||Number(pair[1])>Number(pair[2]))return null;values.push(Number(pair[1]))}return values.length&&values.every(n=>n===values[0])?values[0]:null;}
 function gradeOne(p,data,now){
  if(!valid(p,now))return {status:'excluded',reason:'Invalid or post-start capture'};
  if(now<time(p.startsAt))return {status:'pending',reason:'Awaiting scheduled start'};
@@ -32,6 +33,7 @@ function gradeOne(p,data,now){
    if(r.starter!==true||!g.first_basket?.available||!g.first_basket.first_game?.player_id)return {status:'awaiting_result',reason:'Opening field goal / starter result unavailable'};
    const won=String(g.first_basket.first_game.player_id)===p.playerId&&g.first_basket.first_game.team===p.team;return {status:won?'win':'loss',actual:g.first_basket.first_game.player_id};
   }
+  if(p.market==='threes'){const actual=nbaMadeThrees(r.stats);return actual===null?{status:'awaiting_result',reason:'Official made-three statistic missing or conflicting'}:settle(p,actual);}
   const fields=nbaFields[p.market];if(!fields)return {status:'awaiting_result',reason:'Unsupported market'};
   const values=fields.map(k=>r.stats?.[k]);if(values.some(v=>v===null||v===undefined||v===''||(!Number.isFinite(Number(v))||Number(v)<0)))return {status:'awaiting_result',reason:'Official statistic missing'};
   return settle(p,values.reduce((s,v)=>s+Number(v),0));

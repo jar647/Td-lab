@@ -6,7 +6,7 @@ let c=api.capture(null,[base],now);assert.equal(c.added,1);const original=struct
 c=api.capture(c.ledger,[{...base,line:10,score:99,label:'Changed line'}],now+1000);assert.equal(c.added,0);assert.equal(c.ledger.picks[0].line,20);assert.equal(c.ledger.picks[0].score,85);assert.equal(c.ledger.picks[0].capturedAt,before);assert.equal(c.ledger.picks[0].revisions.length,1);
 assert.equal(api.capture(c.ledger,[base],now+3600000).added,0,'No tipoff or post-tip capture');assert.equal(api.capture(null,[{...base,startsAt:'not a time'}],now).rejected,1);
 assert.equal(api.capture(null,[{...base,modelVersion:'v2'}],now).added,1,'Model versions remain separate');
-const box={id:'g',status:'STATUS_FINAL',players:[{id:'p',team:'A',starter:true,stats:{MIN:'30:00',PTS:'20',REB:'4',AST:'3'}}],first_basket:{available:true,first_game:{player_id:'p',team:'A'}}};
+const box={id:'g',status:'STATUS_FINAL',players:[{id:'p',team:'A',starter:true,stats:{MIN:'30:00',PTS:'20',REB:'4',AST:'3','3PT':'2-7'}}],first_basket:{available:true,first_game:{player_id:'p',team:'A'}}};
 const data={nba:{games:[box]}},p=c.ledger.picks[0],after=now+4*3600000;
 assert.equal(api.gradeOne(p,data,now).status,'pending','Future results must never settle a pre-start selection');assert.equal(api.gradeOne(p,data,after).status,'win');assert.equal(api.gradeOne({...p,side:'over'},data,after).status,'push');assert.equal(api.gradeOne({...p,side:'under'},data,after).status,'push');assert.equal(api.gradeOne({...p,side:'under',line:19.5},data,after).status,'loss');assert.equal(api.gradeOne({...p,side:'under',line:20.5},data,after).status,'win');
 assert.equal(api.gradeOne({...p,market:'PRA',line:27},data,after).status,'win');
@@ -33,7 +33,7 @@ assert.equal(api.summarize({picks:[{...graded.picks[0],score:null,probability:.2
 
 // Contract: every market emitted by either deployed NBA recommendation engine
 // must have a supported settlement path, including the short combo keys.
-const expectedNBA={points:20,rebounds:4,assists:3,pr:24,pa:23,ra:7,pra:27,'Points + Rebounds':24,'Points + Assists':23,'Rebounds + Assists':7,PRA:27};
+const expectedNBA={points:20,rebounds:4,assists:3,threes:2,pr:24,pa:23,ra:7,pra:27,'Points + Rebounds':24,'Points + Assists':23,'Rebounds + Assists':7,PRA:27};
 for(const market of new Set([...require('./nba_matchup_discovery').markets,...require('./nba_game_first').markets])){
  assert(Object.hasOwn(expectedNBA,market),'New NBA market needs an explicit grading contract: '+market);
  const record={...p,market,line:expectedNBA[market],side:'at_least'};
@@ -64,9 +64,9 @@ assert.equal(api.captureCoverage(graded.picks,[], '2026-11-13').partialFirstDay,
 // The actual source adapter must save an entire 40+ candidate slate; no top-8
 // or top-three limit may leak from a different recommendation section.
 const fortyFive=Array.from({length:45},(_,i)=>({playerId:'full-slate-'+i,name:'Player '+i,team:'A',opponent:'B',market:'points',side:'over',baseline:20,researchScore:85,eligible:true,matchupRating:{factors:[]}}));
-const fullSource=require('./scripts/recommendation_sources.cjs').captureSources(now,{onlySport:'NBA',nbaInputs:{feed:{generated_at:before,games:[{id:'whole-slate',home:'A',away:'B',date:new Date(now+6*3600000).toISOString(),status:'STATUS_SCHEDULED'}]},rosters:{generated_at:before,teams:{A:[],B:[]}},injuries:{generated_at:before,status:'ok',injuries:[]}},nbaMatchups:{labels:{points:'points'},analyze:()=>({ready:true,candidates:[...fortyFive,...['over','under'].flatMap(side=>[84,84.99,100.01,NaN,null].map(researchScore=>({...fortyFive[0],playerId:'low-'+side+'-'+researchScore,side,researchScore}))),{...fortyFive[0],playerId:'three',market:'threes',researchScore:100}]})}});
+const fullSource=require('./scripts/recommendation_sources.cjs').captureSources(now,{onlySport:'NBA',nbaInputs:{feed:{generated_at:before,games:[{id:'whole-slate',home:'A',away:'B',date:new Date(now+6*3600000).toISOString(),status:'STATUS_SCHEDULED'}]},rosters:{generated_at:before,teams:{A:[],B:[]}},injuries:{generated_at:before,status:'ok',injuries:[]}},nbaMatchups:{labels:{points:'points'},analyze:()=>({ready:true,candidates:[...fortyFive,...['over','under'].flatMap(side=>[84,84.99,100.01,NaN,null].map(researchScore=>({...fortyFive[0],playerId:'low-'+side+'-'+researchScore,side,researchScore}))),{...fortyFive[0],playerId:'three',market:'threes',researchScore:85},{...fortyFive[0],playerId:'under-high',side:'under',researchScore:100}]})}});
 assert(!fullSource.coverage.some(c=>c.status==='error'),JSON.stringify(fullSource.coverage));
-assert.equal(fullSource.picks.filter(p=>p.board==='Best Props').length,45);assert.equal(api.capture(null,fullSource.picks,now).added,45);assert.equal(fullSource.coverage.find(c=>c.sport==='NBA'&&!c.gameId).bestPropsCandidates,45);
+assert.equal(fullSource.picks.filter(p=>p.board==='Best Props').length,46);assert.equal(api.capture(null,fullSource.picks,now).added,46);assert.equal(fullSource.coverage.find(c=>c.sport==='NBA'&&!c.gameId).bestPropsCandidates,46);
 
 assert(api.captureCoverage(graded.picks,coverage.fixtures,day).partialFirstDay,'Stored fixture evidence preserves the partial-day warning when the live feed rolls over');
 
@@ -78,3 +78,27 @@ const qb=(id,team,opp,quality)=>({player_id:id,player:id,team,opp,pos:'QB',avail
 const nflPlayers=[qb('qualified','A','B',300),qb('boundary-60','A','B',100),qb('below-60','B','A',95),qb('below-floor','B','A',90)];
 const nflSource=require('./scripts/recommendation_sources.cjs').captureSources(now,{onlySport:'NFL',nflInputs:{feed:nflPlayers,status:{generated_at:before},games:{generated_at:before,games:[{game_id:'nfl-g',home:'A',away:'B',kickoff_at:new Date(now+6*3600000).toISOString()}]}},nflEngine:{simulate:()=>({markets:nflPlayers.flatMap(p=>[150,175,200,225,250,275,300].map(line=>({id:p.player_id,market:'passYards',line,scenarioRate:.99,modeledMean:300})))})}});
 assert(!nflSource.coverage.some(c=>c.status==='error'),JSON.stringify(nflSource.coverage));assert(nflSource.picks.some(p=>p.playerId==='qualified'));assert(nflSource.picks.some(p=>p.playerId==='boundary-60'&&p.score===60));assert(!nflSource.picks.some(p=>['below-floor','below-60'].includes(p.playerId)));assert(nflSource.picks.every(p=>p.scoreKind==='NFL matchup score /100'&&p.score>=60&&p.score<=100));
+// Every eligible TD research row is captured; a positional top-three cap may
+// not silently lose players from the complete public board.
+const tdPlayers=Array.from({length:50},(_,i)=>({player_id:'td-'+i,player:'TD Player '+i,team:i%2?'B':'A',opp:i%2?'A':'B',pos:'RB',market:'ATD',availability:'ROSTER_ACTIVE',playerAppearancesVerified:true,games:5,last5GamesPlayed:5,tdallowed:1.2,rzallowed:3.5,playerRz:2.5,rzshare:35,goalLine5:.8,snapShare:.85,playerAnytimeTDs:1,recent3AnytimeTDs:1}));
+const tdWithheld=[{...tdPlayers[0],player_id:'td-out',availability:'OUT'},{...tdPlayers[0],player_id:'td-low',tdallowed:0,rzallowed:0,playerRz:0,rzshare:0,goalLine5:0,snapShare:0,playerAnytimeTDs:0,recent3AnytimeTDs:0}];
+const tdSource=require('./scripts/recommendation_sources.cjs').captureSources(now,{onlySport:'NFL',nflInputs:{feed:[...tdPlayers,...tdWithheld],status:{generated_at:before},games:{generated_at:before,games:[{game_id:'td-game',home:'A',away:'B',kickoff_at:new Date(now+6*3600000).toISOString()}]}},nflEngine:{simulate:()=>({markets:[]})}});
+assert(!tdSource.coverage.some(c=>c.status==='error'),JSON.stringify(tdSource.coverage));
+assert.equal(tdSource.picks.length,50,'all eligible TD rows are frozen without truncation');
+assert(tdSource.picks.every(p=>p.board==='Anytime TD research'&&p.score===100&&p.inputs.productionAvailable===true));
+assert(!tdSource.picks.some(p=>['td-out','td-low'].includes(p.playerId)));
+// TD capture is independent of QB/game-model availability and later games
+// still get a chance to publish supported research.
+const nextTD={...tdPlayers[0],player_id:'next-game-td',player:'Next Game TD',team:'C',opp:'D'};
+const isolatedTD=require('./scripts/recommendation_sources.cjs').captureSources(now,{onlySport:'NFL',nflInputs:{feed:[...tdPlayers,nextTD],status:{generated_at:before},games:{generated_at:before,games:[{game_id:'qb-unavailable',home:'A',away:'B',kickoff_at:new Date(now+6*3600000).toISOString()},{game_id:'next-game',home:'C',away:'D',kickoff_at:new Date(now+7*3600000).toISOString()}]}},nflEngine:{simulate:records=>{if(records.some(r=>r.team==='A'))throw Error('QB model unavailable');return {markets:[]}}}});
+assert.equal(isolatedTD.picks.length,51,'independent TD research survives a game-model failure');
+assert(isolatedTD.picks.some(p=>p.playerId==='next-game-td'),'later games still process');
+assert(isolatedTD.coverage.some(c=>c.gameId==='qb-unavailable'&&c.status==='partial'));
+
+// A made-three count of zero is known; absent/malformed/conflicting evidence is not zero.
+for(const [stats,actual] of [[{'3PT':'0-7'},0],[{'3PT':'3-7'},3],[{'3PM':'3'},3],[{'3PTM':3},3],[{'3PM':3,'3PT':'3-7'},3],[{},null],[{'3PT':'8-7'},null],[{'3PT':'3-7','3PM':2},null],[{'3PM':null},null]]){
+ const source=structuredClone(data);source.nba.games[0].players[0].stats={MIN:'30',...stats};const result=api.gradeOne({...p,market:'threes',line:2.5,side:'over'},source,after);
+ assert.equal(result.status,actual===null?'awaiting_result':actual>2.5?'win':'loss');if(actual!==null)assert.equal(result.actual,actual);
+}
+const oldUnder=api.capture(null,[{...base,market:'threes',side:'under',line:2.5,label:'Old saved UNDER'}],now).ledger;
+const underOriginal=structuredClone(oldUnder.picks[0]);const oldGraded=api.grade(oldUnder,data,after);assert.equal(oldGraded.picks[0].outcome.status,'win');assert.equal(oldGraded.picks[0].side,'under');assert.equal(oldGraded.picks[0].capturedAt,underOriginal.capturedAt);assert.equal(oldGraded.picks[0].line,2.5);

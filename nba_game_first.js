@@ -1,7 +1,7 @@
 /* Shared-outcome NBA matchup research; prices never change the simulation. */
 (function(root,factory){const api=factory(typeof module==='object'&&module.exports?require('./nba_possession_engine.js'):root.CookNBAPossessions,typeof module==='object'&&module.exports?require('./nba_matchup_discovery.js'):root.CookNBAMatchups);if(typeof module==='object'&&module.exports)module.exports=api;root.CookNBAGameFirst=api;})(typeof globalThis!=='undefined'?globalThis:this,function(possessions,matchups){
 'use strict';
-const markets=['points','rebounds','assists','Points + Rebounds','Points + Assists','Rebounds + Assists','PRA'];
+const markets=['points','rebounds','assists','threes','Points + Rebounds','Points + Assists','Rebounds + Assists','PRA'];
 const fields=m=>({'Points + Rebounds':['points','rebounds'],'Points + Assists':['points','assists'],'Rebounds + Assists':['rebounds','assists'],PRA:['points','rebounds','assists']}[m]||[m]);
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),mean=a=>a.reduce((s,x)=>s+x,0)/Math.max(1,a.length);
 const hits=(row,x,line)=>row.side==='under'?x<line:x>line;
@@ -9,9 +9,9 @@ function chance(row,line){if(!Number.isFinite(line)||line<.5||!row.samples?.leng
 function candidate(row,excluded=[],lines={}){
  if(row)row={...row,side:String(row.side||'over').toLowerCase()};
  if(row?.matchupRating?.side&&row.matchupRating.side!==row.side)return null;
- if(!row||!markets.includes(row.market)||excluded.includes(row.market)||!['over','under'].includes(String(row.side||'over').toLowerCase())||row.reviewRequired||row.eligible!==true||!(Number(row.matchupGames)>=3)||!Number.isFinite(row.forecast)||row.forecast<=0||!row.samples?.length||(row.side==='under'?!(row.matchupBoost<0):!(row.matchupBoost>0)))return null;
- const minimum={points:8,rebounds:3,assists:3}[row.market]||10;if(row.forecast<minimum)return null;
- const override=lines[row.key];const line=override===undefined?Math.max(.5,(row.side==='under'?Math.ceil(row.forecast*1.16-.5):Math.floor(row.forecast*.84-.5))+.5):override;
+ if(!row||!markets.includes(row.market)||excluded.includes(row.market)||row.side!=='over'||row.reviewRequired||row.eligible!==true||!(Number(row.matchupGames)>=3)||!Number.isFinite(row.forecast)||row.forecast<=0||!Array.isArray(row.samples)||!row.samples.length||!row.samples.every(x=>Number.isFinite(x)&&x>=0)||!(row.matchupBoost>0))return null;
+ const minimum={points:8,rebounds:3,assists:3,threes:1}[row.market]||10;if(row.forecast<minimum)return null;
+ const override=lines[row.key];const line=override===undefined?Math.max(.5,Math.floor(row.forecast*.84-.5)+.5):override;
  const probability=chance(row,line);if(probability===null||probability===0)return null;
  const matchupQuality=row.matchupRating?.score;if(!Number.isFinite(matchupQuality)||matchupQuality<85||matchupQuality>100)return null;
  const lineConfidence=Math.round(clamp(probability*100,0,100));
@@ -54,17 +54,16 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
     const paceBoost=model.pace/model.league.pace-1,minuteBoost=own.minutes[player.id]/Math.max(1,player.baseline)-1;
     const shooting=(1-player.tpa/Math.max(.001,player.fga))*def.twoDefense+player.tpa/Math.max(.001,player.fga)*def.threeDefense;
     const reboundBoost=(model.league.orb-def.orb)*.25,assistBoost=shooting;
-    const boosts={points:shooting*2,rebounds:reboundBoost,assists:assistBoost};
-    for(const market of markets)for(const side of ['over','under']){
-     const ks=fields(market),forecast=ks.reduce((s,k)=>s+projected[k],0),defense=mean(ks.map(k=>boosts[k]));
+    const boosts={points:shooting*2,rebounds:reboundBoost,assists:assistBoost,threes:def.threeDefense*2};
+    for(const market of markets){const side='over';
+     const ks=fields(market);if(!projected||!samples||!ks.every(k=>Number.isFinite(projected[k])&&Array.isArray(samples[k])&&samples[k].length>0&&samples[k].length===samples[ks[0]].length&&samples[k].every(Number.isFinite)))continue;const forecast=ks.reduce((s,k)=>s+projected[k],0),defense=mean(ks.map(k=>boosts[k]));
      const boost=defense+.35*paceBoost+.35*clamp(minuteBoost,-.2,.2);
-     const recorded=historical.map(x=>ks.reduce((s,k)=>s+x[k],0)),baseline=mean(recorded),observedMax=recorded.length?Math.max(...recorded):null;
+     const recorded=historical.filter(x=>ks.every(k=>Number.isFinite(x[k]))).map(x=>ks.reduce((s,k)=>s+x[k],0)),baseline=mean(recorded),observedMax=recorded.length?Math.max(...recorded):null;
      const reviewReasons=[];if(minuteReview)reviewReasons.push('Rotation estimate '+own.minutes[player.id].toFixed(1)+' MIN exceeds the recent workload bound '+minuteUpper.toFixed(1)+' MIN in a limited '+player.sample+'-game sample');if(observedMax!==null&&forecast>observedMax&&player.sample<10)reviewReasons.push('Forecast exceeds every observed '+market+' result in the limited prior sample');
-     if(side==='under'&&recorded.length&&forecast<Math.min(...recorded)&&player.sample<10)reviewReasons.push('Forecast below every observed '+market+' result in the limited prior sample');
      if(minuteReview)playerReviews.set(player.id,[reviewReasons[0]]);
      const values=samples[ks[0]].map((_,i)=>ks.reduce((s,k)=>s+samples[k][i],0));
-     const reason='Prior sample average '+baseline.toFixed(1)+' '+market+' ('+player.sample+' games); simulated '+forecast.toFixed(1)+'. '+player.name+' vs '+opponent+': '+projected.minutes.toFixed(1)+' simulated minutes ('+player.baseline.toFixed(1)+' recent baseline), '+(100*shotShare).toFixed(1)+'% of projected team field-goal attempts. '+
-      ks.map(k=>k==='rebounds'?'Rebound role: '+(player.orb*36).toFixed(1)+' offensive / '+(player.drb*36).toFixed(1)+' defensive boards per 36 observed minutes; opponent offensive-rebound rate '+(100*def.orb).toFixed(1)+'%. ':k==='assists'?'Creation role: '+(player.ast*36).toFixed(1)+' assists per 36 observed minutes; teammate shooting and opponent defense share the same simulation. ':'Player shooting mix: '+(100*(1-player.tpa/Math.max(.001,player.fga))).toFixed(0)+'% two-point attempts; opponent two-point defense delta '+(100*def.twoDefense).toFixed(1)+' percentage points. ').join('')+
+     const reason='Prior sample average '+baseline.toFixed(1)+' '+market+' ('+recorded.length+' games); simulated '+forecast.toFixed(1)+'. '+player.name+' vs '+opponent+': '+projected.minutes.toFixed(1)+' simulated minutes ('+player.baseline.toFixed(1)+' recent baseline), '+(100*shotShare).toFixed(1)+'% of projected team field-goal attempts. '+
+      ks.map(k=>k==='threes'?'Three-point opportunity: '+(player.tpa*36).toFixed(1)+' attempts per 36 observed minutes; opponent three-point defense delta '+(100*def.threeDefense).toFixed(1)+' percentage points. ':k==='rebounds'?'Rebound role: '+(player.orb*36).toFixed(1)+' offensive / '+(player.drb*36).toFixed(1)+' defensive boards per 36 observed minutes; opponent offensive-rebound rate '+(100*def.orb).toFixed(1)+'%. ':k==='assists'?'Creation role: '+(player.ast*36).toFixed(1)+' assists per 36 observed minutes; teammate shooting and opponent defense share the same simulation. ':'Player shooting mix: '+(100*(1-player.tpa/Math.max(.001,player.fga))).toFixed(0)+'% two-point attempts; opponent two-point defense delta '+(100*def.twoDefense).toFixed(1)+' percentage points. ').join('')+
       'Pace '+model.pace.toFixed(1)+' vs '+model.league.pace.toFixed(1)+' league sample possessions; '+player.sample+' player games / '+def.games+' opponent games.'+(own.absent.length?' Rotation redistributed with '+own.absent.join(', ')+' absent.':'')+' '+(100*simulation.blowoutRate).toFixed(1)+'% simulated blowouts; late-game minutes adjust in those outcomes.';
      const positionRows=ks.map(k=>ratings.get(player.id+'|'+k+'|'+side));
      const supported=positionRows.every(Boolean);

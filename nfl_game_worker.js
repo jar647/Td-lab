@@ -1,5 +1,5 @@
 /* Worker keeps 10k–100k correlated game simulations off the page thread. */
-importScripts('./nfl_game_engine.js?v=nfl-supported-qb-v3');
+importScripts('./nfl_game_engine.js?v=nfl-depth-chart-qb-v4');
 self.onmessage=function(event){
  const {players,count,seed,selected,requestId,options}=event.data||{};
  try{

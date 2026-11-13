@@ -11,6 +11,7 @@ import pathlib
 import re
 import sys
 from scripts.build_hardrock_feed import get
+from scripts.odds_provider import ProviderRateLimit
 from nba_model import name_key, timestamp, fresh, UTC
 from nba_pipeline import atomic
 
@@ -35,6 +36,9 @@ def classify_market(name,meta=None):
     text=str(name).lower()
     if re.search(r'quarter|half|period|regulation|excluding|excl\.?|first|second|third|fourth|[1-4](?:st|nd|rd|th)',text):return None
     text=re.sub(r'\b(?:including|incl\.?)\s+(?:overtime|ot)\b','',text)
+    # Recognize made threes only; attempts and partial games remain excluded.
+    text=re.sub(r'\b(?:3[ -]?(?:point(?:er)?s?|pt|pm)|three[ -]?(?:point(?:er)?s?))(?:[ -]?(?:field[ -]?goals?))?(?:[ -]?made)?\b','threes',text)
+    text=re.sub(r'\bthrees?(?:[ -]?made)?\b','threes',text)
     words=re.findall(r'[a-z]+',text)
     metadata=meta or {}
     if metadata.get('sportId') is not None and str(metadata['sportId'])!='11':return None
@@ -49,10 +53,10 @@ def classify_market(name,meta=None):
     if not explicit and not catalog_verified:return None
     words=[w for w in words if w not in ('over','under','player','total','full','time','and')]
     # Supported component sets; unknown qualifiers/milestone words fail closed.
-    aliases={'point':'points','points':'points','rebound':'rebounds','rebounds':'rebounds','assist':'assists','assists':'assists'}
+    aliases={'point':'points','points':'points','rebound':'rebounds','rebounds':'rebounds','assist':'assists','assists':'assists','threes':'threes'}
     if not words or any(w not in aliases for w in words):return None
     stats=frozenset(aliases[w] for w in words)
-    return {frozenset(['points']):'points',frozenset(['rebounds']):'rebounds',frozenset(['assists']):'assists',frozenset(['points','rebounds']):'points_rebounds',frozenset(['points','assists']):'points_assists',frozenset(['rebounds','assists']):'rebounds_assists',frozenset(['points','rebounds','assists']):'pra'}.get(stats)
+    return {frozenset(['points']):'points',frozenset(['rebounds']):'rebounds',frozenset(['assists']):'assists',frozenset(['threes']):'threes',frozenset(['points','rebounds']):'points_rebounds',frozenset(['points','assists']):'points_assists',frozenset(['rebounds','assists']):'rebounds_assists',frozenset(['points','rebounds','assists']):'pra'}.get(stats)
 
 def parse_props(game,catalog,response,players,now,bookmaker='hardrockbet'):
     lookup={str(m.get('marketId')):m for m in records(catalog,'markets')}
@@ -86,8 +90,11 @@ def parse_props(game,catalog,response,players,now,bookmaker='hardrockbet'):
 def collect(feed,rosters,now,request=get,diagnostics=None):
     diagnostics=diagnostics if diagnostics is not None else {}
     if not fresh(feed,now,6) or not fresh(rosters,now,24):raise RuntimeError('stale_local_inputs')
+    diagnostics['provider_phase']='fixtures'
     fixtures=records(request('fixtures',sportId=11,**{'from':now.date().isoformat(),'to':(now+dt.timedelta(days=2)).date().isoformat()}),'fixtures')
+    diagnostics['provider_phase']='markets'
     catalog=request('markets',sportId=11)
+    diagnostics['provider_phase']='tournaments'
     tournaments=records(request('tournaments',sportId=11),'tournaments')
     nba_ids={str(t.get('tournamentId')) for t in tournaments if str(t.get('tournamentName') or t.get('name') or '').strip().lower() in ('nba','usa nba','usa - nba')}
     diagnostics['basketball_prop_examples']=[{k:m.get(k) for k in ('marketName','period','marketType','playerProp','handicap')} for m in records(catalog,'markets') if str(m.get('sportId'))=='11' and m.get('playerProp') is True][:12]
@@ -105,6 +112,7 @@ def collect(feed,rosters,now,request=get,diagnostics=None):
         g=match_fixture(f,feed.get('games',[]))
         if not g or not now<timestamp(g['date'])<=now+dt.timedelta(hours=48):continue
         matched+=1
+        diagnostics['provider_phase']='odds'
         response=request('odds',fixtureId=f['fixtureId'],bookmakers='hardrockbet')
         bk=response.get('bookmakerOdds',{}).get('hardrockbet',{})
         priced_markets+=len(bk.get('markets',{}))
@@ -128,12 +136,14 @@ def main(root=ROOT,request=get,now=None):
                 stamp=q.get('observed_at',captures.get('generated_at'))
                 if fresh({'generated_at':stamp},now,1):data['sgp_quotes'].append({**q,'observed_at':stamp})
         atomic(root/'data/nba_market_odds.json',data)
-        status={'generated_at':now.isoformat(),'status':'ok','markets':len(data['markets']),'source':data['source']}
+        status={'generated_at':now.isoformat(),'status':'ok','markets':len(data['markets']),'source':data['source'],'live_price_verified':True}
     except Exception as exc:
         # Provider exceptions may contain a query URL/key. Never print their text.
         message=str(exc)
         code='missing_repository_secret' if message=='Missing ODDSPAPI_API_KEY' else 'provider_authentication' if message in ('Odds provider HTTP 401','Odds provider HTTP 403') else 'provider_rate_limit' if message=='Odds provider HTTP 429' else message if message in ('stale_local_inputs','no_supported_active_NBA_props') else 'provider_unavailable'
         status={'generated_at':now.isoformat(),'status':'unavailable','reason_code':code,'diagnostics':diagnostics,'reason':'NBA odds refresh unavailable; last successful prices retained and freshness-gated.'}
+        status['live_price_verified']=False
+        if isinstance(exc,ProviderRateLimit):status.update(exc.safe_details())
     atomic(root/'data/nba_market_status.json',status)
     print('NBA odds:',status['status'])
     return status
