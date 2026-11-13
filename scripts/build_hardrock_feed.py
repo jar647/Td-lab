@@ -1,6 +1,7 @@
 """Export verified Hard Rock YES anytime-TD prices. No credentials in output."""
 import datetime as dt
 import json
+import os
 from pathlib import Path
 
 from scripts.odds_provider import request_json, ProviderRateLimit
@@ -47,6 +48,16 @@ def cli():
         main()
     except ProviderRateLimit as exc:
         print("NFL odds unavailable: provider_rate_limit; retry after", exc.retry_at)
+        fresh_prices, mode = False, "provider_rate_limit"
+    else:
+        fresh_prices, mode = True, "fresh_prices"
+    # Only this attempt's typed result controls downstream price capture.
+    # Authentication, invalid data and unknown failures still propagate above.
+    output = os.environ.get("GITHUB_OUTPUT")
+    if output:
+        with open(output, "a", encoding="utf-8") as handle:
+            handle.write("fresh_prices=" + str(fresh_prices).lower() + "\nmode=" + mode + "\n")
+    return fresh_prices
 
 
 if __name__ == "__main__":
