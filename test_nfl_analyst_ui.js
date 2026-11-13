@@ -5,6 +5,7 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 const engine=require('./nfl_game_engine.js');
 const goal1=require('./nfl_goal1.js');
+const topPlays=require('./nfl_top_plays.js');
 const html=fs.readFileSync('analyst.html','utf8');
 assert(html.includes('src="./nfl_game_engine.js?v=nfl-depth-chart-qb-v4"'),'analyst must load simulator engine');
 assert(html.includes('nfl_game_worker.js'),'analyst must execute off-thread');
@@ -67,7 +68,7 @@ class FakeWorker{
  terminate(){}
 }
 function response(obj){return {ok:true,async json(){return obj}}}
-const context={document:{getElementById:el},Worker:FakeWorker,PropVaultGoal1:{...goal1,buildTicket(candidates,count){
+const context={document:{getElementById:el},Worker:FakeWorker,PropShopNFLTopPlays:topPlays,PropVaultGoal1:{...goal1,buildTicket(candidates,count){
  const selected=goal1.buildTicket(candidates,count);tickets.push({candidates,selected,count});return selected;
 }},CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'},
  setTimeout,Date,console,fetch:async url=>{

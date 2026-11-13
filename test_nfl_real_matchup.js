@@ -5,6 +5,7 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 const engine=require('./nfl_game_engine.js');
 const goal1=require('./nfl_goal1.js');
+const topPlays=require('./nfl_top_plays.js');
 const html=fs.readFileSync('analyst.html','utf8');
 const js=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(x=>x[1]).find(Boolean);
 assert(js,'analyst script missing');
@@ -26,7 +27,7 @@ class LocalWorker{
  terminate(){}
 }
 const ok=x=>({ok:true,json:async()=>x});
-const context={document:{getElementById:el},Worker:LocalWorker,PropVaultGoal1:goal1,CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'},setTimeout,console,Date,
+const context={document:{getElementById:el},Worker:LocalWorker,PropVaultGoal1:goal1,PropShopNFLTopPlays:topPlays,CookItUpQuickSlip:{button:()=>'<button class="quick-slip-add">Add to Quick Slip</button>'},setTimeout,console,Date,
  fetch:async url=>{
   if(url.includes('matchups.json'))return ok(players);
   if(url.includes('status.json'))return ok(status);
