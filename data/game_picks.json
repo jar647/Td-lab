@@ -1,7 +1,7 @@
 {
   "season": 2026,
   "week": 10,
-  "generated_at": "2026-11-13T12:42:19.331750+00:00",
+  "generated_at": "2026-11-13T13:34:58.901700+00:00",
   "model_status": "AUDITED_BASELINE_UNCALIBRATED",
   "model_version": "score-baseline-trust-v3",
   "note": "Historical scoring research baseline; independently recomputed source rates; QB-led history separated; no unvalidated EPA point correction or verified betting recommendation.",
@@ -767,7 +767,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T12:42:17.288555+00:00",
+            "retrieved_at": "2026-11-13T13:34:57.922543+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -801,7 +801,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T12:42:16.968487+00:00",
+          "checked_at": "2026-11-13T13:34:57.608680+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -1031,7 +1031,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T12:42:17.289055+00:00",
+          "generated_at": "2026-11-13T13:34:57.922903+00:00",
           "available": false,
           "quarterbacks": {
             "NYG": {
@@ -1253,7 +1253,9 @@
                     "rushAttempts": 2.0,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.2,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -1279,7 +1281,9 @@
                       "rushAttempts": 22.4,
                       "recYards": 24.0,
                       "receptions": 3.2,
-                      "targets": 4.8
+                      "targets": 4.8,
+                      "rushTDs": 1.0,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -1304,7 +1308,9 @@
                       "rushAttempts": 0.4,
                       "recYards": 85.8,
                       "receptions": 7.6,
-                      "targets": 10.2
+                      "targets": 10.2,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -1329,7 +1335,9 @@
                       "rushAttempts": 0.2,
                       "recYards": 51.0,
                       "receptions": 4.2,
-                      "targets": 6.0
+                      "targets": 6.0,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.4
                     }
                   }
                 ],
@@ -1663,7 +1671,9 @@
                     "rushAttempts": 4.8,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.6,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -1689,7 +1699,9 @@
                       "rushAttempts": 11.6,
                       "recYards": 32.4,
                       "receptions": 2.8,
-                      "targets": 3.0
+                      "targets": 3.0,
+                      "rushTDs": 0.2,
+                      "recTDs": 0.4
                     }
                   },
                   {
@@ -1714,7 +1726,9 @@
                       "rushAttempts": 0.0,
                       "recYards": 33.667,
                       "receptions": 3.0,
-                      "targets": 6.667
+                      "targets": 6.667,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -1739,7 +1753,9 @@
                       "rushAttempts": 7.2,
                       "recYards": 1.4,
                       "receptions": 0.2,
-                      "targets": 0.2
+                      "targets": 0.2,
+                      "rushTDs": 0.2,
+                      "recTDs": 0.0
                     }
                   }
                 ],
@@ -2103,7 +2119,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T12:42:17.315540+00:00",
+            "retrieved_at": "2026-11-13T13:34:57.941218+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -2137,7 +2153,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T12:42:16.968487+00:00",
+          "checked_at": "2026-11-13T13:34:57.608680+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -2368,7 +2384,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T12:42:17.316018+00:00",
+          "generated_at": "2026-11-13T13:34:57.941582+00:00",
           "available": true,
           "quarterbacks": {
             "DET": {
@@ -2743,7 +2759,9 @@
                     "rushAttempts": 3.2,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.0,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -2769,7 +2787,9 @@
                       "rushAttempts": 16.8,
                       "recYards": 23.2,
                       "receptions": 3.4,
-                      "targets": 4.4
+                      "targets": 4.4,
+                      "rushTDs": 0.2,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -2794,7 +2814,9 @@
                       "rushAttempts": 0.0,
                       "recYards": 64.4,
                       "receptions": 4.8,
-                      "targets": 8.4
+                      "targets": 8.4,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.2
                     }
                   },
                   {
@@ -2819,7 +2841,9 @@
                       "rushAttempts": 0.0,
                       "recYards": 30.6,
                       "receptions": 4.0,
-                      "targets": 5.6
+                      "targets": 5.6,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.8
                     }
                   }
                 ],
@@ -3161,7 +3185,9 @@
                     "rushAttempts": 2.6,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.0,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -3187,7 +3213,9 @@
                       "rushAttempts": 18.8,
                       "recYards": 18.0,
                       "receptions": 3.0,
-                      "targets": 3.6
+                      "targets": 3.6,
+                      "rushTDs": 1.0,
+                      "recTDs": 0.4
                     }
                   },
                   {
@@ -3212,7 +3240,9 @@
                       "rushAttempts": 0.2,
                       "recYards": 50.2,
                       "receptions": 3.8,
-                      "targets": 6.0
+                      "targets": 6.0,
+                      "rushTDs": 0.2,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -3237,7 +3267,9 @@
                       "rushAttempts": 0.0,
                       "recYards": 43.0,
                       "receptions": 4.6,
-                      "targets": 6.4
+                      "targets": 6.4,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.0
                     }
                   }
                 ],
@@ -3572,7 +3604,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T12:42:17.747811+00:00",
+            "retrieved_at": "2026-11-13T13:34:58.084598+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -3612,7 +3644,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T12:42:16.968487+00:00",
+          "checked_at": "2026-11-13T13:34:57.608680+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -3843,7 +3875,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T12:42:17.748327+00:00",
+          "generated_at": "2026-11-13T13:34:58.084999+00:00",
           "available": true,
           "quarterbacks": {
             "ATL": {
@@ -4136,7 +4168,9 @@
                     "rushAttempts": 5.4,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.2,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -4162,7 +4196,9 @@
                       "rushAttempts": 14.8,
                       "recYards": 16.6,
                       "receptions": 2.6,
-                      "targets": 3.0
+                      "targets": 3.0,
+                      "rushTDs": 0.6,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -4187,7 +4223,9 @@
                       "rushAttempts": 5.0,
                       "recYards": 40.333,
                       "receptions": 4.0,
-                      "targets": 5.667
+                      "targets": 5.667,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -4212,7 +4250,9 @@
                       "rushAttempts": 1.2,
                       "recYards": 58.6,
                       "receptions": 4.0,
-                      "targets": 5.4
+                      "targets": 5.4,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.2
                     }
                   }
                 ],
@@ -4581,7 +4621,9 @@
                     "rushAttempts": 2.6,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.2,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -4607,7 +4649,9 @@
                       "rushAttempts": 14.6,
                       "recYards": 13.4,
                       "receptions": 1.6,
-                      "targets": 2.6
+                      "targets": 2.6,
+                      "rushTDs": 0.2,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -4632,7 +4676,9 @@
                       "rushAttempts": 10.4,
                       "recYards": 9.6,
                       "receptions": 1.4,
-                      "targets": 1.4
+                      "targets": 1.4,
+                      "rushTDs": 0.4,
+                      "recTDs": 0.2
                     }
                   },
                   {
@@ -4657,7 +4703,9 @@
                       "rushAttempts": 6.0,
                       "recYards": 8.0,
                       "receptions": 1.0,
-                      "targets": 2.0
+                      "targets": 2.0,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.0
                     }
                   }
                 ],
@@ -5001,7 +5049,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T12:42:17.884728+00:00",
+            "retrieved_at": "2026-11-13T13:34:58.171558+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -5041,7 +5089,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T12:42:16.968487+00:00",
+          "checked_at": "2026-11-13T13:34:57.608680+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -5272,7 +5320,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T12:42:17.885239+00:00",
+          "generated_at": "2026-11-13T13:34:58.171911+00:00",
           "available": true,
           "quarterbacks": {
             "CLE": {
@@ -5565,7 +5613,9 @@
                     "rushAttempts": 1.2,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.4,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -5591,7 +5641,9 @@
                       "rushAttempts": 12.0,
                       "recYards": 22.667,
                       "receptions": 3.667,
-                      "targets": 4.333
+                      "targets": 4.333,
+                      "rushTDs": 0.333,
+                      "recTDs": 0.667
                     }
                   },
                   {
@@ -5616,7 +5668,9 @@
                       "rushAttempts": 0.0,
                       "recYards": 101.8,
                       "receptions": 7.0,
-                      "targets": 11.0
+                      "targets": 11.0,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.6
                     }
                   },
                   {
@@ -5641,7 +5695,9 @@
                       "rushAttempts": 6.8,
                       "recYards": 12.2,
                       "receptions": 1.8,
-                      "targets": 2.2
+                      "targets": 2.2,
+                      "rushTDs": 0.4,
+                      "recTDs": 0.0
                     }
                   }
                 ],
@@ -6046,7 +6102,9 @@
                     "rushAttempts": 5.4,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.0,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -6072,7 +6130,9 @@
                       "rushAttempts": 12.6,
                       "recYards": 12.2,
                       "receptions": 2.2,
-                      "targets": 3.0
+                      "targets": 3.0,
+                      "rushTDs": 0.2,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -6097,7 +6157,9 @@
                       "rushAttempts": 11.0,
                       "recYards": 1.75,
                       "receptions": 0.5,
-                      "targets": 1.25
+                      "targets": 1.25,
+                      "rushTDs": 0.25,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -6122,7 +6184,9 @@
                       "rushAttempts": 0.2,
                       "recYards": 49.2,
                       "receptions": 4.0,
-                      "targets": 7.2
+                      "targets": 7.2,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.4
                     }
                   }
                 ],
@@ -6430,7 +6494,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T12:42:18.009704+00:00",
+            "retrieved_at": "2026-11-13T13:34:58.241186+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -6470,7 +6534,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T12:42:16.968487+00:00",
+          "checked_at": "2026-11-13T13:34:57.608680+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -6701,7 +6765,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T12:42:18.010219+00:00",
+          "generated_at": "2026-11-13T13:34:58.241542+00:00",
           "available": true,
           "quarterbacks": {
             "GB": {
@@ -6994,7 +7058,9 @@
                     "rushAttempts": 3.4,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.0,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -7020,7 +7086,9 @@
                       "rushAttempts": 15.0,
                       "recYards": 30.2,
                       "receptions": 3.2,
-                      "targets": 4.2
+                      "targets": 4.2,
+                      "rushTDs": 0.4,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -7045,7 +7113,9 @@
                       "rushAttempts": 0.4,
                       "recYards": 48.2,
                       "receptions": 5.8,
-                      "targets": 8.2
+                      "targets": 8.2,
+                      "rushTDs": 0.2,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -7070,7 +7140,9 @@
                       "rushAttempts": 6.0,
                       "recYards": 0.0,
                       "receptions": 0.0,
-                      "targets": 0.0
+                      "targets": 0.0,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.0
                     }
                   }
                 ],
@@ -7450,7 +7522,9 @@
                       "rushAttempts": 17.4,
                       "recYards": 1.8,
                       "receptions": 0.8,
-                      "targets": 1.4
+                      "targets": 1.4,
+                      "rushTDs": 0.6,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -7475,7 +7549,9 @@
                       "rushAttempts": 1.2,
                       "recYards": 39.6,
                       "receptions": 4.2,
-                      "targets": 5.0
+                      "targets": 5.0,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.2
                     }
                   },
                   {
@@ -7500,7 +7576,9 @@
                       "rushAttempts": 0.0,
                       "recYards": 59.2,
                       "receptions": 3.8,
-                      "targets": 5.4
+                      "targets": 5.4,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.4
                     }
                   }
                 ],
@@ -7826,7 +7904,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T12:42:18.168924+00:00",
+            "retrieved_at": "2026-11-13T13:34:58.329482+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -7866,7 +7944,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T12:42:16.968487+00:00",
+          "checked_at": "2026-11-13T13:34:57.608680+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -8097,7 +8175,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T12:42:18.169454+00:00",
+          "generated_at": "2026-11-13T13:34:58.329853+00:00",
           "available": false,
           "quarterbacks": {
             "IND": {
@@ -8321,7 +8399,9 @@
                     "rushAttempts": 4.0,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.2,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -8347,7 +8427,9 @@
                       "rushAttempts": 15.0,
                       "recYards": 5.0,
                       "receptions": 1.0,
-                      "targets": 1.0
+                      "targets": 1.0,
+                      "rushTDs": 1.0,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -8372,7 +8454,9 @@
                       "rushAttempts": 5.8,
                       "recYards": 27.6,
                       "receptions": 3.8,
-                      "targets": 4.8
+                      "targets": 4.8,
+                      "rushTDs": 0.4,
+                      "recTDs": 0.2
                     }
                   },
                   {
@@ -8397,7 +8481,9 @@
                       "rushAttempts": 0.0,
                       "recYards": 71.8,
                       "receptions": 5.8,
-                      "targets": 9.4
+                      "targets": 9.4,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.2
                     }
                   }
                 ],
@@ -8758,7 +8844,9 @@
                     "rushAttempts": 1.6,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.0,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -8784,7 +8872,9 @@
                       "rushAttempts": 18.6,
                       "recYards": 18.0,
                       "receptions": 3.4,
-                      "targets": 4.4
+                      "targets": 4.4,
+                      "rushTDs": 0.8,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -8809,7 +8899,9 @@
                       "rushAttempts": 0.0,
                       "recYards": 86.4,
                       "receptions": 6.8,
-                      "targets": 9.6
+                      "targets": 9.6,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.6
                     }
                   },
                   {
@@ -8834,7 +8926,9 @@
                       "rushAttempts": 0.2,
                       "recYards": 37.6,
                       "receptions": 3.0,
-                      "targets": 6.2
+                      "targets": 6.2,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.2
                     }
                   }
                 ],
@@ -9165,7 +9259,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T12:42:18.196004+00:00",
+            "retrieved_at": "2026-11-13T13:34:58.348143+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -9199,7 +9293,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T12:42:16.968487+00:00",
+          "checked_at": "2026-11-13T13:34:57.608680+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -9429,7 +9523,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T12:42:18.196427+00:00",
+          "generated_at": "2026-11-13T13:34:58.348421+00:00",
           "available": true,
           "quarterbacks": {
             "NO": {
@@ -9722,7 +9816,9 @@
                     "rushAttempts": 2.2,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.0,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -9748,7 +9844,9 @@
                       "rushAttempts": 16.5,
                       "recYards": 32.0,
                       "receptions": 3.25,
-                      "targets": 3.5
+                      "targets": 3.5,
+                      "rushTDs": 0.25,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -9773,7 +9871,9 @@
                       "rushAttempts": 17.4,
                       "recYards": 16.6,
                       "receptions": 2.6,
-                      "targets": 3.4
+                      "targets": 3.4,
+                      "rushTDs": 0.4,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -9798,7 +9898,9 @@
                       "rushAttempts": 0.0,
                       "recYards": 56.8,
                       "receptions": 4.4,
-                      "targets": 7.2
+                      "targets": 7.2,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.2
                     }
                   }
                 ],
@@ -10131,7 +10233,9 @@
                     "rushAttempts": 6.6,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.6,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -10157,7 +10261,9 @@
                       "rushAttempts": 22.2,
                       "recYards": 18.8,
                       "receptions": 1.6,
-                      "targets": 2.0
+                      "targets": 2.0,
+                      "rushTDs": 1.2,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -10182,7 +10288,9 @@
                       "rushAttempts": 0.8,
                       "recYards": 37.0,
                       "receptions": 2.8,
-                      "targets": 4.8
+                      "targets": 4.8,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.2
                     }
                   },
                   {
@@ -10207,7 +10315,9 @@
                       "rushAttempts": 0.0,
                       "recYards": 62.6,
                       "receptions": 4.6,
-                      "targets": 5.4
+                      "targets": 5.4,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.2
                     }
                   }
                 ],
@@ -10542,7 +10652,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T12:42:18.223444+00:00",
+            "retrieved_at": "2026-11-13T13:34:58.366425+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -10582,7 +10692,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T12:42:16.968487+00:00",
+          "checked_at": "2026-11-13T13:34:57.608680+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -10813,7 +10923,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T12:42:18.223847+00:00",
+          "generated_at": "2026-11-13T13:34:58.366707+00:00",
           "available": true,
           "quarterbacks": {
             "NYJ": {
@@ -11106,7 +11216,9 @@
                     "rushAttempts": 3.4,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.0,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -11132,7 +11244,9 @@
                       "rushAttempts": 19.0,
                       "recYards": 9.6,
                       "receptions": 1.6,
-                      "targets": 2.8
+                      "targets": 2.8,
+                      "rushTDs": 1.2,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -11157,7 +11271,9 @@
                       "rushAttempts": 0.0,
                       "recYards": 69.6,
                       "receptions": 5.4,
-                      "targets": 8.0
+                      "targets": 8.0,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.2
                     }
                   },
                   {
@@ -11182,7 +11298,9 @@
                       "rushAttempts": 0.2,
                       "recYards": 31.6,
                       "receptions": 4.4,
-                      "targets": 6.4
+                      "targets": 6.4,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.4
                     }
                   }
                 ],
@@ -11543,7 +11661,9 @@
                     "rushAttempts": 2.6,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.0,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -11569,7 +11689,9 @@
                       "rushAttempts": 15.8,
                       "recYards": 29.0,
                       "receptions": 2.0,
-                      "targets": 2.2
+                      "targets": 2.2,
+                      "rushTDs": 0.4,
+                      "recTDs": 0.6
                     }
                   },
                   {
@@ -11594,7 +11716,9 @@
                       "rushAttempts": 7.0,
                       "recYards": 7.2,
                       "receptions": 0.8,
-                      "targets": 1.0
+                      "targets": 1.0,
+                      "rushTDs": 0.6,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -11619,7 +11743,9 @@
                       "rushAttempts": 0.4,
                       "recYards": 54.4,
                       "receptions": 2.8,
-                      "targets": 6.4
+                      "targets": 6.4,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.6
                     }
                   }
                 ],
@@ -11945,7 +12071,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T12:42:18.335563+00:00",
+            "retrieved_at": "2026-11-13T13:34:58.444932+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -11985,7 +12111,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T12:42:16.968487+00:00",
+          "checked_at": "2026-11-13T13:34:57.608680+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -12215,7 +12341,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T12:42:18.336056+00:00",
+          "generated_at": "2026-11-13T13:34:58.445255+00:00",
           "available": true,
           "quarterbacks": {
             "TEN": {
@@ -12510,7 +12636,9 @@
                       "rushAttempts": 11.4,
                       "recYards": 18.6,
                       "receptions": 2.6,
-                      "targets": 3.0
+                      "targets": 3.0,
+                      "rushTDs": 0.2,
+                      "recTDs": 0.2
                     }
                   },
                   {
@@ -12535,7 +12663,9 @@
                       "rushAttempts": 0.0,
                       "recYards": 71.2,
                       "receptions": 8.0,
-                      "targets": 9.6
+                      "targets": 9.6,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.6
                     }
                   },
                   {
@@ -12560,7 +12690,9 @@
                       "rushAttempts": 5.6,
                       "recYards": 7.4,
                       "receptions": 1.2,
-                      "targets": 1.8
+                      "targets": 1.8,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.0
                     }
                   }
                 ],
@@ -12956,7 +13088,9 @@
                     "rushAttempts": 0.8,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.0,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -12982,7 +13116,9 @@
                       "rushAttempts": 14.6,
                       "recYards": 17.0,
                       "receptions": 3.0,
-                      "targets": 4.2
+                      "targets": 4.2,
+                      "rushTDs": 0.6,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -13007,7 +13143,9 @@
                       "rushAttempts": 1.2,
                       "recYards": 103.2,
                       "receptions": 11.2,
-                      "targets": 14.4
+                      "targets": 14.4,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.8
                     }
                   },
                   {
@@ -13032,7 +13170,9 @@
                       "rushAttempts": 10.6,
                       "recYards": 15.8,
                       "receptions": 1.2,
-                      "targets": 2.0
+                      "targets": 2.0,
+                      "rushTDs": 0.8,
+                      "recTDs": 0.2
                     }
                   }
                 ],
@@ -13357,7 +13497,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T12:42:18.885494+00:00",
+            "retrieved_at": "2026-11-13T13:34:58.520330+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -13397,7 +13537,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T12:42:16.968487+00:00",
+          "checked_at": "2026-11-13T13:34:57.608680+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -13629,7 +13769,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T12:42:18.885950+00:00",
+          "generated_at": "2026-11-13T13:34:58.520644+00:00",
           "available": false,
           "quarterbacks": {
             "ARI": {
@@ -13853,7 +13993,9 @@
                     "rushAttempts": 1.0,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.0,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -13879,7 +14021,9 @@
                       "rushAttempts": 7.2,
                       "recYards": 41.2,
                       "receptions": 4.6,
-                      "targets": 6.2
+                      "targets": 6.2,
+                      "rushTDs": 0.2,
+                      "recTDs": 0.2
                     }
                   },
                   {
@@ -13904,7 +14048,9 @@
                       "rushAttempts": 0.2,
                       "recYards": 91.2,
                       "receptions": 6.4,
-                      "targets": 9.0
+                      "targets": 9.0,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.8
                     }
                   },
                   {
@@ -13929,7 +14075,9 @@
                       "rushAttempts": 9.4,
                       "recYards": 2.4,
                       "receptions": 0.4,
-                      "targets": 0.6
+                      "targets": 0.6,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.0
                     }
                   }
                 ],
@@ -14226,7 +14374,9 @@
                     "rushAttempts": 2.0,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.0,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -14252,7 +14402,9 @@
                       "rushAttempts": 17.6,
                       "recYards": 13.0,
                       "receptions": 1.2,
-                      "targets": 1.6
+                      "targets": 1.6,
+                      "rushTDs": 0.6,
+                      "recTDs": 0.2
                     }
                   },
                   {
@@ -14277,7 +14429,9 @@
                       "rushAttempts": 11.0,
                       "recYards": 7.5,
                       "receptions": 2.0,
-                      "targets": 3.0
+                      "targets": 3.0,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -14302,7 +14456,9 @@
                       "rushAttempts": 9.4,
                       "recYards": 16.6,
                       "receptions": 2.0,
-                      "targets": 3.0
+                      "targets": 3.0,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.0
                     }
                   }
                 ],
@@ -14668,7 +14824,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T12:42:18.912717+00:00",
+            "retrieved_at": "2026-11-13T13:34:58.538683+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -14702,7 +14858,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T12:42:16.968487+00:00",
+          "checked_at": "2026-11-13T13:34:57.608680+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -14934,7 +15090,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T12:42:18.913152+00:00",
+          "generated_at": "2026-11-13T13:34:58.538977+00:00",
           "available": false,
           "quarterbacks": {
             "LV": {
@@ -15158,7 +15314,9 @@
                     "rushAttempts": 2.6,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.2,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -15184,7 +15342,9 @@
                       "rushAttempts": 18.4,
                       "recYards": 10.0,
                       "receptions": 1.8,
-                      "targets": 2.4
+                      "targets": 2.4,
+                      "rushTDs": 0.8,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -15209,7 +15369,9 @@
                       "rushAttempts": 0.0,
                       "recYards": 81.2,
                       "receptions": 6.6,
-                      "targets": 12.4
+                      "targets": 12.4,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.6
                     }
                   },
                   {
@@ -15234,7 +15396,9 @@
                       "rushAttempts": 0.0,
                       "recYards": 76.6,
                       "receptions": 4.6,
-                      "targets": 7.4
+                      "targets": 7.4,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.4
                     }
                   }
                 ],
@@ -15657,7 +15821,9 @@
                     "rushAttempts": 5.8,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.2,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -15683,7 +15849,9 @@
                       "rushAttempts": 13.4,
                       "recYards": 33.2,
                       "receptions": 4.6,
-                      "targets": 5.6
+                      "targets": 5.6,
+                      "rushTDs": 1.2,
+                      "recTDs": 0.2
                     }
                   },
                   {
@@ -15708,7 +15876,9 @@
                       "rushAttempts": 8.6,
                       "recYards": -0.2,
                       "receptions": 0.4,
-                      "targets": 0.8
+                      "targets": 0.8,
+                      "rushTDs": 0.2,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -15733,7 +15903,9 @@
                       "rushAttempts": 0.0,
                       "recYards": 61.8,
                       "receptions": 5.2,
-                      "targets": 7.4
+                      "targets": 7.4,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.4
                     }
                   }
                 ],
@@ -16068,7 +16240,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T12:42:19.077077+00:00",
+            "retrieved_at": "2026-11-13T13:34:58.653676+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -16108,7 +16280,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T12:42:16.968487+00:00",
+          "checked_at": "2026-11-13T13:34:57.608680+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -16339,7 +16511,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T12:42:19.077583+00:00",
+          "generated_at": "2026-11-13T13:34:58.654013+00:00",
           "available": true,
           "quarterbacks": {
             "DAL": {
@@ -16632,7 +16804,9 @@
                     "rushAttempts": 3.0,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.6,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -16658,7 +16832,9 @@
                       "rushAttempts": 10.8,
                       "recYards": 35.0,
                       "receptions": 5.8,
-                      "targets": 6.4
+                      "targets": 6.4,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -16683,7 +16859,9 @@
                       "rushAttempts": 0.0,
                       "recYards": 92.4,
                       "receptions": 7.0,
-                      "targets": 9.6
+                      "targets": 9.6,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.8
                     }
                   },
                   {
@@ -16708,7 +16886,9 @@
                       "rushAttempts": 0.0,
                       "recYards": 102.8,
                       "receptions": 6.8,
-                      "targets": 8.8
+                      "targets": 8.8,
+                      "rushTDs": 0.0,
+                      "recTDs": 1.0
                     }
                   }
                 ],
@@ -17033,7 +17213,9 @@
                     "rushAttempts": 1.0,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.0,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -17059,7 +17241,9 @@
                       "rushAttempts": 16.2,
                       "recYards": 36.8,
                       "receptions": 3.0,
-                      "targets": 4.4
+                      "targets": 4.4,
+                      "rushTDs": 0.4,
+                      "recTDs": 0.2
                     }
                   },
                   {
@@ -17084,7 +17268,9 @@
                       "rushAttempts": 9.2,
                       "recYards": 16.4,
                       "receptions": 2.6,
-                      "targets": 3.4
+                      "targets": 3.4,
+                      "rushTDs": 0.2,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -17109,7 +17295,9 @@
                       "rushAttempts": 0.2,
                       "recYards": 56.0,
                       "receptions": 4.4,
-                      "targets": 8.0
+                      "targets": 8.0,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.0
                     }
                   }
                 ],
@@ -17408,7 +17596,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T12:42:19.210266+00:00",
+            "retrieved_at": "2026-11-13T13:34:58.839577+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -17448,7 +17636,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T12:42:16.968487+00:00",
+          "checked_at": "2026-11-13T13:34:57.608680+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -17678,7 +17866,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T12:42:19.210814+00:00",
+          "generated_at": "2026-11-13T13:34:58.839970+00:00",
           "available": true,
           "quarterbacks": {
             "CIN": {
@@ -17971,7 +18159,9 @@
                     "rushAttempts": 3.0,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.0
+                    "targets": 0.0,
+                    "rushTDs": 0.0,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -17997,7 +18187,9 @@
                       "rushAttempts": 17.2,
                       "recYards": 6.2,
                       "receptions": 1.0,
-                      "targets": 1.4
+                      "targets": 1.4,
+                      "rushTDs": 0.2,
+                      "recTDs": 0.2
                     }
                   },
                   {
@@ -18022,7 +18214,9 @@
                       "rushAttempts": 1.0,
                       "recYards": 52.4,
                       "receptions": 5.0,
-                      "targets": 8.4
+                      "targets": 8.4,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.2
                     }
                   },
                   {
@@ -18047,7 +18241,9 @@
                       "rushAttempts": 3.8,
                       "recYards": 13.4,
                       "receptions": 3.0,
-                      "targets": 4.4
+                      "targets": 4.4,
+                      "rushTDs": 0.2,
+                      "recTDs": 0.0
                     }
                   }
                 ],
@@ -18307,7 +18503,9 @@
                     "rushAttempts": 4.4,
                     "recYards": 0.0,
                     "receptions": 0.0,
-                    "targets": 0.2
+                    "targets": 0.2,
+                    "rushTDs": 0.0,
+                    "recTDs": 0.0
                   }
                 },
                 "top_usage_players": [
@@ -18333,7 +18531,9 @@
                       "rushAttempts": 10.4,
                       "recYards": 8.4,
                       "receptions": 1.8,
-                      "targets": 2.0
+                      "targets": 2.0,
+                      "rushTDs": 0.2,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -18358,7 +18558,9 @@
                       "rushAttempts": 5.8,
                       "recYards": 18.6,
                       "receptions": 2.8,
-                      "targets": 3.6
+                      "targets": 3.6,
+                      "rushTDs": 0.0,
+                      "recTDs": 0.0
                     }
                   },
                   {
@@ -18383,7 +18585,9 @@
                       "rushAttempts": 7.0,
                       "recYards": 8.4,
                       "receptions": 1.8,
-                      "targets": 2.8
+                      "targets": 2.8,
+                      "rushTDs": 0.2,
+                      "recTDs": 0.2
                     }
                   }
                 ],
@@ -18609,7 +18813,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T12:42:19.331170+00:00",
+            "retrieved_at": "2026-11-13T13:34:58.901268+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -18649,7 +18853,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T12:42:16.968487+00:00",
+          "checked_at": "2026-11-13T13:34:57.608680+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -18880,7 +19084,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T12:42:19.331649+00:00",
+          "generated_at": "2026-11-13T13:34:58.901616+00:00",
           "available": true,
           "quarterbacks": {
             "BAL": {
