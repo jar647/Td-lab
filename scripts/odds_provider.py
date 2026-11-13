@@ -59,12 +59,13 @@ def atomic(path, value):
 
 def public_response(value, secret):
     """Defensively exclude echoed credentials from the persisted public catalog."""
+    redact = lambda text: text.replace(secret, '[redacted]') if secret else text
     if isinstance(value, dict):
-        return {k: public_response(v, secret) for k, v in value.items()
+        return {redact(k): public_response(v, secret) for k, v in value.items()
                 if ''.join(c for c in k.lower() if c.isalnum()) not in SENSITIVE_FIELDS}
     if isinstance(value, list):
         return [public_response(v, secret) for v in value]
-    return value.replace(secret, '[redacted]') if isinstance(value, str) else value
+    return redact(value) if isinstance(value, str) else value
 
 
 def retry_time(headers, now):

@@ -88,7 +88,7 @@ class TransportTests(unittest.TestCase):
         self.assertEqual(len(calls),1);self.assertNotIn('PRIVATE_TEST_KEY',str(error.exception))
 
     def test_persisted_catalog_strips_any_echoed_credentials(self):
-        response={'markets':[],'apiKey':'PRIVATE_TEST_KEY','nested':{'token':'sensitive','url':'echo/PRIVATE_TEST_KEY'}}
+        response={'markets':[],'apiKey':'PRIVATE_TEST_KEY','PRIVATE_TEST_KEY':'echoed-key','nested':{'token':'sensitive','url':'echo/PRIVATE_TEST_KEY','prefix-PRIVATE_TEST_KEY':'nested-key'}}
         request_json('markets',{},root=self.root,now=self.now,opener=lambda *a,**k:Response(response))
         persisted=(self.root/'data/odds_provider_cache.json').read_text()
         self.assertNotIn('PRIVATE_TEST_KEY',persisted);self.assertNotIn('sensitive',persisted)
