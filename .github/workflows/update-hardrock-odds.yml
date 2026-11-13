@@ -6,6 +6,8 @@ on:
     paths:
       - ".github/workflows/update-hardrock-odds.yml"
       - "scripts/build_hardrock_feed.py"
+      - "scripts/odds_provider.py"
+      - "tests/test_odds_provider_transport.py"
       - "scripts/capture_forward_bets.py"
       - "tests/test_odds_pipeline.py"
   schedule:
@@ -13,7 +15,9 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: hardrock-odds-feed
+  # NBA and NFL use one provider key and one persisted reset/catalog cache.
+  # Serialize production odds writers; PR and fast availability jobs stay separate.
+  group: nba-feed-writer
   cancel-in-progress: false
 jobs:
   update:
@@ -25,7 +29,11 @@ jobs:
         with:
           python-version: '3.11'
       - name: Test odds publishing and capture entry point
-        run: python -m unittest discover -s tests -p 'test_odds_pipeline.py'
+        run: python -m unittest -v tests.test_odds_pipeline tests.test_odds_provider_transport
+      - name: Load the newest shared provider cooldown and catalogs
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
       - name: Export verified YES anytime TD odds
         env:
           ODDSPAPI_API_KEY: ${{ secrets.ODDSPAPI_API_KEY }}
@@ -43,6 +51,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/hardrock_anytime_td.json data/odds_history/ data/forward/ data/verification_status.json
+          for provider_file in data/odds_provider_state.json data/odds_provider_cache.json; do
+            if test -f "$provider_file"; then git add "$provider_file"; fi
+          done
           if ! git diff --cached --quiet; then
             git commit -m "Refresh verified Hard Rock anytime TD prices"
             for attempt in 1 2 3; do

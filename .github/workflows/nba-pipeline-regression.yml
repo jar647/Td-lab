@@ -54,10 +54,11 @@ jobs:
         run: |
           python - <<'PY'
           import os, subprocess
-          watched={'nba_rosters.py','nba_injuries.py','nba_model.py','nba_pipeline.py','scripts/build_nba_odds.py','scripts/build_hardrock_feed.py','requirements.txt'}
+          price_paths={'scripts/build_nba_odds.py','scripts/build_hardrock_feed.py','scripts/odds_provider.py','scripts/verify_nba_odds_mode.py'}
+          watched={'nba_rosters.py','nba_injuries.py','nba_model.py','nba_pipeline.py','requirements.txt'} | price_paths
           changed=set(subprocess.check_output(['git','diff','--name-only',os.environ['NBA_BASE_SHA'],os.environ['NBA_HEAD_SHA']],text=True).splitlines())
           needed=bool(changed & watched)
-          prices=bool(changed & {'scripts/build_nba_odds.py','scripts/build_hardrock_feed.py'})
+          prices=bool(changed & price_paths)
           with open(os.environ['GITHUB_OUTPUT'],'a') as out: out.write('needed='+str(needed).lower()+'\nprices='+str(prices).lower()+'\n')
           print('Live provider check required:',needed)
           PY
@@ -67,7 +68,17 @@ jobs:
           python nba_feed.py
           python nba_rosters.py
           python nba_injuries.py
-      - name: Verify the existing provider connection for NBA
+      - name: Snapshot retained prices and check outage safeguards
+        if: steps.provider-paths.outputs.prices == 'true'
+        run: |
+          python -m unittest -v tests.test_odds_provider_transport test_nba_odds test_nba_pipeline
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          from scripts.verify_nba_odds_mode import fingerprint
+          Path(os.environ['RUNNER_TEMP'],'nba-odds-before.json').write_text(json.dumps({'sha256':fingerprint('data/nba_market_odds.json')}))
+          PY
+      - name: Attempt the existing NBA provider connection once
         if: steps.provider-paths.outputs.prices == 'true'
         env:
           ODDSPAPI_API_KEY: ${{ secrets.ODDSPAPI_API_KEY }}
@@ -75,6 +86,12 @@ jobs:
       - name: Run the published analyst with real current inputs
         if: steps.provider-paths.outputs.needed == 'true'
         run: python nba_pipeline.py
+      - name: Verify fresh prices or identified rate-limited research mode
+        if: steps.provider-paths.outputs.prices == 'true'
+        run: |
+          python -m scripts.verify_nba_odds_mode \
+            --before "$RUNNER_TEMP/nba-odds-before.json" \
+            --evidence "$RUNNER_TEMP/nba-odds-validation.json"
       - name: Record live-input evidence
         if: always() && steps.provider-paths.outputs.needed == 'true'
         uses: actions/upload-artifact@v4
@@ -83,18 +100,8 @@ jobs:
           path: |
             data/nba_market_status.json
             data/nba_analysis.json
+            ${{ runner.temp }}/nba-odds-validation.json
           retention-days: 7
-      - name: Require actual fresh prices when changing the odds provider
-        if: steps.provider-paths.outputs.prices == 'true'
-        run: |
-          python - <<'PY'
-          import json
-          status=json.load(open('data/nba_market_status.json'))
-          print('NBA provider status:',status.get('status'),status.get('reason_code','ok'))
-          print('Safe source diagnostics:',json.dumps(status.get('diagnostics',{})))
-          if status.get('status')!='ok':
-              raise SystemExit('Live odds gate failed; see NBA provider status above. No fabricated prices substituted.')
-          PY
 
   possession-live-check:
     if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
