@@ -18,6 +18,10 @@ on:
       - 'nfl_goal1.js'
       - 'nfl_td_matchup.js'
       - 'nfl_player_board.js'
+      - 'nfl_top_plays.js'
+      - 'nfl_top_plays_ui.js'
+      - 'test_nfl_top_plays.js'
+      - 'test_nfl_top_plays_ui.js'
       - 'test_nfl_td_matchup.js'
       - 'test_nfl_player_board.js'
       - 'test_nfl_history_chart.js'
@@ -52,6 +56,8 @@ jobs:
       - run: node test_nfl_goal1.js
       - run: node test_nfl_td_matchup.js
       - run: node test_nfl_player_board.js
+      - run: node test_nfl_top_plays.js
+      - run: node test_nfl_top_plays_ui.js
       - run: node test_nfl_history_chart.js
       - run: node test_nfl_matchup_score.js
       - run: node test_nfl_min_score_ui.js

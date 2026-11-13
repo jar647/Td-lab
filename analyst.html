@@ -1,61 +1,9 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CoOk It Up | Game Analyst</title><style>:root{font-family:system-ui;background:#07120f;color:#e9fff3}*{box-sizing:border-box}body{margin:0}header{padding:22px 16px;background:#0d2119;border-bottom:1px solid #285440}main{max-width:800px;margin:auto;padding:18px}h1{margin:0;font-size:25px}h1 span{color:#27e59a}.sub{color:#a1b9ad;font-size:13px;line-height:1.5}.panel{border:1px solid #2b5342;background:#10241b;border-radius:15px;padding:17px;margin:13px 0}select,button,input{width:100%;padding:14px;background:#0a1912;color:white;border:1px solid #39634c;border-radius:10px;font-size:16px}input{padding:12px;background:#0a1912;color:#fff;border:1px solid #39634c;border-radius:9px;font-size:16px}button{background:#16d98a;color:#062017;font-weight:850;margin-top:12px;cursor:pointer}.leg{border-top:1px solid #31523e;padding:15px 0}.pick{color:#48f3ab;font-size:21px;font-weight:800}.small{font-size:12px;color:#b2cabc}.warning{color:#ffd083}.reason{line-height:1.55;font-size:14px}a{color:#4be9a6}.status{padding:10px 0;color:#b8d0c1}</style></head><body><header><h1><img src="./cook-it-up-mark.svg" alt="" width="32" height="32" style="vertical-align:middle;margin-right:6px">CoOk <span style="color:#ffad36">It Up</span></h1><div class="sub">GAME ANALYST · Evidence-led player props · No sportsbook odds needed</div></header><main><a href="./">← Main app</a> · <a href="./results.html?sport=NFL">📊 Recorded recommendation results</a> · <a href="./game-odds.html?sport=NFL">🎲 Game Odds Simulator (ML / ATS / Total)</a><section class="panel"><h2>Game-first matchup research</h2><p class="sub">Choose a matchup. The analyst evaluates recent production, usage, opponent tendencies, and injury uncertainty before selecting alternate lines. Player prop recommendations require a matchup score of at least 60/100. You make the final betting decision.</p><select id="game"><option value="">Loading matchups…</option></select><button id="build">Analyze game & build research ticket</button><div id="status" class="status"></div><div id="feedHealth" class="warning" role="status" aria-live="polite"></div><div id="validationStatus" class="sub" aria-live="polite">Probability validation: checking forward results…</div></section><section id="results"></section><p class="sub">Research tool, not a guarantee. Historical performance is not a calibrated probability. Data source: existing CoOk It Up matchup feed. Verify official active/inactive lists before placing a bet.</p></main><script src="./nfl_game_engine.js?v=nfl-depth-chart-qb-v4"></script><script src="./nfl_goal1.js?v=nfl-prop-score60-v1"></script><script src="./quick_slip.js"></script><script>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CoOk It Up | Game Analyst</title><style>:root{font-family:system-ui;background:#07120f;color:#e9fff3}*{box-sizing:border-box}body{margin:0}header{padding:22px 16px;background:#0d2119;border-bottom:1px solid #285440}main{max-width:800px;margin:auto;padding:18px}h1{margin:0;font-size:25px}h1 span{color:#27e59a}.sub{color:#a1b9ad;font-size:13px;line-height:1.5}.panel{border:1px solid #2b5342;background:#10241b;border-radius:15px;padding:17px;margin:13px 0}select,button,input{width:100%;padding:14px;background:#0a1912;color:white;border:1px solid #39634c;border-radius:10px;font-size:16px}input{padding:12px;background:#0a1912;color:#fff;border:1px solid #39634c;border-radius:9px;font-size:16px}button{background:#16d98a;color:#062017;font-weight:850;margin-top:12px;cursor:pointer}.leg{border-top:1px solid #31523e;padding:15px 0}.pick{color:#48f3ab;font-size:21px;font-weight:800}.small{font-size:12px;color:#b2cabc}.warning{color:#ffd083}.reason{line-height:1.55;font-size:14px}a{color:#4be9a6}.status{padding:10px 0;color:#b8d0c1}</style></head><body><header><h1><img src="./cook-it-up-mark.svg" alt="" width="32" height="32" style="vertical-align:middle;margin-right:6px">CoOk <span style="color:#ffad36">It Up</span></h1><div class="sub">GAME ANALYST · Evidence-led player props · No sportsbook odds needed</div></header><main><a href="./">← Main app</a> · <a href="./results.html?sport=NFL">📊 Recorded recommendation results</a> · <a href="./game-odds.html?sport=NFL">🎲 Game Odds Simulator (ML / ATS / Total)</a><section class="panel"><h2>Game-first matchup research</h2><p class="sub">Choose a matchup. The analyst evaluates recent production, usage, opponent tendencies, and injury uncertainty before selecting alternate lines. Player prop recommendations require a matchup score of at least 60/100. You make the final betting decision.</p><select id="game"><option value="">Loading matchups…</option></select><button id="build">Analyze game & build research ticket</button><div id="status" class="status"></div><div id="feedHealth" class="warning" role="status" aria-live="polite"></div><div id="validationStatus" class="sub" aria-live="polite">Probability validation: checking forward results…</div></section><section id="results"></section><p class="sub">Research tool, not a guarantee. Historical performance is not a calibrated probability. Data source: existing CoOk It Up matchup feed. Verify official active/inactive lists before placing a bet.</p></main><script src="./nfl_game_engine.js?v=nfl-depth-chart-qb-v4"></script><script src="./nfl_goal1.js?v=nfl-prop-score60-v1"></script><script src="./nfl_td_matchup.js?v=nfl-full-boards-v1"></script><script src="./nfl_player_board.js?v=nfl-full-boards-v1"></script><script src="./nfl_top_plays.js?v=nfl-top-plays-v1"></script><script src="./quick_slip.js"></script><script>
 const $=id=>document.getElementById(id);let players=[];let exclusions=new Set();let feedMeta=null;let currentModel=null;let currentJoint=null;let validationGate=null;let desiredLegs=4;let gameLeg=null;let gamePicksByKey=new Map();let manualLines=new Map();let windowLastMatchup=null;
 const n=v=>v===null||v===undefined||v===''?null:(Number.isFinite(Number(v))?Number(v):null);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const defs=[
-{key:'rushYards',season:'playerRushYards',recent:'recent3RushYards',volume:'playerCarries',volumeLabel:'carries/game',def:'defRushYardsAllowed',ratio:'RUSH',label:'rushing yards',positions:['RB','QB'],steps:[25,40,50,60,70,80,100]},
-{key:'recYards',season:'playerRecYards',recent:'recent3RecYards',volume:'playerTargets',volumeLabel:'targets/game',def:'defRecYardsAllowed',ratio:'REC',label:'receiving yards',positions:['WR','TE','RB'],steps:[20,25,30,40,50,60,70,80,100]},
-{key:'receptions',season:'playerReceptions',recent:'recent3Receptions',volume:'playerTargets',volumeLabel:'targets/game',def:'defReceptionsAllowed',ratio:'CATCH',label:'receptions',positions:['WR','TE','RB'],steps:[2,3,4,5,6,7,8]},
-{key:'passYards',season:'playerPassYards',recent:'recent3PassYards',volume:'playerPassAttempts',volumeLabel:'attempts/game',def:'defPassYardsAllowed',ratio:'PASS',label:'passing yards',positions:['QB'],steps:[150,175,200,225,250,275,300]}];
-function choose(p,d,scenarioLookup){
-if(p.qbRole==='BACKUP'||!d.positions.includes(p.pos)||p.playerAppearancesVerified===false)return null;
-const sample=n(p.last5GamesPlayed)||0;if(sample<3)return null;
-const category={rushYards:'RUSH',recYards:'REC',receptions:'CATCH',passYards:'PASS'}[d.key];
-const researchScore=PropVaultGoal1.matchupScore(p,category);
-if(!PropVaultGoal1.qualifies(researchScore))return null;
-const season=n(p[d.season]),recent=n(p[d.recent]),volume=n(p[d.volume]);if(season===null||season<=0||recent===null)return null;
-if(d.key==='rushYards'&&volume<5)return null;
-if(d.key==='passYards'&&volume<20)return null;
-if((d.key==='recYards'||d.key==='receptions')&&volume<3)return null;
-const last=(p.last5GameStats||[]).map(g=>n(g[d.key])).filter(v=>v!==null);
-if(last.length<3)return null;
-const ratio=n(p.defenseOpponentRatio?.[d.ratio]);const matchup=ratio!==null?Math.max(.85,Math.min(1.12,ratio)):1;
-const projected=(season*.5+recent*.5)*matchup;
-// Pick a meaningful line that the observed data can support. Do not
-// automatically walk down to a near-free alternate just to force a leg.
-const id=String(p.player_id||p.team+'|'+p.player);
-const viable=d.steps.map(line=>{
- const scenario=scenarioLookup.get(id+'|'+d.key+'|'+line);
- return {line,hits:last.filter(v=>v>=line).length,scenarioRate:scenario?.scenarioRate,modeledMean:scenario?.modeledMean};
-}).filter(x=>x.scenarioRate!==undefined&&x.scenarioRate>=.57&&x.modeledMean>0&&x.line<=x.modeledMean*1.04);
-if(!viable.length)return null;
-const floor={receptions:3,recYards:30,rushYards:40,passYards:200}[d.key];
-const ranked=viable.map(x=>{
- const meaningful=x.line>=floor;
- const proximity=x.line/Math.max(1,x.modeledMean);
- return {...x,utility:x.scenarioRate*65+proximity*38+(meaningful?9:-24)};
-}).sort((x,y)=>y.utility-x.utility||y.line-x.line);
-const best=ranked[0];
-if(best.line<floor&&best.utility<38)return null;
-const line=best.line,hits=best.hits;
-const status=String(p.injuryReportStatus||'NOT_REPORTED').toUpperCase();
-const availability=String(p.availability||'UNVERIFIED').toUpperCase();
-if(/OUT|IR|PUP|SUSPENDED|INACTIVE/.test(status+' '+availability))return null;
-const practice=String(p.injuryPracticeStatus||'NOT_REPORTED').toUpperCase();
-const practiceFlag=/DNP_PRACTICE|LIMITED_PRACTICE/.test(practice);
-const injuryFlag=/QUESTIONABLE|DOUBTFUL|LIMITED|UNVERIFIED|NOT_REPORTED/.test(status+' '+availability)||practiceFlag;
-const consistency=hits/last.length;
-const score=best.utility+best.scenarioRate*20+Math.min(1,sample/5)*8-(injuryFlag?12:0);
-const reasons=[`Game-first scenario frequency: ${(best.scenarioRate*100).toFixed(1)}% at this line (UNCALIBRATED).`,`Recent form: ${recent.toFixed(d.key==='receptions'?1:0)} ${d.label}/game over the latest three recorded games versus ${season.toFixed(d.key==='receptions'?1:0)} season average.`,`Cleared ${line}+ in ${hits} of the last ${last.length} recorded games.`,`Workload: ${volume.toFixed(1)} ${d.volumeLabel}.`];
-if(ratio!==null)reasons.push(`Opponent matchup factor: ${ratio.toFixed(2)}× its opponents' baseline in this category (${ratio>1.04?'favorable':ratio<.96?'challenging':'roughly neutral'}).`);
-else reasons.push('Opponent-adjusted category data unavailable; selection relies on production and workload.');
-const risks=[];if(injuryFlag)risks.push(`Game-day status not confirmed (${status}; roster: ${availability}).`);
-if(practiceFlag)risks.push(`Practice report: ${practice.replace('_PRACTICE','')}. This is NOT an official game-day OUT designation.`);
-if(p.pos==='RB'&&Array.isArray(p.possibleReturningTeammates)&&p.possibleReturningTeammates.length)risks.push('Potential returning teammates could alter workload.');
-if(last.length<5)risks.push('Limited recent sample.');
-if(line<floor)risks.push('Very conservative alternate line. Book availability and price are unverified; omit it if payout contribution is negligible.');
-return {p,d,line,score,researchScore,reasons,risks,hits,sample,injuryFlag,scenarioRate:best.scenarioRate};
-}
+const defs=PropShopNFLTopPlays.defs;
+const choose=PropShopNFLTopPlays.choose;
 function invokeGameWorker(gamePlayers,count,selected){
  return new Promise((resolve,reject)=>{
   if(typeof Worker==='undefined'){reject(Error('Web Workers are unavailable on this browser'));return}
@@ -259,8 +207,9 @@ async function init(){
    fetch('./data/game_picks.json',{cache:'no-store'}).catch(()=>null)
   ]);
   const r=responses[0];if(!r.ok)throw Error('Feed HTTP '+r.status);
-  players=await r.json();
+  const playerFeed=await r.json();
   feedMeta=responses[1]?.ok?await responses[1].json():null;
+  players=PropShopNFLTopPlays.mergeRecords(playerFeed,feedMeta?.rosterPlayers||[]);
   validationGate=responses[3]?.ok?await responses[3].json():null;
   const gameScores=responses[5]?.ok?await responses[5].json():null;
   gamePicksByKey=new Map((gameScores?.games||[]).map(x=>[[x.home,x.away].sort().join('-'),x]));

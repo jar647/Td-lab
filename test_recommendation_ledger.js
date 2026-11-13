@@ -78,22 +78,102 @@ const qb=(id,team,opp,quality)=>({player_id:id,player:id,team,opp,pos:'QB',avail
 const nflPlayers=[qb('qualified','A','B',300),qb('boundary-60','A','B',100),qb('below-60','B','A',95),qb('below-floor','B','A',90)];
 const nflSource=require('./scripts/recommendation_sources.cjs').captureSources(now,{onlySport:'NFL',nflInputs:{feed:nflPlayers,status:{generated_at:before},games:{generated_at:before,games:[{game_id:'nfl-g',home:'A',away:'B',kickoff_at:new Date(now+6*3600000).toISOString()}]}},nflEngine:{simulate:()=>({markets:nflPlayers.flatMap(p=>[150,175,200,225,250,275,300].map(line=>({id:p.player_id,market:'passYards',line,scenarioRate:.99,modeledMean:300})))})}});
 assert(!nflSource.coverage.some(c=>c.status==='error'),JSON.stringify(nflSource.coverage));assert(nflSource.picks.some(p=>p.playerId==='qualified'));assert(nflSource.picks.some(p=>p.playerId==='boundary-60'&&p.score===60));assert(!nflSource.picks.some(p=>['below-floor','below-60'].includes(p.playerId)));assert(nflSource.picks.every(p=>p.scoreKind==='NFL matchup score /100'&&p.score>=60&&p.score<=100));
-// Every eligible TD research row is captured; a positional top-three cap may
-// not silently lose players from the complete public board.
+// The compact page captures the actual category leaders it displays. The
+// retired full TD roster board must no longer inflate new recommendation counts.
+const topPlays=require('./nfl_top_plays');
 const tdPlayers=Array.from({length:50},(_,i)=>({player_id:'td-'+i,player:'TD Player '+i,team:i%2?'B':'A',opp:i%2?'A':'B',pos:'RB',market:'ATD',availability:'ROSTER_ACTIVE',playerAppearancesVerified:true,games:5,last5GamesPlayed:5,tdallowed:1.2,rzallowed:3.5,playerRz:2.5,rzshare:35,goalLine5:.8,snapShare:.85,playerAnytimeTDs:1,recent3AnytimeTDs:1}));
 const tdWithheld=[{...tdPlayers[0],player_id:'td-out',availability:'OUT'},{...tdPlayers[0],player_id:'td-low',tdallowed:0,rzallowed:0,playerRz:0,rzshare:0,goalLine5:0,snapShare:0,playerAnytimeTDs:0,recent3AnytimeTDs:0}];
 const tdSource=require('./scripts/recommendation_sources.cjs').captureSources(now,{onlySport:'NFL',nflInputs:{feed:[...tdPlayers,...tdWithheld],status:{generated_at:before},games:{generated_at:before,games:[{game_id:'td-game',home:'A',away:'B',kickoff_at:new Date(now+6*3600000).toISOString()}]}},nflEngine:{simulate:()=>({markets:[]})}});
 assert(!tdSource.coverage.some(c=>c.status==='error'),JSON.stringify(tdSource.coverage));
-assert.equal(tdSource.picks.length,50,'all eligible TD rows are frozen without truncation');
-assert(tdSource.picks.every(p=>p.board==='Anytime TD research'&&p.score===100&&p.inputs.productionAvailable===true));
+assert.equal(tdSource.picks.length,3,'the TD-only compact game shows and freezes three category leaders');
+assert(tdSource.picks.every(p=>p.board==='Game top plays'&&p.score===100));
+const tdDisplayed=topPlays.build([...tdPlayers,...tdWithheld],{game_id:'td-game',home:'A',away:'B',kickoff_at:new Date(now+6*3600000).toISOString()},{markets:[]},{now,fixtures:[{game_id:'td-game',home:'A',away:'B',kickoff_at:new Date(now+6*3600000).toISOString()}],feedGeneratedAt:before,fixturesGeneratedAt:before});
+assert.deepEqual(tdSource.picks.map(p=>p.playerId),tdDisplayed.visible.map(c=>String(c.p.player_id)),'capture matches the exact displayed TD leaders');
 assert(!tdSource.picks.some(p=>['td-out','td-low'].includes(p.playerId)));
+assert(!sources.picks.some(p=>p.board==='Anytime TD research'),'the retired public board emits no new records');
+const legacyTD={...base,sport:'NFL',board:'Anytime TD research',market:'anytime_td',side:'winner',line:null,score:69,scoreKind:'Anytime TD matchup /100',modelVersion:'nfl-td-role-retired-production',label:'Original legacy TD pick',inputs:{scoringVersion:'nfl-td-role-v1',performanceScore:74,opponentScore:64,scoreFactors:[{key:'tds',value:.5}],depthChart:{unit:'first',source:'https://example.com/depth'}}};
+const legacyTDLedger=api.capture(null,[legacyTD],now).ledger,legacyTDOriginal=structuredClone(legacyTDLedger.picks[0]);
+const legacyRetained=api.capture(legacyTDLedger,tdSource.picks,now+1000).ledger;
+assert.deepEqual(legacyRetained.picks.find(p=>p.id===legacyTDOriginal.id),legacyTDOriginal,'retiring a producer preserves every original legacy pick field and its evidence');
+const captureTDPrices=tdPrices=>require('./scripts/recommendation_sources.cjs').captureSources(now,{onlySport:'NFL',nflInputs:{feed:tdPlayers,status:{generated_at:before},games:{generated_at:before,games:[{game_id:'td-game',home:'A',away:'B',kickoff_at:new Date(now+6*3600000).toISOString()}]},tdPrices},nflEngine:{simulate:()=>({markets:[]})}}).picks;
+const offeredTD={source:'Verified test book',retrieved_at_utc:before,games:[{fixture_id:'td-fixture',fixture_metadata:{startTime:new Date(now+6*3600000).toISOString(),participant1Abbr:'A',participant2Abbr:'B'},selections:tdPlayers.map(p=>({player_name:p.player,american_odds:200}))}]};
+assert(captureTDPrices(offeredTD).every(p=>p.board==='Game top plays'&&p.americanOdds===200&&p.priceObservedAt===before&&p.priceFixture==='td-fixture'),'fresh identity-matched prices attach to the current TD board');
+assert(captureTDPrices({...offeredTD,retrieved_at_utc:new Date(now-3600001).toISOString()}).every(p=>p.americanOdds===undefined),'stale quotes never attach to current TD plays');
+const wrongTD=structuredClone(offeredTD);wrongTD.games[0].fixture_metadata.participant2Abbr='C';
+assert(captureTDPrices(wrongTD).every(p=>p.americanOdds===undefined),'quotes from a different fixture never attach to current TD plays');
 // TD capture is independent of QB/game-model availability and later games
 // still get a chance to publish supported research.
 const nextTD={...tdPlayers[0],player_id:'next-game-td',player:'Next Game TD',team:'C',opp:'D'};
 const isolatedTD=require('./scripts/recommendation_sources.cjs').captureSources(now,{onlySport:'NFL',nflInputs:{feed:[...tdPlayers,nextTD],status:{generated_at:before},games:{generated_at:before,games:[{game_id:'qb-unavailable',home:'A',away:'B',kickoff_at:new Date(now+6*3600000).toISOString()},{game_id:'next-game',home:'C',away:'D',kickoff_at:new Date(now+7*3600000).toISOString()}]}},nflEngine:{simulate:records=>{if(records.some(r=>r.team==='A'))throw Error('QB model unavailable');return {markets:[]}}}});
-assert.equal(isolatedTD.picks.length,51,'independent TD research survives a game-model failure');
+assert.equal(isolatedTD.picks.length,4,'per-game displayed TD leaders survive a model failure without global truncation');
+assert(isolatedTD.picks.every(p=>p.board==='Game top plays'),'only the current public TD recommendation board emits new records');
+assert(isolatedTD.picks.some(p=>p.board==='Game top plays'&&p.gameId==='qb-unavailable'&&p.market==='anytime_td'),'main-game TD plays remain capturable without the game simulation');
 assert(isolatedTD.picks.some(p=>p.playerId==='next-game-td'),'later games still process');
 assert(isolatedTD.coverage.some(c=>c.gameId==='qb-unavailable'&&c.status==='partial'));
+
+// The compact game page exposes the union of category leaders, not only the
+// All-props top three. Its exact default lines/scores must all be captured.
+const gameFixture={game_id:'main-game',home:'A',away:'B',kickoff_at:new Date(now+6*3600000).toISOString()};
+const mainPlayer=(id,pos,team)=>({
+ player_id:id,player:id,market:'ATD',pos,team,opp:team==='A'?'B':'A',
+ availability:'ROSTER_ACTIVE',playerAppearancesVerified:true,games:5,last5GamesPlayed:5,
+ playerPassYards:300,playerPassAttempts:40,recent3PassYards:300,
+ playerRushYards:100,playerCarries:20,recent3RushYards:100,
+ playerRecYards:100,playerTargets:10,recent3RecYards:100,
+ playerReceptions:8,recent3Receptions:8,
+ defPassYardsAllowed:300,defPassAttemptsAllowed:40,
+ defRushYardsAllowed:100,defRushAttemptsAllowed:20,
+ defRecYardsAllowed:130,defTargetsAllowed:13,defReceptionsAllowed:9,
+ defenseOpponentRatio:{PASS:1,RUSH:1,REC:1,CATCH:1},
+ tdallowed:1.2,rzallowed:3.5,playerRz:2.5,rzshare:35,goalLine5:.8,snapShare:.85,
+ playerAnytimeTDs:1,recent3AnytimeTDs:1,
+ last5GameStats:Array.from({length:5},()=>({passYards:300,rushYards:100,recYards:100,receptions:8,rushTDs:1,recTDs:0}))
+});
+const mainPlayers=['QB','RB','WR','TE'].flatMap((pos,i)=>['A','B'].map(team=>mainPlayer(i+'-'+team,pos,team)));
+const mainSimulation={markets:mainPlayers.flatMap(p=>topPlays.defs.flatMap(d=>d.steps.map(line=>({id:p.player_id,market:d.key,line,scenarioRate:.8,modeledMean:p[d.season]}))))};
+const displayed=topPlays.build(mainPlayers,gameFixture,mainSimulation,{now,fixtures:[gameFixture],feedGeneratedAt:before,fixturesGeneratedAt:before});
+assert(displayed.visible.length>3,'category leaders beyond All-props top three are visible');
+const mainCapture=require('./scripts/recommendation_sources.cjs').captureSources(now,{onlySport:'NFL',nflInputs:{feed:mainPlayers,status:{generated_at:before},games:{generated_at:before,games:[gameFixture]}},nflEngine:{simulate:(_pool,count,seed)=>{assert.equal(count,10000);assert.equal(seed,982451653);return mainSimulation;}}});
+assert(!mainCapture.coverage.some(c=>c.status==='error'||c.status==='partial'),JSON.stringify(mainCapture.coverage));
+const compactSaved=mainCapture.picks.filter(p=>p.board==='Game top plays');
+const defaults=c=>[String(c.p.player_id),c.market,c.side,c.market==='anytime_td'?null:c.line,c.researchScore];
+const savedDefaults=p=>[p.playerId,p.market,p.side,p.line,p.score];
+assert.deepEqual(compactSaved.map(savedDefaults).sort(),displayed.visible.map(defaults).sort(),'every displayed category default is frozen exactly once with the same score/line');
+for(const category of ['PASS','RUSH','REC','CATCH','TD'])assert(compactSaved.some(p=>p.inputs.category===category),'category captured: '+category);
+assert(compactSaved.every(p=>p.modelVersion.startsWith('nfl-top-plays-')&&p.score>=60&&p.score<=100&&p.side!=='under'));
+const frozenCompact=api.capture(c.ledger,compactSaved,now).ledger;
+assert.deepEqual(frozenCompact.picks.find(x=>x.id===original.id).inputs,original.inputs,'adding the game board preserves earlier input evidence');
+const compactOriginal=structuredClone(frozenCompact.picks.find(x=>x.board==='Game top plays'));
+const changedCompact={...compactSaved.find(x=>x.playerId===compactOriginal.playerId&&x.market===compactOriginal.market),line:compactOriginal.market==='anytime_td'?null:compactOriginal.line+5,score:99,label:'Later display revision'};
+const compactAgain=api.capture(frozenCompact,[changedCompact],now+1000).ledger.picks.find(x=>x.id===compactOriginal.id);
+assert.equal(compactAgain.score,compactOriginal.score);assert.equal(compactAgain.line,compactOriginal.line);assert.equal(compactAgain.capturedAt,compactOriginal.capturedAt);
+assert.deepEqual(compactAgain.inputs,compactOriginal.inputs,'frozen main-game evidence is never replaced by a later display');
+assert.equal(compactAgain.revisions.length,1);
+
+// Main page, dedicated analyst and capture must send the same raw roster cues
+// into the engine. A sourced current QB with missing history forces a team
+// volume fallback; omitting that identity silently substitutes an old QB.
+const engine=require('./nfl_game_engine');
+const rosterNow=Date.now(),rosterStamp=new Date(rosterNow).toISOString();
+const rosterFixture={game_id:'roster-qb-game',home:'A',away:'B',kickoff_at:new Date(rosterNow+6*3600000).toISOString()};
+const rosterVerified=mainPlayers.map(p=>{
+ const qb=p.pos==='QB',rb=p.pos==='RB',wr=p.pos==='WR';
+ const values={passYards:qb?300:0,passAttempts:qb?40:0,rushYards:rb?90:qb?15:0,rushAttempts:rb?18:qb?3:0,recYards:rb?22:wr?100:qb?0:65,targets:rb?4:wr?12:qb?0:8,receptions:rb?3:wr?8:qb?0:6,rushTDs:0,recTDs:0};
+ const history=Array.from({length:5},(_,i)=>({...values,week:i+1,gameId:'past-'+i}));
+ return {...p,season:2026,teamPassAttemptsPerGame:40,playerPassYards:values.passYards,playerPassAttempts:values.passAttempts,recent3PassYards:values.passYards,playerRushYards:values.rushYards,playerCarries:values.rushAttempts,recent3RushYards:values.rushYards,playerRecYards:values.recYards,playerTargets:values.targets,recent3RecYards:values.recYards,playerReceptions:values.receptions,recent3Receptions:values.receptions,seasonGameStats:history,last5GameStats:history,tdallowed:0,rzallowed:0,playerRz:0,rzshare:0,goalLine5:0,playerAnytimeTDs:0,recent3AnytimeTDs:0};
+});
+const rosterQB={player_id:'current-qb-without-history',player:'Sourced current QB',team:'A',opp:'B',pos:'QB',market:'ATD',season:2026,availability:'ROSTER_ACTIVE',displayOnly:true,playerAppearancesVerified:false,games:0,last5GamesPlayed:0,seasonGameStats:[],last5GameStats:[],depthChart:{order:1,unit:'first',position:'QB',sourceStatus:'ok',season:2026,observedAt:rosterStamp,source:'https://example.com/team/depth'}};
+const mergedRoster=topPlays.mergeRecords(rosterVerified,[rosterQB]);
+assert.equal(engine.build(rosterVerified).teams.find(t=>t.team==='A').outlook.quarterbackPlayerPropsAvailable,true,'omitting the current QB would select earlier player history');
+const rosterSimulation=engine.simulate(mergedRoster,10000,982451653,[]),fallback=rosterSimulation.teams.find(t=>t.team==='A');
+assert.equal(fallback.quarterbackSelection,'TEAM_VOLUME_FALLBACK');assert.equal(fallback.quarterbackPlayerPropsAvailable,false);
+assert(!rosterSimulation.markets.some(m=>m.team==='A'&&m.market==='passYards'),'neither the current historyless QB nor an old named QB receives a passing market');
+const rosterOptions={now:rosterNow,fixtures:[rosterFixture],feedGeneratedAt:rosterStamp,fixturesGeneratedAt:rosterStamp};
+const rosterDisplayed=topPlays.build(mergedRoster,rosterFixture,rosterSimulation,rosterOptions);
+const rosterCapture=require('./scripts/recommendation_sources.cjs').captureSources(rosterNow,{onlySport:'NFL',nflInputs:{feed:rosterVerified,status:{generated_at:rosterStamp,rosterPlayers:[rosterQB]},games:{generated_at:rosterStamp,games:[rosterFixture]}},nflEngine:{simulate:(pool,count,seed)=>{assert(pool.some(p=>p.player_id===rosterQB.player_id&&p.playerAppearancesVerified===false),'source-only QB cue reaches the capture engine unchanged');assert.equal(count,10000);assert.equal(seed,982451653);assert.equal(engine.build(pool).teams.find(t=>t.team==='A').outlook.quarterbackSelection,'TEAM_VOLUME_FALLBACK');return rosterSimulation;}}});
+assert(!rosterCapture.coverage.some(c=>c.status==='error'||c.status==='partial'),JSON.stringify(rosterCapture.coverage));
+assert.deepEqual(rosterCapture.picks.filter(p=>p.board==='Game top plays').map(savedDefaults).sort(),rosterDisplayed.visible.map(defaults).sort(),'capture freezes exactly the main page default scores and lines under current QB fallback');
+assert(!rosterCapture.picks.some(p=>p.playerId===rosterQB.player_id||p.team==='A'&&p.market==='passYards'),'no source-only or silently substituted QB recommendation is captured');
 
 // A made-three count of zero is known; absent/malformed/conflicting evidence is not zero.
 for(const [stats,actual] of [[{'3PT':'0-7'},0],[{'3PT':'3-7'},3],[{'3PM':'3'},3],[{'3PTM':3},3],[{'3PM':3,'3PT':'3-7'},3],[{},null],[{'3PT':'8-7'},null],[{'3PT':'3-7','3PM':2},null],[{'3PM':null},null]]){
