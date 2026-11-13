@@ -11,23 +11,28 @@
  const finite=value=>typeof value==='number'&&Number.isFinite(value);
  function create(options){
   const host=options.root,heading=options.heading,status=options.status;
-  const now=options.now||Date.now,cache=new Map(),lines=new Map();
-  let category='ALL',result=null,pending=null,currentKey='',lastRecords=null,generation=0,timer=null,destroyed=false;
+  const now=options.now||Date.now,cache=new Map(),lines=new Map(),failed=new Set();
+  let category='ALL',result=null,pending=null,currentKey='',inputKey='',lastRecords=null,generation=0,timer=null,destroyed=false;
   const setTimer=options.setTimeout||setTimeout,clearTimer=options.clearTimeout||clearTimeout;
   function inputs(){
-   const state=options.getState(),selected=options.getGame();
+   const state=options.getState(),selected=options.getGame()||'ALL';
    const fixtures=Array.isArray(state.fixtures)?state.fixtures:[];
    const fixture=fixtures.find(g=>fixturePair(g)===selected);
    return {state,selected,fixture,buildOptions:{now:now(),fixtures,feedGeneratedAt:state.feedGeneratedAt,
     fixturesGeneratedAt:state.fixturesGeneratedAt,excluded:state.excluded}};
   }
-  function snapshot(simulation){const x=inputs();return top.build(x.state.records,x.fixture,simulation,x.buildOptions)}
-  function cancel(){if(pending){pending.worker.terminate();pending.resolve(null);pending=null}generation++}
+  const fixtureId=g=>String(g?.game_id??g?.id??'');
+  function snapshot(){
+   const x=inputs();
+   return x.selected==='ALL'?top.slate(x.state.records,x.state.fixtures,cache,x.buildOptions):
+    top.build(x.state.records,x.fixture,cache.get(fixtureId(x.fixture))||null,x.buildOptions);
+  }
+  function cancel(){if(pending){for(const worker of pending.active.values())worker.terminate();pending.resolve(null);pending=null}generation++}
   function schedule(){
    if(timer)clearTimer(timer);
    if(destroyed||!result?.ready)return;
-   const kickoff=Date.parse(result.fixture?.kickoff_at||'');
-   timer=setTimer(()=>refresh(),Math.max(1,Math.min(30000,kickoff-now()+1)));
+   const games=result.games||[result.fixture],kickoff=Math.min(...games.map(g=>Date.parse(g?.kickoff_at||'')).filter(t=>Number.isFinite(t)&&t>now()));
+   timer=setTimer(()=>{failed.clear();return refresh()},Math.max(1,Math.min(30000,kickoff-now()+1)));
    timer?.unref?.();
   }
   function chosen(row){
@@ -43,6 +48,7 @@
   }
   function card(row,index){
    const p=row.p,alt=chosen(row),isTD=row.market==='anytime_td';
+   const fixture=row.fixture||result.fixture;
    const line=isTD?'Anytime rushing / receiving TD':alt.line+'+ '+row.d.label;
    const usage=(row.reasons||[]).find(s=>/^Workload:/.test(s));
    const evidence=row.opponentContext;
@@ -57,7 +63,9 @@
    const source=p.depthChart?.source,link=typeof source==='string'&&/^https:\/\//i.test(source)?'<p><a href="'+esc(source)+'" target="_blank" rel="noopener noreferrer">Depth-chart source</a></p>':'';
    return '<article class="matchrow nfl-top-play" data-play-key="'+esc(row.key)+'" data-player-id="'+esc(p.player_id)+'" data-score="'+row.researchScore+'">'+
     '<div class="row"><span class="pill">'+(index===0?'BEST SINGLE':'#'+(index+1))+'</span><strong class="score mono nfl-top-score">'+row.researchScore+'<small>/100</small></strong></div>'+
-    '<h3>'+esc(p.player)+' <span class="pill">'+esc(p.team)+' · '+esc(p.pos)+'</span></h3>'+(questionable?'<p class="notice">QUESTIONABLE · verify the official active list</p>':'')+'<p class="nfl-top-selection">'+esc(line)+'</p>'+
+    '<h3>'+esc(p.player)+' <span class="pill">'+esc(p.team)+' · '+esc(p.pos)+'</span></h3>'+
+    (fixture?'<p class="statsline nfl-top-matchup">'+esc(fixture.away+' @ '+fixture.home)+'</p>':'')+
+    (questionable?'<p class="notice">QUESTIONABLE · verify the official active list</p>':'')+'<p class="nfl-top-selection">'+esc(line)+'</p>'+
     '<div class="bar"><div style="width:'+row.researchScore+'%"></div></div><p class="statsline">'+esc(opposing||'Opponent evidence requires review.')+'</p>'+
     (usage?'<p class="statsline">'+esc(usage)+'</p>':'')+'<p class="statsline">'+esc(recent)+'</p>'+alternatives+
     '<button type="button" class="primary nfl-top-add" data-top-add="'+esc(row.key)+'">＋ Add to Quick Slip</button>'+
@@ -66,46 +74,56 @@
     (row.risks||[]).map(s=>'<p class="notice">'+esc(s)+'</p>').join('')+link+'</details></article>';
   }
   function render(loading=false,error=''){
-   const selected=options.getGame();
-   if(heading)heading.textContent=result?.fixture?'Top plays · '+result.fixture.away+' @ '+result.fixture.home:'NFL TOP PLAYS';
-   if(!selected||selected==='ALL'){
-    host.innerHTML='<p class="muted">Choose a game above to see its best single and top plays.</p>';
-    if(status)status.textContent='';return;
-   }
-   const rows=top.select(result,category,3);
-   host.innerHTML=rows.length?rows.map(card).join(''):'<p class="'+(loading?'muted':'notice')+'">'+esc(loading?'Finding the top plays for this matchup…':'PASS · '+(result?.reason||'No supported plays meet the 60/100 minimum in this category.'))+'</p>';
-   if(status)status.textContent=loading?'Analyzing player usage and opponent matchups…':
-    error?(rows.length?'Showing supported TD research. ':'')+error:rows.length+' qualifying '+(rows.length===1?'play':'plays')+' · Matchup scores, not win probabilities. Verify player status and sportsbook lines.';
+   const labels={ALL:'Top plays',PASS:'Best passing plays',RUSH:'Best rushing plays',REC:'Best receiving plays',CATCH:'Best reception plays',TD:'Best anytime TD plays'};
+   if(heading)heading.textContent=labels[category]+' · '+(result?.fixture?result.fixture.away+' @ '+result.fixture.home:'All games');
+   const rows=loading&&category!=='TD'?[]:top.select(result,category,3);
+   host.innerHTML=rows.length?rows.map(card).join(''):'<p class="'+(loading?'muted':'notice')+'">'+esc(loading?'Finding the best plays across '+(result?.fixture?'this matchup':'all games')+'…':'PASS · '+(result?.reason||'No supported plays meet the 60/100 minimum in this category.'))+'</p>';
+   const games=result?.games||(result?.ready?[result.fixture]:[]),completed=games.filter(g=>cache.has(fixtureId(g))||failed.has(fixtureId(g))).length;
+   const unavailable=games.filter(g=>failed.has(fixtureId(g))).length;
+   if(status)status.textContent=loading&&category!=='TD'?'Analyzing '+completed+' of '+games.length+' games for the best plays…':
+    error?(rows.length?'Showing supported TD research. ':'')+error:rows.length+' qualifying '+(rows.length===1?'play':'plays')+
+    (unavailable?' · '+unavailable+' game simulation'+(unavailable===1?'':'s')+' unavailable':'')+' · Matchup scores, not win probabilities. Verify player status and sportsbook lines.';
   }
   function refresh(){
    if(destroyed)return Promise.resolve(null);
    const x=inputs();
-   if(lastRecords!==x.state.records){cancel();cache.clear();lines.clear();currentKey='';lastRecords=x.state.records}
-   result=top.build(x.state.records,x.fixture,null,x.buildOptions);
-   if(!x.selected||x.selected==='ALL'||!result.ready){cancel();currentKey='';render();schedule();return Promise.resolve(result)}
    const excluded=(x.state.records||[]).filter(r=>typeof x.state.excluded==='function'&&x.state.excluded(r)).map(r=>String(r.player_id||r.player)).sort();
-   const key=JSON.stringify([x.selected,x.fixture?.game_id||x.fixture?.id,x.fixture?.kickoff_at,x.state.feedGeneratedAt,x.state.fixturesGeneratedAt,excluded]);
+   const sourceKey=JSON.stringify([x.state.feedGeneratedAt,x.state.fixturesGeneratedAt,x.state.fixtures,excluded]);
+   if(lastRecords!==x.state.records||sourceKey!==inputKey){cancel();cache.clear();failed.clear();lines.clear();currentKey='';inputKey=sourceKey;lastRecords=x.state.records}
+   const key=x.selected;
    if(key!==currentKey){cancel();lines.clear();currentKey=key}
-   if(cache.has(key)){result=snapshot(cache.get(key));render();schedule();return Promise.resolve(result)}
-   if(pending?.key===key){render(true);return pending.promise}
-   render(true);
-   let worker;
-   try{worker=options.workerFactory()}catch(error){render(false,'Game simulation unavailable: '+error.message);schedule();return Promise.resolve(result)}
+   result=snapshot();
+   if(!result.ready){cancel();render();schedule();return Promise.resolve(result)}
+   if(pending){render(true);return pending.promise}
+   const games=result.games||[result.fixture],queue=games.filter(g=>!cache.has(fixtureId(g))&&!failed.has(fixtureId(g)));
+   if(!queue.length){render();schedule();return Promise.resolve(result)}
    const token=generation;
    let resolve;const promise=new Promise(r=>{resolve=r});
-   pending={worker,resolve,promise,key};
-   function finish(simulation,error=''){
-    worker.terminate();
-    if(destroyed||token!==generation||options.getGame()!==x.selected){resolve(null);return}
-    pending=null;
-    if(simulation)cache.set(key,simulation);
-    result=snapshot(simulation);render(false,error);schedule();resolve(result);
+   const batch={resolve,promise,active:new Map(),queue};pending=batch;render(true);
+   function pump(){
+    if(destroyed||token!==generation||pending!==batch)return;
+    while(batch.active.size<2&&batch.queue.length){
+     const game=batch.queue.shift(),id=fixtureId(game),gameKey=fixturePair(game);
+     let worker;
+     try{worker=options.workerFactory()}catch{failed.add(id);continue}
+     batch.active.set(id,worker);
+     let finished=false;
+     function finish(simulation){
+      if(finished)return;finished=true;
+      worker.terminate();
+      if(destroyed||token!==generation||pending!==batch)return;
+      batch.active.delete(id);
+      if(simulation&&Array.isArray(simulation.markets))cache.set(id,simulation);else failed.add(id);
+      result=snapshot();render(true);pump();
+     }
+     worker.onmessage=e=>finish(e.data?.result||null);worker.onerror=()=>finish(null);
+     try{worker.postMessage({players:x.state.records.filter(r=>r.market==='ATD'&&pair(r)===gameKey&&
+      !(typeof x.state.excluded==='function'&&x.state.excluded(r))),count:10000,seed:982451653,selected:[],requestId:token})}
+     catch{finish(null)}
+    }
+    if(!batch.active.size&&!batch.queue.length&&pending===batch){pending=null;result=snapshot();render();schedule();resolve(result)}
    }
-   worker.onmessage=e=>e.data?.result?finish(e.data.result):finish(null,'Game simulation unavailable; no simulated play is shown.');
-   worker.onerror=()=>finish(null,'Game simulation unavailable; no simulated play is shown.');
-   try{worker.postMessage({players:x.state.records.filter(r=>r.market==='ATD'&&pair(r)===x.selected&&
-     !(typeof x.state.excluded==='function'&&x.state.excluded(r))),count:10000,seed:982451653,selected:[],requestId:token})}
-   catch(error){finish(null,'Game simulation unavailable: '+error.message)}
+   pump();
    return promise;
   }
   function setCategory(value){category=['PASS','RUSH','REC','CATCH','TD'].includes(value)?value:'ALL';return refresh()}
@@ -115,12 +133,13 @@
    lines.set(key,line);render(!!pending);return true;
   }
   function add(key){
-   const simulation=cache.get(currentKey)||null,fresh=snapshot(simulation);
-   const row=top.select(fresh,category,3).find(r=>r.key===key);
+   const fresh=snapshot();
+   const row=pending&&category!=='TD'?null:top.select(fresh,category,3).find(r=>r.key===key);
    if(!row){result=fresh;render(!!pending);return false}
    const alt=chosen(row),td=row.market==='anytime_td';
    if(!td&&!(row.alternatives||[]).some(a=>a.line===alt.line))return false;
-   options.quickSlip.add({sport:'NFL',game:row.p.team+' vs '+row.p.opp,gameId:fresh.fixture.game_id||fresh.fixture.id,
+   const fixture=row.fixture||fresh.fixture;if(!fixture)return false;
+   options.quickSlip.add({sport:'NFL',game:fixture.away+' @ '+fixture.home,gameId:fixture.game_id??fixture.id,
     player:row.p.player,team:row.p.team,opponent:row.p.opp,market:row.d.label,marketKey:row.market,
     side:td?'winner':'at_least',recommendationLine:td?null:alt.line,line:td?null:alt.line,
     recommendation:td?'Anytime rushing / receiving TD':alt.line+'+ '+row.d.label,

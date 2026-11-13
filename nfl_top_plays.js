@@ -107,6 +107,7 @@ function build(records,fixture,simulation,options={}){
  const matches=Array.isArray(fixtures)?fixtures.filter(g=>g&&gameKey(g)===gameKey(fixture)):[];
  if(matches.length!==1)return empty('Exactly one verified fixture is required for this matchup.');
  const verified=matches[0],kickoff=stamp(verified.kickoff_at);
+ if(fixtures.filter(g=>fixtureId(g)===fixtureId(verified)).length!==1)return empty('Exactly one verified fixture identity is required.');
  if(!fixtureId(verified)||fixtureId(verified)!==fixtureId(fixture)||stamp(fixture.kickoff_at)!==kickoff||!Number.isFinite(kickoff))return empty('Verified fixture identity or timezone-aware kickoff is unavailable.');
  if(kickoff<=now)return empty('Game has started or finished; no new player recommendations.');
  if(kickoff-now>7*86400000)return empty('Choose a game within the next seven days.');
@@ -147,5 +148,39 @@ function build(records,fixture,simulation,options={}){
  else if(!candidates.length){result.status='pass';result.reason='No supported OVER or anytime-TD play meets the score, usage and availability requirements.';}
  return result;
 }
-return {defs,choose,build,select,categories,mergeRecords};
+function slate(records,fixtures,simulations,options={}){
+ const empty=reason=>({ready:false,status:'pass',reason,candidates:[],topThree:[],bestSingle:null,visible:[],fixture:null,games:[],perGame:[],coverage:[]});
+ const now=options.now===undefined?Date.now():options.now;
+ if(typeof now!=='number'||!Number.isFinite(now)||!Array.isArray(records))return empty('Player feed or current time is unavailable.');
+ if(!fresh(options.feedGeneratedAt,now)||!fresh(options.fixturesGeneratedAt,now))return empty('Fresh NFL player and game feeds within 48 hours are required.');
+ const schedule=Array.isArray(fixtures)?fixtures:Array.isArray(fixtures?.games)?fixtures.games:[];
+ const ids=new Map();
+ for(const fixture of schedule){const id=fixtureId(fixture);if(id)ids.set(id,(ids.get(id)||0)+1)}
+ const result=empty(null);let available=0;
+ for(const fixture of schedule){
+  const id=fixtureId(fixture);
+  const simulation=id&&typeof simulations?.get==='function'?simulations.get(id):null;
+  const model=ids.get(id)>1?
+   {ready:false,status:'pass',reason:'Duplicate fixture identity; game excluded from the board.',candidates:[],topThree:[],bestSingle:null,visible:[],fixture:fixture||null}:
+   build(records,fixture,simulation,{...options,now,fixtures:schedule});
+  result.perGame.push(model);
+  result.coverage.push({gameId:id||null,ready:model.ready,status:model.status,reason:model.reason});
+  if(!model.ready)continue;
+  result.games.push(model.fixture);
+  if(Array.isArray(simulation?.markets))available++;
+  result.candidates.push(...model.candidates.map(candidate=>({...candidate,fixture:model.fixture})));
+ }
+ if(!result.games.length){result.reason='No verified upcoming NFL games within the next seven days are available.';return result}
+ result.ready=true;result.candidates.sort(order);
+ result.topThree=select(result);result.bestSingle=result.topThree[0]||null;
+ const visible=new Map();for(const category of categories)for(const candidate of select(result,category))visible.set(candidate.key,candidate);
+ result.visible=[...visible.values()].sort(order);
+ if(available<result.games.length){
+  result.status='partial';
+  result.reason='Player simulations are pending or unavailable for '+(result.games.length-available)+' of '+result.games.length+' games'+(result.candidates.length?'; showing supported research from available inputs.':'.');
+ }else if(result.candidates.length){result.status='ok';result.reason=null}
+ else result.reason='No supported OVER or anytime-TD play meets the score, usage and availability requirements.';
+ return result;
+}
+return {defs,choose,build,slate,select,categories,mergeRecords};
 });

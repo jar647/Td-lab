@@ -113,4 +113,60 @@ const noisy=full.map(p=>({...p,americanOdds:999,odds:-999,impliedWinProbability:
 const summarize=r=>r.candidates.map(c=>({key:c.key,line:c.line,researchScore:c.researchScore,score:c.score,hits:c.hits,scenarioRate:c.scenarioRate}));
 assert.deepEqual(summarize(api.build(noisy,fixture,simulation(noisy),options)),summarize(built),'prices and betting-value metadata never change matchup scores or default lines');
 const original=JSON.stringify(full);api.build(full,fixture,simulation(full),options);assert.equal(JSON.stringify(full),original,'building never mutates sourced records');
+
+// Category tabs rank the full upcoming board without requiring a game choice.
+const secondFixture={game_id:'2026_10_C_D',home:'C',away:'D',kickoff_at:new Date(now+2*86400000).toISOString()};
+const weakGame=full.map(p=>({...p,playerPassYards:220,playerPassAttempts:30,recent3PassYards:220,recent3PassAttempts:30,defPassYardsAllowed:225,defPassAttemptsAllowed:30,
+ playerRushYards:60,playerCarries:12,recent3RushYards:60,recent3Carries:12,defRushYardsAllowed:75,defRushAttemptsAllowed:14,
+ playerRecYards:65,playerTargets:6,recent3RecYards:65,recent3Targets:6,defRecYardsAllowed:90,defTargetsAllowed:9,playerReceptions:5,recent3Receptions:5,defReceptionsAllowed:6}));
+const secondGame=full.map(p=>({...p,player:'Second-game '+p.player,player_id:'second-'+p.player_id,team:p.team==='A'?'C':'D',opp:p.team==='A'?'D':'C'}));
+const schedule=[fixture,secondFixture],allRecords=[...weakGame,...secondGame];
+const simulations=new Map([[fixture.game_id,simulation(weakGame)],[secondFixture.game_id,simulation(secondGame)]]);
+const boardResult=api.slate(allRecords,schedule,simulations,options);
+assert.equal(boardResult.ready,true);assert.equal(boardResult.status,'ok');assert.equal(boardResult.fixture,null);
+assert.equal(boardResult.games.length,2);assert.equal(boardResult.perGame.length,2);assert.equal(boardResult.topThree.length,3);
+assert(boardResult.bestSingle.researchScore>boardResult.perGame[0].bestSingle.researchScore,'a stronger later matchup wins the full-board ranking');
+assert(boardResult.topThree.every(c=>c.fixture.game_id===secondFixture.game_id),'global leaders may all come from the strongest matchup; no game quota is imposed');
+for(const category of ['ALL','PASS','RUSH','REC','CATCH']){
+ const choices=api.select(boardResult,category);assert(choices.length,'slate '+category+' has ranked plays');
+ assert(choices.every(c=>category==='ALL'||c.category===category));
+ assert(choices.every((c,i)=>i===0||choices[i-1].researchScore>=c.researchScore));
+ assert.equal(new Set(choices.map(c=>c.p.team+'|'+c.p.player_id)).size,choices.length);
+ assert(choices.every(c=>[c.fixture.home,c.fixture.away].includes(c.p.team)&&[c.fixture.home,c.fixture.away].includes(c.p.opp)),'every all-board card retains its own matchup');
+}
+const capturedDefaults=new Set(boardResult.perGame.flatMap(g=>g.visible.map(c=>c.key)));
+assert(boardResult.visible.every(c=>capturedDefaults.has(c.key)),'all global leaders are already captured by the per-game category unions');
+assert.equal(boardResult.candidates.length,boardResult.perGame.reduce((sum,g)=>sum+g.candidates.length,0));
+assert(boardResult.candidates.every(c=>c.key.startsWith(c.fixture.game_id+'|')),'adding a matchup does not change frozen selection identities');
+assert.notEqual(boardResult.candidates[0],boardResult.perGame.find(g=>g.fixture.game_id===boardResult.candidates[0].fixture.game_id).candidates.find(c=>c.key===boardResult.candidates[0].key),'slate cards clone their per-game candidates');
+
+// Ties and repeat player identities across fixtures cannot make an uncaptured
+// fourth local player become a global Top3 selection.
+const repeatFixture={game_id:'2026_10_A_C',home:'A',away:'C',kickoff_at:new Date(now+3*86400000).toISOString()};
+const repeatGame=full.map(p=>({...p,team:p.team==='A'?'A':'C',opp:p.team==='A'?'C':'A'}));
+const repeated=api.slate([...allRecords,...repeatGame],[...schedule,repeatFixture],new Map([...simulations,[repeatFixture.game_id,simulation(repeatGame)]]),options);
+const repeatedCaptured=new Set(repeated.perGame.flatMap(g=>g.visible.map(c=>c.key)));
+assert(repeated.visible.every(c=>repeatedCaptured.has(c.key)));
+for(const category of api.categories){const choices=api.select(repeated,category);assert.equal(new Set(choices.map(c=>c.p.team+'|'+c.p.player_id)).size,choices.length)}
+
+const pendingBoard=api.slate([...allRecords,{...tdPlayer,team:'C',opp:'D'}],schedule,new Map([[fixture.game_id,simulations.get(fixture.game_id)]]),options);
+assert.equal(pendingBoard.ready,true);assert.equal(pendingBoard.status,'partial');assert.equal(pendingBoard.games.length,2);
+const pendingTD=api.select(pendingBoard,'TD')[0];assert(pendingTD);assert.equal(pendingTD.fixture.game_id,secondFixture.game_id);assert.equal(pendingTD.scenarioRate,null);assert.equal(pendingTD.hits,2);assert.equal(pendingTD.sample,3);
+const initialBoard=api.slate(allRecords,schedule,new Map(),options);assert.equal(initialBoard.ready,true);assert.equal(initialBoard.status,'partial');assert.equal(initialBoard.games.length,2);assert.deepEqual(initialBoard.candidates,[]);
+
+// A malformed, completed, distant or duplicate schedule entry cannot become a
+// worker target or borrow a different matchup's simulation through a reused ID.
+const past={game_id:'past',home:'E',away:'F',kickoff_at:new Date(now).toISOString()},far={game_id:'far',home:'G',away:'H',kickoff_at:new Date(now+8*86400000).toISOString()};
+const checkedBoard=api.slate(allRecords,[fixture,secondFixture,past,far,null],simulations,options);assert.equal(checkedBoard.games.length,2);assert.equal(checkedBoard.coverage.filter(c=>!c.ready).length,3);
+const repeatedID={...secondFixture,game_id:fixture.game_id};
+assert.equal(api.slate(allRecords,[fixture,repeatedID],simulations,options).ready,false,'a repeated fixture ID cannot reuse another game simulation');
+const duplicatedPair=api.slate(allRecords,[fixture,{...fixture,game_id:'duplicate-pair'},secondFixture],simulations,options);assert.equal(duplicatedPair.games.length,1);assert.equal(duplicatedPair.games[0].game_id,secondFixture.game_id);
+for(const changes of [{feedGeneratedAt:'2020-01-01T00:00:00Z'},{fixturesGeneratedAt:'2026-11-13'},{now:NaN}]){
+ const invalidBoard=api.slate(allRecords,schedule,simulations,{...options,...changes});assert.equal(invalidBoard.ready,false);assert.deepEqual(invalidBoard.candidates,[]);assert.deepEqual(invalidBoard.games,[]);
+}
+assert.equal(api.slate(allRecords,[],simulations,options).ready,false);
+assert.equal(api.slate(allRecords,{games:schedule},simulations,options).games.length,2);
+const immutable=JSON.stringify({records:allRecords,schedule,simulations:[...simulations]});
+api.slate(allRecords,schedule,simulations,options);assert.equal(JSON.stringify({records:allRecords,schedule,simulations:[...simulations]}),immutable,'slate aggregation never mutates feeds, fixtures or simulations');
 console.log('NFL game-first top plays: score boundaries, supported lines, unique ranks, reachable capture union, fresh/future fixtures, availability, TD fallback and price independence passed');
+console.log('NFL full-board top plays: cross-game category rankings, own-matchup metadata, partial simulation safeguards and frozen capture coverage passed');
