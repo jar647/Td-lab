@@ -1,10 +1,16 @@
 'use strict';
-const assert=require('node:assert/strict'),fs=require('node:fs');
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const ui=require('./nfl_top_plays_ui.js'),top=require('./nfl_top_plays.js');
 const html=fs.readFileSync('index.html','utf8');
 assert(html.includes('src="./nfl_top_plays_ui.js?v=nfl-board-v2"'));
 assert.match(html,/<button class="chip active" onclick="setMainCategory\('ALL',this\)">TOP PLAYS/);
 assert.doesNotMatch(html,/<(?:div|section)[^>]*id="(?:propRankings|simpleRankings|yardageSection|tdSection)"/,'full roster boards are removed from the main NFL view');
+// Each tab is a full-board entry point, even after an optional game filter.
+const navNodes=new Map(),navElement=id=>{if(!navNodes.has(id))navNodes.set(id,{value:'CAR|NO',hidden:false,scrollIntoView(){}});return navNodes.get(id)};
+const navState={document:{getElementById:navElement,querySelectorAll:()=>[]},nflTopPlaysCategory:'ALL',propCategory:'PASS',renderNFLTopPlays(){assert.equal(navElement('gameFilter').value,'ALL')},renderSelectedGamePick(){},loadBacktestLab(){}};
+vm.createContext(navState);const navStart=html.indexOf('function setMainCategory('),navEnd=html.indexOf('\nfunction setPropCategory(',navStart);vm.runInContext(html.slice(navStart,navEnd),navState);
+for(const category of ['ALL','PASS','RUSH','REC','CATCH','TD']){navElement('gameFilter').value='CAR|NO';navState.setMainCategory(category,null);assert.equal(navElement('gameFilter').value,'ALL',category+' opens the complete board');assert.equal(navState.nflTopPlaysCategory,category)}
+for(const category of ['GAME','BACKTEST']){navElement('gameFilter').value='CAR|NO';navState.setMainCategory(category,null);assert.equal(navElement('gameFilter').value,'CAR|NO','other navigation behavior is preserved')}
 const now=Date.parse('2026-11-13T14:00:00Z'),stamp=new Date(now).toISOString();
 const fixtures=[{game_id:'AB',home:'A',away:'B',kickoff_at:new Date(now+3600000).toISOString()},
  {game_id:'CD',home:'C',away:'D',kickoff_at:new Date(now+7200000).toISOString()}];
