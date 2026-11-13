@@ -58,10 +58,10 @@ def add_anytime_touchdowns(player_stats, plays):
     """
     source=official_stat_plays(plays)
     required(source,['touchdown','td_team','posteam','week','receiver_player_id',
-                     'rusher_player_id','pass_touchdown'],'anytime touchdown statistics')
+                     'rusher_player_id','pass_touchdown','rush_touchdown'],'anytime touchdown statistics')
     scores=source[pd.to_numeric(source.touchdown,errors='coerce').eq(1) &
                   source.td_team.astype(str).eq(source.posteam.astype(str))]
-    rush=official_rush_attempts(scores)
+    rush=official_rush_attempts(scores[pd.to_numeric(scores.rush_touchdown,errors='coerce').eq(1)])
     received=scores[pd.to_numeric(scores.pass_touchdown,errors='coerce').eq(1)]
     for data,identity,field in ((rush,'rusher_player_id','rushTDs'),
                                 (received,'receiver_player_id','recTDs')):

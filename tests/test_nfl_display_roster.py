@@ -55,15 +55,15 @@ class AnytimeTouchdownSourceTests(unittest.TestCase):
     def play(self,**changes):
         return dict(dict(posteam='A',defteam='B',week=1,touchdown=1,td_team='A',
             pass_attempt=0,qb_spike=0,sack=0,rush_attempt=0,qb_kneel=0,
-            two_point_attempt=0,play=1,no_play=0,pass_touchdown=0,
+            two_point_attempt=0,play=1,no_play=0,pass_touchdown=0,rush_touchdown=0,
             passer_player_id='qb',rusher_player_id=None,receiver_player_id=None),**changes)
 
     def test_scoring_credit_excludes_passers_conversions_nullified_and_defensive_scores(self):
         plays=pd.DataFrame([
             self.play(pass_attempt=1,pass_touchdown=1,receiver_player_id='wr'),
-            self.play(rush_attempt=1,rusher_player_id='rb'),
-            self.play(rush_attempt=1,rusher_player_id='qb'),
-            self.play(rush_attempt=1,rusher_player_id='rb',two_point_attempt=1),
+            self.play(rush_attempt=1,rush_touchdown=1,rusher_player_id='rb'),
+            self.play(rush_attempt=1,rush_touchdown=1,rusher_player_id='qb'),
+            self.play(rush_attempt=1,rush_touchdown=1,rusher_player_id='rb',two_point_attempt=1),
             self.play(pass_attempt=1,pass_touchdown=1,receiver_player_id='wr',no_play=1),
             self.play(pass_attempt=1,receiver_player_id='wr',td_team='B'),
             self.play(rush_attempt=1,rusher_player_id='rb',touchdown=0)])
@@ -72,6 +72,14 @@ class AnytimeTouchdownSourceTests(unittest.TestCase):
         self.assertEqual(stats[('A','wr',1)],{'recTDs':1})
         self.assertEqual(stats[('A','rb',1)],{'rushTDs':1})
         self.assertEqual(stats[('A','qb',1)],{'passTDs':1,'rushTDs':1})
+
+    def test_offensive_fumble_recovery_does_not_credit_rusher_with_touchdown(self):
+        plays=pd.DataFrame([
+            self.play(rush_attempt=1,rusher_player_id='rb',td_player_id='te'),
+            self.play(rush_attempt=1,rush_touchdown=1,rusher_player_id='rb',td_player_id='rb')])
+        stats={}
+        add_anytime_touchdowns(stats,plays)
+        self.assertEqual(stats,{('A','rb',1):{'rushTDs':1}})
 
     def test_td_audit_preserves_old_feeds_and_blocks_inconsistent_new_fields(self):
         from tests.test_feed_totals import FeedTotalsTests
