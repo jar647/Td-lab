@@ -271,6 +271,7 @@ function setMainCategory(category,button){
  document.querySelectorAll('#mainMarketNav button').forEach(b=>b.classList.toggle('active',b===button));
  if(isBacktest){loadBacktestLab();document.getElementById('backtestPanel').scrollIntoView({block:'start',behavior:'smooth'});return;}
  if(isGame){renderSelectedGamePick();document.getElementById('gamePicksPanel').scrollIntoView({block:'start',behavior:'smooth'});return;}
+ document.getElementById('gameFilter').value='ALL';
  nflTopPlaysCategory=category;propCategory=category==='ALL'?'PASS':category;
  renderNFLTopPlays();
 }
