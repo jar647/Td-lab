@@ -35,12 +35,15 @@ jobs:
           git fetch origin main
           git reset --hard origin/main
       - name: Export verified YES anytime TD odds
+        id: export
         env:
           ODDSPAPI_API_KEY: ${{ secrets.ODDSPAPI_API_KEY }}
         run: python -m scripts.build_hardrock_feed
       - name: Archive timestamped prices for forward testing
+        if: steps.export.outputs.fresh_prices == 'true'
         run: python -m scripts.archive_odds
       - name: Freeze verified pregame research decisions
+        if: steps.export.outputs.fresh_prices == 'true'
         run: python -m scripts.capture_forward_bets
       - name: Grade previously frozen decisions
         run: python -m scripts.grade_forward_bets
