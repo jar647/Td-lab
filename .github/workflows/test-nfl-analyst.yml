@@ -20,6 +20,7 @@ on:
       - 'nfl_player_board.js'
       - 'test_nfl_td_matchup.js'
       - 'test_nfl_player_board.js'
+      - 'test_nfl_history_chart.js'
       - 'test_nfl_goal1.js'
       - 'test_nfl_matchup_score.js'
       - 'test_nfl_min_score_ui.js'
@@ -51,6 +52,7 @@ jobs:
       - run: node test_nfl_goal1.js
       - run: node test_nfl_td_matchup.js
       - run: node test_nfl_player_board.js
+      - run: node test_nfl_history_chart.js
       - run: node test_nfl_matchup_score.js
       - run: node test_nfl_min_score_ui.js
       - run: node test_nfl_scenario_ui.js

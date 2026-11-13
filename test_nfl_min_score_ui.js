@@ -22,13 +22,14 @@ const roster=[low,high,
  {...high,player_id:'missing',player:'Roster-only player',games:0,playerAppearancesVerified:false,displayOnly:true},
  {...high,player_id:'manual',player:'Manually excluded player'},
  {...high,player_id:'other-game',player:'Other matchup',team:'C',opp:'D'}];
-const context={PropVaultGoal1:goal,PropShopNFLBoard:board,PropShopNFLTD:td,CookItUpNFLReturns:returns,propCategory:'RUSH',autoRecords:roster,propLines:{},activeFeedWeek:'test',
+const futureFixture={home:'A',away:'B',kickoff_at:new Date(Date.now()+3600000).toISOString()};
+const context={PropVaultGoal1:goal,PropShopNFLBoard:board,PropShopNFLTD:td,CookItUpNFLReturns:returns,propCategory:'RUSH',autoRecords:roster,propLines:{},activeFeedWeek:'test',propVaultGameFeed:{games:[futureFixture]},
  document:{getElementById:el},num:Number,gameKey:r=>[r.team,r.opp].sort().join('|'),gameMatches:()=>true,inactiveOrBackup:()=>false,manuallyInactive:r=>r.player_id==='manual',playerDisplay:r=>r.player,escapeHTML:s=>String(s??''),
  propLineKey:(r,c)=>r.player_id+'|'+c,lastFiveChart:()=>'',suggestAltLine:()=>null,
  CookItUpQuickSlip:{button(pick){picks.push(pick);return '<button>Add</button>'}},simplePosition:'ALL',
  hardRockPrice:()=>''};
 vm.createContext(context);
-vm.runInContext(section('function matchupGrade(','\nfunction lastFiveChart(')+';renderPropMatchups()',context);
+vm.runInContext(section('function propDecision(','\n// Research thresholds')+section('function matchupGrade(','\nfunction lastFiveChart(')+';renderPropMatchups()',context);
 assert.match(el('propRankings').innerHTML,/Boundary qualifier/);
 for(const player of roster.filter(r=>r.player_id!=='other-game'))assert(el('propRankings').innerHTML.includes(player.player),player.player+' remains visible');
 assert.doesNotMatch(el('propRankings').innerHTML,/Other matchup/);
@@ -43,19 +44,29 @@ assert.match(el('propRankings').innerHTML,/Limited sample/);
 const card=(id,html=el('propRankings').innerHTML)=>{const start=html.indexOf('data-player-id="'+id+'"');return html.slice(start,html.indexOf('</article>',start))};
 assert.match(card('missing'),/N\/A/);
 assert.doesNotMatch(card('missing'),/>0\/100/,'missing history must not become a zero score');
-assert.equal(picks.length,1);assert.equal(picks[0].researchScore,60);
+assert.equal(picks.length,0,'missing posted line cannot create an incomplete Quick Slip pick');
+assert.match(card('high'),/ENTER POSTED LINE/);
+context.propLines['high|RUSH']=20;
+vm.runInContext('renderPropMatchups()',context);
+assert.equal(picks.length,1);assert.equal(picks[0].researchScore,60);assert.equal(picks[0].side,'over');assert.equal(picks[0].line,20);
 assert.equal(picks[0].player,'Boundary qualifier','visible below-floor, OUT, backup, manual and short-sample rows cannot be added');
 // The line-comparison function enforces the same gate before choosing a side.
-vm.runInContext(section('function propDecision(','\n// Research thresholds'),context);
 const cfg=goal.SPECS.RUSH;
 context.entry={r:high,score:60};context.cfg=cfg;
-for(const [line,side] of [[20,'OVER'],[100,'UNDER']]){
+for(const [line,side] of [[20,'OVER'],[100,'PASS.*OVER UNSUPPORTED']]){
  context.propLines['high|RUSH']=line;
  assert.match(vm.runInContext("propDecision(entry,cfg,'RUSH').label",context),new RegExp(side));
  context.entry.score=59.99;
  assert.match(vm.runInContext("propDecision(entry,cfg,'RUSH').label",context),/PASS.*60\/100/);
  context.entry.score=60;
 }
+for(const line of [0,-1,Infinity,100]){
+ context.propLines['high|RUSH']=line;picks.length=0;
+ vm.runInContext('renderPropMatchups()',context);
+ assert.equal(picks.length,0,'invalid or unsupported posted OVER lines cannot be added');
+ assert.doesNotMatch(card('high'),/UNDER LEAN/);
+}
+context.propLines['high|RUSH']=20;
 // The full TD board includes weak/unavailable rows; recommendation panels remain gated.
 vm.runInContext(section('function renderSimpleMatchups(){','\nlet propVaultGameFeed=' )+';renderSimpleMatchups()',context);
 for(const player of roster.filter(r=>r.player_id!=='other-game'))assert(el('simpleRankings').innerHTML.includes(player.player),player.player+' remains in the TD roster');
@@ -65,6 +76,15 @@ for(const id of ['topDawgs','tdCategoryTop']){
  assert.doesNotMatch(el(id).innerHTML,/Unavailable player|Backup quarterback|One-game player|Roster-only player|Manually excluded player/);
 }
 context.simplePosition='TE';vm.runInContext('renderSimpleMatchups()',context);assert.match(el('topDawgs').innerHTML,/Boundary qualifier/,'position filter must not erase other-position summary recommendations');assert.doesNotMatch(el('simpleRankings').innerHTML,/Boundary qualifier/);context.simplePosition='ALL';
+for(const games of [[],[{...futureFixture,kickoff_at:null}],[{...futureFixture,kickoff_at:'2026-11-14'}],[{...futureFixture,kickoff_at:new Date(Date.now()-1000).toISOString()}],[futureFixture,{...futureFixture}]]){
+ context.propVaultGameFeed={games};picks.length=0;
+ vm.runInContext('renderPropMatchups();renderSimpleMatchups()',context);
+ assert.match(el('propRankings').innerHTML,/Boundary qualifier/,'past or unverified fixtures retain player research');
+ assert.equal(picks.length,0,'past or unverified fixtures cannot create new player recommendations');
+ assert.match(el('topDawgs').innerHTML,/PASS.*No TD recommendation/);
+ assert.match(vm.runInContext("propDecision(entry,cfg,'RUSH').label",context),/PASS.*RESEARCH ONLY/);
+}
+context.propVaultGameFeed={games:[futureFixture]};
 context.autoRecords=[low];picks.length=0;
 vm.runInContext('renderPropMatchups();renderSimpleMatchups()',context);
 assert.match(el('propRankings').innerHTML,/Below minimum/);
@@ -76,4 +96,4 @@ context.autoRecords=[];
 vm.runInContext('renderPropMatchups();renderSimpleMatchups()',context);
 assert.match(el('propRankings').innerHTML,/No roster records/);
 assert.match(el('simpleRankings').innerHTML,/No roster records/);
-console.log('NFL full-player boards, both-team components and gated OVER/UNDER/TD recommendations passed');
+console.log('NFL full-player boards, supported OVER lines, verified pregame eligibility and TD recommendation gates passed');

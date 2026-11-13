@@ -7,6 +7,7 @@ const html=fs.readFileSync('index.html','utf8');
 const section=(from,to)=>html.slice(html.indexOf(from),html.indexOf(to,html.indexOf(from)));
 const controller=section('function renderGameSGP(){','\nfunction openSearchedPlayer(');
 const research=section('function propResearch(','\nfunction suggestAltLine(');
+const pregame=section('function nflPregameReason(','\nfunction nflBoardRows(');
 class Element{
  constructor(tag){this.tagName=tag;this.children=[];this.style={};this.listeners={};this._text='';this._value='';this.disabled=false;}
  appendChild(child){this.children.push(child);if(this.tagName==='select'&&(child.selected||this.children.length===1))this._value=child.value;return child;}
@@ -31,11 +32,11 @@ function player(id,team='A',pos='RB',extra={}){
   defRushAttemptsAllowed:24,defTargetsAllowed:15,
   last5GameStats:Array.from({length:5},()=>({rushYards:140,recYards:140,receptions:12})),...extra};
 }
-function mount(records,manualInactives=[]){
+function mount(records,manualInactives=[],games=[{home:'A',away:'B',kickoff_at:new Date(Date.now()+3600000).toISOString()}]){
  const panel=new Element('section'),filter=new Element('select');
  filter.appendChild(Object.assign(new Element('option'),{value:'A|B',textContent:'A at B'}));
  const state={copied:'',picks:[]};
- const context={PropVaultGoal1:require('./nfl_goal1.js'),autoRecords:records,manualInactives,activeFeedWeek:'week-8',propVaultGameFeed:null,propVaultMarketLines:{},
+ const context={PropVaultGoal1:require('./nfl_goal1.js'),autoRecords:records,manualInactives,activeFeedWeek:'week-8',propVaultGameFeed:{games},propVaultMarketLines:{},
   gameKey:r=>[r.team,r.opp].sort().join('|'),
   document:{getElementById:id=>id==='sgpPanel'?panel:id==='gameFilter'?filter:walk(panel,e=>e.id===id)[0],
    createElement:tag=>new Element(tag),createTextNode:text=>Object.assign(new Element('#text'),{textContent:text})},
@@ -44,7 +45,7 @@ function mount(records,manualInactives=[]){
  vm.createContext(context);
  const inactive=section('function normPlayer(','\n// Use the most games recorded');
  const backup=section('function inactiveOrBackup(','\nfunction availableTeamGames(');
- vm.runInContext(research+inactive+backup+controller+';renderGameSGP()',context);
+ vm.runInContext(research+pregame+inactive+backup+controller+';renderGameSGP()',context);
  const card=panel.children.find(x=>x.tagName==='section');
  const count=walk(card,x=>x.id==='autoSgpLegCount')[0];
  const list=card.children.find(x=>x.tagName==='ol');
@@ -100,5 +101,10 @@ function mount(records,manualInactives=[]){
  assert.equal(empty.list.children.length,0);
  assert.equal(empty.copy.disabled,true);
  assert.match(empty.notice.textContent,/Only 0 of 10/);
+ for(const games of [[],[{home:'A',away:'B',kickoff_at:new Date(Date.now()-1000).toISOString()}]]){
+  const unavailable=mount(records,[],games);await unavailable.choose(10);
+  assert.equal(unavailable.list.children.length,0,'past or unverified fixtures cannot create new player SGP legs');
+  assert.equal(unavailable.state.picks.length,0);
+ }
  console.log('NFL main SGP UI: 2–10 choices, generated/copy counts, evidence filters, duplicate/game exclusions and shortfall passed');
 })().catch(error=>{console.error(error);process.exitCode=1;});

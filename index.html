@@ -126,40 +126,32 @@ function propLineKey(r,category){return [r.player_id||r.player,r.team,r.opp,cate
 function setPropLine(key,value){const v=String(value).trim();if(v==='')delete propLines[key];else if(Number.isFinite(Number(v))&&Number(v)>=0&&Number(v)<=9999)propLines[key]=Number(v);else return;localStorage.setItem(PROP_LINES_KEY,JSON.stringify(propLines));renderPropMatchups();}
 
 function propDecision(x,cfg,category){
- if(!PropVaultGoal1.qualifies(x.score))return {label:'🛑 PASS · BELOW 60/100',detail:'Player prop recommendations require a matchup score of at least 60/100 for either OVER or UNDER.'};
+ if(!PropVaultGoal1.qualifies(x.score))return {label:'🛑 PASS · BELOW 60/100',detail:'Player prop recommendations require a matchup score of at least 60/100. Only supported OVER lines are recommended.',overSupported:false};
+ const pregameReason=nflPregameReason(x.r);
+ if(pregameReason)return {label:'🛑 PASS · RESEARCH ONLY',detail:pregameReason,overSupported:false};
+ if(x.recommendable===false)return {label:'🛑 PASS · RESEARCH ONLY',detail:(x.reasons||[]).join(' · ')||'Recommendation eligibility is unverified.',overSupported:false};
  const line=propLines[propLineKey(x.r,category)];
- if(line==null)return {label:'⚪ ENTER POSTED LINE',detail:'Enter the current sportsbook line to compare against the matchup projection.'};
+ if(line==null)return {label:'⚪ ENTER POSTED LINE',detail:'Enter a positive current sportsbook OVER line before adding this play.',overSupported:false};
  const avg=Number(x.r[cfg.player]),def=Number(x.r[cfg.def]),posted=Number(line);
  const games=Number(x.r.games)||0;
  const recentField={PTD:'recent3PassTDs',PASS:'recent3PassYards',RUSH:'recent3RushYards',REC:'recent3RecYards',CATCH:'recent3Receptions'}[category];
  // Team-window recent averages dilute backup players who missed team games.
  const recent=games<3||x.r[recentField]==null?null:Number(x.r[recentField]);
- if(!Number.isFinite(avg)||avg<0||!Number.isFinite(def)||def<0||!Number.isFinite(posted)||posted<=0)
-  return {label:'🛑 INSUFFICIENT DATA',detail:'Player average, defensive allowance or sportsbook line is invalid.'};
+ if(x.r[cfg.player]==null||x.r[cfg.def]==null||!Number.isFinite(avg)||avg<0||!Number.isFinite(def)||def<=0||!Number.isFinite(posted)||posted<=0)
+  return {label:'🛑 PASS · INSUFFICIENT DATA',detail:'Player average, defensive allowance or positive sportsbook line is invalid.',overSupported:false};
  // Match the projection displayed on the card, so the verdict cannot contradict it.
  const blend=recent!=null&&Number.isFinite(recent)?avg*.7+recent*.3:avg;
  const matchup=Math.max(.85,Math.min(1.15,def/Math.max(avg,.1)));
  const projection=blend*(.75+.25*matchup);
  const edge=projection-posted,edgePct=edge/posted;
  const sampleNote=games<3?' Limited sample: '+games+' verified appearance'+(games===1?'':'s')+'; this is a provisional model lean, not a measured hit probability.':'';
- const detail='Model projection '+projection.toFixed(1)+' vs sportsbook '+posted.toFixed(1)+'; edge '+(edge>=0?'+':'')+edge.toFixed(1)+' ('+(edgePct*100).toFixed(1)+'%).'+sampleNote+' Quoted sportsbook prices are assessed separately from the research projection. No calibrated hit probability is available.';
+ const detail='Model projection '+projection.toFixed(1)+' vs sportsbook '+posted.toFixed(1)+'; projection gap '+(edge>=0?'+':'')+edge.toFixed(1)+' ('+(edgePct*100).toFixed(1)+'%).'+sampleNote+' No calibrated hit probability is available.';
+ if(edge<=0)return {label:'🛑 PASS · OVER UNSUPPORTED',detail:detail+' The projection must exceed the posted OVER line.',overSupported:false};
  if(edge>=(category==='PTD'?.35:10)&&edgePct>=.08)
-  return {label:games<3?'⚠️ LIMITED-SAMPLE OVER LEAN '+posted:'⚠️ MODEL OVER LEAN '+posted,detail};
+  return {label:games<3?'⚠️ LIMITED-SAMPLE OVER LEAN '+posted:'⚠️ MODEL OVER LEAN '+posted,detail,overSupported:true};
  if(edge>=(category==='PTD'?.18:5)&&edgePct>=.04)
-  return {label:'⚠️ SMALL OVER LEAN '+posted,detail};
- if(edge<=-(category==='PTD'?.35:10)&&-edgePct>=.08)
-  return {label:'⚠️ MODEL UNDER LEAN '+posted,detail:detail+' Under candidate based on negative projection difference; hit rate remains uncalibrated.'};
- if(edge<=-(category==='PTD'?.18:5)&&-edgePct>=.04)
-  return {label:'⚠️ SMALL UNDER LEAN '+posted,detail:detail+' Under candidate is provisional and may be too close to the posted line.'};
- const alt=category==='PTD'?null:suggestAltLine(x,cfg,category);
- if(alt&&alt.line<posted)
-  return {label:'⚠️ RESEARCH ALT '+alt.line+'+',detail:detail+' Posted OVER lacks sufficient projection cushion; alternate has recent-log support.'};
- if(games>0&&games<3&&category==='PASS'){
-  const candidates=[125,150,175,200,225,250,275,300].filter(v=>v<posted&&v<=projection*.9&&v<=avg*.9);
-  const target=candidates.at(-1);
-  if(target)return {label:'⚠️ LIMITED-SAMPLE ALT '+target+'+',detail:detail+' Provisional alternate, not verified against three game logs.'};
- }
- return {label:'🛑 PASS',detail:detail+' No qualifying over edge or supported alternate.'};
+  return {label:'⚠️ SMALL OVER LEAN '+posted,detail,overSupported:true};
+ return {label:'⚠️ RESEARCH OVER '+posted+' · SMALL PROJECTION GAP',detail:detail+' A narrow projection gap warrants additional review.',overSupported:true};
 }
 // Research thresholds, not sportsbook prices or calibrated probabilities.
 // Shared research engine for PASS, RUSH, REC, CATCH and the SGP builder.
@@ -289,8 +281,19 @@ function matchupGrade(score){
  if(n>=50)return {label:'⚪ NEUTRAL MATCHUP',color:'#bfc9c4'};
  return {label:'🔴 UNFAVORABLE MATCHUP',color:'#ed8c83'};
 }
+function nflPregameReason(r,now=Date.now()){
+ const games=typeof propVaultGameFeed!=='undefined'&&Array.isArray(propVaultGameFeed?.games)?propVaultGameFeed.games:[];
+ const key=[String(r.team),String(r.opp)].sort().join('|');
+ const fixtures=games.filter(g=>[String(g.home),String(g.away)].sort().join('|')===key);
+ if(fixtures.length!==1)return 'Verified kickoff time unavailable; research only.';
+ const kickoff=fixtures[0].kickoff_at;
+ const time=typeof kickoff==='string'&&/T.*(?:Z|[+-]\d{2}:\d{2})$/.test(kickoff)?Date.parse(kickoff):NaN;
+ if(!Number.isFinite(time))return 'Verified kickoff time unavailable; research only.';
+ if(time<=now)return 'Game has started or finished; no new player recommendations.';
+ return '';
+}
 function nflBoardRows(category,position){
- return PropShopNFLBoard.rows(autoRecords,category,{game:document.getElementById('gameFilter')?.value||'ALL',position:position||(category==='TD'?simplePosition:'ALL'),ratingFor:(r,c)=>c==='TD'?PropShopNFLTD.rating(r):PropVaultGoal1.matchupRating(r,c),excluded:r=>manuallyInactive(r)?'Manually marked inactive':r.qbRole==='BACKUP'?'Backup quarterback':''});
+ return PropShopNFLBoard.rows(autoRecords,category,{game:document.getElementById('gameFilter')?.value||'ALL',position:position||(category==='TD'?simplePosition:'ALL'),ratingFor:(r,c)=>c==='TD'?PropShopNFLTD.rating(r):PropVaultGoal1.matchupRating(r,c),excluded:r=>manuallyInactive(r)?'Manually marked inactive':r.qbRole==='BACKUP'?'Backup quarterback':nflPregameReason(r)});
 }
 function nflBoardComponents(row){
  const rating=row.rating,performance=rating?.performanceScore??(rating&&Number.isFinite(rating.offense)?Math.round(100*rating.offense):null),opponent=rating?.opponentScore??(rating&&Number.isFinite(rating.defense)?Math.round(100*rating.defense):null);
@@ -406,7 +409,8 @@ function renderPropMatchups(){
   const statusWarning=/QUESTIONABLE|DOUBTFUL|LIMITED|UNVERIFIED|NOT_REPORTED|NOT LISTED|GTD/.test(status);
   const limitedSample=CookItUpNFLReturns.isJacobsLimitedReturnSample(x.r);
   const scenarioMarkup=limitedSample?'<p class="muted" style="color:#ffd38b">SIMULATION UNAVAILABLE · only one verified game since return. No reliable scenario percentage is shown.</p>':'<details class="pv-scenario-details" data-game="'+escapeHTML(game)+'" data-player-id="'+escapeHTML(playerId)+'" data-scenario-market="'+scenarioMarket+'" data-posted-line="'+(posted??'')+'" data-projection="'+(valid?projected:'')+'"><summary>📊 Simulated chances · UNCALIBRATED</summary><div class="pv-scenario-body"><label>Alternate line threshold<select aria-label="Alternate line threshold for '+escapeHTML(x.r.player)+'" disabled><option>Open to calculate</option></select></label><p class="pv-scenario-result" aria-live="polite">Open to run 10,000 complete-game simulations.</p><p class="muted">Uses recorded player history, workload, opponent matchup factors, and shared game pace/script. This simulation is not calibrated against held-out games.</p><p class="muted">Player availability is not used to reduce simulated workload. '+(statusWarning?'Status needs review: '+escapeHTML(status)+'. ':'')+'Verify current injury and active status separately.</p></div></details>';
-  const addToSlip=x.recommendable?CookItUpQuickSlip.button({sport:'NFL',researchScore:x.score,game:(activeFeedWeek||'Current week')+' · '+x.r.team+' vs '+x.r.opp,player:x.r.player,team:x.r.team,opponent:x.r.opp,market:{PTD:'Passing TDs',PASS:'Passing yards',RUSH:'Rushing yards',REC:'Receiving yards',CATCH:'Receptions'}[propCategory]||propCategory,line:posted,recommendation:undefined}):'<p class="muted">RESEARCH ONLY · '+escapeHTML(x.reasons.join(' · '))+'. Projection and scenarios remain available when supported.</p>';
+  const decision=propDecision(x,cfg,propCategory);
+  const addToSlip=x.recommendable&&decision.overSupported?CookItUpQuickSlip.button({sport:'NFL',researchScore:x.score,game:(activeFeedWeek||'Current week')+' · '+x.r.team+' vs '+x.r.opp,player:x.r.player,team:x.r.team,opponent:x.r.opp,market:{PTD:'Passing TDs',PASS:'Passing yards',RUSH:'Rushing yards',REC:'Receiving yards',CATCH:'Receptions'}[propCategory]||propCategory,line:posted,side:'over'}):'<p class="muted">'+escapeHTML(decision.label)+' · '+escapeHTML(decision.detail)+'. Projection and scenarios remain available when supported.</p>';
   return '<div class="pv-verdict"><div class="pv-eyebrow">'+escapeHTML(propCategory==='CATCH'?'RECEPTIONS':propCategory==='PTD'?'PASSING TOUCHDOWNS':'YARDS')+' · PROJECTION & SIMULATED CHANCES</div>'
    +'<div class="pv-decision">PROJECTION ONLY · NO SPORTSBOOK ODDS</div>'
    +'<div class="pv-metrics"><div><span>Projection</span><strong>'+fmt(valid?projected:null)+'</strong></div>'
@@ -563,7 +567,7 @@ function renderGameSGP(){
   {key:'CATCH',pos:['WR','TE','RB'],field:'playerReceptions',def:'defReceptionsAllowed',thresholds:[3,4,5,6,7],unit:'receptions'}
  ];
  for(const r of autoRecords){
-  if(gameKey(r)!==selected||r.market!=='ATD'||!['ROSTER_ACTIVE','QUESTIONABLE'].includes(String(r.availability).toUpperCase())||r.playerAppearancesVerified===false||inactiveOrBackup(r)||Number(r.games)<3)continue;
+  if(gameKey(r)!==selected||r.market!=='ATD'||!['ROSTER_ACTIVE','QUESTIONABLE'].includes(String(r.availability).toUpperCase())||r.playerAppearancesVerified===false||inactiveOrBackup(r)||Number(r.games)<3||nflPregameReason(r))continue;
   audit.players++;
   // Avoid projecting teammate volume from an injury-depleted sample without review.
   // Unconfirmed teammate returns are caution flags, not automatic exclusions.
@@ -1323,7 +1327,8 @@ async function loadGamePicks(){
    list.appendChild(card);
   }
   renderSelectedGamePick();
- }catch(e){status.textContent='Game picks unavailable: '+e.message;list.replaceChildren()}
+  renderPropMatchups();renderSimpleMatchups();renderGameSGP();
+ }catch(e){propVaultGameFeed=null;status.textContent='Game picks unavailable: '+e.message;list.replaceChildren();renderPropMatchups();renderSimpleMatchups();renderGameSGP()}
 }
 
 drawPositions();save();renderBoard();loadGamePicks();loadAutoFeed();loadPerformance();loadProjectionTracker();loadProbabilityStatus();
