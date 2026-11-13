@@ -289,21 +289,21 @@ function matchupGrade(score){
  if(n>=50)return {label:'⚪ NEUTRAL MATCHUP',color:'#bfc9c4'};
  return {label:'🔴 UNFAVORABLE MATCHUP',color:'#ed8c83'};
 }
-function nflBoardRows(category){
- return PropShopNFLBoard.rows(autoRecords,category,{game:document.getElementById('gameFilter')?.value||'ALL',position:category==='TD'?simplePosition:'ALL',ratingFor:(r,c)=>c==='TD'?PropShopNFLTD.rating(r):PropVaultGoal1.matchupRating(r,c),excluded:r=>manuallyInactive(r)?'Manually marked inactive':r.qbRole==='BACKUP'?'Backup quarterback':''});
+function nflBoardRows(category,position){
+ return PropShopNFLBoard.rows(autoRecords,category,{game:document.getElementById('gameFilter')?.value||'ALL',position:position||(category==='TD'?simplePosition:'ALL'),ratingFor:(r,c)=>c==='TD'?PropShopNFLTD.rating(r):PropVaultGoal1.matchupRating(r,c),excluded:r=>manuallyInactive(r)?'Manually marked inactive':r.qbRole==='BACKUP'?'Backup quarterback':''});
 }
 function nflBoardComponents(row){
  const rating=row.rating,performance=rating?.performanceScore??(rating&&Number.isFinite(rating.offense)?Math.round(100*rating.offense):null),opponent=rating?.opponentScore??(rating&&Number.isFinite(rating.defense)?Math.round(100*rating.defense):null);
  const value=n=>Number.isFinite(n)?n+'/100':'N/A';
- return '<div class="statsline">Player performance / usage: <b>'+value(performance)+'</b> · Opponent vs '+escapeHTML(row.record.pos)+': <b>'+value(opponent)+'</b></div>'+(row.opponentContext?'<div class="statsline">'+escapeHTML(row.record.opp)+' allowance: '+escapeHTML(row.opponentContext.value)+' per game · '+escapeHTML(row.opponentContext.label)+' · higher allowance is an easier matchup</div>':'<div class="statsline">Opponent position comparison unavailable</div>');
+ return '<span class="statsline" style="display:block">Player performance / usage: <b>'+value(performance)+'</b> · Opponent vs '+escapeHTML(row.record.pos)+': <b>'+value(opponent)+'</b></span>'+(row.opponentContext?'<span class="statsline" style="display:block">'+escapeHTML(row.record.opp)+' allowance: '+escapeHTML(row.opponentContext.value)+' per game · '+escapeHTML(row.opponentContext.label)+' · higher allowance is an easier matchup</span>':'<span class="statsline" style="display:block">Opponent position comparison unavailable</span>');
 }
 function nflBoardState(row){
  return '<p class="muted" style="color:'+(row.recommendable?'#6dffc2':'#ffd38b')+'">'+(row.recommendable?'MEETS RESEARCH FILTERS · '+row.score+'/100 · verify lines and game-day status':'RESEARCH ONLY · '+escapeHTML(row.reasons.join(' · ')||'Incomplete eligibility data'))+'</p>';
 }
 function nflBoardCard(row,body){
- const r=row.record,score=Number.isFinite(row.score)?row.score+'/100':'N/A';
+ const r=row.record,score=Number.isFinite(row.score)?row.score+'/100':'N/A',color=row.score===null?'#91a99d':matchupGrade(row.score).color;
  const roleSource=row.record.depthChart?.source||row.record.starterContext?.source,roleEvidence=typeof roleSource==='string'&&/^https:\/\//.test(roleSource)?'<p class="muted"><a href="'+escapeHTML(roleSource)+'" target="_blank" rel="noopener noreferrer">Starting-role source</a> · '+escapeHTML(row.record.depthChart?.observedAt||'See cited team announcement')+' · verify game-day status</p>':'';
- return '<article class="matchrow nfl-player-row" data-player-id="'+escapeHTML(String(r.player_id||r.player))+'"><details class="nfl-player-card"><summary style="cursor:pointer;padding:8px 0"><div class="row"><div><b>'+playerDisplay(r)+'</b> <span class="pill">'+escapeHTML(r.pos)+'</span><div class="muted">'+escapeHTML(r.team)+' vs '+escapeHTML(r.opp)+'</div></div><b style="color:#6dffc2">'+score+'</b></div><div class="muted">'+escapeHTML(row.roleLabel||'Starting status unconfirmed')+' · '+escapeHTML(row.statusLabel)+'</div>'+nflBoardComponents(row)+'</summary><div class="nfl-player-body">'+nflBoardState(row)+roleEvidence+body+'</div></details></article>';
+ return '<article class="matchrow nfl-player-row" data-player-id="'+escapeHTML(String(r.player_id||r.player))+'"><details class="nfl-player-card"><summary style="cursor:pointer;padding:8px 0"><span class="row"><span><b>'+playerDisplay(r)+'</b> <span class="pill">'+escapeHTML(r.pos)+'</span><span class="muted" style="display:block">'+escapeHTML(r.team)+' vs '+escapeHTML(r.opp)+'</span></span><b style="color:'+color+'">'+score+'</b></span><span class="muted" style="display:block">'+escapeHTML(row.roleLabel||'Starting status unconfirmed')+' · '+escapeHTML(row.statusLabel)+'</span>'+nflBoardComponents(row)+'</summary><div class="nfl-player-body">'+nflBoardState(row)+roleEvidence+body+'</div></details></article>';
 }
 function nflBoardHTML(rows,render){
  if(!rows.length)return '<p class="muted">No roster records for this category and game. Refresh the feed or choose another matchup.</p>';
@@ -425,21 +425,22 @@ function lastFiveChart(r,category,target,defenseAverage){
  if(!field)return '';
  const games=Array.isArray(r.last5GameStats)?r.last5GameStats.slice(-5):[];
  if(!games.length)return '<div class="muted">Actual game-by-game stats awaiting the next nflverse feed update. No invented results.</div>';
- const values=games.map(g=>Number(g[field]));
- if(values.some(v=>!Number.isFinite(v)))return '<div class="muted">Incomplete game data. Chart withheld.</div>';
- const validTarget=Number.isFinite(Number(target))&&Number(target)>0;
- const threshold=validTarget?Number(target):null;
+ const statNumber=value=>['number','string'].includes(typeof value)&&String(value).trim()!==''&&Number.isFinite(Number(value))?Number(value):null;
+ const values=games.map(g=>statNumber(g[field]));
+ if(values.some(v=>v===null))return '<div class="muted">Incomplete game data. Chart withheld.</div>';
+ const targetNumber=statNumber(target),validTarget=targetNumber!==null&&targetNumber>0;
+ const threshold=validTarget?targetNumber:null;
  const hits=validTarget?values.filter(v=>v>=threshold).length:null;
  const max=Math.max(1,...values);
  const average=(values.reduce((sum,v)=>sum+v,0)/values.length).toFixed(1);
- const seasonValue=r.seasonAverages&&r.seasonAverages[field];
+ const seasonValue=statNumber(r.seasonAverages&&r.seasonAverages[field]);
  const bars=games.map((g,i)=>{
   const v=values[i],color=!validTarget?'#81938b':v>=threshold?'#00d985':'#ec6565';
   return '<div style="flex:1;min-width:0;text-align:center"><b style="font-size:12px">'+escapeHTML(v)+'</b><div style="height:70px;display:flex;align-items:flex-end;justify-content:center"><div style="width:72%;max-width:38px;height:'+Math.max(3,Math.round(v/max*65))+'px;background:'+color+';border-radius:5px 5px 0 0"></div></div><span class="muted">W'+escapeHTML(g.week)+'</span></div>';
  }).join('');
  const targetLabel=validTarget?'Research target '+escapeHTML(threshold)+'+ · '+hits+'/'+games.length+' hits ('+Math.round(100*hits/games.length)+'%)':'No verified or suggested target available · neutral bars';
- const defense=defenseAverage==null?'Unavailable':escapeHTML(defenseAverage)+'/game';
- return '<div style="margin-top:12px"><div class="muted" style="font-weight:800">LAST '+games.length+' '+(r.playerAppearancesVerified?'SNAP-VERIFIED APPEARANCES IN TEAM WINDOW':'TEAM GAMES (PARTICIPATION UNVERIFIED)')+'</div><div class="muted">Season: '+(r.seasonGamesPlayed||'--')+' games · Last five: '+(r.last5GamesPlayed||games.length)+' games</div><div style="display:flex;gap:8px;align-items:end;margin-top:8px">'+bars+'</div><div class="muted" style="margin-top:8px">'+targetLabel+'</div><div class="muted">Season average: '+(Number.isFinite(Number(seasonValue))?Number(seasonValue).toFixed(1):'N/A')+' · Last '+games.length+' average: '+average+' · Opposing defense allowed: '+defense+'</div><div class="muted">Green = met research target · Red = below target · Gray = no target. ' + (r.playerAppearancesVerified?'Appearances confirmed from offensive snap data.':'Zero production may mean no recorded touches, not confirmed participation. Team-game window; player appearances unverified.') + ' Research targets are not sportsbook lines.</div></div>';
+ const defenseValue=statNumber(defenseAverage),defense=defenseValue===null?'Unavailable':escapeHTML(defenseValue)+'/game';
+ return '<div style="margin-top:12px"><div class="muted" style="font-weight:800">LAST '+games.length+' '+(r.playerAppearancesVerified?'SNAP-VERIFIED APPEARANCES IN TEAM WINDOW':'TEAM GAMES (PARTICIPATION UNVERIFIED)')+'</div><div class="muted">Season: '+(r.seasonGamesPlayed||'--')+' games · Last five: '+(r.last5GamesPlayed||games.length)+' games</div><div style="display:flex;gap:8px;align-items:end;margin-top:8px">'+bars+'</div><div class="muted" style="margin-top:8px">'+targetLabel+'</div><div class="muted">Season average: '+(seasonValue!==null?seasonValue.toFixed(1):'N/A')+' · Last '+games.length+' average: '+average+' · Opposing defense allowed: '+defense+'</div><div class="muted">Green = met research target · Red = below target · Gray = no target. ' + (r.playerAppearancesVerified?'Appearances confirmed from offensive snap data.':'Zero production may mean no recorded touches, not confirmed participation. Team-game window; player appearances unverified.') + ' Research targets are not sportsbook lines.</div></div>';
 }
 function renderFirstTdProbability(){
  const root=document.getElementById('firstTDProbabilityPanel');if(!root)return;
@@ -471,7 +472,7 @@ function renderFirstTdProbability(){
 }
 function renderSimpleMatchups(){
  const el=document.getElementById('simpleRankings');if(!el)return;
- const rows=nflBoardRows('TD'),qualified=rows.filter(row=>row.recommendable).sort((a,b)=>b.score-a.score);
+ const allRows=nflBoardRows('TD','ALL'),rows=allRows.filter(row=>simplePosition==='ALL'||row.record.pos===simplePosition),qualified=allRows.filter(row=>row.recommendable).sort((a,b)=>b.score-a.score);
  const topDawgs=document.getElementById('topDawgs');
  const leader=row=>'<div class="matchrow"><b>'+playerDisplay(row.record)+'</b> · '+escapeHTML(row.record.team)+' · '+escapeHTML(row.record.pos)+' · <b>'+row.score+'/100</b>'+nflBoardComponents(row)+'</div>';
  if(topDawgs)topDawgs.innerHTML=qualified.length?'<p class="muted">Highest-rated TD research meeting the 60/100 and availability filters. Not calibrated betting probabilities.</p>'+qualified.slice(0,3).map(leader).join(''):'<p class="muted">PASS · No TD recommendation meets the score, sample and availability filters. All roster players remain listed below.</p>';

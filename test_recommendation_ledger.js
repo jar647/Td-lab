@@ -87,3 +87,10 @@ assert(!tdSource.coverage.some(c=>c.status==='error'),JSON.stringify(tdSource.co
 assert.equal(tdSource.picks.length,50,'all eligible TD rows are frozen without truncation');
 assert(tdSource.picks.every(p=>p.board==='Anytime TD research'&&p.score===100&&p.inputs.productionAvailable===true));
 assert(!tdSource.picks.some(p=>['td-out','td-low'].includes(p.playerId)));
+// TD capture is independent of QB/game-model availability and later games
+// still get a chance to publish supported research.
+const nextTD={...tdPlayers[0],player_id:'next-game-td',player:'Next Game TD',team:'C',opp:'D'};
+const isolatedTD=require('./scripts/recommendation_sources.cjs').captureSources(now,{onlySport:'NFL',nflInputs:{feed:[...tdPlayers,nextTD],status:{generated_at:before},games:{generated_at:before,games:[{game_id:'qb-unavailable',home:'A',away:'B',kickoff_at:new Date(now+6*3600000).toISOString()},{game_id:'next-game',home:'C',away:'D',kickoff_at:new Date(now+7*3600000).toISOString()}]}},nflEngine:{simulate:records=>{if(records.some(r=>r.team==='A'))throw Error('QB model unavailable');return {markets:[]}}}});
+assert.equal(isolatedTD.picks.length,51,'independent TD research survives a game-model failure');
+assert(isolatedTD.picks.some(p=>p.playerId==='next-game-td'),'later games still process');
+assert(isolatedTD.coverage.some(c=>c.gameId==='qb-unavailable'&&c.status==='partial'));

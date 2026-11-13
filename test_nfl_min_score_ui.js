@@ -64,6 +64,7 @@ for(const id of ['topDawgs','tdCategoryTop']){
  assert.doesNotMatch(el(id).innerHTML,/Below minimum/);
  assert.doesNotMatch(el(id).innerHTML,/Unavailable player|Backup quarterback|One-game player|Roster-only player|Manually excluded player/);
 }
+context.simplePosition='TE';vm.runInContext('renderSimpleMatchups()',context);assert.match(el('topDawgs').innerHTML,/Boundary qualifier/,'position filter must not erase other-position summary recommendations');assert.doesNotMatch(el('simpleRankings').innerHTML,/Boundary qualifier/);context.simplePosition='ALL';
 context.autoRecords=[low];picks.length=0;
 vm.runInContext('renderPropMatchups();renderSimpleMatchups()',context);
 assert.match(el('propRankings').innerHTML,/Below minimum/);

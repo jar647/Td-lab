@@ -34,12 +34,14 @@ function captureSources(now=Date.now(),overrides={}){
   const due=(games.games||[]).filter(g=>Date.parse(g.kickoff_at)>now&&Date.parse(g.kickoff_at)<now+7*86400000);
   const tdRows=boards.rows(feed,'TD',{ratingFor:r=>td.rating(r)}).filter(row=>row.recommendable);
   for(const g of due){const pool=feed.filter(p=>[g.home,g.away].includes(p.team)&&[g.home,g.away].includes(p.opp));if(!pool.length)continue;
+   for(const row of tdRows.filter(row=>[g.home,g.away].includes(row.record.team)&&[g.home,g.away].includes(row.record.opp))){const r=row.record,rating=row.rating;picks.push({sport:'NFL',board:'Anytime TD research',gameId:g.game_id,startsAt:g.kickoff_at,playerId:String(r.player_id),player:r.player,team:r.team,market:'anytime_td',side:'winner',line:null,score:row.score,scoreKind:'Anytime TD matchup /100',modelVersion:'nfl-td-role-'+hash(['nfl_td_matchup.js','nfl_player_board.js'])+'-min'+goal.MIN_SCORE+'-'+(rating.productionAvailable?'production':'usage'),label:r.player+' anytime rushing/receiving TD',reason:rating.coverage+' Player performance '+rating.performanceScore+'/100; opponent vs '+r.pos+' '+rating.opponentScore+'/100.',inputs:{feed:status.generated_at,scoringVersion:td.VERSION,productionAvailable:rating.productionAvailable,performanceScore:rating.performanceScore,opponentScore:rating.opponentScore,scoreFactors:rating.factors.map(({key,value,weight,max,group})=>({key,value,weight,max,group})),depthChart:r.depthChart||null}})}
+   try{
    const sim=engine.simulate(pool,10000,982451653,[]),lookup=new Map(sim.markets.map(x=>[x.id+'|'+x.market+'|'+x.line,x]));
    const candidates=pool.flatMap(p=>sandbox.definitions.map(d=>sandbox.choose(p,d,lookup)).filter(Boolean)).sort((a,b)=>b.score-a.score);
    const selected=new Map([...goal.rankPlayers(candidates,3),...goal.buildTicket(candidates,4)].map(c=>[goal.marketId(c),c]));
    for(const c of [...selected.values()].filter(c=>recommendationScore(c.researchScore,goal.MIN_SCORE)))picks.push({sport:'NFL',board:'Game analyst (top 3/default ticket)',gameId:g.game_id,startsAt:g.kickoff_at,playerId:String(c.p.player_id),player:c.p.player,team:c.p.team,market:c.d.key,side:'at_least',line:c.line,score:c.researchScore,scoreKind:'NFL matchup score /100',modelVersion,label:c.p.player+' '+c.line+'+ '+c.d.label,reason:c.reasons.join(' '),probability:c.scenarioRate,inputs:{feed:status.generated_at,games:games.generated_at,rawRank:c.score}});
-   for(const row of tdRows.filter(row=>[g.home,g.away].includes(row.record.team)&&[g.home,g.away].includes(row.record.opp))){const r=row.record,rating=row.rating;picks.push({sport:'NFL',board:'Anytime TD research',gameId:g.game_id,startsAt:g.kickoff_at,playerId:String(r.player_id),player:r.player,team:r.team,market:'anytime_td',side:'winner',line:null,score:row.score,scoreKind:'Anytime TD matchup /100',modelVersion:'nfl-td-role-'+hash(['nfl_td_matchup.js','nfl_player_board.js'])+'-'+(rating.productionAvailable?'production':'usage'),label:r.player+' anytime rushing/receiving TD',reason:rating.coverage+' Player performance '+rating.performanceScore+'/100; opponent vs '+r.pos+' '+rating.opponentScore+'/100.',inputs:{feed:status.generated_at,scoringVersion:td.VERSION,productionAvailable:rating.productionAvailable,performanceScore:rating.performanceScore,opponentScore:rating.opponentScore,scoreFactors:rating.factors.map(({key,value,weight,max,group})=>({key,value,weight,max,group})),depthChart:r.depthChart||null}})}
 
+   }catch(error){coverage.push({sport:'NFL',gameId:g.game_id,status:'partial',reason:'Game analyst withheld: '+error.message})}
   }
   const tdPrices=read('data/hardrock_anytime_td.json');
   if(fresh(tdPrices.retrieved_at_utc,now,1)){
@@ -53,7 +55,7 @@ function captureSources(now=Date.now(),overrides={}){
     if(candidates.length===1&&quotes.length===1){p.americanOdds=quotes[0].american_odds;p.priceObservedAt=tdPrices.retrieved_at_utc;p.bookmaker=tdPrices.source;p.priceFixture=offered[0].fixture_id;}
    }
   }
-  coverage.push({sport:'NFL',status:'ok',games:due.length});
+  coverage.push({sport:'NFL',status:coverage.some(c=>c.sport==='NFL'&&c.status==='partial')?'partial':'ok',games:due.length});
  });
  attempt('UFC',()=>{
   const schedule=read('ufc_schedule.json'),profiles=read('ufc_fighter_data.json'),history=read('ufc_history_data.json');if(!fresh(schedule.generated_at,now,168)){coverage.push({sport:'UFC',status:'stale',reason:'Saved schedule older than the app’s seven-day cache limit'});return;}
