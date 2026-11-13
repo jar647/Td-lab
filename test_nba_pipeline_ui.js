@@ -19,15 +19,15 @@ a.best_single={player_id:'p',player:'Sentinel',side:'over',market:'points',obser
 for(const score of [75,84.99,100.01,Infinity,NaN,null,'85'])assert(!ui.render(a,null,now,[{...ratings[0],researchScore:score}]).includes('Sentinel'));
 assert(!ui.render(a,null,now).includes('Sentinel'));
 for(const score of [85,100])assert(ui.render(a,null,now,[{...ratings[0],researchScore:score}]).includes(score+'/100'));
-assert(ui.render(a,null,now).includes('PASS · No supported OVER or UNDER matchup rated 85+/100'));
+assert(ui.render(a,null,now).includes('PASS · No supported OVER matchup rated 85+/100'));
 for(const patch of [{side:'under'},{market:'threes'}]){const b={...a,best_single:{...a.best_single,...patch},top_players:[{...a.best_single,...patch}]};assert(!ui.render(b,null,now,ratings).includes('Sentinel'))}
 assert(!ui.render({...a,blockers:['availability']},null,now,ratings).includes('Sentinel'));
 const underRecord={...a,best_single:{...a.best_single,side:'under'},top_players:[{...a.best_single,side:'under'}]};
 for(const score of [75,84.99,100.01,Infinity,NaN,null,'85'])assert(!ui.render(underRecord,null,now,[{...ratings[0],side:'under',researchScore:score}]).includes('Sentinel'));
-for(const score of [85,100])assert(ui.render(underRecord,null,now,[{...ratings[0],side:'under',researchScore:score}]).includes(score+'/100'));
+for(const score of [85,100])assert(!ui.render(underRecord,null,now,[{...ratings[0],side:'under',researchScore:score}]).includes('Sentinel'));
 assert(!ui.render(underRecord,null,now,[{...ratings[0],side:'over',researchScore:99}]).includes('Sentinel'));
 // Quoted and unpriced tickets share the same matchup-only gate for both sides.
-for(const side of ['over','under']){
+for(const side of ['over']){
  const pick={...a.best_single,side,researchScore:100,probability:.99};
  const row={...ratings[0],side};
  const quoted={...a,best_single:null,top_players:[],sgp:{bookmaker:'hardrockbet',observed_at:new Date(now).toISOString(),legs:[pick]}};
@@ -42,7 +42,8 @@ for(const side of ['over','under']){
  assert(ui.render(quoted,null,now,[row]).includes('SGP research lean'));
  assert(ui.render(unpriced,null,now,[row]).includes('Unpriced SGP research target'));
  const threesRecord={...a,best_single:{...pick,market:'threes'},top_players:[{...pick,market:'threes'}]};
- assert(!ui.render(threesRecord,null,now,[{...row,market:'threes',researchScore:100}]).includes('Sentinel'));
+ assert(ui.render(threesRecord,null,now,[{...row,market:'threes',researchScore:85}]).includes('Sentinel'));
+ assert(!ui.render(threesRecord,null,now,[{...row,market:'threes',researchScore:84.99}]).includes('Sentinel'));
  const combined={...quoted,sgp:{...quoted.sgp,legs:[{...pick,market:'pra'}]}};
  const combinedRows=['points','rebounds','assists'].map(market=>({...row,market}));
  assert(ui.render(combined,null,now,combinedRows).includes('SGP research lean'));
@@ -51,7 +52,12 @@ for(const side of ['over','under']){
 }
 const projectionRecord={...a,best_single:null,top_players:[],rotation:[{player_id:'archive',player:'Projection Sentinel',minutes:30,status:'available'}],projections:[{player_id:'archive',market:'points',projection:22.5}]};
 html=ui.render(projectionRecord,{model:'v2',graded_games:1,graded_projections:10,mae:2},now,[]);
-assert(html.includes('PASS · No supported OVER or UNDER matchup rated 85+/100'));
+assert(html.includes('PASS · No supported OVER matchup rated 85+/100'));
 assert(html.includes('Projection Sentinel')&&html.includes('22.5'));
 assert(html.includes('Frozen model grading'));
 console.log('Published NBA model UI: PASS');
+
+for(const ticket of ['sgp','research_ticket']){
+ const under={...a.best_single,side:'under'},bad={...a,best_single:under,top_players:[under],sgp:null,research_ticket:null};bad[ticket]={bookmaker:'hardrockbet',observed_at:new Date(now).toISOString(),legs:[under],joint_probability:.2,fair_decimal:5,minimum_decimal_for_5pct_ev:5.25};
+ const html=ui.render(bad,null,now,[{...ratings[0],side:'under',researchScore:100}]);assert(!html.includes('Sentinel'));assert(!html.includes('SGP research lean'));assert(!html.includes('Unpriced SGP research target'));
+}

@@ -9,9 +9,9 @@ const center=r.weaknesses.find(x=>x.attacking==='A'&&x.position==='C'&&x.market=
 for(const side of ['over','under']){
  assert.equal(engine.minimumScore(side),85);
  for(const researchScore of [75,80,84,84.99,100.01,Infinity,NaN,undefined,null,'85'])assert.equal(engine.qualifies({side,researchScore}),false,side+' score '+researchScore+' must fail closed');
- for(const researchScore of [85,85.01,99,100])assert.equal(engine.qualifies({side,researchScore}),true,side+' score '+researchScore+' must qualify');
+ for(const researchScore of [85,85.01,99,100])assert.equal(engine.qualifies({side,researchScore}),side==='over',side+' score '+researchScore+' must qualify');
 }
-assert.deepEqual(engine.markets,['points','rebounds','assists','pr','pa','ra','pra']);
+assert.deepEqual(engine.markets,['points','rebounds','assists','threes','pr','pa','ra','pra']);
 assert.equal(engine.recorded(player('A','C',0)).points,20);
 assert.equal(engine.baseline([30,30,30,30,30,30,30,30,30,30],'pr'),30);
 assert(engine.thresholds([30,31,32],'pra').includes(30.5)===false);
@@ -26,9 +26,19 @@ console.log('NBA position matchups: sourced positions, opponent/peer comparisons
 // Low-production players facing strong position defenses have separate UNDER evidence.
 const suppressed=structuredClone(feed);for(const g of suppressed.games)for(const x of g.players)if(x.id==='AC'){x.stats.REB='3';x.stats.DREB='1'}
 const underAnalysis=engine.analyze(game,suppressed,rosters,injuries,now),under=underAnalysis.candidates.find(x=>x.playerId==='AC'&&x.market==='rebounds'&&x.side==='under');
-assert(underAnalysis.weaknesses.some(x=>x.attacking==='A'&&x.position==='C'&&x.market==='rebounds'&&x.side==='under'));assert(under,'The fixture must retain a supported 85+ UNDER recommendation');assert(under.researchScore>=85);assert(under.weakness.allowed<under.weakness.leagueAverage);assert(under.baseline>3);
+assert(underAnalysis.weaknesses.some(x=>x.attacking==='A'&&x.position==='C'&&x.market==='rebounds'&&x.side==='under'));assert.equal(under,undefined,'Defensive suppression stays descriptive and cannot create a new UNDER recommendation');
 assert.equal(engine.rate([4,5,6],5,3,'under').hits,1,'Under excludes an integer push');
 assert(underAnalysis.candidates.every(engine.qualifies));
-assert(!engine.qualifies({side:'under',researchScore:84.99}));assert(engine.qualifies({side:'under',researchScore:85}));assert(!engine.qualifies({side:'over',researchScore:84.99}));
+assert(!engine.qualifies({side:'under',researchScore:84.99}));assert(!engine.qualifies({side:'under',researchScore:85}));assert(!engine.qualifies({side:'over',researchScore:84.99}));
 assert.deepEqual(engine.analyze(game,{...suppressed,odds:999,impliedProbability:.01},rosters,injuries,now).candidates,underAnalysis.candidates);
 assert.equal(engine.analyze(game,suppressed,rosters,{...injuries,generated_at:'2000-01-01'},now).candidates.length,0);
+
+// 3PM comes from observed makes, never an absent field or the attempt count.
+for(const [stats,value] of [[{'3PT':'0-4'},0],[{'3PT':'5-8'},5],[{'3PM':'3'},3],[{'3PTM':2},2],[{},null],[{'3PT':''},null],[{'3PT':'6-5'},null],[{'3PT':'2-5','3PM':3},null],[{'3PM':null},null]])assert.equal(engine.madeThrees(stats),value);
+const withoutThree=player('A','C',0);delete withoutThree.stats['3PT'];assert.equal(engine.recorded(withoutThree).threes,null);assert.equal(engine.recorded(withoutThree).points,20);
+const shooting=structuredClone(feed);for(const g of shooting.games)for(const x of g.players){const made=x.id==='ASG'?5:1;x.stats['3PT']=made+'-8';x.stats.PTS=String(20+made)}
+const shootingAnalysis=engine.analyze(game,shooting,rosters,injuries,now),shooter=shootingAnalysis.candidates.find(x=>x.playerId==='ASG'&&x.market==='threes');
+assert(shooter,'Observed shooting role and opponent position weakness should support a qualifying three-point OVER');assert(shooter.researchScore>=85);assert.equal(shooter.history.length,10);assert(shooter.history.every(x=>x===5));assert.equal(shooter.weakness.games,10);assert.equal(shooter.baseline,5);
+const sourceRecords=p.records;p.records=(f,cutoff)=>sourceRecords(f,cutoff).map(g=>({...g,players:g.players.map(x=>{const stats={...x.stats};delete stats['3PT'];return {...x,stats}})}));
+try{const missing=engine.analyze(game,shooting,rosters,injuries,now);assert(!missing.candidates.some(x=>x.market==='threes'));assert(missing.candidates.some(x=>x.market==='rebounds'),'Missing 3PM must not erase other observed markets');assert(!missing.weaknesses.some(x=>x.market==='threes'));}finally{p.records=sourceRecords}
+console.log('NBA OVER-only and 85+ three-point boundary / known versus missing 3PM samples PASS');
