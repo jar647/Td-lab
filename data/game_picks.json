@@ -1,7 +1,7 @@
 {
   "season": 2026,
   "week": 10,
-  "generated_at": "2026-11-13T02:53:05.086308+00:00",
+  "generated_at": "2026-11-13T03:58:00.057308+00:00",
   "model_status": "AUDITED_BASELINE_UNCALIBRATED",
   "model_version": "score-baseline-trust-v3",
   "note": "Historical scoring research baseline; independently recomputed source rates; QB-led history separated; no unvalidated EPA point correction or verified betting recommendation.",
@@ -756,12 +756,8 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "fieldturf",
-            "temperature_f": 50,
-            "wind_mph": 10.0,
-            "wind_direction": "NE",
-            "precipitation_probability": 75,
-            "weather_condition": "Rain Showers",
-            "weather_updated_at": null
+            "temperature_f": null,
+            "wind_mph": null
           },
           "travel": {
             "available": true,
@@ -771,7 +767,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T02:53:03.191754+00:00",
+            "retrieved_at": "2026-11-13T03:57:57.639774+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -797,21 +793,15 @@
             }
           },
           "weather": {
-            "available": true,
-            "source": "National Weather Service hourly forecast",
-            "forecast_time": "2026-11-12T21:00:00-05:00",
-            "updated_at": null,
-            "temperature_f": 50,
-            "wind_mph": 10.0,
-            "wind_direction": "NE",
-            "precipitation_probability": 75,
-            "condition": "Rain Showers"
+            "available": false,
+            "source": "NWS",
+            "reason": "Kickoff is outside the available hourly forecast window."
           }
         },
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T02:53:02.797059+00:00",
+          "checked_at": "2026-11-13T03:57:57.183667+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -1041,7 +1031,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T02:53:03.192211+00:00",
+          "generated_at": "2026-11-13T03:57:57.640541+00:00",
           "available": false,
           "quarterbacks": {
             "NYG": {
@@ -1084,8 +1074,8 @@
           "away_rest": 4.0,
           "travel_miles": 198,
           "roof": "outdoors",
-          "temperature_f": 50,
-          "wind_mph": 10.0
+          "temperature_f": null,
+          "wind_mph": null
         },
         "prior_games": 4.0,
         "league_points_prior": 22.0,
@@ -2113,7 +2103,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T02:53:03.219028+00:00",
+            "retrieved_at": "2026-11-13T03:57:57.666920+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -2147,7 +2137,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T02:53:02.797059+00:00",
+          "checked_at": "2026-11-13T03:57:57.183667+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -2378,7 +2368,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T02:53:03.219494+00:00",
+          "generated_at": "2026-11-13T03:57:57.667583+00:00",
           "available": true,
           "quarterbacks": {
             "DET": {
@@ -3514,7 +3504,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T02:53:03.371076+00:00",
+            "retrieved_at": "2026-11-13T03:57:57.883632+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -3554,7 +3544,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T02:53:02.797059+00:00",
+          "checked_at": "2026-11-13T03:57:57.183667+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -3785,7 +3775,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T02:53:03.371592+00:00",
+          "generated_at": "2026-11-13T03:57:57.884291+00:00",
           "available": true,
           "quarterbacks": {
             "ATL": {
@@ -4934,7 +4924,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T02:53:03.855673+00:00",
+            "retrieved_at": "2026-11-13T03:57:58.167613+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -4974,7 +4964,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T02:53:02.797059+00:00",
+          "checked_at": "2026-11-13T03:57:57.183667+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -5205,7 +5195,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T02:53:03.856143+00:00",
+          "generated_at": "2026-11-13T03:57:58.168257+00:00",
           "available": true,
           "quarterbacks": {
             "CLE": {
@@ -6363,7 +6353,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T02:53:04.049250+00:00",
+            "retrieved_at": "2026-11-13T03:57:58.398202+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -6403,7 +6393,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T02:53:02.797059+00:00",
+          "checked_at": "2026-11-13T03:57:57.183667+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -6634,7 +6624,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T02:53:04.049722+00:00",
+          "generated_at": "2026-11-13T03:57:58.398813+00:00",
           "available": true,
           "quarterbacks": {
             "GB": {
@@ -7732,7 +7722,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T02:53:04.152213+00:00",
+            "retrieved_at": "2026-11-13T03:57:58.691308+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -7772,7 +7762,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T02:53:02.797059+00:00",
+          "checked_at": "2026-11-13T03:57:57.183667+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -8003,7 +7993,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T02:53:04.152694+00:00",
+          "generated_at": "2026-11-13T03:57:58.691875+00:00",
           "available": false,
           "quarterbacks": {
             "IND": {
@@ -9053,7 +9043,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T02:53:04.179481+00:00",
+            "retrieved_at": "2026-11-13T03:57:58.718049+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -9087,7 +9077,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T02:53:02.797059+00:00",
+          "checked_at": "2026-11-13T03:57:57.183667+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -9317,7 +9307,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T02:53:04.179916+00:00",
+          "generated_at": "2026-11-13T03:57:58.718654+00:00",
           "available": true,
           "quarterbacks": {
             "NO": {
@@ -10412,7 +10402,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T02:53:04.206545+00:00",
+            "retrieved_at": "2026-11-13T03:57:58.743537+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -10452,7 +10442,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T02:53:02.797059+00:00",
+          "checked_at": "2026-11-13T03:57:57.183667+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -10683,7 +10673,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T02:53:04.206961+00:00",
+          "generated_at": "2026-11-13T03:57:58.744114+00:00",
           "available": true,
           "quarterbacks": {
             "NYJ": {
@@ -11806,7 +11796,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T02:53:04.699718+00:00",
+            "retrieved_at": "2026-11-13T03:57:58.946489+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -11846,7 +11836,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T02:53:02.797059+00:00",
+          "checked_at": "2026-11-13T03:57:57.183667+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -12076,7 +12066,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T02:53:04.700176+00:00",
+          "generated_at": "2026-11-13T03:57:58.947128+00:00",
           "available": true,
           "quarterbacks": {
             "TEN": {
@@ -13209,7 +13199,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T02:53:04.783742+00:00",
+            "retrieved_at": "2026-11-13T03:57:59.303660+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -13249,7 +13239,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T02:53:02.797059+00:00",
+          "checked_at": "2026-11-13T03:57:57.183667+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -13481,7 +13471,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T02:53:04.784201+00:00",
+          "generated_at": "2026-11-13T03:57:59.304313+00:00",
           "available": false,
           "quarterbacks": {
             "ARI": {
@@ -14520,7 +14510,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T02:53:04.810351+00:00",
+            "retrieved_at": "2026-11-13T03:57:59.329608+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -14554,7 +14544,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T02:53:02.797059+00:00",
+          "checked_at": "2026-11-13T03:57:57.183667+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -14786,7 +14776,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T02:53:04.810776+00:00",
+          "generated_at": "2026-11-13T03:57:59.330226+00:00",
           "available": false,
           "quarterbacks": {
             "LV": {
@@ -15902,7 +15892,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T02:53:04.904211+00:00",
+            "retrieved_at": "2026-11-13T03:57:59.614374+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -15942,7 +15932,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T02:53:02.797059+00:00",
+          "checked_at": "2026-11-13T03:57:57.183667+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -16173,7 +16163,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T02:53:04.904698+00:00",
+          "generated_at": "2026-11-13T03:57:59.615031+00:00",
           "available": true,
           "quarterbacks": {
             "DAL": {
@@ -17206,7 +17196,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T02:53:05.007982+00:00",
+            "retrieved_at": "2026-11-13T03:57:59.807971+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -17246,7 +17236,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T02:53:02.797059+00:00",
+          "checked_at": "2026-11-13T03:57:57.183667+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -17476,7 +17466,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T02:53:05.008473+00:00",
+          "generated_at": "2026-11-13T03:57:59.808588+00:00",
           "available": true,
           "quarterbacks": {
             "CIN": {
@@ -18407,7 +18397,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-13T02:53:05.085765+00:00",
+            "retrieved_at": "2026-11-13T03:58:00.056636+00:00",
             "season": 2026,
             "through_week": 9,
             "sources": [
@@ -18447,7 +18437,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "d2e3f0fb7dc4e9d9f2922c45a5f3fb929f6d4a4f659182ab70125a6af241e4e6",
-          "checked_at": "2026-11-13T02:53:02.797059+00:00",
+          "checked_at": "2026-11-13T03:57:57.183667+00:00",
           "through_week": 9,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -18678,7 +18668,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v1",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-13T02:53:05.086213+00:00",
+          "generated_at": "2026-11-13T03:58:00.057214+00:00",
           "available": true,
           "quarterbacks": {
             "BAL": {
