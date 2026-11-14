@@ -13,6 +13,18 @@
  function createButton(pick){
   const el=root.document.createElement('button');el.type='button';el.className='quick-slip-add';el.dataset.quickSlip=encode(pick);el.textContent='＋ Add to Quick Slip';return el;
  }
+ function nflSide(pick){
+  const explicit=String(pick.side||'').trim().toLowerCase().replace(/[ -]+/g,'_');
+  if(explicit)return explicit==='atleast'?'at_least':explicit;
+  const label=String(pick.recommendation||'').trim();
+  const direction=/^(over|under)\b/i.exec(label);
+  if(direction)return direction[1].toLowerCase();
+  if(/^\d+(?:\.\d+)?\s*\+/.test(label))return 'at_least';
+  const line=pick.recommendationLine??pick.line;
+  if(line===null||line===undefined||line==='')return 'winner';
+  const numeric=Number(line);
+  return Number.isFinite(numeric)?Number.isInteger(numeric)?'at_least':'over':'unknown';
+ }
  function addFromButton(button){
   let pick;try{pick=decode(button.dataset.quickSlip)}catch(_){return}
   for(const [inputKey,valueKey] of [['lineInputId','line'],['overOddsInputId','overOdds'],['underOddsInputId','underOdds']]){
@@ -26,8 +38,12 @@
    if(!validRating(pick)||Number(pick.line)!==Number(pick.ratedLine)||!price||Number(price)!==Number(pick.ratedOdds)||String(pick.side).toUpperCase()!==pick.ratedSide)pick.propScore=null;
    pick.ratingSavedAt=pick.propScore===null?null:new Date().toISOString();
   }
-  const key=[pick.sport,pick.game,pick.player,pick.market,pick.recommendationLine??pick.line??''].join('|').toLowerCase();
-  const exists=picks.findIndex(p=>p.key===key);
+  const baseKey=[pick.sport,pick.game,pick.player,pick.market,pick.recommendationLine??pick.line??''].join('|').toLowerCase();
+  const nfl=String(pick.sport||'').toUpperCase()==='NFL',side=nfl?nflSide(pick):null;
+  const key=nfl?baseKey+'|'+side:baseKey;
+  // Legacy NFL keys have no direction. Match them only when their original
+  // recommendation means the same thing; OVER 80 and 80+ settle differently.
+  const exists=picks.findIndex(p=>nfl?(p.key===key||p.key===baseKey)&&nflSide(p)===side:p.key===key);
   if(exists>=0)picks[exists]={...picks[exists],...pick,key};else picks.push({...pick,key});
   save();
   const old=button.textContent;button.textContent='Added ✓';button.classList.add('is-added');

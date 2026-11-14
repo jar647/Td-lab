@@ -194,7 +194,30 @@ function simulate(records,count=10000,seed=1307,selected=[],options={}){
    throw Error('Cannot simulate '+leg.id+' '+leg.market+': '+(unavailable?.reason||'This market is not supported for the selected player'));
   }
  }
+ let parlayLegs=null;
+ if(options.parlayLegs!==undefined){
+  if(!Array.isArray(options.parlayLegs)||options.parlayLegs.length<1||options.parlayLegs.length>4)
+   throw Error('Parlay legs must be an array of one to four supported player props');
+  const seen=new Set();parlayLegs=[];
+  for(const leg of options.parlayLegs){
+   if(!leg||typeof leg!=='object'||Array.isArray(leg))throw Error('Each parlay leg must be a player prop object');
+   const id=typeof leg.id==='string'?leg.id.trim():typeof leg.id==='number'&&Number.isSafeInteger(leg.id)&&leg.id>=0?String(leg.id):null;
+   const raw=leg.line;
+   const numeric=typeof raw==='number'||typeof raw==='string'&&/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(raw.trim());
+   const line=numeric?Number(raw):NaN;
+   if(!id||typeof leg.market!=='string'||!Object.hasOwn(MARKETS,leg.market)||!['over','at_least'].includes(leg.side))
+    throw Error('Parlay legs require an exact player identity, supported player market and over or at_least side');
+   if(!Number.isFinite(line)||line<0||line>10000||!Number.isInteger(line*2)||leg.side==='at_least'&&line===0)
+    throw Error('Parlay lines must be finite whole or half thresholds; at_least thresholds must be positive');
+   if(seen.has(id))throw Error('A parlay may contain only one prop per player');
+   if(!byId.has(id))throw Error('Cannot simulate parlay '+id+': player has no eligible verified history in this matchup');
+   if(!supportedMarkets.has(marketKey(id,leg.market)))
+    throw Error('Cannot simulate parlay '+id+' '+leg.market+': this player market is unavailable');
+   seen.add(id);parlayLegs.push({p:byId.get(id),market:leg.market,line,side:leg.side});
+  }
+ }
  let joint=0;
+ let parlayAllWin=0,parlayNonLoss=0;
  const sumScores={};
  for(let trial=0;trial<count;trial++){
   for(const p of model.players){p.output.passYards=0;p.output.rushYards=0;p.output.recYards=0;p.output.receptions=0;}
@@ -250,6 +273,16 @@ function simulate(records,count=10000,seed=1307,selected=[],options={}){
   if(selections.length&&selections.every(x=>{
    const p=byId.get(x.id);return p&&MARKETS[x.market]&&p.output[x.market]>=x.line;
   }))joint++;
+  if(parlayLegs){
+   let allWin=true,nonLoss=true;
+   for(const leg of parlayLegs){
+    const value=Math.floor(leg.p.output[leg.market]);
+    if(value<leg.line){allWin=false;nonLoss=false;break}
+    if(leg.side==='over'&&value===leg.line)allWin=false;
+   }
+   if(allWin)parlayAllWin++;
+   if(nonLoss)parlayNonLoss++;
+  }
  }
  const markets=[];
  for(const [key,n] of hits.entries()){
@@ -277,6 +310,13 @@ function simulate(records,count=10000,seed=1307,selected=[],options={}){
    return {id,market,count,bins:[...bins].sort((a,b)=>a[0]-b[0])};
   })}:{}),
   joint:selections.length?{legs:selections.length,hits:joint,scenarioRate:joint/count}:null,
+  ...(parlayLegs?{parlay:{count,legs:parlayLegs.length,
+   allWinCount:parlayAllWin,nonLossCount:parlayNonLoss,
+   // At least one push and no losing leg. Book-specific parlay repricing
+   // determines payout; this category does not imply a full-stake refund.
+   pushOnlyCount:parlayNonLoss-parlayAllWin,lossCount:count-parlayNonLoss,
+   allWinRate:parlayAllWin/count,nonLossRate:parlayNonLoss/count,
+   pushOnlyRate:(parlayNonLoss-parlayAllWin)/count,lossRate:(count-parlayNonLoss)/count}}:{}),
   assumptions:['Generative team play volume and pass/rush split','Player targets and carries compete for team opportunities',
    'Receptions require target and completion','Quarterback passing yards derive from completed receiver outcomes',
    'Pace/game script drive within-game dependencies','Distribution parameters and correlations are NOT calibrated']};

@@ -88,6 +88,6 @@ let loaded,message,posted;
 const worker={importScripts:path=>{loaded=path},PropVaultGameEngine:{simulate(...args){message=args;return {settlements:[settlement]}}},postMessage:value=>{posted=value}};
 vm.runInNewContext(fs.readFileSync('nfl_game_worker.js','utf8'),{...worker,self:worker});
 worker.onmessage({data:{players:lineup,count:10000,seed:982451653,selected:[],requestId:7,options:{collectSettlements:true}}});
-assert.equal(loaded,'./nfl_game_engine.js?v=nfl-book-review-v5');assert.equal(message[4].collectSettlements,true);assert.equal(posted.requestId,7);
+assert.equal(loaded,'./nfl_game_engine.js?v=nfl-parlay-v6');assert.equal(message[4].collectSettlements,true);assert.equal(posted.requestId,7);
 assert.equal(posted.result.settlements[0],settlement);
 console.log('NFL book review: exact OVER settlement, pushes, American odds, malformed-data safeguards and unchanged seeded simulations PASS');

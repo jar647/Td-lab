@@ -79,6 +79,43 @@ const changedSimulation=simulation([boundary]);changedSimulation.markets.find(r=
 const supported=api.build([boundary],fixture,changedSimulation,options).bestSingle.alternatives;
 assert.equal(supported.find(a=>a.line===60).scenarioRate,.3,'alternate frequency comes from the matching actual simulation market');
 
+// Default lines balance meaningful production with the generated frequency;
+// easier 90%+ thresholds cannot win just because their hit count is higher.
+function lineLookup(record,market,modeledMean,rates){
+ return new Map(Object.entries(rates).map(([line,scenarioRate])=>[
+  record.player_id+'|'+market+'|'+line,{id:record.player_id,market,line:Number(line),scenarioRate,modeledMean}]));
+}
+const rushDefinition=api.defs.find(d=>d.key==='rushYards');
+const cook=player('james-cook','RB','A',{player:'James Cook'});
+const cookModel=lineLookup(cook,'rushYards',112.9,{25:.9996,40:.9935,50:.9789,60:.9486,70:.8914,80:.807,100:.597});
+const cookOriginal=JSON.stringify({record:cook,lookup:[...cookModel]});
+const cookDefault=api.choose(cook,rushDefinition,cookModel);
+assert.equal(cookDefault.line,80,'Cook selects 80+ instead of the easier 60+ default');
+assert.equal(cookDefault.scenarioRate,.807);assert.equal(cookDefault.modeledMean,112.9);
+assert.equal(cookDefault.researchScore,goal.matchupScore(cook,'RUSH'),'line selection cannot change the matchup rating');
+assert(cookDefault.reasons.some(reason=>reason.includes('closest to 75% simulated frequency')));
+assert(cookDefault.reasons.some(reason=>reason.includes('Book availability and price require verification')));
+assert.equal(JSON.stringify({record:cook,lookup:[...cookModel]}),cookOriginal,'choosing a default never edits sourced player inputs or simulation outcomes');
+const pricedCook={...cook,odds:-10000,americanOdds:99999,impliedWinProbability:.999,expectedValue:99999};
+assert.deepEqual({...api.choose(pricedCook,rushDefinition,cookModel),p:cook},cookDefault,'manual prices and betting-value metadata cannot change the default or its quality');
+const alternateProfile=lineLookup(cook,'rushYards',112.9,{40:.99,50:.94,60:.86,70:.75,80:.64,100:.4});
+const differentDefault=api.choose(cook,rushDefinition,alternateProfile);
+assert.equal(differentDefault.line,70);assert.equal(differentDefault.researchScore,cookDefault.researchScore,'frequency is not reinterpreted as the matchup score');
+const tieModel=lineLookup(cook,'rushYards',112.9,{60:.875,70:.625});
+assert.equal(api.choose(cook,rushDefinition,tieModel).line,70,'equidistant supported lines prefer the higher threshold');
+const catchDefinition=api.defs.find(d=>d.key==='receptions'),catchPlayer=player('catch-player','WR');
+const discreteModel=lineLookup(catchPlayer,'receptions',5,{2:.99,3:.89,4:.68,5:.5});
+assert.equal(api.choose(catchPlayer,catchDefinition,discreteModel).line,4,'75% is a target, not a cutoff that forces an easy three-catch line');
+for(const definition of api.defs){
+ const record=player('floor-'+definition.key,definition.positions[0]);
+ const tinyRates=Object.fromEntries(definition.steps.filter(line=>line<goal.MIN_ALT[definition.key]).map(line=>[line,.99]));
+ assert.equal(api.choose(record,definition,lineLookup(record,definition.key,300,tinyRates)),null,'missing meaningful '+definition.key+' coverage must PASS instead of inventing a tiny fallback');
+}
+assert.equal(api.choose(cook,rushDefinition,lineLookup(cook,'rushYards',112.9,{40:.5699})),null,'balanced defaults preserve the existing simulation support floor');
+assert.equal(api.choose(cook,rushDefinition,lineLookup(cook,'rushYards',50,{60:.75})),null,'balanced defaults preserve the existing modeled-mean limit');
+const noMeaningful=api.build([cook],fixture,{markets:[...lineLookup(cook,'rushYards',112.9,{25:.99}).values()]},options);
+assert.deepEqual(noMeaningful.candidates,[]);assert.equal(noMeaningful.status,'pass');
+
 for(const update of [{feedGeneratedAt:'2026-11-11T13:59:59Z'},{fixturesGeneratedAt:'2026-11-11T13:59:59Z'},{feedGeneratedAt:'2026-11-13'},{feedGeneratedAt:new Date(now+300001).toISOString()},{fixtures:[]},{fixtures:[fixture,{...fixture}]},{now:NaN}]){
  const r=api.build(full,fixture,simulation(full),{...options,...update});assert.equal(r.ready,false);assert.deepEqual(r.candidates,[]);
 }

@@ -49,10 +49,13 @@ function choose(p,d,scenarioLookup){
  const viable=d.steps.map(line=>{
   const scenario=scenarioLookup.get(id+'|'+d.key+'|'+line);
   return {line,hits:last.filter(v=>v>=line).length,scenarioRate:n(scenario?.scenarioRate),modeledMean:n(scenario?.modeledMean)};
- }).filter(x=>x.scenarioRate!==null&&x.scenarioRate>=.57&&x.scenarioRate<=1&&x.modeledMean>0&&x.line<=x.modeledMean*1.04);
+ }).filter(x=>x.line>=floor&&x.scenarioRate!==null&&x.scenarioRate>=.57&&x.scenarioRate<=1&&x.modeledMean>0&&x.line<=x.modeledMean*1.04);
  if(!viable.length)return null;
- const ranked=viable.map(x=>({...x,utility:x.scenarioRate*65+x.line/Math.max(1,x.modeledMean)*38+(x.line>=floor?9:-24)})).sort((a,b)=>b.utility-a.utility||b.line-a.line);
- const best=ranked[0];if(best.line<floor&&best.utility<38)return null;
+ // The target is a balanced threshold preference, not a calibrated chance
+ // requirement or a matchup score. Do not reward the easiest high-rate line.
+ const ranked=viable.map(x=>({...x,utility:x.scenarioRate*65+x.line/Math.max(1,x.modeledMean)*38+9}))
+  .sort((a,b)=>Math.abs(a.scenarioRate-.75)-Math.abs(b.scenarioRate-.75)||b.line-a.line);
+ const best=ranked[0];
  const status=String(p.injuryReportStatus||'NOT_REPORTED').toUpperCase(),availability=String(p.availability||'UNVERIFIED').toUpperCase();
  if(!['ROSTER_ACTIVE','QUESTIONABLE'].includes(availability)||/OUT|IR|PUP|SUSPENDED|INACTIVE|DOUBTFUL/.test(status+' '+availability))return null;
  const practice=String(p.injuryPracticeStatus||'NOT_REPORTED').toUpperCase(),practiceFlag=/DNP_PRACTICE|LIMITED_PRACTICE/.test(practice);
@@ -60,12 +63,12 @@ function choose(p,d,scenarioLookup){
  const score=best.utility+best.scenarioRate*20+Math.min(1,sample/5)*8-(injuryFlag?12:0);
  const reasons=[`Game-first scenario frequency: ${(best.scenarioRate*100).toFixed(1)}% at this line (UNCALIBRATED).`,`Recent form: ${recent.toFixed(d.key==='receptions'?1:0)} ${d.label}/game over the latest three recorded games versus ${season.toFixed(d.key==='receptions'?1:0)} season average.`,`Cleared ${best.line}+ in ${best.hits} of the last ${last.length} recorded games.`,`Workload: ${volume.toFixed(1)} ${d.volumeLabel}.`];
  reasons.push(ratio!==null?`Opponent matchup factor: ${ratio.toFixed(2)}× its opponents' baseline in this category (${ratio>1.04?'favorable':ratio<.96?'challenging':'roughly neutral'}).`:'Opponent-adjusted category data unavailable; selection relies on production and workload.');
+ reasons.push('Balanced alternate: supported meaningful line closest to 75% simulated frequency. Book availability and price require verification.');
  const risks=[];
  if(injuryFlag)risks.push(`Game-day status not confirmed (${status}; roster: ${availability}).`);
  if(practiceFlag)risks.push(`Practice report: ${practice.replace('_PRACTICE','')}. This is NOT an official game-day OUT designation.`);
  if(p.pos==='RB'&&Array.isArray(p.possibleReturningTeammates)&&p.possibleReturningTeammates.length)risks.push('Potential returning teammates could alter workload.');
  if(last.length<5)risks.push('Limited recent sample.');
- if(best.line<floor)risks.push('Very conservative alternate line. Book availability and price are unverified; omit it if payout contribution is negligible.');
  return {p,d,line:best.line,score,researchScore,reasons,risks,hits:best.hits,sample,injuryFlag,scenarioRate:best.scenarioRate,modeledMean:best.modeledMean};
 }
 function order(a,b){return b.researchScore-a.researchScore||b.score-a.score||String(a.key).localeCompare(String(b.key));}

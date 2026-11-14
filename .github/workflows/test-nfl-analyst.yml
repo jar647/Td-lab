@@ -21,6 +21,13 @@ on:
       - 'nfl_top_plays.js'
       - 'nfl_top_plays_ui.js'
       - 'nfl_book_review.js'
+      - 'nfl_parlay.js'
+      - 'nfl_parlay_ui.js'
+      - 'test_nfl_parlay.js'
+      - 'test_nfl_parlay_ui.js'
+      - 'test_nfl_parlay_engine.js'
+      - 'test_nfl_quick_slip_side.js'
+      - 'quick_slip.js'
       - 'test_nfl_book_review.js'
       - 'test_nfl_book_review_ui.js'
       - 'test_nfl_top_plays.js'
@@ -63,6 +70,10 @@ jobs:
       - run: node test_nfl_top_plays_ui.js
       - run: node test_nfl_book_review.js
       - run: node test_nfl_book_review_ui.js
+      - run: node test_nfl_parlay.js
+      - run: node test_nfl_parlay_ui.js
+      - run: node test_nfl_parlay_engine.js
+      - run: node test_nfl_quick_slip_side.js
       - run: node test_nfl_history_chart.js
       - run: node test_nfl_matchup_score.js
       - run: node test_nfl_min_score_ui.js
