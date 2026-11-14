@@ -148,7 +148,37 @@ class LiveInjuryTests(unittest.TestCase):
 
     def test_current_monday_game_accepts_preceding_friday_report(self):
         games = [dict(slate()[0], gameday='2026-11-16', gametime='20:15')]
-        self.assertIn(GSIS, self.fetch(slate=games)['reports'])
+        self.assertIn(GSIS, self.fetch(document(report(stamp='2026-11-13T16:33Z')), slate=games)['reports'])
+
+    def test_unscoped_previous_monday_out_cannot_be_restamped_for_next_game(self):
+        # Monday Nov 9 belongs to the prior NFL week. A fresh global endpoint
+        # timestamp must not turn that game's OUT into a Nov 15 designation.
+        old = report(stamp='2026-11-10T00:00Z')  # Nov 9, 7 p.m. Eastern
+        self.assertEqual(self.fetch(document(old))['reports'], {})
+        monday = [dict(slate()[0], gameday='2026-11-16', gametime='20:15')]
+        self.assertEqual(self.fetch(document(old), slate=monday)['reports'], {})
+        prior = self.fetch()
+        prior['reports'][GSIS]['reportedAt'] = old['date']
+        empty = dict(document(), injuries=[])
+        self.assertEqual(self.fetch(empty, previous=prior)['reports'], {}, 'previously cached output week alone cannot re-scope an old report')
+        current = self.fetch(document(report(stamp='2026-11-10T05:00Z')))
+        self.assertIn(GSIS, current['reports'], 'Tuesday midnight Eastern begins the unscoped reporting window')
+
+    def test_explicit_source_week_can_identify_current_week_early_report(self):
+        early = report(stamp='2026-11-09T17:00Z')
+        for doc in [document(dict(early, week=10)), dict(document(early), week=10)]:
+            result = self.fetch(doc)
+            self.assertIn(GSIS, result['reports'])
+            self.assertTrue(result['reports'][GSIS]['weekScoped'])
+            empty = dict(document(), injuries=[])
+            self.assertIn(GSIS, self.fetch(empty, previous=result)['reports'], 'cache retains explicit original source scope')
+
+    def test_explicit_previous_document_week_cannot_rescope_unscoped_friday_row(self):
+        doc = dict(document(report(stamp='2026-11-13T16:33Z')), week=9)
+        result = self.fetch(doc)
+        self.assertEqual(result['reports'], {})
+        self.assertEqual(result['diagnostics']['status'], 'unavailable')
+        self.assertIn('another week', result['diagnostics']['error'])
 
     def test_active_or_practice_labels_never_invent_game_designations(self):
         for status in ['Active', 'Full Participation', 'DNP', 'Limited', '', 'IR']:

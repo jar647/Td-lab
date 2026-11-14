@@ -12,7 +12,9 @@ class BestBetsSafetyTests(unittest.TestCase):
     def test_stale_prices_block_best_bets(self):
         self.assertIn("!hardRockFeedFresh||!m", HTML)
         self.assertIn("hardRockFeedFresh=fresh", HTML)
-        self.assertIn("hardRockFeedFresh=false;hardRockMatched=new Map();hardRockMatchCount=0;renderBoard();renderBestBets()", HTML)
+        # Injury refresh batches the board render, while stale prices must
+        # still clear the matched quotes and recompute BET/PASS immediately.
+        self.assertRegex(HTML, r"hardRockFeedFresh=false;hardRockMatched=new Map\(\);hardRockMatchCount=0;(?:if\(!options\.deferRender\))?renderBoard\(\);renderBestBets\(\)")
 
     def test_price_feed_must_be_current(self):
         self.assertIn("age<=15*60000", HTML)

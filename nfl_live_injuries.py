@@ -85,13 +85,16 @@ def _fixtures(slate, season, week, now):
         if not 0 < (kickoff - now).total_seconds() <= 7 * 86400:
             continue
         day = kickoff.astimezone(EASTERN).date()
-        # NFL weeks generally run Thursday through Monday/Tuesday. Reports
-        # from the prior game's week cannot carry into this game's designation.
+        # Monday injury news can concern the previous NFL week's Monday game.
+        # Unscoped rows must be dated Tuesday or later; only a source that
+        # explicitly supplies this NFL week may use an earlier Monday report.
         monday = day - timedelta(days=day.weekday() + (7 if day.weekday() < 2 else 0))
-        starts = datetime.combine(monday, time(), EASTERN).astimezone(timezone.utc)
+        scoped_starts = datetime.combine(monday, time(), EASTERN).astimezone(timezone.utc)
+        starts = datetime.combine(monday + timedelta(days=1), time(), EASTERN).astimezone(timezone.utc)
         for team, opponent in [(home, away), (away, home)]:
             by_team.setdefault(team, []).append({'gameId': game_id.strip(), 'opponent': opponent,
-                                                 'kickoff': kickoff, 'reportStart': starts})
+                                                 'kickoff': kickoff, 'reportStart': starts,
+                                                 'scopedReportStart': scoped_starts})
     return {team: games[0] for team, games in by_team.items() if len(games) == 1}
 
 
@@ -113,8 +116,9 @@ def _roster_lookup(rosters, season):
             and len(by_gsis[next(iter(ids))]) == 1 and len(by_athlete[key[1]]) == 1}
 
 
-def _reported_in_game(stamp, fixture, now):
-    return stamp is not None and fixture['reportStart'] <= stamp < fixture['kickoff'] and stamp <= now + timedelta(minutes=5)
+def _reported_in_game(stamp, fixture, now, week_scoped=False):
+    starts = fixture['scopedReportStart'] if week_scoped else fixture['reportStart']
+    return stamp is not None and starts <= stamp < fixture['kickoff'] and stamp <= now + timedelta(minutes=5)
 
 
 def _cached_out(previous, fixtures, roster, season, week, now):
@@ -135,7 +139,7 @@ def _cached_out(previous, fixtures, roster, season, week, now):
             continue
         reported = _stamp(report.get('reportedAt'))
         observed = _stamp(report.get('observedAt'))
-        if not _reported_in_game(reported, fixture, now) or observed is None or observed > now + timedelta(minutes=5):
+        if not _reported_in_game(reported, fixture, now, report.get('weekScoped') is True) or observed is None or observed > now + timedelta(minutes=5):
             continue
         retained[gsis] = dict(report, cached=True)
     return retained
@@ -202,7 +206,8 @@ def fetch_live_injuries(season, week, slate, rosters, now=None, fetch_json=None,
                 reported = _stamp(row.get('date'))
                 wrong_scope = (row.get('week') is not None and _integer(row['week']) != week or
                                row.get('season') is not None and _integer(row['season']) != season)
-                if not outer_id or outer_id != identifier(team_data.get('id')) or not gsis or wrong_scope or not _reported_in_game(reported, fixture, now):
+                week_scoped = _integer(row.get('week')) == week or _integer(document.get('week')) == week
+                if not outer_id or outer_id != identifier(team_data.get('id')) or not gsis or wrong_scope or not _reported_in_game(reported, fixture, now, week_scoped):
                     diagnostics['rejected_rows'] += 1
                     continue
                 report = {'status': status, 'team': team, 'opponent': fixture['opponent'],
@@ -210,6 +215,8 @@ def fetch_live_injuries(season, week, slate, rosters, now=None, fetch_json=None,
                           'athleteId': athlete_id, 'source': INJURIES_URL,
                           'reportedAt': reported.isoformat(), 'observedAt': now.isoformat(),
                           'sourceUpdatedAt': updated.isoformat()}
+                if week_scoped:
+                    report['weekScoped'] = True
                 old = fresh.get(gsis)
                 # Conservative duplicate handling: a lower-severity duplicate
                 # cannot overwrite a current explicit OUT designation.
