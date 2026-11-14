@@ -9,6 +9,7 @@ import pandas as pd
 from injury_readiness import diagnose_injury_feed, trusted_injury_rows
 from nfl_starters import apply_starter_context
 from nfl_depth_charts import apply_depth_chart_context, fetch_depth_charts
+from nfl_live_injuries import fetch_live_injuries
 
 SEASON = int(os.getenv('TDLAB_SEASON', datetime.now(timezone.utc).year))
 WINDOW = int(os.getenv('TDLAB_WINDOW', '5'))
@@ -123,8 +124,10 @@ def display_roster_players(rosters, weekly_rosters, slate, season, week, now,
                    if k in row and pd.notna(row[k]) and str(row[k]).strip()),None)
         if not name:continue
         reserve_status='DEV' if status=='DEV' else 'PUP' if 'PUP' in status else 'NFI' if 'NFI' in status else 'SUSPENDED' if 'SUSPEND' in status else 'RES' if status=='RES' else 'IR'
-        health=injury_status.get(pid,reserve_status if status in reserved else
-                                  'ROSTER_ACTIVE' if status in {'ACT','ACTIVE','ROSTER_ACTIVE'} else 'UNVERIFIED')
+        # An injury report cannot promote a reserve or practice-squad player
+        # back onto the active roster merely by labeling them questionable.
+        health=reserve_status if status in reserved else injury_status.get(pid,
+            'ROSTER_ACTIVE' if status in {'ACT','ACTIVE','ROSTER_ACTIVE'} else 'UNVERIFIED')
         source_week=int(weekly[pid]['week']) if pid in weekly else None
         if source_week is not None and source_week<week and health=='ROSTER_ACTIVE':health='UNVERIFIED'
         number=row.get('jersey_number');number=int(number) if pd.notna(number) and str(number).replace('.','',1).isdigit() and float(number).is_integer() and 0<=float(number)<=99 else None
@@ -205,7 +208,39 @@ def practice_flags(injuries, week):
             result.pop(pid,None)
     return result
 
-def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None, snap_counts=None, depth_charts=None):
+def live_injury_reports(payload, roster_team, slate, season, week):
+    """Accept collector reports only for the same GSIS identity and fixture.
+
+    The collector verifies source timestamps and ESPN-to-GSIS joins. Recheck
+    the downstream publication scope here so an injected or cached payload
+    cannot apply a designation to a transferred player or another game.
+    """
+    if not isinstance(payload, dict) or not isinstance(payload.get('reports'), dict):
+        return {}
+    if not {'game_id', 'home_team', 'away_team'}.issubset(slate.columns):
+        return {}
+    fixtures=[]
+    for _, game in slate.iterrows():
+        for team, opponent in ((game.home_team, game.away_team), (game.away_team, game.home_team)):
+            fixtures.append((str(game.game_id), str(team), str(opponent)))
+    reports={}
+    for pid, report in payload['reports'].items():
+        if not isinstance(pid, str) or not isinstance(report, dict):
+            continue
+        if not isinstance(report.get('status'), str) or report['status'] not in {'OUT', 'DOUBTFUL', 'QUESTIONABLE'}:
+            continue
+        if report.get('season') != season or report.get('week') != week:
+            continue
+        if not isinstance(report.get('team'), str) or roster_team.get(pid) != report['team']:
+            continue
+        fixture=(report.get('gameId'), report['team'], report.get('opponent'))
+        if fixtures.count(fixture) != 1:
+            continue
+        reports[pid]=dict(report)
+    return reports
+
+
+def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None, snap_counts=None, depth_charts=None, live_injuries=None):
     now = now or datetime.now(timezone.utc)
     required(pbp, ['season','week','game_id','posteam','defteam','yardline_100','play_type',
                    'rush_attempt','pass_attempt','rusher_player_id','receiver_player_id',
@@ -641,6 +676,19 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     injury_records=trusted_injury_rows(injuries,SEASON,week,roster_team)
     injury_status=availability(injury_records,week)
     practice_status=practice_flags(injury_records,week)
+    current_live=live_injury_reports(live_injuries,roster_team,slate,SEASON,week)
+    # Only negative designations are supplemental evidence. Neither a missing
+    # report nor an Active label clears a stronger existing restriction.
+    severity={'QUESTIONABLE':1,'DOUBTFUL':2,'OUT':3}
+    for pid, report in current_live.items():
+        prior=injury_status.get(pid)
+        if severity[report['status']] >= severity.get(prior,0):
+            injury_status[pid]=report['status']
+    if live_injuries is not None:
+        diagnostics=live_injuries.get('diagnostics',{}) if isinstance(live_injuries,dict) else {}
+        diagnostics=dict(diagnostics) if isinstance(diagnostics,dict) else {'status':'unavailable'}
+        diagnostics['applied_reports']=len(current_live)
+        injury_diagnostics['live_source']={'reports':current_live,'diagnostics':diagnostics}
     weekly_diagnostics={'source_rows':0,'latest_week':None,'status_column':False}
     if weekly_rosters is not None and not weekly_rosters.empty and {'gsis_id','week'}.issubset(weekly_rosters.columns):
         wr=weekly_rosters.copy()
@@ -825,6 +873,14 @@ def build(pbp, schedules, rosters, now=None, injuries=None, weekly_rosters=None,
     apply_starter_context(result,SEASON,week)
     roster_players=display_roster_players(roster,weekly_rosters,slate,SEASON,week,now,
         existing_records=result,injury_status=injury_status,practice_status=practice_status)
+    for row in result+roster_players:
+        report=current_live.get(str(row['player_id']))
+        if report is None:
+            continue
+        row['injuryReportStatus']=injury_status[str(row['player_id'])]
+        if row['availability'] not in {'OUT','INACTIVE','IR','PUP','NFI','SUSPENDED','RES','DEV'}:
+            row['availability']=row['injuryReportStatus']
+        row['injuryEvidence']={**report,'effectiveStatus':row['availability']}
     # A sourced starter may be a roster-only player with no model history.
     # Apply that same game-scoped confirmation across both display cohorts.
     apply_starter_context(result+roster_players,SEASON,week)
@@ -872,7 +928,14 @@ def main():
     target_week=int(upcoming.iloc[0].week) if not upcoming.empty else None
     target=upcoming[pd.to_numeric(upcoming.week,errors='coerce').eq(target_week)] if target_week is not None else upcoming
     depth_charts=fetch_depth_charts(set(target.home_team.astype(str))|set(target.away_team.astype(str)),SEASON,now=now)
-    result,meta=build(pbp,schedules,rosters,injuries=injuries,weekly_rosters=weekly_rosters,snap_counts=snap_counts,depth_charts=depth_charts)
+    previous_live=None
+    try:
+        previous=json.loads((OUT/'status.json').read_text())
+        previous_live=previous.get('availability_diagnostics',{}).get('injuries',{}).get('live_source')
+    except (OSError,ValueError,TypeError,AttributeError):
+        pass
+    live_injuries=fetch_live_injuries(SEASON,target_week,target,rosters,now=now,previous=previous_live)
+    result,meta=build(pbp,schedules,rosters,now=now,injuries=injuries,weekly_rosters=weekly_rosters,snap_counts=snap_counts,depth_charts=depth_charts,live_injuries=live_injuries)
     print('AVAILABILITY DIAGNOSTICS: '+json.dumps(meta['availability_diagnostics']))
     # Freeze each week's first published candidate set for honest, forward-only grading.
     # Never replace snapshots as subsequent results become known.
