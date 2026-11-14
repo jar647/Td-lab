@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const ui=require('./nfl_top_plays_ui.js'),top=require('./nfl_top_plays.js');
 const html=fs.readFileSync('index.html','utf8');
-assert(html.includes('src="./nfl_top_plays_ui.js?v=nfl-board-v2"'));
+assert(html.includes('src="./nfl_top_plays_ui.js?v=nfl-td-ten-v3"'));
 assert.match(html,/<button class="chip active" onclick="setMainCategory\('ALL',this\)">TOP PLAYS/);
 assert.doesNotMatch(html,/<(?:div|section)[^>]*id="(?:propRankings|simpleRankings|yardageSection|tdSection)"/,'full roster boards are removed from the main NFL view');
 // Each tab is a full-board entry point, even after an optional game filter.
@@ -74,5 +74,16 @@ function mount(){
  await failed.controller.setCategory('RUSH');assert.equal(failed.jobs.length,2,'category changes do not hammer failed workers');
  const recovery=failed.tick();assert.equal(failed.jobs.length,4,'the timed refresh retries transient failures');failed.finish(failed.jobs[2]);failed.finish(failed.jobs[3]);await recovery;assert.match(failed.host.innerHTML,/Player other/);failed.controller.destroy();
  const duplicate=mount();duplicate.state.fixtures=[fixtures[0],{...fixtures[1],game_id:fixtures[0].game_id}];await duplicate.select('A|B');assert.equal(duplicate.jobs.length,0);assert.match(duplicate.host.innerHTML,/PASS/);duplicate.controller.destroy();
+ // All ten TD leaders, including the last card, remain actionable even
+ // while unrelated yardage simulations are still being prepared.
+ const td=mount();td.state.records=Array.from({length:12},(_,i)=>player('ten-'+i,i<6?'A':'C','RB',{
+  tdallowed:1.2,rzallowed:3.5,playerRz:2.5,rzshare:35,goalLine5:.8,snapShare:.85,playerAnytimeTDs:1,recent3AnytimeTDs:1,
+  last5GameStats:Array.from({length:5},()=>({rushYards:100,recYards:100,receptions:8,rushTDs:1,recTDs:0}))}));
+ const tdWork=td.controller.setCategory('TD');const tdLeaders=top.select(td.controller.getResult(),'TD');
+ assert.equal((td.host.innerHTML.match(/class="matchrow nfl-top-play"/g)||[]).length,10);assert.match(td.heading.textContent,/Top 10 anytime TD scorers/);assert.match(td.status.textContent,/10 qualifying plays/);assert.match(td.host.innerHTML,/>#10<\/span>/);
+ assert(td.controller.add(tdLeaders[9].key),'the tenth visible TD can be added');assert.equal(td.picks[0].player,tdLeaders[9].p.player);assert.equal(td.picks[0].gameId,tdLeaders[9].fixture.game_id);assert.equal(td.picks[0].scenarioRate,null);assert.equal(td.picks[0].side,'winner');
+ const outside=td.controller.getResult().candidates.find(c=>c.category==='TD'&&!tdLeaders.some(visible=>visible.key===c.key));assert(outside);assert.equal(td.controller.add(outside.key),false,'undisplayed lower-ranked TDs are not added through the page');
+ td.finish(td.jobs[0]);td.finish(td.jobs[1]);await tdWork;await td.controller.setCategory('ALL');assert.equal((td.host.innerHTML.match(/class="matchrow nfl-top-play"/g)||[]).length,3,'Top Plays stays at three');
+ await td.controller.setCategory('RUSH');assert.equal((td.host.innerHTML.match(/class="matchrow nfl-top-play"/g)||[]).length,3,'other category limits are unchanged');td.controller.destroy();
  console.log('NFL all-game category UI: global best plays, optional game filter, bounded cached simulations, fixture-specific Quick Slip and freshness/race safeguards PASS');
 })().catch(error=>{console.error(error);process.exitCode=1});

@@ -74,9 +74,9 @@
     (row.risks||[]).map(s=>'<p class="notice">'+esc(s)+'</p>').join('')+link+'</details></article>';
   }
   function render(loading=false,error=''){
-   const labels={ALL:'Top plays',PASS:'Best passing plays',RUSH:'Best rushing plays',REC:'Best receiving plays',CATCH:'Best reception plays',TD:'Best anytime TD plays'};
+   const labels={ALL:'Top plays',PASS:'Best passing plays',RUSH:'Best rushing plays',REC:'Best receiving plays',CATCH:'Best reception plays',TD:'Top 10 anytime TD scorers'};
    if(heading)heading.textContent=labels[category]+' · '+(result?.fixture?result.fixture.away+' @ '+result.fixture.home:'All games');
-   const rows=loading&&category!=='TD'?[]:top.select(result,category,3);
+   const rows=loading&&category!=='TD'?[]:top.select(result,category);
    host.innerHTML=rows.length?rows.map(card).join(''):'<p class="'+(loading?'muted':'notice')+'">'+esc(loading?'Finding the best plays across '+(result?.fixture?'this matchup':'all games')+'…':'PASS · '+(result?.reason||'No supported plays meet the 60/100 minimum in this category.'))+'</p>';
    const games=result?.games||(result?.ready?[result.fixture]:[]),completed=games.filter(g=>cache.has(fixtureId(g))||failed.has(fixtureId(g))).length;
    const unavailable=games.filter(g=>failed.has(fixtureId(g))).length;
@@ -134,7 +134,7 @@
   }
   function add(key){
    const fresh=snapshot();
-   const row=pending&&category!=='TD'?null:top.select(fresh,category,3).find(r=>r.key===key);
+   const row=pending&&category!=='TD'?null:top.select(fresh,category).find(r=>r.key===key);
    if(!row){result=fresh;render(!!pending);return false}
    const alt=chosen(row),td=row.market==='anytime_td';
    if(!td&&!(row.alternatives||[]).some(a=>a.line===alt.line))return false;

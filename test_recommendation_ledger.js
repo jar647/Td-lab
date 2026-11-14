@@ -85,7 +85,7 @@ const tdPlayers=Array.from({length:50},(_,i)=>({player_id:'td-'+i,player:'TD Pla
 const tdWithheld=[{...tdPlayers[0],player_id:'td-out',availability:'OUT'},{...tdPlayers[0],player_id:'td-low',tdallowed:0,rzallowed:0,playerRz:0,rzshare:0,goalLine5:0,snapShare:0,playerAnytimeTDs:0,recent3AnytimeTDs:0}];
 const tdSource=require('./scripts/recommendation_sources.cjs').captureSources(now,{onlySport:'NFL',nflInputs:{feed:[...tdPlayers,...tdWithheld],status:{generated_at:before},games:{generated_at:before,games:[{game_id:'td-game',home:'A',away:'B',kickoff_at:new Date(now+6*3600000).toISOString()}]}},nflEngine:{simulate:()=>({markets:[]})}});
 assert(!tdSource.coverage.some(c=>c.status==='error'),JSON.stringify(tdSource.coverage));
-assert.equal(tdSource.picks.length,3,'the TD-only compact game shows and freezes three category leaders');
+assert.equal(tdSource.picks.length,10,'the TD-only board shows and freezes its ten category leaders');
 assert(tdSource.picks.every(p=>p.board==='Game top plays'&&p.score===100));
 const tdDisplayed=topPlays.build([...tdPlayers,...tdWithheld],{game_id:'td-game',home:'A',away:'B',kickoff_at:new Date(now+6*3600000).toISOString()},{markets:[]},{now,fixtures:[{game_id:'td-game',home:'A',away:'B',kickoff_at:new Date(now+6*3600000).toISOString()}],feedGeneratedAt:before,fixturesGeneratedAt:before});
 assert.deepEqual(tdSource.picks.map(p=>p.playerId),tdDisplayed.visible.map(c=>String(c.p.player_id)),'capture matches the exact displayed TD leaders');
@@ -105,11 +105,51 @@ assert(captureTDPrices(wrongTD).every(p=>p.americanOdds===undefined),'quotes fro
 // still get a chance to publish supported research.
 const nextTD={...tdPlayers[0],player_id:'next-game-td',player:'Next Game TD',team:'C',opp:'D'};
 const isolatedTD=require('./scripts/recommendation_sources.cjs').captureSources(now,{onlySport:'NFL',nflInputs:{feed:[...tdPlayers,nextTD],status:{generated_at:before},games:{generated_at:before,games:[{game_id:'qb-unavailable',home:'A',away:'B',kickoff_at:new Date(now+6*3600000).toISOString()},{game_id:'next-game',home:'C',away:'D',kickoff_at:new Date(now+7*3600000).toISOString()}]}},nflEngine:{simulate:records=>{if(records.some(r=>r.team==='A'))throw Error('QB model unavailable');return {markets:[]}}}});
-assert.equal(isolatedTD.picks.length,4,'per-game displayed TD leaders survive a model failure without global truncation');
+assert.equal(isolatedTD.picks.length,11,'ten first-game TD leaders survive a model failure and later-game picks are not globally truncated');
 assert(isolatedTD.picks.every(p=>p.board==='Game top plays'),'only the current public TD recommendation board emits new records');
 assert(isolatedTD.picks.some(p=>p.board==='Game top plays'&&p.gameId==='qb-unavailable'&&p.market==='anytime_td'),'main-game TD plays remain capturable without the game simulation');
 assert(isolatedTD.picks.some(p=>p.playerId==='next-game-td'),'later games still process');
 assert(isolatedTD.coverage.some(c=>c.gameId==='qb-unavailable'&&c.status==='partial'));
+
+// The full-board TD tab now exposes ten scorers. Its fourth through tenth
+// selections must reach frozen capture with their own fixture and score.
+const tenFixtures=[
+ {game_id:'ten-a',home:'A',away:'B',kickoff_at:new Date(now+6*3600000).toISOString()},
+ {game_id:'ten-b',home:'C',away:'D',kickoff_at:new Date(now+7*3600000).toISOString()}
+];
+const tenRecords=tenFixtures.flatMap((fixture,game)=>Array.from({length:12},(_,i)=>({
+ ...tdPlayers[0],player_id:'board-'+game+'-'+i,player:'Board TD '+game+' '+i,
+ team:i%2?fixture.away:fixture.home,opp:i%2?fixture.home:fixture.away,
+ tdallowed:i<6?1.2:game===0?.8:.7,
+ last5GameStats:Array.from({length:5},()=>({rushTDs:1,recTDs:0,passTDs:7}))
+})));
+const tenInputs=[...tenRecords,{...tenRecords[0]},...tdWithheld];
+const tenSimulations=new Map(tenFixtures.map(fixture=>[fixture.game_id,{markets:[]}]));
+const tenBoard=topPlays.slate(tenInputs,tenFixtures,tenSimulations,{now,feedGeneratedAt:before,fixturesGeneratedAt:before});
+const tenDisplayed=topPlays.select(tenBoard,'TD');
+assert.equal(tenDisplayed.length,10,'full-board anytime TD shows ten distinct eligible scorers');
+assert.equal(new Set(tenDisplayed.map(r=>r.p.player_id)).size,10,'duplicate player rows cannot fill extra slots');
+assert.equal(new Set(tenDisplayed.map(r=>r.fixture.game_id)).size,2,'global top ten draws from both games without a per-game display restriction');
+assert(tenDisplayed.every((r,i)=>r.researchScore>=60&&(!i||r.researchScore<=tenDisplayed[i-1].researchScore)),'the expanded board remains score ordered and above the recommendation floor');
+const tenCapture=require('./scripts/recommendation_sources.cjs').captureSources(now,{onlySport:'NFL',nflInputs:{feed:tenInputs,status:{generated_at:before},games:{generated_at:before,games:tenFixtures}},nflEngine:{simulate:()=>({markets:[]})}});
+assert(!tenCapture.coverage.some(c=>c.status==='error'),JSON.stringify(tenCapture.coverage));
+const tenSaved=tenCapture.picks.filter(p=>p.board==='Game top plays'&&p.market==='anytime_td');
+assert.equal(tenSaved.length,20,"capture retains each game filter's ten reachable scorers");
+const tenSavedKeys=new Set(tenSaved.map(p=>JSON.stringify([p.gameId,p.playerId,p.side,p.line,p.score])));
+for(const [index,row]of tenDisplayed.entries()){
+ assert(tenSavedKeys.has(JSON.stringify([row.fixture.game_id,String(row.p.player_id),'winner',null,row.researchScore])),'global TD rank '+(index+1)+' is frozen with its actual default score and fixture');
+ const saved=tenSaved.find(p=>p.gameId===row.fixture.game_id&&p.playerId===String(row.p.player_id));
+ assert.equal(saved.startsAt,row.fixture.kickoff_at,'TD rank '+(index+1)+' keeps its own kickoff');
+}
+const tenFrozen=api.capture(legacyTDLedger,tenSaved,now).ledger;
+assert.deepEqual(tenFrozen.picks.find(p=>p.id===legacyTDOriginal.id),legacyTDOriginal,'expanding the board leaves all retired historical TD evidence intact');
+const tenthRow=tenDisplayed[9],tenthFrozen=tenFrozen.picks.find(p=>p.gameId===tenthRow.fixture.game_id&&p.playerId===String(tenthRow.p.player_id));
+assert(tenthFrozen,'the tenth displayed scorer is persisted, not lost at a former top-three cap');
+const tenthOriginal=structuredClone(tenthFrozen),tenthRevision={...tenSaved.find(p=>p.gameId===tenthFrozen.gameId&&p.playerId===tenthFrozen.playerId),score:60,label:'Later top-ten update'};
+const tenthAgain=api.capture(tenFrozen,[tenthRevision],now+1000).ledger.picks.find(p=>p.id===tenthFrozen.id);
+assert.equal(tenthAgain.score,tenthOriginal.score);assert.equal(tenthAgain.capturedAt,tenthOriginal.capturedAt);assert.deepEqual(tenthAgain.inputs,tenthOriginal.inputs);
+assert.equal(tenthAgain.revisions.length,1,'a later tenth-place display change becomes a revision, not a rewritten prediction');
+assert.equal(api.gradeOne(tenthFrozen,{nfl:{games:[{gameId:tenthFrozen.gameId,final:true,players:[{playerId:tenthFrozen.playerId,team:tenthFrozen.team,participationVerified:true,scoredTD:true}]}]}},now+8*3600000).status,'win','the tenth-place saved TD can be settled from verified offensive TD results');
 
 // The compact game page exposes the union of category leaders, not only the
 // All-props top three. Its exact default lines/scores must all be captured.
