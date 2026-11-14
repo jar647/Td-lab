@@ -168,5 +168,24 @@ assert.equal(api.slate(allRecords,[],simulations,options).ready,false);
 assert.equal(api.slate(allRecords,{games:schedule},simulations,options).games.length,2);
 const immutable=JSON.stringify({records:allRecords,schedule,simulations:[...simulations]});
 api.slate(allRecords,schedule,simulations,options);assert.equal(JSON.stringify({records:allRecords,schedule,simulations:[...simulations]}),immutable,'slate aggregation never mutates feeds, fixtures or simulations');
+// Only the Anytime TD category expands. It retains the same eligibility,
+// ranking and uniqueness rules, including when fewer than ten qualify.
+const tenTDPlayers=Array.from({length:12},(_,i)=>({...tdPlayer,player_id:'ten-td-'+i,player:'Ten TD '+i}));
+const tenTDInput=[...tenTDPlayers,{...tenTDPlayers[0]},
+ {...tdPlayer,player_id:'ten-out',availability:'OUT'},
+ {...tdPlayer,player_id:'ten-unverified',playerAppearancesVerified:false},
+ {...tdPlayer,player_id:'ten-low',tdallowed:0,rzallowed:0,playerRz:0,rzshare:0,goalLine5:0,snapShare:0,playerAnytimeTDs:0,recent3AnytimeTDs:0}];
+const tenTDModel=api.build(tenTDInput,fixture,null,options),tenTD=api.select(tenTDModel,'TD');
+assert.equal(api.selectionLimit('TD'),10);assert.equal(tenTD.length,10);assert.equal(api.select(tenTDModel,'TD',100).length,10);assert.equal(api.select(tenTDModel,'TD',4).length,4);assert.equal(api.select(tenTDModel,'TD',0).length,0);
+assert.equal(new Set(tenTD.map(c=>c.p.player_id)).size,10);assert(tenTD.every((c,i)=>c.researchScore>=60&&(!i||c.researchScore<=tenTD[i-1].researchScore)));
+assert(tenTD.every(c=>/^ten-td-/.test(c.p.player_id)));
+assert.equal(tenTDModel.topThree.length,3);assert.equal(api.select(tenTDModel,'ALL',100).length,3);
+assert(tenTD.every(c=>tenTDModel.visible.some(saved=>saved.key===c.key)),'all ten reachable TD defaults enter capture');
+assert.equal(api.select(api.build(tenTDPlayers.slice(0,4),fixture,null,options),'TD').length,4,'missing qualifiers are not replaced with filler');
+for(const category of ['ALL','PASS','RUSH','REC','CATCH']){
+ assert.equal(api.selectionLimit(category),3);
+ const many={candidates:Array.from({length:12},(_,i)=>({...built.candidates[0],category:category==='ALL'?'RUSH':category,key:'cap-'+category+'-'+i,p:{...built.candidates[0].p,player_id:'cap-'+i}}))};
+ assert.equal(api.select(many,category).length,3);assert.equal(api.select(many,category,100).length,3);
+}
 console.log('NFL game-first top plays: score boundaries, supported lines, unique ranks, reachable capture union, fresh/future fixtures, availability, TD fallback and price independence passed');
 console.log('NFL full-board top plays: cross-game category rankings, own-matchup metadata, partial simulation safeguards and frozen capture coverage passed');

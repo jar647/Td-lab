@@ -69,9 +69,11 @@ function choose(p,d,scenarioLookup){
  return {p,d,line:best.line,score,researchScore,reasons,risks,hits:best.hits,sample,injuryFlag,scenarioRate:best.scenarioRate,modeledMean:best.modeledMean};
 }
 function order(a,b){return b.researchScore-a.researchScore||b.score-a.score||String(a.key).localeCompare(String(b.key));}
-function select(result,category='ALL',limit=3){
+function selectionLimit(category){return category==='TD'?10:3}
+function select(result,category='ALL',limit=selectionLimit(category)){
  if(!categories.includes(category))return [];
- const count=typeof limit==='number'&&Number.isFinite(limit)?Math.max(0,Math.min(3,Math.trunc(limit))):3;
+ const maximum=selectionLimit(category);
+ const count=typeof limit==='number'&&Number.isFinite(limit)?Math.max(0,Math.min(maximum,Math.trunc(limit))):maximum;
  if(!count)return [];
  const seen=new Set(),out=[];
  for(const c of (Array.isArray(result?.candidates)?result.candidates:[]).filter(c=>c&&c.p&&Number.isFinite(c.researchScore)&&Number.isFinite(c.score)).sort(order)){
@@ -182,5 +184,5 @@ function slate(records,fixtures,simulations,options={}){
  else result.reason='No supported OVER or anytime-TD play meets the score, usage and availability requirements.';
  return result;
 }
-return {defs,choose,build,slate,select,categories,mergeRecords};
+return {defs,choose,build,slate,select,selectionLimit,categories,mergeRecords};
 });
