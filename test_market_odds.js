@@ -30,12 +30,15 @@ for(const [name,html] of [['NFL',nfl],['NBA',nba]]){
  }else{
   assert.ok(html.includes('src="./nfl_game_engine.js?v=nfl-depth-chart-qb-v4"'),'NFL must load matchup simulations');
   assert.ok(html.includes('UNCALIBRATED'),'NFL scenario frequencies must be identified as uncalibrated');
-  assert.ok(!html.includes('Over odds')&&!html.includes('Under odds'),'NFL player cards must not request sportsbook prices');
-  assert.ok(!html.includes('setPropOdds('),'NFL player odds must not be stored from cards');
+  const topUI=fs.readFileSync('nfl_top_plays_ui.js','utf8');
+  assert.ok(/src="\.\/nfl_book_review\.js\?v=/.test(html),'NFL must load the exact-line book comparison helper');
+  assert.ok(topUI.includes('Book OVER line')&&topUI.includes('American odds'),'NFL Top Plays must expose the requested compact book comparison');
+  assert.ok(topUI.includes('nfl-top-book-review'),'manual prices stay within the compact Top Plays cards');
+  assert.ok(!html.includes('setPropOdds('),'retired full-board NFL odds controls must remain removed');
  }
  const inline=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(x=>x[1]).filter(Boolean);
  assert.equal(inline.length,1,name+' should retain one inline controller');
  new vm.Script(inline[0],{filename:name+'.html'});
 }
 assert.ok(nba.includes('setNBAQuote('),'NBA prices must be saved');
-console.log('NFL odds removal and NBA two-sided pricing checks passed');
+console.log('NFL compact book review and NBA two-sided pricing checks passed');

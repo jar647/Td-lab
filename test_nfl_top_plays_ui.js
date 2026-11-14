@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const ui=require('./nfl_top_plays_ui.js'),top=require('./nfl_top_plays.js');
 const html=fs.readFileSync('index.html','utf8');
-assert(html.includes('src="./nfl_top_plays_ui.js?v=nfl-sim-percent-v4"'));
+assert(html.includes('src="./nfl_top_plays_ui.js?v=nfl-book-review-v5"'));
 for(const [rate,text]of [[0,'0.0%'],[.12345,'12.3%'],[1,'100.0%']])assert.equal(ui.simulationPercent(rate),text);
 for(const rate of [null,undefined,'0.8','',NaN,Infinity,-.1,1.01,false])assert.equal(ui.simulationPercent(rate),null,'missing or malformed rates are never displayed as zero');
 assert.match(html,/<button class="chip active" onclick="setMainCategory\('ALL',this\)">TOP PLAYS/);

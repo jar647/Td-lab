@@ -161,6 +161,7 @@ function simulate(records,count=10000,seed=1307,selected=[],options={}){
   line:typeof x?.line==='number'||typeof x?.line==='string'?finite(x.line):null}));
  const byId=new Map(model.players.map(p=>[p.id,p]));
  const supportedMarkets=new Set(),unavailableMarkets=[];
+ const settlementBins=options.collectSettlements===true?new Map():null;
  const teamsByName=new Map(model.teams.map(t=>[t.team,t]));
  const marketKey=(id,market)=>JSON.stringify([id,market]);
  const allStats={};
@@ -180,6 +181,7 @@ function simulate(records,count=10000,seed=1307,selected=[],options={}){
    reason='No supported receiving opportunity for '+p.name+' in the verified workload inputs. A receiving frequency is unavailable.';
   if(reason){unavailableMarkets.push({id:p.id,market,reason});continue}
   supportedMarkets.add(marketKey(p.id,market));
+  if(settlementBins)settlementBins.set(marketKey(p.id,market),new Map());
   for(const line of lines)hits.set(JSON.stringify([p.id,market,line]),0);
  }
  // Unsupported selections are missing model coverage, not zero-probability
@@ -230,6 +232,13 @@ function simulate(records,count=10000,seed=1307,selected=[],options={}){
   }
   for(const p of model.players){
    for(const [market,lines] of Object.entries(MARKETS)){
+    const bins=settlementBins?.get(marketKey(p.id,market));
+    if(bins){
+     // Whole-number settlement is a review convention. Flooring preserves
+     // every existing integer alternate threshold without changing the draws.
+     const wholeTotal=Math.floor(p.output[market]);
+     bins.set(wholeTotal,(bins.get(wholeTotal)||0)+1);
+    }
     for(const line of lines){
      const key=JSON.stringify([p.id,market,line]);
      if(!hits.has(key))continue;
@@ -263,6 +272,10 @@ function simulate(records,count=10000,seed=1307,selected=[],options={}){
  }));
  return {status:'RESEARCH_ONLY_UNCALIBRATED',modelVersion:MODEL_VERSION,inputAudit:model.players.map(p=>({id:p.id,name:p.name,team:p.team,games:p.gameCount,history:p.history,sourceAvailability:p.sourceAvailability,historicalPassingYards:p.historicalPassingYards,historicalPassAttempts:p.historicalPassAttempts,modeledPassAttempts:p.pos==='QB'&&!supportedMarkets.has(marketKey(p.id,'passYards'))?null:p.pass,passingMatchupFactor:p.passMatch,receivingMatchupFactor:p.recMatch,rushingMatchupFactor:p.rushMatch,participationAssumption:p.pos==='QB'&&!supportedMarkets.has(marketKey(p.id,'passYards'))?'Not selected as the modeled quarterback; named QB passing and rushing scenarios are unavailable. Game-day starting status is not confirmed.':'Assumes listed eligible player participates; game-day active status is not confirmed'})),audit:{passingReceivingConservation:true},
   count,seed,teams:summary,markets,unavailableMarkets,
+  ...(settlementBins?{settlements:[...settlementBins].map(([key,bins])=>{
+   const [id,market]=JSON.parse(key);
+   return {id,market,count,bins:[...bins].sort((a,b)=>a[0]-b[0])};
+  })}:{}),
   joint:selections.length?{legs:selections.length,hits:joint,scenarioRate:joint/count}:null,
   assumptions:['Generative team play volume and pass/rush split','Player targets and carries compete for team opportunities',
    'Receptions require target and completion','Quarterback passing yards derive from completed receiver outcomes',
