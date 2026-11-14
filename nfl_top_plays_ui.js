@@ -9,6 +9,7 @@
  const pair=p=>[String(p.team||''),String(p.opp||'')].sort().join('|');
  const fixturePair=g=>[String(g.home||''),String(g.away||'')].sort().join('|');
  const finite=value=>typeof value==='number'&&Number.isFinite(value);
+ const simulationPercent=rate=>finite(rate)&&rate>=0&&rate<=1?(100*rate).toFixed(1)+'%':null;
  function create(options){
   const host=options.root,heading=options.heading,status=options.status;
   const now=options.now||Date.now,cache=new Map(),lines=new Map(),failed=new Set();
@@ -42,8 +43,9 @@
   }
   function selectionReasons(row,alt){
    if(row.market==='anytime_td')return row.reasons||[];
-   return (row.reasons||[]).map(reason=>/^Game-first scenario frequency:/.test(reason)&&finite(alt.scenarioRate)?
-    'Game-first scenario frequency: '+(100*alt.scenarioRate).toFixed(1)+'% at '+alt.line+'+ (UNCALIBRATED).':
+   const percent=simulationPercent(alt.scenarioRate);
+   return (row.reasons||[]).map(reason=>/^Game-first scenario frequency:/.test(reason)?
+    (percent===null?'Simulated frequency unavailable for this line.':'Game-first scenario frequency: '+percent+' at '+alt.line+'+ (UNCALIBRATED).'):
     /^Cleared /.test(reason)&&finite(alt.hits)&&finite(alt.sample)?'Cleared '+alt.line+'+ in '+alt.hits+' of the last '+alt.sample+' recorded games.':reason);
   }
   function card(row,index){
@@ -56,8 +58,11 @@
     (row.reasons||[]).find(s=>/Opponent|opponent/.test(s));
    const recent=finite(alt.hits)&&finite(alt.sample)&&alt.sample>0?'Recent clears '+alt.hits+'/'+alt.sample:'Recent sample unavailable';
    const questionable=String(p.availability).toUpperCase()==='QUESTIONABLE'||String(p.injuryReportStatus).toUpperCase()==='QUESTIONABLE';
-   const alternatives=(row.alternatives||[]).length>1?'<label class="nfl-top-line-label">Alternate line<select data-top-line="'+esc(row.key)+'" aria-label="Alternate line for '+esc(p.player)+'">'+
-    row.alternatives.map(a=>'<option value="'+a.line+'"'+(Number(a.line)===Number(alt.line)?' selected':'')+'>'+a.line+'+ '+esc(row.d.label)+'</option>').join('')+'</select></label>':'';
+   const alternatives=!isTD&&(row.alternatives||[]).length>1?'<label class="nfl-top-line-label">Alternate line<select data-top-line="'+esc(row.key)+'" aria-label="Alternate line for '+esc(p.player)+'">'+
+    row.alternatives.map(a=>'<option value="'+a.line+'"'+(Number(a.line)===Number(alt.line)?' selected':'')+'>'+a.line+'+ '+esc(row.d.label)+' · '+(simulationPercent(a.scenarioRate)===null?'Simulation unavailable':simulationPercent(a.scenarioRate)+' simulated')+'</option>').join('')+'</select></label>':'';
+   const percent=simulationPercent(alt.scenarioRate);
+   const simulated=isTD?'':percent===null?'<p class="statsline nfl-top-simulation">Simulation unavailable for this line.</p>':
+    '<p class="statsline nfl-top-simulation" data-scenario-rate="'+alt.scenarioRate+'" aria-live="polite"><strong>At '+alt.line+'+: '+percent+' simulated hit frequency</strong><br><span class="muted">Uncalibrated model frequency.</span></p>';
    const components=row.rating,performance=components?.performanceScore??(finite(components?.offense)?Math.round(100*components.offense):null),defense=components?.opponentScore??(finite(components?.defense)?Math.round(100*components.defense):null);
    const breakdown=finite(performance)&&finite(defense)?'<p>Player performance / usage '+performance+'/100 · Opponent vs '+esc(p.pos)+' '+defense+'/100</p>':'';
    const source=p.depthChart?.source,link=typeof source==='string'&&/^https:\/\//i.test(source)?'<p><a href="'+esc(source)+'" target="_blank" rel="noopener noreferrer">Depth-chart source</a></p>':'';
@@ -67,7 +72,7 @@
     (fixture?'<p class="statsline nfl-top-matchup">'+esc(fixture.away+' @ '+fixture.home)+'</p>':'')+
     (questionable?'<p class="notice">QUESTIONABLE · verify the official active list</p>':'')+'<p class="nfl-top-selection">'+esc(line)+'</p>'+
     '<div class="bar"><div style="width:'+row.researchScore+'%"></div></div><p class="statsline">'+esc(opposing||'Opponent evidence requires review.')+'</p>'+
-    (usage?'<p class="statsline">'+esc(usage)+'</p>':'')+'<p class="statsline">'+esc(recent)+'</p>'+alternatives+
+    (usage?'<p class="statsline">'+esc(usage)+'</p>':'')+'<p class="statsline">'+esc(recent)+'</p>'+alternatives+simulated+
     '<button type="button" class="primary nfl-top-add" data-top-add="'+esc(row.key)+'">＋ Add to Quick Slip</button>'+
     '<details class="nfl-top-evidence"><summary>Why this play?</summary>'+breakdown+
     selectionReasons(row,alt).map(s=>'<p>'+esc(s)+'</p>').join('')+'<p>'+esc(row.roleLabel||'Game-day starting status requires confirmation.')+'</p>'+
@@ -153,5 +158,5 @@
   host.addEventListener('click',click);host.addEventListener('change',change);
   return {refresh,setCategory,setLine,add,getResult:()=>result,destroy(){destroyed=true;cancel();if(timer)clearTimer(timer);host.removeEventListener('click',click);host.removeEventListener('change',change)}};
  }
- return {create};
+ return {create,simulationPercent};
 });
