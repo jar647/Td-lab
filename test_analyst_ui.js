@@ -13,7 +13,7 @@ const html=fs.readFileSync('analyst.html','utf8');
 assert.match(html,/<script src="\.\/nfl_game_engine\.js\?v=nfl-depth-chart-qb-v4"><\/script>/,
   'The analyst must load the current game-first simulator');
 assert.ok(html.includes("nfl_game_worker.js"),'Long simulations must run off the page thread');
-assert.match(html,/<script src="\.\/nfl_top_plays\.js\?v=nfl-top-plays-v1"><\/script>/,'The analyst loads the same selection helper as the game page and capture');
+assert.match(html,/<script src="\.\/nfl_top_plays\.js\?v=nfl-balanced-lines-v4"><\/script>/,'The analyst loads the same selection helper as the game page and capture');
 const inline=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)]
   .map(m=>m[1]).filter(s=>s.trim());
 assert.equal(inline.length,1,'Exactly one controller should exist');

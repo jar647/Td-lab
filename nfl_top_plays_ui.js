@@ -125,6 +125,7 @@
    if(status)status.textContent=loading&&category!=='TD'?'Analyzing '+completed+' of '+games.length+' games for the best plays…':
     error?(rows.length?'Showing supported TD research. ':'')+error:rows.length+' qualifying '+(rows.length===1?'play':'plays')+
     (unavailable?' · '+unavailable+' game simulation'+(unavailable===1?'':'s')+' unavailable':'')+' · Matchup scores, not win probabilities. Verify player status and sportsbook lines.';
+   options.onUpdate?.();
   }
   function refresh(){
    if(destroyed)return Promise.resolve(null);
@@ -168,6 +169,14 @@
    return promise;
   }
   function setCategory(value){category=['PASS','RUSH','REC','CATCH','TD'].includes(value)?value:'ALL';return refresh()}
+  function getBuilderState(){
+   const x=inputs(),current=lastRecords===x.state.records&&sourceSignature(x)===inputKey?snapshot():null;
+   return {ready:!!current?.ready&&!pending,reason:pending?'Finish analyzing the board before generating a ticket.':current?.reason||'Current matchup data is unavailable.',
+    signature:inputKey+'|'+x.selected,candidates:(current?.candidates||[]).map(c=>({...c,fixture:c.fixture||current.fixture})),
+    fixtures:current?.games||(current?.fixture?[current.fixture]:[]),
+    records:(x.state.records||[]).filter(r=>!(typeof x.state.excluded==='function'&&x.state.excluded(r))),
+    simulations:cache,quotes:Object.fromEntries([...quotes].map(([key,value])=>[key,{...value}]))};
+  }
   function setLine(key,value){
    const row=result?.candidates.find(r=>r.key===key),line=Number(value);
    if(!row||!Number.isFinite(line)||!(row.alternatives||[]).some(a=>a.line===line))return false;
@@ -189,6 +198,7 @@
    }
    const target=Array.from(host.querySelectorAll?.('[data-book-result]')||[]).find(node=>node.dataset.bookResult===key);
    if(target)target.innerHTML=bookResult(row);else render(!!pending);
+   options.onUpdate?.();
    return true;
   }
   function add(key){
@@ -211,7 +221,7 @@
   const change=e=>{if(e.target.dataset.topLine)setLine(e.target.dataset.topLine,e.target.value)};
   const input=e=>{if(e.target.dataset.bookLine)setBookQuote(e.target.dataset.bookLine,{line:e.target.value});if(e.target.dataset.bookOdds)setBookQuote(e.target.dataset.bookOdds,{odds:e.target.value})};
   host.addEventListener('click',click);host.addEventListener('change',change);host.addEventListener('input',input);
-  return {refresh,setCategory,setLine,setBookQuote,add,getResult:()=>result,destroy(){destroyed=true;cancel();if(timer)clearTimer(timer);host.removeEventListener('click',click);host.removeEventListener('change',change);host.removeEventListener('input',input)}};
+  return {refresh,setCategory,setLine,setBookQuote,getBuilderState,add,getResult:()=>result,destroy(){destroyed=true;cancel();if(timer)clearTimer(timer);host.removeEventListener('click',click);host.removeEventListener('change',change);host.removeEventListener('input',input)}};
  }
  return {create,simulationPercent};
 });
