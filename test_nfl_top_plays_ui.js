@@ -2,7 +2,9 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const ui=require('./nfl_top_plays_ui.js'),top=require('./nfl_top_plays.js');
 const html=fs.readFileSync('index.html','utf8');
-assert(html.includes('src="./nfl_top_plays_ui.js?v=nfl-td-ten-v3"'));
+assert(html.includes('src="./nfl_top_plays_ui.js?v=nfl-sim-percent-v4"'));
+for(const [rate,text]of [[0,'0.0%'],[.12345,'12.3%'],[1,'100.0%']])assert.equal(ui.simulationPercent(rate),text);
+for(const rate of [null,undefined,'0.8','',NaN,Infinity,-.1,1.01,false])assert.equal(ui.simulationPercent(rate),null,'missing or malformed rates are never displayed as zero');
 assert.match(html,/<button class="chip active" onclick="setMainCategory\('ALL',this\)">TOP PLAYS/);
 assert.doesNotMatch(html,/<(?:div|section)[^>]*id="(?:propRankings|simpleRankings|yardageSection|tdSection)"/,'full roster boards are removed from the main NFL view');
 // Each tab is a full-board entry point, even after an optional game filter.
@@ -26,7 +28,7 @@ const records=[player('rb'),player('wr','B','WR'),player('third','A','TE'),
  player('low','B','RB',{playerRushYards:48,playerCarries:5,defRushAttemptsAllowed:10,recent3Carries:5,
   playerTargets:0,playerRecYards:0,playerReceptions:0,defRecYardsAllowed:0,defReceptionsAllowed:0,defTargetsAllowed:0}),
  player('out','A','WR',{availability:'OUT'}),player('other','C','RB',{injuryReportStatus:'ACTIVE',playerTargets:0,playerRecYards:0,playerReceptions:0})];
-function simulation(players){return {markets:players.flatMap(p=>top.defs.filter(d=>d.positions.includes(p.pos)).flatMap(d=>d.steps.map(line=>({id:p.player_id,market:d.key,line,modeledMean:d.key==='receptions'?8:110,scenarioRate:.8,hits:8000}))))}}
+function simulation(players){return {markets:players.flatMap(p=>top.defs.filter(d=>d.positions.includes(p.pos)).flatMap(d=>d.steps.map(line=>{const rate=.9-line*.0005;return {id:p.player_id,market:d.key,line,modeledMean:d.key==='receptions'?8:110,scenarioRate:rate,hits:Math.round(rate*10000)}})))}}
 function node(){return {innerHTML:'',textContent:'',listeners:{},addEventListener(e,f){this.listeners[e]=f},removeEventListener(e){delete this.listeners[e]}}}
 function mount(){
  let selected='ALL',time=now,scheduled;const host=node(),heading=node(),status=node(),jobs=[],picks=[];
@@ -48,7 +50,13 @@ function mount(){
  assert.doesNotMatch(view.host.innerHTML,/Player (?:low|out)/);
  const rushing=top.select(view.controller.getResult(),'RUSH');assert.equal(rushing[0].p.player_id,'other','strongest supported rushing play can come from another game');
  const row=rushing[0],alternate=row.alternatives.find(a=>a.line!==row.line);assert(alternate);
+ const originalScore=row.researchScore,originalKeys=top.select(view.controller.getResult(),'RUSH').map(c=>c.key);
+ assert(view.host.innerHTML.includes(row.line+'+ '+row.d.label+' · '+ui.simulationPercent(row.scenarioRate)+' simulated'),'each alternate option shows its own model frequency');
+ assert.match(view.host.innerHTML,new RegExp('At '+row.line+'\\+: '+ui.simulationPercent(row.scenarioRate)+' simulated hit frequency'));
+ assert.notEqual(alternate.scenarioRate,row.scenarioRate,'line changes exercise different simulated frequencies');
  assert(view.controller.setLine(row.key,alternate.line));assert(view.controller.add(row.key));assert.equal(view.picks[0].line,alternate.line);assert.equal(view.picks[0].researchScore,row.researchScore);assert.equal(view.picks[0].side,'at_least');
+ assert.equal(view.picks[0].scenarioRate,alternate.scenarioRate);assert(view.host.innerHTML.includes('At '+alternate.line+'+: '+ui.simulationPercent(alternate.scenarioRate)+' simulated hit frequency'));assert.match(view.host.innerHTML,/Uncalibrated model frequency/);
+ assert.equal(top.select(view.controller.getResult(),'RUSH')[0].researchScore,originalScore);assert.deepEqual(top.select(view.controller.getResult(),'RUSH').map(c=>c.key),originalKeys,'displaying another line percentage never changes matchup scores or ranking');
  assert.equal(view.picks[0].gameId,'CD');assert.equal(view.picks[0].game,'D @ C','all-game Quick Slip uses the selected play fixture');
  assert(view.picks[0].notes.includes('Cleared '+alternate.line+'+'));assert(view.picks[0].notes.includes((alternate.scenarioRate*100).toFixed(1)+'% at '+alternate.line+'+'));
  assert.equal(view.controller.setLine(row.key,9999),false);assert.equal(view.controller.add('unknown'),false);
@@ -81,6 +89,7 @@ function mount(){
   last5GameStats:Array.from({length:5},()=>({rushYards:100,recYards:100,receptions:8,rushTDs:1,recTDs:0}))}));
  const tdWork=td.controller.setCategory('TD');const tdLeaders=top.select(td.controller.getResult(),'TD');
  assert.equal((td.host.innerHTML.match(/class="matchrow nfl-top-play"/g)||[]).length,10);assert.match(td.heading.textContent,/Top 10 anytime TD scorers/);assert.match(td.status.textContent,/10 qualifying plays/);assert.match(td.host.innerHTML,/>#10<\/span>/);
+ assert.doesNotMatch(td.host.innerHTML,/nfl-top-simulation|% simulated|simulated hit frequency/,'TD cards have no supported simulation percentage');
  assert(td.controller.add(tdLeaders[9].key),'the tenth visible TD can be added');assert.equal(td.picks[0].player,tdLeaders[9].p.player);assert.equal(td.picks[0].gameId,tdLeaders[9].fixture.game_id);assert.equal(td.picks[0].scenarioRate,null);assert.equal(td.picks[0].side,'winner');
  const outside=td.controller.getResult().candidates.find(c=>c.category==='TD'&&!tdLeaders.some(visible=>visible.key===c.key));assert(outside);assert.equal(td.controller.add(outside.key),false,'undisplayed lower-ranked TDs are not added through the page');
  td.finish(td.jobs[0]);td.finish(td.jobs[1]);await tdWork;await td.controller.setCategory('ALL');assert.equal((td.host.innerHTML.match(/class="matchrow nfl-top-play"/g)||[]).length,3,'Top Plays stays at three');
