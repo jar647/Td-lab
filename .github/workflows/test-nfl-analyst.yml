@@ -20,6 +20,9 @@ on:
       - 'nfl_player_board.js'
       - 'nfl_top_plays.js'
       - 'nfl_top_plays_ui.js'
+      - 'nfl_book_review.js'
+      - 'test_nfl_book_review.js'
+      - 'test_nfl_book_review_ui.js'
       - 'test_nfl_top_plays.js'
       - 'test_nfl_top_plays_ui.js'
       - 'test_nfl_td_matchup.js'
@@ -58,6 +61,8 @@ jobs:
       - run: node test_nfl_player_board.js
       - run: node test_nfl_top_plays.js
       - run: node test_nfl_top_plays_ui.js
+      - run: node test_nfl_book_review.js
+      - run: node test_nfl_book_review_ui.js
       - run: node test_nfl_history_chart.js
       - run: node test_nfl_matchup_score.js
       - run: node test_nfl_min_score_ui.js
