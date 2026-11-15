@@ -2,10 +2,10 @@
    independent player-leg multiplication, calibrated edge or betting approval. */
 (function(root,factory){
  const common=typeof module==='object'&&module.exports;
- const api=factory(common?require('./nfl_goal1.js'):root.PropVaultGoal1,common?require('./market_odds.js'):root.CookItUpPricing);
+ const api=factory(common?require('./nfl_goal1.js'):root.PropVaultGoal1,common?require('./market_odds.js'):root.CookItUpPricing,common?require('./nfl_top_plays.js'):root.PropShopNFLTopPlays,common?require('./nfl_player_board.js'):root.PropShopNFLBoard);
  if(common)module.exports=api;
  root.PropShopNFLParlay=api;
-})(typeof globalThis!=='undefined'?globalThis:this,function(goal,pricing){
+})(typeof globalThis!=='undefined'?globalThis:this,function(goal,pricing,top,board){
  'use strict';
  const markets=new Set(['passYards','rushYards','recYards','receptions']);
  const positions={passYards:['QB'],rushYards:['QB','RB','WR'],recYards:['RB','WR','TE'],receptions:['RB','WR','TE']};
@@ -50,6 +50,28 @@
   const shortfall=requested-legs.length;
   return {legs,requested,shortfall,reason:shortfall?'Only '+legs.length+' supported distinct '+(mode==='across'?'players from different games':'players in this game')+' available; no filler legs added.':'Research draft generated.'};
  }
+ function generateAnytime(candidates,{now=Date.now()}={}){
+  const empty=reason=>({legs:[],requested:5,shortfall:5,reason});
+  if(!finite(now)||!Array.isArray(candidates)||typeof top?.select!=='function'||typeof board?.isReserveQuarterback!=='function')return empty('Current anytime-TD research rankings are unavailable. Scores are not touchdown probabilities.');
+  const signatures=new Map(),ambiguous=new Set(),blocked=/^(OUT|INACTIVE|SUSPENDED|IR|PUP|RES|DEV|CUT|RET|EXE|TRD|TRT|DOUBTFUL)$/;
+  for(const c of candidates){const key=fixtureId(c?.fixture);if(!key)continue;const signature=JSON.stringify([c.fixture.home,c.fixture.away,c.fixture.kickoff_at]);if(signatures.has(key)&&signatures.get(key)!==signature)ambiguous.add(key);else signatures.set(key,signature)}
+  const pool=candidates.filter(c=>{
+   const p=c?.p,g=c?.fixture;
+   if(!p||!g||c.market!=='anytime_td'||c.category!=='TD'||c.side!=='winner'||!id(p.player_id)||
+    !finite(c.researchScore)||c.researchScore<60||c.researchScore>100||!finite(c.score)||p.playerAppearancesVerified!==true||
+    !['QB','RB','WR','TE'].includes(p.pos)||p.qbRole==='BACKUP'||board.isReserveQuarterback(p)||!['ROSTER_ACTIVE','QUESTIONABLE'].includes(String(p.availability).toUpperCase())||
+    blocked.test(String(p.availability).toUpperCase())||blocked.test(String(p.injuryReportStatus||'').toUpperCase()))return false;
+   const sample=p.seasonGamesPlayed??p.games;
+   if(!['number','string'].includes(typeof sample)||typeof sample==='string'&&!sample.trim()||!Number.isFinite(Number(sample))||Number(sample)<2)return false;
+   const kickoff=time(g.kickoff_at),key=fixtureId(g);
+   return !!key&&!ambiguous.has(key)&&typeof g.home==='string'&&!!g.home.trim()&&typeof g.away==='string'&&!!g.away.trim()&&g.home!==g.away&&
+    ((p.team===g.home&&p.opp===g.away)||(p.team===g.away&&p.opp===g.home))&&Number.isFinite(kickoff)&&kickoff>now&&kickoff-now<=7*86400000;
+  });
+  // Reuse the board's ordering and player deduplication. Its QUESTIONABLE and
+  // practice flags stay visible; TD research does not require yardage history.
+  const legs=top.select({candidates:pool},'TD',5),shortfall=5-legs.length;
+  return {legs,requested:5,shortfall,reason:(shortfall?'Only '+legs.length+' qualifying anytime-TD plays; no filler legs added. ':'')+'Scores are research rankings, not touchdown probabilities.'};
+ }
  function validGroup(group){
   const p=group?.parlay;if(!id(group?.gameId)||!p||!Number.isSafeInteger(p.count)||p.count<1000||!Number.isInteger(p.legs)||p.legs<1||p.legs>4)return false;
   const fields=['allWin','nonLoss','pushOnly','loss'];
@@ -73,5 +95,5 @@
   return {status:'ready',allWinRate,pushOnlyRate,lossRate,groups:[...groups],independentGames:groups.length>1,price,
    modelDifference:price&&!hasPushPath?allWinRate-price.implied:null,play:false,verifiedValue:false};
  }
- return {generate,combine};
+ return {generate,generateAnytime,combine};
 });

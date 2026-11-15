@@ -184,7 +184,7 @@
   function setCategory(value){category=['PASS','RUSH','REC','CATCH','TD'].includes(value)?value:'ALL';return refresh()}
   function getBuilderState(){
    const x=inputs(),current=lastRecords===x.state.records&&sourceSignature(x)===inputKey?snapshot():null;
-   return {ready:!!current?.ready&&!pending,reason:pending?'Finish analyzing the board before generating a ticket.':current?.reason||'Current matchup data is unavailable.',
+   return {ready:!!current?.ready&&!pending,tdReady:!!current?.ready,reason:pending?'Finish analyzing the board before generating a ticket.':current?.reason||'Current matchup data is unavailable.',
     signature:inputKey+'|'+x.selected,candidates:(current?.candidates||[]).map(c=>({...c,fixture:c.fixture||current.fixture})),
     fixtures:current?.games||(current?.fixture?[current.fixture]:[]),
     records:(x.state.records||[]).filter(r=>!(typeof x.state.excluded==='function'&&x.state.excluded(r))),
