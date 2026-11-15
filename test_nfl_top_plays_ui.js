@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const ui=require('./nfl_top_plays_ui.js'),top=require('./nfl_top_plays.js');
 const html=fs.readFileSync('index.html','utf8');
-assert(html.includes('src="./nfl_top_plays_ui.js?v=nfl-parlay-v6"'));
+assert(html.includes('src="./nfl_top_plays_ui.js?v=nfl-best-singles-v7"'));
 for(const [rate,text]of [[0,'0.0%'],[.12345,'12.3%'],[1,'100.0%']])assert.equal(ui.simulationPercent(rate),text);
 for(const rate of [null,undefined,'0.8','',NaN,Infinity,-.1,1.01,false])assert.equal(ui.simulationPercent(rate),null,'missing or malformed rates are never displayed as zero');
 assert.match(html,/<button class="chip active" onclick="setMainCategory\('ALL',this\)">TOP PLAYS/);
@@ -60,7 +60,7 @@ function mount(){
  assert.equal(view.picks[0].gameId,'CD');assert.equal(view.picks[0].game,'D @ C','all-game Quick Slip uses the selected play fixture');
  assert(view.picks[0].notes.includes('Cleared '+alternate.line+'+'));assert(view.picks[0].notes.includes((alternate.scenarioRate*100).toFixed(1)+'% at '+alternate.line+'+'));
  assert.equal(view.controller.setLine(row.key,9999),false);assert.equal(view.controller.add('unknown'),false);
- await view.controller.setCategory('ALL');assert.equal((view.host.innerHTML.match(/class="matchrow nfl-top-play"/g)||[]).length,3);assert.match(view.host.innerHTML,/BEST SINGLE/);assert.match(view.host.innerHTML,/100<small>\/100/);assert.match(view.host.innerHTML,/Why this play/);
+ await view.controller.setCategory('ALL');assert.equal((view.host.innerHTML.match(/class="matchrow nfl-top-play"/g)||[]).length,2);assert.equal((view.host.innerHTML.match(/>BEST SINGLE<\/span>/g)||[]).length,2);assert.match(view.heading.textContent,/Best single from each game/);assert.match(view.host.innerHTML,/100<small>\/100/);assert.match(view.host.innerHTML,/Why this play/);
  const scores=top.select(view.controller.getResult()).map(r=>r.researchScore);assert(scores.every((v,i)=>!i||v<=scores[i-1]));
  await view.controller.setCategory('REC');assert.equal(view.jobs.length,2,'completed game simulations are reused across categories');assert.doesNotMatch(view.host.innerHTML,/100\+ rushing yards/);
  await view.controller.setCategory('TD');assert.match(view.host.innerHTML,/PASS/);assert.equal((view.host.innerHTML.match(/data-top-add=/g)||[]).length,0);
@@ -77,7 +77,7 @@ function mount(){
  assert.doesNotMatch(reload.host.innerHTML,/Player rb/);reload.finish(reload.jobs[1]);await replacement;assert.doesNotMatch(reload.host.innerHTML,/Player rb/);reload.controller.destroy();
  // Complete a longer slate with at most two active workers.
  const queue=mount();queue.state.fixtures=[...fixtures,{game_id:'EF',home:'E',away:'F',kickoff_at:new Date(now+10800000).toISOString()}];queue.state.records=[...records,player('third-game','E','RB',{opp:'F'})];
- const batch=queue.controller.refresh();assert.equal(queue.jobs.length,2);queue.finish(queue.jobs[0]);assert.equal(queue.jobs.length,3);assert(queue.jobs[0].terminated);queue.finish(queue.jobs[1]);queue.finish(queue.jobs[2]);await batch;assert.equal(queue.controller.getResult().games.length,3);queue.controller.destroy();
+ const batch=queue.controller.refresh();assert.equal(queue.jobs.length,2);queue.finish(queue.jobs[0]);assert.equal(queue.jobs.length,3);assert(queue.jobs[0].terminated);queue.finish(queue.jobs[1]);queue.finish(queue.jobs[2]);await batch;assert.equal(queue.controller.getResult().games.length,3);assert.equal((queue.host.innerHTML.match(/class="matchrow nfl-top-play"/g)||[]).length,3,'three games produce three best singles');queue.controller.destroy();
  const failed=mount(),work=failed.controller.refresh();failed.jobs[0].onerror();failed.jobs[1].onerror();await work;assert.match(failed.status.textContent,/simulations unavailable/);assert.equal((failed.host.innerHTML.match(/data-top-add=/g)||[]).length,0);
  await failed.controller.setCategory('RUSH');assert.equal(failed.jobs.length,2,'category changes do not hammer failed workers');
  const recovery=failed.tick();assert.equal(failed.jobs.length,4,'the timed refresh retries transient failures');failed.finish(failed.jobs[2]);failed.finish(failed.jobs[3]);await recovery;assert.match(failed.host.innerHTML,/Player other/);failed.controller.destroy();
@@ -92,7 +92,7 @@ function mount(){
  assert.doesNotMatch(td.host.innerHTML,/nfl-top-simulation|% simulated|simulated hit frequency/,'TD cards have no supported simulation percentage');
  assert(td.controller.add(tdLeaders[9].key),'the tenth visible TD can be added');assert.equal(td.picks[0].player,tdLeaders[9].p.player);assert.equal(td.picks[0].gameId,tdLeaders[9].fixture.game_id);assert.equal(td.picks[0].scenarioRate,null);assert.equal(td.picks[0].side,'winner');
  const outside=td.controller.getResult().candidates.find(c=>c.category==='TD'&&!tdLeaders.some(visible=>visible.key===c.key));assert(outside);assert.equal(td.controller.add(outside.key),false,'undisplayed lower-ranked TDs are not added through the page');
- td.finish(td.jobs[0]);td.finish(td.jobs[1]);await tdWork;await td.controller.setCategory('ALL');assert.equal((td.host.innerHTML.match(/class="matchrow nfl-top-play"/g)||[]).length,3,'Top Plays stays at three');
+ td.finish(td.jobs[0]);td.finish(td.jobs[1]);await tdWork;await td.controller.setCategory('ALL');assert.equal((td.host.innerHTML.match(/class="matchrow nfl-top-play"/g)||[]).length,2,'Top Plays shows one best single from each of the two games');
  await td.controller.setCategory('RUSH');assert.equal((td.host.innerHTML.match(/class="matchrow nfl-top-play"/g)||[]).length,3,'other category limits are unchanged');td.controller.destroy();
- console.log('NFL all-game category UI: global best plays, optional game filter, bounded cached simulations, fixture-specific Quick Slip and freshness/race safeguards PASS');
+ console.log('NFL all-game category UI: one best single per game, unchanged category leaders, optional game filter, bounded cached simulations, fixture-specific Quick Slip and freshness/race safeguards PASS');
 })().catch(error=>{console.error(error);process.exitCode=1});
