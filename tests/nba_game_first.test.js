@@ -14,8 +14,15 @@ const game=upcoming.find(g=>{const analysis=engine.analyze(g,feed,inj,roster,con
 test('real cache either supports player research or visibly withholds unsupported inputs',t=>{
  if(!game){
   const cases=checked.length?checked:[{game:feed.games.find(g=>Number.isFinite(Date.parse(g.date))),analysis:null}];
-  for(const entry of cases){const a=entry.analysis||engine.analyze(entry.game,feed,inj,roster,context,now);assert.equal(typeof a.reason,'string');assert(a.reason.length);assert.deepEqual(a.rows,[]);assert.equal(engine.build(a.rows).picks.length,0);assert.throws(()=>possessions.build(entry.game,feed,inj,roster,now,{context}),error=>error.message===a.reason)}
-  t.diagnostic('Actual cache withheld: '+cases[0].analysis?.reason);return;
+  for(const entry of cases){
+   const a=entry.analysis||engine.analyze(entry.game,feed,inj,roster,context,now);
+   if(a.reason!==null){assert.equal(typeof a.reason,'string');assert(a.reason.length)}
+   assert.deepEqual(a.rows,[]);assert.equal(engine.build(a.rows).picks.length,0);
+   // A supported base rotation can still fail an uncertain in/out draw.
+   // Freshness and cutoff failures must also be enforced before simulation.
+   if(/Fresh game, injury and roster|closed after tipoff/.test(a.reason||''))assert.throws(()=>possessions.build(entry.game,feed,inj,roster,now,{context}),error=>error.message===a.reason);
+  }
+  t.diagnostic('Actual cache withheld: '+(cases[0].analysis?.reason||'No supported pregame player opportunities'));return;
  }
  const a=engine.analyze(game,feed,inj,roster,context,now);assert.equal(a.reason,null);assert(a.rows.length);const ticket=engine.build(a.rows);assert(ticket.picks.every(r=>r.score>=85));assert.equal(ticket.bestSingle===null,ticket.topThree.length===0);assert(a.rows.every(r=>r.samples.length===1000&&r.reason.includes(r.name)&&r.reason.includes('Pace')&&r.minutes>=20));const exclude=ticket.picks[0]?.market||'points';assert(engine.build(a.rows,{excludedMarkets:[exclude]}).picks.every(r=>r.market!==exclude));const copied=JSON.stringify(a.rows);engine.build(a.rows,{lines:{[a.rows[0].key]:1000}});assert.equal(JSON.stringify(a.rows),copied);const outName=(inj.injuries||[]).filter(p=>/OUT|INACTIVE|DOUBTFUL/.test(p.status)).map(p=>p.player);assert(!a.rows.some(r=>outName.includes(r.name)));
 });
