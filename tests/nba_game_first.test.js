@@ -5,13 +5,37 @@ test('odds-free OVER recommendations support five legs and distinct players in s
 test('alternate line recomputes exact strict-over frequency, including integer pushes',()=>{const r=row('1');assert.equal(engine.chance(r,10),4/8);assert(engine.chance(r,7.5)>engine.chance(r,11.5));const built=engine.build([r],{lines:{[r.key]:9.5}});assert.equal(built.picks[0].line,9.5);assert.equal(built.picks[0].probability,5/8);assert.equal(engine.build([r],{lines:{[r.key]:100}}).picks.length,0)});
 test('reject NaN, wrong-side evidence, stale eligibility and exclusions',()=>{for(const r of [{...row('1'),side:'under'},row('1','points',-.1),{...row('1'),eligible:false},{...row('1'),matchupGames:NaN},{...row('1'),forecast:NaN}])assert.equal(engine.candidate(r),null);assert.equal(engine.build([row('1')],{excludedMarkets:['rebounds']}).picks.length,0);assert.equal(engine.chance(row('1'),NaN),null)});
 test('joint probability comes from aligned outcomes and conflicting pairs are excluded',()=>{const a={...row('a'),samples:[10,10,10,10,10,0,0,0]},b={...row('b'),samples:[0,0,0,10,10,10,10,10]};const r=engine.build([a,b]);assert.equal(r.picks.length,1);const positive=engine.build([a,{...b,samples:a.samples}]);assert.equal(positive.picks.length,2);assert.equal(positive.jointHitRate,5/8);assert.notEqual(positive.jointHitRate,(5/8)**2)});
+const possessions=require('../nba_possession_engine');
 const read=n=>JSON.parse(fs.readFileSync('data/'+n+'.json'));const feed=read('nba_games'),inj=read('nba_injuries'),roster=read('nba_rosters'),context=read('nba_game_context');const now=Math.max(...[feed,inj,roster].map(d=>Date.parse(d.generated_at)))+1000;
-// Select a genuinely eligible pregame example. The earliest tipoff may already
-// require a <15-minute injury snapshot; that strict runtime gate stays intact.
-const game=feed.games.find(g=>{
- if(g.status!=='STATUS_SCHEDULED'||Date.parse(g.date)-now<=90*60000)return false;
- const analysis=engine.analyze(g,feed,inj,roster,context,now);
- return analysis.reason===null&&analysis.rows.length>0;
+// Published snapshots update independently. Assess the actual timestamps; a
+// newer injury report must not make an older game feed appear fresh.
+const upcoming=feed.games.filter(g=>g.status==='STATUS_SCHEDULED'&&Date.parse(g.date)>now),checked=[];
+const game=upcoming.find(g=>{const analysis=engine.analyze(g,feed,inj,roster,context,now);checked.push({game:g,analysis});return analysis.reason===null&&analysis.rows.length>0});
+test('real cache either supports player research or visibly withholds unsupported inputs',t=>{
+ if(!game){
+  const cases=checked.length?checked:[{game:feed.games.find(g=>Number.isFinite(Date.parse(g.date))),analysis:null}];
+  for(const entry of cases){
+   const a=entry.analysis||engine.analyze(entry.game,feed,inj,roster,context,now);
+   if(a.reason!==null){assert.equal(typeof a.reason,'string');assert(a.reason.length)}
+   assert.deepEqual(a.rows,[]);assert.equal(engine.build(a.rows).picks.length,0);
+   // A supported base rotation can still fail an uncertain in/out draw.
+   // Freshness and cutoff failures must also be enforced before simulation.
+   if(/Fresh game, injury and roster|closed after tipoff/.test(a.reason||''))assert.throws(()=>possessions.build(entry.game,feed,inj,roster,now,{context}),error=>error.message===a.reason);
+  }
+  t.diagnostic('Actual cache withheld: '+(cases[0].analysis?.reason||'No supported pregame player opportunities'));return;
+ }
+ const a=engine.analyze(game,feed,inj,roster,context,now);assert.equal(a.reason,null);assert(a.rows.length);const ticket=engine.build(a.rows);assert(ticket.picks.every(r=>r.score>=85));assert.equal(ticket.bestSingle===null,ticket.topThree.length===0);assert(a.rows.every(r=>r.samples.length===1000&&r.reason.includes(r.name)&&r.reason.includes('Pace')&&r.minutes>=20));const exclude=ticket.picks[0]?.market||'points';assert(engine.build(a.rows,{excludedMarkets:[exclude]}).picks.every(r=>r.market!==exclude));const copied=JSON.stringify(a.rows);engine.build(a.rows,{lines:{[a.rows[0].key]:1000}});assert.equal(JSON.stringify(a.rows),copied);const outName=(inj.injuries||[]).filter(p=>/OUT|INACTIVE|DOUBTFUL/.test(p.status)).map(p=>p.player);assert(!a.rows.some(r=>outName.includes(r.name)));
 });
-test('real feed drives roles, player-specific explanations, exclusions and rebuild without odds',()=>{assert(game);const a=engine.analyze(game,feed,inj,roster,context,now);assert.equal(a.reason,null);assert(a.rows.length);const ticket=engine.build(a.rows);assert(ticket.picks.every(r=>r.score>=85));assert.equal(ticket.bestSingle===null,ticket.topThree.length===0);assert(a.rows.every(r=>r.samples.length===1000&&r.reason.includes(r.name)&&r.reason.includes('Pace')&&r.minutes>=20));const exclude=ticket.picks[0]?.market||'points';assert(engine.build(a.rows,{excludedMarkets:[exclude]}).picks.every(r=>r.market!==exclude));const copied=JSON.stringify(a.rows);engine.build(a.rows,{lines:{[a.rows[0].key]:1000}});assert.equal(JSON.stringify(a.rows),copied);const outName=(inj.injuries||[]).filter(p=>/OUT|INACTIVE|DOUBTFUL/.test(p.status)).map(p=>p.player);assert(!a.rows.some(r=>outName.includes(r.name)))});
-test('missing, stale and post-tipoff inputs produce visible reasons and no invented picks',()=>{assert(engine.analyze(game,feed,null,roster,context,now).reason);assert(engine.analyze(game,{...feed,generated_at:'2000-01-01'},inj,roster,context,now).reason);assert(engine.analyze(game,feed,inj,roster,context,Date.parse(game.date)+1).reason);assert.equal(engine.build([]).jointHitRate,null)});
+test('missing, stale and post-tipoff inputs produce visible reasons and no invented picks',()=>{
+ const fixture=game||upcoming[0]||{id:'freshness-test',home:'A',away:'B',status:'STATUS_SCHEDULED',date:new Date(now+6*3600000).toISOString()};
+ for(const analysis of [engine.analyze(fixture,feed,null,roster,null,now),engine.analyze(fixture,{...feed,generated_at:'2000-01-01'},inj,roster,context,now),engine.analyze(fixture,feed,inj,roster,context,Date.parse(fixture.date)+1)]){assert.equal(typeof analysis.reason,'string');assert(analysis.reason.length);assert.deepEqual(analysis.rows,[]);assert.equal(engine.build(analysis.rows).picks.length,0)}
+ assert.equal(engine.build([]).jointHitRate,null);
+ // Independent synthetic snapshots isolate the freshness boundary without
+ // altering any real cache timestamp or pretending missing history exists.
+ const clock=Date.parse('2026-11-01T12:00:00Z'),stamp=new Date(clock).toISOString(),synthetic={id:'freshness-boundary',home:'A',away:'B',status:'STATUS_SCHEDULED',date:new Date(clock+6*3600000).toISOString()},emptyFeed={generated_at:stamp,games:[]},availability={generated_at:stamp,status:'ok',injuries:[]},rosters={generated_at:stamp,teams:{}};
+ const check=(f,at=clock,g=synthetic)=>engine.analyze(g,f,availability,rosters,null,at);
+ assert.match(check(emptyFeed).reason,/At least eight earlier complete shooting box scores/,'coherent fresh snapshots pass freshness but do not invent historical evidence');
+ assert.match(check({...emptyFeed,generated_at:new Date(clock-12*3600000).toISOString()}).reason,/At least eight earlier/,'the exact 12-hour boundary remains allowed');
+ const stale={...emptyFeed,generated_at:new Date(clock-12*3600000-1).toISOString()};assert.throws(()=>possessions.build(synthetic,stale,availability,rosters,clock),/Fresh game, injury and roster/);assert.match(check(stale).reason,/Fresh game, injury and roster/);
+ const near={...synthetic,date:new Date(clock+3600000).toISOString()};assert.match(check(emptyFeed,clock+15*60000,near).reason,/At least eight earlier/);assert.match(check(emptyFeed,clock+15*60000+1,near).reason,/availability must be refreshed within 15 minutes/);
+});
