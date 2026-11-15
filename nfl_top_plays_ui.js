@@ -11,6 +11,14 @@
  const fixturePair=g=>[String(g.home||''),String(g.away||'')].sort().join('|');
  const finite=value=>typeof value==='number'&&Number.isFinite(value);
  const simulationPercent=rate=>finite(rate)&&rate>=0&&rate<=1?(100*rate).toFixed(1)+'%':null;
+ function gameModels(result){
+  if(result?.ready!==true)return [];
+  return (Array.isArray(result.perGame)?result.perGame:result.fixture?[result]:[]).filter(game=>game?.ready===true&&game.fixture);
+ }
+ function bestSingles(result){
+  return gameModels(result).flatMap(game=>top.select(game,'ALL',1).map(row=>({...row,fixture:game.fixture})))
+   .sort((a,b)=>b.researchScore-a.researchScore||b.score-a.score||String(a.key).localeCompare(String(b.key)));
+ }
  function create(options){
   const host=options.root,heading=options.heading,status=options.status;
   const now=options.now||Date.now,cache=new Map(),lines=new Map(),quotes=new Map(),failed=new Set();
@@ -46,6 +54,7 @@
    return alternatives.find(a=>Number(a.line)===value)||alternatives.find(a=>Number(a.line)===Number(row.line))||
     {line:row.line,hits:row.hits,sample:row.sample,scenarioRate:row.scenarioRate};
   }
+  function rowsFor(current){return category==='ALL'?bestSingles(current):top.select(current,category)}
   function selectionReasons(row,alt){
    if(row.market==='anytime_td')return row.reasons||[];
    const percent=simulationPercent(alt.scenarioRate);
@@ -99,8 +108,8 @@
    const components=row.rating,performance=components?.performanceScore??(finite(components?.offense)?Math.round(100*components.offense):null),defense=components?.opponentScore??(finite(components?.defense)?Math.round(100*components.defense):null);
    const breakdown=finite(performance)&&finite(defense)?'<p>Player performance / usage '+performance+'/100 · Opponent vs '+esc(p.pos)+' '+defense+'/100</p>':'';
    const source=p.depthChart?.source,link=typeof source==='string'&&/^https:\/\//i.test(source)?'<p><a href="'+esc(source)+'" target="_blank" rel="noopener noreferrer">Depth-chart source</a></p>':'';
-   return '<article class="matchrow nfl-top-play" data-play-key="'+esc(row.key)+'" data-player-id="'+esc(p.player_id)+'" data-score="'+row.researchScore+'">'+
-    '<div class="row"><span class="pill">'+(index===0?'BEST SINGLE':'#'+(index+1))+'</span><strong class="score mono nfl-top-score">'+row.researchScore+'<small>/100</small></strong></div>'+
+   return '<article class="matchrow nfl-top-play" data-play-key="'+esc(row.key)+'" data-game-id="'+esc(fixtureId(fixture))+'" data-player-id="'+esc(p.player_id)+'" data-score="'+row.researchScore+'">'+
+    '<div class="row"><span class="pill">'+(category==='ALL'||index===0?'BEST SINGLE':'#'+(index+1))+'</span><strong class="score mono nfl-top-score">'+row.researchScore+'<small>/100</small></strong></div>'+
     '<h3>'+esc(p.player)+' <span class="pill">'+esc(p.team)+' · '+esc(p.pos)+'</span></h3>'+
     (fixture?'<p class="statsline nfl-top-matchup">'+esc(fixture.away+' @ '+fixture.home)+'</p>':'')+
     (questionable?'<p class="notice">QUESTIONABLE · verify the official active list</p>':'')+'<p class="nfl-top-selection">'+esc(line)+'</p>'+
@@ -115,15 +124,19 @@
    const active=host.ownerDocument?.activeElement;
    const focus=active?.dataset?.bookLine?{field:'bookLine',key:active.dataset.bookLine}:active?.dataset?.bookOdds?{field:'bookOdds',key:active.dataset.bookOdds}:null;
    const caret=focus&&typeof active.selectionStart==='number'?{start:active.selectionStart,end:active.selectionEnd}:null;
-   const labels={ALL:'Top plays',PASS:'Best passing plays',RUSH:'Best rushing plays',REC:'Best receiving plays',CATCH:'Best reception plays',TD:'Top 10 anytime TD scorers'};
+   const labels={ALL:'Best single from each game',PASS:'Best passing plays',RUSH:'Best rushing plays',REC:'Best receiving plays',CATCH:'Best reception plays',TD:'Top 10 anytime TD scorers'};
    if(heading)heading.textContent=labels[category]+' · '+(result?.fixture?result.fixture.away+' @ '+result.fixture.home:'All games');
-   const rows=loading&&category!=='TD'?[]:top.select(result,category);
-   host.innerHTML=rows.length?rows.map(card).join(''):'<p class="'+(loading?'muted':'notice')+'">'+esc(loading?'Finding the best plays across '+(result?.fixture?'this matchup':'all games')+'…':'PASS · '+(result?.reason||'No supported plays meet the 60/100 minimum in this category.'))+'</p>';
+   if(options.description)options.description.textContent=category==='ALL'?'One Best Single per game · 60/100 minimum.':'Best plays in each category · 60/100 minimum.';
+   const rows=loading&&category!=='TD'?[]:rowsFor(result);
+   const passes=category==='ALL'&&!loading?gameModels(result).filter(game=>!top.select(game,'ALL',1).length):[];
+   const passHTML=passes.map(game=>'<section class="matchrow nfl-top-pass" data-game-id="'+esc(fixtureId(game.fixture))+'"><h3>'+esc(game.fixture.away+' @ '+game.fixture.home)+'</h3><p class="notice">PASS · '+esc(game.reason||'No supported play meets the 60/100 minimum and availability requirements.')+'</p></section>').join('');
+   host.innerHTML=rows.length||passes.length?rows.map(card).join('')+passHTML:'<p class="'+(loading?'muted':'notice')+'">'+esc(loading?'Finding the best plays across '+(result?.fixture?'this matchup':'all games')+'…':'PASS · '+(result?.reason||'No supported plays meet the 60/100 minimum in this category.'))+'</p>';
    if(focus){const replacement=Array.from(host.querySelectorAll?.('input')||[]).find(node=>node.dataset[focus.field]===focus.key);replacement?.focus({preventScroll:true});if(caret)replacement?.setSelectionRange(caret.start,caret.end)}
    const games=result?.games||(result?.ready?[result.fixture]:[]),completed=games.filter(g=>cache.has(fixtureId(g))||failed.has(fixtureId(g))).length;
    const unavailable=games.filter(g=>failed.has(fixtureId(g))).length;
+   const coverage=category==='ALL'?rows.length+' best '+(rows.length===1?'single':'singles')+' · '+games.length+' '+(games.length===1?'game':'games')+(passes.length?' · '+passes.length+' PASS':''):rows.length+' qualifying '+(rows.length===1?'play':'plays');
    if(status)status.textContent=loading&&category!=='TD'?'Analyzing '+completed+' of '+games.length+' games for the best plays…':
-    error?(rows.length?'Showing supported TD research. ':'')+error:rows.length+' qualifying '+(rows.length===1?'play':'plays')+
+    error?(rows.length?'Showing supported TD research. ':'')+error:coverage+
     (unavailable?' · '+unavailable+' game simulation'+(unavailable===1?'':'s')+' unavailable':'')+' · Matchup scores, not win probabilities. Verify player status and sportsbook lines.';
    options.onUpdate?.();
   }
@@ -178,14 +191,16 @@
     simulations:cache,quotes:Object.fromEntries([...quotes].map(([key,value])=>[key,{...value}]))};
   }
   function setLine(key,value){
-   const row=result?.candidates.find(r=>r.key===key),line=Number(value);
+   const x=inputs();
+   if(lastRecords!==x.state.records||sourceSignature(x)!==inputKey){refresh();return false}
+   const fresh=snapshot(),row=pending&&category!=='TD'?null:rowsFor(fresh).find(r=>r.key===key),line=Number(value);
    if(!row||!Number.isFinite(line)||!(row.alternatives||[]).some(a=>a.line===line))return false;
-   lines.set(key,line);render(!!pending);return true;
+   result=fresh;lines.set(key,line);render(!!pending);return true;
   }
   function setBookQuote(key,values){
    const x=inputs();
    if(lastRecords!==x.state.records||sourceSignature(x)!==inputKey){refresh();return false}
-   const fresh=snapshot(),row=top.select(fresh,category).find(r=>r.key===key);
+   const fresh=snapshot(),row=rowsFor(fresh).find(r=>r.key===key);
    if(!row||row.market==='anytime_td'||pending){result=fresh;render(!!pending);return false}
    const quote=quotes.get(key)||{line:'',odds:''};
    for(const field of ['line','odds'])if(Object.hasOwn(values||{},field)){
@@ -202,8 +217,10 @@
    return true;
   }
   function add(key){
+   const x=inputs();
+   if(lastRecords!==x.state.records||sourceSignature(x)!==inputKey){refresh();return false}
    const fresh=snapshot();
-   const row=pending&&category!=='TD'?null:top.select(fresh,category).find(r=>r.key===key);
+   const row=pending&&category!=='TD'?null:rowsFor(fresh).find(r=>r.key===key);
    if(!row){result=fresh;render(!!pending);return false}
    const alt=chosen(row),td=row.market==='anytime_td';
    if(!td&&!(row.alternatives||[]).some(a=>a.line===alt.line))return false;
@@ -223,5 +240,5 @@
   host.addEventListener('click',click);host.addEventListener('change',change);host.addEventListener('input',input);
   return {refresh,setCategory,setLine,setBookQuote,getBuilderState,add,getResult:()=>result,destroy(){destroyed=true;cancel();if(timer)clearTimer(timer);host.removeEventListener('click',click);host.removeEventListener('change',change);host.removeEventListener('input',input)}};
  }
- return {create,simulationPercent};
+ return {create,simulationPercent,bestSingles};
 });
