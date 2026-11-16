@@ -55,6 +55,8 @@ on:
       - 'test_market_odds.js'
       - '.github/workflows/nba-feed.yml'
       - 'scripts/archive_nba_evidence.py'
+      - 'tests/test_nba_evidence_archive.py'
+      - 'tests/test_nba_refresh_workflow.py'
       - 'scripts/check_nba_evidence_archive.py'
       - 'scripts/grade_nba_prospective.py'
   pull_request:
@@ -82,7 +84,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Test locked NBA forecasts and daily learning
-        run: python -m unittest -v test_nba_tracker_integrity.py test_nba_pipeline.py test_nba_odds.py test_nba_contracts.py test_nba_daily_learning.py test_nba_first_basket.py tests.test_odds_provider_transport
+        run: python -m unittest -v test_nba_tracker_integrity.py test_nba_pipeline.py test_nba_odds.py test_nba_contracts.py test_nba_daily_learning.py test_nba_first_basket.py tests.test_odds_provider_transport tests.test_nba_evidence_archive tests.test_nba_refresh_workflow
       - name: Test NBA UI and simulations
         run: |
           node test_market_odds.js
@@ -108,13 +110,14 @@ jobs:
     timeout-minutes: 25
     env:
       ODDSPAPI_API_KEY: ${{ secrets.ODDSPAPI_API_KEY }}
+      PYTHONUNBUFFERED: "1"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Refresh and publish NBA records
+      - name: Refresh and validate current NBA sources
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -122,6 +125,27 @@ jobs:
           git reset --hard origin/main
           python nba_feed.py
           python nba_rosters.py || echo 'Roster source unavailable; existing file retained'
+          python -m unittest -v test_nba_contracts.NBAContracts.test_feed
+      - name: Publish current NBA sources before derived research
+        run: |
+          # Keep live source freshness independent of simulation/archive runtime.
+          # The five-minute availability writer retains ownership of its files.
+          git add data/nba_games.json data/nba_rosters.json
+          if test -f data/nba_season_stats.json; then git add data/nba_season_stats.json; fi
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Refresh current NBA game and roster sources"
+          for attempt in 1 2 3 4; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort
+              exit 1
+            fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 2
+          done
+          exit 1
+      - name: Build and validate NBA research and evidence
+        run: |
           python nba_injuries.py || echo 'Injury source unavailable; existing file retained, UI will reject stale records'
           python nba_game_context.py
           python nba_tracker.py
@@ -132,7 +156,7 @@ jobs:
           python scripts/archive_nba_evidence.py
           python scripts/check_nba_evidence_archive.py
           python scripts/grade_nba_prospective.py
-          python -m unittest -v test_nba_tracker_tipoff.py test_nba_pipeline.py test_nba_odds.py test_nba_contracts.py test_nba_daily_learning.py test_nba_first_basket.py tests.test_odds_provider_transport
+          python -m unittest -v test_nba_tracker_tipoff.py test_nba_pipeline.py test_nba_odds.py test_nba_contracts.py test_nba_daily_learning.py test_nba_first_basket.py tests.test_odds_provider_transport tests.test_nba_evidence_archive tests.test_nba_refresh_workflow
           node test_market_odds.js
           node test_player_probability.js
           node test_nba_pipeline_ui.js
@@ -146,17 +170,17 @@ jobs:
           node test_nba_forward_market_ledger.js
           node test_nba_bet_research.js
           node test_nba_first_basket.js
+      - name: Publish validated NBA research and evidence
+        run: |
           git add data/nba_simulator_report.json data/nba_simulator_locks.json
           git add data/nba_evidence_archive.json.gz data/nba_evidence_manifest.json data/nba_evidence_*.json.gz data/nba_prospective_accuracy.json
           git rm -f --ignore-unmatch data/nba_evidence_archive.json
-          git add data/nba_games.json data/nba_projection_tracker.json data/nba_daily_learning.json data/nba_analysis.json data/nba_pipeline_locks.json data/nba_market_status.json
+          git add data/nba_projection_tracker.json data/nba_daily_learning.json data/nba_analysis.json data/nba_pipeline_locks.json data/nba_market_status.json
           if test -f data/nba_market_odds.json; then git add data/nba_market_odds.json; fi
           # Only public catalog responses and safe reset timestamps are persisted.
           for provider_file in data/odds_provider_state.json data/odds_provider_cache.json; do
             if test -f "$provider_file"; then git add "$provider_file"; fi
           done
-          if test -f data/nba_season_stats.json; then git add data/nba_season_stats.json; fi
-          if test -f data/nba_rosters.json; then git add data/nba_rosters.json; fi
           # Fast availability writer owns these files; retain newer published snapshots.
           git restore --worktree -- data/nba_injuries.json data/nba_game_context.json
           if git diff --cached --quiet; then exit 0; fi

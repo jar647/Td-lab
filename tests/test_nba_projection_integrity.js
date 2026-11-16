@@ -28,9 +28,21 @@ if(a.reason){
 // Dead-ball accounting is independent of the latest live snapshot freshness.
 // Use an actual historical fixture and the same four-hour completion buffer as
 // the walk-forward audit, leaving all published timestamps unchanged.
-const final=feed.games.filter(g=>g.status==='STATUS_FINAL'&&g.season_type===2).sort((a,b)=>Date.parse(b.date)-Date.parse(a.date))[0];
-const historicalNow=Date.parse(final.date)-1,historicalFeed={...feed,games:feed.games.filter(g=>g.status!=='STATUS_FINAL'||Date.parse(g.date)+4*3600000<=historicalNow)};
-const historicalModel=p.build({...final,status:'STATUS_SCHEDULED'},historicalFeed,{injuries:[]},{},historicalNow,{historical:true});
+const finals=feed.games.filter(g=>g.status==='STATUS_FINAL'&&g.season_type===2).sort((a,b)=>Date.parse(b.date)-Date.parse(a.date));
+let final,historicalModel,rejectedHistoricalRosters=0;
+for(const candidate of finals){
+ const historicalNow=Date.parse(candidate.date)-1,historicalFeed={...feed,games:feed.games.filter(g=>g.status!=='STATUS_FINAL'||Date.parse(g.date)+4*3600000<=historicalNow)};
+ const buildHistorical=()=>p.build({...candidate,status:'STATUS_SCHEDULED'},historicalFeed,{injuries:[]},{},historicalNow,{historical:true});
+ try{historicalModel=buildHistorical();final=candidate;break}catch(error){
+  // Historical rosters are unavailable. A recently traded player can appear
+  // in both teams' earlier boxes; that ambiguous reconstruction stays closed.
+  if(error.message!=='Player appears on both current rosters')throw error;
+  assert.throws(buildHistorical,/^Error: Player appears on both current rosters$/,'Ambiguous historical rosters must remain rejected');
+  rejectedHistoricalRosters++;
+ }
+}
+assert(final&&historicalModel,'A supported historical fixture is required for dead-ball and cutoff checks');
+console.log('NBA historical fixture '+final.id+'; ambiguous roster fixtures rejected: '+rejectedHistoricalRosters);
 for(const t of Object.values(historicalModel.teams)){assert(t.liveRebound>0&&t.liveRebound<=1);assert(t.allowLiveRebound>0&&t.allowLiveRebound<=1)}
 const noPlayerRebounds=structuredClone(historicalModel);for(const t of Object.values(noPlayerRebounds.teams)){t.liveRebound=0;t.allowLiveRebound=0}
 assert(p.draws(noPlayerRebounds,1000,123,{availability:'in'}).players.every(p=>p.rebounds===0),'Dead-ball misses must never produce player rebounds');
