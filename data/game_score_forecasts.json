@@ -1,50 +1,50 @@
 {
   "status": "PROSPECTIVE_RESEARCH_NOT_CALIBRATED",
-  "updated_at": "2026-11-16T03:37:58.869Z",
+  "updated_at": "2026-11-16T05:11:33.505Z",
   "method": "First baseline and supported lineup-scenario forecasts per game/model frozen before verified scheduled kickoff. Existing predictions are never replaced. Results graded next calendar day from schedule finals; no historical backfill.",
   "summary": {
     "frozen": 53,
-    "graded": 30,
-    "non_tie_winner_games": 30,
-    "margin_mae": 11.280000000000001,
-    "total_mae": 11.199999999999998,
-    "brier": 0.20924852011417325,
+    "graded": 51,
+    "non_tie_winner_games": 51,
+    "margin_mae": 11.803921568627448,
+    "total_mae": 10.745098039215685,
+    "brier": 0.20551343461592478,
     "calibration": [
       {
         "range": [
           0,
           0.2
         ],
-        "games": 0,
-        "mean_forecast": null,
-        "actual_home_win_rate": null
+        "games": 1,
+        "mean_forecast": 0.17868402318722668,
+        "actual_home_win_rate": 0
       },
       {
         "range": [
           0.2,
           0.4
         ],
-        "games": 3,
-        "mean_forecast": 0.37413820836317074,
-        "actual_home_win_rate": 0
+        "games": 11,
+        "mean_forecast": 0.3553472761346658,
+        "actual_home_win_rate": 0.09090909090909091
       },
       {
         "range": [
           0.4,
           0.6
         ],
-        "games": 20,
-        "mean_forecast": 0.510220839277083,
-        "actual_home_win_rate": 0.4
+        "games": 31,
+        "mean_forecast": 0.5067112737676471,
+        "actual_home_win_rate": 0.45161290322580644
       },
       {
         "range": [
           0.6,
           0.8
         ],
-        "games": 7,
-        "mean_forecast": 0.6494875399730394,
-        "actual_home_win_rate": 0.8571428571428571
+        "games": 8,
+        "mean_forecast": 0.6442265974764095,
+        "actual_home_win_rate": 0.75
       },
       {
         "range": [
@@ -73,17 +73,17 @@
       },
       "d424257eb2217514b95921702aec59950c0637907b319221d806e0a003dcf482": {
         "frozen": 14,
-        "graded": 1,
-        "margin_mae": 6.3,
-        "total_mae": 0.10000000000000142,
-        "brier": 0.3684445166324323
+        "graded": 13,
+        "margin_mae": 12.246153846153847,
+        "total_mae": 9.046153846153846,
+        "brier": 0.20722458621308262
       },
       "aeb722573bf20c91b7dee08e84a42ce12b9e33c1ae321f0e0954e8e2fea0e176|nfl-qb-lineup-scenario-v1": {
         "frozen": 11,
-        "graded": 1,
-        "margin_mae": 5.5,
-        "total_mae": 1.2999999999999972,
-        "brier": 0.3160966425329159
+        "graded": 10,
+        "margin_mae": 11.620000000000001,
+        "total_mae": 9.580000000000002,
+        "brier": 0.21943511003822383
       }
     },
     "scope": "Aggregate research scorecard; compare per-signature groups when model code changes."
@@ -1339,7 +1339,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 35,
+        "away": 10,
+        "margin_error": -22,
+        "total_error": 1.7999999999999972,
+        "brier": 0.16940904291722467,
+        "home_won": true
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_10_KC_ATL",
@@ -1373,7 +1381,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 13,
+        "away": 35,
+        "margin_error": 19.9,
+        "total_error": -3.700000000000003,
+        "brier": 0.15798769864179688,
+        "home_won": false
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_10_HOU_CLE",
@@ -1407,7 +1423,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 27,
+        "away": 24,
+        "margin_error": -3.6,
+        "total_error": -6.600000000000001,
+        "brier": 0.30953513985256154,
+        "home_won": true
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_10_MIN_GB",
@@ -1441,7 +1465,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 10,
+        "away": 30,
+        "margin_error": 20.6,
+        "total_error": 0.7999999999999972,
+        "brier": 0.28776934138558496,
+        "home_won": false
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_10_MIA_IND",
@@ -1475,7 +1507,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 24,
+        "away": 22,
+        "margin_error": 0.20000000000000018,
+        "total_error": -1.6000000000000014,
+        "brier": 0.23642049309687027,
+        "home_won": true
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_10_CAR_NO",
@@ -1509,7 +1549,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 17,
+        "away": 20,
+        "margin_error": 3.3,
+        "total_error": 10.899999999999999,
+        "brier": 0.23768973672953614,
+        "home_won": false
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_10_BUF_NYJ",
@@ -1543,7 +1591,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 12,
+        "away": 31,
+        "margin_error": 17,
+        "total_error": 6.200000000000003,
+        "brier": 0.14262501117536622,
+        "home_won": false
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_10_JAX_TEN",
@@ -1577,7 +1633,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 23,
+        "away": 40,
+        "margin_error": 12.1,
+        "total_error": -19.700000000000003,
+        "brier": 0.12119409561802677,
+        "home_won": false
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_10_LA_ARI",
@@ -1611,7 +1675,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 6,
+        "away": 34,
+        "margin_error": 25.1,
+        "total_error": 5.5,
+        "brier": 0.1468514774764189,
+        "home_won": false
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_10_SEA_LV",
@@ -1645,7 +1717,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 13,
+        "away": 21,
+        "margin_error": 6.9,
+        "total_error": 12.899999999999999,
+        "brier": 0.1779189153827298,
+        "home_won": false
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_10_SF_DAL",
@@ -1679,7 +1759,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 40,
+        "away": 46,
+        "margin_error": 4.9,
+        "total_error": -37.3,
+        "brier": 0.16419681298139957,
+        "home_won": false
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_10_PIT_CIN",
@@ -1713,7 +1801,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 38,
+        "away": 18,
+        "margin_error": -17.3,
+        "total_error": -10.5,
+        "brier": 0.17387733888012674,
+        "home_won": true
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_10_LAC_BAL",
@@ -2088,7 +2184,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 35,
+        "away": 10,
+        "margin_error": -26.1,
+        "total_error": 4.700000000000003,
+        "brier": 0.3021328798153639,
+        "home_won": true
+      }
     },
     {
       "key": "nfl-qb-lineup-scenario-v1|2026_10_KC_ATL",
@@ -2224,7 +2328,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 13,
+        "away": 35,
+        "margin_error": 18.9,
+        "total_error": -4.299999999999997,
+        "brier": 0.13847315721293718,
+        "home_won": false
+      }
     },
     {
       "key": "nfl-qb-lineup-scenario-v1|2026_10_HOU_CLE",
@@ -2360,7 +2472,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 27,
+        "away": 24,
+        "margin_error": -7.9,
+        "total_error": -8.899999999999999,
+        "brier": 0.4391962695724942,
+        "home_won": true
+      }
     },
     {
       "key": "nfl-qb-lineup-scenario-v1|2026_10_MIN_GB",
@@ -2496,7 +2616,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 10,
+        "away": 30,
+        "margin_error": 22.9,
+        "total_error": -3.1000000000000014,
+        "brier": 0.3689347600000001,
+        "home_won": false
+      }
     },
     {
       "key": "nfl-qb-lineup-scenario-v1|2026_10_CAR_NO",
@@ -2632,7 +2760,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 17,
+        "away": 20,
+        "margin_error": 3.4,
+        "total_error": 10.399999999999999,
+        "brier": 0.2450709454219696,
+        "home_won": false
+      }
     },
     {
       "key": "nfl-qb-lineup-scenario-v1|2026_10_BUF_NYJ",
@@ -2768,7 +2904,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 12,
+        "away": 31,
+        "margin_error": 8.4,
+        "total_error": 7.200000000000003,
+        "brier": 0.0431226080405083,
+        "home_won": false
+      }
     },
     {
       "key": "nfl-qb-lineup-scenario-v1|2026_10_JAX_TEN",
@@ -2904,7 +3048,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 23,
+        "away": 40,
+        "margin_error": 4.4,
+        "total_error": -18.6,
+        "brier": 0.03192798014237336,
+        "home_won": false
+      }
     },
     {
       "key": "nfl-qb-lineup-scenario-v1|2026_10_SF_DAL",
@@ -3040,7 +3192,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 40,
+        "away": 46,
+        "margin_error": 1.7999999999999998,
+        "total_error": -31.200000000000003,
+        "brier": 0.13167405508376506,
+        "home_won": false
+      }
     },
     {
       "key": "nfl-qb-lineup-scenario-v1|2026_10_PIT_CIN",
@@ -3176,7 +3336,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-16T05:11:33.505Z",
+        "home": 38,
+        "away": 18,
+        "margin_error": -16.9,
+        "total_error": -6.100000000000001,
+        "brier": 0.1777218025599104,
+        "home_won": true
+      }
     },
     {
       "key": "nfl-qb-lineup-scenario-v1|2026_10_LAC_BAL",
