@@ -1,14 +1,14 @@
 {
   "status": "PROSPECTIVE_RESEARCH_NOT_CALIBRATED",
-  "updated_at": "2026-11-17T03:56:51.918Z",
+  "updated_at": "2026-11-17T05:58:57.558Z",
   "method": "First baseline and supported lineup-scenario forecasts per game/model frozen before verified scheduled kickoff. Existing predictions are never replaced. Results graded next calendar day from schedule finals; no historical backfill.",
   "summary": {
     "frozen": 78,
-    "graded": 51,
-    "non_tie_winner_games": 51,
-    "margin_mae": 11.803921568627448,
-    "total_mae": 10.745098039215685,
-    "brier": 0.20551343461592478,
+    "graded": 53,
+    "non_tie_winner_games": 53,
+    "margin_mae": 11.573584905660375,
+    "total_mae": 10.384905660377358,
+    "brier": 0.21098408506218355,
     "calibration": [
       {
         "range": [
@@ -33,18 +33,18 @@
           0.4,
           0.6
         ],
-        "games": 31,
-        "mean_forecast": 0.5067112737676471,
-        "actual_home_win_rate": 0.45161290322580644
+        "games": 32,
+        "mean_forecast": 0.5089713045269243,
+        "actual_home_win_rate": 0.4375
       },
       {
         "range": [
           0.6,
           0.8
         ],
-        "games": 8,
-        "mean_forecast": 0.6442265974764095,
-        "actual_home_win_rate": 0.75
+        "games": 9,
+        "mean_forecast": 0.6398375918504482,
+        "actual_home_win_rate": 0.6666666666666666
       },
       {
         "range": [
@@ -73,17 +73,17 @@
       },
       "d424257eb2217514b95921702aec59950c0637907b319221d806e0a003dcf482": {
         "frozen": 14,
-        "graded": 13,
-        "margin_mae": 12.246153846153847,
-        "total_mae": 9.046153846153846,
-        "brier": 0.20722458621308262
+        "graded": 14,
+        "margin_mae": 11.828571428571431,
+        "total_mae": 8.485714285714286,
+        "brier": 0.21854375769816753
       },
       "aeb722573bf20c91b7dee08e84a42ce12b9e33c1ae321f0e0954e8e2fea0e176|nfl-qb-lineup-scenario-v1": {
         "frozen": 23,
-        "graded": 10,
-        "margin_mae": 11.620000000000001,
-        "total_mae": 9.580000000000002,
-        "brier": 0.21943511003822383
+        "graded": 11,
+        "margin_mae": 11.01818181818182,
+        "total_mae": 8.81818181818182,
+        "brier": 0.22996631420559369
       },
       "aeb722573bf20c91b7dee08e84a42ce12b9e33c1ae321f0e0954e8e2fea0e176": {
         "frozen": 13,
@@ -1850,7 +1850,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-17T05:58:57.558Z",
+        "home": 20,
+        "away": 23,
+        "margin_error": 6.4,
+        "total_error": 1.2000000000000028,
+        "brier": 0.3656929870042714,
+        "home_won": false
+      }
     },
     {
       "key": "nfl-qb-lineup-scenario-v1|2026_10_WAS_NYG",
@@ -3487,7 +3495,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-17T05:58:57.558Z",
+        "home": 20,
+        "away": 23,
+        "margin_error": 5,
+        "total_error": -1.2000000000000028,
+        "brier": 0.3352783558792925,
+        "home_won": false
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_11_IND_HOU",
