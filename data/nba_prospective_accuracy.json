@@ -1,16 +1,16 @@
 {
   "method": "Earliest archived pre-tip simulator forecast per game; only final ESPN box scores; no backfilled forecasts",
   "captured_forecasts": 99,
-  "awaiting_final_games": 19,
+  "awaiting_final_games": 17,
   "unusable_final_boxes": 0,
-  "archive_snapshots": 165,
-  "candidate_locks": 989,
-  "graded_games": 80,
-  "score_mae": 10.51625,
-  "margin_mae": 13.3725,
-  "total_mae": 15.419999999999998,
-  "brier": 0.216276658875,
-  "winner_accuracy": 0.6375,
+  "archive_snapshots": 166,
+  "candidate_locks": 1006,
+  "graded_games": 82,
+  "score_mae": 10.484756097560975,
+  "margin_mae": 13.33048780487805,
+  "total_mae": 15.386585365853657,
+  "brier": 0.21804716292682927,
+  "winner_accuracy": 0.6219512195121951,
   "validated_for_betting": false,
   "rows": [
     {
@@ -1278,6 +1278,22 @@
       "model": "nba-possession-audit-v4"
     },
     {
+      "game_id": "401909999",
+      "tipoff": "2026-11-17T01:00Z",
+      "captured_at": "2026-11-15T03:30:58.431126+00:00",
+      "predicted_home": 112.8,
+      "predicted_away": 114.3,
+      "actual_home": 106.0,
+      "actual_away": 98.0,
+      "home_probability": 0.4664,
+      "score_mae": 11.549999999999997,
+      "margin_error": 9.5,
+      "total_error": 23.099999999999994,
+      "brier": 0.2847289600000001,
+      "correct_winner": false,
+      "model": "nba-possession-audit-v4"
+    },
+    {
       "game_id": "401910000",
       "tipoff": "2026-11-17T01:00Z",
       "captured_at": "2026-11-15T03:30:58.431126+00:00",
@@ -1290,6 +1306,22 @@
       "margin_error": 23.5,
       "total_error": 24.5,
       "brier": 0.31809600000000005,
+      "correct_winner": false,
+      "model": "nba-possession-audit-v4"
+    },
+    {
+      "game_id": "401910001",
+      "tipoff": "2026-11-17T02:00Z",
+      "captured_at": "2026-11-15T03:30:58.431126+00:00",
+      "predicted_home": 114.4,
+      "predicted_away": 112.6,
+      "actual_home": 105.0,
+      "actual_away": 117.0,
+      "home_probability": 0.5413,
+      "score_mae": 6.900000000000006,
+      "margin_error": 13.800000000000011,
+      "total_error": 5.0,
+      "brier": 0.29300569,
       "correct_winner": false,
       "model": "nba-possession-audit-v4"
     }
