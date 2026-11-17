@@ -1054,10 +1054,426 @@
         },
         "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
       }
+    },
+    "2026_11_IND_HOU|opponent-score-ridge-v1": {
+      "game_id": "2026_11_IND_HOU",
+      "version": "opponent-score-ridge-v1",
+      "frozen_at": "2026-11-17T01:01:03.585847+00:00",
+      "kickoff_at": "2026-11-20T01:15:00+00:00",
+      "baseline": {
+        "home": 25.6,
+        "away": 21.8
+      },
+      "candidate": {
+        "version": "opponent-score-ridge-v1",
+        "status": "SHADOW_ONLY_NOT_VALIDATED",
+        "home": 26.7,
+        "away": 21.6,
+        "margin": 5.1,
+        "total": 48.3,
+        "training_games": 421,
+        "qb_basis": {
+          "HOU": {
+            "player_id": "00-0039163",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          },
+          "IND": {
+            "player_id": "00-0035710",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          }
+        },
+        "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+      }
+    },
+    "2026_11_MIA_BUF|opponent-score-ridge-v1": {
+      "game_id": "2026_11_MIA_BUF",
+      "version": "opponent-score-ridge-v1",
+      "frozen_at": "2026-11-17T01:01:03.585847+00:00",
+      "kickoff_at": "2026-11-22T18:00:00+00:00",
+      "baseline": {
+        "home": 27.0,
+        "away": 19.4
+      },
+      "candidate": {
+        "version": "opponent-score-ridge-v1",
+        "status": "SHADOW_ONLY_NOT_VALIDATED",
+        "home": 29.5,
+        "away": 19.6,
+        "margin": 9.9,
+        "total": 49.1,
+        "training_games": 421,
+        "qb_basis": {
+          "BUF": {
+            "player_id": "00-0034857",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          },
+          "MIA": {
+            "player_id": "00-0040014",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          }
+        },
+        "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+      }
+    },
+    "2026_11_BAL_CAR|opponent-score-ridge-v1": {
+      "game_id": "2026_11_BAL_CAR",
+      "version": "opponent-score-ridge-v1",
+      "frozen_at": "2026-11-17T01:01:03.585847+00:00",
+      "kickoff_at": "2026-11-22T18:00:00+00:00",
+      "baseline": {
+        "home": 24.9,
+        "away": 23.1
+      },
+      "candidate": {
+        "version": "opponent-score-ridge-v1",
+        "status": "SHADOW_ONLY_NOT_VALIDATED",
+        "home": 23.5,
+        "away": 21.5,
+        "margin": 2.0,
+        "total": 45.0,
+        "training_games": 421,
+        "qb_basis": {
+          "CAR": {
+            "player_id": "00-0039150",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          },
+          "BAL": {
+            "player_id": "00-0040981",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          }
+        },
+        "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+      }
+    },
+    "2026_11_NO_CHI|opponent-score-ridge-v1": {
+      "game_id": "2026_11_NO_CHI",
+      "version": "opponent-score-ridge-v1",
+      "frozen_at": "2026-11-17T01:01:03.585847+00:00",
+      "kickoff_at": "2026-11-22T18:00:00+00:00",
+      "baseline": {
+        "home": 25.5,
+        "away": 20.9
+      },
+      "candidate": {
+        "version": "opponent-score-ridge-v1",
+        "status": "SHADOW_ONLY_NOT_VALIDATED",
+        "home": 28.4,
+        "away": 20.9,
+        "margin": 7.5,
+        "total": 49.3,
+        "training_games": 421,
+        "qb_basis": {
+          "CHI": {
+            "player_id": "00-0039918",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          },
+          "NO": {
+            "player_id": "00-0040743",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          }
+        },
+        "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+      }
+    },
+    "2026_11_TEN_DAL|opponent-score-ridge-v1": {
+      "game_id": "2026_11_TEN_DAL",
+      "version": "opponent-score-ridge-v1",
+      "frozen_at": "2026-11-17T01:01:03.585847+00:00",
+      "kickoff_at": "2026-11-22T18:00:00+00:00",
+      "baseline": {
+        "home": 26.5,
+        "away": 22.6
+      },
+      "candidate": {
+        "version": "opponent-score-ridge-v1",
+        "status": "SHADOW_ONLY_NOT_VALIDATED",
+        "home": 29.8,
+        "away": 22.9,
+        "margin": 6.9,
+        "total": 52.7,
+        "training_games": 421,
+        "qb_basis": {
+          "DAL": {
+            "player_id": "00-0033077",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          },
+          "TEN": {
+            "player_id": "00-0040676",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          }
+        },
+        "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+      }
+    },
+    "2026_11_TB_DET|opponent-score-ridge-v1": {
+      "game_id": "2026_11_TB_DET",
+      "version": "opponent-score-ridge-v1",
+      "frozen_at": "2026-11-17T01:01:03.585847+00:00",
+      "kickoff_at": "2026-11-22T18:00:00+00:00",
+      "baseline": {
+        "home": 24.3,
+        "away": 21.6
+      },
+      "candidate": {
+        "version": "opponent-score-ridge-v1",
+        "status": "SHADOW_ONLY_NOT_VALIDATED",
+        "home": 26.1,
+        "away": 22.5,
+        "margin": 3.6,
+        "total": 48.6,
+        "training_games": 421,
+        "qb_basis": {
+          "DET": {
+            "player_id": "00-0033106",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          },
+          "TB": {
+            "player_id": "00-0034855",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          }
+        },
+        "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+      }
+    },
+    "2026_11_ARI_KC|opponent-score-ridge-v1": {
+      "game_id": "2026_11_ARI_KC",
+      "version": "opponent-score-ridge-v1",
+      "frozen_at": "2026-11-17T01:01:03.585847+00:00",
+      "kickoff_at": "2026-11-22T18:00:00+00:00",
+      "baseline": {
+        "home": 26.5,
+        "away": 18.6
+      },
+      "candidate": {
+        "version": "opponent-score-ridge-v1",
+        "status": "SHADOW_ONLY_NOT_VALIDATED",
+        "home": 27.3,
+        "away": 14.9,
+        "margin": 12.4,
+        "total": 42.2,
+        "training_games": 421,
+        "qb_basis": {
+          "KC": {
+            "player_id": "00-0033873",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          },
+          "ARI": {
+            "player_id": "00-0035289",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          }
+        },
+        "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+      }
+    },
+    "2026_11_JAX_NYG|opponent-score-ridge-v1": {
+      "game_id": "2026_11_JAX_NYG",
+      "version": "opponent-score-ridge-v1",
+      "frozen_at": "2026-11-17T01:01:03.585847+00:00",
+      "kickoff_at": "2026-11-22T18:00:00+00:00",
+      "baseline": {
+        "home": 21.2,
+        "away": 23.6
+      },
+      "candidate": {
+        "version": "opponent-score-ridge-v1",
+        "status": "SHADOW_ONLY_NOT_VALIDATED",
+        "home": 19.2,
+        "away": 27.5,
+        "margin": -8.3,
+        "total": 46.7,
+        "training_games": 421,
+        "qb_basis": {
+          "NYG": {
+            "player_id": "00-0039923",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          },
+          "JAX": {
+            "player_id": "00-0036971",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          }
+        },
+        "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+      }
+    },
+    "2026_11_NYJ_LAC|opponent-score-ridge-v1": {
+      "game_id": "2026_11_NYJ_LAC",
+      "version": "opponent-score-ridge-v1",
+      "frozen_at": "2026-11-17T01:01:03.585847+00:00",
+      "kickoff_at": "2026-11-22T21:05:00+00:00",
+      "baseline": {
+        "home": 21.8,
+        "away": 22.1
+      },
+      "candidate": {
+        "version": "opponent-score-ridge-v1",
+        "status": "SHADOW_ONLY_NOT_VALIDATED",
+        "home": 22.2,
+        "away": 19.4,
+        "margin": 2.8,
+        "total": 41.6,
+        "training_games": 421,
+        "qb_basis": {
+          "LAC": {
+            "player_id": "00-0036355",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          },
+          "NYJ": {
+            "player_id": "00-0030565",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          }
+        },
+        "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+      }
+    },
+    "2026_11_LV_DEN|opponent-score-ridge-v1": {
+      "game_id": "2026_11_LV_DEN",
+      "version": "opponent-score-ridge-v1",
+      "frozen_at": "2026-11-17T01:01:03.585847+00:00",
+      "kickoff_at": "2026-11-22T21:25:00+00:00",
+      "baseline": {
+        "home": 25.3,
+        "away": 21.9
+      },
+      "candidate": {
+        "version": "opponent-score-ridge-v1",
+        "status": "SHADOW_ONLY_NOT_VALIDATED",
+        "home": 26.4,
+        "away": 18.4,
+        "margin": 8.0,
+        "total": 44.8,
+        "training_games": 421,
+        "qb_basis": {
+          "DEN": {
+            "player_id": "00-0039732",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          },
+          "LV": {
+            "player_id": "00-0041562",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          }
+        },
+        "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+      }
+    },
+    "2026_11_PIT_PHI|opponent-score-ridge-v1": {
+      "game_id": "2026_11_PIT_PHI",
+      "version": "opponent-score-ridge-v1",
+      "frozen_at": "2026-11-17T01:01:03.585847+00:00",
+      "kickoff_at": "2026-11-22T21:25:00+00:00",
+      "baseline": {
+        "home": 20.6,
+        "away": 21.8
+      },
+      "candidate": {
+        "version": "opponent-score-ridge-v1",
+        "status": "SHADOW_ONLY_NOT_VALIDATED",
+        "home": 18.3,
+        "away": 21.5,
+        "margin": -3.2,
+        "total": 39.8,
+        "training_games": 421,
+        "qb_basis": {
+          "PHI": {
+            "player_id": "00-0039398",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          },
+          "PIT": {
+            "player_id": "00-0023459",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          }
+        },
+        "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+      }
+    },
+    "2026_11_MIN_SF|opponent-score-ridge-v1": {
+      "game_id": "2026_11_MIN_SF",
+      "version": "opponent-score-ridge-v1",
+      "frozen_at": "2026-11-17T01:01:03.585847+00:00",
+      "kickoff_at": "2026-11-23T01:20:00+00:00",
+      "baseline": {
+        "home": 23.0,
+        "away": 20.2
+      },
+      "candidate": {
+        "version": "opponent-score-ridge-v1",
+        "status": "SHADOW_ONLY_NOT_VALIDATED",
+        "home": 23.3,
+        "away": 23.1,
+        "margin": 0.2,
+        "total": 46.4,
+        "training_games": 421,
+        "qb_basis": {
+          "SF": {
+            "player_id": "00-0037834",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          },
+          "MIN": {
+            "player_id": "00-0029604",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          }
+        },
+        "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+      }
+    },
+    "2026_11_CIN_WAS|opponent-score-ridge-v1": {
+      "game_id": "2026_11_CIN_WAS",
+      "version": "opponent-score-ridge-v1",
+      "frozen_at": "2026-11-17T01:01:03.585847+00:00",
+      "kickoff_at": "2026-11-24T01:15:00+00:00",
+      "baseline": {
+        "home": 22.3,
+        "away": 24.9
+      },
+      "candidate": {
+        "version": "opponent-score-ridge-v1",
+        "status": "SHADOW_ONLY_NOT_VALIDATED",
+        "home": 23.5,
+        "away": 29.0,
+        "margin": -5.5,
+        "total": 52.5,
+        "training_games": 421,
+        "qb_basis": {
+          "WAS": {
+            "player_id": "00-0039910",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          },
+          "CIN": {
+            "player_id": "00-0036442",
+            "source": "LAST_OBSERVED_QB_PROXY",
+            "historical_effect_available": true
+          }
+        },
+        "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+      }
     }
   },
   "summary": {
-    "frozen": 29,
+    "frozen": 42,
     "graded": 28,
     "models": {
       "baseline": {
