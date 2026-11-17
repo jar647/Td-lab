@@ -2,11 +2,21 @@ name: Backtest Game Picks Baseline
 on:
   workflow_dispatch:
   push:
+    branches: [main]
     paths:
       - 'game_picks_backtest.py'
       - 'game_picks.py'
       - 'game_context.py'
       - '.github/workflows/game-picks-backtest.yml'
+      - 'tests/test_game_backtest_publication.py'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'game_picks_backtest.py'
+      - 'game_picks.py'
+      - 'game_context.py'
+      - '.github/workflows/game-picks-backtest.yml'
+      - 'tests/test_game_backtest_publication.py'
 permissions:
   contents: write
 jobs:
@@ -19,10 +29,31 @@ jobs:
           python-version: '3.11'
           cache: pip
       - run: pip install -r requirements.txt
+      - name: Test main-only backtest publication
+        run: python -m unittest -v tests.test_game_backtest_publication
       - name: Walk-forward historical scoring test
         run: python game_picks_backtest.py
       - name: Commit audited results
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: |
+          # Feature/manual/PR validation must never publish an unmerged checkout.
+          if [ "${GITHUB_REF:-}" != 'refs/heads/main' ] || [ "${GITHUB_EVENT_NAME:-}" = 'pull_request' ]; then
+            echo 'Validation only: backtest publication requires the main branch.'
+            exit 0
+          fi
+          case "${GITHUB_EVENT_NAME:-}" in
+            push|workflow_dispatch) ;;
+            *) echo 'Validation only: unsupported publication event.'; exit 0 ;;
+          esac
+          git fetch origin main
+          if ! git merge-base --is-ancestor HEAD origin/main; then
+            echo 'Refusing to publish: checkout includes commits not merged into main.' >&2
+            exit 1
+          fi
+          if ! git diff --cached --quiet; then
+            echo 'Refusing to publish: unexpected staged changes.' >&2
+            exit 1
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/game_picks_backtest.json
@@ -30,7 +61,11 @@ jobs:
             git commit -m "Update game picks walk-forward backtest"
             for attempt in 1 2 3; do
               git fetch origin main
-              git rebase -X theirs origin/main
+              if ! git rebase origin/main; then
+                git rebase --abort
+                echo 'Backtest publication conflicted with newer main data; no overwrite attempted.' >&2
+                exit 1
+              fi
               if git push origin HEAD:main; then exit 0; fi
               sleep 3
             done
