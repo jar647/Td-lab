@@ -20,6 +20,11 @@ on:
       - 'game_context.py'
       - 'game_trust.py'
       - 'nfl_score_model.py'
+      - 'nfl_score_context.py'
+      - 'nfl_matchup_research.py'
+      - 'nfl_matchup_research_ui.js'
+      - 'test_nfl_matchup_research_ui.js'
+      - 'test_nfl_shared_research.js'
       - 'nfl_lineup_scenarios.py'
       - 'score_baseline.py'
       - 'track_nfl_score_candidate.py'
@@ -78,13 +83,13 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Verify NFL engine Python syntax
-        run: python -m compileall -q injury_readiness.py nfl_live_injuries.py nfl_starters.py nfl_depth_charts.py build_feed.py capture_prop_probabilities.py grade_prop_probabilities.py historical_participation.py opportunity_prop_model.py player_prop_probability_backtest.py nfl_lineup_scenarios.py game_picks.py game_picks_backtest.py game_context.py game_trust.py nfl_weather.py nfl_research.py tests
+        run: python -m compileall -q injury_readiness.py nfl_live_injuries.py nfl_starters.py nfl_depth_charts.py build_feed.py capture_prop_probabilities.py grade_prop_probabilities.py historical_participation.py opportunity_prop_model.py player_prop_probability_backtest.py nfl_lineup_scenarios.py nfl_score_context.py nfl_matchup_research.py game_picks.py game_picks_backtest.py game_context.py game_trust.py nfl_weather.py nfl_research.py tests
       - name: Test game-first NFL Monte Carlo engine
         run: node test_nfl_game_engine.js
       - name: Test Goal 1 decision and odds engine
         run: node test_nfl_goal1.js
       - name: Test full-game odds and pregame context simulation
-        run: node test_nfl_lineup_simulator.js && node test_game_odds.js && node test_game_odds_ui.js && node test_game_score_forecasts.js && node test_game_trust_ui.js
+        run: node test_nfl_lineup_simulator.js && node test_nfl_shared_research.js && node test_nfl_matchup_research_ui.js && node test_game_odds.js && node test_game_odds_ui.js && node test_game_score_forecasts.js && node test_game_trust_ui.js
       - name: Test Josh Jacobs verified return visibility
         run: node test_jacobs_return_visibility.js
       - name: Test NFL analyst browser-controller flow

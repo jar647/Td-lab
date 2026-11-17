@@ -12,6 +12,8 @@ from nfl_research import enrich_research, injury_research
 from game_trust import MODEL_VERSION, reconcile_contexts, quarterback_context, validation_report
 from nfl_score_model import fit as fit_score_candidate, candidate_card
 from nfl_lineup_scenarios import build_scenario
+from nfl_score_context import merge_score_injury_reports
+from nfl_matchup_research import build_matchup_research
 
 ROOT=Path(__file__).resolve().parent
 LEAGUE_POINTS=22.0
@@ -86,7 +88,7 @@ def key_player_usage(matchups,team):
     skill=[p for p in rows if p.get("pos") in ("RB","WR","TE")]
     skill.sort(key=lambda p:float(p.get("playerTargets") or 0)+float(p.get("playerCarries") or 0),reverse=True)
     def card(p):
-        return {"name":p.get("player"),"position":p.get("pos"),
+        return {"player_id":p.get("player_id"),"name":p.get("player"),"position":p.get("pos"),
           "qb_role":p.get("qbRole"),"starter_context":p.get("starterContext"),
           "games":p.get("seasonGamesPlayed",p.get("games")),
           "availability":p.get("injuryReportStatus") if p.get("injuryReportStatus") not in (None,"NOT_REPORTED") else (p.get("gameDayAvailability") or "NOT_REPORTED"),
@@ -127,23 +129,28 @@ def main():
     season=int(status.get("season",datetime.now(timezone.utc).year))
     week=int(status.get("week",0))
     schedules=frame(nflreadpy.load_schedules())
+    source_errors=[]
     try:
         injuries=frame(nflreadpy.load_injuries([season]))
-        rosters=frame(nflreadpy.load_rosters([season]))
-        injury_error=None
     except Exception as exc:
-        injuries,rosters=None,None
-        injury_error=str(exc)
+        injuries=None
+        source_errors.append('Injury source: '+str(exc))
+    try:
+        rosters=frame(nflreadpy.load_rosters([season]))
+    except Exception as exc:
+        rosters=None
+        source_errors.append('Roster identity source: '+str(exc))
     teams=set(schedules.loc[pd.to_numeric(schedules.season,errors="coerce")==season,"home_team"].dropna().astype(str))
     injury_reports=injury_research(injuries,rosters,season,week,teams)
-    if injury_error:
+    if source_errors:
         for report in injury_reports.values():
-            report["source_error"]=injury_error
+            report["source_error"]='; '.join(source_errors)
     pbp=frame(nflreadpy.load_pbp([season])).to_dict("records")
     player_feed=json.loads((ROOT/"data/matchups.json").read_text()) if (ROOT/"data/matchups.json").exists() else []
     regular=schedules[(pd.to_numeric(schedules["season"],errors="coerce")==season)&(schedules["game_type"].astype(str).str.upper()=="REG")].copy()
     regular["week_num"]=pd.to_numeric(regular["week"],errors="coerce")
     slate=regular[regular.week_num==week]
+    injury_reports=merge_score_injury_reports(injury_reports,status,player_feed,slate,rosters,season,week)
     # Reconcile the same completed-game sample through a second aggregation path.
     completed=regular[(regular.week_num<week)&regular.home_score.notna()&regular.away_score.notna()]
     completed_ids=set(completed.game_id.astype(str))
@@ -200,14 +207,24 @@ def main():
         weather=forecast_for_game(r,str(r["home_team"]),research["venue"].get("roof"))
         research=enrich_research(research,schedules,season,week,injury_reports)
         research["weather"]=weather
+        # Schedule weather fields are not dated pregame forecasts. Only the
+        # verified NWS result may populate current weather or condition draws.
+        research["venue"].update(temperature_f=None,wind_mph=None)
         lineup=build_scenario(candidate_model,schedules,participation,rosters,str(r['home_team']),str(r['away_team']),player_feed,injury_reports,season,week,str(r.get('location','')).lower()=='neutral')
         lineup['score_source_check']=score_source_check
+        for team,qb in lineup.get('quarterbacks',{}).items():
+            facts=research.get('teams',{}).get(team)
+            if facts is not None:
+                facts.setdefault('usage',{})['quarterback_basis']=qb
+        matchup_research=build_matchup_research(candidate_model,pbp,home_context,away_context,
+            str(r['home_team']),str(r['away_team']),season,week)
         if weather.get("available"):
             research["venue"].update({"temperature_f":weather.get("temperature_f"),
                 "wind_mph":weather.get("wind_mph"),"wind_direction":weather.get("wind_direction"),
                 "precipitation_probability":weather.get("precipitation_probability"),
                 "weather_condition":weather.get("condition"),"weather_updated_at":weather.get("updated_at")})
         sim_context=residual_context(r,str(r["home_team"]),str(r["away_team"]))
+        sim_context.update(temperature_f=None,wind_mph=None)
         if weather.get("available"):
             sim_context["temperature_f"]=weather.get("temperature_f")
             sim_context["wind_mph"]=weather.get("wind_mph")
@@ -216,7 +233,7 @@ def main():
           "projected_home_points":hp,"projected_away_points":ap,
           "projected_margin_home":round(hp-ap,1),"projected_total":round(hp+ap,1),
           "model_inputs":{"home":h,"away":a,"baseline_home_points":baseline_home,"baseline_away_points":baseline_away,
-            "matchup":matchup,"research_context":research,"trust":trust,"score_candidate":candidate,"lineup_scenario":lineup,
+            "matchup":matchup,"matchup_research":matchup_research,"research_context":research,"trust":trust,"score_candidate":candidate,"lineup_scenario":lineup,
             "residual_context":sim_context,
             "prior_games":PRIOR_GAMES,"league_points_prior":LEAGUE_POINTS,"home_advantage_points":HOME_ADVANTAGE_POINTS},
           "ml":{"pick":None,"confidence":None,"status":"PASS"},

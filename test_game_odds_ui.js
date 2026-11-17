@@ -3,7 +3,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const engine=require('./game_odds_engine.js');
 const html=fs.readFileSync('game-odds.html','utf8');
-assert.match(html,/<script src="\.\/game_odds_engine\.js\?v=game-line-lineup-v1"><\/script>/,'Engine assets must be versioned with the worker');
+assert.match(html,/<script src="\.\/game_odds_engine\.js\?v=game-line-shared-research-v2"><\/script>/,'Engine assets must be versioned with the worker');
 assert.match(html,/new Worker\('\.\/game_odds_worker\.js\?v=[^']+'\)/,'Game Odds must use a versioned simulation worker');
 assert.doesNotMatch(html,/Checking latest NBA availability and lineups/,'NBA simulation must not block on a live availability request');
 assert.match(html,/selected\.model=null;runId\+\+;if\(worker\)/,'Changed availability must invalidate an active forecast before it is displayed');

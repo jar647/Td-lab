@@ -93,6 +93,7 @@
    scoreCandidate:game.model_inputs?.score_candidate||null,
    residualBasis:scenario?'OPPONENT_QB_CHRONOLOGICAL_ERRORS':baselineResiduals?'SCORING_BASELINE':'MATCHUP_ADJUSTED',
    matchupAnalysis:game.model_inputs?.matchup||null,
+   matchupResearch:game.model_inputs?.matchup_research||null,
    pregameContext:game.model_inputs?.research_context||null,
    method:(scenario?'Opponent-adjusted scoring with explicit QB and observed joint absence scenarios; matching chronological opponent/QB residuals':baselineResiduals?'Historical scoring baseline. Experimental EPA point corrections disabled; residuals use the same baseline':game.model_version==='score-baseline-pbp-v2'?'Pregame scoring baseline with shrunk home/road scoring splits and season/recent EPA-success offense-vs-defense adjustment':'Pregame score baseline')+', plus '+conditional.reason+' Paired historical score residual simulation.',
    homeOffense:finite(game.model_inputs?.home?.offense),awayOffense:finite(game.model_inputs?.away?.offense),

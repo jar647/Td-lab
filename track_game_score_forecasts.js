@@ -57,7 +57,7 @@ function captureAndGrade(slate,history,previous,results,now=new Date(),signature
 }
 if(require.main===module){
  const read=(p,fallback)=>fs.existsSync(p)?JSON.parse(fs.readFileSync(p,'utf8')):fallback;
- const signature=crypto.createHash('sha256').update(['game_picks.py','game_context.py','game_trust.py','nfl_weather.py','nfl_score_model.py','nfl_lineup_scenarios.py','game_odds_engine.js'].map(p=>fs.readFileSync(p,'utf8')).join('\n')).digest('hex');
+ const signature=crypto.createHash('sha256').update(['game_picks.py','game_context.py','game_trust.py','nfl_weather.py','nfl_score_model.py','nfl_lineup_scenarios.py','nfl_score_context.py','nfl_matchup_research.py','game_odds_engine.js'].map(p=>fs.readFileSync(p,'utf8')).join('\n')).digest('hex');
  const out=captureAndGrade(read('data/game_picks.json',{}),read('data/game_picks_backtest.json',{}),
   read('data/game_score_forecasts.json',{}),read('data/game_score_results.json',{}),new Date(),signature,10000,read('data/nfl_score_model_audit.json',null));
  fs.writeFileSync('data/game_score_forecasts.json.tmp',JSON.stringify(out,null,2));

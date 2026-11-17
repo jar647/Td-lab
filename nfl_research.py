@@ -114,8 +114,8 @@ def enrich_research(context, all_schedules, season, week, injury_reports, retrie
                    {'name':'nflverse injury reports','url':INJURY_SOURCE},
                    {'name':'nflverse roster identity checks','url':ROSTER_SOURCE}],
         'model_use':{'scoring':'Score mean uses scoring and home/road splits with explicit prior shrinkage.',
-                     'team_tendencies':'Score adjustment uses recent/season EPA, success and pass/rush mix.',
+                     'team_tendencies':'Season/recent EPA, success and pass/rush mix explain matchup research. EPA point corrections remain disabled; the selected QB/opponent scenario identifies its separate score basis.',
                      'weather_rest_travel':'Conditions historical score-error sampling when sufficient comparable games exist.',
                      'coach_record':'Research context; no automatic points awarded for career wins.',
-                     'injury_reports':'Research context; player replacement score effects are not implemented.'}}
+                     'injury_reports':'Shared current-game injury evidence. The lineup scenario lists supported observed absence associations and injuries whose score effects remain unmodeled; no arbitrary replacement penalty is assigned.'}}
     return context

@@ -27,6 +27,15 @@ _POINT_CACHE = {}
 _HOURLY_CACHE = {}
 
 
+def _aware_datetime(value):
+    """Unknown or timezone-free dates cannot establish pregame evidence."""
+    try:
+        parsed = value if isinstance(value, datetime) else datetime.fromisoformat(value.replace("Z", "+00:00")) if isinstance(value, str) else None
+        return parsed if parsed is not None and parsed.tzinfo is not None and parsed.utcoffset() is not None else None
+    except (TypeError, ValueError, OverflowError):
+        return None
+
+
 def _request_json(url):
     req = Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/geo+json"})
     with urlopen(req, timeout=12) as response:
@@ -58,14 +67,16 @@ def kickoff_utc(game, home_team):
 
 
 def select_hourly_period(periods, kickoff):
-    if not kickoff:
+    kickoff = _aware_datetime(kickoff)
+    if kickoff is None or not isinstance(periods, (list, tuple)):
         return None
     candidates = []
-    for period in periods or []:
-        try:
-            starts = datetime.fromisoformat(period["startTime"].replace("Z", "+00:00"))
-            ends = datetime.fromisoformat(period["endTime"].replace("Z", "+00:00"))
-        except (KeyError, TypeError, ValueError):
+    for period in periods:
+        if not isinstance(period, dict):
+            continue
+        starts = _aware_datetime(period.get("startTime"))
+        ends = _aware_datetime(period.get("endTime"))
+        if starts is None or ends is None or ends <= starts:
             continue
         if starts <= kickoff < ends:
             return period
@@ -75,14 +86,22 @@ def select_hourly_period(periods, kickoff):
     return min(candidates, key=lambda x:x[0])[1] if candidates else None
 
 
-def forecast_for_game(game, home_team, roof=None):
+def forecast_for_game(game, home_team, roof=None, now=None):
     """Return a timestamped forecast, or explicit missing/unavailable status."""
+    if str(game.get("location", "")).strip().lower() == "neutral":
+        return {"available": False, "source": "NWS", "reason": "Verified neutral-site coordinates unavailable; home-stadium weather is not used."}
     if str(roof or "").lower() in ("dome", "closed"):
         return {"available": False, "source": "NWS", "reason": "Indoor venue; outdoor weather is not a game-condition input."}
     coords = TEAM_COORDS.get(home_team)
     kickoff = kickoff_utc(game, home_team)
     if not coords or not kickoff:
         return {"available": False, "source": "NWS", "reason": "Stadium coordinates or scheduled local kickoff time unavailable."}
+    clock = _aware_datetime(now if now is not None else datetime.now(timezone.utc))
+    if clock is None:
+        return {"available": False, "source": "NWS", "reason": "Timezone-aware current time is required to verify forecast freshness."}
+    if clock >= kickoff:
+        return {"available": False, "source": "NWS", "kickoff_at": kickoff.isoformat(),
+                "reason": "Pregame weather research closes at kickoff."}
     lat, lon = coords
     point_key = (lat, lon)
     try:
@@ -95,14 +114,30 @@ def forecast_for_game(game, home_team, roof=None):
         if hourly_url not in _HOURLY_CACHE:
             _HOURLY_CACHE[hourly_url] = _request_json(hourly_url)
         payload = _HOURLY_CACHE[hourly_url]
-        period = select_hourly_period(payload.get("properties", {}).get("periods"), kickoff)
+        properties = payload.get("properties") if isinstance(payload, dict) else None
+        properties = properties if isinstance(properties, dict) else {}
+        timestamp_field = next((key for key in ("updated", "updateTime", "generatedAt") if properties.get(key) is not None), None)
+        raw_update = properties.get(timestamp_field) if timestamp_field else None
+        updated_at = raw_update if isinstance(raw_update, str) else None
+        stamp = _aware_datetime(updated_at)
+        evidence = {"available": False, "source": "NWS", "updated_at": updated_at,
+                    "source_timestamp_field": timestamp_field, "kickoff_at": kickoff.isoformat()}
+        if stamp is None:
+            return {**evidence, "reason": "A dated, timezone-aware NWS forecast update is required; missing or malformed update time."}
+        age = (clock-stamp).total_seconds()
+        if age > 12*3600:
+            return {**evidence, "reason": "NWS forecast update is stale (older than 12 hours); prior source timestamp retained."}
+        if age < -300 or stamp >= kickoff:
+            return {**evidence, "reason": "NWS forecast update is in the future or not before kickoff; no verified pregame forecast."}
+        period = select_hourly_period(properties.get("periods"), kickoff)
         if not period:
-            return {"available": False, "source": "NWS", "reason": "Kickoff is outside the available hourly forecast window."}
+            return {**evidence, "reason": "Kickoff is outside the available hourly forecast window."}
         precip = period.get("probabilityOfPrecipitation") or {}
         temp = period.get("temperature")
         return {"available": True, "source": "National Weather Service hourly forecast",
                 "forecast_time": period.get("startTime"),
-                "updated_at": payload.get("properties", {}).get("updated"),
+                "updated_at": updated_at,
+                "source_timestamp_field": timestamp_field,
                 "temperature_f": temp if isinstance(temp, (int, float)) and math.isfinite(temp) else None,
                 "wind_mph": parse_wind_mph(period.get("windSpeed")),
                 "wind_direction": period.get("windDirection"),
