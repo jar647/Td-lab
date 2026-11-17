@@ -1,9 +1,9 @@
 {
   "status": "PROSPECTIVE_RESEARCH_NOT_CALIBRATED",
-  "updated_at": "2026-11-17T19:49:27.683Z",
+  "updated_at": "2026-11-17T20:37:32.792Z",
   "method": "First baseline and supported lineup-scenario forecasts per game/model frozen before verified scheduled kickoff. Existing predictions are never replaced. Results graded next calendar day from schedule finals; no historical backfill.",
   "summary": {
-    "frozen": 78,
+    "frozen": 90,
     "graded": 53,
     "non_tie_winner_games": 53,
     "margin_mae": 11.573584905660375,
@@ -87,6 +87,13 @@
       },
       "aeb722573bf20c91b7dee08e84a42ce12b9e33c1ae321f0e0954e8e2fea0e176": {
         "frozen": 13,
+        "graded": 0,
+        "margin_mae": null,
+        "total_mae": null,
+        "brier": null
+      },
+      "213a848f692a9c8037cd03c1e71cbbac8bd43feb56291ad2c6042c75c968853c|nfl-qb-lineup-scenario-v2": {
+        "frozen": 12,
         "graded": 0,
         "margin_mae": null,
         "total_mae": null,
@@ -5570,6 +5577,3355 @@
         "score_source_check": {
           "matching_training_games": 408,
           "training_games": 421,
+          "checked_at": "2026-11-12T13:07:35.668270+00:00",
+          "source": "ESPN final scoreboards",
+          "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+          "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "nfl-qb-lineup-scenario-v2|2026_11_IND_HOU",
+      "game_id": "2026_11_IND_HOU",
+      "model_version": "nfl-qb-lineup-scenario-v2",
+      "model_signature": "213a848f692a9c8037cd03c1e71cbbac8bd43feb56291ad2c6042c75c968853c|nfl-qb-lineup-scenario-v2",
+      "captured_at": "2026-11-17T20:37:32.792Z",
+      "kickoff_at": "2026-11-20T01:15:00+00:00",
+      "feed_generated_at": "2026-11-17T20:37:32.515641+00:00",
+      "source_sha256": "b9164b663c03a4f9e6fe1d322ffae9ac572e1e4d6fc9f983062a4a3e62dcdc3a",
+      "home": "HOU",
+      "away": "IND",
+      "projection": {
+        "home": 26.7,
+        "away": 21.6,
+        "margin": 5.1,
+        "total": 48.3
+      },
+      "home_win_probability": 0.6951432385255161,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "lineup_scenario": {
+        "version": "nfl-qb-lineup-scenario-v2",
+        "base_version": "opponent-score-ridge-v1",
+        "generated_at": "2026-11-17T20:37:28.286864+00:00",
+        "available": true,
+        "quarterbacks": {
+          "HOU": {
+            "player_id": "00-0039163",
+            "player": "C.J. Stroud",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/34/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:32:51+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes C.J. Stroud starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          },
+          "IND": {
+            "player_id": "00-0035710",
+            "player": "Daniel Jones",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/11/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:32:51+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Daniel Jones starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          }
+        },
+        "training_games": 422,
+        "through_week": 10,
+        "status": "EXPERIMENTAL_SCENARIO",
+        "injuries": {
+          "HOU": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0031565",
+                "player": "Danielle Hunter",
+                "position": "DL",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "HOU",
+                "opponent": "IND",
+                "game_id": "2026_11_IND_HOU",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "HOU",
+                  "opponent": "IND",
+                  "gameId": "2026_11_IND_HOU",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "2976560",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0036556",
+                "player": "Brevin Jordan",
+                "position": "TE",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "HOU",
+                "opponent": "IND",
+                "game_id": "2026_11_IND_HOU",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "HOU",
+                  "opponent": "IND",
+                  "gameId": "2026_11_IND_HOU",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4362504",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 2,
+            "live_report_count": 2,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 2,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          },
+          "IND": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0032753",
+                "player": "Luke Rhodes",
+                "position": "LS",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "IND",
+                "opponent": "HOU",
+                "game_id": "2026_11_IND_HOU",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "IND",
+                  "opponent": "HOU",
+                  "gameId": "2026_11_IND_HOU",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "2566045",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0035674",
+                "player": "Jerry Tillery",
+                "position": "DL",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "IND",
+                "opponent": "HOU",
+                "game_id": "2026_11_IND_HOU",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "IND",
+                  "opponent": "HOU",
+                  "gameId": "2026_11_IND_HOU",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "3863182",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 2,
+            "live_report_count": 2,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 2,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          }
+        },
+        "limits": [
+          "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+          "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+          "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+          "No verified betting edge or calibrated probability is claimed."
+        ],
+        "before_absence_adjustment": {
+          "home": 26.7,
+          "away": 21.6
+        },
+        "home": 26.7,
+        "away": 21.6,
+        "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+        "score_source_check": {
+          "matching_training_games": 408,
+          "training_games": 422,
+          "checked_at": "2026-11-12T13:07:35.668270+00:00",
+          "source": "ESPN final scoreboards",
+          "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+          "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "nfl-qb-lineup-scenario-v2|2026_11_MIA_BUF",
+      "game_id": "2026_11_MIA_BUF",
+      "model_version": "nfl-qb-lineup-scenario-v2",
+      "model_signature": "213a848f692a9c8037cd03c1e71cbbac8bd43feb56291ad2c6042c75c968853c|nfl-qb-lineup-scenario-v2",
+      "captured_at": "2026-11-17T20:37:32.792Z",
+      "kickoff_at": "2026-11-22T18:00:00+00:00",
+      "feed_generated_at": "2026-11-17T20:37:32.515641+00:00",
+      "source_sha256": "b9164b663c03a4f9e6fe1d322ffae9ac572e1e4d6fc9f983062a4a3e62dcdc3a",
+      "home": "BUF",
+      "away": "MIA",
+      "projection": {
+        "home": 29.5,
+        "away": 19.6,
+        "margin": 9.9,
+        "total": 49.1
+      },
+      "home_win_probability": 0.7573760519111833,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "lineup_scenario": {
+        "version": "nfl-qb-lineup-scenario-v2",
+        "base_version": "opponent-score-ridge-v1",
+        "generated_at": "2026-11-17T20:37:28.719303+00:00",
+        "available": true,
+        "quarterbacks": {
+          "BUF": {
+            "player_id": "00-0034857",
+            "player": "Josh Allen",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/2/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:35:40+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Josh Allen starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          },
+          "MIA": {
+            "player_id": "00-0040014",
+            "player": "Kyle McCord",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/15/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:32:59+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Kyle McCord starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          }
+        },
+        "training_games": 422,
+        "through_week": 10,
+        "status": "EXPERIMENTAL_SCENARIO",
+        "injuries": {
+          "BUF": {
+            "coverage": "NO_MATCHED_CURRENT_WEEK_REPORT",
+            "reports": [],
+            "report_count": 0,
+            "live_report_count": 0,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 0,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          },
+          "MIA": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0038728",
+                "player": "Jared Wayne",
+                "position": "WR",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "MIA",
+                "opponent": "BUF",
+                "game_id": "2026_11_MIA_BUF",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "MIA",
+                  "opponent": "BUF",
+                  "gameId": "2026_11_MIA_BUF",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4430681",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0041525",
+                "player": "Chris Bell",
+                "position": "WR",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "MIA",
+                "opponent": "BUF",
+                "game_id": "2026_11_MIA_BUF",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "MIA",
+                  "opponent": "BUF",
+                  "gameId": "2026_11_MIA_BUF",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4869961",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 2,
+            "live_report_count": 2,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 2,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          }
+        },
+        "limits": [
+          "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+          "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+          "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+          "No verified betting edge or calibrated probability is claimed."
+        ],
+        "before_absence_adjustment": {
+          "home": 29.5,
+          "away": 19.6
+        },
+        "home": 29.5,
+        "away": 19.6,
+        "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+        "score_source_check": {
+          "matching_training_games": 408,
+          "training_games": 422,
+          "checked_at": "2026-11-12T13:07:35.668270+00:00",
+          "source": "ESPN final scoreboards",
+          "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+          "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "nfl-qb-lineup-scenario-v2|2026_11_BAL_CAR",
+      "game_id": "2026_11_BAL_CAR",
+      "model_version": "nfl-qb-lineup-scenario-v2",
+      "model_signature": "213a848f692a9c8037cd03c1e71cbbac8bd43feb56291ad2c6042c75c968853c|nfl-qb-lineup-scenario-v2",
+      "captured_at": "2026-11-17T20:37:32.792Z",
+      "kickoff_at": "2026-11-22T18:00:00+00:00",
+      "feed_generated_at": "2026-11-17T20:37:32.515641+00:00",
+      "source_sha256": "b9164b663c03a4f9e6fe1d322ffae9ac572e1e4d6fc9f983062a4a3e62dcdc3a",
+      "home": "CAR",
+      "away": "BAL",
+      "projection": {
+        "home": 23.6,
+        "away": 23.2,
+        "margin": 0.4,
+        "total": 46.8
+      },
+      "home_win_probability": 0.5221659278024066,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "lineup_scenario": {
+        "version": "nfl-qb-lineup-scenario-v2",
+        "base_version": "opponent-score-ridge-v1",
+        "generated_at": "2026-11-17T20:37:29.131370+00:00",
+        "available": true,
+        "quarterbacks": {
+          "CAR": {
+            "player_id": "00-0039150",
+            "player": "Bryce Young",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/29/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:33:29+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Bryce Young starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          },
+          "BAL": {
+            "player_id": "00-0033119",
+            "player": "Jacoby Brissett",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/33/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:33:29+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Jacoby Brissett starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          }
+        },
+        "training_games": 422,
+        "through_week": 10,
+        "status": "EXPERIMENTAL_SCENARIO",
+        "injuries": {
+          "CAR": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0041063",
+                "player": "Will Lee III",
+                "position": "DB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "CAR",
+                "opponent": "BAL",
+                "game_id": "2026_11_BAL_CAR",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "CAR",
+                  "opponent": "BAL",
+                  "gameId": "2026_11_BAL_CAR",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "5151083",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0035687",
+                "player": "Bobby Okereke",
+                "position": "LB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "CAR",
+                "opponent": "BAL",
+                "game_id": "2026_11_BAL_CAR",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "CAR",
+                  "opponent": "BAL",
+                  "gameId": "2026_11_BAL_CAR",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "3117253",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 2,
+            "live_report_count": 2,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 2,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          },
+          "BAL": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0036302",
+                "player": "Jaylinn Hawkins",
+                "position": "DB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "BAL",
+                "opponent": "CAR",
+                "game_id": "2026_11_BAL_CAR",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "BAL",
+                  "opponent": "CAR",
+                  "gameId": "2026_11_BAL_CAR",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "3858276",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 1,
+            "live_report_count": 1,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 1,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          }
+        },
+        "limits": [
+          "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+          "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+          "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+          "No verified betting edge or calibrated probability is claimed."
+        ],
+        "before_absence_adjustment": {
+          "home": 23.6,
+          "away": 23.2
+        },
+        "home": 23.6,
+        "away": 23.2,
+        "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+        "score_source_check": {
+          "matching_training_games": 408,
+          "training_games": 422,
+          "checked_at": "2026-11-12T13:07:35.668270+00:00",
+          "source": "ESPN final scoreboards",
+          "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+          "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "nfl-qb-lineup-scenario-v2|2026_11_NO_CHI",
+      "game_id": "2026_11_NO_CHI",
+      "model_version": "nfl-qb-lineup-scenario-v2",
+      "model_signature": "213a848f692a9c8037cd03c1e71cbbac8bd43feb56291ad2c6042c75c968853c|nfl-qb-lineup-scenario-v2",
+      "captured_at": "2026-11-17T20:37:32.792Z",
+      "kickoff_at": "2026-11-22T18:00:00+00:00",
+      "feed_generated_at": "2026-11-17T20:37:32.515641+00:00",
+      "source_sha256": "b9164b663c03a4f9e6fe1d322ffae9ac572e1e4d6fc9f983062a4a3e62dcdc3a",
+      "home": "CHI",
+      "away": "NO",
+      "projection": {
+        "home": 28.4,
+        "away": 20.9,
+        "margin": 7.5,
+        "total": 49.3
+      },
+      "home_win_probability": 0.7305634246144161,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "lineup_scenario": {
+        "version": "nfl-qb-lineup-scenario-v2",
+        "base_version": "opponent-score-ridge-v1",
+        "generated_at": "2026-11-17T20:37:29.542303+00:00",
+        "available": true,
+        "quarterbacks": {
+          "CHI": {
+            "player_id": "00-0039918",
+            "player": "Caleb Williams",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/3/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:32:57+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Caleb Williams starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          },
+          "NO": {
+            "player_id": "00-0040743",
+            "player": "Tyler Shough",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/18/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:35:53+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Tyler Shough starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          }
+        },
+        "training_games": 422,
+        "through_week": 10,
+        "status": "EXPERIMENTAL_SCENARIO",
+        "injuries": {
+          "CHI": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0038111",
+                "player": "Kyler Gordon",
+                "position": "DB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "CHI",
+                "opponent": "NO",
+                "game_id": "2026_11_NO_CHI",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "CHI",
+                  "opponent": "NO",
+                  "gameId": "2026_11_NO_CHI",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4361093",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T18:14:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T18:14:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0041060",
+                "player": "Malik Muhammad",
+                "position": "DB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "CHI",
+                "opponent": "NO",
+                "game_id": "2026_11_NO_CHI",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "CHI",
+                  "opponent": "NO",
+                  "gameId": "2026_11_NO_CHI",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4870953",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 2,
+            "live_report_count": 2,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 2,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          },
+          "NO": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0041326",
+                "player": "CJ Donaldson",
+                "position": "RB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "NO",
+                "opponent": "CHI",
+                "game_id": "2026_11_NO_CHI",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "NO",
+                  "opponent": "CHI",
+                  "gameId": "2026_11_NO_CHI",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "5081999",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 1,
+            "live_report_count": 1,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 1,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          }
+        },
+        "limits": [
+          "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+          "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+          "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+          "No verified betting edge or calibrated probability is claimed."
+        ],
+        "before_absence_adjustment": {
+          "home": 28.4,
+          "away": 20.9
+        },
+        "home": 28.4,
+        "away": 20.9,
+        "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+        "score_source_check": {
+          "matching_training_games": 408,
+          "training_games": 422,
+          "checked_at": "2026-11-12T13:07:35.668270+00:00",
+          "source": "ESPN final scoreboards",
+          "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+          "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "nfl-qb-lineup-scenario-v2|2026_11_TEN_DAL",
+      "game_id": "2026_11_TEN_DAL",
+      "model_version": "nfl-qb-lineup-scenario-v2",
+      "model_signature": "213a848f692a9c8037cd03c1e71cbbac8bd43feb56291ad2c6042c75c968853c|nfl-qb-lineup-scenario-v2",
+      "captured_at": "2026-11-17T20:37:32.792Z",
+      "kickoff_at": "2026-11-22T18:00:00+00:00",
+      "feed_generated_at": "2026-11-17T20:37:32.515641+00:00",
+      "source_sha256": "b9164b663c03a4f9e6fe1d322ffae9ac572e1e4d6fc9f983062a4a3e62dcdc3a",
+      "home": "DAL",
+      "away": "TEN",
+      "projection": {
+        "home": 29.8,
+        "away": 22.9,
+        "margin": 6.9,
+        "total": 52.7
+      },
+      "home_win_probability": 0.7154174919211925,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "lineup_scenario": {
+        "version": "nfl-qb-lineup-scenario-v2",
+        "base_version": "opponent-score-ridge-v1",
+        "generated_at": "2026-11-17T20:37:29.951110+00:00",
+        "available": true,
+        "quarterbacks": {
+          "DAL": {
+            "player_id": "00-0033077",
+            "player": "Dak Prescott",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/6/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:35:26+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Dak Prescott starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          },
+          "TEN": {
+            "player_id": "00-0040676",
+            "player": "Cam Ward",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/10/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:35:41+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Cam Ward starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          }
+        },
+        "training_games": 422,
+        "through_week": 10,
+        "status": "EXPERIMENTAL_SCENARIO",
+        "injuries": {
+          "DAL": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0037578",
+                "player": "Juanyeh Thomas",
+                "position": "DB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "DAL",
+                "opponent": "TEN",
+                "game_id": "2026_11_TEN_DAL",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "DAL",
+                  "opponent": "TEN",
+                  "gameId": "2026_11_TEN_DAL",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4360590",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0035227",
+                "player": "P.J. Locke",
+                "position": "DB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "DAL",
+                "opponent": "TEN",
+                "game_id": "2026_11_TEN_DAL",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "DAL",
+                  "opponent": "TEN",
+                  "gameId": "2026_11_TEN_DAL",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "3929850",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0039062",
+                "player": "Jonathan Mingo",
+                "position": "WR",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "DAL",
+                "opponent": "TEN",
+                "game_id": "2026_11_TEN_DAL",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "DAL",
+                  "opponent": "TEN",
+                  "gameId": "2026_11_TEN_DAL",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4426485",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0040725",
+                "player": "Donovan Ezeiruaku",
+                "position": "LB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "DAL",
+                "opponent": "TEN",
+                "game_id": "2026_11_TEN_DAL",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "DAL",
+                  "opponent": "TEN",
+                  "gameId": "2026_11_TEN_DAL",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4683848",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 4,
+            "live_report_count": 4,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 4,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          },
+          "TEN": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0041479",
+                "player": "Anthony Hill Jr.",
+                "position": "LB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "TEN",
+                "opponent": "DAL",
+                "game_id": "2026_11_TEN_DAL",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "TEN",
+                  "opponent": "DAL",
+                  "gameId": "2026_11_TEN_DAL",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4870805",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0035672",
+                "player": "Cody Barton",
+                "position": "LB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "TEN",
+                "opponent": "DAL",
+                "game_id": "2026_11_TEN_DAL",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "TEN",
+                  "opponent": "DAL",
+                  "gameId": "2026_11_TEN_DAL",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "3926229",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 2,
+            "live_report_count": 2,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 2,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          }
+        },
+        "limits": [
+          "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+          "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+          "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+          "No verified betting edge or calibrated probability is claimed."
+        ],
+        "before_absence_adjustment": {
+          "home": 29.8,
+          "away": 22.9
+        },
+        "home": 29.8,
+        "away": 22.9,
+        "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+        "score_source_check": {
+          "matching_training_games": 408,
+          "training_games": 422,
+          "checked_at": "2026-11-12T13:07:35.668270+00:00",
+          "source": "ESPN final scoreboards",
+          "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+          "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "nfl-qb-lineup-scenario-v2|2026_11_TB_DET",
+      "game_id": "2026_11_TB_DET",
+      "model_version": "nfl-qb-lineup-scenario-v2",
+      "model_signature": "213a848f692a9c8037cd03c1e71cbbac8bd43feb56291ad2c6042c75c968853c|nfl-qb-lineup-scenario-v2",
+      "captured_at": "2026-11-17T20:37:32.792Z",
+      "kickoff_at": "2026-11-22T18:00:00+00:00",
+      "feed_generated_at": "2026-11-17T20:37:32.515641+00:00",
+      "source_sha256": "b9164b663c03a4f9e6fe1d322ffae9ac572e1e4d6fc9f983062a4a3e62dcdc3a",
+      "home": "DET",
+      "away": "TB",
+      "projection": {
+        "home": 26.1,
+        "away": 22.5,
+        "margin": 3.6,
+        "total": 48.6
+      },
+      "home_win_probability": 0.6062959511235374,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "lineup_scenario": {
+        "version": "nfl-qb-lineup-scenario-v2",
+        "base_version": "opponent-score-ridge-v1",
+        "generated_at": "2026-11-17T20:37:30.069208+00:00",
+        "available": true,
+        "quarterbacks": {
+          "DET": {
+            "player_id": "00-0033106",
+            "player": "Jared Goff",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/8/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:35:41+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Jared Goff starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          },
+          "TB": {
+            "player_id": "00-0034855",
+            "player": "Baker Mayfield",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/27/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:36:02+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Baker Mayfield starts. Game-day starting status is not confirmed.",
+            "availability": "QUESTIONABLE"
+          }
+        },
+        "training_games": 422,
+        "through_week": 10,
+        "status": "EXPERIMENTAL_SCENARIO",
+        "injuries": {
+          "DET": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0034384",
+                "player": "D.J. Reed",
+                "position": "DB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "DET",
+                "opponent": "TB",
+                "game_id": "2026_11_TB_DET",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "DET",
+                  "opponent": "TB",
+                  "gameId": "2026_11_TB_DET",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "3139387",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 1,
+            "live_report_count": 1,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 1,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          },
+          "TB": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0034855",
+                "player": "Baker Mayfield",
+                "position": "QB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "TB",
+                "opponent": "DET",
+                "game_id": "2026_11_TB_DET",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "TB",
+                  "opponent": "DET",
+                  "gameId": "2026_11_TB_DET",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "3052587",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T15:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T15:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0039068",
+                "player": "Yaya Diaby",
+                "position": "LB",
+                "designation": "DOUBTFUL",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "TB",
+                "opponent": "DET",
+                "game_id": "2026_11_TB_DET",
+                "live_evidence": {
+                  "status": "DOUBTFUL",
+                  "team": "TB",
+                  "opponent": "DET",
+                  "gameId": "2026_11_TB_DET",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4686334",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 2,
+            "live_report_count": 2,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 2,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          }
+        },
+        "limits": [
+          "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+          "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+          "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+          "No verified betting edge or calibrated probability is claimed."
+        ],
+        "before_absence_adjustment": {
+          "home": 26.1,
+          "away": 22.5
+        },
+        "home": 26.1,
+        "away": 22.5,
+        "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+        "score_source_check": {
+          "matching_training_games": 408,
+          "training_games": 422,
+          "checked_at": "2026-11-12T13:07:35.668270+00:00",
+          "source": "ESPN final scoreboards",
+          "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+          "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "nfl-qb-lineup-scenario-v2|2026_11_JAX_NYG",
+      "game_id": "2026_11_JAX_NYG",
+      "model_version": "nfl-qb-lineup-scenario-v2",
+      "model_signature": "213a848f692a9c8037cd03c1e71cbbac8bd43feb56291ad2c6042c75c968853c|nfl-qb-lineup-scenario-v2",
+      "captured_at": "2026-11-17T20:37:32.792Z",
+      "kickoff_at": "2026-11-22T18:00:00+00:00",
+      "feed_generated_at": "2026-11-17T20:37:32.515641+00:00",
+      "source_sha256": "b9164b663c03a4f9e6fe1d322ffae9ac572e1e4d6fc9f983062a4a3e62dcdc3a",
+      "home": "NYG",
+      "away": "JAX",
+      "projection": {
+        "home": 19.2,
+        "away": 27.5,
+        "margin": -8.3,
+        "total": 46.7
+      },
+      "home_win_probability": 0.2501761804087385,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "lineup_scenario": {
+        "version": "nfl-qb-lineup-scenario-v2",
+        "base_version": "opponent-score-ridge-v1",
+        "generated_at": "2026-11-17T20:37:30.933616+00:00",
+        "available": true,
+        "quarterbacks": {
+          "NYG": {
+            "player_id": "00-0039923",
+            "player": "J.J. McCarthy",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/19/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:36:03+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes J.J. McCarthy starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          },
+          "JAX": {
+            "player_id": "00-0036971",
+            "player": "Trevor Lawrence",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/30/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:34:18+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Trevor Lawrence starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          }
+        },
+        "training_games": 422,
+        "through_week": 10,
+        "status": "EXPERIMENTAL_SCENARIO",
+        "injuries": {
+          "NYG": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0036280",
+                "player": "Malik Harrison",
+                "position": "LB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "NYG",
+                "opponent": "JAX",
+                "game_id": "2026_11_JAX_NYG",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "NYG",
+                  "opponent": "JAX",
+                  "gameId": "2026_11_JAX_NYG",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4040615",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 1,
+            "live_report_count": 1,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 1,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          },
+          "JAX": {
+            "coverage": "NO_MATCHED_CURRENT_WEEK_REPORT",
+            "reports": [],
+            "report_count": 0,
+            "live_report_count": 0,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 0,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          }
+        },
+        "limits": [
+          "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+          "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+          "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+          "No verified betting edge or calibrated probability is claimed."
+        ],
+        "before_absence_adjustment": {
+          "home": 19.2,
+          "away": 27.5
+        },
+        "home": 19.2,
+        "away": 27.5,
+        "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+        "score_source_check": {
+          "matching_training_games": 408,
+          "training_games": 422,
+          "checked_at": "2026-11-12T13:07:35.668270+00:00",
+          "source": "ESPN final scoreboards",
+          "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+          "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "nfl-qb-lineup-scenario-v2|2026_11_NYJ_LAC",
+      "game_id": "2026_11_NYJ_LAC",
+      "model_version": "nfl-qb-lineup-scenario-v2",
+      "model_signature": "213a848f692a9c8037cd03c1e71cbbac8bd43feb56291ad2c6042c75c968853c|nfl-qb-lineup-scenario-v2",
+      "captured_at": "2026-11-17T20:37:32.792Z",
+      "kickoff_at": "2026-11-22T21:05:00+00:00",
+      "feed_generated_at": "2026-11-17T20:37:32.515641+00:00",
+      "source_sha256": "b9164b663c03a4f9e6fe1d322ffae9ac572e1e4d6fc9f983062a4a3e62dcdc3a",
+      "home": "LAC",
+      "away": "NYJ",
+      "projection": {
+        "home": 22.4,
+        "away": 19.3,
+        "margin": 3.1,
+        "total": 41.7
+      },
+      "home_win_probability": 0.6618653590765144,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "lineup_scenario": {
+        "version": "nfl-qb-lineup-scenario-v2",
+        "base_version": "opponent-score-ridge-v1",
+        "generated_at": "2026-11-17T20:37:31.052413+00:00",
+        "available": true,
+        "quarterbacks": {
+          "LAC": {
+            "player_id": "00-0036355",
+            "player": "Justin Herbert",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/24/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:34:18+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Justin Herbert starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          },
+          "NYJ": {
+            "player_id": "00-0030565",
+            "player": "Geno Smith",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/20/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:35:41+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Geno Smith starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          }
+        },
+        "training_games": 422,
+        "through_week": 10,
+        "status": "EXPERIMENTAL_SCENARIO",
+        "injuries": {
+          "LAC": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0038414",
+                "player": "Kendall Williamson",
+                "position": "DB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "LAC",
+                "opponent": "NYJ",
+                "game_id": "2026_11_NYJ_LAC",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "LAC",
+                  "opponent": "NYJ",
+                  "gameId": "2026_11_NYJ_LAC",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4360745",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0040065",
+                "player": "Isas Waxter",
+                "position": "DB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "LAC",
+                "opponent": "NYJ",
+                "game_id": "2026_11_NYJ_LAC",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "LAC",
+                  "opponent": "NYJ",
+                  "gameId": "2026_11_NYJ_LAC",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4574105",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0039915",
+                "player": "Ladd McConkey",
+                "position": "WR",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "LAC",
+                "opponent": "NYJ",
+                "game_id": "2026_11_NYJ_LAC",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "LAC",
+                  "opponent": "NYJ",
+                  "gameId": "2026_11_NYJ_LAC",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4612826",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 3,
+            "live_report_count": 3,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 3,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          },
+          "NYJ": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0039347",
+                "player": "Trevin Wallace",
+                "position": "LB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "NYJ",
+                "opponent": "LAC",
+                "game_id": "2026_11_NYJ_LAC",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "NYJ",
+                  "opponent": "LAC",
+                  "gameId": "2026_11_NYJ_LAC",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4683815",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0039372",
+                "player": "Jarvis Brownlee Jr.",
+                "position": "DB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "NYJ",
+                "opponent": "LAC",
+                "game_id": "2026_11_NYJ_LAC",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "NYJ",
+                  "opponent": "LAC",
+                  "gameId": "2026_11_NYJ_LAC",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4426817",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 2,
+            "live_report_count": 2,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 2,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          }
+        },
+        "limits": [
+          "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+          "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+          "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+          "No verified betting edge or calibrated probability is claimed."
+        ],
+        "before_absence_adjustment": {
+          "home": 22.4,
+          "away": 19.3
+        },
+        "home": 22.4,
+        "away": 19.3,
+        "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+        "score_source_check": {
+          "matching_training_games": 408,
+          "training_games": 422,
+          "checked_at": "2026-11-12T13:07:35.668270+00:00",
+          "source": "ESPN final scoreboards",
+          "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+          "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "nfl-qb-lineup-scenario-v2|2026_11_LV_DEN",
+      "game_id": "2026_11_LV_DEN",
+      "model_version": "nfl-qb-lineup-scenario-v2",
+      "model_signature": "213a848f692a9c8037cd03c1e71cbbac8bd43feb56291ad2c6042c75c968853c|nfl-qb-lineup-scenario-v2",
+      "captured_at": "2026-11-17T20:37:32.792Z",
+      "kickoff_at": "2026-11-22T21:25:00+00:00",
+      "feed_generated_at": "2026-11-17T20:37:32.515641+00:00",
+      "source_sha256": "b9164b663c03a4f9e6fe1d322ffae9ac572e1e4d6fc9f983062a4a3e62dcdc3a",
+      "home": "DEN",
+      "away": "LV",
+      "projection": {
+        "home": 26.4,
+        "away": 18.4,
+        "margin": 8,
+        "total": 44.8
+      },
+      "home_win_probability": 0.7535093232767651,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "lineup_scenario": {
+        "version": "nfl-qb-lineup-scenario-v2",
+        "base_version": "opponent-score-ridge-v1",
+        "generated_at": "2026-11-17T20:37:31.469683+00:00",
+        "available": true,
+        "quarterbacks": {
+          "DEN": {
+            "player_id": "00-0039732",
+            "player": "Bo Nix",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/7/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:35:40+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Bo Nix starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          },
+          "LV": {
+            "player_id": "00-0041562",
+            "player": "Fernando Mendoza",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/13/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:35:41+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Fernando Mendoza starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          }
+        },
+        "training_games": 422,
+        "through_week": 10,
+        "status": "EXPERIMENTAL_SCENARIO",
+        "injuries": {
+          "DEN": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0036564",
+                "player": "Talanoa Hufanga",
+                "position": "DB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "DEN",
+                "opponent": "LV",
+                "game_id": "2026_11_LV_DEN",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "DEN",
+                  "opponent": "LV",
+                  "gameId": "2026_11_LV_DEN",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4360853",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0036221",
+                "player": "Brandon Jones",
+                "position": "DB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "DEN",
+                "opponent": "LV",
+                "game_id": "2026_11_LV_DEN",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "DEN",
+                  "opponent": "LV",
+                  "gameId": "2026_11_LV_DEN",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4039059",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0039371",
+                "player": "Kris Abrams-Draine",
+                "position": "DB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "DEN",
+                "opponent": "LV",
+                "game_id": "2026_11_LV_DEN",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "DEN",
+                  "opponent": "LV",
+                  "gameId": "2026_11_LV_DEN",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4429193",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 3,
+            "live_report_count": 3,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 3,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          },
+          "LV": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0040581",
+                "player": "Dont'e Thornton Jr.",
+                "position": "WR",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "LV",
+                "opponent": "DEN",
+                "game_id": "2026_11_LV_DEN",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "LV",
+                  "opponent": "DEN",
+                  "gameId": "2026_11_LV_DEN",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4432775",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0037262",
+                "player": "Thomas Booker",
+                "position": "DL",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "LV",
+                "opponent": "DEN",
+                "game_id": "2026_11_LV_DEN",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "LV",
+                  "opponent": "DEN",
+                  "gameId": "2026_11_LV_DEN",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4360749",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 2,
+            "live_report_count": 2,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 2,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          }
+        },
+        "limits": [
+          "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+          "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+          "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+          "No verified betting edge or calibrated probability is claimed."
+        ],
+        "before_absence_adjustment": {
+          "home": 26.4,
+          "away": 18.4
+        },
+        "home": 26.4,
+        "away": 18.4,
+        "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+        "score_source_check": {
+          "matching_training_games": 408,
+          "training_games": 422,
+          "checked_at": "2026-11-12T13:07:35.668270+00:00",
+          "source": "ESPN final scoreboards",
+          "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+          "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "nfl-qb-lineup-scenario-v2|2026_11_PIT_PHI",
+      "game_id": "2026_11_PIT_PHI",
+      "model_version": "nfl-qb-lineup-scenario-v2",
+      "model_signature": "213a848f692a9c8037cd03c1e71cbbac8bd43feb56291ad2c6042c75c968853c|nfl-qb-lineup-scenario-v2",
+      "captured_at": "2026-11-17T20:37:32.792Z",
+      "kickoff_at": "2026-11-22T21:25:00+00:00",
+      "feed_generated_at": "2026-11-17T20:37:32.515641+00:00",
+      "source_sha256": "b9164b663c03a4f9e6fe1d322ffae9ac572e1e4d6fc9f983062a4a3e62dcdc3a",
+      "home": "PHI",
+      "away": "PIT",
+      "projection": {
+        "home": 18.3,
+        "away": 21.5,
+        "margin": -3.2,
+        "total": 39.8
+      },
+      "home_win_probability": 0.36063008554141457,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "lineup_scenario": {
+        "version": "nfl-qb-lineup-scenario-v2",
+        "base_version": "opponent-score-ridge-v1",
+        "generated_at": "2026-11-17T20:37:31.892524+00:00",
+        "available": true,
+        "quarterbacks": {
+          "PHI": {
+            "player_id": "00-0039398",
+            "player": "Joe Milton III",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/21/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:33:38+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Joe Milton III starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          },
+          "PIT": {
+            "player_id": "00-0023459",
+            "player": "Aaron Rodgers",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/23/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:33:05+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Aaron Rodgers starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          }
+        },
+        "training_games": 422,
+        "through_week": 10,
+        "status": "EXPERIMENTAL_SCENARIO",
+        "injuries": {
+          "PHI": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0038393",
+                "player": "Dontayvion Wicks",
+                "position": "WR",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "PHI",
+                "opponent": "PIT",
+                "game_id": "2026_11_PIT_PHI",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "PHI",
+                  "opponent": "PIT",
+                  "gameId": "2026_11_PIT_PHI",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4428850",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0036912",
+                "player": "DeVonta Smith",
+                "position": "WR",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "PHI",
+                "opponent": "PIT",
+                "game_id": "2026_11_PIT_PHI",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "PHI",
+                  "opponent": "PIT",
+                  "gameId": "2026_11_PIT_PHI",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4241478",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0032580",
+                "player": "Jonathan Jones",
+                "position": "DB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "PHI",
+                "opponent": "PIT",
+                "game_id": "2026_11_PIT_PHI",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "PHI",
+                  "opponent": "PIT",
+                  "gameId": "2026_11_PIT_PHI",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "2971027",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0040708",
+                "player": "Jihaad Campbell",
+                "position": "LB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "PHI",
+                "opponent": "PIT",
+                "game_id": "2026_11_PIT_PHI",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "PHI",
+                  "opponent": "PIT",
+                  "gameId": "2026_11_PIT_PHI",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4685287",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0036501",
+                "player": "Michael Carter II",
+                "position": "DB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "PHI",
+                "opponent": "PIT",
+                "game_id": "2026_11_PIT_PHI",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "PHI",
+                  "opponent": "PIT",
+                  "gameId": "2026_11_PIT_PHI",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4240456",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0037132",
+                "player": "Britain Covey",
+                "position": "WR",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "PHI",
+                "opponent": "PIT",
+                "game_id": "2026_11_PIT_PHI",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "PHI",
+                  "opponent": "PIT",
+                  "gameId": "2026_11_PIT_PHI",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "3926231",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 6,
+            "live_report_count": 6,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 6,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          },
+          "PIT": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0034277",
+                "player": "DeShon Elliott",
+                "position": "DB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "PIT",
+                "opponent": "PHI",
+                "game_id": "2026_11_PIT_PHI",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "PIT",
+                  "opponent": "PHI",
+                  "gameId": "2026_11_PIT_PHI",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "3929846",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 1,
+            "live_report_count": 1,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 1,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          }
+        },
+        "limits": [
+          "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+          "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+          "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+          "No verified betting edge or calibrated probability is claimed."
+        ],
+        "before_absence_adjustment": {
+          "home": 18.3,
+          "away": 21.5
+        },
+        "home": 18.3,
+        "away": 21.5,
+        "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+        "score_source_check": {
+          "matching_training_games": 408,
+          "training_games": 422,
+          "checked_at": "2026-11-12T13:07:35.668270+00:00",
+          "source": "ESPN final scoreboards",
+          "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+          "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "nfl-qb-lineup-scenario-v2|2026_11_MIN_SF",
+      "game_id": "2026_11_MIN_SF",
+      "model_version": "nfl-qb-lineup-scenario-v2",
+      "model_signature": "213a848f692a9c8037cd03c1e71cbbac8bd43feb56291ad2c6042c75c968853c|nfl-qb-lineup-scenario-v2",
+      "captured_at": "2026-11-17T20:37:32.792Z",
+      "kickoff_at": "2026-11-23T01:20:00+00:00",
+      "feed_generated_at": "2026-11-17T20:37:32.515641+00:00",
+      "source_sha256": "b9164b663c03a4f9e6fe1d322ffae9ac572e1e4d6fc9f983062a4a3e62dcdc3a",
+      "home": "SF",
+      "away": "MIN",
+      "projection": {
+        "home": 23.3,
+        "away": 23.1,
+        "margin": 0.2,
+        "total": 46.4
+      },
+      "home_win_probability": 0.4857320742969804,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "lineup_scenario": {
+        "version": "nfl-qb-lineup-scenario-v2",
+        "base_version": "opponent-score-ridge-v1",
+        "generated_at": "2026-11-17T20:37:32.011050+00:00",
+        "available": true,
+        "quarterbacks": {
+          "SF": {
+            "player_id": "00-0037834",
+            "player": "Brock Purdy",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/25/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:35:41+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Brock Purdy starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          },
+          "MIN": {
+            "player_id": "00-0029604",
+            "player": "Kirk Cousins",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/16/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:33:36+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Kirk Cousins starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          }
+        },
+        "training_games": 422,
+        "through_week": 10,
+        "status": "EXPERIMENTAL_SCENARIO",
+        "injuries": {
+          "SF": {
+            "coverage": "NO_MATCHED_CURRENT_WEEK_REPORT",
+            "reports": [],
+            "report_count": 0,
+            "live_report_count": 0,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 0,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          },
+          "MIN": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0040173",
+                "player": "Tyrion Ingram-Dawkins",
+                "position": "DL",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "MIN",
+                "opponent": "SF",
+                "game_id": "2026_11_MIN_SF",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "MIN",
+                  "opponent": "SF",
+                  "gameId": "2026_11_MIN_SF",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4629149",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0036259",
+                "player": "Jauan Jennings",
+                "position": "WR",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "MIN",
+                "opponent": "SF",
+                "game_id": "2026_11_MIN_SF",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "MIN",
+                  "opponent": "SF",
+                  "gameId": "2026_11_MIN_SF",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "3886598",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              },
+              {
+                "player_id": "00-0035276",
+                "player": "Blake Cashman",
+                "position": "LB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "MIN",
+                "opponent": "SF",
+                "game_id": "2026_11_MIN_SF",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "MIN",
+                  "opponent": "SF",
+                  "gameId": "2026_11_MIN_SF",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "3728281",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 3,
+            "live_report_count": 3,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 3,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          }
+        },
+        "limits": [
+          "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+          "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+          "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+          "No verified betting edge or calibrated probability is claimed."
+        ],
+        "before_absence_adjustment": {
+          "home": 23.3,
+          "away": 23.1
+        },
+        "home": 23.3,
+        "away": 23.1,
+        "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+        "score_source_check": {
+          "matching_training_games": 408,
+          "training_games": 422,
+          "checked_at": "2026-11-12T13:07:35.668270+00:00",
+          "source": "ESPN final scoreboards",
+          "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
+          "scope": "Final game scores only; this does not externally verify EPA, injuries or player identities."
+        }
+      },
+      "status": "FROZEN_BEFORE_KICKOFF",
+      "result": null
+    },
+    {
+      "key": "nfl-qb-lineup-scenario-v2|2026_11_CIN_WAS",
+      "game_id": "2026_11_CIN_WAS",
+      "model_version": "nfl-qb-lineup-scenario-v2",
+      "model_signature": "213a848f692a9c8037cd03c1e71cbbac8bd43feb56291ad2c6042c75c968853c|nfl-qb-lineup-scenario-v2",
+      "captured_at": "2026-11-17T20:37:32.792Z",
+      "kickoff_at": "2026-11-24T01:15:00+00:00",
+      "feed_generated_at": "2026-11-17T20:37:32.515641+00:00",
+      "source_sha256": "b9164b663c03a4f9e6fe1d322ffae9ac572e1e4d6fc9f983062a4a3e62dcdc3a",
+      "home": "WAS",
+      "away": "CIN",
+      "projection": {
+        "home": 23.5,
+        "away": 29,
+        "margin": -5.5,
+        "total": 52.5
+      },
+      "home_win_probability": 0.30942261843060015,
+      "probability_definition": "Home win conditional on non-tie; ties excluded from winner grading.",
+      "draws": 10000,
+      "seed": 6472026,
+      "lineup_scenario": {
+        "version": "nfl-qb-lineup-scenario-v2",
+        "base_version": "opponent-score-ridge-v1",
+        "generated_at": "2026-11-17T20:37:32.428173+00:00",
+        "available": true,
+        "quarterbacks": {
+          "WAS": {
+            "player_id": "00-0039910",
+            "player": "Jayden Daniels",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/28/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:32:52+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Jayden Daniels starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          },
+          "CIN": {
+            "player_id": "00-0036442",
+            "player": "Joe Burrow",
+            "source": "SOURCED_DEPTH_CHART",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/4/depthcharts",
+            "source_observed_at": "2026-11-17T20:37:11.313282+00:00",
+            "source_updated_at": "2026-11-17T20:32:50+00:00",
+            "effect_available": true,
+            "assumption": "Depth-chart first unit; assumes Joe Burrow starts. Game-day starting status is not confirmed.",
+            "availability": "NOT_REPORTED"
+          }
+        },
+        "training_games": 422,
+        "through_week": 10,
+        "status": "EXPERIMENTAL_SCENARIO",
+        "injuries": {
+          "WAS": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0039686",
+                "player": "Colson Yankoff",
+                "position": "TE",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "WAS",
+                "opponent": "CIN",
+                "game_id": "2026_11_CIN_WAS",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "WAS",
+                  "opponent": "CIN",
+                  "gameId": "2026_11_CIN_WAS",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4361088",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 1,
+            "live_report_count": 1,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 1,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          },
+          "CIN": {
+            "coverage": "REPORTED_WITH_LIVE_SOURCE",
+            "reports": [
+              {
+                "player_id": "00-0036231",
+                "player": "Kyle Dugger",
+                "position": "DB",
+                "designation": "QUESTIONABLE",
+                "practice": null,
+                "injury": null,
+                "season": 2026,
+                "week": 11,
+                "team": "CIN",
+                "opponent": "WAS",
+                "game_id": "2026_11_CIN_WAS",
+                "live_evidence": {
+                  "status": "QUESTIONABLE",
+                  "team": "CIN",
+                  "opponent": "WAS",
+                  "gameId": "2026_11_CIN_WAS",
+                  "season": 2026,
+                  "week": 11,
+                  "athleteId": "4401811",
+                  "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                  "reportedAt": "2026-11-17T12:19:00+00:00",
+                  "observedAt": "2026-11-17T20:37:11.313282+00:00",
+                  "sourceUpdatedAt": "2026-11-17T20:35:36+00:00",
+                  "cached": false
+                },
+                "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+                "source_updated_at": "2026-11-17T12:19:00+00:00",
+                "observed_at": "2026-11-17T20:37:11.313282+00:00",
+                "source_document_updated_at": "2026-11-17T20:35:36+00:00",
+                "cached": false
+              }
+            ],
+            "report_count": 1,
+            "live_report_count": 1,
+            "live_source": {
+              "status": "ok",
+              "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
+              "observed_at": "2026-11-17T20:37:11.313282+00:00",
+              "accepted_reports": 1,
+              "rejected_rows": 0
+            },
+            "official_inactives_confirmed": false,
+            "source": "https://github.com/nflverse/nflverse-data/releases/tag/injuries",
+            "other_out_reports": [],
+            "units": [
+              {
+                "side": "offense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              },
+              {
+                "side": "defense",
+                "players": [],
+                "shift": 0,
+                "applied": false,
+                "absent_games": 0,
+                "present_games": 0,
+                "method": "Same-team score residuals with all listed players absent versus all present, after opponent/QB scoring fit; shrunk toward zero. Descriptive association, not a causal injury penalty.",
+                "status": "NO_KNOWN_OUTS",
+                "reason": "No matched OUT players for this unit. Missing reports do not establish health."
+              }
+            ]
+          }
+        },
+        "limits": [
+          "Sourced OUT players are considered; practice-only and questionable statuses are not assumed OUT.",
+          "Complete matching injury histories can be sparse; unsupported injury effects remain explicitly unmodeled.",
+          "Residual uncertainty comes from chronological opponent/QB model errors, without historical injury-announcement validation.",
+          "No verified betting edge or calibrated probability is claimed."
+        ],
+        "before_absence_adjustment": {
+          "home": 23.5,
+          "away": 29
+        },
+        "home": 23.5,
+        "away": 29,
+        "reason": "Opponent-adjusted scoring with explicit QB assumptions and supported observed lineup scenarios; unsupported injuries are listed, not silently declared modeled.",
+        "score_source_check": {
+          "matching_training_games": 408,
+          "training_games": 422,
           "checked_at": "2026-11-12T13:07:35.668270+00:00",
           "source": "ESPN final scoreboards",
           "audit_path": "./docs/nfl-game-score-input-audit-2026-11-12.json",
