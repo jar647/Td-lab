@@ -13,6 +13,9 @@ on:
       - 'recommendation_ledger.js'
       - 'nba_matchup_discovery.js'
       - 'nba_game_first.js'
+      - 'nba_prop_evidence.js'
+      - 'nba_prop_lines.js'
+      - 'nba_parlay.js'
       - 'nba_first_basket.js'
       - 'nfl_game_engine.js'
       - 'nfl_goal1.js'
@@ -53,7 +56,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node test_recommendation_ledger.js && node test_daily_plays.js
+      - run: node test_recommendation_ledger.js && node test_daily_plays.js && node test_nba_selection_capture.js
   capture-and-grade:
     if: github.event_name != 'pull_request' && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
     needs: validate

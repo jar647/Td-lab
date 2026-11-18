@@ -1,22 +1,30 @@
 /* Shared-outcome NBA matchup research; prices never change the simulation. */
-(function(root,factory){const api=factory(typeof module==='object'&&module.exports?require('./nba_possession_engine.js'):root.CookNBAPossessions,typeof module==='object'&&module.exports?require('./nba_matchup_discovery.js'):root.CookNBAMatchups);if(typeof module==='object'&&module.exports)module.exports=api;root.CookNBAGameFirst=api;})(typeof globalThis!=='undefined'?globalThis:this,function(possessions,matchups){
+(function(root,factory){const api=factory(typeof module==='object'&&module.exports?require('./nba_possession_engine.js'):root.CookNBAPossessions,typeof module==='object'&&module.exports?require('./nba_matchup_discovery.js'):root.CookNBAMatchups,typeof module==='object'&&module.exports?require('./nba_prop_lines.js'):root.CookNBAPropLines);if(typeof module==='object'&&module.exports)module.exports=api;root.CookNBAGameFirst=api;})(typeof globalThis!=='undefined'?globalThis:this,function(possessions,matchups,propLines){
 'use strict';
 const markets=['points','rebounds','assists','threes','Points + Rebounds','Points + Assists','Rebounds + Assists','PRA'];
 const fields=m=>({'Points + Rebounds':['points','rebounds'],'Points + Assists':['points','assists'],'Rebounds + Assists':['rebounds','assists'],PRA:['points','rebounds','assists']}[m]||[m]);
+const canonical=m=>({'Points + Rebounds':'pr','Points + Assists':'pa','Rebounds + Assists':'ra',PRA:'pra'}[m]||m);
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),mean=a=>a.reduce((s,x)=>s+x,0)/Math.max(1,a.length);
 const hits=(row,x,line)=>row.side==='under'?x<line:x>line;
+function supportedRole(role,playerId,team){return !!role&&role.eligible===true&&role.roleStatus==='SUPPORTED'&&['NOT LISTED','ACTIVE','AVAILABLE','PROBABLE'].includes(String(role.status||'').toUpperCase())&&String(role.playerId)===String(playerId)&&role.team===team&&Number.isInteger(role.historyGames)&&role.historyGames>=5&&Number.isFinite(role.projectedMinutes)&&Number.isFinite(role.minutesLow)&&Number.isFinite(role.minutesHigh)&&role.minutesLow>=20&&role.minutesHigh<=48&&role.minutesHigh>=role.minutesLow&&role.minutesHigh-role.minutesLow<=6&&role.projectedMinutes>=role.minutesLow-.01&&role.projectedMinutes<=role.minutesHigh+.01&&Array.isArray(role.holdReasons)&&!role.holdReasons.length;}
 function chance(row,line){if(!Number.isFinite(line)||line<.5||!row.samples?.length)return null;return row.samples.filter(x=>hits(row,x,line)).length/row.samples.length;}
 function candidate(row,excluded=[],lines={}){
  if(row)row={...row,side:String(row.side||'over').toLowerCase()};
  if(row?.matchupRating?.side&&row.matchupRating.side!==row.side)return null;
+ if(row?.roleEvidence&&!supportedRole(row.roleEvidence,row.playerId,row.team))return null;
  if(!row||!markets.includes(row.market)||excluded.includes(row.market)||row.side!=='over'||row.reviewRequired||row.eligible!==true||!(Number(row.matchupGames)>=3)||!Number.isFinite(row.forecast)||row.forecast<=0||!Array.isArray(row.samples)||!row.samples.length||!row.samples.every(x=>Number.isFinite(x)&&x>=0)||!(row.matchupBoost>0))return null;
  const minimum={points:8,rebounds:3,assists:3,threes:1}[row.market]||10;if(row.forecast<minimum)return null;
- const override=lines[row.key];const line=override===undefined?Math.max(.5,Math.floor(row.forecast*.84-.5)+.5):override;
+ const lineSamples=row.roleEvidence?.selectionSamples?.[canonical(row.market)]||row.selectionSamples||row.samples;
+ const target=row.selectedLineEvidence||propLines?.select?.({market:canonical(row.market),samples:lineSamples,sampleKind:row.roleEvidence?.sampleKind||'simulation_outcomes'});
+ const override=lines[row.key];if(override===undefined&&target?.available!==true)return null;
+ const line=override===undefined?target.line:override;
  const probability=chance(row,line);if(probability===null||probability===0)return null;
  const matchupQuality=row.matchupRating?.score;if(!Number.isFinite(matchupQuality)||matchupQuality<85||matchupQuality>100)return null;
  const lineConfidence=Math.round(clamp(probability*100,0,100));
  const score=matchupQuality; // Matchup-only research rank: never use odds, value, or chosen line.
- return {...row,line,side:row.side||'over',probability,researchOnly:true,matchupQuality,lineConfidence,score};
+ const settlement=override===undefined?null:propLines.evaluate(row.samples,line);if(settlement&&!settlement.available)return null;
+ const exact=override===undefined?target:{...settlement,market:canonical(row.market),line,milestone:Number.isInteger(line+.5)?line+.5:null,frequency:probability,sampleCount:row.samples.length,sampleKind:'simulation_outcomes',policy:'manual-exact-over-v1',settlement:'strict_over',offered:false,calibrated:false};
+ return {...row,line,side:row.side||'over',probability,researchOnly:true,matchupQuality,lineConfidence,score,linePolicy:exact.policy,selectedLineEvidence:exact,defaultLineEvidence:target};
 }
 function build(rows,options={}){
  const excluded=options.excludedMarkets||[],max=clamp(Math.trunc(Number(options.maxLegs)||5),1,5);
@@ -26,6 +34,7 @@ function build(rows,options={}){
  for(const row of ranked){
   if(seen.has(String(row.playerId)))continue;
   if(picks.length&&row.gameId!==picks[0].gameId)continue;
+  if(picks.length&&(row.outcomeSetId||picks[0].outcomeSetId)&&row.outcomeSetId!==picks[0].outcomeSetId)continue;
   const hit=row.samples.map(x=>hits(row,x,row.line));if(wins&&hit.length!==wins.length)continue;
   let conflicts=false;
   for(const prior of picks){const joint=mean(hit.map((v,i)=>Number(v&&hits(prior,prior.samples[i],prior.line)))),ratio=joint/Math.max(.001,row.probability*prior.probability);if(ratio<.8){conflicts=true;break}}
@@ -40,7 +49,7 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
  try{
   const model=possessions.build(game,feed,injuries,rosters,now,{context});
   const simulation=possessions.draws(model,options.count||1000,6472026,{collectPlayerOutcomes:true});
-  const positional=matchups.analyze(game,feed,rosters,injuries,now);
+  const positional=matchups.analyze(game,feed,rosters,injuries,now,{model,simulation,context});
   const ratings=new Map(positional.candidates.map(r=>[r.playerId+'|'+r.market+'|'+(r.side||'over'),r]));
   const rows=[],playerReviews=new Map();
   for(const team of [game.away,game.home]){
@@ -66,7 +75,11 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
       ks.map(k=>k==='threes'?'Three-point opportunity: '+(player.tpa*36).toFixed(1)+' attempts per 36 observed minutes; opponent three-point defense delta '+(100*def.threeDefense).toFixed(1)+' percentage points. ':k==='rebounds'?'Rebound role: '+(player.orb*36).toFixed(1)+' offensive / '+(player.drb*36).toFixed(1)+' defensive boards per 36 observed minutes; opponent offensive-rebound rate '+(100*def.orb).toFixed(1)+'%. ':k==='assists'?'Creation role: '+(player.ast*36).toFixed(1)+' assists per 36 observed minutes; teammate shooting and opponent defense share the same simulation. ':'Player shooting mix: '+(100*(1-player.tpa/Math.max(.001,player.fga))).toFixed(0)+'% two-point attempts; opponent two-point defense delta '+(100*def.twoDefense).toFixed(1)+' percentage points. ').join('')+
       'Pace '+model.pace.toFixed(1)+' vs '+model.league.pace.toFixed(1)+' league sample possessions; '+player.sample+' player games / '+def.games+' opponent games.'+(own.absent.length?' Rotation redistributed with '+own.absent.join(', ')+' absent.':'')+' '+(100*simulation.blowoutRate).toFixed(1)+'% simulated blowouts; late-game minutes adjust in those outcomes.';
      const positionRows=ks.map(k=>ratings.get(player.id+'|'+k+'|'+side));
-     const supported=positionRows.every(Boolean);
+     const direct=ratings.get(player.id+'|'+canonical(market)+'|'+side);
+     const roleEvidence=positional.roleEvidence?.players?.[String(player.id)]||direct?.roleEvidence||positionRows.find(r=>r?.roleEvidence)?.roleEvidence;
+     const roleSupported=supportedRole(roleEvidence,player.id,team);
+     const supported=positionRows.every(Boolean)&&roleSupported;
+     if(!roleSupported)reviewReasons.push(...(roleEvidence?.holdReasons?.length?roleEvidence.holdReasons:['Supported rotation and opportunity evidence is unavailable for this player.']));
      // A combination's rating is constrained by its weakest supported stat.
      // Use that SAME stat's score factors so the displayed breakdown sums to the score.
      const limiting=supported?positionRows.reduce((lowest,r)=>r.researchScore<lowest.researchScore?r:lowest):null;
@@ -78,9 +91,14 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
       allowed:r.weakness.allowed,leagueAverage:r.weakness.leagueAverage,
       opponentGames:r.weakness.games,playerAverage:r.playerAverage,
       peerAverage:r.peerAverage,playerGames:r.history.length,baseline:r.baseline,
-      last5:r.last5,last10:r.last10
+      last5:r.last5,last10:r.last10,normalizedAllowed:r.weakness.normalizedAllowed,normalizedLeagueAverage:r.weakness.normalizedLeagueAverage,
+      allowanceBasis:r.weakness.allowanceBasis,shrinkage:r.weakness.shrinkage
      })):[];
-     rows.push({side,matchupRating,matchupEvidence,position:supported?positionRows[0].position:null,key:[game.id,player.id,market,...(side==='under'?['under']:[])].join('|'),gameId:String(game.id),game,playerId:player.id,name:player.name,team,opponent,market,forecast,baseline,observedMax,reviewRequired:reviewReasons.length>0,reviewReasons,minutes:projected.minutes,matchupGames:def.games,matchupBoost:boost,samples:values,reason:reason+' '+(model.context?.tracking==='fresh'&&Object.keys(player.defenderExposure||{}).length?'Fresh defender tracking incorporated; historical exposure '+Number(player.matchupSample||0).toFixed(0)+' possessions, not a confirmed assignment.':'Individual defender tracking unavailable or stale; that adjustment is omitted.'),eligible:supported});
+     const selectedLineEvidence=direct?.selectedLineEvidence||(roleEvidence?propLines?.select?.({market:canonical(market),samples:roleEvidence.selectionSamples?.[canonical(market)],sampleKind:roleEvidence.sampleKind}):null);
+     rows.push({side,matchupRating,matchupEvidence,weakness:limiting?.weakness,roleEvidence,selectedLineEvidence,linePolicy:selectedLineEvidence?.policy,
+      inputTimes:{...model.inputTimes},outcomeSetId:[model.version,game.id,now,options.count||1000,6472026,JSON.stringify(model.inputTimes),context?.generated_at||''].join('|'),
+      availabilitySensitivity:model.uncertain?.length?{type:'equal_weight_in_out',players:model.uncertain.slice(),probabilityValidated:false}:null,
+      position:supported?positionRows[0].position:null,key:[game.id,player.id,market,...(side==='under'?['under']:[])].join('|'),gameId:String(game.id),game,playerId:player.id,name:player.name,team,opponent,market,forecast,baseline,observedMax,reviewRequired:reviewReasons.length>0,reviewReasons,minutes:projected.minutes,matchupGames:def.games,matchupBoost:boost,samples:values,reason:reason+' '+(model.context?.tracking==='fresh'&&Object.keys(player.defenderExposure||{}).length?'Fresh defender tracking incorporated; historical exposure '+Number(player.matchupSample||0).toFixed(0)+' possessions, not a confirmed assignment.':'Individual defender tracking unavailable or stale; that adjustment is omitted.'),eligible:supported});
     }
    }
   }

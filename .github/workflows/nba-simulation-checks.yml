@@ -4,6 +4,13 @@ on:
     branches: [main]
     paths:
       - 'nba.html'
+      - 'nba_parlay*.js'
+      - 'nba_prop*.js'
+      - 'nba_selection_ui.js'
+      - 'test_nba_parlay*.js'
+      - 'test_nba_selection*.js'
+      - 'tests/test_nba_parlay.js'
+      - 'tests/test_nba_prop*.js'
       - 'game-odds.html'
       - 'nba_simulator_ui.js'
       - 'nba_live_context.js'
@@ -31,6 +38,16 @@ jobs:
           node-version: '22'
       - name: Verify simulation loading, rendering and failure recovery
         run: |
+          node --check nba_parlay_worker.js
+          node test_nba_parlay_worker.js
+          node test_nba_selection_page.js
+          node test_nba_selection_ui.js
+          node test_nba_parlay_ui.js
+          node test_nba_selection_capture.js
+          node tests/test_nba_parlay.js
+          node tests/test_nba_prop_lines.js
+          node tests/test_nba_prop_evidence.js
+          node tests/test_nba_normalized_matchups.js
           node --check nba_simulator_ui.js
           node --check game_odds_worker.js
           node test_nba_live_refresh.js
