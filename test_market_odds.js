@@ -28,7 +28,7 @@ for(const [name,html] of [['NFL',nfl],['NBA',nba]]){
   assert.ok(html.includes('src="./player_probability.js"'),name+' must load the model probability research engine');
   assert.ok(html.includes('Over odds')&&html.includes('Under odds'),name+' must retain both-sided pricing');
  }else{
-  assert.ok(html.includes('src="./nfl_game_engine.js?v=nfl-offered-lines-v1"'),'NFL must load matchup simulations');
+  assert.ok(html.includes('src="./nfl_game_engine.js?v=nfl-ten-legs-v1"'),'NFL must load matchup simulations');
   assert.ok(html.includes('UNCALIBRATED'),'NFL scenario frequencies must be identified as uncalibrated');
   const topUI=fs.readFileSync('nfl_top_plays_ui.js','utf8');
   assert.ok(/src="\.\/nfl_book_review\.js\?v=/.test(html),'NFL must load the exact-line book comparison helper');
