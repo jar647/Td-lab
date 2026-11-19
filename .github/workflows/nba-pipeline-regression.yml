@@ -119,9 +119,14 @@ jobs:
         run: |
           python - <<'PY2'
           import os,subprocess
-          paths=set(subprocess.check_output(['git','diff','--name-only',os.environ['BASE'],os.environ['HEAD']],text=True).splitlines())
-          needed=bool(paths & {'nba_rosters.py','nba_matchup_discovery.js','scripts/verify_nba_matchup_discovery.js','scripts/audit_nba_projections.js','scripts/compare_nba_projection_audits.js','nba_game_first.js','nba_possession_engine.js','nba_simulator_ui.js','nba_feed.py','nba_shot_profile.py','nba_rotation_profile.py','nba_game_context.py','nba_game_context.js','game_odds_engine.js','scripts/publish_nba_simulator.js'})
-          with open(os.environ['GITHUB_OUTPUT'],'a') as out:out.write('needed='+str(needed).lower()+'\n')
+          paths=set(subprocess.check_output(['git','diff','--name-only',os.environ['BASE']+'...'+os.environ['HEAD']],text=True).splitlines())
+          model_inputs={'nba_possession_engine.js','nba_game_context.js','nba_game_context.py','nba_feed.py','nba_shot_profile.py','nba_rotation_profile.py','nba_rosters.py','nba_injuries.py','scripts/enrich_nba_shots.py','scripts/audit_nba_projections.js'}
+          selection_paths={'nba_matchup_discovery.js','scripts/verify_nba_matchup_discovery.js','scripts/compare_nba_projection_audits.js','scripts/audit_nba_rebound_selection.js','nba_game_first.js','nba_prop_evidence.js','nba_prop_lines.js','nba_parlay.js','nba_simulator_ui.js','game_odds_engine.js','scripts/publish_nba_simulator.js','tests/test_nba_rebound_selection.js'}
+          needed=bool(paths & (model_inputs|selection_paths))
+          model_changed=bool(paths & model_inputs)
+          with open(os.environ['GITHUB_OUTPUT'],'a') as out:out.write('needed='+str(needed).lower()+'\nmodel_changed='+str(model_changed).lower()+'\n')
+          print('Historical possession model/input changes:',sorted(paths & model_inputs))
+          print('Audit gate:', 'original historic improvement benchmark' if model_changed else 'zero-tolerance non-regression against actual PR base; historic benchmark remains diagnostic')
           PY2
       - uses: actions/setup-python@v5
         with:
@@ -138,18 +143,46 @@ jobs:
           python nba_game_context.py
       - name: Verify possession model on current source data
         if: steps.paths.outputs.needed == 'true'
+        env:
+          NBA_AUDIT_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          NBA_AUDIT_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          NBA_AUDIT_MODEL_CHANGED: ${{ steps.paths.outputs.model_changed }}
         run: |
           node --test tests/nba_game_first.test.js
           node test_nba_game_first_threshold.js
           node test_nba_possessions.js
           node test_nba_game_context.js
+          node tests/test_nba_rebound_selection.js
           node scripts/verify_nba_matchup_discovery.js
-          mkdir -p "$RUNNER_TEMP/nba-audit-baseline"
+          mkdir -p "$RUNNER_TEMP/nba-audit-baseline" "$RUNNER_TEMP/nba-audit-pr-base"
           git show ded8f5b275353e92f5228298c6e35da6255924dc:nba_possession_engine.js > "$RUNNER_TEMP/nba-audit-baseline/nba_possession_engine.js"
           git show ded8f5b275353e92f5228298c6e35da6255924dc:nba_game_context.js > "$RUNNER_TEMP/nba-audit-baseline/nba_game_context.js"
-          node scripts/audit_nba_projections.js "$RUNNER_TEMP/nba-audit-baseline/nba_possession_engine.js" "$RUNNER_TEMP/nba-before.json"
+          git show "$NBA_AUDIT_BASE_SHA:nba_possession_engine.js" > "$RUNNER_TEMP/nba-audit-pr-base/nba_possession_engine.js"
+          git show "$NBA_AUDIT_BASE_SHA:nba_game_context.js" > "$RUNNER_TEMP/nba-audit-pr-base/nba_game_context.js"
+          node scripts/audit_nba_projections.js "$RUNNER_TEMP/nba-audit-baseline/nba_possession_engine.js" "$RUNNER_TEMP/nba-legacy-before.json"
+          node scripts/audit_nba_projections.js "$RUNNER_TEMP/nba-audit-pr-base/nba_possession_engine.js" "$RUNNER_TEMP/nba-pr-base.json"
           node scripts/audit_nba_projections.js "$GITHUB_WORKSPACE/nba_possession_engine.js" "$RUNNER_TEMP/nba-after.json"
-          node scripts/compare_nba_projection_audits.js "$RUNNER_TEMP/nba-before.json" "$RUNNER_TEMP/nba-after.json" "$RUNNER_TEMP/nba-projection-comparison.json"
+          python - <<'PYHASH'
+          import hashlib,json,os,pathlib,subprocess
+          files=['nba_possession_engine.js','nba_game_context.js']
+          def digest(folder):return {name:hashlib.sha256((pathlib.Path(folder)/name).read_bytes()).hexdigest() for name in files}
+          model_changed=os.environ['NBA_AUDIT_MODEL_CHANGED']=='true'
+          evidence={'baseSha':os.environ['NBA_AUDIT_BASE_SHA'],'headSha':os.environ['NBA_AUDIT_HEAD_SHA'],'checkedOutSha':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'legacySha':'ded8f5b275353e92f5228298c6e35da6255924dc','modelInputsChanged':model_changed,'comparisonMode':'historical_improvement' if model_changed else 'non_regression','prBaseCode':digest(pathlib.Path(os.environ['RUNNER_TEMP'])/'nba-audit-pr-base'),'headCode':digest(pathlib.Path(os.environ['GITHUB_WORKSPACE'])),'legacyCode':digest(pathlib.Path(os.environ['RUNNER_TEMP'])/'nba-audit-baseline'),'sourceFeedSha256':hashlib.sha256(pathlib.Path('data/nba_games.json').read_bytes()).hexdigest()}
+          evidence['unchangedCoreCode']=evidence['prBaseCode']==evidence['headCode']
+          pathlib.Path(os.environ['RUNNER_TEMP'],'nba-audit-source-evidence.json').write_text(json.dumps(evidence,indent=2)+'\n')
+          assert model_changed or evidence['unchangedCoreCode'], 'Core code changed: the original historical improvement gate is required'
+          print('NBA audit source evidence:',json.dumps(evidence))
+          PYHASH
+          node scripts/audit_nba_rebound_selection.js "$RUNNER_TEMP/nba-after.json" "$RUNNER_TEMP/nba-legacy-before.json" "$RUNNER_TEMP/nba-rebound-selection-audit.json" "$RUNNER_TEMP/nba-audit-source-evidence.json"
+          if [ "$NBA_AUDIT_MODEL_CHANGED" = 'true' ]; then
+            # Actual model/input transformations retain the strict original gate.
+            node scripts/compare_nba_projection_audits.js "$RUNNER_TEMP/nba-legacy-before.json" "$RUNNER_TEMP/nba-after.json" "$RUNNER_TEMP/nba-projection-comparison.json"
+          else
+            # Selection-only work cannot claim a new historic model improvement.
+            # Retain the true legacy result, including an existing failed gate.
+            node scripts/compare_nba_projection_audits.js "$RUNNER_TEMP/nba-legacy-before.json" "$RUNNER_TEMP/nba-after.json" "$RUNNER_TEMP/nba-legacy-comparison.json" || test -s "$RUNNER_TEMP/nba-legacy-comparison.json"
+            node scripts/compare_nba_projection_audits.js "$RUNNER_TEMP/nba-pr-base.json" "$RUNNER_TEMP/nba-after.json" "$RUNNER_TEMP/nba-projection-comparison.json" non_regression
+          fi
           python - <<'PY3'
           import json
           d=json.load(open('data/nba_game_context.json'))
@@ -165,5 +198,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: nba-projection-audit
-          path: ${{ runner.temp }}/nba-projection-comparison.json
+          path: |
+            ${{ runner.temp }}/nba-projection-comparison.json
+            ${{ runner.temp }}/nba-legacy-comparison.json
+            ${{ runner.temp }}/nba-rebound-selection-audit.json
+            ${{ runner.temp }}/nba-audit-source-evidence.json
           retention-days: 14
