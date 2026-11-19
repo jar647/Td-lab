@@ -101,7 +101,7 @@ assert(results.scores(ufcGroups).includes('Wilson'),'UFC score rendering remains
 const page=fs.readFileSync('results.html','utf8'),controller=fs.readFileSync('results.js','utf8');
 assert(page.indexOf('nba_prop_validation.js')<page.indexOf('results.js'));
 assert.match(page,/id="nba-prop-validation-panel" hidden/);
-assert(page.includes('results.js?v=issue130-v1'));
+assert(page.includes('results.js?v=issue130-results-v2'));
 const elements=new Map();
 function el(id){
  if(!elements.has(id)){
@@ -135,5 +135,11 @@ vm.createContext(sandbox);vm.runInContext(controller,sandbox,{timeout:5000});
  el('board').value='ALL';el('board').onchange();assert.equal(el('nba-prop-validation-panel').hidden,false);
  el('sport').value='NBA';el('date').value='2026-11-01';el('date').onchange();assert.equal(el('nba-prop-validation-panel').hidden,true);
  assert.equal(JSON.stringify(todayPicks),originalTodayPicks,'Dashboard rendering cannot mutate captured results or evidence');
+ // Automatic threshold tracking belongs to the selected sport, independently of NBA-only validation.
+ todayPicks.push(pick('auto-nfl',{sport:'NFL',board:'Automatic OVER alternate lines',market:'rushYards',side:'over',line:49.5,probability:.7,day:'2026-11-18',startsAt:'2026-11-18T20:00:00Z'}),pick('auto-nba',{sport:'NBA',board:'Automatic OVER alternate lines',market:'points',side:'over',line:19.5,probability:.8,day:'2026-11-18',startsAt:'2026-11-18T20:00:00Z'}));
+ el('date').value='ALL';el('board').value='ALL';el('outcome').value='ALL';el('sport').value='NFL';el('sport').onchange();
+ assert.equal(el('nba-prop-validation-panel').hidden,true);assert.equal(el('automatic-over-calibration').hidden,false);assert(el('automatic-over-calibration').innerHTML.includes('NFL rushYards OVER 49.5'));assert(!el('automatic-over-calibration').innerHTML.includes('NBA points OVER'));
+ el('sport').value='NBA';el('sport').onchange();assert.equal(el('automatic-over-calibration').hidden,false);assert(el('automatic-over-calibration').innerHTML.includes('NBA points OVER 19.5'));assert(!el('automatic-over-calibration').innerHTML.includes('NFL rushYards OVER'));
+ el('sport').value='UFC';el('sport').onchange();assert.equal(el('automatic-over-calibration').hidden,true);
  console.log('NBA prop validation: frozen/model/market/policy isolation, game-cluster uncertainty, matched line/role score checks and NBA-only filtered dashboard PASS');
 })().catch(error=>{console.error(error);process.exitCode=1});
