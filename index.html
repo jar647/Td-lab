@@ -1414,6 +1414,7 @@ const slipTicketHost=document.createElement("section");document.getElementById("
 PropShopSlipTicket.mount({host:slipTicketHost,slip:CookItUpQuickSlip,getState:()=>nflTopPlaysView?.getBuilderState(),workerFactory:()=>new Worker("./nfl_game_worker.js?v=nfl-ten-legs-v1"),eligible:PropShopNFLParlay.eligible,pricing:CookItUpPricing});
 const researchSlipHost=document.createElement('section');document.getElementById('quickSlipPanel').appendChild(researchSlipHost);
 PropShopResearchSlip.mount({host:researchSlipHost,slip:CookItUpQuickSlip,getNFL:()=>nflTopPlaysView?.getBuilderState(),nflWorker:()=>new Worker('./nfl_game_worker.js?v=nfl-ten-legs-v1')});
+const advancedSlip=document.createElement('details');advancedSlip.innerHTML='<summary>Advanced NFL ticket check · up to 10 legs</summary>';document.getElementById('quickSlipPanel').appendChild(advancedSlip);advancedSlip.appendChild(slipTicketHost);
 startNFLInjuryRefresh();
 </script></body></html>
 
