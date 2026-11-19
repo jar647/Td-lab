@@ -13,7 +13,7 @@ const untouched=JSON.stringify(pool);
 let result=api.generate(pool,{now});assert.equal(result.requested,3);assert.equal(result.shortfall,0);assert.deepEqual(result.legs.map(c=>c.p.player_id),['a','d','e'],'full pool supplies different games beyond the first three candidates');assert.equal(result.legs[0],pool[0],'draft keeps original candidate objects');assert.equal(JSON.stringify(pool),untouched,'generation never mutates source candidates');
 result=api.generate([...pool].reverse(),{now,count:4});assert.deepEqual(result.legs.map(c=>c.p.player_id),['a','d','e','f']);assert.equal(new Set(result.legs.map(c=>c.fixture.game_id)).size,4);
 result=api.generate(pool,{now,count:4,mode:'same',gameId:'AB'});assert.equal(result.legs.length,3);assert.equal(result.shortfall,1);assert.match(result.reason,/no filler/i);assert.equal(new Set(result.legs.map(c=>c.p.player_id)).size,3);assert(result.legs.every(c=>c.fixture.game_id==='AB'));
-for(const count of [0,1,5,2.5,'3',NaN,Infinity,null])assert.deepEqual(api.generate(pool,{now,count}).legs,[],'invalid count '+count);
+for(const count of [0,1,11,2.5,'3',NaN,Infinity,null])assert.deepEqual(api.generate(pool,{now,count}).legs,[],'invalid count '+count);
 for(const options of [{mode:'same'},{mode:'same',gameId:'unknown'},{mode:'other'},{now:NaN}])assert.deepEqual(api.generate(pool,{now,...options}).legs,[]);
 assert.deepEqual(api.generate(null,{now}).legs,[]);
 const invalid=[
@@ -38,12 +38,16 @@ combined=api.combine([group('AB',2,0,10000)],{combinedOdds:'+100'});assert.equal
 combined=api.combine([group('AB',1,6000,2000),group('CD',1,0,0)],{combinedOdds:'+100'});assert.equal(combined.pushOnlyRate,0);assert.equal(combined.lossRate,1);assert.equal(combined.modelDifference,-.5,'another always-losing group leaves no surviving reduced-ticket path');
 for(const price of [undefined,null,'','   '])assert.equal(api.combine([group('AB')],{combinedOdds:price}).price,null);
 for(const price of ['-90','-110.5','Infinity',0,[],{},false])assert.equal(api.combine([group('AB')],{combinedOdds:price}).status,'invalid-odds');
-for(const groups of [null,[],[group('AB'),group('AB')],[group('AB',1)],Array.from({length:5},(_,i)=>group(String(i),1))])assert.equal(api.combine(groups,{}).status,'unavailable');
+for(const groups of [null,[],[group('AB'),group('AB')],[group('AB',1)],Array.from({length:11},(_,i)=>group(String(i),1))])assert.equal(api.combine(groups,{}).status,'unavailable');
 const badGroups=[
- p=>{p.count=999},p=>{p.count='10000'},p=>{p.count=1000.5},p=>{p.legs=0},p=>{p.legs=5},p=>{p.allWinCount=-1},p=>{p.allWinCount=6000.5},p=>{p.nonLossCount=5000},p=>{p.pushOnlyCount=1},p=>{p.lossCount=3999},p=>{p.allWinRate=null},p=>{p.allWinRate='0.6'},p=>{p.allWinRate=.61},p=>{p.nonLossRate=Infinity},p=>{p.nonLossRate=.6-1e-11},p=>{p.pushOnlyRate=NaN},p=>{delete p.lossRate}
+ p=>{p.count=999},p=>{p.count='10000'},p=>{p.count=1000.5},p=>{p.legs=0},p=>{p.legs=11},p=>{p.allWinCount=-1},p=>{p.allWinCount=6000.5},p=>{p.nonLossCount=5000},p=>{p.pushOnlyCount=1},p=>{p.lossCount=3999},p=>{p.allWinRate=null},p=>{p.allWinRate='0.6'},p=>{p.allWinRate=.61},p=>{p.nonLossRate=Infinity},p=>{p.nonLossRate=.6-1e-11},p=>{p.pushOnlyRate=NaN},p=>{delete p.lossRate}
 ];
 for(const mutate of badGroups){const g=group('AB');mutate(g.parlay);assert.equal(api.combine([g],{}).status,'unavailable',String(mutate))}
 const zeroId=group('');assert.equal(api.combine([zeroId],{}).status,'unavailable');
 const inputGroups=[group('AB',1),group('CD',1)],before=JSON.stringify(inputGroups);api.combine(inputGroups,{combinedOdds:'+200'});assert.equal(JSON.stringify(inputGroups),before);
 const browser={PropVaultGoal1:goal,CookItUpPricing:pricing};vm.runInNewContext(fs.readFileSync('nfl_parlay.js','utf8'),browser);assert.equal(typeof browser.PropShopNFLParlay.generate,'function');assert.equal(browser.PropShopNFLParlay.combine([group('AB')],{}).status,'ready');
 console.log('NFL parlay helper: full-pool distinct drafts, history/injury/PASS safeguards, joint counts, push paths and actual combined prices PASS');
+
+const tenPool=Array.from({length:10},(_,i)=>candidate("ten"+i,"A"+i));
+assert.equal(api.generate(tenPool,{now,count:10}).legs.length,10);
+assert.equal(api.combine(Array.from({length:10},(_,i)=>group("g"+i,1))).status,"ready");

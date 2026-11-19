@@ -93,3 +93,8 @@ for(const malformed of [null,false,'legs',{},[],[valid,valid],Array(1),Array(5).
  assert.throws(()=>run(malformed),/parlay|Parlay|player market/, 'unsupported or malformed parlay is unavailable, not a fabricated zero');
 }
 console.log('NFL parlay engine: exact correlated outcomes, whole/half lines, pushes, unsupported guards and unchanged seeded simulations PASS');
+const tenLineup=['A','B'].flatMap(team=>[player(team,team+'q','QB',{p:35,py:250}),...Array.from({length:4},(_,i)=>player(team,team+i,'WR',{t:6,c:4,y:45}))]);
+const tenLegs=tenLineup.map(p=>leg(p.player_id,p.pos==='QB'?'passYards':'recYards',10,'over'));
+const tenResult=engine.simulate(tenLineup,count,seed,[],{parlayLegs:tenLegs});
+assert.equal(tenResult.parlay.legs,10);partition(tenResult);
+assert.throws(()=>engine.simulate(tenLineup,count,seed,[],{parlayLegs:[...tenLegs,tenLegs[0]]}),/Parlay/);

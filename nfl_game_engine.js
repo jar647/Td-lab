@@ -211,8 +211,8 @@ function simulate(records,count=10000,seed=1307,selected=[],options={}){
  }
  let parlayLegs=null;
  if(options.parlayLegs!==undefined){
-  if(!Array.isArray(options.parlayLegs)||options.parlayLegs.length<1||options.parlayLegs.length>4)
-   throw Error('Parlay legs must be an array of one to four supported player props');
+  if(!Array.isArray(options.parlayLegs)||options.parlayLegs.length<1||options.parlayLegs.length>10)
+   throw Error('Parlay legs must be an array of one to ten supported player props');
   const seen=new Set();parlayLegs=[];
   for(const leg of options.parlayLegs){
    if(!leg||typeof leg!=='object'||Array.isArray(leg))throw Error('Each parlay leg must be a player prop object');

@@ -63,7 +63,7 @@
   return .35*mean(legs.map(r=>r.balance))+.25*mean(legs.map(r=>r.quality))+.25*mean(legs.map(r=>r.stability))+.15*clamp(m.jointFrequency/Math.pow(.75,legs.length))-penalty;
  }
  function optimize(candidates,offers,simulations,{count=3,mode='across',gameId,now=Date.now()}={}){
-  if(!Number.isInteger(count)||count<2||count>4||!['same','across'].includes(mode)||mode==='same'&&!gameId)return empty('Choose two to four legs and a supported ticket type.',count);
+  if(!Number.isInteger(count)||count<2||count>10||!['same','across'].includes(mode)||mode==='same'&&!gameId)return empty('Choose two to ten legs and a supported ticket type.',count);
   const pool=prepare(candidates,offers,simulations,now).filter(r=>mode!=='same'||r.game===String(gameId));
   const intrinsic=r=>.35*r.balance+.25*r.quality+.25*r.stability+.15*r.rate;
   pool.sort((a,b)=>intrinsic(b)-intrinsic(a)||a.identity.localeCompare(b.identity));
