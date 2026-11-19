@@ -72,6 +72,31 @@ const validGroups=validation.analyze(saved.ledger.picks,{now});
 assert.equal(validGroups.counts.eligibleProps,16);
 assert(validGroups.groups.every(g=>g.metadataComplete===8),'both milestone and strict-over metadata satisfy forward validation');
 
+// Context availability can be newer than the published injury snapshot. Freeze
+// the source actually selected by the shared context/role model, not the older
+// snapshot merely because it was the adapter's injuries argument.
+const published={...inputs.injuries,generated_at:new Date(now-2*3600000).toISOString()};
+const latestReport={...inputs.injuries,generated_at:new Date(now-2*60000).toISOString()};
+const latestContext={generated_at:new Date(now-60000).toISOString(),availability:latestReport};
+const activeTimes={games:stamp,rosters:stamp,injuries:latestReport.generated_at};
+const refreshed=capture({nbaInputs:{...inputs,injuries:published,context:latestContext},
+ nbaMatchups:{labels:{points:'points'},analyze:(g,feed,rosters,injuries,at,{context})=>{
+  const active=require('./nba_game_context').availability(context,g,injuries,at);
+  assert.equal(active.generated_at,latestReport.generated_at);
+  return {ready:true,candidates:best.map(r=>({...r,roleEvidence:{...r.roleEvidence,inputTimes:{games:feed.generated_at,rosters:rosters.generated_at,injuries:active.generated_at}}}))};
+ }},
+ nbaGameFirst:{...gameFirst,analyze:()=>({rows,inputTimes:activeTimes})}});
+for(const pick of refreshed.picks.filter(p=>['Best Props','Game-first recommendations'].includes(p.board))){
+ assert.equal(pick.inputs.games,stamp);
+ assert.equal(pick.inputs.rosters,stamp);
+ assert.equal(pick.inputs.injuries,latestReport.generated_at,'fresher selected context injury provenance must replace the published stamp');
+ assert.equal(pick.inputs.context,latestContext.generated_at);
+}
+const historicalPick={...refreshed.picks[0],inputs:{feed:stamp,rosters:stamp,injuries:published.generated_at}};
+const priorCapture=ledger.capture(null,[historicalPick],now).ledger;
+assert.deepEqual(ledger.capture(priorCapture,refreshed.picks,now+1000).ledger.picks[0],priorCapture.picks[0],
+ 'fresher source provenance is recorded only on new captures; saved original inputs never change');
+
 // The adapter must independently preserve the public 85/100 OVER policy.
 const invalidScores=[84,84.999,100.001,NaN,null,undefined,'90'];
 const rejectedBest=invalidScores.map((researchScore,i)=>({...best[0],playerId:'bad-best-'+i,researchScore}));

@@ -94,5 +94,20 @@ const old={key:'late|player|rebounds',game:late,gameId:'late',playerId:'player',
  before('nba_prop_evidence.js','nba_matchup_discovery.js');before('nba_prop_lines.js','nba_matchup_discovery.js');
  before('nba_matchup_discovery.js','nba_game_first.js');before('nba_prop_lines.js','nba_game_first.js');
  before('nba_parlay.js','nba_parlay_ui.js');before('nba_game_first.js','nba_selection_ui.js');
- console.log('NBA selection page: failed-refresh and in-flight-source holds, fresh Quick Slip evidence, Eastern identity preservation, honest rate units and quick builder wiring PASS');
+
+ // Initial network requests may finish after a newer user-triggered refresh.
+ // Late responses must not restore a cleared injury designation or old slate.
+ const delayed=new Map(),core=['nba_game_context','nba_rosters','nba_injuries','nba_games'];
+ context.fetch=url=>core.some(name=>url==='./data/'+name+'.json')?new Promise(resolve=>delayed.set(url,resolve)):Promise.resolve({ok:false});
+ element('games').value='';element('show').click=()=>{};
+ const initialLoad=evaluate('init()');assert.equal(delayed.size,4);
+ context.raceFresh={feed:{generated_at:stamp,games:[late]},rosters:{generated_at:stamp,teams:{Home:['player']},revision:'current'},injuries:{generated_at:stamp,status:'ok',injuries:[{player_id:'player',status:'OUT'}]},context:{generated_at:stamp,revision:'current'}};
+ evaluate('updateNBASelectionInputs(raceFresh)');
+ const olderStamp='2026-11-18T16:00:00Z',older={nba_game_context:{generated_at:olderStamp,revision:'old'},nba_rosters:{generated_at:olderStamp,teams:{Home:['old-player']},revision:'old'},nba_injuries:{generated_at:olderStamp,status:'ok',injuries:[]},nba_games:{generated_at:olderStamp,games:[fixture('old-slate','2026-11-18T22:00:00Z')]}};
+ for(const name of core)delayed.get('./data/'+name+'.json')({ok:true,json:async()=>older[name]});
+ await initialLoad;await new Promise(resolve=>setImmediate(resolve));
+ assert.deepEqual(plain(evaluate('({games:generatedAt,rosters:rosterData.generated_at,injuries:injuryData.generated_at,context:nbaGameContext.generated_at})')),{games:stamp,rosters:stamp,injuries:stamp,context:stamp},'Late init responses must not replace newer scan source timestamps');
+ assert.equal(evaluate('injuryData.injuries[0]?.status'),'OUT','A newer verified OUT designation survives a late older initial report');
+ assert.deepEqual(plain(evaluate('games.map(g=>g.id)')),['late'],'A late older game feed cannot restore a previous slate');
+ console.log('NBA selection page: monotonic startup sources, failed-refresh and in-flight-source holds, fresh Quick Slip evidence, Eastern identity preservation, honest rate units and quick builder wiring PASS');
 })().catch(error=>{console.error(error);process.exitCode=1});
