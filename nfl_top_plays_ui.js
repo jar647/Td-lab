@@ -129,7 +129,7 @@
    const caret=focus&&typeof active.selectionStart==='number'?{start:active.selectionStart,end:active.selectionEnd}:null;
    const labels={ALL:'Best single from each game',PASS:'Best passing plays',RUSH:'Best rushing plays',REC:'Best receiving plays',CATCH:'Best reception plays',TD:'Top 10 anytime TD scorers'};
    if(heading)heading.textContent=(category==='ALL'&&result?.fixture?'Top three OVER matchup plays':labels[category])+' · '+(result?.fixture?result.fixture.away+' @ '+result.fixture.home:'All games');
-   if(options.description)options.description.textContent=category==='ALL'?'One Best Single per game · 60/100 minimum.':'Best plays in each category · 60/100 minimum.';
+   if(options.description)options.description.textContent=category==='ALL'?(result?.fixture?'Top three distinct OVER matchup plays · 60/100 minimum.':'One Best Single per game · 60/100 minimum.'):'Best plays in each category · 60/100 minimum.';
    const rows=loading&&category!=='TD'?[]:rowsFor(result);
    const passes=category==='ALL'&&!loading?gameModels(result).filter(game=>!top.select(game,'ALL',1).length):[];
    const passHTML=passes.map(game=>'<section class="matchrow nfl-top-pass" data-game-id="'+esc(fixtureId(game.fixture))+'"><h3>'+esc(game.fixture.away+' @ '+game.fixture.home)+'</h3><p class="notice">PASS · '+esc(game.reason||'No supported play meets the 60/100 minimum and availability requirements.')+'</p></section>').join('');
@@ -137,7 +137,7 @@
    if(focus){const replacement=Array.from(host.querySelectorAll?.('input')||[]).find(node=>node.dataset[focus.field]===focus.key);replacement?.focus({preventScroll:true});if(caret)replacement?.setSelectionRange(caret.start,caret.end)}
    const games=result?.games||(result?.ready?[result.fixture]:[]),completed=games.filter(g=>cache.has(fixtureId(g))||failed.has(fixtureId(g))).length;
    const unavailable=games.filter(g=>failed.has(fixtureId(g))).length;
-   const coverage=category==='ALL'?rows.length+' best '+(rows.length===1?'single':'singles')+' · '+games.length+' '+(games.length===1?'game':'games')+(passes.length?' · '+passes.length+' PASS':''):rows.length+' qualifying '+(rows.length===1?'play':'plays');
+   const coverage=category==='ALL'&&!result?.fixture?rows.length+' best '+(rows.length===1?'single':'singles')+' · '+games.length+' '+(games.length===1?'game':'games')+(passes.length?' · '+passes.length+' PASS':''):rows.length+' qualifying '+(rows.length===1?'play':'plays');
    if(status)status.textContent=loading&&category!=='TD'?'Analyzing '+completed+' of '+games.length+' games for the best plays…':
     error?(rows.length?'Showing supported TD research. ':'')+error:coverage+
     (unavailable?' · '+unavailable+' game simulation'+(unavailable===1?'':'s')+' unavailable':'')+' · Matchup scores, not win probabilities. Verify player status and sportsbook lines.';
