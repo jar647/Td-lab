@@ -1,5 +1,5 @@
 /* Worker keeps 10k–100k correlated game simulations off the page thread. */
-importScripts('./nfl_game_engine.js?v=nfl-parlay-v6');
+importScripts('./nfl_game_engine.js?v=nfl-offered-lines-v1');
 self.onmessage=function(event){
  const {players,count,seed,selected,requestId,options}=event.data||{};
  try{

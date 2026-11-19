@@ -7,7 +7,7 @@ const engine=require('./nfl_game_engine.js');
 const goal1=require('./nfl_goal1.js');
 const topPlays=require('./nfl_top_plays.js');
 const html=fs.readFileSync('analyst.html','utf8');
-assert(html.includes('src="./nfl_game_engine.js?v=nfl-depth-chart-qb-v4"'),'analyst must load simulator engine');
+assert(html.includes('src="./nfl_game_engine.js?v=nfl-offered-lines-v1"'),'analyst must load simulator engine');
 assert(html.includes('nfl_game_worker.js'),'analyst must execute off-thread');
 const inline=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)]
  .map(x=>x[1]).filter(x=>x.trim());

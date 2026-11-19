@@ -5,7 +5,9 @@
 */
 (function(root){
 "use strict";
-const MODEL_VERSION='game-first-volume-v4-depth-chart-qb';
+const LEGACY_MODEL_VERSION='game-first-volume-v4-depth-chart-qb';
+const MODEL_VERSION='game-first-volume-v5-counts-catch';
+const DEFAULT_EFFICIENCY_PROFILE='sample_counts';
 const MARKETS={
  rushYards:[25,40,50,60,70,80,100],
  recYards:[20,25,30,40,50,60,70,80,100],
@@ -36,7 +38,7 @@ function firstUnitQuarterback(p,now){
  if(!Number.isFinite(observed)||observed>now+300000||now-observed>72*3600000||!Number.isInteger(season)||season<1900)return false;
  return p.season===null||p.season===undefined||p.season===''||sourceNumber(p.season)===season;
 }
-function playerParams(p){
+function playerParams(p,efficiencyProfile){
  const history=Array.isArray(p.seasonGameStats)?p.seasonGameStats:[];
  const fields=p.pos==='QB'?['passAttempts','rushAttempts','rushYards']:['targets','receptions','recYards','rushAttempts','rushYards'];
  if(history.some(r=>!r||fields.some(k=>finite(r[k])===null)))return null;
@@ -45,9 +47,10 @@ function playerParams(p){
  const key=String(p.player_id||p.team+'|'+p.player);
  const rec=mean(history,'receptions'),targets=mean(history,'targets'),carries=mean(history,'rushAttempts');
  const pass=mean(history,'passAttempts');
- const yardsPerCatch=clamp((mean(history,'recYards')+35)/(rec+3),3,23);
+ const yardsPerCatch=clamp(efficiencyProfile==='sample_counts'?(history.reduce((s,r)=>s+(finite(r.recYards)??0),0)+35)/(history.reduce((s,r)=>s+(finite(r.receptions)??0),0)+3):(mean(history,'recYards')+35)/(rec+3),3,23);
  const rushPerCarry=clamp((mean(history,'rushYards')+18)/(carries+4),1.7,7);
- const targetRate=clamp((rec+3)/(targets+6),.28,.88);
+ const catches=history.reduce((sum,r)=>sum+(finite(r.receptions)??0),0),targetCount=history.reduce((sum,r)=>sum+(finite(r.targets)??0),0);
+ const targetRate=clamp(efficiencyProfile==='sample_counts'?(catches+3)/(targetCount+6):(rec+3)/(targets+6),.28,.88);
  const norm=history.slice(-5);
  const usage=(field)=>.65*mean(history,field)+.35*mean(norm,field);
  const ratios=p.defenseOpponentRatio||{};
@@ -59,7 +62,7 @@ function playerParams(p){
    [p.injuryReportStatus,p.availability,p.injuryPracticeStatus].join('|').toUpperCase()),
   pass:usage('passAttempts'),targets:usage('targets'),carries:usage('rushAttempts'),
   verifiedTeamPass:finite(p.teamPassAttemptsPerGame),
-  catchRate:targetRate,ypc:yardsPerCatch,ypcarry:rushPerCarry,
+  catchRate:targetRate,catchRateEvidence:{profile:efficiencyProfile,catches,targets:targetCount,priorCatches:3,priorTargets:6},ypc:yardsPerCatch,ypcarry:rushPerCarry,
   passMatch:clamp(finite(ratios.PASS)??1,.85,1.12),
   recMatch:clamp(finite(ratios.REC)??1,.85,1.12),
   rushMatch:clamp(finite(ratios.RUSH)??1,.85,1.12),
@@ -69,10 +72,12 @@ function playerParams(p){
 function build(records,options={}){
  if(!Array.isArray(records)||!records.length)throw Error('No matchup player records');
  if(!options||typeof options!=='object'||Array.isArray(options))throw Error('Simulation options must be an object');
+ const efficiencyProfile=options.efficiencyProfile??DEFAULT_EFFICIENCY_PROFILE;
+ if(!['legacy','sample_counts'].includes(efficiencyProfile))throw Error('Unsupported receiver efficiency profile');
  const quarterbackChoices=options.quarterbacks===undefined?{}:options.quarterbacks;
  if(!quarterbackChoices||typeof quarterbackChoices!=='object'||Array.isArray(quarterbackChoices))
   throw Error('Conditional quarterbacks must be an object mapping teams to player IDs');
- const entries=records.filter(p=>p&&p.team&&p.opp&&!blocked(p)).map(playerParams).filter(Boolean);
+ const entries=records.filter(p=>p&&p.team&&p.opp&&!blocked(p)).map(p=>playerParams(p,efficiencyProfile)).filter(Boolean);
  if(new Set(entries.map(p=>p.id)).size!==entries.length)throw Error('Duplicate player identity in matchup inputs');
  const teams=[...new Set(records.map(p=>String(p.team)))].sort();
  if(teams.length!==2)throw Error('Exactly two teams are required for one game');
@@ -150,7 +155,7 @@ function build(records,options={}){
  });
  if(league.some(t=>t.roster.length<(t.outlook.quarterbackPlayerPropsAvailable?4:3)))
   throw Error('Not enough position-verified offensive players for complete matchup');
- return {teams:league,players:entries};
+ return {teams:league,players:entries,efficiencyProfile};
 }
 function simulate(records,count=10000,seed=1307,selected=[],options={}){
  if(!Number.isInteger(count)||count<1000||count>100000)throw Error('Simulation count must be 1,000 to 100,000');
@@ -183,6 +188,16 @@ function simulate(records,count=10000,seed=1307,selected=[],options={}){
   supportedMarkets.add(marketKey(p.id,market));
   if(settlementBins)settlementBins.set(marketKey(p.id,market),new Map());
   for(const line of lines)hits.set(JSON.stringify([p.id,market,line]),0);
+ }
+ const outcomeRows=new Map();
+ if(options.collectPlayerOutcomes!==undefined&&options.collectPlayerOutcomes!==false){
+  const requested=options.collectPlayerOutcomes===true?[...supportedMarkets].map(key=>{const [id,market]=JSON.parse(key);return {id,market}}):options.collectPlayerOutcomes;
+  if(!Array.isArray(requested)||requested.length>160)throw Error('Outcome collection requires at most 160 supported player markets');
+  for(const row of requested){
+   const key=marketKey(String(row?.id||''),row?.market);
+   if(!supportedMarkets.has(key))throw Error('Cannot collect an unsupported player market');
+   if(!outcomeRows.has(key))outcomeRows.set(key,[]);
+  }
  }
  // Unsupported selections are missing model coverage, not zero-probability
  // outcomes. Custom positive thresholds remain valid for supported markets.
@@ -255,6 +270,8 @@ function simulate(records,count=10000,seed=1307,selected=[],options={}){
   }
   for(const p of model.players){
    for(const [market,lines] of Object.entries(MARKETS)){
+    const outcomes=outcomeRows.get(marketKey(p.id,market));
+    if(outcomes)outcomes.push(Math.floor(p.output[market]));
     const bins=settlementBins?.get(marketKey(p.id,market));
     if(bins){
      // Whole-number settlement is a review convention. Flooring preserves
@@ -303,8 +320,14 @@ function simulate(records,count=10000,seed=1307,selected=[],options={}){
   scenarioAvgPasses:Math.round(sumScores[t.team].passes/count*10)/10,
   scenarioAvgRushes:Math.round(sumScores[t.team].rushes/count*10)/10
  }));
- return {status:'RESEARCH_ONLY_UNCALIBRATED',modelVersion:MODEL_VERSION,inputAudit:model.players.map(p=>({id:p.id,name:p.name,team:p.team,games:p.gameCount,history:p.history,sourceAvailability:p.sourceAvailability,historicalPassingYards:p.historicalPassingYards,historicalPassAttempts:p.historicalPassAttempts,modeledPassAttempts:p.pos==='QB'&&!supportedMarkets.has(marketKey(p.id,'passYards'))?null:p.pass,passingMatchupFactor:p.passMatch,receivingMatchupFactor:p.recMatch,rushingMatchupFactor:p.rushMatch,participationAssumption:p.pos==='QB'&&!supportedMarkets.has(marketKey(p.id,'passYards'))?'Not selected as the modeled quarterback; named QB passing and rushing scenarios are unavailable. Game-day starting status is not confirmed.':'Assumes listed eligible player participates; game-day active status is not confirmed'})),audit:{passingReceivingConservation:true},
+ const outputVersion=model.efficiencyProfile==='legacy'?LEGACY_MODEL_VERSION:MODEL_VERSION;
+ let fingerprint=2166136261;
+ const evidence=JSON.stringify(model.players.map(p=>[p.id,p.team,p.pos,p.pass,p.targets,p.carries,p.catchRate,p.ypc,p.ypcarry,p.passMatch,p.recMatch,p.rushMatch,p.sourceAvailability]));
+ for(let i=0;i<evidence.length;i++)fingerprint=Math.imul(fingerprint^evidence.charCodeAt(i),16777619);
+ const outcomeSetId=[outputVersion,seed,count,(fingerprint>>>0).toString(16)].join('|');
+ return {status:'RESEARCH_ONLY_UNCALIBRATED',modelVersion:outputVersion,efficiencyProfile:model.efficiencyProfile,inputAudit:model.players.map(p=>({id:p.id,name:p.name,team:p.team,games:p.gameCount,history:p.history,sourceAvailability:p.sourceAvailability,catchRate:p.catchRate,catchRateEvidence:p.catchRateEvidence,historicalPassingYards:p.historicalPassingYards,historicalPassAttempts:p.historicalPassAttempts,modeledPassAttempts:p.pos==='QB'&&!supportedMarkets.has(marketKey(p.id,'passYards'))?null:p.pass,passingMatchupFactor:p.passMatch,receivingMatchupFactor:p.recMatch,rushingMatchupFactor:p.rushMatch,participationAssumption:p.pos==='QB'&&!supportedMarkets.has(marketKey(p.id,'passYards'))?'Not selected as the modeled quarterback; named QB passing and rushing scenarios are unavailable. Game-day starting status is not confirmed.':'Assumes listed eligible player participates; game-day active status is not confirmed'})),audit:{passingReceivingConservation:true},
   count,seed,teams:summary,markets,unavailableMarkets,
+  ...(outcomeRows.size?{outcomeSetId,playerOutcomes:[...outcomeRows].map(([key,values])=>{const [id,market]=JSON.parse(key);return {id,market,values,outcomeSetId}})}:{}),
   ...(settlementBins?{settlements:[...settlementBins].map(([key,bins])=>{
    const [id,market]=JSON.parse(key);
    return {id,market,count,bins:[...bins].sort((a,b)=>a[0]-b[0])};

@@ -31,7 +31,7 @@ function mergeRecords(feed,rosterPlayers){
  }
  return result;
 }
-function choose(p,d,scenarioLookup){
+function choose(p,d,scenarioLookup,options={}){
  if(!p||!d||!byMarket[d.key]||!scenarioLookup||typeof scenarioLookup.get!=='function')return null;
  d=byMarket[d.key];
  if(p.qbRole==='BACKUP'||board.isReserveQuarterback(p)||!d.positions.includes(p.pos)||p.playerAppearancesVerified===false)return null;
@@ -49,7 +49,7 @@ function choose(p,d,scenarioLookup){
  const viable=d.steps.map(line=>{
   const scenario=scenarioLookup.get(id+'|'+d.key+'|'+line);
   return {line,hits:last.filter(v=>v>=line).length,scenarioRate:n(scenario?.scenarioRate),modeledMean:n(scenario?.modeledMean)};
- }).filter(x=>x.line>=floor&&x.scenarioRate!==null&&x.scenarioRate>=.57&&x.scenarioRate<=1&&x.modeledMean>0&&x.line<=x.modeledMean*1.04);
+ }).filter(x=>x.line>=floor&&x.scenarioRate!==null&&x.scenarioRate>=(options.forParlay?.01:.57)&&x.scenarioRate<=1&&x.modeledMean>0&&(options.forParlay||x.line<=x.modeledMean*1.04));
  if(!viable.length)return null;
  // The target is a balanced threshold preference, not a calibrated chance
  // requirement or a matchup score. Do not reward the easiest high-rate line.
@@ -124,12 +124,14 @@ function build(records,fixture,simulation,options={}){
   const key=String(row.id)+'|'+row.market+'|'+row.line;
   if(lookup.has(key)||duplicates.has(key)){lookup.delete(key);duplicates.add(key)}else lookup.set(key,row);
  }
- const candidates=[];
+ const candidates=[],parlayCandidates=[];
  try{
   for(const d of defs){
    const rows=board.rows(records,d.ratio,{game:gameKey(verified),excluded:p=>excluded(options,p,d.ratio,'',d.key)});
    for(const row of rows.filter(r=>r.recommendable)){
-    const c=choose(row.record,d,lookup);if(!c)continue;
+    const c=choose(row.record,d,lookup),option=c||choose(row.record,d,lookup,{forParlay:true});
+    if(option){const key=[fixtureId(verified),option.p.team,identity(option.p),d.key].join('|');if(!excluded(options,option.p,d.ratio,key,d.key))parlayCandidates.push({...option,key,market:d.key,category:d.ratio,side:'at_least',rating:row.rating,roleLabel:row.roleLabel,opponentContext:row.opponentContext,alternatives:alternatives(option,lookup)});}
+    if(!c)continue;
     const key=[fixtureId(verified),c.p.team,identity(c.p),d.key].join('|');if(excluded(options,c.p,d.ratio,key,d.key))continue;
     candidates.push({...c,key,market:d.key,category:d.ratio,side:'at_least',rating:row.rating,roleLabel:row.roleLabel,opponentContext:row.opponentContext,alternatives:alternatives(c,lookup)});
    }
@@ -146,7 +148,7 @@ function build(records,fixture,simulation,options={}){
   }
  }catch{return empty('Player eligibility or exclusion evidence is unavailable.');}
  candidates.sort(order);
- const result={ready:true,status:simulationAvailable?'ok':'partial',reason:null,candidates,topThree:[],bestSingle:null,visible:[],fixture:verified};
+ const result={ready:true,status:simulationAvailable?'ok':'partial',reason:null,candidates,parlayCandidates,topThree:[],bestSingle:null,visible:[],fixture:verified};
  result.topThree=select(result);result.bestSingle=result.topThree[0]||null;
  const visible=new Map();for(const category of categories)for(const c of select(result,category))visible.set(c.key,c);result.visible=[...visible.values()].sort(order);
  if(!simulationAvailable)result.reason=candidates.length?'Simulated yardage and reception lines are unavailable; independently supported anytime-TD plays remain.':'Simulations are unavailable and no supported anytime-TD play meets the 60/100 minimum.';
@@ -161,7 +163,7 @@ function slate(records,fixtures,simulations,options={}){
  const schedule=Array.isArray(fixtures)?fixtures:Array.isArray(fixtures?.games)?fixtures.games:[];
  const ids=new Map();
  for(const fixture of schedule){const id=fixtureId(fixture);if(id)ids.set(id,(ids.get(id)||0)+1)}
- const result=empty(null);let available=0;
+ const result=empty(null);result.parlayCandidates=[];let available=0;
  for(const fixture of schedule){
   const id=fixtureId(fixture);
   const simulation=id&&typeof simulations?.get==='function'?simulations.get(id):null;
@@ -174,6 +176,7 @@ function slate(records,fixtures,simulations,options={}){
   result.games.push(model.fixture);
   if(Array.isArray(simulation?.markets))available++;
   result.candidates.push(...model.candidates.map(candidate=>({...candidate,fixture:model.fixture})));
+  result.parlayCandidates.push(...(model.parlayCandidates||[]).map(candidate=>({...candidate,fixture:model.fixture})));
  }
  if(!result.games.length){result.reason='No verified upcoming NFL games within the next seven days are available.';return result}
  result.ready=true;result.candidates.sort(order);
