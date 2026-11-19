@@ -7,8 +7,9 @@
  const decode=value=>JSON.parse(decodeURIComponent(value));
  let picks=[];
  try{const saved=JSON.parse(root.localStorage?.getItem(KEY)||'[]');if(Array.isArray(saved))picks=saved}catch(_){}
+ const listeners=new Set();
  let panel,launcher,ratingRecovery;
- function save(){try{root.localStorage?.setItem(KEY,JSON.stringify(picks))}catch(_){}update()}
+ function save(){try{root.localStorage?.setItem(KEY,JSON.stringify(picks))}catch(_){}update();for(const fn of listeners)fn()}
  function button(pick){return '<button type="button" class="quick-slip-add" data-quick-slip="'+encode(pick)+'">＋ Add to Quick Slip</button>'}
  function createButton(pick){
   const el=root.document.createElement('button');el.type='button';el.className='quick-slip-add';el.dataset.quickSlip=encode(pick);el.textContent='＋ Add to Quick Slip';return el;
@@ -129,7 +130,7 @@
   });
   update();
  }
- const api={button,createButton,addFromButton,formatRecommendation:recommendation,formatRating,recoverRatings,setRatingRecovery:fn=>{ratingRecovery=fn;update()},add:pick=>{const b={dataset:{quickSlip:encode(pick)},textContent:'Added',classList:{add(){}},isConnected:false};addFromButton(b)},open,clear:()=>{picks=[];save()},getPicks:()=>picks.map(x=>({...x}))};
+ const api={onChange:fn=>{listeners.add(fn);return ()=>listeners.delete(fn)},button,createButton,addFromButton,formatRecommendation:recommendation,formatRating,recoverRatings,setRatingRecovery:fn=>{ratingRecovery=fn;update()},add:pick=>{const b={dataset:{quickSlip:encode(pick)},textContent:'Added',classList:{add(){}},isConnected:false};addFromButton(b)},open,clear:()=>{picks=[];save()},getPicks:()=>picks.map(x=>({...x}))};
  root.CookItUpQuickSlip=api;
  if(root.document)mount();
 })(typeof window!=='undefined'?window:globalThis);

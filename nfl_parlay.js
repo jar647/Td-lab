@@ -30,9 +30,9 @@
    ((p.team===g.home&&p.opp===g.away)||(p.team===g.away&&p.opp===g.home))&&Number.isFinite(kickoff)&&kickoff>now&&kickoff-now<=7*86400000;
  }
  function generate(candidates,{count=3,mode='across',gameId,now=Date.now()}={}){
-  const requested=Number.isInteger(count)&&count>=2&&count<=4?count:0;
+  const requested=Number.isInteger(count)&&count>=2&&count<=10?count:0;
   const empty=reason=>({legs:[],requested,shortfall:requested,reason});
-  if(!requested)return empty('Choose 2 to 4 legs.');
+  if(!requested)return empty('Choose 2 to 10 legs.');
   if(mode!=='across'&&mode!=='same')return empty('Choose across games or one specified game.');
   if(!finite(now)||!Array.isArray(candidates))return empty('Current supported NFL candidates are unavailable.');
   const selectedGame=id(gameId);if(mode==='same'&&!selectedGame)return empty('Choose a verified game for a same-game draft.');
@@ -73,7 +73,7 @@
   return {legs,requested:5,shortfall,reason:(shortfall?'Only '+legs.length+' qualifying anytime-TD plays; no filler legs added. ':'')+'Scores are research rankings, not touchdown probabilities.'};
  }
  function validGroup(group){
-  const p=group?.parlay;if(!id(group?.gameId)||!p||!Number.isSafeInteger(p.count)||p.count<1000||!Number.isInteger(p.legs)||p.legs<1||p.legs>4)return false;
+  const p=group?.parlay;if(!id(group?.gameId)||!p||!Number.isSafeInteger(p.count)||p.count<1000||!Number.isInteger(p.legs)||p.legs<1||p.legs>10)return false;
   const fields=['allWin','nonLoss','pushOnly','loss'];
   if(fields.some(name=>!Number.isSafeInteger(p[name+'Count'])||p[name+'Count']<0||p[name+'Count']>p.count||
    !finite(p[name+'Rate'])||p[name+'Rate']<0||p[name+'Rate']>1||Math.abs(p[name+'Rate']-p[name+'Count']/p.count)>1e-10))return false;
@@ -81,8 +81,8 @@
  }
  function combine(groups,{combinedOdds}={}){
   const empty=status=>({status,allWinRate:null,pushOnlyRate:null,lossRate:null,groups:[],independentGames:false,price:null,modelDifference:null,play:false,verifiedValue:false});
-  if(!Array.isArray(groups)||!groups.length||groups.length>4||groups.some(group=>!validGroup(group))||new Set(groups.map(group=>id(group.gameId))).size!==groups.length)return empty('unavailable');
-  const legs=groups.reduce((total,group)=>total+group.parlay.legs,0);if(legs<2||legs>4)return empty('unavailable');
+  if(!Array.isArray(groups)||!groups.length||groups.length>10||groups.some(group=>!validGroup(group))||new Set(groups.map(group=>id(group.gameId))).size!==groups.length)return empty('unavailable');
+  const legs=groups.reduce((total,group)=>total+group.parlay.legs,0);if(legs<2||legs>10)return empty('unavailable');
   const entered=combinedOdds!==null&&combinedOdds!==undefined&&(typeof combinedOdds!=='string'||!!combinedOdds.trim());
   const price=entered&&(typeof combinedOdds==='number'||typeof combinedOdds==='string')?pricing?.quote(combinedOdds):null;
   if(entered&&!price)return empty('invalid-odds');

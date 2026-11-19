@@ -34,3 +34,9 @@ for(const invalid of [offer(b,-1),offer(b,50.1),offer(b,49.5,'-90'),offer(b,0.5)
 const pushes=new Map([['AB',simulation([[b,Array(1000).fill(50)],[c,values(800)]])]]);assert.equal(api.optimize([b,c],[offer(b,50),offer(c)],pushes,{count:2,mode:'same',gameId:'AB',now}).available,false,'all pushes cannot masquerade as a supported win leg');
 const prices=api.optimize(pool,offers.map(o=>({...o,odds:'+200'})),sims,{count:3,mode:'same',gameId:'AB',now});assert.deepEqual(prices.legs.map(x=>x.key),result.legs.map(x=>x.key));assert.equal(prices.jointFrequency,result.jointFrequency,'prices cannot alter simulation outcomes or matchup scores');
 console.log('NFL offered-line optimizer: complete shared-outcome search, alternative lines, distinct players/games, quality balance, exact pushes, source/data guards and price independence PASS');
+
+const tenPool=Array.from({length:10},(_,i)=>candidate("ten"+i,80,"g"+i));
+const tenSims=new Map(tenPool.map(p=>[p.fixture.game_id,simulation([[p,values(750)]],p.fixture.game_id)]));
+const ten=api.optimize(tenPool,tenPool.map(p=>offer(p)),tenSims,{count:10,mode:"across",now});
+assert(ten.available);assert.equal(ten.legs.length,10);assert(Math.abs(ten.jointFrequency-Math.pow(.75,10))<1e-12);
+assert.equal(api.optimize(tenPool,tenPool.map(p=>offer(p)),tenSims,{count:11,now}).available,false);

@@ -68,7 +68,7 @@
    const pool=researchPool(s).filter(c=>c.market!=='anytime_td'&&(mode!=='same'||gameId(c)===game));
    if(!pool.some(c=>c.key===offerChoice))offerChoice=pool[0]?.key||'';
    host.innerHTML='<p class="muted">Enter alternative lines your book offers, then compare complete tickets using matchup quality, observed workload, line difficulty and shared game outcomes. Matchup scores stay separate from prices.</p>'+
-    '<div class="grid"><label>Legs<select data-parlay-count aria-label="Parlay leg count">'+[2,3,4].map(n=>'<option value="'+n+'"'+(n===count?' selected':'')+'>'+n+' legs</option>').join('')+'</select></label>'+
+    '<div class="grid"><label>Legs<select data-parlay-count aria-label="Parlay leg count">'+[2,3,4,5,6,7,8,9,10].map(n=>'<option value="'+n+'"'+(n===count?' selected':'')+'>'+n+' legs</option>').join('')+'</select></label>'+
     '<label>Ticket type<select data-parlay-mode aria-label="Parlay ticket type"><option value="across"'+(mode==='across'?' selected':'')+'>Different games</option><option value="same"'+(mode==='same'?' selected':'')+'>Same game</option></select></label></div>'+
     (mode==='same'?'<label>Matchup<select data-parlay-game aria-label="Parlay matchup">'+fixtures.map(g=>{const id=String(g.game_id??g.id);return '<option value="'+esc(id)+'"'+(id===game?' selected':'')+'>'+esc(g.away+' @ '+g.home)+'</option>'}).join('')+'</select></label>':'')+
     '<details class="nfl-offered-options" open><summary>Book options · '+offers.length+' entered</summary><p class="statsline">Add multiple players or alternative lines for the same player. Only one leg per player can be selected. Enter strict OVER lines: 3+ catches corresponds to OVER 2.5.</p>'+
