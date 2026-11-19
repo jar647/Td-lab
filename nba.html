@@ -49,6 +49,7 @@ function nbaMatchupCard(row){
 }
 function renderNBAMatchups(g){if(typeof CookNBAMatchups==='undefined')return;const r=nbaMatchupResearch(g),w=r.weaknesses.filter(nbaOverRecommendation).slice(0,12);let section=$('nba-matchup-discovery');if(!section){section=document.createElement('section');section.id='nba-matchup-discovery';section.className='panel';$('output').append(section)}section.innerHTML='<h2>Where to look &amp; why</h2><p>Opponent position allowances → player roles → supported baselines → historical hit-rate dropdowns.</p>'+(w.length?'<h3>Position matchups to target</h3>'+w.map(x=>'<p><strong>'+esc(x.team)+' · '+x.position+' '+esc(x.market)+'</strong>: '+x.allowed.toFixed(1)+' allowed/game vs '+x.leagueAverage.toFixed(1)+' league average ('+x.games+' games). Look at '+esc(x.attacking)+' '+x.position+' '+esc(x.market)+' props.</p>'+nbaDefenseDetails(x)).join(''):'<p class="warn">Position allowances are pending sufficient sourced position coverage.</p>')+'<h3>Best starting point</h3><p>'+esc(r.bestSingle?r.bestSingle.name+' · '+(r.bestSingle.side==='under'?'UNDER '+r.bestSingle.baseline:r.bestSingle.baseline+'+')+' '+r.bestSingle.market:'PASS · No supported OVER 85+ matchup')+'</p><h3>Top player matchups</h3>'+r.topThree.map(nbaMatchupCard).join('')+(r.reason?'<p class="warn">'+esc(r.reason)+'</p>':'')+'<p class="muted">Default alternates use the shared role-adjusted line policy; dropdown percentages are recorded results, not predicted win probabilities. '+esc(r.method)+'</p>';}
 async function scanNBAMatchups(){
+ nbaAutoScanStarted=true;
  const button=$('scan-slate');if(button.disabled)return;button.disabled=true;$('slate-results').textContent='Refreshing games, rosters and availability…';
  try{
   if(!nbaSelectionController||typeof CookNBAMatchups==='undefined')throw Error('NBA selection tools are unavailable. Refresh the page and retry.');
@@ -89,7 +90,7 @@ function addNBAFirstBasketPick(key){
 let nbaGameContext=null;
 const $=id=>document.getElementById(id);let games=[];let historicalGames=[];let generatedAt='';let currentProjections=[];let injuryData=null;let rosterData=null;let seasonData=null;let opportunityData=null;let freeStatsData=null;
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let nbaSelectionController=null,nbaParlayController=null,nbaAutoAltView=null,nbaResearchSlip=null,nbaResearchSignature=null;
+let nbaSelectionController=null,nbaParlayController=null,nbaAutoAltView=null,nbaResearchSlip=null,nbaResearchSignature=null,nbaAutoScanStarted=false;
 function nbaEasternDay(value){const parts=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(value)).map(x=>[x.type,x.value]));return parts.year+'-'+parts.month+'-'+parts.day;}
 function updateNBASelectionInputs(payload){
  if(nbaResearchSignature!==null&&nbaResearchSignature!==payload.signature)nbaResearchSlip?.invalidate();nbaResearchSignature=payload.signature;
@@ -866,6 +867,7 @@ async function dailyLearning(){
  }catch(e){$('learning').textContent='Daily learning report unavailable: '+e.message+'. Model calibration is not verified.'}
 }
 setupNBASelection();init();audit();dailyLearning();
+const autoResearchRefresh=typeof setInterval==='function'?setInterval(()=>{if(nbaAutoScanStarted&&!document.hidden&&!$('scan-slate').disabled)scanNBAMatchups();},60000):null;autoResearchRefresh?.unref?.();
 
 if(typeof CookNBALiveContext!=='undefined'){
  setInterval(()=>{const g=games[Number($('games').value)];if(g&&Date.parse(g.date)>Date.now()&&Date.parse(g.date)-Date.now()<=90*60000)nbaGameFirstRefresh();},5*60000);
