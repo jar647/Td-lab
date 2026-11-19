@@ -30,7 +30,7 @@
    }catch(e){if(token===version)cancel('Unavailable · '+e.message+' No partial joint probability.')}finally{if(token===version){busy=false;button.disabled=false}}}
   list.addEventListener('change',e=>{if(e.target.dataset.researchSelect===undefined)return;const p=slip.getPicks()[Number(e.target.dataset.researchSelect)];if(!p)return;if(e.target.checked&&selected.size>=5){e.target.checked=false;out.textContent='Maximum five selected research legs.';return}if(e.target.checked)selected.add(p.key);else selected.delete(p.key);cancel('Selection changed. Check the updated research.');price.value='';});
   button.addEventListener('click',run);price.addEventListener('input',()=>{priceAt=now();render()});const unsubscribe=slip.onChange(()=>{cancel('Slip changed. Recheck selected research.');price.value='';listPicks()});listPicks();
-  const timer=setInterval(()=>{if((result||busy)&&(fingerprint()!==lastFingerprint||now()>=expires||getNFL&&picksSport()==='NFL'&&(getNFL()?.signature!==signature||!getNFL()?.ready))){cancel('Sources, slip or kickoff changed. Run a fresh check.');price.value='';}},1000);
+  const timer=setInterval(()=>{if(result&&priceAt!==null&&now()-priceAt>15*60000){priceAt=null;render()}if((result||busy)&&(fingerprint()!==lastFingerprint||now()>=expires||getNFL&&picksSport()==='NFL'&&(getNFL()?.signature!==signature||!getNFL()?.ready))){cancel('Sources, slip or kickoff changed. Run a fresh check.');price.value='';}},1000);
   function picksSport(){return slip.getPicks().find(p=>selected.has(p.key))?.sport;}
   return {run,invalidate(){if(busy&&picksSport()==='NBA'&&!result)return;cancel('Source data changed. Recheck the selected research.');price.value='';},destroy(){cancel();clearInterval(timer);unsubscribe()}};
  }
