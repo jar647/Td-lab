@@ -1410,9 +1410,8 @@ async function loadNFLGamePicks(options={}){
 
 drawPositions();save();renderBoard();loadGamePicks();loadAutoFeed();loadPerformance();loadProjectionTracker();loadProbabilityStatus();
 setInterval(loadHardRockStatus,60000);
-startNFLInjuryRefresh();
-
 const slipTicketHost=document.createElement("section");document.getElementById("quickSlipPanel").appendChild(slipTicketHost);
 PropShopSlipTicket.mount({host:slipTicketHost,slip:CookItUpQuickSlip,getState:()=>nflTopPlaysView?.getBuilderState(),workerFactory:()=>new Worker("./nfl_game_worker.js?v=nfl-ten-legs-v1"),eligible:PropShopNFLParlay.eligible,pricing:CookItUpPricing});
+startNFLInjuryRefresh();
 </script></body></html>
 
