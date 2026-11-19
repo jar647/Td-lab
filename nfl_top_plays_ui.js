@@ -1,10 +1,10 @@
 /* Compact NFL game-first recommendations. Shared selection lives in nfl_top_plays.js. */
 (function(root,factory){
  const common=typeof module==='object'&&module.exports;
- const api=factory(common?require('./nfl_top_plays.js'):root.PropShopNFLTopPlays,common?require('./nfl_book_review.js'):root.PropShopNFLBookReview);
+ const api=factory(common?require('./nfl_top_plays.js'):root.PropShopNFLTopPlays,common?require('./nfl_book_review.js'):root.PropShopNFLBookReview,common?require('./js/alt-line-cards.js'):root.PropShopAltCards);
  if(typeof module==='object'&&module.exports)module.exports=api;
  root.PropShopNFLTopPlaysUI=api;
-})(typeof globalThis!=='undefined'?globalThis:this,function(top,book){
+})(typeof globalThis!=='undefined'?globalThis:this,function(top,book,altCards){
  'use strict';
  const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const pair=p=>[String(p.team||''),String(p.opp||'')].sort().join('|');
@@ -84,21 +84,24 @@
   function bookSection(row){
    if(row.market==='anytime_td')return '';
    const quote=quotes.get(row.key)||{line:'',odds:''};
-   return '<section class="nfl-top-book-review" aria-label="Book price comparison for '+esc(row.p.player)+'"><h4>Compare your book</h4>'+
+   return '<details class="nfl-top-book-review" aria-label="Book price comparison for '+esc(row.p.player)+'"><summary>Optional sportsbook comparison</summary><h4>Compare your book</h4>'+
     '<div class="grid"><label>Book OVER line<input type="number" inputmode="decimal" min="0" max="10000" step="0.5" placeholder="49.5" data-book-line="'+esc(row.key)+'" aria-label="Book OVER line for '+esc(row.p.player)+'" value="'+esc(quote.line)+'"></label>'+
     '<label>American odds<input type="text" inputmode="text" placeholder="-110 or +150" data-book-odds="'+esc(row.key)+'" aria-label="American odds for '+esc(row.p.player)+'" value="'+esc(quote.odds)+'"></label></div>'+
     '<p class="statsline" data-book-result="'+esc(row.key)+'" aria-live="polite">'+bookResult(row)+'</p>'+
-    '<details class="nfl-top-evidence"><summary>How this comparison works</summary><p>A book OVER 50 wins at 51 or more and pushes at 50. The 50+ alternate above includes 50. Simulated yardage totals are rounded down to whole yards for this comparison. Your entered price does not change the matchup score or saved recommendation.</p></details></section>';
+    '<details class="nfl-top-evidence"><summary>How this comparison works</summary><p>A book OVER 50 wins at 51 or more and pushes at 50. The 50+ alternate above includes 50. Simulated yardage totals are rounded down to whole yards for this comparison. Your entered price does not change the matchup score or saved recommendation.</p></details></details>';
   }
   function card(row,index){
    const p=row.p,alt=chosen(row),isTD=row.market==='anytime_td';
    const fixture=row.fixture||result.fixture;
+   const input=inputs(),research=isTD?null:altCards.nfl(row,cache.get(fixtureId(fixture))?.settlements?.find(r=>r.id===String(p.player_id)&&r.market===row.market),{now:now(),sourceUpdatedAt:input.state.feedGeneratedAt,startsAt:fixture?.kickoff_at,maxAgeMs:48*3600000,injuryUnresolved:/OUT|DOUBTFUL|QUESTIONABLE|DNP/.test(String(p.injuryReportStatus)+' '+String(p.injuryPracticeStatus)+' '+String(p.availability))});
+   const researchHTML=research?'<p class="muted">Strict OVER '+(alt.line-.5)+' equals '+alt.line+'+ on whole-number results.</p>'+altCards.html(research,{line:alt.line-.5,historyGames:alt.sample,caveats:row.risks||[]}):'';
    const line=isTD?'Anytime rushing / receiving TD':alt.line+'+ '+row.d.label;
    const usage=(row.reasons||[]).find(s=>/^Workload:/.test(s));
    const evidence=row.opponentContext;
    const opposing=evidence?p.opp+' allows '+Number(evidence.value).toFixed(1)+' '+(isTD?'TDs':row.d.label)+' per game vs '+p.pos:
     (row.reasons||[]).find(s=>/Opponent|opponent/.test(s));
    const recent=finite(alt.hits)&&finite(alt.sample)&&alt.sample>0?'Recent clears '+alt.hits+'/'+alt.sample:'Recent sample unavailable';
+   const held=!isTD&&/OUT|DOUBTFUL|QUESTIONABLE|DNP/.test(String(p.injuryReportStatus)+' '+String(p.injuryPracticeStatus)+' '+String(p.availability));
    const questionable=String(p.availability).toUpperCase()==='QUESTIONABLE'||String(p.injuryReportStatus).toUpperCase()==='QUESTIONABLE';
    const alternatives=!isTD&&(row.alternatives||[]).length>1?'<label class="nfl-top-line-label">Alternate line<select data-top-line="'+esc(row.key)+'" aria-label="Alternate line for '+esc(p.player)+'">'+
     row.alternatives.map(a=>'<option value="'+a.line+'"'+(Number(a.line)===Number(alt.line)?' selected':'')+'>'+a.line+'+ '+esc(row.d.label)+' · '+(simulationPercent(a.scenarioRate)===null?'Simulation unavailable':simulationPercent(a.scenarioRate)+' simulated')+'</option>').join('')+'</select></label>':'';
@@ -114,8 +117,8 @@
     (fixture?'<p class="statsline nfl-top-matchup">'+esc(fixture.away+' @ '+fixture.home)+'</p>':'')+
     (questionable?'<p class="notice">QUESTIONABLE · verify the official active list</p>':'')+'<p class="nfl-top-selection">'+esc(line)+'</p>'+
     '<div class="bar"><div style="width:'+row.researchScore+'%"></div></div><p class="statsline">'+esc(opposing||'Opponent evidence requires review.')+'</p>'+
-    (usage?'<p class="statsline">'+esc(usage)+'</p>':'')+'<p class="statsline">'+esc(recent)+'</p>'+alternatives+simulated+bookSection(row)+
-    '<button type="button" class="primary nfl-top-add" data-top-add="'+esc(row.key)+'">＋ Add '+(isTD?'to':alt.line+'+ to')+' Quick Slip</button>'+
+    (usage?'<p class="statsline">'+esc(usage)+'</p>':'')+'<p class="statsline">'+esc(recent)+'</p>'+alternatives+simulated+researchHTML+bookSection(row)+
+    '<button type="button" class="primary nfl-top-add" data-top-add="'+esc(row.key)+'"'+(held?' disabled':'')+'>＋ Add '+(isTD?'to':alt.line+'+ to')+' Quick Slip</button>'+
     '<details class="nfl-top-evidence"><summary>Why this play?</summary>'+breakdown+
     selectionReasons(row,alt).map(s=>'<p>'+esc(s)+'</p>').join('')+'<p>'+esc(row.roleLabel||'Game-day starting status requires confirmation.')+'</p>'+
     (row.risks||[]).map(s=>'<p class="notice">'+esc(s)+'</p>').join('')+link+'</details></article>';
@@ -224,6 +227,7 @@
    const row=pending&&category!=='TD'?null:rowsFor(fresh).find(r=>r.key===key);
    if(!row){result=fresh;render(!!pending);return false}
    const alt=chosen(row),td=row.market==='anytime_td';
+   if(!td&&/OUT|DOUBTFUL|QUESTIONABLE|DNP/.test(String(row.p.injuryReportStatus)+' '+String(row.p.injuryPracticeStatus)+' '+String(row.p.availability)))return false;
    if(!td&&!(row.alternatives||[]).some(a=>a.line===alt.line))return false;
    const fixture=row.fixture||fresh.fixture;if(!fixture)return false;
    options.quickSlip.add({sport:'NFL',game:fixture.away+' @ '+fixture.home,gameId:fixture.game_id??fixture.id,
@@ -231,7 +235,7 @@
     side:td?'winner':'at_least',recommendationLine:td?null:alt.line,line:td?null:alt.line,
     recommendation:td?'Anytime rushing / receiving TD':alt.line+'+ '+row.d.label,
     researchScore:row.researchScore,sampleHits:alt.hits??null,sampleSize:alt.sample??null,
-    scenarioRate:td?null:alt.scenarioRate,notes:selectionReasons(row,alt).join(' ')});
+    scenarioRate:td?null:alt.scenarioRate,researchMethod:td?'anytime-td':'unpriced-over-alt-v1',matchupConfidence:row.researchScore,probabilityCalibrated:false,sourceUpdatedAt:x.state.feedGeneratedAt,startsAt:fixture.kickoff_at,playerId:String(row.p.player_id),sportsbookAvailable:null,notes:selectionReasons(row,alt).join(' ')});
    if(status)status.textContent='Added '+row.p.player+' to Quick Slip.';
    return true;
   }

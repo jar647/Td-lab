@@ -66,8 +66,9 @@ for(const pick of gamePicks){
  assert.notEqual(pick.probability,pick.inputs.selectionEvidence.line.frequency);
  assert.deepEqual(pick.inputs.selectionEvidence,expected);
 }
+const automatic=result.picks.filter(p=>p.board==='Automatic OVER alternate lines');assert.equal(automatic.length,12);assert.equal(new Set(automatic.map(p=>p.playerId)).size,3);assert(automatic.every(p=>p.side==='over'&&p.inputs.alternateLineResearch.priced===false&&p.inputs.alternateLineResearch.calibrated===false));
 const saved=ledger.capture(null,result.picks,now);
-assert.equal(saved.added,17,'both complete prop boards and the separate first-basket pick survive capture');
+assert.equal(saved.added,29,'both complete prop boards and the separate first-basket pick survive capture');
 const validGroups=validation.analyze(saved.ledger.picks,{now});
 assert.equal(validGroups.counts.eligibleProps,16);
 assert(validGroups.groups.every(g=>g.metadataComplete===8),'both milestone and strict-over metadata satisfy forward validation');

@@ -60,6 +60,7 @@
  }
  function validRating(pick){return typeof pick.propScore==='number'&&Number.isInteger(pick.propScore)&&pick.propScore>=0&&pick.propScore<=100}
  function formatRating(pick){
+  if(pick.researchMethod==='unpriced-over-alt-v1')return 'Matchup confidence '+esc(pick.matchupConfidence??pick.researchScore)+'/100 · heuristic, not probability · unpriced';
   if(pick.sport!=='NBA')return '';
   if(pick.researchMethod==='position-history')return 'Position matchup · historical results';
   if(Number(pick.matchupBoost)>0&&pick.matchupGames)return 'Matchup research · not a priced bet';
@@ -90,7 +91,7 @@
  function recoverRatings(resolve){
   let recovered=0,unresolved=0,changed=false;
   for(const pick of picks){
-   if(pick.sport!=='NBA'||pick.researchMethod==='position-history'||validRating(pick))continue;
+   if(pick.sport!=='NBA'||['position-history','unpriced-over-alt-v1'].includes(pick.researchMethod)||validRating(pick))continue;
    const result=resolve({...pick});if(!result)continue;
    if(validRating(result)){
     for(const key of ['propScore','ratedLine','ratedSide','ratedOdds','overOdds','underOdds'])if(result[key]!==undefined)pick[key]=result[key];
@@ -104,7 +105,7 @@
   if(!panel||!launcher)return;
   const count=panel.querySelector('[data-slip-count]');if(count)count.textContent=String(picks.length);
   launcher.textContent='Quick Slip · '+picks.length;
-  const repair=panel.querySelector('.quick-slip-repair');if(repair)repair.hidden=!ratingRecovery||!picks.some(p=>p.sport==='NBA'&&p.researchMethod!=='position-history'&&!validRating(p));
+  const repair=panel.querySelector('.quick-slip-repair');if(repair)repair.hidden=!ratingRecovery||!picks.some(p=>p.sport==='NBA'&&!['position-history','unpriced-over-alt-v1'].includes(p.researchMethod)&&!validRating(p));
   const list=panel.querySelector('[data-slip-list]');if(!list)return;
   list.innerHTML=picks.length?picks.map(row).join(''):'<p class="quick-slip-empty">Your slip is empty. Tap “Add to Quick Slip” beside a recommendation.</p>';
  }

@@ -114,8 +114,8 @@
     ' supported minutes; '+(100*p.probability).toFixed(1)+'% of the exact-line simulation sample. '+
     (result.gameGroups.find(g=>g.gameId===p.gameId).legs>1?'Evaluated jointly with the other legs in this game.':'Adds a distinct game exposure.') }));
  }
- function evaluate(legs,{now=Date.now()}={}){
-  if(!finite(now)||!Array.isArray(legs)||legs.length<2||legs.length>4)return empty('A parlay requires two to four supported exact-line legs.',{requested:Array.isArray(legs)?legs.length:0});
+ function evaluate(legs,{now=Date.now(),research=false}={}){
+  if(!finite(now)||!Array.isArray(legs)||legs.length<(research?1:2)||legs.length>(research?5:4))return empty('A parlay requires two to four supported exact-line legs.',{requested:Array.isArray(legs)?legs.length:0});
   const prepared=legs.map(c=>prepare(c,now));
   if(prepared.some(p=>!p))return empty('A selected player, line, role, source timestamp or upcoming fixture is no longer supported.',{requested:legs.length});
   if(new Set(prepared.map(p=>p.key)).size!==prepared.length)return empty('Selected legs must have distinct, unambiguous identities.',{requested:legs.length});
@@ -205,5 +205,5 @@
   return {...evaluate(legs,{now}),requested,shortfall:0,mode,gameId:selectedGame,objective:best.objective,
    reason:'Draft balances supported matchup quality, minutes stability, line difficulty and shared game outcomes rather than taking the highest scores alone.'};
  }
- return {generate,evaluate,evaluateLeg,MIN_SAMPLES,LIMITS:[...LIMITS]};
+ return {generate,evaluate,evaluateResearch:(legs,options={})=>evaluate(legs,{...options,research:true}),evaluateLeg,MIN_SAMPLES,LIMITS:[...LIMITS]};
 });
