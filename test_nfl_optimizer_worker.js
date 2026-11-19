@@ -1,0 +1,13 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+const imports=[],messages=[],context={console,Date,Math,Number,String,Object,Array,Set,Map,JSON,Uint8Array,postMessage:m=>messages.push(JSON.parse(JSON.stringify(m)))};context.self=context;
+context.importScripts=(...urls)=>{for(const url of urls){const file=url.replace(/^\.\//,'').split('?')[0];imports.push(file);vm.runInContext(fs.readFileSync(file,'utf8'),context,{filename:file})}};
+vm.createContext(context);vm.runInContext(fs.readFileSync('nfl_parlay_optimizer_worker.js','utf8'),context);
+assert(imports.includes('nfl_parlay_optimizer.js'));assert.equal(context.PropVaultGameEngine,undefined,'search worker consumes existing outcomes without creating another simulator');
+const now=Date.parse('2026-11-19T16:00:00Z'),fixture={game_id:'AB',home:'A',away:'B',kickoff_at:new Date(now+3600000).toISOString()};
+const candidates=['A','B'].map((team,i)=>({key:team,fixture,market:'recYards',side:'at_least',line:50,scenarioRate:.8,researchScore:80,score:100,d:{label:'receiving yards'},p:{player_id:team,player:team,team,opp:team==='A'?'B':'A',pos:'WR',availability:'ROSTER_ACTIVE',injuryReportStatus:'ACTIVE',playerAppearancesVerified:true,last5GamesPlayed:5,last5GameStats:Array.from({length:5},()=>({recYards:80,targets:7}))}}));
+const sim={count:1000,outcomeSetId:'aligned',playerOutcomes:candidates.map((c,j)=>({id:c.p.player_id,market:'recYards',outcomeSetId:'aligned',values:Array.from({length:1000},(_,i)=>i>=j*200&&i<j*200+800?80:20)}))};
+context.self.onmessage({data:{requestId:5,candidates,offers:candidates.map(c=>({id:c.key,candidateKey:c.key,line:49.5,odds:'-110'})),simulations:[['AB',sim]],options:{count:2,mode:'same',gameId:'AB',now}}});
+assert.equal(messages[0].requestId,5);assert(messages[0].result.available);assert.equal(messages[0].result.jointFrequency,.6);
+context.self.onmessage({data:{requestId:6,simulations:{}}});assert.equal(messages[1].requestId,6);assert.equal(typeof messages[1].error,'string');
+console.log('NFL search worker: browser dependency loading, existing aligned outcomes, exact joint counts and request-scoped failures PASS');

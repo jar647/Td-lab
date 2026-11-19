@@ -95,5 +95,5 @@
   return {status:'ready',allWinRate,pushOnlyRate,lossRate,groups:[...groups],independentGames:groups.length>1,price,
    modelDifference:price&&!hasPushPath?allWinRate-price.implied:null,play:false,verifiedValue:false};
  }
- return {generate,generateAnytime,combine};
+ return {generate,generateAnytime,combine,eligible};
 });

@@ -29,7 +29,7 @@ function run(){
  const legs=[{id:'a-wr',market:'receptions',line:3},{id:'a-qb',market:'passYards',line:200}];
  const result=engine.simulate(lineup,1500,12,legs);
  assert.equal(result.status,'RESEARCH_ONLY_UNCALIBRATED');
- assert.equal(result.modelVersion,'game-first-volume-v4-depth-chart-qb');
+ assert.equal(result.modelVersion,'game-first-volume-v5-counts-catch');
  assert.equal(result.teams.length,2);
  assert.equal(result.joint.legs,2);
  assert(!result.markets.some(m=>m.id==='a-out'),'OUT player must be excluded');
