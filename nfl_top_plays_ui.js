@@ -54,7 +54,7 @@
    return alternatives.find(a=>Number(a.line)===value)||alternatives.find(a=>Number(a.line)===Number(row.line))||
     {line:row.line,hits:row.hits,sample:row.sample,scenarioRate:row.scenarioRate};
   }
-  function rowsFor(current){return category==='ALL'?bestSingles(current):top.select(current,category)}
+  function rowsFor(current){return category==='ALL'?(current?.fixture?top.select({...current,candidates:(current.candidates||[]).filter(c=>c.side==='at_least')},'ALL',3):bestSingles(current)):top.select(current,category)}
   function selectionReasons(row,alt){
    if(row.market==='anytime_td')return row.reasons||[];
    const percent=simulationPercent(alt.scenarioRate);
@@ -112,7 +112,7 @@
    const breakdown=finite(performance)&&finite(defense)?'<p>Player performance / usage '+performance+'/100 · Opponent vs '+esc(p.pos)+' '+defense+'/100</p>':'';
    const source=p.depthChart?.source,link=typeof source==='string'&&/^https:\/\//i.test(source)?'<p><a href="'+esc(source)+'" target="_blank" rel="noopener noreferrer">Depth-chart source</a></p>':'';
    return '<article class="matchrow nfl-top-play" data-play-key="'+esc(row.key)+'" data-game-id="'+esc(fixtureId(fixture))+'" data-player-id="'+esc(p.player_id)+'" data-score="'+row.researchScore+'">'+
-    '<div class="row"><span class="pill">'+(category==='ALL'||index===0?'BEST SINGLE':'#'+(index+1))+'</span><strong class="score mono nfl-top-score">'+row.researchScore+'<small>/100</small></strong></div>'+
+    '<div class="row"><span class="pill">'+(category==='ALL'&&!result?.fixture||index===0?'BEST SINGLE':'#'+(index+1))+'</span><strong class="score mono nfl-top-score">'+row.researchScore+'<small>/100</small></strong></div>'+
     '<h3>'+esc(p.player)+' <span class="pill">'+esc(p.team)+' · '+esc(p.pos)+'</span></h3>'+
     (fixture?'<p class="statsline nfl-top-matchup">'+esc(fixture.away+' @ '+fixture.home)+'</p>':'')+
     (questionable?'<p class="notice">QUESTIONABLE · verify the official active list</p>':'')+'<p class="nfl-top-selection">'+esc(line)+'</p>'+
@@ -128,7 +128,7 @@
    const focus=active?.dataset?.bookLine?{field:'bookLine',key:active.dataset.bookLine}:active?.dataset?.bookOdds?{field:'bookOdds',key:active.dataset.bookOdds}:null;
    const caret=focus&&typeof active.selectionStart==='number'?{start:active.selectionStart,end:active.selectionEnd}:null;
    const labels={ALL:'Best single from each game',PASS:'Best passing plays',RUSH:'Best rushing plays',REC:'Best receiving plays',CATCH:'Best reception plays',TD:'Top 10 anytime TD scorers'};
-   if(heading)heading.textContent=labels[category]+' · '+(result?.fixture?result.fixture.away+' @ '+result.fixture.home:'All games');
+   if(heading)heading.textContent=(category==='ALL'&&result?.fixture?'Top three OVER matchup plays':labels[category])+' · '+(result?.fixture?result.fixture.away+' @ '+result.fixture.home:'All games');
    if(options.description)options.description.textContent=category==='ALL'?'One Best Single per game · 60/100 minimum.':'Best plays in each category · 60/100 minimum.';
    const rows=loading&&category!=='TD'?[]:rowsFor(result);
    const passes=category==='ALL'&&!loading?gameModels(result).filter(game=>!top.select(game,'ALL',1).length):[];
