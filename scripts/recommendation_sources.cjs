@@ -16,7 +16,9 @@ function nbaSelectionEvidence(row){
   defense:defense?{basis:text(defense.allowanceBasis),normalizedAllowed:number(defense.normalizedAllowed),normalizedLeagueAverage:number(defense.normalizedLeagueAverage),shrinkage:number(defense.shrinkage)}:null};
 }
 function captureSources(now=Date.now(),overrides={}){
- const picks=[],coverage=[];const attempt=(sport,run)=>{if(overrides.onlySport&&overrides.onlySport!==sport)return;try{run()}catch(e){coverage.push({sport,status:'error',reason:e.message})}};
+ const picks=[],coverage=[],alt=require('../js/unpriced-alt-lines'),autoNBA=require('../nba_auto_alt_ui');
+ const alternateVersion='automatic-over-'+hash(['js/unpriced-alt-lines.js','nba_auto_alt_ui.js','nba_game_first.js','nfl_top_plays.js','nfl_game_engine.js']);
+ const freezeAlternates=(common,research)=>{if(research.status!=='research-only')return;for(const row of research.lines)picks.push({...common,board:'Automatic OVER alternate lines',side:'over',line:row.line,probability:row.probability,modelVersion:alternateVersion,label:common.player+' OVER '+row.line+' '+common.market,inputs:{...common.inputs,alternateLineResearch:{policy:'unpriced-over-alt-v1',sampleSize:research.sampleSize,sourceUpdatedAt:research.sourceUpdatedAt,confidence:research.confidence,pushProbability:row.pushProbability,priced:false,calibrated:false,sportsbookAvailable:null}}});};const attempt=(sport,run)=>{if(overrides.onlySport&&overrides.onlySport!==sport)return;try{run()}catch(e){coverage.push({sport,status:'error',reason:e.message})}};
  attempt('NBA',()=>{
   const matchups=overrides.nbaMatchups||require('../nba_matchup_discovery'),first=overrides.nbaFirstBasket||require('../nba_first_basket'),gf=overrides.nbaGameFirst||require('../nba_game_first');
   const feed=overrides.nbaInputs?.feed||read('data/nba_games.json'),rosters=overrides.nbaInputs?.rosters||read('data/nba_rosters.json'),injuries=overrides.nbaInputs?.injuries||read('data/nba_injuries.json'),context=overrides.nbaInputs?.context||read('data/nba_game_context.json');
@@ -32,6 +34,7 @@ function captureSources(now=Date.now(),overrides={}){
    // including qualified players outside the current top-three display.
    const universe=analysis.rows.map(r=>gf.candidate(r)).filter(Boolean);
    const selected=new Map([...universe,...ticket.picks,...ticket.topThree,...(ticket.bestSingle?[ticket.bestSingle]:[])].map(p=>[p.key,p]));
+   for(const r of autoNBA.shortlist(universe)){const research=autoNBA.research(r,now);freezeAlternates({sport:'NBA',gameId:String(g.id),startsAt:g.date,playerId:r.playerId,player:r.name,team:r.team,opponent:r.opponent,market:r.market,score:r.score,scoreKind:'Matchup confidence /100 (not probability)',reason:r.reason,inputs:{...analysis.inputTimes,selectionEvidence:nbaSelectionEvidence(r)}},research);}
    for(const r of [...selected.values()].filter(r=>String(r.side||'over').toLowerCase()==='over'&&recommendationScore(r.score)))picks.push({sport:'NBA',board:'Game-first recommendations',gameId:String(g.id),startsAt:g.date,playerId:r.playerId,player:r.name,team:r.team,market:r.market,side:r.side,line:r.line,score:r.score,probability:r.probability,scoreKind:'Matchup score /100',modelVersion:gameFirstVersion,label:r.name+' '+r.side.toUpperCase()+' '+r.line+' '+r.market,reason:r.reason,inputs:{...analysis.inputTimes,context:context?.generated_at||null,selectionEvidence:nbaSelectionEvidence(r)}});
   }
   const board=first.slate(feed,rosters,injuries,now);
@@ -49,7 +52,7 @@ function captureSources(now=Date.now(),overrides={}){
   for(const g of due){const pool=records.filter(p=>[g.home,g.away].includes(p.team)&&[g.home,g.away].includes(p.opp));if(!pool.length)continue;
    let sim=null;
    try{
-   sim=engine.simulate(pool,10000,982451653,[]);const lookup=new Map(sim.markets.map(x=>[x.id+'|'+x.market+'|'+x.line,x]));
+   sim=engine.simulate(pool,10000,982451653,[],{collectSettlements:true});const lookup=new Map(sim.markets.map(x=>[x.id+'|'+x.market+'|'+x.line,x]));
    const candidates=pool.flatMap(p=>topPlays.defs.map(d=>topPlays.choose(p,d,lookup)).filter(Boolean)).sort((a,b)=>b.score-a.score);
    const selected=new Map([...goal.rankPlayers(candidates,3),...goal.buildTicket(candidates,4)].map(c=>[goal.marketId(c),c]));
    for(const c of [...selected.values()].filter(c=>recommendationScore(c.researchScore,goal.MIN_SCORE)))picks.push({sport:'NFL',board:'Game analyst (top 3/default ticket)',gameId:g.game_id,startsAt:g.kickoff_at,playerId:String(c.p.player_id),player:c.p.player,team:c.p.team,market:c.d.key,side:'at_least',line:c.line,score:c.researchScore,scoreKind:'NFL matchup score /100',modelVersion,label:c.p.player+' '+c.line+'+ '+c.d.label,reason:c.reasons.join(' '),probability:c.scenarioRate,inputs:{feed:status.generated_at,games:games.generated_at,rawRank:c.score}});
@@ -66,6 +69,8 @@ function captureSources(now=Date.now(),overrides={}){
     for(const c of displayed.visible||[]){
      if(!recommendationScore(c.researchScore,goal.MIN_SCORE)||!['rushYards','recYards','receptions','passYards','anytime_td'].includes(c.market)||!(c.market==='anytime_td'?c.side==='winner':c.side==='at_least'&&Number.isFinite(c.line)&&c.line>0))continue;
      const touchdown=c.market==='anytime_td';
+     if(!touchdown&&!/OUT|DOUBTFUL|QUESTIONABLE|DNP/.test(String(c.p.injuryReportStatus)+' '+String(c.p.injuryPracticeStatus)+' '+String(c.p.availability))){const settlement=sim?.settlements?.find(r=>r.id===String(c.p.player_id)&&r.market===c.market),research=alt.fromSettlement(settlement,(c.alternatives||[]).map(r=>r.line-.5),{now,sourceUpdatedAt:status.generated_at,startsAt:g.kickoff_at,maxAgeMs:48*3600000,rating:c.researchScore});freezeAlternates({sport:'NFL',gameId:g.game_id,startsAt:g.kickoff_at,playerId:String(c.p.player_id),player:c.p.player,team:c.p.team,opponent:c.p.opp,market:c.market,score:c.researchScore,scoreKind:'Matchup confidence /100 (not probability)',reason:c.reasons.join(' '),inputs:{feed:status.generated_at,games:games.generated_at,rating:c.rating,opponentContext:c.opponentContext}},research);}
+
      picks.push({sport:'NFL',board:'Game top plays',gameId:g.game_id,startsAt:g.kickoff_at,playerId:String(c.p.player_id),player:c.p.player,team:c.p.team,opponent:c.p.opp,market:c.market,side:c.side,line:touchdown?null:c.line,score:c.researchScore,scoreKind:'NFL matchup score /100',modelVersion:topPlaysVersion,label:touchdown?c.p.player+' anytime rushing/receiving TD':c.p.player+' '+c.line+'+ '+c.d.label,reason:(c.reasons||[]).join(' '),...(Number.isFinite(c.scenarioRate)?{probability:c.scenarioRate}:{}),inputs:{feed:status.generated_at,games:games.generated_at,category:c.category,rawRank:c.score,rating:c.rating||null,roleLabel:c.roleLabel||null,opponentContext:c.opponentContext||null,depthChart:c.p.depthChart||null}});
     }
    }catch(error){coverage.push({sport:'NFL',gameId:g.game_id,status:'partial',reason:'Game top plays withheld: '+error.message})}

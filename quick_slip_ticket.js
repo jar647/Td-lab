@@ -4,9 +4,9 @@
  const markets={passYards:'passYards',rushYards:'rushYards',recYards:'recYards',receptions:'receptions','passing yards':'passYards','rushing yards':'rushYards','receiving yards':'recYards'};
  const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const pct=x=>(100*x).toFixed(1)+'%';
- function prepare(picks,state,now,eligible){
+ function prepare(picks,state,now,eligible,{min=2,max=10}={}){
   if(!state?.ready)throw Error(state?.reason||'Wait for current NFL research to finish.');
-  if(!Array.isArray(picks)||picks.length<2||picks.length>10)throw Error('Save 2–10 NFL player props to check a ticket.');
+  if(!Array.isArray(picks)||picks.length<min||picks.length>max)throw Error('Save '+min+'–'+max+' NFL player props to check a ticket.');
   const pool=[...(state.offeredCandidates||[]),...(state.candidates||[])],seen=new Set();
   return picks.map(p=>{
    if(p.sport!=='NFL')throw Error('This checker supports NFL yardage and reception props. Mixed sports, TD and game-line tickets cannot receive a complete percentage.');

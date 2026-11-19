@@ -39,6 +39,11 @@ on:
       - 'test_nfl_parlay_engine.js'
       - 'test_nfl_quick_slip_side.js'
       - 'quick_slip.js'
+      - 'research_slip.js'
+      - 'nba_auto_alt_ui.js'
+      - 'js/unpriced-alt-lines.js'
+      - 'js/alt-line-cards.js'
+      - 'test_auto_alt_lines.js'
       - 'quick_slip_ticket.js'
       - 'test_quick_slip_ticket.js'
       - 'test_nfl_book_review.js'
@@ -99,6 +104,7 @@ jobs:
       - run: node test_nfl_parlay_engine.js
       - run: node test_nfl_quick_slip_side.js
       - run: node test_quick_slip_ticket.js
+      - run: node test_auto_alt_lines.js
       - run: node test_nfl_history_chart.js
       - run: node test_nfl_matchup_score.js
       - run: node test_nfl_min_score_ui.js
