@@ -1,0 +1,24 @@
+'use strict';
+const assert=require('node:assert/strict'),api=require('./quick_slip_ticket'),parlay=require('./nfl_parlay');
+const now=Date.parse('2026-11-19T16:00:00Z');
+function candidate(id,game='AB') {return {key:id,market:'recYards',side:'at_least',line:30,researchScore:80,score:80,scenarioRate:.7,fixture:{game_id:game,home:game[0],away:game[1],kickoff_at:'2026-11-20T01:15:00Z'},p:{player_id:id,player:id,team:game[0],opp:game[1],pos:'WR',availability:'ROSTER_ACTIVE',playerAppearancesVerified:true,last5GamesPlayed:5,last5GameStats:[{recYards:80},{recYards:90},{recYards:70}]}}}
+const a=candidate('a'),b=candidate('b'),c=candidate('c','CD');
+const pick=c=>({sport:'NFL',player:c.p.player,playerId:c.p.player_id,team:c.p.team,opponent:c.p.opp,marketKey:c.market,gameId:c.fixture.game_id,side:'over',line:49.5});
+const state={ready:true,offeredCandidates:[a,b,c]};
+const legs=api.prepare([pick(a),pick(b)],state,now,parlay.eligible);
+const values=n=>Array.from({length:1000},(_,i)=>i<n?80:20);
+const sim=(rows,batch='one')=>({count:1000,outcomeSetId:batch,playerOutcomes:rows.map(([id,v])=>({id,market:'recYards',values:v,outcomeSetId:batch}))});
+const sims=new Map([['AB',sim([['a',values(800)],['b',values(600)]])],['CD',sim([['c',values(500)]],'two')]]);
+let result=api.analyze(legs,sims);assert.equal(result.allWin,.6);assert.notEqual(result.allWin,.8*.6);assert.equal(result.legs[0].player,'b');assert.equal(result.legs[0].without,.8);assert(result.correlations[0].coefficient>0);assert.equal(result.loss,.4);
+const cross=api.prepare([pick(a),pick(c)],state,now,parlay.eligible);assert.equal(api.analyze(cross,sims).allWin,.4);
+const pushed=api.prepare([{...pick(a),line:80},pick(b)],state,now,parlay.eligible);result=api.analyze(pushed,sims);assert.equal(result.allWin,0);assert.equal(result.pushOnly,.6);
+const plus=api.prepare([{...pick(a),line:80,side:'at_least'},pick(b)],state,now,parlay.eligible);assert.equal(api.analyze(plus,sims).allWin,.6);
+for(const picks of [[pick(a)],[pick(a),{...pick(b),sport:'NBA'}],[pick(a),{...pick(b),marketKey:'anytime_td'}],[pick(a),{...pick(b),side:'under'}],[pick(a),{...pick(b),line:null}],[pick(a),pick(a)]])assert.throws(()=>api.prepare(picks,state,now,parlay.eligible));
+assert.throws(()=>api.prepare([pick(a),pick(b)],{...state,ready:false},now,parlay.eligible));
+assert.throws(()=>api.prepare([pick(a),pick(b)],state,Date.parse('2026-11-21'),parlay.eligible));
+assert.throws(()=>api.prepare([pick(a),pick(b)],{...state,offeredCandidates:[a,{...b,p:{...b.p,injuryReportStatus:'OUT'}}]},now,parlay.eligible));
+const bad=sim([['a',values(800)],['b',values(600)]]);bad.playerOutcomes[1].outcomeSetId='other';assert.throws(()=>api.analyze(legs,new Map([['AB',bad]])));
+const sparse=sim([['a',values(800)],['b',values(600)]]);delete sparse.playerOutcomes[0].values[0];assert.throws(()=>api.analyze(legs,new Map([['AB',sparse]])));
+const ten=Array.from({length:10},(_,i)=>candidate('p'+i,'A'+i));const tenLegs=api.prepare(ten.map(pick),{ready:true,offeredCandidates:ten},now,parlay.eligible);const tenSims=new Map(ten.map(x=>[x.fixture.game_id,sim([[x.p.player_id,values(800)]],x.key)]));assert(Math.abs(api.analyze(tenLegs,tenSims).allWin-.8**10)<1e-12);
+require('./quick_slip');let changed=0;const unsub=globalThis.CookItUpQuickSlip.onChange(()=>changed++);globalThis.CookItUpQuickSlip.add(pick(a));globalThis.CookItUpQuickSlip.clear();assert.equal(changed,2);unsub();globalThis.CookItUpQuickSlip.clear();assert.equal(changed,2);
+console.log('Quick Slip ticket: shared outcomes, leave-one-out, pushes, distinct games, ten legs, injuries, unsupported/stale inputs, corrupt draws and invalidation PASS');
