@@ -72,16 +72,18 @@ const old={key:'late|player|rebounds',game:late,gameId:'late',playerId:'player',
  assert.deepEqual(plain(buildOptions.excludedMarkets),['threes']);
  context.refreshed={...refreshed,score:74};evaluate('nbaGameFirstPick(old.key)');assert.equal(saved.length,1,'A newly disqualified player cannot enter Quick Slip');
 
- // Raw per-game descriptive totals must not inherit normalized-rate percentages.
+ // Matchup research remains available internally, but the retired historical
+ // "Where to look" panel is not mounted in the game explorer.
  const weakness={team:'Away',attacking:'Home',position:'SG',market:'rebounds',side:'over',allowed:6,leagueAverage:7.5,games:10,excess:.066,
   scheduleAdjustedAllowed:6.5,scheduleAdjustedLeagueAverage:5.9,shrinkage:10/18};
  context.CookNBAMatchups.analyze=()=>({ready:true,candidates:[],weaknesses:[weakness],topThree:[],reason:'PASS',method:'Supported samples'});
- evaluate('nbaMatchupCache.clear();renderNBAMatchups(late)');
- const research=element('nba-matchup-discovery').innerHTML;
- assert.match(research,/6\.0 allowed\/game vs 7\.5 league average \(10 games\)/);
- assert.match(research,/Opponent-adjusted allowance 6\.5 vs 5\.9 league reference per 100 possessions and 48 positional minutes/);
- assert(!research.includes('+7%'),'The +6.6% normalized difference must not be presented as the raw 6 versus 7.5 comparison');
- assert.match(research,/56% sample weight/);
+ evaluate('nbaMatchupCache.clear()');
+ const research=plain(evaluate('nbaMatchupResearch(late)'));
+ assert.equal(research.weaknesses[0].allowed,6,'Raw opponent allowances remain available for other analytics');
+ assert.equal(research.weaknesses[0].scheduleAdjustedAllowed,6.5,'Normalized defensive evidence remains available for other analytics');
+ assert(!script.includes('renderNBAMatchups(g)'),'Game analysis must not render the removed historical panel');
+ assert(!source.includes('Where to look &amp; why'),'Retired panel must not appear in the app');
+ assert(source.includes('NBA Best Props')&&source.includes('Quick Slip'),'Best Props and Quick Slip remain available');
 
  // The redundant parlay generator is removed while NBA Best Props and First Basket remain.
  const main=source.slice(0,source.indexOf('<script'));
@@ -107,5 +109,5 @@ const old={key:'late|player|rebounds',game:late,gameId:'late',playerId:'player',
  assert.deepEqual(plain(evaluate('({games:generatedAt,rosters:rosterData.generated_at,injuries:injuryData.generated_at,context:nbaGameContext.generated_at})')),{games:stamp,rosters:stamp,injuries:stamp,context:stamp},'Late init responses must not replace newer scan source timestamps');
  assert.equal(evaluate('injuryData.injuries[0]?.status'),'OUT','A newer verified OUT designation survives a late older initial report');
  assert.deepEqual(plain(evaluate('games.map(g=>g.id)')),['late'],'A late older game feed cannot restore a previous slate');
- console.log('NBA selection page: monotonic startup sources, failed-refresh and in-flight-source holds, fresh Quick Slip evidence, Eastern identity preservation, honest rate units and removed redundant parlay UI PASS');
+ console.log('NBA selection page: monotonic startup sources, failed-refresh and in-flight-source holds, fresh Quick Slip evidence, Eastern identity preservation, retained matchup data and removed historical panel/parlay UI PASS');
 })().catch(error=>{console.error(error);process.exitCode=1});
