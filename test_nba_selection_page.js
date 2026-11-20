@@ -47,6 +47,18 @@ const old={key:'late|player|rebounds',game:late,gameId:'late',playerId:'player',
  assert.equal(analyzed,0,'Changed availability must prevent the old analysis from being published');
  assert.match(element('slate-results').textContent,/UNAVAILABLE.*availability changed during analysis/);
 
+ // A fully audited empty slate may be PASS; incomplete simulation counts may not.
+ const verification={ready:true,candidates:[],held:[{gameId:'early',reason:'No supported matchups'}],diagnostics:{gamesAnalyzed:2,modelRows:100,eligibleRows:0,ratedRows:0,qualifiedRows:0,modelUnavailableGames:0}};
+ context.verification=verification;
+ evaluate('nbaAutoAltView={render:()=>""};nbaSelectionController={refreshInputs:async()=>({ready:true}),getCandidates:async()=>verification}');
+ await evaluate('scanNBAMatchups()');
+ assert.match(element('slate-results').innerHTML,/Audit: 2\/2 games/);
+ assert.match(element('slate-results').innerHTML,/PASS · No supported OVER clears all current model requirements/);
+ context.verification={...verification,diagnostics:{...verification.diagnostics,gamesAnalyzed:1}};
+ await evaluate('scanNBAMatchups()');
+ assert.match(element('slate-results').innerHTML,/INCOMPLETE CHECK/);
+ assert(!element('slate-results').innerHTML.includes('PASS · No supported OVER clears all'),'Never turn an incomplete scan into a clean PASS');
+
  // Refreshing fixtures preserves identity even when the option index changes.
  context.payload={...context.payload,feed:{generated_at:stamp,games:[late,
   fixture('tomorrow','2026-11-19T05:00:00Z'),early,
