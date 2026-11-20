@@ -28,7 +28,7 @@
  }
  function create(options={}){
   const now=options.now||Date.now,fetcher=options.fetch||(typeof root.fetch==='function'?root.fetch.bind(root):null),schedule=options.setTimeout||root.setTimeout.bind(root),cancel=options.clearTimeout||root.clearTimeout.bind(root);
-  let destroyed=false,revision=0,request=0,refreshTask=null,computeTask=null,current=null,cache=null,job=null;
+  let destroyed=false,revision=0,request=0,refreshTask=null,computeTask=null,current=null,cache=null,job=null,lastRefreshAt=0;
   const progress=value=>{try{options.onProgress?.(value)}catch(_){}};
   const unavailable=reason=>({candidates:[],signature:current?.signature||null,reason,ready:false});
   function stop(reason){if(job){job.finish(unavailable(reason));job=null}}
@@ -68,7 +68,7 @@
     current={...inputs,games,signature,ready:true,reason:games.length?'':'No upcoming NBA games remain today (Eastern).'};
     if(typeof options.updateInputs==='function')await options.updateInputs(inputs);
     if(destroyed||version!==revision)return unavailable('NBA sources changed during refresh.');
-    return current;
+    lastRefreshAt=now();return current;
    })();
    const safeTask=task.catch(()=>{if(destroyed||version!==revision)return unavailable('NBA sources changed during refresh.');cache=null;current=null;stop('NBA input refresh failed.');return unavailable('NBA input refresh failed. Retry before selecting props.');});
    refreshTask=safeTask;try{return await safeTask}finally{if(refreshTask===safeTask)refreshTask=null}
@@ -88,14 +88,14 @@
   }
   async function fallback(inputs,version){
    if(typeof gf?.analyze!=='function'||typeof gf?.candidate!=='function')return unavailable('The NBA research engine is unavailable.');
-   const rows=[],held=[];
+   const rows=[],held=[],diagnostics={gamesAnalyzed:0,modelRows:0,eligibleRows:0,ratedRows:0,qualifiedRows:0,modelUnavailableGames:0};
    for(let i=0;i<inputs.games.length;i++){
     await new Promise(resolve=>schedule(resolve,0));if(destroyed||version!==revision||current?.signature!==inputs.signature)return unavailable('NBA sources changed during simulation.');
     progress({type:'progress',completed:i,total:inputs.games.length,game:inputs.games[i]});
     const result=gf.analyze(inputs.games[i],inputs.feed,inputs.injuries,inputs.rosters,inputs.context,now(),{count:1000});
-    rows.push(...(result?.rows||[]));if(result?.reason)held.push({gameId:String(inputs.games[i].id),reason:result.reason});
+    const sampled=result?.rows||[];rows.push(...sampled);diagnostics.gamesAnalyzed++;diagnostics.modelRows+=sampled.length;diagnostics.eligibleRows+=sampled.filter(r=>r.side==='over'&&r.eligible===true&&!r.reviewRequired).length;diagnostics.ratedRows+=sampled.filter(r=>r.side==='over'&&Number.isFinite(r.matchupRating?.score)&&r.matchupRating.score>=gf.minimumScore(r.market)).length;if(result?.reason){held.push({gameId:String(inputs.games[i].id),reason:result.reason});if(!sampled.length)diagnostics.modelUnavailableGames++;}
    }
-   return {candidates:supported(rows,inputs),held,signature:inputs.signature,ready:true,reason:''};
+   const eligible=supported(rows,inputs);diagnostics.qualifiedRows=eligible.length;return {candidates:eligible,held,diagnostics,signature:inputs.signature,ready:true,reason:''};
   }
   function runWorker(inputs,version){
    const make=options.workerFactory||(typeof root.Worker==='function'?()=>new root.Worker('./nba_parlay_worker.js?v=nba-best-props-gate-20261120-v2'):null);
@@ -109,7 +109,7 @@
       if(data.type==='progress'){progress(data);return}
       if(data.type==='error')return finish(unavailable(typeof data.error==='string'?data.error:'The NBA simulation worker failed.'));
       if(data.type!=='result'||!Array.isArray(data.candidates))return finish(unavailable('The NBA simulation returned incomplete results. Retry the research scan.'));
-      finish({candidates:supported(data.candidates,inputs),held:Array.isArray(data.held)?data.held:[],signature:inputs.signature,ready:true,reason:''});
+      finish({candidates:supported(data.candidates,inputs),held:Array.isArray(data.held)?data.held:[],diagnostics:data.diagnostics||null,signature:inputs.signature,ready:true,reason:''});
      };
      worker.onerror=()=>finish(unavailable('The NBA simulation worker failed. Retry the research scan.'));
      worker.onmessageerror=()=>finish(unavailable('The NBA simulation result could not be read.'));
@@ -118,8 +118,11 @@
     }catch(_){finish(unavailable('The NBA simulation worker could not start. Retry the research scan.'))}
    });
   }
-  async function getCandidates(){
-   const inputs=await refreshInputs();if(destroyed||!inputs.ready)return unavailable(inputs.reason||'Fresh NBA research is unavailable.');
+  async function getCandidates(options={}){
+   // Only a scan that just completed an explicit full source refresh may reuse
+   // those already validated bytes; Quick Slip and other calls still refetch.
+   const reuse=options.reuseFreshInputs===true&&current?.ready&&now()-lastRefreshAt>=0&&now()-lastRefreshAt<=10000&&!validate(current,now());
+   const inputs=reuse?current:await refreshInputs();if(destroyed||!inputs.ready)return unavailable(inputs.reason||'Fresh NBA research is unavailable.');
    if(!inputs.games.length)return {candidates:[],signature:inputs.signature,reason:inputs.reason,ready:true};
    if(cache&&cache.signature===inputs.signature&&now()-cache.at<=60000&&now()>=cache.at)return {...cache.result,candidates:supported(cache.result.candidates,inputs)};
    if(computeTask&&computeTask.signature===inputs.signature)return computeTask.promise;
@@ -128,7 +131,7 @@
    })().catch(()=>unavailable('The NBA research engine failed. Retry the research scan.'));computeTask={signature:inputs.signature,promise};
    try{return await promise}finally{if(computeTask?.promise===promise)computeTask=null}
   }
-  return {refreshInputs,getCandidates,invalidate(){revision++;current=null;cache=null;refreshTask=null;computeTask=null;stop('NBA sources were invalidated. Generate fresh research.');},destroy(){if(destroyed)return;destroyed=true;revision++;current=null;cache=null;refreshTask=null;computeTask=null;stop('NBA selection provider was closed.');}};
+  return {refreshInputs,getCandidates,invalidate(){revision++;current=null;cache=null;lastRefreshAt=0;refreshTask=null;computeTask=null;stop('NBA sources were invalidated. Generate fresh research.');},destroy(){if(destroyed)return;destroyed=true;revision++;current=null;cache=null;lastRefreshAt=0;refreshTask=null;computeTask=null;stop('NBA selection provider was closed.');}};
  }
  return {create};
 });
