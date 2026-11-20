@@ -13,7 +13,8 @@ function candidate(row,excluded=[],lines={}){
  if(row?.matchupRating?.side&&row.matchupRating.side!==row.side)return null;
  if(row?.roleEvidence&&!supportedRole(row.roleEvidence,row.playerId,row.team))return null;
  if(!row||!markets.includes(row.market)||excluded.includes(row.market)||row.side!=='over'||row.reviewRequired||row.eligible!==true||!(Number(row.matchupGames)>=3)||!Number.isFinite(row.forecast)||row.forecast<=0||!Array.isArray(row.samples)||!row.samples.length||!row.samples.every(x=>Number.isFinite(x)&&x>=0)||!Number.isFinite(row.matchupBoost))return null;
- // A negative defensive/projection boost is already priced into the forecast; only non-finite boosts are invalid.\n const minimum={points:8,rebounds:3,assists:3,threes:1}[row.market]||10;if(row.forecast<minimum)return null;
+ // A negative defensive/projection boost is already priced into the forecast; only non-finite boosts are invalid.
+ const minimum={points:8,rebounds:3,assists:3,threes:1}[row.market]||10;if(row.forecast<minimum)return null;
  const lineSamples=row.roleEvidence?.selectionSamples?.[canonical(row.market)]||row.selectionSamples||row.samples;
  const target=row.selectedLineEvidence||propLines?.select?.({market:canonical(row.market),samples:lineSamples,sampleKind:row.roleEvidence?.sampleKind||'simulation_outcomes'});
  const override=lines[row.key];if(override===undefined&&target?.available!==true)return null;
