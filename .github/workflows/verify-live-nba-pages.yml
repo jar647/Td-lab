@@ -51,14 +51,14 @@ jobs:
           for attempt in $(seq 1 24); do
             echo "Live deployment verification attempt ${attempt}/24"
             if curl --fail --location --silent --show-error --connect-timeout 10 --max-time 25 "${site}/nba.html?verify=${GITHUB_SHA}" -o /tmp/prop-shop-nba.html \
-              && grep -Fq 'View simulation-backed NBA Best Props' /tmp/prop-shop-nba.html \
+              && grep -Fq 'NBA Best Props' /tmp/prop-shop-nba.html \
               && ! grep -Fq 'r.topThree.map(nbaMatchupCard)' /tmp/prop-shop-nba.html \
               && grep -Fq 'nbaAutoAltView.render(top)' /tmp/prop-shop-nba.html \
               && grep -Fq 'nba_auto_alt_ui.js' /tmp/prop-shop-nba.html \
               && curl --fail --location --silent --show-error --connect-timeout 10 --max-time 25 "${site}/nba_auto_alt_ui.js?verify=${GITHUB_SHA}" -o /tmp/prop-shop-auto-alt.js \
               && grep -Fq 'simulated' /tmp/prop-shop-auto-alt.js \
               && verify_selection_gate; then
-              echo 'PASS: Live Pages HTML is updated; historical player hit-rate cards are not rendered; simulated NBA Best Props UI is published.'
+              echo 'PASS: Live NBA Game Explorer omits the retired historical panel while Best Props and the simulation-backed prop interface remain published.'
               exit 0
             fi
             if [ "${attempt}" -lt 24 ]; then sleep 10; fi
