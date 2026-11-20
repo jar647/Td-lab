@@ -17,6 +17,9 @@ assert.ok(match[1].includes("fetch('./data/nba_daily_learning.json'"),'Daily mod
 assert.ok(match[1].includes('projected five'),'Starting lineup rendering missing');
 assert.ok(match[1].includes('function injuryFor(p)'),'Injury helper required by projection rendering');
 assert.ok(match[1].includes('Player recommendations · matchup opportunities'),'Top props rendering missing');
+assert.ok(!html.includes('Where to look &amp; why'),'The retired historical matchup panel must not appear in NBA game analysis');
+assert.ok(!match[1].includes('renderNBAMatchups(g)'),'Game analysis must not recreate the retired matchup panel');
+assert.ok(html.includes('NBA Best Props')&&html.includes('Quick Slip'),'Best Props and Quick Slip must remain available');
 assert.match(match[1],/\$\('output'\)\.innerHTML=intro;renderNBAGameFirst\(g\)/,'Analyze must actually render the game-first player prop ticket after refreshing output');
 const elements=new Map();
 function element(id){if(!elements.has(id))elements.set(id,{value:'',textContent:'',innerHTML:'',onclick:null});return elements.get(id)}
@@ -75,6 +78,7 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  assert.ok(html.includes('projected five'),'Selected game must render lineups');
  assert.ok(html.includes('First basket scorer'),'Selected game must render first basket research');
  assert.ok(html.includes('NBA Game Simulator'),'Selected NBA game must render simulator');
+ assert.ok(!html.includes('Where to look &amp; why'),'Game explorer must omit the removed historical panel');
  assert.ok(html.includes('PTS <strong>')&&html.includes('REB <strong>')&&html.includes('AST <strong>')&&html.includes('3PM <strong>'),'Selected game must render all projected stat labels');
  assert.ok(html.includes('Player recommendations · matchup opportunities'),'Selected game must render prop section');
  assert(!html.includes('Over &amp; Under'),'No two-sided recommendations in the primary workflow');
