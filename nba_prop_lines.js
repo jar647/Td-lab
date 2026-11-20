@@ -64,7 +64,7 @@
   // merely to manufacture a high frequency.
   const supported=rows.filter(row=>row.frequency>=.5);
   if(!supported.length)return empty('No supported line reaches the minimum research frequency without lowering the market floor.');
-  supported.sort((a,b)=>{const gap=Math.abs(a.frequency-TARGET)-Math.abs(b.frequency-TARGET);return Math.abs(gap)>1e-12?gap:b.line-a.line});
+  supported.sort((a,b)=>{const gap=Math.abs(a.frequency-TARGET)-Math.abs(b.frequency-TARGET);return Math.abs(gap)>1e-12?gap:(side==='under'?a.line-b.line:b.line-a.line)});
   return {...supported[0],reason:offered?'Closest supported supplied book line to the 75% planning target.':'Closest conventional research line to the 75% planning target; book availability is unverified.'};
  }
  function minimumScore(market,side='over'){if(!['over','under'].includes(side))return 101;return side==='under'?(canonical(market)==='threes'?90:85):(canonical(market)==='threes'?85:75);}
