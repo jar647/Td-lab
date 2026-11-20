@@ -1089,6 +1089,10 @@
           }
         },
         "method": "Opponent-adjusted offensive/defensive scoring ratings and historical QB effects. Prior season downweighted; current weeks weighted by recency. Other injuries and drive-level efficiency are not modeled. Candidate does not replace the displayed baseline or authorize a bet."
+      },
+      "actual": {
+        "home": 26.0,
+        "away": 3.0
       }
     },
     "2026_11_MIA_BUF|opponent-score-ridge-v1": {
@@ -1478,15 +1482,15 @@
   },
   "summary": {
     "frozen": 42,
-    "graded": 29,
+    "graded": 30,
     "models": {
       "baseline": {
-        "margin_mae": 11.5724,
-        "total_mae": 9.8207
+        "margin_mae": 11.8267,
+        "total_mae": 10.1067
       },
       "candidate": {
-        "margin_mae": 9.8379,
-        "total_mae": 9.9897
+        "margin_mae": 10.1067,
+        "total_mae": 10.3
       }
     }
   },
