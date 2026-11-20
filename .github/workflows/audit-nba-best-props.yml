@@ -1,0 +1,20 @@
+name: Diagnose live NBA Best Props filtering
+on:
+  pull_request:
+    paths:
+      - 'scripts/audit_nba_best_props.js'
+      - '.github/workflows/audit-nba-best-props.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Analyze all of today's games through every prop gate
+        run: node scripts/audit_nba_best_props.js

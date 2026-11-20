@@ -5,7 +5,7 @@ importScripts('./nba_game_context.js?v=nba-sim-availability-1',
  './nba_prop_evidence.js?v=nba-prop-select-v2',
  './nba_prop_lines.js?v=nba75-threes85-v1',
  './nba_matchup_discovery.js?v=nba75-threes85-v1',
- './nba_game_first.js?v=nba75-threes85-v1');
+ './nba_game_first.js?v=nba-best-props-gate-20261120-v2');
 self.onmessage=function(event){
  const {requestId,feed,rosters,injuries,context,games,now}=event.data||{};
  try{
