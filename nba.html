@@ -51,7 +51,7 @@ async function scanNBAMatchups(){
  nbaAutoScanStarted=true;
  const button=$('scan-slate');if(button.disabled)return;button.disabled=true;$('slate-results').textContent='Refreshing games, rosters and availability…';
  try{
-  if(!nbaSelectionController||typeof PropShopNBAAutoAlt==='undefined')throw Error('NBA selection tools are unavailable. Refresh the page and retry.');
+  if(!nbaSelectionController||typeof CookNBAMatchups==='undefined')throw Error('NBA selection tools are unavailable. Refresh the page and retry.');
   const refreshed=await nbaSelectionController.refreshInputs();if(refreshed.ready!==true)throw Error(refreshed.reason||'Current NBA inputs could not be verified.');
   const sources=()=>JSON.stringify([generatedAt,rosterData?.generated_at,injuryData,nbaGameContext]);
   const signature=sources(),upcoming=games.filter(g=>g.status==='STATUS_SCHEDULED'&&Date.parse(g.date)>Date.now());
