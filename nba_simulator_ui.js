@@ -179,12 +179,22 @@ function modelNote(model){if(!model.rotationFallback)return '';return '<section 
 const CONTROL_IDS=['sim-count','sim-spread','sim-total','sim-home-ml','sim-away-ml','sim-home-spread-odds','sim-away-spread-odds','sim-over-odds','sim-under-odds'];
 function readControls(doc){return Object.fromEntries(CONTROL_IDS.flatMap(id=>{const el=doc.getElementById(id);return el?[[id,el.value]]:[]}));}
 function restoreControls(doc,values){for(const id of CONTROL_IDS){const el=doc.getElementById(id);if(el&&values&&Object.hasOwn(values,id))el.value=values[id];}const count=doc.getElementById('sim-count'),label=doc.getElementById('sim-count-label');if(count&&label)label.textContent=Number(count.value).toLocaleString();}
+function modelReadiness(report){
+ const p=report?.prospective||{},metrics=['margin_mae','total_mae','brier'];
+ const measured=Number.isInteger(p.games)&&p.games>=1&&metrics.every(k=>finite(p[k])&&finite(p['baseline_'+k]));
+ const improvements=measured?Object.fromEntries(metrics.map(k=>[k,p[k]<p['baseline_'+k]])):{};
+ const allImproved=measured&&metrics.every(k=>improvements[k]);
+ const readyForReview=allImproved&&p.games>=100;
+ return {games:p.games||0,measured,improvements,readyForReview,betReady:false,
+  status:!measured?'INSUFFICIENT_VALIDATION':!allImproved?'NOT_BEATING_BASELINE':p.games<100?'SHADOW_VALIDATION_INCOMPLETE':'ELIGIBLE_FOR_INDEPENDENT_REVIEW'};
+}
 function reliability(report,version){
  if(!report||report.model!==version)return '<p class="warn"><strong>Experimental model · accuracy not established.</strong> No matching model-version report is available yet. Simulation frequencies are not verified betting probabilities.</p>';
- const p=report.prospective||{},f=n=>finite(n)?n.toFixed(1):'pending';
- return '<p class="warn"><strong>Experimental model · accuracy not established.</strong> '+esc(version)+' · '+(p.games||0)+' graded pregame forecasts. Margin error '+f(p.margin_mae)+' points (score baseline '+f(p.baseline_margin_mae)+'); total error '+f(p.total_mae)+' (baseline '+f(p.baseline_total_mae)+'). Lower error is better. Simulation frequencies are not verified betting probabilities.</p>';
+ const p=report.prospective||{},f=n=>finite(n)?n.toFixed(1):'pending',readiness=modelReadiness(report);
+ const caveat=readiness.status==='NOT_BEATING_BASELINE'?' This model is NOT outperforming the frozen score baseline on every required metric; no approval or automatic switch is permitted.':readiness.status==='SHADOW_VALIDATION_INCOMPLETE'?' Shadow evaluation has not yet reached 100 graded games.':' Promotion remains off pending independent review.';
+ return '<p class="warn"><strong>Experimental model · accuracy not established.</strong> '+esc(version)+' · '+(p.games||0)+' graded pregame forecasts. Margin error '+f(p.margin_mae)+' points (score baseline '+f(p.baseline_margin_mae)+'); total error '+f(p.total_mae)+' (baseline '+f(p.baseline_total_mae)+'). Lower error is better.'+caveat+' Simulation frequencies are not verified betting probabilities.</p>';
 }
 function compact(result,model){return '<h3>Simulation Results · '+result.runCount.toLocaleString()+' runs</h3>'+modelNote(model)+'<p><strong>'+esc(model.away)+' '+fmt(result.simulated.away)+' · '+esc(model.home)+' '+fmt(result.simulated.home)+'</strong></p><p>Home win '+pct(result.simulated.homeWin)+' · away win '+pct(result.simulated.awayWin)+'. Margin 10–90% range '+fmt(result.simulated.margin.p10)+' to '+fmt(result.simulated.margin.p90)+'; total '+fmt(result.simulated.total.p10)+' to '+fmt(result.simulated.total.p90)+'.</p><div style="overflow-x:auto"><table class="sim-table"><thead><tr><th>Market</th><th>Win</th><th>Odds</th><th>Modeled EV</th><th>Status</th></tr></thead><tbody>'+result.markets.map(m=>'<tr><td>'+esc(m.label)+'</td><td>'+pct(m.win)+'</td><td>'+esc(m.price??'—')+'</td><td>'+(m.ev===null?'—':pct(m.ev))+'</td><td>'+esc(m.signal)+'</td></tr>').join('')+'</tbody></table></div>'+detail(result,model)+'<p class="muted">Candidate model, not demonstrated more accurate. Compare frozen forecasts with actual results. Larger run counts reduce random simulation noise, not model bias.</p>';}
-return {KEY,readControls,restoreControls,reliability,slipLegs,capture,grade,detail,compact,validation,localValidation,modelNote,exportCSV,ensembleScores:blendScores,frozenBlend,gradedEnsemble,marketGrade};
+return {KEY,readControls,restoreControls,reliability,modelReadiness,slipLegs,capture,grade,detail,compact,validation,localValidation,modelNote,exportCSV,ensembleScores:blendScores,frozenBlend,gradedEnsemble,marketGrade};
 });
 
