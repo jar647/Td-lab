@@ -51,22 +51,42 @@ async function scanNBAMatchups(){
  nbaAutoScanStarted=true;
  const button=$('scan-slate');if(button.disabled)return;button.disabled=true;$('slate-results').textContent='Refreshing games, rosters and availability…';
  try{
-  if(!nbaSelectionController||typeof CookNBAMatchups==='undefined')throw Error('NBA selection tools are unavailable. Refresh the page and retry.');
+  if(!nbaSelectionController||typeof PropShopNBAAutoAlt==='undefined')throw Error('NBA selection tools are unavailable. Refresh the page and retry.');
   const refreshed=await nbaSelectionController.refreshInputs();if(refreshed.ready!==true)throw Error(refreshed.reason||'Current NBA inputs could not be verified.');
   const sources=()=>JSON.stringify([generatedAt,rosterData?.generated_at,injuryData,nbaGameContext]);
-  const signature=sources(),upcoming=games.filter(g=>g.status==='STATUS_SCHEDULED'&&Date.parse(g.date)>Date.now()),results=[];
-  for(const g of upcoming){
-   await new Promise(resolve=>setTimeout(resolve,0));
-   if(signature!==sources())throw Error('NBA availability changed during analysis. Run the scan again.');
-   results.push(nbaMatchupResearch(g));
-   $('slate-results').textContent='Checking supported matchups · '+results.length+'/'+upcoming.length+' games…';
-  }
-  const payload=await nbaSelectionController.getCandidates();if(!payload.ready)throw Error(payload.reason);
-  const top=PropShopNBAAutoAlt.shortlist(payload.candidates),weaknesses=results.flatMap(r=>r.weaknesses||[]).slice(0,8);
-  const diagnostics=(()=>{const rows=results.flatMap(r=>r.candidates||[]),held=payload.held||[],qualified=rows.filter(r=>r.side!=='under'&&Number.isFinite(Number(r.researchScore))&&Number(r.researchScore)>=(r.market==='threes'?85:75));const reasons=held.slice(0,8).map(h=>'<li>'+esc(h.gameId+': '+h.reason)+'</li>').join('');return '<details class="nba-matchup-details"><summary>Why are props missing? · '+upcoming.length+' upcoming games · '+rows.length+' matchup candidates · '+qualified.length+' scored 75+ (threes 85+) · '+payload.candidates.length+' passed simulation and safety checks</summary><p>Research scores alone do not guarantee a supported simulated line. Missing role history, unstable minutes, stale injury data, unavailable simulation samples, or matchup evidence can prevent a recommendation. These counts cover different stages, not necessarily the same candidate set.</p>'+(held.length?'<p>Game-level holds:</p><ul>'+reasons+'</ul>':'<p>No game-level holds reported. Candidate-level exclusions are not yet individually reported.</p>')+'</details>';})();
-  $('slate-results').innerHTML='<p>'+top.length+' OVER 75/100+ (threes 85/100+) unpriced research targets · maximum three distinct players per game. Sportsbook odds optional.</p>'+nbaAutoAltView.render(top)+diagnostics+(!top.length?'<p class="warn">PASS · '+esc(payload.reason||'No supported matchup meets current thresholds.')+'</p>':'')+(!top.length&&weaknesses.length?'<details><summary>Opponent matchups to research</summary>'+weaknesses.map(w=>'<p>'+esc(w.attacking+' '+w.position+' '+w.market+' vs '+w.team)+': '+Number(w.allowed).toFixed(1)+' allowed/game.</p>'+nbaDefenseDetails(w)).join('')+'</details>':'');
- }catch(error){$('slate-results').textContent='PASS · '+error.message;}finally{button.disabled=false}
+  const signature=sources(),upcoming=games.filter(g=>g.status==='STATUS_SCHEDULED'&&Date.parse(g.date)>Date.now());
+  // Yield so an injury/roster revision invalidates in-flight research. One
+  // shared worker now owns all nine matchup analyses: no duplicate main-thread pass.
+  await new Promise(resolve=>setTimeout(resolve,0));
+  if(signature!==sources())throw Error('NBA availability changed during analysis. Run the scan again.');
+  const payload=await nbaSelectionController.getCandidates({reuseFreshInputs:true});if(!payload.ready)throw Error(payload.reason);
+  const top=PropShopNBAAutoAlt.shortlist(payload.candidates),d=payload.diagnostics||{},held=payload.held||[];
+  const complete=Number.isInteger(d.gamesAnalyzed)&&d.gamesAnalyzed===upcoming.length&&d.modelUnavailableGames===0;
+  const gameCount=Number.isInteger(d.gamesAnalyzed)?d.gamesAnalyzed:upcoming.length;
+  const rowCount=Number.isInteger(d.modelRows)?d.modelRows:'unverified';
+  const valid=Number.isInteger(d.qualifiedRows)?d.qualifiedRows:payload.candidates.length;
+  const summary='<p class="muted">Audit: '+gameCount+'/'+upcoming.length+' games · '+rowCount+' simulated player markets · '+valid+' passed simulation and safety filters · injury snapshot '+esc(injuryData?.generated_at||'unknown')+'. Experimental frequencies are not calibrated hit probabilities.</p>';
+  const reasons=held.slice(0,8).map(h=>'<li>'+esc(h.gameId+': '+h.reason)+'</li>').join('');
+  const detail=!top.length?'<details class="nba-matchup-details"><summary>Why no qualifying OVER props?</summary><p>Scores alone do not guarantee a supported alternate line. Stable player minutes, current rosters, verified availability and model samples are mandatory. Counts reflect completed simulations, not sportsbook inventory.</p>'+(Number.isInteger(d.eligibleRows)?'<p>'+d.eligibleRows+' player markets passed role safety; '+(d.ratedRows??0)+' reached rating thresholds before final line checks.</p>':'')+(reasons?'<ul>'+reasons+'</ul>':'<p>No individual candidate rejection breakdown is available for this source.</p>')+'</details>':'';
+  const verdict=!top.length?'<p class="warn">'+(complete?'PASS · No supported OVER clears all current model requirements.':'INCOMPLETE CHECK · Some game evidence was unavailable or the model scan was not fully verified.')+'</p>':'';
+  $('slate-results').innerHTML='<p>'+top.length+' qualifying OVER research targets · 75/100 regular, 85/100 threes · up to three distinct players per game. Sportsbook availability unverified.</p>'+summary+nbaAutoAltView.render(top)+verdict+detail;
+ }catch(error){$('slate-results').textContent='UNAVAILABLE · '+error.message;}finally{button.disabled=false}
 }
+let nbaLastVisibleRefresh=0,nbaVisibleRefreshTask=null;
+async function nbaRefreshVisibleSlate(){
+ if(!nbaAutoScanStarted||!nbaSelectionController||document.visibilityState==='hidden'||$('scan-slate').disabled||!games.some(g=>g.status==='STATUS_SCHEDULED'&&Date.parse(g.date)>Date.now())||Date.now()-nbaLastVisibleRefresh<60000||nbaVisibleRefreshTask)return;
+ nbaLastVisibleRefresh=Date.now();
+ const previous=JSON.stringify([generatedAt,rosterData?.generated_at,injuryData,nbaGameContext]);
+ const task=(async()=>{
+  const latest=await nbaSelectionController.refreshInputs();
+  if(!latest.ready){$('slate-results').textContent='UNAVAILABLE · '+esc(latest.reason||'Current NBA sources could not be verified.');return}
+  const current=JSON.stringify([generatedAt,rosterData?.generated_at,injuryData,nbaGameContext]);
+  if(current!==previous)await scanNBAMatchups();
+ })();
+ nbaVisibleRefreshTask=task;try{await task}catch(e){$('slate-results').textContent='UNAVAILABLE · NBA pregame refresh failed.'}finally{nbaVisibleRefreshTask=null}
+}
+if(typeof document.addEventListener==='function')document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')nbaRefreshVisibleSlate();});
+if(typeof setInterval==='function')setInterval(()=>{if(document.visibilityState==='visible')nbaRefreshVisibleSlate()},300000);
 
 function nbaFirstBasketBoard(){return CookNBAFirstBasket.slate({games:historicalGames,generated_at:generatedAt},rosterData,injuryData,Date.now());}
 function scanNBAFirstBasket(){
