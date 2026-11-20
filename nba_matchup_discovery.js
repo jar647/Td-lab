@@ -88,15 +88,28 @@ function opportunityMetric(role,market){
  const values=role.selectionSamples?.[market];return Array.isArray(values)?avg(values):null;
 }
 
+const preparedHistory=new WeakMap();
+function history(feed,cutoff,seasonStart,rosters,reuse){
+ const metadata=rosters?.players||{};
+ if(reuse&&feed&&typeof feed==='object'){
+  const old=preparedHistory.get(feed);
+  if(old&&old.cutoff===cutoff&&old.seasonStart===seasonStart&&old.metadata===metadata&&old.rosterStamp===rosters?.generated_at)return old;
+ }
+ const recent=boxes.records(feed,cutoff).filter(g=>Date.parse(g.date)>=seasonStart);
+ const evidence=defensiveEvidence(recent,metadata);
+ const value={recent,evidence,cutoff,seasonStart,metadata,rosterStamp:rosters?.generated_at};
+ if(reuse&&feed&&typeof feed==='object')preparedHistory.set(feed,value);
+ return value;
+}
 function analyze(game,feed,rosters,injuries,now=Date.now(),options={}){
  const cutoff=Math.min(Date.parse(game.date),now),year=new Date(game.date).getUTCFullYear()-(new Date(game.date).getUTCMonth()<9),seasonStart=Date.UTC(year,9,1);
- const recent=boxes.records(feed,cutoff).filter(g=>Date.parse(g.date)>=seasonStart),members=rosters?.teams||{},metadata=rosters?.players||{};
+ const prepared=history(feed,cutoff,seasonStart,rosters,options.reuseHistory===true),recent=prepared.recent,members=rosters?.teams||{},metadata=rosters?.players||{};
  const pos=p=>position(p.position)||position(metadata[String(p.id)]?.position);
  const profiles=new Map(),teamHistory=new Map();
  for(const prior of recent){for(const team of [prior.home,prior.away]){if(!teamHistory.has(team))teamHistory.set(team,[]);teamHistory.get(team).push(prior)}
   for(const p of prior.players||[]){const stats=recorded(p),primary=pos(p);if(!stats||!primary||!Array.isArray(members[p.team])||!members[p.team].map(String).includes(String(p.id)))continue;
    const id=String(p.id);if(!profiles.has(id))profiles.set(id,{id,name:p.name,team:p.team,position:primary,rows:[]});const row=profiles.get(id);if(row.team!==p.team||row.rows.length>=10)continue;row.rows.push({...stats,date:prior.date,home:p.team===prior.home});}}
- const evidence=defensiveEvidence(recent,metadata),{defense,coverage}=evidence;
+ const {evidence}=prepared,{defense,coverage}=evidence;
  const roleEvidence=roleAPI&&typeof roleAPI.analyze==='function'?roleAPI.analyze(game,feed,rosters,injuries,now,options):{ready:false,reason:'Supported rotation evidence is unavailable.',players:{}};
  const roles=roleEvidence.players||{};
  const peerProfiles=[...profiles.values()].filter(p=>p.rows.length>=5&&avg(p.rows.slice(0,5).map(r=>r.minutes))>=20);

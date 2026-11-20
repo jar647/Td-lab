@@ -50,7 +50,7 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
  try{
   const model=possessions.build(game,feed,injuries,rosters,now,{context});
   const simulation=possessions.draws(model,options.count||1000,6472026,{collectPlayerOutcomes:true});
-  const positional=matchups.analyze(game,feed,rosters,injuries,now,{model,simulation,context});
+  const positional=matchups.analyze(game,feed,rosters,injuries,now,{model,simulation,context,reuseHistory:true});
   const ratings=new Map(positional.candidates.map(r=>[r.playerId+'|'+r.market+'|'+(r.side||'over'),r]));
   const rows=[],playerReviews=new Map();
   for(const team of [game.away,game.home]){
@@ -103,7 +103,7 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
     }
    }
   }
-  return {rows,players:simulation.players.map(p=>({...p,reviewReasons:playerReviews.get(p.id)||[]})),reviewedMarkets:rows.filter(r=>r.reviewRequired).length,model: model.version,generatedAt:new Date(now).toISOString(),inputTimes:model.inputTimes,context:model.context,warnings:model.warnings,pace:model.pace,blowoutRate:simulation.blowoutRate,reason:null};
+  return {rows,underWeaknesses:(positional.weaknesses||[]).filter(w=>w.side==='under'),players:simulation.players.map(p=>({...p,reviewReasons:playerReviews.get(p.id)||[]})),reviewedMarkets:rows.filter(r=>r.reviewRequired).length,model: model.version,generatedAt:new Date(now).toISOString(),inputTimes:model.inputTimes,context:model.context,warnings:model.warnings,pace:model.pace,blowoutRate:simulation.blowoutRate,reason:null};
  }catch(e){return {rows:[],reason:e.message,warnings:[]};}
 }
 return {minimumScore:propLines.minimumScore,chance,candidate,build,analyze,markets};

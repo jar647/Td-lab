@@ -18,6 +18,9 @@ on:
       - 'nba_game_first.js'
       - 'nba_prop_evidence.js'
       - 'nba_prop_lines.js'
+      - 'nba_under_shadow.js'
+      - 'scripts/update_nba_under_shadow.cjs'
+      - 'tests/test_nba_under_shadow.js'
       - 'nba_parlay.js'
       - 'nba_first_basket.js'
       - 'nfl_game_engine.js'
@@ -59,7 +62,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node test_recommendation_ledger.js && node test_daily_plays.js && node test_nba_selection_capture.js
+      - run: node test_recommendation_ledger.js && node test_daily_plays.js && node test_nba_selection_capture.js && node --test tests/test_nba_under_shadow.js && node scripts/update_nba_under_shadow.cjs --dry-run
   capture-and-grade:
     if: github.event_name != 'pull_request' && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
     needs: validate
@@ -83,6 +86,7 @@ jobs:
           node scripts/update_recommendation_results.cjs
           python scripts/refresh_recommendation_nfl_results.py || echo 'NFL result refresh failed; retained prior official cache, unresolved picks remain ungraded'
           node scripts/update_recommendation_results.cjs
+          node scripts/update_nba_under_shadow.cjs
       - name: Publish immutable ledger and dashboard report
         run: |
           git config user.name "github-actions[bot]"
