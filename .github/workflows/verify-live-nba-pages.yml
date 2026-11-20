@@ -5,12 +5,18 @@ on:
     paths:
       - 'nba.html'
       - 'nba_auto_alt_ui.js'
+      - 'nba_game_first.js'
+      - 'nba_selection_ui.js'
+      - 'nba_parlay_worker.js'
       - '.github/workflows/verify-live-nba-pages.yml'
   push:
     branches: [main]
     paths:
       - 'nba.html'
       - 'nba_auto_alt_ui.js'
+      - 'nba_game_first.js'
+      - 'nba_selection_ui.js'
+      - 'nba_parlay_worker.js'
       - '.github/workflows/verify-live-nba-pages.yml'
   workflow_dispatch:
 
@@ -27,6 +33,18 @@ jobs:
         run: |
           set -euo pipefail
           site='https://jar647.github.io/Td-lab'
+          verify_selection_gate() {
+            if [ "${GITHUB_EVENT_NAME}" != "push" ]; then return 0; fi
+            grep -Fq 'nba_game_first.js?v=nba-best-props-gate-20261120-v2' /tmp/prop-shop-nba.html &&
+            grep -Fq 'nba_selection_ui.js?v=nba-best-props-gate-20261120-v2' /tmp/prop-shop-nba.html &&
+            curl --fail --location --silent --show-error --connect-timeout 10 --max-time 25 "${site}/nba_game_first.js?verify=${GITHUB_SHA}" -o /tmp/prop-shop-game-first.js &&
+            grep -Fq '!Number.isFinite(row.matchupBoost)' /tmp/prop-shop-game-first.js &&
+            ! grep -Fq '!(row.matchupBoost>0)' /tmp/prop-shop-game-first.js &&
+            curl --fail --location --silent --show-error --connect-timeout 10 --max-time 25 "${site}/nba_selection_ui.js?verify=${GITHUB_SHA}" -o /tmp/prop-shop-selection-ui.js &&
+            grep -Fq 'nba_parlay_worker.js?v=nba-best-props-gate-20261120-v2' /tmp/prop-shop-selection-ui.js &&
+            curl --fail --location --silent --show-error --connect-timeout 10 --max-time 25 "${site}/nba_parlay_worker.js?verify=${GITHUB_SHA}" -o /tmp/prop-shop-worker.js &&
+            grep -Fq 'nba_game_first.js?v=nba-best-props-gate-20261120-v2' /tmp/prop-shop-worker.js
+          }
           for attempt in $(seq 1 24); do
             echo "Live deployment verification attempt ${attempt}/24"
             if curl --fail --location --silent --show-error --connect-timeout 10 --max-time 25 "${site}/nba.html?verify=${GITHUB_SHA}" -o /tmp/prop-shop-nba.html \
@@ -35,7 +53,8 @@ jobs:
               && grep -Fq 'nbaAutoAltView.render(top)' /tmp/prop-shop-nba.html \
               && grep -Fq 'nba_auto_alt_ui.js' /tmp/prop-shop-nba.html \
               && curl --fail --location --silent --show-error --connect-timeout 10 --max-time 25 "${site}/nba_auto_alt_ui.js?verify=${GITHUB_SHA}" -o /tmp/prop-shop-auto-alt.js \
-              && grep -Fq 'simulated' /tmp/prop-shop-auto-alt.js; then
+              && grep -Fq 'simulated' /tmp/prop-shop-auto-alt.js \
+              && verify_selection_gate; then
               echo 'PASS: Live Pages HTML is updated; historical player hit-rate cards are not rendered; simulated NBA Best Props UI is published.'
               exit 0
             fi
