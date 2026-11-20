@@ -36,7 +36,7 @@ const old={key:'late|player|rebounds',game:late,gameId:'late',playerId:'player',
  element('slate-results').innerHTML='<article>OLD 90/100 candidate</article>';
  await evaluate('scanNBAMatchups()');
  assert.equal(analyzed,0,'A failed refresh must stop before reading previously qualifying globals');
- assert.match(element('slate-results').textContent,/PASS.*Required injury refresh failed/);
+ assert.match(element('slate-results').textContent,/UNAVAILABLE.*Required injury refresh failed/);
  assert.equal(element('slate-results').innerHTML,'','The stale card is removed when the scan fails closed');
  assert.equal(element('scan-slate').disabled,false);
 
@@ -45,7 +45,19 @@ const old={key:'late|player|rebounds',game:late,gameId:'late',playerId:'player',
  context.setTimeout=callback=>{evaluate('injuryData={...injuryData,generated_at:"2026-11-18T17:00:01Z"}');return setTimeout(callback,0)};
  await evaluate('scanNBAMatchups()');context.setTimeout=setTimeout;
  assert.equal(analyzed,0,'Changed availability must prevent the old analysis from being published');
- assert.match(element('slate-results').textContent,/PASS.*availability changed during analysis/);
+ assert.match(element('slate-results').textContent,/UNAVAILABLE.*availability changed during analysis/);
+
+ // A fully audited empty slate may be PASS; incomplete simulation counts may not.
+ const verification={ready:true,candidates:[],held:[{gameId:'early',reason:'No supported matchups'}],diagnostics:{gamesAnalyzed:2,modelRows:100,eligibleRows:0,ratedRows:0,qualifiedRows:0,modelUnavailableGames:0}};
+ context.verification=verification;context.PropShopNBAAutoAlt={shortlist:()=>[]};
+ evaluate('nbaAutoAltView={render:()=>""};nbaSelectionController={refreshInputs:async()=>({ready:true}),getCandidates:async()=>verification}');
+ await evaluate('scanNBAMatchups()');
+ assert.match(element('slate-results').innerHTML,/Audit: 2\/2 games/);
+ assert.match(element('slate-results').innerHTML,/PASS · No supported OVER clears all current model requirements/);
+ context.verification={...verification,diagnostics:{...verification.diagnostics,gamesAnalyzed:1}};
+ await evaluate('scanNBAMatchups()');
+ assert.match(element('slate-results').innerHTML,/INCOMPLETE CHECK/);
+ assert(!element('slate-results').innerHTML.includes('PASS · No supported OVER clears all'),'Never turn an incomplete scan into a clean PASS');
 
  // Refreshing fixtures preserves identity even when the option index changes.
  context.payload={...context.payload,feed:{generated_at:stamp,games:[late,

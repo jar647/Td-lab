@@ -10,15 +10,22 @@ self.onmessage=function(event){
  const {requestId,feed,rosters,injuries,context,games,now}=event.data||{};
  try{
   if(!Array.isArray(games)||!Array.isArray(feed?.games)||!Number.isFinite(now))throw Error('Invalid NBA source inputs. Refresh and retry.');
-  const candidates=[],held=[];
+  const candidates=[],held=[],diagnostics={gamesAnalyzed:0,modelRows:0,eligibleRows:0,ratedRows:0,qualifiedRows:0,modelUnavailableGames:0};
   games.forEach((game,index)=>{
    if(game.status!=='STATUS_SCHEDULED'||Date.parse(game.date)<=now)return;
    const result=CookNBAGameFirst.analyze(game,feed,injuries,rosters,context,now,{count:1000});
-   const rows=(result.rows||[]).map(row=>CookNBAGameFirst.candidate(row)).filter(Boolean);
+   diagnostics.gamesAnalyzed++;
+   const sourceRows=result.rows||[];
+   diagnostics.modelRows+=sourceRows.length;
+   diagnostics.eligibleRows+=sourceRows.filter(r=>r.side==='over'&&r.eligible===true&&!r.reviewRequired).length;
+   diagnostics.ratedRows+=sourceRows.filter(r=>r.side==='over'&&Number.isFinite(r.matchupRating?.score)&&r.matchupRating.score>=CookNBAGameFirst.minimumScore(r.market)).length;
+   if(result.reason&&!sourceRows.length)diagnostics.modelUnavailableGames++;
+   const rows=sourceRows.map(row=>CookNBAGameFirst.candidate(row)).filter(Boolean);
+   diagnostics.qualifiedRows+=rows.length;
    candidates.push(...rows);
    if(!rows.length)held.push({gameId:String(game.id),reason:result.reason||'No supported OVER matchup meets 75/100 (three-pointers require 85/100).'});
    self.postMessage({type:'progress',requestId,completed:index+1,total:games.length});
   });
-  self.postMessage({type:'result',requestId,candidates,held});
+  self.postMessage({type:'result',requestId,candidates,held,diagnostics});
  }catch(error){self.postMessage({type:'error',requestId,error:error.message||'NBA analysis unavailable.'});}
 };

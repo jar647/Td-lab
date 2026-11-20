@@ -21,6 +21,7 @@ context.self.onmessage({data:{requestId:17,feed,rosters,injuries,context:null,ga
 assert.equal(analyzed,1);assert.equal(draws,1,'The worker runs the existing shared-outcome simulation once for the fixture');
 assert(messages.some(m=>m.type==='progress'&&m.requestId===17&&m.completed===1&&m.total===2));
 const result=messages.find(m=>m.type==='result');assert(result);assert.equal(result.requestId,17);assert.deepEqual(result.candidates,[]);
+assert.equal(result.diagnostics.gamesAnalyzed,1);assert(result.diagnostics.modelRows>0);assert.equal(result.diagnostics.qualifiedRows,0);assert.equal(result.diagnostics.modelUnavailableGames,0);
 assert.equal(result.held.length,1);assert.equal(result.held[0].gameId,future.id);assert.match(result.held[0].reason,/85\/100/);
 assert(!messages.some(m=>m.type==='error'),'Valid evidence with no qualifying matchup is a supported PASS, not a worker failure');
 const prior=messages.length;

@@ -33,6 +33,15 @@ function mount(extra={}){
  v.server.injuries.injuries=[{player_id:'p1',team:'H1',status:'OUT'}];const changed=v.provider.getCandidates();await until(()=>v.workers.length===3);v.finish();assert.notEqual((await changed).signature,signature,'changed injury contents invalidate even an unchanged source timestamp');
  v.provider.destroy();
 
+ // The mobile slate scan refreshes once, then reuses that verified snapshot
+ // for the immediately following worker. Quick Slip still refetches independently.
+ const reuse=mount();await reuse.provider.refreshInputs();assert.equal(reuse.requests.length,4);
+ const reuseScan=reuse.provider.getCandidates({reuseFreshInputs:true});await until(()=>reuse.workers.length===1);
+ assert.equal(reuse.requests.length,4,'Do not fetch a multi-megabyte NBA feed twice in one scan');
+ reuse.finish();assert.equal((await reuseScan).ready,true);
+ await reuse.provider.getCandidates();assert.equal(reuse.requests.length,8,'Ordinary Quick Slip verification must refetch real sources');
+ reuse.provider.destroy();
+
  // Required requests fail independently, while optional context may fail.
  for(const source of ['feed','rosters','injuries']){
   const failed=mount();failed.setFetch(async url=>{const key=url.includes('nba_games')?'feed':url.includes('nba_rosters')?'rosters':url.includes('nba_injuries')?'injuries':'context';if(key===source)throw Error('network');return {ok:true,json:async()=>failed.server[key]}});

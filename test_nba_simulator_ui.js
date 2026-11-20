@@ -82,3 +82,10 @@ vm.createContext(sandbox);vm.runInContext(handler,sandbox);
  assert.ok(graded.every(x=>x.grade),'Only matching fixture may be graded');
  assert.equal(graded[0].grade.home,100);
 }
+
+const comparison={model:'audit-model',prospective:{games:57,margin_mae:13.16,baseline_margin_mae:11.90,total_mae:15.50,baseline_total_mae:14.78,brier:.253,baseline_brier:.234}};
+assert.equal(ui.modelReadiness(comparison).status,'NOT_BEATING_BASELINE');
+assert.equal(ui.modelReadiness(comparison).betReady,false);
+assert.match(ui.reliability(comparison,'audit-model'),/NOT outperforming/);
+assert.equal(ui.modelReadiness({...comparison,prospective:{games:100,margin_mae:10,baseline_margin_mae:12,total_mae:12,baseline_total_mae:15,brier:.20,baseline_brier:.24}}).status,'ELIGIBLE_FOR_INDEPENDENT_REVIEW');
+assert.equal(ui.modelReadiness({...comparison,prospective:{games:100,margin_mae:10,baseline_margin_mae:12,total_mae:12,baseline_total_mae:15,brier:.20,baseline_brier:.24}}).betReady,false,'Even a winner needs independent review before betting use');
