@@ -33,3 +33,17 @@ for(const g of games){
  console.log('GAME',JSON.stringify({id:g.id,match:g.away+' @ '+g.home,starts:g.date,ready:research.ready,researchReason:research.reason,rotationReady:research.roleSummary?.ready,rotationReason:research.roleSummary?.reason,coverage:research.coverage,roles:roles.length,roleHeld:held.length,holds:topHoldReasons,research:(research.candidates||[]).length,qualifiedResearch:qualified.length,bestResearch:research.candidates?.slice(0,3).map(x=>({name:x.name,market:x.market,score:x.researchScore})),simReason:sim.reason,simRows:sim.rows?.length,simEligible:eligible.length,simAboveScore:scored.length,accepted:cand.length,highestScores:sim.rows?.filter(x=>Number.isFinite(x.matchupRating?.score)).sort((a,b)=>b.matchupRating.score-a.matchupRating.score).slice(0,3).map(x=>({name:x.name,market:x.market,score:x.matchupRating.score,eligible:x.eligible,review:x.reviewRequired})),acceptedExamples:cand.slice(0,2).map(x=>({name:x.name,market:x.market,score:x.score,line:x.line,prob:x.probability}))}));
 }
 console.log('TOTAL',JSON.stringify(stat));
+
+async function verifyPublishedSelection(){
+ const selection=require('../nba_selection_ui');
+ const autoAlt=require('../nba_auto_alt_ui');
+ const snapshots={'./data/nba_games.json':feed,'./data/nba_rosters.json':rosters,'./data/nba_injuries.json':injuries,'./data/nba_game_context.json':context};
+ const provider=selection.create({now:()=>now,fetch:async url=>({ok:true,json:async()=>snapshots[url]})});
+ const result=await provider.getCandidates();
+ const shortlisted=autoAlt.shortlist(result.candidates||[]);
+ console.log('PROVIDER',JSON.stringify({ready:result.ready,reason:result.reason,passed:result.candidates?.length||0,shortlisted:shortlisted.length,legs:shortlisted.map(r=>({player:r.name,market:r.market,score:r.score,line:r.line,probability:r.probability}))}));
+ if(result.ready!==true)throw Error('Selection provider is not ready: '+result.reason);
+ if(stat.candidateRows>0&&shortlisted.length===0)throw Error('Eligible simulated props were rejected by the UI selection provider');
+ provider.destroy();
+}
+verifyPublishedSelection().catch(err=>{console.error('PROVIDER_ERROR',err.stack||err.message);process.exitCode=1});
