@@ -19,7 +19,7 @@ function candidate(row,excluded=[],lines={}){
  const override=lines[row.key];if(override===undefined&&target?.available!==true)return null;
  const line=override===undefined?target.line:override;
  const probability=chance(row,line);if(probability===null||probability===0)return null;
- const matchupQuality=row.matchupRating?.score;if(!Number.isFinite(matchupQuality)||matchupQuality<85||matchupQuality>100)return null;
+ const matchupQuality=row.matchupRating?.score;if(!Number.isFinite(matchupQuality)||matchupQuality<propLines.minimumScore(row.market)||matchupQuality>100)return null;
  const lineConfidence=Math.round(clamp(probability*100,0,100));
  const score=matchupQuality; // Matchup-only research rank: never use odds, value, or chosen line.
  const settlement=override===undefined?null:propLines.evaluate(row.samples,line);if(settlement&&!settlement.available)return null;
@@ -28,7 +28,7 @@ function candidate(row,excluded=[],lines={}){
 }
 function build(rows,options={}){
  const excluded=options.excludedMarkets||[],max=clamp(Math.trunc(Number(options.maxLegs)||5),1,5);
- const minScore=Number.isFinite(Number(options.minScore))?clamp(Number(options.minScore),85,100):85;
+ const minScore=Number.isFinite(Number(options.minScore))?clamp(Number(options.minScore),75,100):75;
  const ranked=(rows||[]).map(r=>candidate(r,excluded,options.lines||{})).filter(r=>r&&r.score>=minScore).sort((a,b)=>b.score-a.score||b.matchupBoost-a.matchupBoost||a.key.localeCompare(b.key));
  const picks=[],seen=new Set(),correlations=[];let wins=null;
  for(const row of ranked){
@@ -105,5 +105,5 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
   return {rows,players:simulation.players.map(p=>({...p,reviewReasons:playerReviews.get(p.id)||[]})),reviewedMarkets:rows.filter(r=>r.reviewRequired).length,model: model.version,generatedAt:new Date(now).toISOString(),inputTimes:model.inputTimes,context:model.context,warnings:model.warnings,pace:model.pace,blowoutRate:simulation.blowoutRate,reason:null};
  }catch(e){return {rows:[],reason:e.message,warnings:[]};}
 }
-return {chance,candidate,build,analyze,markets};
+return {minimumScore:propLines.minimumScore,chance,candidate,build,analyze,markets};
 });

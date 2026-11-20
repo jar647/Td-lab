@@ -1,6 +1,7 @@
 /* Published-model UI: the displayed forecast is the exact record frozen/graded. */
-(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.CookNBAPipeline=api})(typeof globalThis!=='undefined'?globalThis:this,function(){
+(function(root,factory){const api=factory(typeof module==='object'&&module.exports?require('./nba_prop_lines'):null,root);if(typeof module==='object'&&module.exports)module.exports=api;else root.CookNBAPipeline=api})(typeof globalThis!=='undefined'?globalThis:this,function(lines,root){
  'use strict';
+ const minimumScore=market=>(lines||root.CookNBAPropLines).minimumScore(market);
  const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const pct=x=>Number.isFinite(x)?(x*100).toFixed(1)+'%':'unavailable';
  const fmt=x=>Number.isFinite(x)?x.toFixed(1):'—';
@@ -17,7 +18,7 @@
   html+='<p class="warn">'+(a.reasons||[]).map(x=>esc(x==='No qualifying offered SGP quote'?'Combined sportsbook price unavailable.':x)).join(' · ')+'</p>';
   const blocked=(a.blockers||[]).length>0;
   const canonical={points_rebounds:['points','rebounds'],points_assists:['points','assists'],rebounds_assists:['rebounds','assists'],pra:['points','rebounds','assists']};
-  const rating=p=>{const parts=(canonical[p.market]||[p.market]).map(k=>matchupRows.find(r=>String(r.playerId)===String(p.player_id)&&r.market===k&&(r.side||'over')===String(p.side).toLowerCase()));return parts.every(r=>r?.eligible&&Number.isFinite(r.researchScore)&&r.researchScore>=85&&r.researchScore<=100)?Math.min(...parts.map(r=>r.researchScore)):null};
+  const rating=p=>{const parts=(canonical[p.market]||[p.market]).map(k=>matchupRows.find(r=>String(r.playerId)===String(p.player_id)&&r.market===k&&(r.side||'over')===String(p.side).toLowerCase()));return parts.every(r=>r?.eligible&&Number.isFinite(r.researchScore)&&r.researchScore>=minimumScore(r.market)&&r.researchScore<=100)?Math.min(...parts.map(r=>r.researchScore)):null};
   const supported=p=>rating(p)!==null&&String(p.side).toLowerCase()==='over'&&Object.hasOwn(labels,p.market);
   const leg=p=>baseLeg(p).replace('</strong>','</strong><p>Matchup quality '+rating(p)+'/100 · not win probability</p>');
   const freshLeg=p=>supported(p)&&valid(p.observed_at,now,1);
@@ -28,7 +29,7 @@
    html+='<h3>Unpriced SGP research target — not a bet</h3>'+t.legs.map(leg).join('')+'<p>Modeled joint chance '+pct(t.joint_probability)+' · model fair decimal price '+Number(t.fair_decimal).toFixed(2)+' · requires an actual same-book combined price of at least '+Number(t.minimum_decimal_for_5pct_ev).toFixed(2)+' for a 5% modeled EV margin.</p><p class="warn">No sportsbook combined quote is available. Payout and positive value are not established.</p>';
   }
   if(a.best_single&&!blocked&&freshLeg(a.best_single))html+='<h3>Best single · research lean</h3>'+leg(a.best_single);
-  else html+='<h3>Best single</h3><p>PASS · No supported OVER matchup rated 85+/100 with a current quote.</p>';
+  else html+='<h3>Best single</h3><p>PASS · No supported OVER matchup rated 75+/100 (three-pointers 85+/100) with a current quote.</p>';
   const top=(a.top_players||[]).filter(freshLeg);
   if(top.length&&!blocked)html+='<h3>Top three player recommendations</h3>'+top.map((p,i)=>'<h4>#'+(i+1)+'</h4>'+leg(p)).join('');
   html+='<h3>Projected starting lineups</h3><p class="muted">Projected from recent starts and rotation minutes; not confirmed.</p>';

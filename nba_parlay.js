@@ -38,7 +38,7 @@
   const c=raw,g=c?.game,r=c?.roleEvidence,market=lines?.canonical(c?.market);
   if(!c||!g||!r||!market||!id(c.key)||!id(c.playerId)||!id(c.gameId)||id(g.id)!==id(c.gameId)||
    typeof c.name!=='string'||!c.name.trim()||c.side!=='over'||c.eligible!==true||c.reviewRequired||c.parlayEligible===false||
-   !finite(c.score)||c.score<85||c.score>100||!finite(c.line)||c.line<.5||c.line>400||
+   !finite(c.score)||c.score<lines.minimumScore(c.market)||c.score>100||!finite(c.line)||c.line<.5||c.line>400||
    c.matchupRating?.score!==undefined&&c.matchupRating.score!==c.score)return null;
   if(g.status!=='STATUS_SCHEDULED'||typeof g.home!=='string'||!g.home.trim()||typeof g.away!=='string'||!g.away.trim()||g.home===g.away||
    ![g.home,g.away].includes(c.team)||c.opponent!==undefined&&c.opponent!==(c.team===g.home?g.away:g.home))return null;
@@ -64,7 +64,7 @@
    tip,fixture:JSON.stringify([g.home,g.away,tip]),source:JSON.stringify(stamps),set:id(c.outcomeSetId),
    win,nonLoss,settlement,probability:settlement.winFrequency,
    stability:1-clamp((r.minutesHigh-r.minutesLow)/6),coverage:clamp(r.historyGames/10),
-   quality:(c.score-85)/15,balance:1-clamp(Math.abs(settlement.winFrequency-.75)/.25)};
+   quality:(c.score-lines.minimumScore(c.market))/(100-lines.minimumScore(c.market)),balance:1-clamp(Math.abs(settlement.winFrequency-.75)/.25)};
  }
  function ambiguousGames(pool){
   const fixtures=new Map(),physical=new Map(),bad=new Set();
@@ -179,7 +179,7 @@
   if(mode==='cross_game'){const games=new Set();for(const p of sorted)if(!games.has(p.gameId)){games.add(p.gameId);add(p)}}
   for(const p of sorted)add(p);
   pool.sort(order);
-  if(!pool.length)return fail('No 85+ OVER candidates have current source records, stable supported minutes and suitable exact-line simulation frequencies.');
+  if(!pool.length)return fail('No qualifying OVER candidates (75+; three-pointers 85+) have current source records, stable supported minutes and suitable exact-line simulation frequencies.');
   let beam=[{indices:[],prepared:[],score:0,key:''}],best=null;
   const groupCache=new Map();
   function scoreCombo(combo){

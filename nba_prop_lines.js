@@ -65,6 +65,8 @@
   supported.sort((a,b)=>{const gap=Math.abs(a.frequency-TARGET)-Math.abs(b.frequency-TARGET);return Math.abs(gap)>1e-12?gap:b.line-a.line});
   return {...supported[0],reason:offered?'Closest supported supplied book line to the 75% planning target.':'Closest conventional research line to the 75% planning target; book availability is unverified.'};
  }
+ function minimumScore(market){return canonical(market)==='threes'?85:75;}
+ function qualifiesScore(score,market){return Number.isFinite(score)&&score>=minimumScore(market)&&score<=100;}
  function minimum(market){const key=canonical(market);return key?GRIDS[key][0]:null;}
- return {POLICY,MIN_SAMPLES,TARGET,canonical,minimum,select,ladder,evaluate};
+ return {minimumScore,qualifiesScore,POLICY,MIN_SAMPLES,TARGET,canonical,minimum,select,ladder,evaluate};
 });

@@ -60,7 +60,7 @@ function clusterInterval(rows,options={}){
  return {interval:low===high?null:[low,high],clusters:values.length,resamples:config.resamples,method,
   reason:low===high?'Observed game clusters have no resampled variation; no precision claim is supplied.':'Descriptive uncertainty across observed games; not proof of predictive accuracy or profitability.'};
 }
-const band=score=>score>=95?'95–100':score>=90?'90–94':'85–89';
+const band=score=>score>=95?'95–100':score>=90?'90–94':score>=85?'85–89':score>=80?'80–84':'75–79';
 function summarize(rows,options){return {...totals(rows),clusterUncertainty:clusterInterval(rows,options)};}
 function scoreComparison(rows,metadataComplete,options){
  const low=rows.filter(p=>p.score<90),high=rows.filter(p=>p.score>=90),lo=totals(low),hi=totals(high),all=totals(rows);
@@ -82,7 +82,7 @@ function analyze(picks,options={}){
  for(const p of input){
   if(!p||p.sport!=='NBA')continue;counts.nbaRecords++;
   const market=canonical(p.market);
-  if(!markets.has(market)||!finite(p.score)||p.score<85||p.score>100||!['over','under','at_least'].includes(p.side)){counts.outOfScope++;continue;}
+  if(!markets.has(market)||!finite(p.score)||p.score<(market==='threes'?85:p.inputs?.recommendationMinimum===75?75:85)||p.score>100||!['over','under','at_least'].includes(p.side)){counts.outOfScope++;continue;}
   if(!text(p.board)||!text(p.modelVersion)||!text(p.gameId)||!text(p.playerId)||!finite(p.line)||p.line<0||
    !Number.isFinite(stamp(p.capturedAt))||!Number.isFinite(stamp(p.startsAt))||stamp(p.capturedAt)>=stamp(p.startsAt)||
    stamp(p.capturedAt)>now||settled(p)&&stamp(p.startsAt)>=now) {counts.malformed++;continue;}
@@ -107,13 +107,13 @@ function analyze(picks,options={}){
   for(const p of rows){const e=p.validationEvidence,range=lineRange(p,p.market),id=JSON.stringify([range,e.roleRange,e.sampleKind]);if(!strata.has(id))strata.set(id,[]);strata.get(id).push(p);}
   return {key,sport:'NBA',board:first.board,modelVersion:first.modelVersion,market:first.market,side:first.side,linePolicy:first.validationEvidence.linePolicy,
    ...summarize(rows,options),metadataComplete:rows.filter(p=>p.validationEvidence.metadataComplete).length,
-   bands:['85–89','90–94','95–100'].map(name=>({band:name,...summarize(rows.filter(p=>band(p.score)===name),options)})),
+   bands:(rows.some(p=>p.score<85)?['75–79','80–84','85–89','90–94','95–100']:['85–89','90–94','95–100']).map(name=>({band:name,...summarize(rows.filter(p=>band(p.score)===name),options)})),
    strata:[...strata].sort(([a],[b])=>a.localeCompare(b)).map(([,xs])=>{const e=xs[0].validationEvidence;return {lineRange:lineRange(xs[0],xs[0].market),roleRange:e.roleRange,sampleKind:e.sampleKind,
     metadataComplete:xs.every(p=>p.validationEvidence.metadataComplete),...summarize(xs,options),
-    bands:['85–89','90–94','95–100'].map(name=>({band:name,...summarize(xs.filter(p=>band(p.score)===name),options)})),
+    bands:(rows.some(p=>p.score<85)?['75–79','80–84','85–89','90–94','95–100']:['85–89','90–94','95–100']).map(name=>({band:name,...summarize(xs.filter(p=>band(p.score)===name),options)})),
     scoreTest:scoreComparison(xs,xs.every(p=>p.validationEvidence.metadataComplete),options)};})};
  });
- return {version:VERSION,scope:'Frozen NBA player props rated 85–100; first-basket estimates and older sub-85 recommendations remain in the ordinary record but are outside this score test.',counts,groups:output,
+ return {version:VERSION,scope:'Frozen NBA player props meeting their captured 75/85 market minimum; first-basket estimates and older untagged sub-85 recommendations remain in the ordinary record but are outside this score test.',counts,groups:output,
   limits:['Models, boards, markets, sides and line policies are never pooled for score comparisons.',
    'Score comparisons additionally match captured line ranges, frozen role/minutes ranges and sample kinds. Unknown historical evidence is never backfilled.',
    'Pending, void, push and unresolved records never count as wins or losses. Revisions are not additional trials.',

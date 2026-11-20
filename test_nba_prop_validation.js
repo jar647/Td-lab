@@ -101,7 +101,7 @@ assert(results.scores(ufcGroups).includes('Wilson'),'UFC score rendering remains
 const page=fs.readFileSync('results.html','utf8'),controller=fs.readFileSync('results.js','utf8');
 assert(page.indexOf('nba_prop_validation.js')<page.indexOf('results.js'));
 assert.match(page,/id="nba-prop-validation-panel" hidden/);
-assert(page.includes('results.js?v=issue130-results-v2'));
+assert(page.includes('results.js?v=nba75-threes85-v1'));
 const elements=new Map();
 function el(id){
  if(!elements.has(id)){

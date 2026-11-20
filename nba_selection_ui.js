@@ -77,7 +77,7 @@
    const at=now(),byGame=new Map(fixtures(inputs.feed,at).map(g=>[String(g.id),g]));
    return (Array.isArray(rows)?rows:[]).flatMap(row=>{
     let c;try{c=gf?.candidate?.(row)}catch(_){return []}
-    const g=byGame.get(String(c?.gameId)),r=c?.roleEvidence;if(!c||!g||!r||r.eligible!==true||r.roleStatus!=='SUPPORTED'||!Array.isArray(c.samples)||c.samples.length<1000||c.side!=='over'||c.score<85||c.reviewRequired||c.eligible!==true)return [];
+    const g=byGame.get(String(c?.gameId)),r=c?.roleEvidence;if(!c||!g||!r||r.eligible!==true||r.roleStatus!=='SUPPORTED'||!Array.isArray(c.samples)||c.samples.length<1000||c.side!=='over'||c.score<gf.minimumScore(c.market)||c.reviewRequired||c.eligible!==true)return [];
     if(!c.game||String(c.game.id)!==String(g.id)||c.game.home!==g.home||c.game.away!==g.away||time(c.game.date)!==time(g.date))return [];
     const statuses=['NOT LISTED','ACTIVE','AVAILABLE','PROBABLE'];if(!statuses.includes(String(r.status||'').toUpperCase())||c.status!==undefined&&!statuses.includes(String(c.status).toUpperCase())||![g.home,g.away].includes(c.team)||c.opponent!==undefined&&c.opponent!==(c.team===g.home?g.away:g.home)||!Array.isArray(inputs.rosters.teams[c.team])||!inputs.rosters.teams[c.team].map(String).includes(String(c.playerId)))return [];
     for(const [key,value]of [['games',inputs.feed],['rosters',inputs.rosters],['injuries',inputs.injuries]])if(time(c.inputTimes?.[key])!==stamp(value))return [];
@@ -98,7 +98,7 @@
    return {candidates:supported(rows,inputs),held,signature:inputs.signature,ready:true,reason:''};
   }
   function runWorker(inputs,version){
-   const make=options.workerFactory||(typeof root.Worker==='function'?()=>new root.Worker('./nba_parlay_worker.js?v=nba-prop-select-v2'):null);
+   const make=options.workerFactory||(typeof root.Worker==='function'?()=>new root.Worker('./nba_parlay_worker.js?v=nba75-threes85-v1'):null);
    if(!make)return fallback(inputs,version);
    return new Promise(resolve=>{
     let worker,timer,finished=false;const requestId=++request;
@@ -124,7 +124,7 @@
    if(cache&&cache.signature===inputs.signature&&now()-cache.at<=60000&&now()>=cache.at)return {...cache.result,candidates:supported(cache.result.candidates,inputs)};
    if(computeTask&&computeTask.signature===inputs.signature)return computeTask.promise;
    const version=revision,promise=(async()=>{const result=await runWorker(inputs,version);if(destroyed||version!==revision||current?.signature!==inputs.signature)return unavailable('NBA sources changed during simulation.');
-    if(result.ready){const candidates=supported(result.candidates,inputs);const value={...result,candidates,heldCount:result.held?.length||0,reason:candidates.length?'':result.held?.[0]?.reason||'No supported OVER 85/100+ player props are available from the current sources.'};cache={signature:inputs.signature,at:now(),result:value};return value}return result;
+    if(result.ready){const candidates=supported(result.candidates,inputs);const value={...result,candidates,heldCount:result.held?.length||0,reason:candidates.length?'':result.held?.[0]?.reason||'No supported OVER 75/100+ (three-pointers 85/100+) player props are available from the current sources.'};cache={signature:inputs.signature,at:now(),result:value};return value}return result;
    })().catch(()=>unavailable('The NBA research engine failed. Retry the research scan.'));computeTask={signature:inputs.signature,promise};
    try{return await promise}finally{if(computeTask?.promise===promise)computeTask=null}
   }

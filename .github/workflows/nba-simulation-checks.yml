@@ -7,6 +7,7 @@ on:
       - 'nba_parlay*.js'
       - 'nba_prop*.js'
       - 'nba_selection_ui.js'
+      - 'test_nba_75_policy.js'
       - 'test_nba_parlay*.js'
       - 'test_nba_selection*.js'
       - 'tests/test_nba_parlay.js'
@@ -44,6 +45,7 @@ jobs:
           node test_nba_selection_ui.js
           node test_nba_parlay_ui.js
           node test_nba_selection_capture.js
+          node test_nba_75_policy.js
           node tests/test_nba_parlay.js
           node tests/test_nba_prop_lines.js
           node tests/test_nba_prop_evidence.js
