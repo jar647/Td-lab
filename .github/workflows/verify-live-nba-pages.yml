@@ -38,15 +38,24 @@ jobs:
             ! grep -Fq 'Where to look &amp; why' /tmp/prop-shop-nba.html &&
             ! grep -Fq 'renderNBAMatchups(g)' /tmp/prop-shop-nba.html &&
             grep -Fq 'NBA Best Props' /tmp/prop-shop-nba.html &&
+            grep -Fq 'INCOMPLETE CHECK' /tmp/prop-shop-nba.html &&
+            grep -Fq 'nbaRefreshVisibleSlate' /tmp/prop-shop-nba.html &&
+            grep -Fq 'UNDERS are being evaluated in shadow mode at 85/100 (threes 90/100)' /tmp/prop-shop-nba.html &&
             grep -Fq 'nba_game_first.js?v=nba-best-props-gate-20261120-v2' /tmp/prop-shop-nba.html &&
             grep -Fq 'nba_selection_ui.js?v=nba-best-props-gate-20261120-v2' /tmp/prop-shop-nba.html &&
             curl --fail --location --silent --show-error --connect-timeout 10 --max-time 25 "${site}/nba_game_first.js?verify=${GITHUB_SHA}" -o /tmp/prop-shop-game-first.js &&
             grep -Fq '!Number.isFinite(row.matchupBoost)' /tmp/prop-shop-game-first.js &&
             ! grep -Fq '!(row.matchupBoost>0)' /tmp/prop-shop-game-first.js &&
             curl --fail --location --silent --show-error --connect-timeout 10 --max-time 25 "${site}/nba_selection_ui.js?verify=${GITHUB_SHA}" -o /tmp/prop-shop-selection-ui.js &&
+            grep -Fq 'reuseFreshInputs' /tmp/prop-shop-selection-ui.js &&
             grep -Fq 'nba_parlay_worker.js?v=nba-best-props-gate-20261120-v2' /tmp/prop-shop-selection-ui.js &&
             curl --fail --location --silent --show-error --connect-timeout 10 --max-time 25 "${site}/nba_parlay_worker.js?verify=${GITHUB_SHA}" -o /tmp/prop-shop-worker.js &&
-            grep -Fq 'nba_game_first.js?v=nba-best-props-gate-20261120-v2' /tmp/prop-shop-worker.js
+            grep -Fq 'nba_game_first.js?v=nba-best-props-gate-20261120-v2' /tmp/prop-shop-worker.js &&
+            grep -Fq 'gamesAnalyzed' /tmp/prop-shop-worker.js &&
+            curl --fail --location --silent --show-error --connect-timeout 10 --max-time 25 "${site}/nba_under_shadow.js?verify=${GITHUB_SHA}" -o /tmp/prop-shop-unders.js &&
+            grep -Fq 'studyOnly:true' /tmp/prop-shop-unders.js &&
+            curl --fail --location --silent --show-error --connect-timeout 10 --max-time 25 "${site}/data/recommendations/nba_under_shadow.json?verify=${GITHUB_SHA}" -o /tmp/prop-shop-under-ledger.json &&
+            grep -Fq '"betReady": false' /tmp/prop-shop-under-ledger.json
           }
           for attempt in $(seq 1 24); do
             echo "Live deployment verification attempt ${attempt}/24"
