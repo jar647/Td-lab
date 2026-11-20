@@ -83,12 +83,10 @@ const old={key:'late|player|rebounds',game:late,gameId:'late',playerId:'player',
  assert(!research.includes('+7%'),'The +6.6% normalized difference must not be presented as the raw 6 versus 7.5 comparison');
  assert.match(research,/56% sample weight/);
 
- // The quick entry opens the existing builder directly beside Best Props.
- evaluate('nbaParlayController={};openNBAParlay()');assert.equal(element('nba-parlay-details').open,true);assert.equal(element('nba-parlay-details').scrolled,true);
+ // The redundant parlay generator is removed while NBA Best Props and First Basket remain.
  const main=source.slice(0,source.indexOf('<script'));
- const best=main.indexOf('id="nba-slate"'),button=main.indexOf('id="open-nba-parlay"'),builder=main.indexOf('id="nba-parlay"'),basket=main.indexOf('id="nba-first-basket-slate"');
- assert(best>=0&&best<button&&button<builder&&builder<basket,'The quick parlay button and builder belong directly after Best Props');
- assert.match(main,/<button[^>]*id="open-nba-parlay"[^>]*onclick="openNBAParlay\(\)"[^>]*aria-controls="nba-parlay-details"/);
+ assert(main.includes('id="nba-slate"')&&main.includes('id="nba-first-basket-slate"'));
+ assert(!main.includes('id="open-nba-parlay"')&&!main.includes('id="nba-parlay"'));
  const scripts=[...source.matchAll(/<script src="\.\/([^"?]+)(?:\?[^\"]*)?"/g)].map(match=>match[1]);
  const before=(a,b)=>assert(scripts.includes(a)&&scripts.includes(b)&&scripts.indexOf(a)<scripts.indexOf(b),a+' must load before '+b);
  before('nba_prop_evidence.js','nba_matchup_discovery.js');before('nba_prop_lines.js','nba_matchup_discovery.js');
@@ -109,5 +107,5 @@ const old={key:'late|player|rebounds',game:late,gameId:'late',playerId:'player',
  assert.deepEqual(plain(evaluate('({games:generatedAt,rosters:rosterData.generated_at,injuries:injuryData.generated_at,context:nbaGameContext.generated_at})')),{games:stamp,rosters:stamp,injuries:stamp,context:stamp},'Late init responses must not replace newer scan source timestamps');
  assert.equal(evaluate('injuryData.injuries[0]?.status'),'OUT','A newer verified OUT designation survives a late older initial report');
  assert.deepEqual(plain(evaluate('games.map(g=>g.id)')),['late'],'A late older game feed cannot restore a previous slate');
- console.log('NBA selection page: monotonic startup sources, failed-refresh and in-flight-source holds, fresh Quick Slip evidence, Eastern identity preservation, honest rate units and quick builder wiring PASS');
+ console.log('NBA selection page: monotonic startup sources, failed-refresh and in-flight-source holds, fresh Quick Slip evidence, Eastern identity preservation, honest rate units and removed redundant parlay UI PASS');
 })().catch(error=>{console.error(error);process.exitCode=1});
