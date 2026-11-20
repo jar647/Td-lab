@@ -98,7 +98,7 @@
    return {candidates:supported(rows,inputs),held,signature:inputs.signature,ready:true,reason:''};
   }
   function runWorker(inputs,version){
-   const make=options.workerFactory||(typeof root.Worker==='function'?()=>new root.Worker('./nba_parlay_worker.js?v=nba75-threes85-v1'):null);
+   const make=options.workerFactory||(typeof root.Worker==='function'?()=>new root.Worker('./nba_parlay_worker.js?v=nba-best-props-gate-20261120-v2'):null);
    if(!make)return fallback(inputs,version);
    return new Promise(resolve=>{
     let worker,timer,finished=false;const requestId=++request;
