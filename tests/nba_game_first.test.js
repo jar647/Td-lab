@@ -45,7 +45,7 @@ test('actual NBA matchup and game-first engines select the same supported role-b
   assert.equal(r.selectedLineEvidence.line,pick.recommendedOverLine);assert.deepEqual(r.selectedLineEvidence,pick.selectedLineEvidence);
   assert.equal(r.selectedLineEvidence.sampleKind,'role_adjusted_history');assert.deepEqual(r.inputTimes,r.roleEvidence.inputTimes);
  }
- const ticket=engine.build(analysis.rows);assert(ticket.bestSingle);assert.equal(ticket.bestSingle.line,17.5);
+ const ticket=engine.build(analysis.rows);assert(ticket.bestSingle);const leading=analysis.rows.find(r=>r.key===ticket.bestSingle.key);assert(leading?.selectedLineEvidence?.available);assert.equal(ticket.bestSingle.line,leading.selectedLineEvidence.line,'The highest-rated supported market must retain its role-based selected alternate line');
  assert.equal(ticket.bestSingle.probability,ticket.bestSingle.samples.filter(x=>x>17.5).length/1000);
  assert(analysis.rows.every(r=>r.samples.length===1000&&r.outcomeSetId===analysis.rows[0].outcomeSetId));
 });
