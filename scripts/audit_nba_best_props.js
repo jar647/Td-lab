@@ -10,13 +10,13 @@ const feed=data('nba_games.json'), rosters=data('nba_rosters.json'), injuries=da
 const now=Date.now(), eastern=t=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(t));
 const today=eastern(now);
 const games=feed.games.filter(g=>g.status==='STATUS_SCHEDULED'&&Date.parse(g.date)>now&&eastern(Date.parse(g.date))===today);
-const stat={games:games.length,research:0,qualifiedResearch:0,rawSimulationRows:0,eligibleRows:0,candidateRows:0,simScoreAboveMinimum:0,roles:0,heldRoles:0};
+const stat={games:games.length,research:0,qualifiedResearch:0,rawSimulationRows:0,eligibleRows:0,candidateRows:0,simScoreAboveMinimum:0,roles:0,heldRoles:0,modelFailures:0,researchFailures:0};
 console.log('TIME',new Date(now).toISOString(),'ET',today);
 console.log('SNAPSHOTS',JSON.stringify({games:feed.generated_at,rosters:rosters.generated_at,injuries:injuries.generated_at,context:context.generated_at,scheduled:games.length,final:feed.games.filter(g=>g.status==='STATUS_FINAL').length}));
 for(const g of games){
  let research,sim;
- try{research=matchups.analyze(g,feed,rosters,injuries,now,{context});}catch(e){console.log('MATCHUP_EXCEPTION',g.id,e.message);continue;}
- try{sim=gf.analyze(g,feed,injuries,rosters,context,now,{count:1000});}catch(e){console.log('SIM_EXCEPTION',g.id,e.message);continue;}
+ try{research=matchups.analyze(g,feed,rosters,injuries,now,{context});}catch(e){stat.researchFailures++;console.log('MATCHUP_EXCEPTION',g.id,e.message);continue;}
+ try{sim=gf.analyze(g,feed,injuries,rosters,context,now,{count:1000});}catch(e){stat.modelFailures++;console.log('SIM_EXCEPTION',g.id,e.message);continue;}
  const eligible=(sim.rows||[]).filter(x=>x.eligible&&!x.reviewRequired), scored=(sim.rows||[]).filter(x=>lines.qualifiesScore(x.matchupRating?.score,x.market));
  const qualified=(research.candidates||[]).filter(x=>lines.qualifiesScore(x.researchScore,x.market));
  const cand=(sim.rows||[]).map(x=>gf.candidate(x)).filter(Boolean);
@@ -25,6 +25,8 @@ for(const g of games){
    console.log('ELIGIBLE_DEBUG',JSON.stringify({game:g.id,player:r.name,market:r.market,score:r.matchupRating?.score,forecast:r.forecast,boost:r.matchupBoost,matchupGames:r.matchupGames,samples:r.samples?.length,selected:chosen.available,selectedReason:chosen.reason,selectedLine:line,side:r.side,roleSupported:r.roleEvidence?.roleStatus,roleEligible:r.roleEvidence?.eligible,probability:Number.isFinite(line)&&r.samples?.length?r.samples.filter(x=>x>line).length/r.samples.length:null,acceptedWithPositiveBoost:Boolean(boosted),candidateAccepted:Boolean(gf.candidate(r))}));
  }
 
+ if(sim.reason)stat.modelFailures++;
+ if(research.ready!==true)stat.researchFailures++;
  const roles=Object.values(research.roleEvidence?.players||{}), held=roles.filter(x=>!x.eligible);
  const topHoldReasons=Object.entries(held.flatMap(x=>x.holdReasons||[]).reduce((a,r)=>(a[r]=(a[r]||0)+1,a),{})).sort((a,b)=>b[1]-a[1]).slice(0,5);
  stat.research+=(research.candidates||[]).length;stat.qualifiedResearch+=qualified.length;
@@ -41,7 +43,11 @@ async function verifyPublishedSelection(){
  const provider=selection.create({now:()=>now,fetch:async url=>({ok:true,json:async()=>snapshots[url]})});
  const result=await provider.getCandidates();
  const shortlisted=autoAlt.shortlist(result.candidates||[]);
+ const sourceAgeMinutes=Object.fromEntries([['games',feed],['rosters',rosters],['injuries',injuries]].map(([k,v])=>[k,Math.round((now-Date.parse(v.generated_at))/60000)]));
+ const verdict=!result.ready?'PROVIDER_NOT_READY':shortlisted.length?'QUALIFYING_MODEL_RESEARCH_AVAILABLE':stat.researchFailures||stat.modelFailures?'ZERO_PROPS_INCOMPLETE_EVIDENCE':stat.qualifiedResearch?'ZERO_PROPS_REQUIRES_EXCLUSION_REVIEW':'ZERO_SUPPORTED_MATCHUP_SCORES_NOT_ALL_REAL_WORLD_PROPS';
  console.log('PROVIDER',JSON.stringify({ready:result.ready,reason:result.reason,passed:result.candidates?.length||0,shortlisted:shortlisted.length,legs:shortlisted.map(r=>({player:r.name,market:r.market,score:r.score,line:r.line,probability:r.probability}))}));
+ console.log('AUDIT_VERDICT',JSON.stringify({verdict,sourceAgeMinutes,scheduledGames:games.length,modelFailures:stat.modelFailures,researchFailures:stat.researchFailures,qualifiedResearch:stat.qualifiedResearch,eligibleSimulationRows:stat.eligibleRows,qualifiedSimulationRows:stat.simScoreAboveMinimum,modelCandidates:stat.candidateRows,displayed:shortlisted.length,sportsbookLinesVerified:false,probabilitiesCalibrated:false}));
+
  if(result.ready!==true)throw Error('Selection provider is not ready: '+result.reason);
  if(stat.candidateRows>0&&shortlisted.length===0)throw Error('Eligible simulated props were rejected by the UI selection provider');
  provider.destroy();
