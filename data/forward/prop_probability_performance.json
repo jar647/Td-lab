@@ -2,13 +2,13 @@
   "status": "RESEARCH_ONLY_NOT_BET_READY",
   "bet_ready": false,
   "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
-  "graded": 11909,
-  "current_model_graded": 2498,
+  "graded": 12065,
+  "current_model_graded": 2581,
   "game_first_model_version": "game-first-volume-v4-depth-chart-qb",
-  "game_first_graded": 994,
-  "game_first_distinct_weeks": 1,
+  "game_first_graded": 1067,
+  "game_first_distinct_weeks": 2,
   "game_first_research_review_ready": false,
-  "game_first_distinct_player_games": 139,
+  "game_first_distinct_player_games": 150,
   "forward_review_thresholds": {
     "distinct_weeks": 8,
     "graded_forecast_rows": 500,
@@ -68,37 +68,37 @@
   },
   "game_first_markets": {
     "PASS": {
-      "n": 80,
-      "model_brier": 0.220266,
-      "baseline_brier": 0.224619,
+      "n": 88,
+      "model_brier": 0.212548,
+      "baseline_brier": 0.223794,
       "beats_baseline": true,
-      "distinct_weeks": 1,
-      "model_log_loss": 0.633536,
-      "baseline_log_loss": 0.643699,
+      "distinct_weeks": 2,
+      "model_log_loss": 0.61363,
+      "baseline_log_loss": 0.639424,
       "calibration_bins": [
         {
           "range": "0-10%",
-          "n": 5,
-          "predicted": 0.0606,
+          "n": 6,
+          "predicted": 0.0576,
           "observed": 0.0
         },
         {
           "range": "10-20%",
-          "n": 13,
-          "predicted": 0.1478,
-          "observed": 0.4615
+          "n": 15,
+          "predicted": 0.1455,
+          "observed": 0.4
         },
         {
           "range": "20-30%",
-          "n": 7,
-          "predicted": 0.2436,
-          "observed": 0.2857
+          "n": 8,
+          "predicted": 0.2493,
+          "observed": 0.25
         },
         {
           "range": "30-40%",
-          "n": 10,
-          "predicted": 0.3446,
-          "observed": 0.4
+          "n": 11,
+          "predicted": 0.3465,
+          "observed": 0.3636
         },
         {
           "range": "40-50%",
@@ -108,15 +108,15 @@
         },
         {
           "range": "50-60%",
-          "n": 7,
-          "predicted": 0.5714,
-          "observed": 0.4286
+          "n": 8,
+          "predicted": 0.5707,
+          "observed": 0.375
         },
         {
           "range": "60-70%",
-          "n": 6,
-          "predicted": 0.6446,
-          "observed": 1.0
+          "n": 7,
+          "predicted": 0.652,
+          "observed": 0.8571
         },
         {
           "range": "70-80%",
@@ -126,9 +126,9 @@
         },
         {
           "range": "80-90%",
-          "n": 11,
-          "predicted": 0.8554,
-          "observed": 0.8182
+          "n": 12,
+          "predicted": 0.8543,
+          "observed": 0.8333
         },
         {
           "range": "90-100%",
@@ -137,36 +137,36 @@
           "observed": 0.8333
         }
       ],
-      "expected_calibration_error": 0.154061,
-      "distinct_player_games": 20,
-      "distinct_game_market_players": 20
+      "expected_calibration_error": 0.126869,
+      "distinct_player_games": 22,
+      "distinct_game_market_players": 22
     },
     "RUSH": {
-      "n": 97,
-      "model_brier": 0.153704,
-      "baseline_brier": 0.158853,
+      "n": 106,
+      "model_brier": 0.177609,
+      "baseline_brier": 0.177623,
       "beats_baseline": true,
-      "distinct_weeks": 1,
-      "model_log_loss": 0.552666,
-      "baseline_log_loss": 0.502514,
+      "distinct_weeks": 2,
+      "model_log_loss": 0.658611,
+      "baseline_log_loss": 0.547421,
       "calibration_bins": [
         {
           "range": "0-10%",
-          "n": 28,
-          "predicted": 0.0261,
-          "observed": 0.0714
+          "n": 30,
+          "predicted": 0.0246,
+          "observed": 0.1
         },
         {
           "range": "10-20%",
-          "n": 7,
-          "predicted": 0.153,
-          "observed": 0.0
+          "n": 9,
+          "predicted": 0.1578,
+          "observed": 0.1111
         },
         {
           "range": "20-30%",
-          "n": 7,
-          "predicted": 0.2464,
-          "observed": 0.1429
+          "n": 8,
+          "predicted": 0.2412,
+          "observed": 0.125
         },
         {
           "range": "30-40%",
@@ -188,53 +188,53 @@
         },
         {
           "range": "60-70%",
-          "n": 7,
-          "predicted": 0.6509,
-          "observed": 0.4286
+          "n": 8,
+          "predicted": 0.6496,
+          "observed": 0.375
         },
         {
           "range": "70-80%",
-          "n": 6,
-          "predicted": 0.768,
-          "observed": 0.5
+          "n": 7,
+          "predicted": 0.7649,
+          "observed": 0.5714
         },
         {
           "range": "80-90%",
-          "n": 10,
-          "predicted": 0.8388,
-          "observed": 0.8
+          "n": 11,
+          "predicted": 0.8395,
+          "observed": 0.7273
         },
         {
           "range": "90-100%",
-          "n": 19,
-          "predicted": 0.9773,
-          "observed": 0.8421
+          "n": 20,
+          "predicted": 0.978,
+          "observed": 0.8
         }
       ],
-      "expected_calibration_error": 0.10216,
-      "distinct_player_games": 33,
-      "distinct_game_market_players": 33
+      "expected_calibration_error": 0.119658,
+      "distinct_player_games": 36,
+      "distinct_game_market_players": 36
     },
     "REC": {
-      "n": 297,
-      "model_brier": 0.16029,
-      "baseline_brier": 0.161308,
+      "n": 318,
+      "model_brier": 0.156416,
+      "baseline_brier": 0.157764,
       "beats_baseline": true,
-      "distinct_weeks": 1,
-      "model_log_loss": 0.478988,
-      "baseline_log_loss": 0.491274,
+      "distinct_weeks": 2,
+      "model_log_loss": 0.467642,
+      "baseline_log_loss": 0.482791,
       "calibration_bins": [
         {
           "range": "0-10%",
-          "n": 109,
-          "predicted": 0.0239,
-          "observed": 0.055
+          "n": 118,
+          "predicted": 0.024,
+          "observed": 0.0508
         },
         {
           "range": "10-20%",
-          "n": 40,
-          "predicted": 0.1431,
-          "observed": 0.3
+          "n": 44,
+          "predicted": 0.1428,
+          "observed": 0.2727
         },
         {
           "range": "20-30%",
@@ -244,21 +244,21 @@
         },
         {
           "range": "30-40%",
-          "n": 18,
-          "predicted": 0.3461,
-          "observed": 0.3333
+          "n": 21,
+          "predicted": 0.3466,
+          "observed": 0.381
         },
         {
           "range": "40-50%",
-          "n": 26,
-          "predicted": 0.4448,
-          "observed": 0.4231
+          "n": 28,
+          "predicted": 0.4452,
+          "observed": 0.3929
         },
         {
           "range": "50-60%",
-          "n": 23,
+          "n": 25,
           "predicted": 0.5489,
-          "observed": 0.6522
+          "observed": 0.6
         },
         {
           "range": "60-70%",
@@ -268,9 +268,9 @@
         },
         {
           "range": "70-80%",
-          "n": 13,
-          "predicted": 0.7545,
-          "observed": 0.6923
+          "n": 14,
+          "predicted": 0.7547,
+          "observed": 0.7143
         },
         {
           "range": "80-90%",
@@ -285,66 +285,66 @@
           "observed": 1.0
         }
       ],
-      "expected_calibration_error": 0.060521,
-      "distinct_player_games": 99,
-      "distinct_game_market_players": 99
+      "expected_calibration_error": 0.054218,
+      "distinct_player_games": 106,
+      "distinct_game_market_players": 106
     },
     "CATCH": {
-      "n": 520,
-      "model_brier": 0.177749,
-      "baseline_brier": 0.18676,
+      "n": 555,
+      "model_brier": 0.176968,
+      "baseline_brier": 0.187909,
       "beats_baseline": true,
-      "distinct_weeks": 1,
-      "model_log_loss": 0.525242,
-      "baseline_log_loss": 0.55487,
+      "distinct_weeks": 2,
+      "model_log_loss": 0.523258,
+      "baseline_log_loss": 0.557453,
       "calibration_bins": [
         {
           "range": "0-10%",
-          "n": 124,
-          "predicted": 0.0447,
-          "observed": 0.0726
+          "n": 134,
+          "predicted": 0.0449,
+          "observed": 0.0672
         },
         {
           "range": "10-20%",
-          "n": 68,
+          "n": 70,
           "predicted": 0.1437,
-          "observed": 0.1912
+          "observed": 0.1857
         },
         {
           "range": "20-30%",
-          "n": 61,
-          "predicted": 0.2489,
-          "observed": 0.4262
+          "n": 67,
+          "predicted": 0.2484,
+          "observed": 0.403
         },
         {
           "range": "30-40%",
-          "n": 39,
-          "predicted": 0.3473,
-          "observed": 0.3333
+          "n": 40,
+          "predicted": 0.3463,
+          "observed": 0.325
         },
         {
           "range": "40-50%",
-          "n": 49,
-          "predicted": 0.4578,
-          "observed": 0.4898
+          "n": 54,
+          "predicted": 0.4564,
+          "observed": 0.4815
         },
         {
           "range": "50-60%",
-          "n": 41,
-          "predicted": 0.5517,
-          "observed": 0.4878
+          "n": 44,
+          "predicted": 0.5506,
+          "observed": 0.4545
         },
         {
           "range": "60-70%",
-          "n": 37,
-          "predicted": 0.6468,
-          "observed": 0.5946
+          "n": 39,
+          "predicted": 0.6467,
+          "observed": 0.5897
         },
         {
           "range": "70-80%",
-          "n": 40,
-          "predicted": 0.7499,
-          "observed": 0.725
+          "n": 44,
+          "predicted": 0.7515,
+          "observed": 0.7045
         },
         {
           "range": "80-90%",
@@ -354,33 +354,33 @@
         },
         {
           "range": "90-100%",
-          "n": 24,
-          "predicted": 0.9522,
-          "observed": 1.0
+          "n": 26,
+          "predicted": 0.9494,
+          "observed": 0.9615
         }
       ],
-      "expected_calibration_error": 0.059191,
-      "distinct_player_games": 104,
-      "distinct_game_market_players": 104
+      "expected_calibration_error": 0.057263,
+      "distinct_player_games": 111,
+      "distinct_game_market_players": 111
     }
   },
-  "distinct_graded_weeks": 2,
+  "distinct_graded_weeks": 3,
   "min_forward_weeks_for_review": 8,
   "eligible_for_research_review": false,
   "markets": {
     "PASS": {
-      "n": 176,
-      "model_brier": 0.177888,
-      "baseline_brier": 0.183534,
+      "n": 184,
+      "model_brier": 0.179525,
+      "baseline_brier": 0.184968,
       "beats_baseline": true,
-      "distinct_weeks": 2,
-      "model_log_loss": 0.53343,
-      "baseline_log_loss": 0.546968,
+      "distinct_weeks": 3,
+      "model_log_loss": 0.53618,
+      "baseline_log_loss": 0.549282,
       "calibration_bins": [
         {
           "range": "0-10%",
-          "n": 1,
-          "predicted": 0.0909,
+          "n": 2,
+          "predicted": 0.0871,
           "observed": 0.0
         },
         {
@@ -391,21 +391,21 @@
         },
         {
           "range": "20-30%",
-          "n": 18,
-          "predicted": 0.2429,
-          "observed": 0.1667
+          "n": 19,
+          "predicted": 0.241,
+          "observed": 0.1579
         },
         {
           "range": "30-40%",
-          "n": 21,
-          "predicted": 0.3369,
-          "observed": 0.4762
+          "n": 22,
+          "predicted": 0.3396,
+          "observed": 0.4545
         },
         {
           "range": "40-50%",
-          "n": 19,
-          "predicted": 0.4463,
-          "observed": 0.3158
+          "n": 20,
+          "predicted": 0.4456,
+          "observed": 0.3
         },
         {
           "range": "50-60%",
@@ -415,15 +415,15 @@
         },
         {
           "range": "60-70%",
-          "n": 31,
-          "predicted": 0.6532,
-          "observed": 0.6452
+          "n": 33,
+          "predicted": 0.6518,
+          "observed": 0.6061
         },
         {
           "range": "70-80%",
-          "n": 21,
-          "predicted": 0.7328,
-          "observed": 0.8571
+          "n": 22,
+          "predicted": 0.7325,
+          "observed": 0.8182
         },
         {
           "range": "80-90%",
@@ -433,35 +433,35 @@
         },
         {
           "range": "90-100%",
-          "n": 14,
-          "predicted": 0.9019,
-          "observed": 0.8571
+          "n": 15,
+          "predicted": 0.9024,
+          "observed": 0.8667
         }
       ],
-      "expected_calibration_error": 0.085034,
-      "distinct_player_games": 44,
-      "distinct_game_market_players": 44
+      "expected_calibration_error": 0.085516,
+      "distinct_player_games": 46,
+      "distinct_game_market_players": 46
     },
     "RUSH": {
-      "n": 288,
-      "model_brier": 0.145584,
-      "baseline_brier": 0.147923,
+      "n": 300,
+      "model_brier": 0.154547,
+      "baseline_brier": 0.155989,
       "beats_baseline": true,
-      "distinct_weeks": 2,
-      "model_log_loss": 0.457045,
-      "baseline_log_loss": 0.461124,
+      "distinct_weeks": 3,
+      "model_log_loss": 0.479011,
+      "baseline_log_loss": 0.479918,
       "calibration_bins": [
         {
           "range": "0-10%",
-          "n": 5,
-          "predicted": 0.0909,
-          "observed": 0.2
+          "n": 7,
+          "predicted": 0.0887,
+          "observed": 0.1429
         },
         {
           "range": "10-20%",
-          "n": 96,
-          "predicted": 0.1228,
-          "observed": 0.0521
+          "n": 101,
+          "predicted": 0.1234,
+          "observed": 0.0792
         },
         {
           "range": "20-30%",
@@ -483,9 +483,9 @@
         },
         {
           "range": "50-60%",
-          "n": 14,
-          "predicted": 0.5323,
-          "observed": 0.5714
+          "n": 17,
+          "predicted": 0.5348,
+          "observed": 0.5294
         },
         {
           "range": "60-70%",
@@ -495,15 +495,15 @@
         },
         {
           "range": "70-80%",
-          "n": 17,
-          "predicted": 0.7476,
-          "observed": 0.7647
+          "n": 18,
+          "predicted": 0.75,
+          "observed": 0.7222
         },
         {
           "range": "80-90%",
-          "n": 32,
-          "predicted": 0.8686,
-          "observed": 0.8125
+          "n": 33,
+          "predicted": 0.8694,
+          "observed": 0.7879
         },
         {
           "range": "90-100%",
@@ -512,66 +512,66 @@
           "observed": 0.8125
         }
       ],
-      "expected_calibration_error": 0.05608,
-      "distinct_player_games": 72,
-      "distinct_game_market_players": 72
+      "expected_calibration_error": 0.047682,
+      "distinct_player_games": 75,
+      "distinct_game_market_players": 75
     },
     "REC": {
-      "n": 884,
-      "model_brier": 0.142493,
-      "baseline_brier": 0.146979,
+      "n": 912,
+      "model_brier": 0.140924,
+      "baseline_brier": 0.145376,
       "beats_baseline": true,
-      "distinct_weeks": 2,
-      "model_log_loss": 0.446841,
-      "baseline_log_loss": 0.459073,
+      "distinct_weeks": 3,
+      "model_log_loss": 0.443,
+      "baseline_log_loss": 0.455171,
       "calibration_bins": [
         {
           "range": "0-10%",
-          "n": 34,
-          "predicted": 0.0909,
-          "observed": 0.0588
+          "n": 39,
+          "predicted": 0.0901,
+          "observed": 0.0513
         },
         {
           "range": "10-20%",
-          "n": 347,
-          "predicted": 0.1242,
-          "observed": 0.0605
+          "n": 357,
+          "predicted": 0.1247,
+          "observed": 0.0588
         },
         {
           "range": "20-30%",
-          "n": 121,
-          "predicted": 0.2382,
-          "observed": 0.2066
+          "n": 122,
+          "predicted": 0.2383,
+          "observed": 0.2049
         },
         {
           "range": "30-40%",
-          "n": 85,
-          "predicted": 0.345,
-          "observed": 0.2941
+          "n": 90,
+          "predicted": 0.3447,
+          "observed": 0.2778
         },
         {
           "range": "40-50%",
-          "n": 61,
-          "predicted": 0.4357,
-          "observed": 0.3934
+          "n": 62,
+          "predicted": 0.4359,
+          "observed": 0.3871
         },
         {
           "range": "50-60%",
-          "n": 65,
-          "predicted": 0.5415,
-          "observed": 0.4769
+          "n": 67,
+          "predicted": 0.5409,
+          "observed": 0.4776
         },
         {
           "range": "60-70%",
-          "n": 56,
-          "predicted": 0.644,
-          "observed": 0.7321
+          "n": 59,
+          "predicted": 0.6454,
+          "observed": 0.7119
         },
         {
           "range": "70-80%",
-          "n": 52,
-          "predicted": 0.7375,
-          "observed": 0.6538
+          "n": 53,
+          "predicted": 0.7382,
+          "observed": 0.6604
         },
         {
           "range": "80-90%",
@@ -586,83 +586,83 @@
           "observed": 1.0
         }
       ],
-      "expected_calibration_error": 0.061762,
-      "distinct_player_games": 221,
-      "distinct_game_market_players": 221
+      "expected_calibration_error": 0.06321,
+      "distinct_player_games": 228,
+      "distinct_game_market_players": 228
     },
     "CATCH": {
-      "n": 1150,
-      "model_brier": 0.170204,
-      "baseline_brier": 0.175234,
+      "n": 1185,
+      "model_brier": 0.171231,
+      "baseline_brier": 0.176116,
       "beats_baseline": true,
-      "distinct_weeks": 2,
-      "model_log_loss": 0.515807,
-      "baseline_log_loss": 0.527774,
+      "distinct_weeks": 3,
+      "model_log_loss": 0.51817,
+      "baseline_log_loss": 0.529707,
       "calibration_bins": [
         {
           "range": "0-10%",
-          "n": 14,
-          "predicted": 0.0909,
-          "observed": 0.0714
+          "n": 19,
+          "predicted": 0.0901,
+          "observed": 0.0526
         },
         {
           "range": "10-20%",
-          "n": 219,
-          "predicted": 0.1329,
-          "observed": 0.0776
+          "n": 225,
+          "predicted": 0.133,
+          "observed": 0.0756
         },
         {
           "range": "20-30%",
-          "n": 174,
-          "predicted": 0.2356,
-          "observed": 0.1839
+          "n": 176,
+          "predicted": 0.2358,
+          "observed": 0.1875
         },
         {
           "range": "30-40%",
-          "n": 93,
-          "predicted": 0.3458,
-          "observed": 0.3011
+          "n": 97,
+          "predicted": 0.346,
+          "observed": 0.2887
         },
         {
           "range": "40-50%",
-          "n": 90,
-          "predicted": 0.4328,
-          "observed": 0.3556
+          "n": 92,
+          "predicted": 0.4327,
+          "observed": 0.3478
         },
         {
           "range": "50-60%",
-          "n": 105,
+          "n": 109,
           "predicted": 0.5362,
-          "observed": 0.5238
+          "observed": 0.5138
         },
         {
           "range": "60-70%",
-          "n": 115,
-          "predicted": 0.6386,
-          "observed": 0.6261
+          "n": 116,
+          "predicted": 0.6385,
+          "observed": 0.6293
         },
         {
           "range": "70-80%",
-          "n": 129,
-          "predicted": 0.7434,
-          "observed": 0.6899
+          "n": 132,
+          "predicted": 0.7428,
+          "observed": 0.6742
         },
         {
           "range": "80-90%",
-          "n": 157,
+          "n": 163,
           "predicted": 0.8421,
-          "observed": 0.7962
+          "observed": 0.7853
         },
         {
           "range": "90-100%",
-          "n": 54,
-          "predicted": 0.9027,
-          "observed": 0.9074
+          "n": 56,
+          "predicted": 0.9028,
+          "observed": 0.8929
         }
       ],
-      "expected_calibration_error": 0.043122,
-      "distinct_player_games": 230,
-      "distinct_game_market_players": 230
+      "expected_calibration_error": 0.048864,
+      "distinct_player_games": 237,
+      "distinct_game_market_players": 237
     }
   },
   "version_reports": {
@@ -1579,43 +1579,43 @@
       }
     },
     "game-first-volume-v4-depth-chart-qb": {
-      "graded": 994,
-      "distinct_weeks": 1,
-      "distinct_player_games": 139,
-      "distinct_games": 13,
+      "graded": 1067,
+      "distinct_weeks": 2,
+      "distinct_player_games": 150,
+      "distinct_games": 14,
       "markets": {
         "PASS": {
-          "n": 80,
-          "model_brier": 0.220266,
-          "baseline_brier": 0.224619,
+          "n": 88,
+          "model_brier": 0.212548,
+          "baseline_brier": 0.223794,
           "beats_baseline": true,
-          "distinct_weeks": 1,
-          "model_log_loss": 0.633536,
-          "baseline_log_loss": 0.643699,
+          "distinct_weeks": 2,
+          "model_log_loss": 0.61363,
+          "baseline_log_loss": 0.639424,
           "calibration_bins": [
             {
               "range": "0-10%",
-              "n": 5,
-              "predicted": 0.0606,
+              "n": 6,
+              "predicted": 0.0576,
               "observed": 0.0
             },
             {
               "range": "10-20%",
-              "n": 13,
-              "predicted": 0.1478,
-              "observed": 0.4615
+              "n": 15,
+              "predicted": 0.1455,
+              "observed": 0.4
             },
             {
               "range": "20-30%",
-              "n": 7,
-              "predicted": 0.2436,
-              "observed": 0.2857
+              "n": 8,
+              "predicted": 0.2493,
+              "observed": 0.25
             },
             {
               "range": "30-40%",
-              "n": 10,
-              "predicted": 0.3446,
-              "observed": 0.4
+              "n": 11,
+              "predicted": 0.3465,
+              "observed": 0.3636
             },
             {
               "range": "40-50%",
@@ -1625,15 +1625,15 @@
             },
             {
               "range": "50-60%",
-              "n": 7,
-              "predicted": 0.5714,
-              "observed": 0.4286
+              "n": 8,
+              "predicted": 0.5707,
+              "observed": 0.375
             },
             {
               "range": "60-70%",
-              "n": 6,
-              "predicted": 0.6446,
-              "observed": 1.0
+              "n": 7,
+              "predicted": 0.652,
+              "observed": 0.8571
             },
             {
               "range": "70-80%",
@@ -1643,9 +1643,9 @@
             },
             {
               "range": "80-90%",
-              "n": 11,
-              "predicted": 0.8554,
-              "observed": 0.8182
+              "n": 12,
+              "predicted": 0.8543,
+              "observed": 0.8333
             },
             {
               "range": "90-100%",
@@ -1654,36 +1654,36 @@
               "observed": 0.8333
             }
           ],
-          "expected_calibration_error": 0.154061,
-          "distinct_player_games": 20,
-          "distinct_game_market_players": 20
+          "expected_calibration_error": 0.126869,
+          "distinct_player_games": 22,
+          "distinct_game_market_players": 22
         },
         "RUSH": {
-          "n": 97,
-          "model_brier": 0.153704,
-          "baseline_brier": 0.158853,
+          "n": 106,
+          "model_brier": 0.177609,
+          "baseline_brier": 0.177623,
           "beats_baseline": true,
-          "distinct_weeks": 1,
-          "model_log_loss": 0.552666,
-          "baseline_log_loss": 0.502514,
+          "distinct_weeks": 2,
+          "model_log_loss": 0.658611,
+          "baseline_log_loss": 0.547421,
           "calibration_bins": [
             {
               "range": "0-10%",
-              "n": 28,
-              "predicted": 0.0261,
-              "observed": 0.0714
+              "n": 30,
+              "predicted": 0.0246,
+              "observed": 0.1
             },
             {
               "range": "10-20%",
-              "n": 7,
-              "predicted": 0.153,
-              "observed": 0.0
+              "n": 9,
+              "predicted": 0.1578,
+              "observed": 0.1111
             },
             {
               "range": "20-30%",
-              "n": 7,
-              "predicted": 0.2464,
-              "observed": 0.1429
+              "n": 8,
+              "predicted": 0.2412,
+              "observed": 0.125
             },
             {
               "range": "30-40%",
@@ -1705,53 +1705,53 @@
             },
             {
               "range": "60-70%",
-              "n": 7,
-              "predicted": 0.6509,
-              "observed": 0.4286
+              "n": 8,
+              "predicted": 0.6496,
+              "observed": 0.375
             },
             {
               "range": "70-80%",
-              "n": 6,
-              "predicted": 0.768,
-              "observed": 0.5
+              "n": 7,
+              "predicted": 0.7649,
+              "observed": 0.5714
             },
             {
               "range": "80-90%",
-              "n": 10,
-              "predicted": 0.8388,
-              "observed": 0.8
+              "n": 11,
+              "predicted": 0.8395,
+              "observed": 0.7273
             },
             {
               "range": "90-100%",
-              "n": 19,
-              "predicted": 0.9773,
-              "observed": 0.8421
+              "n": 20,
+              "predicted": 0.978,
+              "observed": 0.8
             }
           ],
-          "expected_calibration_error": 0.10216,
-          "distinct_player_games": 33,
-          "distinct_game_market_players": 33
+          "expected_calibration_error": 0.119658,
+          "distinct_player_games": 36,
+          "distinct_game_market_players": 36
         },
         "REC": {
-          "n": 297,
-          "model_brier": 0.16029,
-          "baseline_brier": 0.161308,
+          "n": 318,
+          "model_brier": 0.156416,
+          "baseline_brier": 0.157764,
           "beats_baseline": true,
-          "distinct_weeks": 1,
-          "model_log_loss": 0.478988,
-          "baseline_log_loss": 0.491274,
+          "distinct_weeks": 2,
+          "model_log_loss": 0.467642,
+          "baseline_log_loss": 0.482791,
           "calibration_bins": [
             {
               "range": "0-10%",
-              "n": 109,
-              "predicted": 0.0239,
-              "observed": 0.055
+              "n": 118,
+              "predicted": 0.024,
+              "observed": 0.0508
             },
             {
               "range": "10-20%",
-              "n": 40,
-              "predicted": 0.1431,
-              "observed": 0.3
+              "n": 44,
+              "predicted": 0.1428,
+              "observed": 0.2727
             },
             {
               "range": "20-30%",
@@ -1761,21 +1761,21 @@
             },
             {
               "range": "30-40%",
-              "n": 18,
-              "predicted": 0.3461,
-              "observed": 0.3333
+              "n": 21,
+              "predicted": 0.3466,
+              "observed": 0.381
             },
             {
               "range": "40-50%",
-              "n": 26,
-              "predicted": 0.4448,
-              "observed": 0.4231
+              "n": 28,
+              "predicted": 0.4452,
+              "observed": 0.3929
             },
             {
               "range": "50-60%",
-              "n": 23,
+              "n": 25,
               "predicted": 0.5489,
-              "observed": 0.6522
+              "observed": 0.6
             },
             {
               "range": "60-70%",
@@ -1785,9 +1785,9 @@
             },
             {
               "range": "70-80%",
-              "n": 13,
-              "predicted": 0.7545,
-              "observed": 0.6923
+              "n": 14,
+              "predicted": 0.7547,
+              "observed": 0.7143
             },
             {
               "range": "80-90%",
@@ -1802,66 +1802,66 @@
               "observed": 1.0
             }
           ],
-          "expected_calibration_error": 0.060521,
-          "distinct_player_games": 99,
-          "distinct_game_market_players": 99
+          "expected_calibration_error": 0.054218,
+          "distinct_player_games": 106,
+          "distinct_game_market_players": 106
         },
         "CATCH": {
-          "n": 520,
-          "model_brier": 0.177749,
-          "baseline_brier": 0.18676,
+          "n": 555,
+          "model_brier": 0.176968,
+          "baseline_brier": 0.187909,
           "beats_baseline": true,
-          "distinct_weeks": 1,
-          "model_log_loss": 0.525242,
-          "baseline_log_loss": 0.55487,
+          "distinct_weeks": 2,
+          "model_log_loss": 0.523258,
+          "baseline_log_loss": 0.557453,
           "calibration_bins": [
             {
               "range": "0-10%",
-              "n": 124,
-              "predicted": 0.0447,
-              "observed": 0.0726
+              "n": 134,
+              "predicted": 0.0449,
+              "observed": 0.0672
             },
             {
               "range": "10-20%",
-              "n": 68,
+              "n": 70,
               "predicted": 0.1437,
-              "observed": 0.1912
+              "observed": 0.1857
             },
             {
               "range": "20-30%",
-              "n": 61,
-              "predicted": 0.2489,
-              "observed": 0.4262
+              "n": 67,
+              "predicted": 0.2484,
+              "observed": 0.403
             },
             {
               "range": "30-40%",
-              "n": 39,
-              "predicted": 0.3473,
-              "observed": 0.3333
+              "n": 40,
+              "predicted": 0.3463,
+              "observed": 0.325
             },
             {
               "range": "40-50%",
-              "n": 49,
-              "predicted": 0.4578,
-              "observed": 0.4898
+              "n": 54,
+              "predicted": 0.4564,
+              "observed": 0.4815
             },
             {
               "range": "50-60%",
-              "n": 41,
-              "predicted": 0.5517,
-              "observed": 0.4878
+              "n": 44,
+              "predicted": 0.5506,
+              "observed": 0.4545
             },
             {
               "range": "60-70%",
-              "n": 37,
-              "predicted": 0.6468,
-              "observed": 0.5946
+              "n": 39,
+              "predicted": 0.6467,
+              "observed": 0.5897
             },
             {
               "range": "70-80%",
-              "n": 40,
-              "predicted": 0.7499,
-              "observed": 0.725
+              "n": 44,
+              "predicted": 0.7515,
+              "observed": 0.7045
             },
             {
               "range": "80-90%",
@@ -1871,14 +1871,14 @@
             },
             {
               "range": "90-100%",
-              "n": 24,
-              "predicted": 0.9522,
-              "observed": 1.0
+              "n": 26,
+              "predicted": 0.9494,
+              "observed": 0.9615
             }
           ],
-          "expected_calibration_error": 0.059191,
-          "distinct_player_games": 104,
-          "distinct_game_market_players": 104
+          "expected_calibration_error": 0.057263,
+          "distinct_player_games": 111,
+          "distinct_game_market_players": 111
         }
       }
     },
@@ -2199,24 +2199,24 @@
       }
     },
     "opportunity-2024-trained-eligible-fullseason-v2": {
-      "graded": 2498,
-      "distinct_weeks": 2,
-      "distinct_player_games": 309,
-      "distinct_games": 29,
+      "graded": 2581,
+      "distinct_weeks": 3,
+      "distinct_player_games": 320,
+      "distinct_games": 30,
       "markets": {
         "PASS": {
-          "n": 176,
-          "model_brier": 0.177888,
-          "baseline_brier": 0.183534,
+          "n": 184,
+          "model_brier": 0.179525,
+          "baseline_brier": 0.184968,
           "beats_baseline": true,
-          "distinct_weeks": 2,
-          "model_log_loss": 0.53343,
-          "baseline_log_loss": 0.546968,
+          "distinct_weeks": 3,
+          "model_log_loss": 0.53618,
+          "baseline_log_loss": 0.549282,
           "calibration_bins": [
             {
               "range": "0-10%",
-              "n": 1,
-              "predicted": 0.0909,
+              "n": 2,
+              "predicted": 0.0871,
               "observed": 0.0
             },
             {
@@ -2227,21 +2227,21 @@
             },
             {
               "range": "20-30%",
-              "n": 18,
-              "predicted": 0.2429,
-              "observed": 0.1667
+              "n": 19,
+              "predicted": 0.241,
+              "observed": 0.1579
             },
             {
               "range": "30-40%",
-              "n": 21,
-              "predicted": 0.3369,
-              "observed": 0.4762
+              "n": 22,
+              "predicted": 0.3396,
+              "observed": 0.4545
             },
             {
               "range": "40-50%",
-              "n": 19,
-              "predicted": 0.4463,
-              "observed": 0.3158
+              "n": 20,
+              "predicted": 0.4456,
+              "observed": 0.3
             },
             {
               "range": "50-60%",
@@ -2251,15 +2251,15 @@
             },
             {
               "range": "60-70%",
-              "n": 31,
-              "predicted": 0.6532,
-              "observed": 0.6452
+              "n": 33,
+              "predicted": 0.6518,
+              "observed": 0.6061
             },
             {
               "range": "70-80%",
-              "n": 21,
-              "predicted": 0.7328,
-              "observed": 0.8571
+              "n": 22,
+              "predicted": 0.7325,
+              "observed": 0.8182
             },
             {
               "range": "80-90%",
@@ -2269,35 +2269,35 @@
             },
             {
               "range": "90-100%",
-              "n": 14,
-              "predicted": 0.9019,
-              "observed": 0.8571
+              "n": 15,
+              "predicted": 0.9024,
+              "observed": 0.8667
             }
           ],
-          "expected_calibration_error": 0.085034,
-          "distinct_player_games": 44,
-          "distinct_game_market_players": 44
+          "expected_calibration_error": 0.085516,
+          "distinct_player_games": 46,
+          "distinct_game_market_players": 46
         },
         "RUSH": {
-          "n": 288,
-          "model_brier": 0.145584,
-          "baseline_brier": 0.147923,
+          "n": 300,
+          "model_brier": 0.154547,
+          "baseline_brier": 0.155989,
           "beats_baseline": true,
-          "distinct_weeks": 2,
-          "model_log_loss": 0.457045,
-          "baseline_log_loss": 0.461124,
+          "distinct_weeks": 3,
+          "model_log_loss": 0.479011,
+          "baseline_log_loss": 0.479918,
           "calibration_bins": [
             {
               "range": "0-10%",
-              "n": 5,
-              "predicted": 0.0909,
-              "observed": 0.2
+              "n": 7,
+              "predicted": 0.0887,
+              "observed": 0.1429
             },
             {
               "range": "10-20%",
-              "n": 96,
-              "predicted": 0.1228,
-              "observed": 0.0521
+              "n": 101,
+              "predicted": 0.1234,
+              "observed": 0.0792
             },
             {
               "range": "20-30%",
@@ -2319,9 +2319,9 @@
             },
             {
               "range": "50-60%",
-              "n": 14,
-              "predicted": 0.5323,
-              "observed": 0.5714
+              "n": 17,
+              "predicted": 0.5348,
+              "observed": 0.5294
             },
             {
               "range": "60-70%",
@@ -2331,15 +2331,15 @@
             },
             {
               "range": "70-80%",
-              "n": 17,
-              "predicted": 0.7476,
-              "observed": 0.7647
+              "n": 18,
+              "predicted": 0.75,
+              "observed": 0.7222
             },
             {
               "range": "80-90%",
-              "n": 32,
-              "predicted": 0.8686,
-              "observed": 0.8125
+              "n": 33,
+              "predicted": 0.8694,
+              "observed": 0.7879
             },
             {
               "range": "90-100%",
@@ -2348,66 +2348,66 @@
               "observed": 0.8125
             }
           ],
-          "expected_calibration_error": 0.05608,
-          "distinct_player_games": 72,
-          "distinct_game_market_players": 72
+          "expected_calibration_error": 0.047682,
+          "distinct_player_games": 75,
+          "distinct_game_market_players": 75
         },
         "REC": {
-          "n": 884,
-          "model_brier": 0.142493,
-          "baseline_brier": 0.146979,
+          "n": 912,
+          "model_brier": 0.140924,
+          "baseline_brier": 0.145376,
           "beats_baseline": true,
-          "distinct_weeks": 2,
-          "model_log_loss": 0.446841,
-          "baseline_log_loss": 0.459073,
+          "distinct_weeks": 3,
+          "model_log_loss": 0.443,
+          "baseline_log_loss": 0.455171,
           "calibration_bins": [
             {
               "range": "0-10%",
-              "n": 34,
-              "predicted": 0.0909,
-              "observed": 0.0588
+              "n": 39,
+              "predicted": 0.0901,
+              "observed": 0.0513
             },
             {
               "range": "10-20%",
-              "n": 347,
-              "predicted": 0.1242,
-              "observed": 0.0605
+              "n": 357,
+              "predicted": 0.1247,
+              "observed": 0.0588
             },
             {
               "range": "20-30%",
-              "n": 121,
-              "predicted": 0.2382,
-              "observed": 0.2066
+              "n": 122,
+              "predicted": 0.2383,
+              "observed": 0.2049
             },
             {
               "range": "30-40%",
-              "n": 85,
-              "predicted": 0.345,
-              "observed": 0.2941
+              "n": 90,
+              "predicted": 0.3447,
+              "observed": 0.2778
             },
             {
               "range": "40-50%",
-              "n": 61,
-              "predicted": 0.4357,
-              "observed": 0.3934
+              "n": 62,
+              "predicted": 0.4359,
+              "observed": 0.3871
             },
             {
               "range": "50-60%",
-              "n": 65,
-              "predicted": 0.5415,
-              "observed": 0.4769
+              "n": 67,
+              "predicted": 0.5409,
+              "observed": 0.4776
             },
             {
               "range": "60-70%",
-              "n": 56,
-              "predicted": 0.644,
-              "observed": 0.7321
+              "n": 59,
+              "predicted": 0.6454,
+              "observed": 0.7119
             },
             {
               "range": "70-80%",
-              "n": 52,
-              "predicted": 0.7375,
-              "observed": 0.6538
+              "n": 53,
+              "predicted": 0.7382,
+              "observed": 0.6604
             },
             {
               "range": "80-90%",
@@ -2422,91 +2422,90 @@
               "observed": 1.0
             }
           ],
-          "expected_calibration_error": 0.061762,
-          "distinct_player_games": 221,
-          "distinct_game_market_players": 221
+          "expected_calibration_error": 0.06321,
+          "distinct_player_games": 228,
+          "distinct_game_market_players": 228
         },
         "CATCH": {
-          "n": 1150,
-          "model_brier": 0.170204,
-          "baseline_brier": 0.175234,
+          "n": 1185,
+          "model_brier": 0.171231,
+          "baseline_brier": 0.176116,
           "beats_baseline": true,
-          "distinct_weeks": 2,
-          "model_log_loss": 0.515807,
-          "baseline_log_loss": 0.527774,
+          "distinct_weeks": 3,
+          "model_log_loss": 0.51817,
+          "baseline_log_loss": 0.529707,
           "calibration_bins": [
             {
               "range": "0-10%",
-              "n": 14,
-              "predicted": 0.0909,
-              "observed": 0.0714
+              "n": 19,
+              "predicted": 0.0901,
+              "observed": 0.0526
             },
             {
               "range": "10-20%",
-              "n": 219,
-              "predicted": 0.1329,
-              "observed": 0.0776
+              "n": 225,
+              "predicted": 0.133,
+              "observed": 0.0756
             },
             {
               "range": "20-30%",
-              "n": 174,
-              "predicted": 0.2356,
-              "observed": 0.1839
+              "n": 176,
+              "predicted": 0.2358,
+              "observed": 0.1875
             },
             {
               "range": "30-40%",
-              "n": 93,
-              "predicted": 0.3458,
-              "observed": 0.3011
+              "n": 97,
+              "predicted": 0.346,
+              "observed": 0.2887
             },
             {
               "range": "40-50%",
-              "n": 90,
-              "predicted": 0.4328,
-              "observed": 0.3556
+              "n": 92,
+              "predicted": 0.4327,
+              "observed": 0.3478
             },
             {
               "range": "50-60%",
-              "n": 105,
+              "n": 109,
               "predicted": 0.5362,
-              "observed": 0.5238
+              "observed": 0.5138
             },
             {
               "range": "60-70%",
-              "n": 115,
-              "predicted": 0.6386,
-              "observed": 0.6261
+              "n": 116,
+              "predicted": 0.6385,
+              "observed": 0.6293
             },
             {
               "range": "70-80%",
-              "n": 129,
-              "predicted": 0.7434,
-              "observed": 0.6899
+              "n": 132,
+              "predicted": 0.7428,
+              "observed": 0.6742
             },
             {
               "range": "80-90%",
-              "n": 157,
+              "n": 163,
               "predicted": 0.8421,
-              "observed": 0.7962
+              "observed": 0.7853
             },
             {
               "range": "90-100%",
-              "n": 54,
-              "predicted": 0.9027,
-              "observed": 0.9074
+              "n": 56,
+              "predicted": 0.9028,
+              "observed": 0.8929
             }
           ],
-          "expected_calibration_error": 0.043122,
-          "distinct_player_games": 230,
-          "distinct_game_market_players": 230
+          "expected_calibration_error": 0.048864,
+          "distinct_player_games": 237,
+          "distinct_game_market_players": 237
         }
       }
     }
   },
   "skipped": {
-    "NO_OFFENSIVE_SNAPS": 1245,
-    "GAME_NOT_FINAL": 36,
-    "SNAP_DATA_INCOMPLETE": 2
+    "NO_OFFENSIVE_SNAPS": 1252,
+    "GAME_NOT_FINAL": 36
   },
   "records": [
     {
@@ -17255,6 +17254,1002 @@
       "threshold": 5.5,
       "model_probability": 0.125,
       "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0039163",
+      "market": "PASS",
+      "threshold": 149.5,
+      "model_probability": 0.90909091,
+      "baseline_probability": 0.90909091,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0039163",
+      "market": "PASS",
+      "threshold": 199.5,
+      "model_probability": 0.72727273,
+      "baseline_probability": 0.72727273,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0039163",
+      "market": "PASS",
+      "threshold": 249.5,
+      "model_probability": 0.61363636,
+      "baseline_probability": 0.63636364,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0039163",
+      "market": "PASS",
+      "threshold": 299.5,
+      "model_probability": 0.43181818,
+      "baseline_probability": 0.45454545,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0035685",
+      "market": "RUSH",
+      "threshold": 24.5,
+      "model_probability": 0.53571429,
+      "baseline_probability": 0.42857143,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0035685",
+      "market": "RUSH",
+      "threshold": 49.5,
+      "model_probability": 0.17857143,
+      "baseline_probability": 0.28571429,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0035685",
+      "market": "RUSH",
+      "threshold": 74.5,
+      "model_probability": 0.14285714,
+      "baseline_probability": 0.14285714,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0035685",
+      "market": "RUSH",
+      "threshold": 99.5,
+      "model_probability": 0.14285714,
+      "baseline_probability": 0.14285714,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0034383",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.65909091,
+      "baseline_probability": 0.72727273,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0034383",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.25,
+      "baseline_probability": 0.18181818,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0034383",
+      "market": "REC",
+      "threshold": 74.5,
+      "model_probability": 0.11363636,
+      "baseline_probability": 0.18181818,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0034383",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.11363636,
+      "baseline_probability": 0.18181818,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0034383",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.81818182,
+      "baseline_probability": 0.81818182,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0034383",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.72727273,
+      "baseline_probability": 0.63636364,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0034383",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.45454545,
+      "baseline_probability": 0.45454545,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0034383",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.22727273,
+      "baseline_probability": 0.27272727,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0034383",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.18181818,
+      "baseline_probability": 0.18181818,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038608",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.54545455,
+      "baseline_probability": 0.54545455,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038608",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.18181818,
+      "baseline_probability": 0.18181818,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038608",
+      "market": "REC",
+      "threshold": 74.5,
+      "model_probability": 0.18181818,
+      "baseline_probability": 0.18181818,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038608",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.11363636,
+      "baseline_probability": 0.18181818,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038608",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.63636364,
+      "baseline_probability": 0.63636364,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038608",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.36363636,
+      "baseline_probability": 0.45454545,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038608",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.13636364,
+      "baseline_probability": 0.18181818,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038608",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.09090909,
+      "baseline_probability": 0.09090909,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038608",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.09090909,
+      "baseline_probability": 0.09090909,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036554",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.77777778,
+      "baseline_probability": 0.77777778,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036554",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.69444444,
+      "baseline_probability": 0.77777778,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036554",
+      "market": "REC",
+      "threshold": 74.5,
+      "model_probability": 0.44444444,
+      "baseline_probability": 0.44444444,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036554",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.30555556,
+      "baseline_probability": 0.22222222,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036554",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.88888889,
+      "baseline_probability": 0.88888889,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036554",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.83333333,
+      "baseline_probability": 0.77777778,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036554",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.72222222,
+      "baseline_probability": 0.66666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036554",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.55555556,
+      "baseline_probability": 0.55555556,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036554",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.38888889,
+      "baseline_probability": 0.44444444,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038618",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.65909091,
+      "baseline_probability": 0.72727273,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038618",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.36363636,
+      "baseline_probability": 0.36363636,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038618",
+      "market": "REC",
+      "threshold": 74.5,
+      "model_probability": 0.15909091,
+      "baseline_probability": 0.09090909,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038618",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.09090909,
+      "baseline_probability": 0.09090909,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038618",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.90909091,
+      "baseline_probability": 0.90909091,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038618",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.81818182,
+      "baseline_probability": 0.81818182,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038618",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.31818182,
+      "baseline_probability": 0.27272727,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038618",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.13636364,
+      "baseline_probability": 0.09090909,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038618",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.09090909,
+      "baseline_probability": 0.09090909,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0035710",
+      "market": "PASS",
+      "threshold": 149.5,
+      "model_probability": 0.64583333,
+      "baseline_probability": 0.58333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0035710",
+      "market": "PASS",
+      "threshold": 199.5,
+      "model_probability": 0.39583333,
+      "baseline_probability": 0.41666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0035710",
+      "market": "PASS",
+      "threshold": 249.5,
+      "model_probability": 0.20833333,
+      "baseline_probability": 0.25,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0035710",
+      "market": "PASS",
+      "threshold": 299.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "RUSH",
+      "threshold": 24.5,
+      "model_probability": 0.89583333,
+      "baseline_probability": 0.83333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "RUSH",
+      "threshold": 49.5,
+      "model_probability": 0.79166667,
+      "baseline_probability": 0.66666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "RUSH",
+      "threshold": 74.5,
+      "model_probability": 0.52083333,
+      "baseline_probability": 0.58333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "RUSH",
+      "threshold": 99.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.33333333,
+      "baseline_probability": 0.33333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.16666667,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "REC",
+      "threshold": 74.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.83333333,
+      "baseline_probability": 0.83333333,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.58333333,
+      "baseline_probability": 0.5,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.29166667,
+      "baseline_probability": 0.33333333,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0041125",
+      "market": "RUSH",
+      "threshold": 24.5,
+      "model_probability": 0.58333333,
+      "baseline_probability": 0.58333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0041125",
+      "market": "RUSH",
+      "threshold": 49.5,
+      "model_probability": 0.10416667,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0041125",
+      "market": "RUSH",
+      "threshold": 74.5,
+      "model_probability": 0.10416667,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0041125",
+      "market": "RUSH",
+      "threshold": 99.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0040128",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.5,
+      "baseline_probability": 0.5,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0040128",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.3,
+      "baseline_probability": 0.3,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0040128",
+      "market": "REC",
+      "threshold": 74.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.2,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0040128",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.1,
+      "baseline_probability": 0.1,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0040128",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.9,
+      "baseline_probability": 0.9,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0040128",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.85,
+      "baseline_probability": 0.8,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0040128",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.7,
+      "baseline_probability": 0.7,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0040128",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.5,
+      "baseline_probability": 0.5,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0040128",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.4,
+      "baseline_probability": 0.4,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0032951",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.39583333,
+      "baseline_probability": 0.33333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0032951",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.16666667,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0032951",
+      "market": "REC",
+      "threshold": 74.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0032951",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0032951",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.5,
+      "baseline_probability": 0.58333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0032951",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.33333333,
+      "baseline_probability": 0.33333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0032951",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0032951",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0032951",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
       "hit": 0
     },
     {
@@ -110387,6 +111382,882 @@
       "threshold": 5.5,
       "model_probability": 0.0159,
       "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0039163",
+      "market": "PASS",
+      "threshold": 149.5,
+      "model_probability": 0.8426,
+      "baseline_probability": 0.90909091,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0039163",
+      "market": "PASS",
+      "threshold": 199.5,
+      "model_probability": 0.5658,
+      "baseline_probability": 0.72727273,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0039163",
+      "market": "PASS",
+      "threshold": 249.5,
+      "model_probability": 0.2898,
+      "baseline_probability": 0.61363636,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0039163",
+      "market": "PASS",
+      "threshold": 299.5,
+      "model_probability": 0.1189,
+      "baseline_probability": 0.43181818,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0035685",
+      "market": "RUSH",
+      "threshold": 24.5,
+      "model_probability": 0.7463,
+      "baseline_probability": 0.53571429,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0035685",
+      "market": "RUSH",
+      "threshold": 49.5,
+      "model_probability": 0.1791,
+      "baseline_probability": 0.17857143,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0035685",
+      "market": "RUSH",
+      "threshold": 99.5,
+      "model_probability": 0.0026,
+      "baseline_probability": 0.14285714,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0034383",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.454,
+      "baseline_probability": 0.65909091,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0034383",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.1158,
+      "baseline_probability": 0.25,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0034383",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.0026,
+      "baseline_probability": 0.11363636,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0034383",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.7618,
+      "baseline_probability": 0.81818182,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0034383",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.5209,
+      "baseline_probability": 0.72727273,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0034383",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.3058,
+      "baseline_probability": 0.45454545,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0034383",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.153,
+      "baseline_probability": 0.22727273,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0034383",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.0663,
+      "baseline_probability": 0.18181818,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038608",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.3152,
+      "baseline_probability": 0.54545455,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038608",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.0689,
+      "baseline_probability": 0.18181818,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038608",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.0019,
+      "baseline_probability": 0.11363636,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038608",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.4789,
+      "baseline_probability": 0.63636364,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038608",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.2206,
+      "baseline_probability": 0.36363636,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038608",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.0775,
+      "baseline_probability": 0.13636364,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038608",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.0249,
+      "baseline_probability": 0.09090909,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038608",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.0071,
+      "baseline_probability": 0.09090909,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036554",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.7574,
+      "baseline_probability": 0.77777778,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036554",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.3856,
+      "baseline_probability": 0.69444444,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036554",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.0418,
+      "baseline_probability": 0.30555556,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036554",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.908,
+      "baseline_probability": 0.88888889,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036554",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.7702,
+      "baseline_probability": 0.83333333,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036554",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.5843,
+      "baseline_probability": 0.72222222,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036554",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.4012,
+      "baseline_probability": 0.55555556,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036554",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.2426,
+      "baseline_probability": 0.38888889,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038618",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.5005,
+      "baseline_probability": 0.65909091,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038618",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.1496,
+      "baseline_probability": 0.36363636,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038618",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.0063,
+      "baseline_probability": 0.09090909,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038618",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.7462,
+      "baseline_probability": 0.90909091,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038618",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.5006,
+      "baseline_probability": 0.81818182,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038618",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.2845,
+      "baseline_probability": 0.31818182,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038618",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.1367,
+      "baseline_probability": 0.13636364,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0038618",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.0583,
+      "baseline_probability": 0.09090909,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0035710",
+      "market": "PASS",
+      "threshold": 149.5,
+      "model_probability": 0.6964,
+      "baseline_probability": 0.64583333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0035710",
+      "market": "PASS",
+      "threshold": 199.5,
+      "model_probability": 0.3649,
+      "baseline_probability": 0.39583333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0035710",
+      "market": "PASS",
+      "threshold": 249.5,
+      "model_probability": 0.1415,
+      "baseline_probability": 0.20833333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0035710",
+      "market": "PASS",
+      "threshold": 299.5,
+      "model_probability": 0.0427,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "RUSH",
+      "threshold": 24.5,
+      "model_probability": 0.9927,
+      "baseline_probability": 0.89583333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "RUSH",
+      "threshold": 49.5,
+      "model_probability": 0.847,
+      "baseline_probability": 0.79166667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "RUSH",
+      "threshold": 99.5,
+      "model_probability": 0.2043,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.4465,
+      "baseline_probability": 0.33333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.1221,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.004,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.6779,
+      "baseline_probability": 0.83333333,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.4253,
+      "baseline_probability": 0.58333333,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.2194,
+      "baseline_probability": 0.29166667,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.0923,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0036223",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.0344,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0041125",
+      "market": "RUSH",
+      "threshold": 24.5,
+      "model_probability": 0.6409,
+      "baseline_probability": 0.58333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0041125",
+      "market": "RUSH",
+      "threshold": 49.5,
+      "model_probability": 0.1699,
+      "baseline_probability": 0.10416667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0041125",
+      "market": "RUSH",
+      "threshold": 99.5,
+      "model_probability": 0.0034,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0040128",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.598,
+      "baseline_probability": 0.5,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0040128",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.1698,
+      "baseline_probability": 0.3,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0040128",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.0043,
+      "baseline_probability": 0.1,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0040128",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.9223,
+      "baseline_probability": 0.9,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0040128",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.7907,
+      "baseline_probability": 0.85,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0040128",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.613,
+      "baseline_probability": 0.7,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0040128",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.4302,
+      "baseline_probability": 0.5,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0040128",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.2706,
+      "baseline_probability": 0.4,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0032951",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.3469,
+      "baseline_probability": 0.39583333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0032951",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.0937,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0032951",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.0041,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0032951",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.4775,
+      "baseline_probability": 0.5,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0032951",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.2202,
+      "baseline_probability": 0.33333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0032951",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.0828,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0032951",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.0278,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v4-depth-chart-qb",
+      "season": 2026,
+      "week": 11,
+      "game_id": "2026_11_IND_HOU",
+      "player_id": "00-0032951",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.0073,
+      "baseline_probability": 0.08333333,
       "hit": 0
     },
     {
