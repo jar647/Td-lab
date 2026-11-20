@@ -35,6 +35,9 @@ jobs:
           site='https://jar647.github.io/Td-lab'
           verify_selection_gate() {
             if [ "${GITHUB_EVENT_NAME}" != "push" ]; then return 0; fi
+            ! grep -Fq 'Where to look &amp; why' /tmp/prop-shop-nba.html &&
+            ! grep -Fq 'renderNBAMatchups(g)' /tmp/prop-shop-nba.html &&
+            grep -Fq 'NBA Best Props' /tmp/prop-shop-nba.html &&
             grep -Fq 'nba_game_first.js?v=nba-best-props-gate-20261120-v2' /tmp/prop-shop-nba.html &&
             grep -Fq 'nba_selection_ui.js?v=nba-best-props-gate-20261120-v2' /tmp/prop-shop-nba.html &&
             curl --fail --location --silent --show-error --connect-timeout 10 --max-time 25 "${site}/nba_game_first.js?verify=${GITHUB_SHA}" -o /tmp/prop-shop-game-first.js &&
