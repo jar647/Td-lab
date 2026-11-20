@@ -28,33 +28,35 @@
    pr:'pr',pointsrebounds:'pr',pa:'pa',pointsassists:'pa',ra:'ra',reboundsassists:'ra',
    pra:'pra',pointsreboundsassists:'pra'})[key]||null;
  }
- function evaluate(samples,line){
+ function evaluateSide(samples,line,side='over'){
+  if(!['over','under'].includes(side))return {available:false,reason:'Unsupported prop direction.',count:0,wins:0,pushes:0,losses:0,winFrequency:null,pushFrequency:null,lossFrequency:null};
   const empty=reason=>({available:false,reason,count:0,wins:0,pushes:0,losses:0,winFrequency:null,pushFrequency:null,lossFrequency:null});
   if(!validNumbers(samples,0,Infinity)||!samples.length)return empty('A complete finite, nonnegative outcome sample is required.');
   if(!finite(line)||line<.5||line>400)return empty('Enter a valid strict OVER line from 0.5 to 400.');
-  let wins=0,pushes=0;for(const value of samples){if(value>line)wins++;else if(value===line)pushes++;}
+  let wins=0,pushes=0;for(const value of samples){if(side==='under'?value<line:value>line)wins++;else if(value===line)pushes++;}
   const count=samples.length,losses=count-wins-pushes;
   return {available:true,reason:null,count,wins,pushes,losses,winFrequency:wins/count,pushFrequency:pushes/count,lossFrequency:losses/count};
  }
- function ladder({market,samples,offeredLines,sampleKind='role_adjusted_history'}={}){
+ function evaluate(samples,line){return evaluateSide(samples,line,'over');}
+ function ladder({market,samples,offeredLines,sampleKind='role_adjusted_history',side='over'}={}){
   const key=canonical(market);
-  if(!key||!validNumbers(samples,0,Infinity)||samples.length<MIN_SAMPLES)return [];
+  if(!key||!['over','under'].includes(side)||!validNumbers(samples,0,Infinity)||samples.length<MIN_SAMPLES)return [];
   const offered=offeredLines!==undefined;
   if(offered&&!validNumbers(offeredLines,.5,400))return [];
   const lines=[...new Set(offered?offeredLines:GRIDS[key].map(value=>value-.5))].sort((a,b)=>a-b);
   return lines.map(line=>{
-   const result=evaluate(samples,line),milestone=Number.isInteger(line+.5)?line+.5:null;
+   const result=evaluateSide(samples,line,side),milestone=Number.isInteger(line+.5)?line+.5:null;
    return {available:true,reason:null,market:key,milestone,line,frequency:result.winFrequency,
     pushFrequency:result.pushFrequency,lossFrequency:result.lossFrequency,
     sampleCount:result.count,targetFrequency:TARGET,policy:POLICY,sampleKind,offered,
-    settlement:'strict_over',calibrated:false};
+    settlement:side==='under'?'strict_under':'strict_over',side,calibrated:false};
   });
  }
  function select(options={}){
-  const key=canonical(options.market),offered=options.offeredLines!==undefined;
+  const key=canonical(options.market),offered=options.offeredLines!==undefined,side=options.side||'over';
   const empty=reason=>({available:false,reason,market:key,milestone:null,line:null,frequency:null,
    policy:POLICY,sampleKind:options.sampleKind||'role_adjusted_history',offered,targetFrequency:TARGET,calibrated:false});
-  if(!key)return empty('Unsupported NBA player-prop market.');
+  if(!key||!['over','under'].includes(side))return empty('Unsupported NBA player-prop market or side.');
   const rows=ladder(options);
   if(!rows.length)return empty(offered?'No supported actual book lines and complete outcome sample were supplied.':'At least five complete supported outcomes are required for a research alternate line.');
   // A caller can inspect an exact harder book line using evaluate(). The
@@ -65,8 +67,8 @@
   supported.sort((a,b)=>{const gap=Math.abs(a.frequency-TARGET)-Math.abs(b.frequency-TARGET);return Math.abs(gap)>1e-12?gap:b.line-a.line});
   return {...supported[0],reason:offered?'Closest supported supplied book line to the 75% planning target.':'Closest conventional research line to the 75% planning target; book availability is unverified.'};
  }
- function minimumScore(market){return canonical(market)==='threes'?85:75;}
- function qualifiesScore(score,market){return Number.isFinite(score)&&score>=minimumScore(market)&&score<=100;}
+ function minimumScore(market,side='over'){if(!['over','under'].includes(side))return 101;return side==='under'?(canonical(market)==='threes'?90:85):(canonical(market)==='threes'?85:75);}
+ function qualifiesScore(score,market,side='over'){return Number.isFinite(score)&&score>=minimumScore(market,side)&&score<=100;}
  function minimum(market){const key=canonical(market);return key?GRIDS[key][0]:null;}
- return {minimumScore,qualifiesScore,POLICY,MIN_SAMPLES,TARGET,canonical,minimum,select,ladder,evaluate};
+ return {minimumScore,qualifiesScore,POLICY,MIN_SAMPLES,TARGET,canonical,minimum,select,ladder,evaluate,evaluateSide};
 });
