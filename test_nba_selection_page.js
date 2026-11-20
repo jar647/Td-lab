@@ -49,7 +49,7 @@ const old={key:'late|player|rebounds',game:late,gameId:'late',playerId:'player',
 
  // A fully audited empty slate may be PASS; incomplete simulation counts may not.
  const verification={ready:true,candidates:[],held:[{gameId:'early',reason:'No supported matchups'}],diagnostics:{gamesAnalyzed:2,modelRows:100,eligibleRows:0,ratedRows:0,qualifiedRows:0,modelUnavailableGames:0}};
- context.verification=verification;
+ context.verification=verification;context.PropShopNBAAutoAlt={shortlist:()=>[]};
  evaluate('nbaAutoAltView={render:()=>""};nbaSelectionController={refreshInputs:async()=>({ready:true}),getCandidates:async()=>verification}');
  await evaluate('scanNBAMatchups()');
  assert.match(element('slate-results').innerHTML,/Audit: 2\/2 games/);
