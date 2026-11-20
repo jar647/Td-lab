@@ -99,7 +99,7 @@ assert.deepEqual(ledger.capture(priorCapture,refreshed.picks,now+1000).ledger.pi
  'fresher source provenance is recorded only on new captures; saved original inputs never change');
 
 // The adapter must independently preserve the public 85/100 OVER policy.
-const invalidScores=[84,84.999,100.001,NaN,null,undefined,'90'];
+const invalidScores=[74,74.999,100.001,NaN,null,undefined,'90'];
 const rejectedBest=invalidScores.map((researchScore,i)=>({...best[0],playerId:'bad-best-'+i,researchScore}));
 const rejectedRows=invalidScores.map((score,i)=>({...rows[0],key:'bad-game-'+i,playerId:'bad-game-'+i,
  matchupRating:{...rows[0].matchupRating,score}}));
@@ -188,3 +188,7 @@ assert.equal(opening.probability,.12);assert.equal(opening.score,null);
 assert.equal(opening.houseRule,'Must start; first field goal only; free throws excluded');
 assert.deepEqual(opening.inputs,{feed:stamp,rosters:stamp,injuries:stamp});
 console.log('NBA frozen selection capture: exact lines, all qualified candidates, 85 OVER gate, independent scores, observed quotes and immutable evidence PASS');
+const newMinimumCapture=capture({candidates:[{...best[0],playerId:'regular-75',researchScore:75},{...best[0],playerId:'three-84',market:'threes',researchScore:84.99},{...best[0],playerId:'three-85',market:'threes',researchScore:85}],simulationRows:[{...rows[0],matchupRating:{...rows[0].matchupRating,score:75}}]});
+assert.deepEqual(newMinimumCapture.picks.filter(p=>p.board==='Best Props').map(p=>p.playerId),['regular-75','three-85']);
+assert(newMinimumCapture.picks.some(p=>p.board==='Game-first recommendations'&&p.score===75));
+assert(newMinimumCapture.picks.filter(p=>p.sport==='NBA'&&p.market!=='first_basket').every(p=>p.inputs.recommendationMinimum===(p.market==='threes'?85:75)));

@@ -82,7 +82,7 @@
    if(destroyed)return;
    const fixtures=games();
    if(!fixtures.some(g=>g.id===game))game=fixtures[0]?.id||'';
-   host.innerHTML='<p class="muted">Build an OVER-only research ticket from supported 85/100+ matchups. Selection considers minutes stability, distinct players and joint outcomes, rather than simply taking the highest scores.</p>'+
+   host.innerHTML='<p class="muted">Build an OVER-only research ticket from supported 75/100+ matchups (three-pointers 85/100+). Selection considers minutes stability, distinct players and joint outcomes, rather than simply taking the highest scores.</p>'+
     '<div class="sim-grid"><div class="sim-field"><label>Legs<select data-nba-parlay-count aria-label="NBA parlay leg count">'+[2,3,4].map(n=>'<option value="'+n+'"'+(n===count?' selected':'')+'>'+n+' legs</option>').join('')+'</select></label></div>'+
     '<div class="sim-field"><label>Ticket type<select data-nba-parlay-mode aria-label="NBA parlay ticket type"><option value="cross_game"'+(mode==='cross_game'?' selected':'')+'>Different games</option><option value="sgp"'+(mode==='sgp'?' selected':'')+'>Same game</option></select></label></div></div>'+
     (mode==='sgp'?'<label>Matchup<select data-nba-parlay-game aria-label="NBA parlay matchup">'+(fixtures.length?fixtures.map(g=>'<option value="'+esc(g.id)+'"'+(g.id===game?' selected':'')+'>'+esc(g.label)+'</option>').join(''):'<option value="">Load current matchups with Generate</option>')+'</select></label>':'')+

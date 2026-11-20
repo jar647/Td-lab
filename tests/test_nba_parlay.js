@@ -94,7 +94,7 @@ assert(evaluate([same[0],soloNoBatch]).available);
 
 // Source timestamps, supported roles and fixture status remain hard gates.
 const invalid=[
- ['minimum matchup rating',p=>{p.score=84}],
+ ['minimum matchup rating',p=>{p.score=74}],
  ['rating consistency',p=>{p.matchupRating={score:99}}],
  ['OVER only',p=>{p.side='under'}],
  ['eligibility',p=>{p.eligible=false}],

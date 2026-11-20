@@ -16,14 +16,14 @@ const fs=require('node:fs');const source=fs.readFileSync('nba.html','utf8');asse
 // Every recommendation surface uses the same current positional rating.
 a.blockers=[];a.sgp=null;a.research_ticket=null;
 a.best_single={player_id:'p',player:'Sentinel',side:'over',market:'points',observed_at:new Date(now).toISOString()};a.top_players=[a.best_single];
-for(const score of [75,84.99,100.01,Infinity,NaN,null,'85'])assert(!ui.render(a,null,now,[{...ratings[0],researchScore:score}]).includes('Sentinel'));
+for(const score of [74,74.99,100.01,Infinity,NaN,null,'85'])assert(!ui.render(a,null,now,[{...ratings[0],researchScore:score}]).includes('Sentinel'));
 assert(!ui.render(a,null,now).includes('Sentinel'));
 for(const score of [85,100])assert(ui.render(a,null,now,[{...ratings[0],researchScore:score}]).includes(score+'/100'));
-assert(ui.render(a,null,now).includes('PASS · No supported OVER matchup rated 85+/100'));
+assert(ui.render(a,null,now).includes('PASS · No supported OVER matchup rated 75+/100'));
 for(const patch of [{side:'under'},{market:'threes'}]){const b={...a,best_single:{...a.best_single,...patch},top_players:[{...a.best_single,...patch}]};assert(!ui.render(b,null,now,ratings).includes('Sentinel'))}
 assert(!ui.render({...a,blockers:['availability']},null,now,ratings).includes('Sentinel'));
 const underRecord={...a,best_single:{...a.best_single,side:'under'},top_players:[{...a.best_single,side:'under'}]};
-for(const score of [75,84.99,100.01,Infinity,NaN,null,'85'])assert(!ui.render(underRecord,null,now,[{...ratings[0],side:'under',researchScore:score}]).includes('Sentinel'));
+for(const score of [74,74.99,100.01,Infinity,NaN,null,'85'])assert(!ui.render(underRecord,null,now,[{...ratings[0],side:'under',researchScore:score}]).includes('Sentinel'));
 for(const score of [85,100])assert(!ui.render(underRecord,null,now,[{...ratings[0],side:'under',researchScore:score}]).includes('Sentinel'));
 assert(!ui.render(underRecord,null,now,[{...ratings[0],side:'over',researchScore:99}]).includes('Sentinel'));
 // Quoted and unpriced tickets share the same matchup-only gate for both sides.
@@ -32,7 +32,7 @@ for(const side of ['over']){
  const row={...ratings[0],side};
  const quoted={...a,best_single:null,top_players:[],sgp:{bookmaker:'hardrockbet',observed_at:new Date(now).toISOString(),legs:[pick]}};
  const unpriced={...quoted,sgp:null,research_ticket:{legs:[pick],joint_probability:.2,fair_decimal:5,minimum_decimal_for_5pct_ev:5.25}};
- for(const score of [84.99,100.01,Infinity,NaN]){
+ for(const score of [74.99,100.01,Infinity,NaN]){
   const rows=[{...row,researchScore:score}];
   assert(!ui.render(quoted,null,now,rows).includes('SGP research lean'));
   assert(!ui.render(unpriced,null,now,rows).includes('Unpriced SGP research target'));
@@ -43,16 +43,16 @@ for(const side of ['over']){
  assert(ui.render(unpriced,null,now,[row]).includes('Unpriced SGP research target'));
  const threesRecord={...a,best_single:{...pick,market:'threes'},top_players:[{...pick,market:'threes'}]};
  assert(ui.render(threesRecord,null,now,[{...row,market:'threes',researchScore:85}]).includes('Sentinel'));
- assert(!ui.render(threesRecord,null,now,[{...row,market:'threes',researchScore:84.99}]).includes('Sentinel'));
+ assert(!ui.render(threesRecord,null,now,[{...row,market:'threes',researchScore:74.99}]).includes('Sentinel'));
  const combined={...quoted,sgp:{...quoted.sgp,legs:[{...pick,market:'pra'}]}};
  const combinedRows=['points','rebounds','assists'].map(market=>({...row,market}));
  assert(ui.render(combined,null,now,combinedRows).includes('SGP research lean'));
- assert(!ui.render(combined,null,now,combinedRows.map(r=>r.market==='assists'?{...r,researchScore:84.99}:r)).includes('SGP research lean'));
+ assert(!ui.render(combined,null,now,combinedRows.map(r=>r.market==='assists'?{...r,researchScore:74.99}:r)).includes('SGP research lean'));
  assert(!ui.render(combined,null,now,combinedRows.map(r=>r.market==='assists'?{...r,researchScore:101}:r)).includes('SGP research lean'));
 }
 const projectionRecord={...a,best_single:null,top_players:[],rotation:[{player_id:'archive',player:'Projection Sentinel',minutes:30,status:'available'}],projections:[{player_id:'archive',market:'points',projection:22.5}]};
 html=ui.render(projectionRecord,{model:'v2',graded_games:1,graded_projections:10,mae:2},now,[]);
-assert(html.includes('PASS · No supported OVER matchup rated 85+/100'));
+assert(html.includes('PASS · No supported OVER matchup rated 75+/100'));
 assert(html.includes('Projection Sentinel')&&html.includes('22.5'));
 assert(html.includes('Frozen model grading'));
 console.log('Published NBA model UI: PASS');

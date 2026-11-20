@@ -14,7 +14,7 @@ function element(id){
  return elements.get(id);
 }
 const saved=[],context={document:{getElementById:element,createElement:()=>element('created-'+elements.size)},
- fetch:async()=>({ok:false}),console,Date:TestDate,setTimeout,clearTimeout,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl,
+ CookNBAPropLines:require('./nba_prop_lines'),fetch:async()=>({ok:false}),console,Date:TestDate,setTimeout,clearTimeout,Math,Number,String,Object,Array,Set,Map,JSON,Promise,Intl,
  CookItUpQuickSlip:{add:pick=>saved.push(pick)}};
 vm.createContext(context);vm.runInContext(script,context);
 const evaluate=code=>vm.runInContext(code,context),plain=value=>JSON.parse(JSON.stringify(value));
@@ -70,7 +70,7 @@ const old={key:'late|player|rebounds',game:late,gameId:'late',playerId:'player',
  assert.match(saved[0].notes,/^FRESH source evidence/);assert(!saved[0].notes.includes('OLD'));
  assert.equal(saved[0].recommendation,'Over 11.5 Rebounds');assert.equal(buildOptions.maxLegs,2);
  assert.deepEqual(plain(buildOptions.excludedMarkets),['threes']);
- context.refreshed={...refreshed,score:84};evaluate('nbaGameFirstPick(old.key)');assert.equal(saved.length,1,'A newly disqualified player cannot enter Quick Slip');
+ context.refreshed={...refreshed,score:74};evaluate('nbaGameFirstPick(old.key)');assert.equal(saved.length,1,'A newly disqualified player cannot enter Quick Slip');
 
  // Raw per-game descriptive totals must not inherit normalized-rate percentages.
  const weakness={team:'Away',attacking:'Home',position:'SG',market:'rebounds',side:'over',allowed:6,leagueAverage:7.5,games:10,excess:.066,
