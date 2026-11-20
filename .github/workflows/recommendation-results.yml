@@ -62,7 +62,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node test_recommendation_ledger.js && node test_daily_plays.js && node test_nba_selection_capture.js && node --test tests/test_nba_under_shadow.js
+      - run: node test_recommendation_ledger.js && node test_daily_plays.js && node test_nba_selection_capture.js && node --test tests/test_nba_under_shadow.js && node scripts/update_nba_under_shadow.cjs --dry-run
   capture-and-grade:
     if: github.event_name != 'pull_request' && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
     needs: validate
