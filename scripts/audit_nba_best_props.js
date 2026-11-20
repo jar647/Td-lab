@@ -20,6 +20,11 @@ for(const g of games){
  const eligible=(sim.rows||[]).filter(x=>x.eligible&&!x.reviewRequired), scored=(sim.rows||[]).filter(x=>lines.qualifiesScore(x.matchupRating?.score,x.market));
  const qualified=(research.candidates||[]).filter(x=>lines.qualifiesScore(x.researchScore,x.market));
  const cand=(sim.rows||[]).map(x=>gf.candidate(x)).filter(Boolean);
+ for(const r of (sim.rows||[]).filter(x=>x.eligible&&!x.reviewRequired&&lines.qualifiesScore(x.matchupRating?.score,x.market))){
+   const chosen=r.selectedLineEvidence||{},line=chosen.line,boosted=gf.candidate({...r,matchupBoost:Math.max(.001,Math.abs(r.matchupBoost||0))});
+   console.log('ELIGIBLE_DEBUG',JSON.stringify({game:g.id,player:r.name,market:r.market,score:r.matchupRating?.score,forecast:r.forecast,boost:r.matchupBoost,matchupGames:r.matchupGames,samples:r.samples?.length,selected:chosen.available,selectedReason:chosen.reason,selectedLine:line,side:r.side,roleSupported:r.roleEvidence?.roleStatus,roleEligible:r.roleEvidence?.eligible,probability:Number.isFinite(line)&&r.samples?.length?r.samples.filter(x=>x>line).length/r.samples.length:null,acceptedWithPositiveBoost:Boolean(boosted),candidateAccepted:Boolean(gf.candidate(r))}));
+ }
+
  const roles=Object.values(research.roleEvidence?.players||{}), held=roles.filter(x=>!x.eligible);
  const topHoldReasons=Object.entries(held.flatMap(x=>x.holdReasons||[]).reduce((a,r)=>(a[r]=(a[r]||0)+1,a),{})).sort((a,b)=>b[1]-a[1]).slice(0,5);
  stat.research+=(research.candidates||[]).length;stat.qualifiedResearch+=qualified.length;
