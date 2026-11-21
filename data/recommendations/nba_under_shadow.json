@@ -64,12 +64,74 @@
       "frozen": true,
       "actual": 1,
       "gradedAt": "2026-11-21T06:42:52.072Z"
+    },
+    {
+      "key": "401910026|4397002|threes|under-shadow",
+      "gameId": "401910026",
+      "game": {
+        "id": "401910026",
+        "date": "2026-11-22T01:00Z",
+        "status": "STATUS_SCHEDULED",
+        "season_type": 2,
+        "home": "Minnesota Timberwolves",
+        "away": "Memphis Grizzlies",
+        "players": []
+      },
+      "startsAt": "2026-11-22T01:00Z",
+      "playerId": "4397002",
+      "player": "Ayo Dosunmu",
+      "team": "Minnesota Timberwolves",
+      "opponent": "Memphis Grizzlies",
+      "position": "SG",
+      "market": "threes",
+      "side": "under",
+      "score": 85,
+      "line": 3.5,
+      "projection": 2.091,
+      "recordedBaseline": 2.5,
+      "simulatedFrequency": 0.85,
+      "simulatedRuns": 1000,
+      "sourceTimestamps": {
+        "games": "2026-11-21T16:50:40.575839+00:00",
+        "injuries": "2026-11-21T16:46:38.830893+00:00",
+        "rosters": "2026-11-21T16:50:46.242303+00:00"
+      },
+      "sampleDepth": 9,
+      "factors": [
+        {
+          "label": "Opponent suppression by position (shrunk and schedule-adjusted)",
+          "points": 33,
+          "max": 40
+        },
+        {
+          "label": "Supported and stable minutes",
+          "points": 25,
+          "max": 25
+        },
+        {
+          "label": "Simulated projection below recorded player baseline",
+          "points": 13,
+          "max": 20
+        },
+        {
+          "label": "Verified player and opponent samples",
+          "points": 14,
+          "max": 15
+        }
+      ],
+      "studyOnly": true,
+      "priceVerified": false,
+      "probabilityCalibrated": false,
+      "reason": "Suppressed defensive position rate, stable supported role, lower simulated forecast and at least 70% experimental UNDER clears. Sportsbook line unverified.",
+      "capturedAt": "2026-11-21T17:22:28.575Z",
+      "result": "pending",
+      "frozen": true
     }
   ],
   "summary": {
-    "captured": 1,
+    "captured": 2,
     "graded": 1,
-    "pending": 0,
+    "pending": 1,
     "void": 0,
     "probabilitiesCalibrated": false,
     "betReady": false,
