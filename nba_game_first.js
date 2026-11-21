@@ -13,7 +13,7 @@ function candidate(row,excluded=[],lines={}){
  if(row?.matchupRating?.side&&row.matchupRating.side!==row.side)return null;
  if(row?.side==='under'&&row.matchupRating?.side!=='under')return null;
  if(row?.roleEvidence&&!supportedRole(row.roleEvidence,row.playerId,row.team))return null;
- if(!row||!markets.includes(row.market)||excluded.includes(row.market)||!['over','under'].includes(row.side)||row.reviewRequired||row.eligible!==true||!(Number(row.matchupGames)>=3)||!Number.isFinite(row.forecast)||row.forecast<0||!Array.isArray(row.samples)||!row.samples.length||!row.samples.every(x=>Number.isFinite(x)&&x>=0)||!Number.isFinite(row.matchupBoost))return null;
+ if(!row||!(markets.includes(row.market)||row.market==='stocks')||excluded.includes(row.market)||!['over','under'].includes(row.side)||row.reviewRequired||row.eligible!==true||!(Number(row.matchupGames)>=3)||!Number.isFinite(row.forecast)||row.forecast<0||!Array.isArray(row.samples)||!row.samples.length||!row.samples.every(x=>Number.isFinite(x)&&x>=0)||!Number.isFinite(row.matchupBoost))return null;
  // A negative defensive/projection boost is already priced into the forecast; only non-finite boosts are invalid.
  const minimum=row.side==='under'?0:({points:8,rebounds:3,assists:3,threes:1,steals:.2,blocks:.2,'Steals + Blocks':.3}[row.market]??10);if(row.forecast<minimum)return null;
  const lineSamples=row.roleEvidence?.selectionSamples?.[canonical(row.market)]||row.selectionSamples||row.samples;
