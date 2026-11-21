@@ -60,7 +60,7 @@ function clusterInterval(rows,options={}){
  return {interval:low===high?null:[low,high],clusters:values.length,resamples:config.resamples,method,
   reason:low===high?'Observed game clusters have no resampled variation; no precision claim is supplied.':'Descriptive uncertainty across observed games; not proof of predictive accuracy or profitability.'};
 }
-const band=score=>score>=95?'95–100':score>=90?'90–94':score>=85?'85–89':score>=80?'80–84':'75–79';
+const band=score=>score>=95?'95–100':score>=90?'90–94':score>=85?'85–89':score>=80?'80–84':'BELOW_80';
 function summarize(rows,options){return {...totals(rows),clusterUncertainty:clusterInterval(rows,options)};}
 function scoreComparison(rows,metadataComplete,options){
  const low=rows.filter(p=>p.score<90),high=rows.filter(p=>p.score>=90),lo=totals(low),hi=totals(high),all=totals(rows);
@@ -107,10 +107,10 @@ function analyze(picks,options={}){
   for(const p of rows){const e=p.validationEvidence,range=lineRange(p,p.market),id=JSON.stringify([range,e.roleRange,e.sampleKind]);if(!strata.has(id))strata.set(id,[]);strata.get(id).push(p);}
   return {key,sport:'NBA',board:first.board,modelVersion:first.modelVersion,market:first.market,side:first.side,linePolicy:first.validationEvidence.linePolicy,
    ...summarize(rows,options),metadataComplete:rows.filter(p=>p.validationEvidence.metadataComplete).length,
-   bands:(rows.some(p=>p.score<85)?['75–79','80–84','85–89','90–94','95–100']:['85–89','90–94','95–100']).map(name=>({band:name,...summarize(rows.filter(p=>band(p.score)===name),options)})),
+   bands:['80–84','85–89','90–94','95–100'].map(name=>({band:name,...summarize(rows.filter(p=>band(p.score)===name),options)})),
    strata:[...strata].sort(([a],[b])=>a.localeCompare(b)).map(([,xs])=>{const e=xs[0].validationEvidence;return {lineRange:lineRange(xs[0],xs[0].market),roleRange:e.roleRange,sampleKind:e.sampleKind,
     metadataComplete:xs.every(p=>p.validationEvidence.metadataComplete),...summarize(xs,options),
-    bands:(rows.some(p=>p.score<85)?['75–79','80–84','85–89','90–94','95–100']:['85–89','90–94','95–100']).map(name=>({band:name,...summarize(xs.filter(p=>band(p.score)===name),options)})),
+    bands:['80–84','85–89','90–94','95–100'].map(name=>({band:name,...summarize(xs.filter(p=>band(p.score)===name),options)})),
     scoreTest:scoreComparison(xs,xs.every(p=>p.validationEvidence.metadataComplete),options)};})};
  });
  return {version:VERSION,scope:'Frozen NBA player props meeting their 80/100 market minimum; first-basket estimates and older untagged sub-85 recommendations remain in the ordinary record but are outside this score test.',counts,groups:output,
