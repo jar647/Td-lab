@@ -9,7 +9,7 @@ function row(market='points',score=80,side='over'){
  game:{id:'g',home:'B',away:'A',date:tip,status:'STATUS_SCHEDULED'},team:'A',opponent:'B',market,side,
  score,matchupRating:{score,side,factors:[]},eligible:true,forecast:20,matchupBoost:.1,matchupGames:8,
  line:market==='threes'?2.5:19.5,
- samples:Array.from({length:1000},(_,i)=>i<700?(market==='threes'?4:20):0),
+ samples:Array.from({length:1000},(_,i)=>(side==='under'?i<700?0:market==='threes'?4:20:i<700?market==='threes'?4:20:0)),
  inputTimes:{games:stamp,rosters:stamp,injuries:stamp},outcomeSetId:'batch',
  roleEvidence:{playerId:'p',team:'A',eligible:true,roleStatus:'SUPPORTED',status:'ACTIVE',
  projectedMinutes:32,minutesLow:31,minutesHigh:33,historyGames:8,holdReasons:[]}};
