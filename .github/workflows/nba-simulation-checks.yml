@@ -4,6 +4,9 @@ on:
     branches: [main]
     paths:
       - 'nba.html'
+      - 'nba_book_compare.js'
+      - 'nba_auto_alt_ui.js'
+      - 'test_nba_book_compare.js'
       - 'nba_parlay*.js'
       - 'nba_prop*.js'
       - 'nba_selection_ui.js'
@@ -42,6 +45,7 @@ jobs:
           node --check nba_parlay_worker.js
           node test_nba_parlay_worker.js
           node test_nba_selection_page.js
+          node test_nba_book_compare.js
           node test_nba_selection_ui.js
           node test_nba_parlay_ui.js
           node test_nba_selection_capture.js
