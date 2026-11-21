@@ -3,7 +3,7 @@
  'use strict';
  const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  function nfl(row,settlement,context){return alt.fromSettlement(settlement,(row.alternatives||[]).map(r=>r.line-.5),{...context,rating:row.researchScore});}
- function nba(row,thresholds,context){return alt.overResearch(row.samples,thresholds,{...context,minSamples:1000,rating:row.score,injuryUnresolved:row.reviewRequired||row.eligible!==true});}
+ function nba(row,thresholds,context){return alt.overResearch(row.samples,thresholds,{...context,minSamples:1000,rating:row.score,side:row.side,injuryUnresolved:row.reviewRequired||row.eligible!==true});}
  function html(research,{line,historyGames,opportunity,caveats=[]}={}){
   if(research.status!=='research-only')return '<p class="notice">Alternate-line research unavailable: '+esc(research.reason)+'</p>';
   const selected=research.lines.find(r=>r.line===line),rate=selected?'<strong>'+(100*selected.probability).toFixed(1)+'% simulated probability</strong>':'';
