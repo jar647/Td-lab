@@ -43,35 +43,41 @@ function capture(options={},adapter=source){
 }
 const result=capture(),bestPicks=result.picks.filter(p=>p.board==='Best Props');
 const gamePicks=result.picks.filter(p=>p.board==='Game-first recommendations');
-assert.equal(bestPicks.length,8);
-assert.equal(gamePicks.length,8,'all qualified default parlay candidates are frozen, including players outside top three/default ticket');
-assert(gameFirst.build(rows).topThree.length<gamePicks.length);
-assert(gameFirst.build(rows).picks.length<gamePicks.length);
-assert.deepEqual(gamePicks.map(p=>p.playerId).sort(),rows.map(r=>r.playerId).sort());
+assert.equal(bestPicks.length,8,'all displayed Best Props default lines remain tracked');
+assert.equal(gamePicks.length,0,'the same player-market cannot be tracked twice across NBA boards');
+assert(!result.picks.some(p=>p.market==='first_basket'||p.board==='Automatic OVER alternate lines'),
+ 'First Basket and alternate-line menus are never captured as independent recommendations');
+const issued=gameFirst.build(rows),gameOnly=capture({candidates:[]}).picks.filter(p=>p.board==='Game-first recommendations');
+const issuedKeys=new Set([...issued.picks,...issued.topThree,...(issued.bestSingle?[issued.bestSingle]:[])].map(p=>p.key));
+assert(issuedKeys.size>0&&issuedKeys.size<rows.length,'game-first offers selected recommendations, not every candidate');
+assert.deepEqual(gameOnly.map(p=>p.playerId).sort(),[...issuedKeys].map(key=>rows.find(r=>r.key===key).playerId).sort());
+assert(gameOnly.every(p=>p.inputs.recommendationScope==='game-first-visible'));
 const draft=parlay.generate(rows.map(r=>gameFirst.candidate(r)),{count:3,mode:'sgp',gameId:game.id,now});
 assert.equal(draft.available,true,'the tested universe is actually eligible for the shared-outcome parlay generator');
-assert(draft.legs.every(leg=>gamePicks.some(p=>p.playerId===leg.playerId&&p.market===leg.market&&p.line===leg.line)),
- 'every generated default leg has a frozen exact-line individual prediction');
+assert(draft.legs.every(leg=>gameOnly.some(p=>p.playerId===leg.playerId&&p.market===leg.market&&p.line===leg.line)),
+ 'each real game-first default ticket leg is frozen at its exact recommended line');
 const expected={role:{projectedMinutes:32,minutesLow:31,minutesHigh:33,historyGames:8,roleStatus:'SUPPORTED'},
  line:{policy:lines.POLICY,sampleKind:'role_adjusted_history',frequency:.75,milestone:20,strictOverLine:19.5},
  defense:{basis:weakness.allowanceBasis,normalizedAllowed:29.1,normalizedLeagueAverage:25.3,shrinkage:.5}};
 for(const pick of bestPicks){
  assert.equal(pick.side,'at_least');assert.equal(pick.line,20);
+ assert.equal(pick.inputs.recommendationScope,'best-props-visible');
  assert.deepEqual(pick.inputs.selectionEvidence,expected);
  assert(!Object.hasOwn(pick,'probability'),'constructed role-history line frequency is never presented as a predictive probability');
 }
-for(const pick of gamePicks){
+for(const pick of gameOnly){
  assert.equal(pick.side,'over');assert.equal(pick.line,19.5);
- assert.equal(pick.probability,.5,'capture freezes actual shared-game outcome frequency at the selected strict line');
+ assert.equal(pick.probability,.5,'capture freezes shared-game outcome frequency at only the selected strict line');
  assert.notEqual(pick.probability,pick.inputs.selectionEvidence.line.frequency);
  assert.deepEqual(pick.inputs.selectionEvidence,expected);
 }
-const automatic=result.picks.filter(p=>p.board==='Automatic OVER alternate lines');assert.equal(automatic.length,12);assert.equal(new Set(automatic.map(p=>p.playerId)).size,3);assert(automatic.every(p=>p.side==='over'&&p.inputs.alternateLineResearch.priced===false&&p.inputs.alternateLineResearch.calibrated===false));
 const saved=ledger.capture(null,result.picks,now);
-assert.equal(saved.added,29,'both complete prop boards and the separate first-basket pick survive capture');
+assert.equal(saved.added,8,'one exact line per issued player prop, no First Basket or alternate sweeps');
+assert.equal(ledger.capture(saved.ledger,gameOnly,now+1000).added,0,
+ 'the equivalent game-first selections must not generate duplicate player-market trials');
 const validGroups=validation.analyze(saved.ledger.picks,{now});
-assert.equal(validGroups.counts.eligibleProps,16);
-assert(validGroups.groups.every(g=>g.metadataComplete===8),'both milestone and strict-over metadata satisfy forward validation');
+assert.equal(validGroups.counts.eligibleProps,8);
+assert(validGroups.groups.every(g=>g.metadataComplete===8),'frozen role/line evidence supports forward validation');
 
 // Context availability can be newer than the published injury snapshot. Freeze
 // the source actually selected by the shared context/role model, not the older
