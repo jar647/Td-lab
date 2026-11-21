@@ -8,16 +8,16 @@ const feed={generated_at:new Date(now).toISOString(),games},game={id:'next',home
 const original=p.draws;p.draws=()=>{throw Error('No simulation may run in matchup discovery')};const r=engine.analyze(game,feed,rosters,injuries,now);p.draws=original;
 const center=r.weaknesses.find(x=>x.attacking==='A'&&x.position==='C'&&x.market==='rebounds');assert(center);assert(center.allowed>center.leagueAverage);assert(engine.rate([4,5,6,7,8],5,5).games===5);assert(engine.thresholds([4,5,6,7,8],'rebounds').includes(5));assert(r.topThree.every(x=>engine.markets.includes(x.market)));
 for(const side of ['over','under']){
- assert.equal(engine.minimumScore(side),75);
- for(const researchScore of [0,74,74.99,100.01,Infinity,NaN,undefined,null,'85'])assert.equal(engine.qualifies({side,researchScore}),false,side+' score '+researchScore+' must fail closed');
- for(const researchScore of [75,75.01,84.99,85,99,100])assert.equal(engine.qualifies({side,researchScore}),side==='over',side+' score '+researchScore+' must qualify');
+ assert.equal(engine.minimumScore('points',side),80);
+ for(const researchScore of [0,74,79.99,100.01,Infinity,NaN,undefined,null,'85'])assert.equal(engine.qualifies({side,market:'points',researchScore}),false,side+' score '+researchScore+' must fail closed');
+ for(const researchScore of [80,80.01,84.99,85,99,100])assert.equal(engine.qualifies({side,market:'points',researchScore}),true,side+' score '+researchScore+' must qualify');
 }
-assert.deepEqual(engine.markets,['points','rebounds','assists','threes','pr','pa','ra','pra']);
+assert.deepEqual(engine.markets,['points','rebounds','assists','threes','pr','pa','ra','pra','steals','blocks','stocks']);
 assert.equal(engine.recorded(player('A','C',0)).points,20);
 assert.equal(engine.baseline([30,30,30,30,30,30,30,30,30,30],'pr'),30);
 assert(engine.thresholds([30,31,32],'pra').includes(30.5)===false);
 assert(r.weaknesses.some(x=>x.market==='pr')&&r.weaknesses.some(x=>x.market==='pra'),'combo opponent allowances must be computed');
-assert(r.candidates.length>0,'The fixture must retain supported 85+ OVER recommendations');assert(r.candidates.every(x=>x.researchScore>=engine.minimumScore(x.market)));assert.equal(engine.rate([4,5,5,6,7],5,5).hits,4,'5+ means at least five');assert.equal(engine.rate([4,5,5],5,10).games,3,'Never invent ten observations');
+assert(r.candidates.length>0,'The fixture must retain supported 80+ NBA recommendations');assert(r.candidates.every(x=>x.researchScore>=engine.minimumScore(x.market)));assert.equal(engine.rate([4,5,5,6,7],5,5).hits,4,'5+ means at least five');assert.equal(engine.rate([4,5,5],5,10).games,3,'Never invent ten observations');
 assert.equal(engine.position('F'),null);assert.equal(engine.position('Power Forward'),'PF');assert.equal(engine.position('C-F'),null);
 const unknown=structuredClone(rosters),unknownFeed=structuredClone(feed);delete unknown.players.AC;for(const h of unknownFeed.games)for(const x of h.players)if(x.id==='AC')x.position='F';assert(!engine.analyze(game,unknownFeed,unknown,injuries,now).candidates.some(x=>x.playerId==='AC'),'Do not invent a center assignment for broad forward data');
 const out={...injuries,injuries:[{player_id:'AC',player:'A C',status:'OUT'}]};assert(!engine.analyze(game,feed,rosters,out,now).candidates.some(x=>x.playerId==='AC'));
@@ -27,10 +27,10 @@ console.log('NBA position matchups: sourced positions, opponent/peer comparisons
 // Low-production players facing strong position defenses have separate UNDER evidence.
 const suppressed=structuredClone(feed);for(const g of suppressed.games)for(const x of g.players)if(x.id==='AC'){x.stats.REB='3';x.stats.DREB='1'}
 const underAnalysis=engine.analyze(game,suppressed,rosters,injuries,now),under=underAnalysis.candidates.find(x=>x.playerId==='AC'&&x.market==='rebounds'&&x.side==='under');
-assert(underAnalysis.weaknesses.some(x=>x.attacking==='A'&&x.position==='C'&&x.market==='rebounds'&&x.side==='under'));assert.equal(under,undefined,'Defensive suppression stays descriptive and cannot create a new UNDER recommendation');
+assert(underAnalysis.weaknesses.some(x=>x.attacking==='A'&&x.position==='C'&&x.market==='rebounds'&&x.side==='under'));if(under)assert(under.researchScore>=80&&under.side==='under','Published UNDERs must be supported 80+ recommendations');
 assert.equal(engine.rate([4,5,6],5,3,'under').hits,1,'Under excludes an integer push');
 assert(underAnalysis.candidates.every(engine.qualifies));
-assert(!engine.qualifies({side:'under',researchScore:84.99}));assert(!engine.qualifies({side:'under',researchScore:85}));assert(!engine.qualifies({side:'over',market:'threes',researchScore:84.99}));
+assert(!engine.qualifies({side:'under',market:'points',researchScore:79.99}));assert(engine.qualifies({side:'under',market:'points',researchScore:80}));assert(engine.qualifies({side:'over',market:'threes',researchScore:80}));
 assert.deepEqual(engine.analyze(game,{...suppressed,odds:999,impliedProbability:.01},rosters,injuries,now).candidates,underAnalysis.candidates);
 assert.equal(engine.analyze(game,suppressed,rosters,{...injuries,generated_at:'2000-01-01'},now).candidates.length,0);
 
