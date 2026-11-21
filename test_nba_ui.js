@@ -230,16 +230,18 @@ assert.equal(vm.runInContext('nbaPropRating(ratingResult,{})',sandbox),null);
 assert.ok(vm.runInContext('nbaRatingHTML({rating:nbaPropRating(ratingResult,ratingContext)})',sandbox).includes('not win probability'));
 console.log('NBA matchup score isolated from prices and implied probability: PASS');
 
-// Matchup research chooses up to three distinct OVER players; unsupported directions are excluded.
+// Matchup research chooses up to three distinct 80+ NBA players across OVER and UNDER.
 sandbox.matchupFixture=Array.from({length:7},(_,i)=>({key:'m'+i,playerId:i===1?'same':'p'+i,market:'points',quality:99-i,result:{rating:{score:85}},matchup:{strength:i/10},target:{side:i%2?'OVER':'UNDER',line:20.5}}));
 sandbox.matchupFixture[0].playerId='same';sandbox.matchupFixture[6].market='threes';sandbox.matchupFixture[5].target=null;
 const three=vm.runInContext('nbaMatchupThree(matchupFixture)',sandbox);
-assert.equal(three.length,2);assert.deepEqual(Array.from(three,r=>r.key),['m3','m1']);
-assert.equal(new Set(three.map(r=>r.playerId)).size,2);
+assert.equal(three.length,3,'Return up to three distinct qualified OVER or UNDER players');
+assert.equal(new Set(three.map(r=>r.playerId)).size,3);
+assert(three.some(r=>r.target.side==='under'),'An independently eligible UNDER must be considered');
+assert(three.every(r=>r.result.rating.score>=80&&r.target?.line>0));
 assert.ok(match[1].includes('outlookHTML+scoutHtml'));
 assert.ok(match[1].includes('row.target=nbaResearchTarget(row,side)'));
 assert.ok(match[1].includes('row.target.distance>.25')); 
-console.log('NBA matchup-first three-player cap, direction and game outlook: PASS');
+console.log('NBA matchup-first three-player cap, supported UNDER direction and game outlook: PASS');
 
 // Recover an old explicitly-directed leg at its own saved price, not another market.
 vm.runInContext(`
