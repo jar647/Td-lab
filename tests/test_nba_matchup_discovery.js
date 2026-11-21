@@ -39,7 +39,7 @@ for(const [stats,value] of [[{'3PT':'0-4'},0],[{'3PT':'5-8'},5],[{'3PM':'3'},3],
 const withoutThree=player('A','C',0);delete withoutThree.stats['3PT'];assert.equal(engine.recorded(withoutThree).threes,null);assert.equal(engine.recorded(withoutThree).points,20);
 const shooting=structuredClone(feed);for(const g of shooting.games)for(const x of g.players){const made=x.id==='ASG'?5:1;x.stats['3PT']=made+'-'+(x.id==='ASG'?12:4);x.stats.PTS=String(20+made)}
 const shootingAnalysis=engine.analyze(game,shooting,rosters,injuries,now),shooter=shootingAnalysis.candidates.find(x=>x.playerId==='ASG'&&x.market==='threes');
-assert(shooter,'Observed shooting role and opponent position weakness should support a qualifying three-point OVER');assert(shooter.researchScore>=85);assert.equal(shooter.history.length,10);assert(shooter.history.every(x=>x===5));assert.equal(shooter.weakness.games,10);assert.equal(shooter.baseline,5);
+assert(shooter,'Observed shooting role and opponent position weakness should support a qualifying three-point OVER');assert(shooter.researchScore>=80);assert.equal(shooter.history.length,10);assert(shooter.history.every(x=>x===5));assert.equal(shooter.weakness.games,10);assert.equal(shooter.baseline,5);
 const sourceRecords=p.records;p.records=(f,cutoff)=>sourceRecords(f,cutoff).map(g=>({...g,players:g.players.map(x=>{const stats={...x.stats};delete stats['3PT'];return {...x,stats}})}));
 try{const missing=engine.analyze(game,shooting,rosters,injuries,now);assert(!missing.candidates.some(x=>x.market==='threes'));assert(missing.weaknesses.some(x=>x.market==='rebounds'),'Missing 3PM must not erase other observed matchup research');assert(!missing.weaknesses.some(x=>x.market==='threes'));}finally{p.records=sourceRecords}
-console.log('NBA OVER-only and 85+ three-point boundary / known versus missing 3PM samples PASS');
+console.log('NBA 80+ two-sided three-point boundary / known versus missing 3PM samples PASS');
