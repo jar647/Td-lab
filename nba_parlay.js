@@ -180,7 +180,7 @@
   if(mode==='cross_game'){const games=new Set();for(const p of sorted)if(!games.has(p.gameId)){games.add(p.gameId);add(p)}}
   for(const p of sorted)add(p);
   pool.sort(order);
-  if(!pool.length)return fail('No qualifying OVER candidates (75+; three-pointers 85+) have current source records, stable supported minutes and suitable exact-line simulation frequencies.');
+  if(!pool.length)return fail('No qualifying OVER or UNDER candidates (80/100 minimum) have current source records, stable supported minutes and suitable exact-line simulation frequencies.');
   let beam=[{indices:[],prepared:[],score:0,key:''}],best=null;
   const groupCache=new Map();
   function scoreCombo(combo){
