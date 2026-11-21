@@ -8,11 +8,10 @@ dates, sports, boards and outcomes. CSV exports the filtered underlying records.
 
 `scripts/update_recommendation_results.cjs` uses the same NBA modules and the
 actual selection functions extracted from the deployed NFL analyst and UFC app.
-It records NBA Best Props, game-first best/top-three/default ticket, first-basket
-top five, NFL analyst top-three/default ticket and TD position leaders, and UFC
+It records NBA Best Props and game-first best/top-three/default ticket, NFL analyst top-three/default ticket and TD position leaders, and UFC
 top pick plus supported predicted winners. Manual custom prices, lines,
 exclusions, simulator-only hypotheticals and real-money execution are not public
-recommendations and are not captured by this server ledger.
+recommendations and are not captured by this server ledger. NBA First Basket and unselected automatic alternate-line thresholds are also not tracked. One issued default NBA line is retained per game/player/market, even when the same candidate appears on multiple boards.
 
 Every first observation freezes the exact game/player identity, line, side,
 score or evidence category, source model hash, source timestamps and capture
@@ -33,7 +32,7 @@ remain real when data refreshes fail.
 
 NBA uses final official player box scores by ID/team. Integer-plus milestones
 settle inclusively; regular OVER/UNDER lines are strict with pushes. Missing
-fields never become zero. DNP is void. First basket means first made field goal,
+fields never become zero. DNP is void. Retired First Basket picks are omitted from active results. First basket historically meant first made field goal,
 excludes free throws and requires a starting appearance; a bench appearance is
 void, unknown starter/opening evidence remains unresolved.
 
@@ -60,7 +59,7 @@ returns at recorded prices, not proof of executed bets.
 Group by sport, board, model hash, market and side; never pool NBA UNDERs with
 OVERs, NFL raw ranks with /100 scores, or UFC evidence labels with probabilities.
 Five-point score bands show W/L, hit rate, Wilson intervals, game counts and
-priced ROI. First-basket/scenario frequencies use separate estimate bands.
+priced ROI. Historical First Basket and unselected alternate-line estimates are excluded from published performance; the underlying past capture archive is preserved.
 Mean estimate and Brier scores use only settled predictions. These are
 uncalibrated forecasts, not interpreted as /100 matchup scores.
 
@@ -87,4 +86,4 @@ final outcomes. Archived source replays are audits, not forward ledger entries.
 Coverage retains the day's fixture list so an incomplete first-day record stays
 marked partial even after old source fixtures roll out of the live feed. A source
 adapter regression test supplies 45 eligible Best Props and verifies all 45 are
-captured; top-three/ticket/first-basket limits must never truncate Best Props.
+captured; top-three/ticket limits must never truncate publicly recommended Best Props. Unissued options are not new picks.
