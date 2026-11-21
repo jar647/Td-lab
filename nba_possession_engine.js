@@ -87,12 +87,12 @@ function build(game,feed,injuries,rosters,now=Date.now(),options={}){
 function random(seed){let s=seed>>>0;return ()=>{s+=0x6D2B79F5;let t=s;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296}}
 function draws(model,count=10000,seed=6472026,options={}){
  if(!Number.isInteger(count)||count<1000||count>100000)throw Error('Runs must be between 1000 and 100000');
- const rng=random(seed),poisson=lambda=>{
+ const rng=random(seed),defensiveRng=random(seed^0x5a17b10c),poisson=lambda=>{
   // Simple rate-based count approximation conditional on simulated minutes.
   // It is NOT a possession-level steal/block event and has no calibrated edge.
   if(!Number.isFinite(lambda)||lambda<0)return null;
   const stop=Math.exp(-Math.min(12,lambda));let n=0,product=1;
-  do{product*=rng();n++}while(product>stop&&n<40);
+  do{product*=defensiveRng();n++}while(product>stop&&n<40);
   return n-1;
  },gauss=()=>Math.sqrt(-2*Math.log(Math.max(1e-12,rng())))*Math.cos(2*Math.PI*rng()),g=model.game,home=[],away=[],players=Object.values(model.teams).flatMap(t=>t.players),sums=Object.fromEntries(players.map(p=>[p.id,{points:0,rebounds:0,assists:0,threes:0,steals:0,blocks:0,stocks:0,minutes:0,played:0}])),legs=(options.legs||[]).slice(0,5),legWins=legs.map(()=>0),pairWins=legs.map(()=>legs.map(()=>0));const playerOutcomes=options.collectPlayerOutcomes?{}:null;let allWin=0,overtime=0,overtimePeriods=0,blowouts=0;
  const choose=(ps,weight,exclude)=>{const values=ps.map(p=>p.id===exclude?0:Math.max(0,weight(p))),sum=values.reduce((a,b)=>a+b,0);if(!sum)return null;let n=rng()*sum;for(let i=0;i<ps.length;i++){n-=values[i];if(n<=0)return ps[i]}return ps.at(-1)};
