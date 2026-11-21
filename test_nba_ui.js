@@ -146,20 +146,20 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  console.log('NBA concise verdict and optional calculation details: PASS');
 }
 
-// Both sides need 85+ before entering recommendation ranks.
+// Both NBA sides must meet 80/100 before entering recommendation ranks.
 {
  const row=(key,playerId,decision,candidate,ev,quality=0,quote={line:5.5,over:-110,under:-110})=>({key,playerId,market:'points',quality,quote,result:{decision,candidate,rating:{score:candidate==='UNDER'?84.99:85},expectedValue:ev,estimatedEdge:ev/2}});
  const rows=[row('over','one','LEAN','OVER',.10),row('under','two','LEAN','UNDER',.30),row('pass','three','PASS',null,99,999),row('waiting','four','PASS',null,99,998,{}) ,row('second-market','two','LEAN','OVER',.20),row('third','five','LEAN','OVER',.08)];
  const groups=JSON.parse(vm.runInContext('JSON.stringify(nbaPropGroups('+JSON.stringify(rows)+'))',sandbox));
  assert.deepEqual(groups.recommended.map(r=>r.key),['over','second-market','third']);
- assert.deepEqual(groups.other.map(r=>r.key),[]);
- assert.deepEqual(groups.passed.map(r=>r.key),['pass','under']);
+ assert.deepEqual(groups.other.map(r=>r.key),['under']);
+ assert.deepEqual(groups.passed.map(r=>r.key),['pass']);
  assert.deepEqual(groups.awaiting.map(r=>r.key),['waiting']);
  assert.equal(new Set(groups.recommended.map(r=>r.playerId)).size,3);
  const changed=rows.map(r=>r.key==='under'?{...r,result:{decision:'PASS',candidate:null}}:r);
  const after=JSON.parse(vm.runInContext('JSON.stringify(nbaPropGroups('+JSON.stringify(changed)+'))',sandbox));
  assert(!after.recommended.some(r=>r.key==='under'));assert(after.passed.some(r=>r.key==='under'));
- console.log('NBA 85+ OVER / UNDER ranking, PASS removal and awaiting-odds buckets: PASS');
+ console.log('NBA 80+ OVER / UNDER ranking, PASS removal and awaiting-odds buckets: PASS');
 }
 
 // Current single-book prices can discover an Under. Manual edits win; a changed
