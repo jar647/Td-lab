@@ -6,12 +6,32 @@ const num=x=>typeof x==='number'&&Number.isFinite(x);
 const day=x=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(x));
 function identity(p){return [p.sport,p.board,p.gameId,p.playerId||'',p.market,p.side||'',p.modelVersion,...(p.board==='Automatic OVER alternate lines'?[p.line]:[])].join('|');}
 function valid(p,now){return p&&['NBA','NFL','UFC'].includes(p.sport)&&p.board&&p.gameId&&p.market&&p.modelVersion&&p.label&&num(time(p.capturedAt))&&num(time(p.startsAt))&&time(p.capturedAt)<time(p.startsAt)&&time(p.capturedAt)<=now&&(!['over','under','at_least'].includes(p.side)||num(p.line));}
+function nbaPropKey(p){return [p.gameId,p.playerId,p.market].map(String).join('|');}
+function activePicks(picks){
+ // Historical records remain immutable. Published stats include only issued plays.
+ const out=[],seenNBA=new Set();
+ for(const p of picks||[]){
+  if(p.sport==='NBA'){
+   if(p.market==='first_basket'||p.board==='Top 5 first basket'||p.board==='Automatic OVER alternate lines')continue;
+   // Historical game-first snapshots contained entire candidate universes;
+   // absent a captured selection scope we cannot assert a play was issued.
+   if(p.board==='Game-first recommendations'&&p.inputs?.recommendationScope!=='game-first-visible')continue;
+   const key=nbaPropKey(p);if(seenNBA.has(key))continue;seenNBA.add(key);
+  }
+  out.push(p);
+ }
+ return out;
+}
 function capture(ledger,candidates,now=Date.now()){
- const out=JSON.parse(JSON.stringify(ledger||{schema:1,picks:[]})),seen=new Map(out.picks.map(p=>[identity(p),p]));let added=0,rejected=0;
+ const out=JSON.parse(JSON.stringify(ledger||{schema:1,picks:[]})),seen=new Map(out.picks.map(p=>[identity(p),p])),recordedNBA=new Set(activePicks(out.picks).filter(p=>p.sport==='NBA').map(nbaPropKey));let added=0,rejected=0;
  for(const candidate of candidates){const p={...candidate,capturedAt:new Date(now).toISOString()};if(!valid(p,now)||time(p.startsAt)<=now){rejected++;continue;}
+  if(p.sport==='NBA'&&(p.market==='first_basket'||p.board==='Top 5 first basket'||p.board==='Automatic OVER alternate lines')){rejected++;continue;}
   const id=identity(p),old=seen.get(id);
   if(old){if((old.line!==p.line||old.score!==p.score||old.label!==p.label)&&!(old.revisions||[]).some(r=>r.line===p.line&&r.score===p.score&&r.label===p.label)){old.revisions=old.revisions||[];old.revisions.push({at:p.capturedAt,line:p.line,score:p.score,label:p.label});}continue;}
-  const row={...p,id,day:day(p.startsAt),outcome:{status:'pending',reason:'Awaiting official result'}};out.picks.push(row);seen.set(id,row);added++;
+  // One immutable recommended NBA line per game/player/market, across boards,
+  // model versions and revised alternate options. Other sports are unchanged.
+  if(p.sport==='NBA'&&recordedNBA.has(nbaPropKey(p))){rejected++;continue;}
+  const row={...p,id,day:day(p.startsAt),outcome:{status:'pending',reason:'Awaiting official result'}};out.picks.push(row);seen.set(id,row);if(p.sport==='NBA')recordedNBA.add(nbaPropKey(p));added++;
  }
  return {ledger:out,added,rejected};
 }
@@ -83,5 +103,5 @@ function summarize(ledger,now=Date.now()){
  for(const p of picks){if(!days.has(p.day))days.set(p.day,[]);days.get(p.day).push(p);const key=[p.sport,p.board,p.modelVersion,p.market,p.side,p.scoreKind||'none'].join('|');if(!groups.has(key))groups.set(key,[]);groups.get(key).push(p);}
  return {schema:1,alternateCalibration:alternateCalibration(picks),generatedAt:new Date(now).toISOString(),startedAt:picks.length?picks.reduce((a,p)=>p.capturedAt<a?p.capturedAt:a,picks[0].capturedAt):null,overall:stats(picks),days:[...days].sort((a,b)=>b[0].localeCompare(a[0])).map(([day,rows])=>({day,...stats(rows)})),groups:[...groups].map(([key,rows])=>{const buckets=new Map();for(const p of rows){const b=scoreBand(p);if(!buckets.has(b))buckets.set(b,[]);buckets.get(b).push(p);}const settled=rows.filter(p=>num(p.score)&&['win','loss'].includes(p.outcome.status));const cutoff=rows[0].scoreKind?.includes('TD opportunity')?60:rows[0].scoreKind?.includes('raw rank')?100:90,high=settled.filter(p=>p.score>=cutoff),low=settled.filter(p=>p.score<cutoff),hs=stats(high),ls=stats(low),enough=hs.settled>=30&&ls.settled>=30&&new Set(settled.map(p=>p.gameId)).size>=30&&new Set(settled.map(p=>p.day)).size>=10;return {key,sport:rows[0].sport,board:rows[0].board,modelVersion:rows[0].modelVersion,market:rows[0].market,side:rows[0].side,scoreKind:rows[0].scoreKind,...stats(rows),bands:[...buckets].sort((a,b)=>a[0].localeCompare(b[0],undefined,{numeric:true})).map(([band,list])=>({band,...stats(list)})),scoreTest:{cutoff,status:!rows.some(p=>num(p.score))?'NOT_NUMERIC_SCORE':enough?'DESCRIPTIVE_ONLY':'INSUFFICIENT_EVIDENCE',high:hs,low:ls,difference:hs.hitRate!==null&&ls.hitRate!==null?hs.hitRate-ls.hitRate:null,reason:!rows.some(p=>num(p.score))?'This board supplies experimental frequencies or evidence categories, not a /100 score. Compare its estimate/evidence bands and observed outcomes instead.':enough?'Compare matched market/side results; shared games and chosen line difficulty still confound score effects. This does not prove causation or profitability.':'Need at least 30 settled picks on each side of '+cutoff+', 30 distinct games and 10 dates within the same market, side and model version. No evidence claim yet.'}};}),picks};
 }
-return {alternateCalibration,captureCoverage,capture,grade,gradeOne,valid,identity,settle,stats,wilson,scoreBand,summarize};
+return {activePicks,alternateCalibration,captureCoverage,capture,grade,gradeOne,valid,identity,settle,stats,wilson,scoreBand,summarize};
 });
