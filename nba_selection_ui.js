@@ -93,12 +93,12 @@
     await new Promise(resolve=>schedule(resolve,0));if(destroyed||version!==revision||current?.signature!==inputs.signature)return unavailable('NBA sources changed during simulation.');
     progress({type:'progress',completed:i,total:inputs.games.length,game:inputs.games[i]});
     const result=gf.analyze(inputs.games[i],inputs.feed,inputs.injuries,inputs.rosters,inputs.context,now(),{count:1000});
-    const sampled=result?.rows||[];rows.push(...sampled);diagnostics.gamesAnalyzed++;diagnostics.modelRows+=sampled.length;diagnostics.eligibleRows+=sampled.filter(r=>['over','under'].includes(r.side)&&r.eligible===true&&!r.reviewRequired).length;diagnostics.ratedRows+=sampled.filter(r=>['over','under'].includes(r.side)&&Number.isFinite(r.matchupRating?.score)&&r.matchupRating.score>=gf.minimumScore(r.market)).length;if(result?.reason){held.push({gameId:String(inputs.games[i].id),reason:result.reason});if(!sampled.length)diagnostics.modelUnavailableGames++;}
+    const sampled=result?.rows||[];rows.push(...sampled);diagnostics.gamesAnalyzed++;diagnostics.modelRows+=sampled.length;diagnostics.eligibleRows+=sampled.filter(r=>['over','under'].includes(r.side)&&r.eligible===true&&!r.reviewRequired).length;diagnostics.ratedRows+=sampled.filter(r=>['over','under'].includes(r.side)&&Number.isFinite(r.matchupRating?.score)&&r.matchupRating.score>=gf.minimumScore(r.market,r.side)).length;if(result?.reason){held.push({gameId:String(inputs.games[i].id),reason:result.reason});if(!sampled.length)diagnostics.modelUnavailableGames++;}
    }
    const eligible=supported(rows,inputs);diagnostics.qualifiedRows=eligible.length;return {candidates:eligible,held,diagnostics,signature:inputs.signature,ready:true,reason:''};
   }
   function runWorker(inputs,version){
-   const make=options.workerFactory||(typeof root.Worker==='function'?()=>new root.Worker('./nba_parlay_worker.js?v=nba-best-props-gate-20261120-v2'):null);
+   const make=options.workerFactory||(typeof root.Worker==='function'?()=>new root.Worker('./nba_parlay_worker.js?v=nba80-def-under-20261121'):null);
    if(!make)return fallback(inputs,version);
    return new Promise(resolve=>{
     let worker,timer,finished=false;const requestId=++request;
