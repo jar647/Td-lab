@@ -6,6 +6,27 @@ let c=api.capture(null,[base],now);assert.equal(c.added,1);const original=struct
 c=api.capture(c.ledger,[{...base,line:10,score:99,label:'Changed line'}],now+1000);assert.equal(c.added,0);assert.equal(c.ledger.picks[0].line,20);assert.equal(c.ledger.picks[0].score,85);assert.equal(c.ledger.picks[0].capturedAt,before);assert.equal(c.ledger.picks[0].revisions.length,1);
 assert.equal(api.capture(c.ledger,[base],now+3600000).added,0,'No tipoff or post-tip capture');assert.equal(api.capture(null,[{...base,startsAt:'not a time'}],now).rejected,1);
 assert.equal(api.capture(null,[{...base,modelVersion:'v2'}],now).added,1,'Model versions remain separate');
+const neverNew=api.capture(c.ledger,[
+ {...base,modelVersion:'v2',line:16,label:'New model alternate'},
+ {...base,board:'Game-first recommendations',side:'over',line:19.5,modelVersion:'game-v1',inputs:{recommendationScope:'game-first-visible'}},
+ {...base,board:'Top 5 first basket',market:'first_basket',side:'winner',line:null},
+ {...base,board:'Automatic OVER alternate lines',side:'over',line:12.5}
+],now+2000);
+assert.equal(neverNew.added,0,'only the originally issued NBA prop is frozen, not cross-board/model/alternate duplicates or First Basket');
+assert.equal(neverNew.ledger.picks.length,1);
+assert.equal(api.capture(c.ledger,[{...base,market:'assists',line:5,label:'Player 5+ assists'}],now+2000).added,1,
+ 'another real market for the same player is still tracked');
+assert.equal(api.capture(c.ledger,[{...base,playerId:'another',line:20}],now+2000).added,1,
+ 'other players are still tracked');
+const retired={...c.ledger.picks[0],board:'Automatic OVER alternate lines',id:'historic-auto',line:12.5};
+const firstBasketLegacy={...c.ledger.picks[0],board:'Top 5 first basket',market:'first_basket',id:'historic-basket'};
+const unissuedGameFirst={...c.ledger.picks[0],board:'Game-first recommendations',id:'legacy-universe'};
+const actualAnotherMarket={...c.ledger.picks[0],board:'Game-first recommendations',market:'assists',id:'issued-assists',inputs:{recommendationScope:'game-first-visible'}};
+const historicalNFL={...c.ledger.picks[0],sport:'NFL',market:'receptions',id:'nfl-capture'};
+const active=api.activePicks([c.ledger.picks[0],retired,firstBasketLegacy,unissuedGameFirst,actualAnotherMarket,historicalNFL]);
+assert.deepEqual(active.map(p=>p.id),[c.ledger.picks[0].id,'issued-assists','nfl-capture'],
+ 'archived first baskets, option sweeps and unissued legacy candidates stay out of results while real NBA/NFL plays remain');
+
 const box={id:'g',status:'STATUS_FINAL',players:[{id:'p',team:'A',starter:true,stats:{MIN:'30:00',PTS:'20',REB:'4',AST:'3','3PT':'2-7'}}],first_basket:{available:true,first_game:{player_id:'p',team:'A'}}};
 const data={nba:{games:[box]}},p=c.ledger.picks[0],after=now+4*3600000;
 assert.equal(api.gradeOne(p,data,now).status,'pending','Future results must never settle a pre-start selection');assert.equal(api.gradeOne(p,data,after).status,'win');assert.equal(api.gradeOne({...p,side:'over'},data,after).status,'push');assert.equal(api.gradeOne({...p,side:'under'},data,after).status,'push');assert.equal(api.gradeOne({...p,side:'under',line:19.5},data,after).status,'loss');assert.equal(api.gradeOne({...p,side:'under',line:20.5},data,after).status,'win');
