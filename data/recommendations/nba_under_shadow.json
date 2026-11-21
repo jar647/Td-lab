@@ -126,12 +126,74 @@
       "capturedAt": "2026-11-21T17:22:28.575Z",
       "result": "pending",
       "frozen": true
+    },
+    {
+      "key": "401910024|3934672|assists|under-shadow",
+      "gameId": "401910024",
+      "game": {
+        "id": "401910024",
+        "date": "2026-11-22T00:30Z",
+        "status": "STATUS_SCHEDULED",
+        "season_type": 2,
+        "home": "New York Knicks",
+        "away": "Portland Trail Blazers",
+        "players": []
+      },
+      "startsAt": "2026-11-22T00:30Z",
+      "playerId": "3934672",
+      "player": "Jalen Brunson",
+      "team": "New York Knicks",
+      "opponent": "Portland Trail Blazers",
+      "position": "PG",
+      "market": "assists",
+      "side": "under",
+      "score": 81,
+      "line": 9.5,
+      "projection": 5.429,
+      "recordedBaseline": 6.5,
+      "simulatedFrequency": 0.949,
+      "simulatedRuns": 1000,
+      "sourceTimestamps": {
+        "games": "2026-11-21T22:46:30.601035+00:00",
+        "injuries": "2026-11-21T23:22:33.174540+00:00",
+        "rosters": "2026-11-21T22:46:36.771331+00:00"
+      },
+      "sampleDepth": 10,
+      "factors": [
+        {
+          "label": "Opponent suppression by position (shrunk and schedule-adjusted)",
+          "points": 28,
+          "max": 40
+        },
+        {
+          "label": "Supported and stable minutes",
+          "points": 25,
+          "max": 25
+        },
+        {
+          "label": "Simulated projection below recorded player baseline",
+          "points": 13,
+          "max": 20
+        },
+        {
+          "label": "Verified player and opponent samples",
+          "points": 15,
+          "max": 15
+        }
+      ],
+      "studyOnly": true,
+      "priceVerified": false,
+      "probabilityCalibrated": false,
+      "reason": "Suppressed defensive position rate, stable supported role, lower simulated forecast and at least 70% experimental UNDER clears. Sportsbook line unverified.",
+      "capturedAt": "2026-11-21T23:25:15.662Z",
+      "result": "pending",
+      "frozen": true
     }
   ],
   "summary": {
-    "captured": 2,
+    "captured": 3,
     "graded": 1,
-    "pending": 1,
+    "pending": 2,
     "void": 0,
     "probabilitiesCalibrated": false,
     "betReady": false,
