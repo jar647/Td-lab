@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-11-21T02:19:12.918322+00:00",
+  "generated_at_utc": "2026-11-21T03:30:54.216836+00:00",
   "source": "Immutable pregame NBA tracker + ESPN final box scores",
   "status": "DAILY_RESEARCH_REVIEW_ONLY",
   "bet_ready": false,
@@ -7,12 +7,12 @@
   "schedule": "Every NBA data refresh; daily result reviews and pregame projections",
   "source_age_hours": 0.03,
   "source_fresh": true,
-  "graded_projection_rows": 15169,
-  "distinct_graded_game_days": 22,
+  "graded_projection_rows": 15754,
+  "distinct_graded_game_days": 23,
   "inventory": {
     "snapshots": 205,
-    "pending_predictions": 5810,
-    "dnp": 1217,
+    "pending_predictions": 5125,
+    "dnp": 1317,
     "ungraded": 1175,
     "invalid_pregame_locks": 0,
     "invalid_records": 0
@@ -97,18 +97,18 @@
     },
     "nba-ui-season-recent-matchup-v5": {
       "assists": {
-        "n": 2708,
-        "distinct_games": 141,
-        "distinct_days": 18,
-        "distinct_player_games": 2708,
-        "mae": 1.432,
-        "bias": 0.021,
-        "within_20pct": 0.7648,
-        "walk_forward_holdout_days": 15,
-        "walk_forward_holdout_forecasts": 2329,
-        "baseline_holdout_mae": 1.4317,
-        "bias_challenger_holdout_mae": 1.4304,
-        "bias_challenger_mae_improvement": 0.0009,
+        "n": 2825,
+        "distinct_games": 147,
+        "distinct_days": 19,
+        "distinct_player_games": 2825,
+        "mae": 1.431,
+        "bias": 0.031,
+        "within_20pct": 0.7639,
+        "walk_forward_holdout_days": 16,
+        "walk_forward_holdout_forecasts": 2446,
+        "baseline_holdout_mae": 1.4308,
+        "bias_challenger_holdout_mae": 1.4294,
+        "bias_challenger_mae_improvement": 0.001,
         "eligible_for_research_review": true,
         "challenger_outperforms_baseline": false,
         "daily_walk_forward": [
@@ -216,21 +216,28 @@
             "train_rows": 2625,
             "holdout_rows": 83,
             "frozen_pregame_bias_adjustment": 0.0194
+          },
+          {
+            "day": "2026-11-20",
+            "train_days": 18,
+            "train_rows": 2708,
+            "holdout_rows": 117,
+            "frozen_pregame_bias_adjustment": 0.0204
           }
         ]
       },
       "minutes": {
-        "n": 2708,
-        "distinct_games": 141,
-        "distinct_days": 18,
-        "distinct_player_games": 2708,
-        "mae": 4.912,
-        "bias": 0.076,
-        "within_20pct": 0.5624,
-        "walk_forward_holdout_days": 15,
-        "walk_forward_holdout_forecasts": 2329,
-        "baseline_holdout_mae": 4.9913,
-        "bias_challenger_holdout_mae": 4.9967,
+        "n": 2825,
+        "distinct_games": 147,
+        "distinct_days": 19,
+        "distinct_player_games": 2825,
+        "mae": 4.904,
+        "bias": 0.078,
+        "within_20pct": 0.5632,
+        "walk_forward_holdout_days": 16,
+        "walk_forward_holdout_forecasts": 2446,
+        "baseline_holdout_mae": 4.9784,
+        "bias_challenger_holdout_mae": 4.984,
         "bias_challenger_mae_improvement": -0.0011,
         "eligible_for_research_review": true,
         "challenger_outperforms_baseline": false,
@@ -339,22 +346,29 @@
             "train_rows": 2625,
             "holdout_rows": 83,
             "frozen_pregame_bias_adjustment": 0.0976
+          },
+          {
+            "day": "2026-11-20",
+            "train_days": 18,
+            "train_rows": 2708,
+            "holdout_rows": 117,
+            "frozen_pregame_bias_adjustment": 0.0741
           }
         ]
       },
       "points": {
-        "n": 2708,
-        "distinct_games": 141,
-        "distinct_days": 18,
-        "distinct_player_games": 2708,
-        "mae": 4.907,
-        "bias": 0.171,
-        "within_20pct": 0.3198,
-        "walk_forward_holdout_days": 15,
-        "walk_forward_holdout_forecasts": 2329,
-        "baseline_holdout_mae": 4.857,
-        "bias_challenger_holdout_mae": 4.8392,
-        "bias_challenger_mae_improvement": 0.0037,
+        "n": 2825,
+        "distinct_games": 147,
+        "distinct_days": 19,
+        "distinct_player_games": 2825,
+        "mae": 4.92,
+        "bias": 0.213,
+        "within_20pct": 0.3193,
+        "walk_forward_holdout_days": 16,
+        "walk_forward_holdout_forecasts": 2446,
+        "baseline_holdout_mae": 4.874,
+        "bias_challenger_holdout_mae": 4.8553,
+        "bias_challenger_mae_improvement": 0.0038,
         "eligible_for_research_review": true,
         "challenger_outperforms_baseline": false,
         "daily_walk_forward": [
@@ -462,22 +476,29 @@
             "train_rows": 2625,
             "holdout_rows": 83,
             "frozen_pregame_bias_adjustment": 0.1824
+          },
+          {
+            "day": "2026-11-20",
+            "train_days": 18,
+            "train_rows": 2708,
+            "holdout_rows": 117,
+            "frozen_pregame_bias_adjustment": 0.167
           }
         ]
       },
       "rebounds": {
-        "n": 2708,
-        "distinct_games": 141,
-        "distinct_days": 18,
-        "distinct_player_games": 2708,
-        "mae": 1.978,
-        "bias": 0.205,
-        "within_20pct": 0.61,
-        "walk_forward_holdout_days": 15,
-        "walk_forward_holdout_forecasts": 2329,
-        "baseline_holdout_mae": 1.979,
-        "bias_challenger_holdout_mae": 1.956,
-        "bias_challenger_mae_improvement": 0.0116,
+        "n": 2825,
+        "distinct_games": 147,
+        "distinct_days": 19,
+        "distinct_player_games": 2825,
+        "mae": 1.977,
+        "bias": 0.214,
+        "within_20pct": 0.6106,
+        "walk_forward_holdout_days": 16,
+        "walk_forward_holdout_forecasts": 2446,
+        "baseline_holdout_mae": 1.9781,
+        "bias_challenger_holdout_mae": 1.9541,
+        "bias_challenger_mae_improvement": 0.0121,
         "eligible_for_research_review": true,
         "challenger_outperforms_baseline": false,
         "daily_walk_forward": [
@@ -585,21 +606,28 @@
             "train_rows": 2625,
             "holdout_rows": 83,
             "frozen_pregame_bias_adjustment": 0.1892
+          },
+          {
+            "day": "2026-11-20",
+            "train_days": 18,
+            "train_rows": 2708,
+            "holdout_rows": 117,
+            "frozen_pregame_bias_adjustment": 0.2007
           }
         ]
       },
       "threes": {
-        "n": 2708,
-        "distinct_games": 141,
-        "distinct_days": 18,
-        "distinct_player_games": 2708,
-        "mae": 0.988,
-        "bias": -0.008,
-        "within_20pct": 0.8715,
-        "walk_forward_holdout_days": 15,
-        "walk_forward_holdout_forecasts": 2329,
-        "baseline_holdout_mae": 0.9776,
-        "bias_challenger_holdout_mae": 0.9808,
+        "n": 2825,
+        "distinct_games": 147,
+        "distinct_days": 19,
+        "distinct_player_games": 2825,
+        "mae": 0.986,
+        "bias": -0.006,
+        "within_20pct": 0.8722,
+        "walk_forward_holdout_days": 16,
+        "walk_forward_holdout_forecasts": 2446,
+        "baseline_holdout_mae": 0.9761,
+        "bias_challenger_holdout_mae": 0.9793,
         "bias_challenger_mae_improvement": -0.0033,
         "eligible_for_research_review": true,
         "challenger_outperforms_baseline": false,
@@ -708,6 +736,13 @@
             "train_rows": 2625,
             "holdout_rows": 83,
             "frozen_pregame_bias_adjustment": -0.0095
+          },
+          {
+            "day": "2026-11-20",
+            "train_days": 18,
+            "train_rows": 2708,
+            "holdout_rows": 117,
+            "frozen_pregame_bias_adjustment": -0.0076
           }
         ]
       }
