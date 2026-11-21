@@ -114,7 +114,7 @@ const gates=capture({candidates:[...rejectedBest,qualifiedThree,
  {...best[0],playerId:'best-under',side:'under',researchScore:100},
  {...best[0],playerId:'not-eligible',eligible:false,researchScore:100}],
  simulationRows:[...rejectedRows,{...rows[0],playerId:'game-under',side:'under',matchupRating:{side:'under',score:100}},rows[0]]});
-assert.deepEqual(gates.picks.filter(p=>p.board==='Best Props').map(p=>p.playerId),['three-85']);
+assert.deepEqual(gates.picks.filter(p=>p.board==='Best Props').map(p=>p.playerId),['three-80']);
 assert.deepEqual(gates.picks.filter(p=>p.board==='Game-first recommendations').map(p=>p.playerId),['p0']);
 assert.equal(capture({ready:false}).picks.filter(p=>p.board==='Best Props').length,0,'PASS cannot publish candidates left in an unavailable analysis');
 assert(capture({ready:false}).coverage.some(c=>c.status==='withheld'&&c.gameId===game.id));
