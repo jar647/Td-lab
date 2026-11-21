@@ -39,7 +39,8 @@
   if(!c||!g||!r||!market||!id(c.key)||!id(c.playerId)||!id(c.gameId)||id(g.id)!==id(c.gameId)||
    typeof c.name!=='string'||!c.name.trim()||!['over','under'].includes(c.side)||c.eligible!==true||c.reviewRequired||c.parlayEligible===false||
    !finite(c.score)||c.score<lines.minimumScore(c.market,c.side)||c.score>100||!finite(c.line)||c.line<.5||c.line>400||
-   c.matchupRating?.score!==undefined&&c.matchupRating.score!==c.score)return null;
+   c.matchupRating?.score!==undefined&&c.matchupRating.score!==c.score||
+   c.side==='under'&&(c.matchupRating?.side!=='under'||c.selectedLineEvidence?.side!=='under'))return null;
   if(g.status!=='STATUS_SCHEDULED'||typeof g.home!=='string'||!g.home.trim()||typeof g.away!=='string'||!g.away.trim()||g.home===g.away||
    ![g.home,g.away].includes(c.team)||c.opponent!==undefined&&c.opponent!==(c.team===g.home?g.away:g.home))return null;
   const tip=time(g.date);if(!Number.isFinite(tip)||tip<=now||tip-now>7*86400000)return null;
