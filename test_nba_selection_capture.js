@@ -104,12 +104,12 @@ const priorCapture=ledger.capture(null,[historicalPick],now).ledger;
 assert.deepEqual(ledger.capture(priorCapture,refreshed.picks,now+1000).ledger.picks[0],priorCapture.picks[0],
  'fresher source provenance is recorded only on new captures; saved original inputs never change');
 
-// The adapter must independently preserve the public 85/100 OVER policy.
-const invalidScores=[74,74.999,100.001,NaN,null,undefined,'90'];
+// Capture only the actual issued NBA market and side at the uniform 80/100 minimum.
+const invalidScores=[74,79.999,100.001,NaN,null,undefined,'90'];
 const rejectedBest=invalidScores.map((researchScore,i)=>({...best[0],playerId:'bad-best-'+i,researchScore}));
 const rejectedRows=invalidScores.map((score,i)=>({...rows[0],key:'bad-game-'+i,playerId:'bad-game-'+i,
  matchupRating:{...rows[0].matchupRating,score}}));
-const qualifiedThree={...best[0],playerId:'three-85',market:'threes',researchScore:85};
+const qualifiedThree={...best[0],playerId:'three-80',market:'threes',researchScore:80};
 const gates=capture({candidates:[...rejectedBest,qualifiedThree,
  {...best[0],playerId:'best-under',side:'under',researchScore:100},
  {...best[0],playerId:'not-eligible',eligible:false,researchScore:100}],
@@ -192,7 +192,7 @@ assert.notEqual(changedGameFirst.find(p=>p.board==='Game-first recommendations')
 assert.equal(capture({},withChangedSource('nba_game_first.js')).picks.find(p=>p.board==='Best Props').modelVersion,bestPicks[0].modelVersion);
 assert(!result.picks.some(p=>p.market==='first_basket'));
 console.log('NBA frozen selection capture: one issued exact line, no First Basket/automatic alternates, OVER gate, observed quotes and immutable evidence PASS');
-const newMinimumCapture=capture({candidates:[{...best[0],playerId:'regular-75',researchScore:75},{...best[0],playerId:'three-84',market:'threes',researchScore:84.99},{...best[0],playerId:'three-85',market:'threes',researchScore:85}],simulationRows:[{...rows[0],matchupRating:{...rows[0].matchupRating,score:75}}]});
-assert.deepEqual(newMinimumCapture.picks.filter(p=>p.board==='Best Props').map(p=>p.playerId),['regular-75','three-85']);
-assert(newMinimumCapture.picks.some(p=>p.board==='Game-first recommendations'&&p.score===75));
-assert(newMinimumCapture.picks.filter(p=>p.sport==='NBA'&&p.market!=='first_basket').every(p=>p.inputs.recommendationMinimum===(p.market==='threes'?85:75)));
+const newMinimumCapture=capture({candidates:[{...best[0],playerId:'regular-79',researchScore:79},{...best[0],playerId:'three-79',market:'threes',researchScore:79.99},{...best[0],playerId:'three-85',market:'threes',researchScore:85}],simulationRows:[{...rows[0],matchupRating:{...rows[0].matchupRating,score:79}}]});
+assert.deepEqual(newMinimumCapture.picks.filter(p=>p.board==='Best Props').map(p=>p.playerId),['three-80']);
+assert(newMinimumCapture.picks.some(p=>p.board==='Game-first recommendations'&&p.score===80));
+assert(newMinimumCapture.picks.filter(p=>p.sport==='NBA'&&p.market!=='first_basket').every(p=>p.inputs.recommendationMinimum===80));
