@@ -1,11 +1,11 @@
 /* Use the existing game-first engine off the UI thread. No separate simulation. */
 'use strict';
 importScripts('./nba_game_context.js?v=nba-sim-availability-1',
- './nba_possession_engine.js?v=nba-over-threes85-v1',
- './nba_prop_evidence.js?v=nba-prop-select-v2',
- './nba_prop_lines.js?v=nba75-threes85-v1',
- './nba_matchup_discovery.js?v=nba75-threes85-v1',
- './nba_game_first.js?v=nba-best-props-gate-20261120-v2');
+ './nba_possession_engine.js?v=nba80-def-under-20261121',
+ './nba_prop_evidence.js?v=nba80-def-under-20261121',
+ './nba_prop_lines.js?v=nba80-def-under-20261121',
+ './nba_matchup_discovery.js?v=nba80-def-under-20261121',
+ './nba_game_first.js?v=nba80-def-under-20261121');
 self.onmessage=function(event){
  const {requestId,feed,rosters,injuries,context,games,now}=event.data||{};
  try{
