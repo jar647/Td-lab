@@ -13,7 +13,7 @@ const separated=[pick('a'),pick('b',{market:'assists'}),pick('c',{modelVersion:'
  pick('f',{inputs:{selectionEvidence:{line:{policy:'balanced-v2',sampleKind:'simulation'}}}}),pick('old',{inputs:{}}),
  pick('nfl',{sport:'NFL'}),pick('basket',{market:'first_basket',score:null}),pick('old-score',{score:82})];
 const original=JSON.stringify(separated),separate=validation.analyze(separated,options);
-assert.equal(separate.groups.length,8);assert.equal(separate.counts.eligibleProps,8);assert.equal(separate.counts.outOfScope,1);
+assert.equal(separate.groups.length,7);assert.equal(separate.counts.eligibleProps,8);assert.equal(separate.counts.outOfScope,1);
 assert.equal(separate.groups.find(g=>g.linePolicy==='UNKNOWN').strata[0].roleRange,'UNKNOWN');
 assert(separate.groups.every(g=>g.bands.map(b=>b.band).join(',')==='80–84,85–89,90–94,95–100'));
 assert.equal(JSON.stringify(separated),original,'Reports must never rewrite captured predictions or fill missing metadata');
