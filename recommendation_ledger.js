@@ -11,8 +11,9 @@ function activePicks(picks){
  // Historical records remain immutable. Published stats include only issued plays.
  const out=[],seenNBA=new Set();
  for(const p of picks||[]){
+  if(p.board==='Automatic OVER alternate lines')continue;
   if(p.sport==='NBA'){
-   if(p.market==='first_basket'||p.board==='Top 5 first basket'||p.board==='Automatic OVER alternate lines')continue;
+   if(p.market==='first_basket'||p.board==='Top 5 first basket')continue;
    // Historical game-first snapshots contained entire candidate universes;
    // absent a captured selection scope we cannot assert a play was issued.
    if(p.board==='Game-first recommendations'&&p.inputs?.recommendationScope!=='game-first-visible')continue;
@@ -25,7 +26,7 @@ function activePicks(picks){
 function capture(ledger,candidates,now=Date.now()){
  const out=JSON.parse(JSON.stringify(ledger||{schema:1,picks:[]})),seen=new Map(out.picks.map(p=>[identity(p),p])),recordedNBA=new Set(activePicks(out.picks).filter(p=>p.sport==='NBA').map(nbaPropKey));let added=0,rejected=0;
  for(const candidate of candidates){const p={...candidate,capturedAt:new Date(now).toISOString()};if(!valid(p,now)||time(p.startsAt)<=now){rejected++;continue;}
-  if(p.sport==='NBA'&&(p.market==='first_basket'||p.board==='Top 5 first basket'||p.board==='Automatic OVER alternate lines')){rejected++;continue;}
+  if(p.board==='Automatic OVER alternate lines'||(p.sport==='NBA'&&(p.market==='first_basket'||p.board==='Top 5 first basket'))){rejected++;continue;}
   const id=identity(p),old=seen.get(id);
   if(old){if((old.line!==p.line||old.score!==p.score||old.label!==p.label)&&!(old.revisions||[]).some(r=>r.line===p.line&&r.score===p.score&&r.label===p.label)){old.revisions=old.revisions||[];old.revisions.push({at:p.capturedAt,line:p.line,score:p.score,label:p.label});}continue;}
   // One immutable recommended NBA line per game/player/market, across boards,
