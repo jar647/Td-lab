@@ -15,10 +15,10 @@ function input(market='points'){
  const weakness={side:'under',market,team:'B',attacking:'A',position:'PF',games:10,excess:.45};
  return {analysis:{reason:null,rows:[row],underWeaknesses:[weakness]},rosters:{players:{'1':{position:'PF'}}}};
 }
-test('OVER thresholds unchanged, UNDER thresholds strict, invalid sides fail closed',()=>{
- for(const m of ['points','rebounds','assists','pr','pa','ra','pra']){assert.equal(lines.minimumScore(m),75);assert.equal(lines.minimumScore(m,'under'),85);assert(lines.qualifiesScore(85,m,'under'));assert(!lines.qualifiesScore(84,m,'under'))}
- assert.equal(lines.minimumScore('threes'),85);assert.equal(lines.minimumScore('threes','under'),90);
- assert(!lines.qualifiesScore(89.99,'threes','under'));assert(lines.qualifiesScore(90,'threes','under'));
+test('all eleven NBA markets use 80/100 on both sides; invalid directions fail closed',()=>{
+ for(const m of ['points','rebounds','assists','threes','steals','blocks','stocks','pr','pa','ra','pra']){assert.equal(lines.minimumScore(m),80);assert.equal(lines.minimumScore(m,'under'),80);assert(lines.qualifiesScore(80,m,'under'));assert(!lines.qualifiesScore(79.99,m,'under'))}
+ assert.equal(lines.minimumScore('threes'),80);assert.equal(lines.minimumScore('threes','under'),80);
+ assert(!lines.qualifiesScore(79.99,'threes','under'));assert(lines.qualifiesScore(80,'threes','under'));
  assert.equal(lines.minimumScore('points','sideways'),101);
 });
 test('strict UNDER settlement, fractional thresholds, and tighter line tie-break',()=>{
@@ -35,7 +35,7 @@ test('independently supported UNDERS enter shadow only, never live recommendatio
  assert.equal(out.length,1);const p=out[0];
  assert.equal(p.side,'under');assert(p.score>=85);assert.equal(p.line,9.5);
  assert.equal(p.simulatedFrequency,.8);assert.equal(p.studyOnly,true);assert.equal(p.priceVerified,false);assert.equal(p.probabilityCalibrated,false);
- assert.equal(gameFirst.candidate({...fixture.analysis.rows[0],side:'under'}),null,'UNDER cannot leak into live OVER selection');
+ assert.equal(gameFirst.candidate({...fixture.analysis.rows[0],side:'under'}),null,'UNDER without side-specific matchup evidence must not enter live picks');
  assert.deepEqual(shadow.evaluate({...fixture.analysis,underWeaknesses:[]},fixture.rosters,start),[]);
  assert.deepEqual(shadow.evaluate({...fixture.analysis,rows:[{...fixture.analysis.rows[0],roleEvidence:{...role,roleStatus:'UNVERIFIED'}}]},fixture.rosters,start),[]);
  assert.deepEqual(shadow.evaluate({...fixture.analysis,rows:[{...fixture.analysis.rows[0],forecast:9}]},fixture.rosters,start),[],'Projected line gap must be meaningful');
