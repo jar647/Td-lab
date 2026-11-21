@@ -236,7 +236,7 @@ sandbox.matchupFixture[0].playerId='same';sandbox.matchupFixture[6].market='thre
 const three=vm.runInContext('nbaMatchupThree(matchupFixture)',sandbox);
 assert.equal(three.length,3,'Return up to three distinct qualified OVER or UNDER players');
 assert.equal(new Set(three.map(r=>r.playerId)).size,3);
-assert(three.some(r=>r.target.side==='under'),'An independently eligible UNDER must be considered');
+assert(three.some(r=>r.target.side==='UNDER'),'An independently eligible UNDER must be considered');
 assert(three.every(r=>r.result.rating.score>=80&&r.target?.line>0));
 assert.ok(match[1].includes('outlookHTML+scoutHtml'));
 assert.ok(match[1].includes('row.target=nbaResearchTarget(row,side)'));
