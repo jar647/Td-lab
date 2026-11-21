@@ -17,7 +17,7 @@ function candidate(row,excluded=[],lines={}){
  const minimum=row.side==='under'?0:({points:8,rebounds:3,assists:3,threes:1,steals:.2,blocks:.2,'Steals + Blocks':.3}[row.market]??10);if(row.forecast<minimum)return null;
  const lineSamples=row.roleEvidence?.selectionSamples?.[canonical(row.market)]||row.selectionSamples||row.samples;
  const target=row.selectedLineEvidence||propLines?.select?.({market:canonical(row.market),samples:lineSamples,sampleKind:row.roleEvidence?.sampleKind||'simulation_outcomes',side:row.side});
- const override=lines[row.key];if(override===undefined&&target?.available!==true)return null;
+ const override=lines[row.key];if(target?.side&&target.side!==row.side)return null;if(override===undefined&&target?.available!==true)return null;
  const line=override===undefined?target.line:override;
  const probability=chance(row,line);if(probability===null||probability===0)return null;
  const matchupQuality=row.matchupRating?.score;if(!Number.isFinite(matchupQuality)||matchupQuality<propLines.minimumScore(row.market,row.side)||matchupQuality>100)return null;
