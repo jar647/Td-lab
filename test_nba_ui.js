@@ -263,10 +263,10 @@ assert.match(vm.runInContext('restoredResult.ratingNote',sandbox),/does not curr
 vm.runInContext('renderProjections=repairOriginalRenderer',sandbox);
 console.log('NBA legacy saved-side recovery, missing odds and failing quote: PASS');
 
-// A new UNDER cannot qualify even with its own 85+ rating; saved history remains.
+// A supported UNDER with its own 80+ matchup evidence can qualify; unsupported/over-only evidence cannot.
 vm.runInContext('nbaQuoteContexts.target.eligible=true;nbaQuoteContexts.target.matchupRatings={under:{side:"under",score:85,factors:[]}}',sandbox);
-assert.equal(vm.runInContext('nbaPriceReview("target",20,{line:25.5,under:-110}).candidate',sandbox),null);
-vm.runInContext('nbaQuoteContexts.target.matchupRatings.under.score=84',sandbox);
+assert.equal(vm.runInContext('nbaPriceReview("target",20,{line:25.5,under:-110}).candidate',sandbox),'UNDER');
+vm.runInContext('nbaQuoteContexts.target.matchupRatings.under.score=79',sandbox);
 assert.equal(vm.runInContext('nbaPriceReview("target",20,{line:25.5,under:-110}).candidate',sandbox),null);
 vm.runInContext('delete nbaQuoteContexts.target.matchupRatings;nbaQuoteContexts.target.matchupRating.score=99',sandbox);
 assert.equal(vm.runInContext('nbaPriceReview("target",20,{line:25.5,under:-110}).candidate',sandbox),null);
