@@ -127,7 +127,7 @@
    if(cache&&cache.signature===inputs.signature&&now()-cache.at<=60000&&now()>=cache.at)return {...cache.result,candidates:supported(cache.result.candidates,inputs)};
    if(computeTask&&computeTask.signature===inputs.signature)return computeTask.promise;
    const version=revision,promise=(async()=>{const result=await runWorker(inputs,version);if(destroyed||version!==revision||current?.signature!==inputs.signature)return unavailable('NBA sources changed during simulation.');
-    if(result.ready){const candidates=supported(result.candidates,inputs);const value={...result,candidates,heldCount:result.held?.length||0,reason:candidates.length?'':result.held?.[0]?.reason||'No supported OVER 75/100+ (three-pointers 85/100+) player props are available from the current sources.'};cache={signature:inputs.signature,at:now(),result:value};return value}return result;
+    if(result.ready){const candidates=supported(result.candidates,inputs);const value={...result,candidates,heldCount:result.held?.length||0,reason:candidates.length?'':result.held?.[0]?.reason||'No supported OVER or UNDER 80/100+ player props are available from the current sources.'};cache={signature:inputs.signature,at:now(),result:value};return value}return result;
    })().catch(()=>unavailable('The NBA research engine failed. Retry the research scan.'));computeTask={signature:inputs.signature,promise};
    try{return await promise}finally{if(computeTask?.promise===promise)computeTask=null}
   }
