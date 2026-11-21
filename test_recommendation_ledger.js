@@ -54,7 +54,7 @@ assert.equal(api.summarize({picks:[{...graded.picks[0],score:null,probability:.2
 
 // Contract: every market emitted by either deployed NBA recommendation engine
 // must have a supported settlement path, including the short combo keys.
-const expectedNBA={points:20,rebounds:4,assists:3,threes:2,pr:24,pa:23,ra:7,pra:27,'Points + Rebounds':24,'Points + Assists':23,'Rebounds + Assists':7,PRA:27};
+const expectedNBA={points:20,rebounds:4,assists:3,threes:2,steals:2,blocks:1,stocks:3,'Steals + Blocks':3,pr:24,pa:23,ra:7,pra:27,'Points + Rebounds':24,'Points + Assists':23,'Rebounds + Assists':7,PRA:27};
 for(const market of new Set([...require('./nba_matchup_discovery').markets,...require('./nba_game_first').markets])){
  assert(Object.hasOwn(expectedNBA,market),'New NBA market needs an explicit grading contract: '+market);
  const record={...p,market,line:expectedNBA[market],side:'at_least'};
