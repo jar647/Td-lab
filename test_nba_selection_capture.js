@@ -193,6 +193,6 @@ assert.equal(capture({},withChangedSource('nba_game_first.js')).picks.find(p=>p.
 assert(!result.picks.some(p=>p.market==='first_basket'));
 console.log('NBA frozen selection capture: one issued exact line, no First Basket/automatic alternates, OVER gate, observed quotes and immutable evidence PASS');
 const newMinimumCapture=capture({candidates:[{...best[0],playerId:'regular-79',researchScore:79},{...best[0],playerId:'three-79',market:'threes',researchScore:79.99},{...best[0],playerId:'three-85',market:'threes',researchScore:85}],simulationRows:[{...rows[0],matchupRating:{...rows[0].matchupRating,score:79}}]});
-assert.deepEqual(newMinimumCapture.picks.filter(p=>p.board==='Best Props').map(p=>p.playerId),['three-80']);
+assert.deepEqual(newMinimumCapture.picks.filter(p=>p.board==='Best Props').map(p=>p.playerId),['three-85']);
 assert(!newMinimumCapture.picks.some(p=>p.board==='Game-first recommendations'&&p.score<80),'Sub-80 simulated research must not be captured');
 assert(newMinimumCapture.picks.filter(p=>p.sport==='NBA'&&p.market!=='first_basket').every(p=>p.inputs.recommendationMinimum===80));
