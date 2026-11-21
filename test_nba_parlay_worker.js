@@ -8,17 +8,25 @@ vm.createContext(context);vm.runInContext(fs.readFileSync(path.join(__dirname,'n
 assert.deepEqual(imports,['nba_game_context.js','nba_possession_engine.js','nba_prop_evidence.js','nba_prop_lines.js','nba_matchup_discovery.js','nba_game_first.js']);
 const positions=['PG','SG','SF','PF','C','PG','SG','C'],rosters={generated_at:stamp,teams:{},players:{}};
 function players(team){return positions.map((position,i)=>({id:team+i,name:team+' Player '+i,team,position,starter:i<5,didNotPlay:false,
- stats:{MIN:'30',FG:'4-10','3PT':'1-3',FT:'2-2',PTS:'11',OREB:'1',DREB:'4',REB:'5',AST:'3',TO:'1'}}))}
+ stats:{MIN:'30',FG:'4-10','3PT':'1-3',FT:'2-2',PTS:'11',OREB:'1',DREB:'4',REB:'5',AST:'3',STL:'2',BLK:'1',TO:'1'}}))}
 for(const team of ['A','B']){const rows=players(team);rosters.teams[team]=rows.map(p=>p.id);for(const p of rows)rosters.players[p.id]={name:p.name,team,position:p.position}}
 const feed={generated_at:stamp,games:Array.from({length:15},(_,i)=>({id:'history'+i,date:new Date(clock-(i+1)*86400000).toISOString(),status:'STATUS_FINAL',season_type:2,home:'A',away:'B',players:[...players('A'),...players('B')]}))};
 const future={id:'upcoming',home:'A',away:'B',date:new Date(clock+6*3600000).toISOString(),status:'STATUS_SCHEDULED',season_type:2};
 const closed={...future,id:'already-started',date:new Date(clock-3600000).toISOString()};
 const injuries={generated_at:stamp,status:'ok',injuries:[]};
 let draws=0,analyzed=0;const actualDraws=context.CookNBAPossessions.draws,actualAnalyze=context.CookNBAGameFirst.analyze;
-context.CookNBAPossessions.draws=(model,count,...rest)=>{draws++;assert.equal(count,1000);return actualDraws(model,count,...rest)};
+let checkedDefensiveDraws=false;
+context.CookNBAPossessions.draws=(model,count,...rest)=>{draws++;assert.equal(count,1000);
+ const simulation=actualDraws(model,count,...rest),entry=Object.values(simulation.playerOutcomes||{})[0];
+ assert(entry&&entry.steals.length===1000&&entry.blocks.length===1000&&entry.stocks.length===1000,
+  'Defensive outcomes must use the same 1,000 game draws as the existing player props');
+ assert(entry.stocks.every((v,i)=>v===entry.steals[i]+entry.blocks[i]),'Stocks must equal steals plus blocks within each same-game draw');
+ assert(entry.steals.every(v=>Number.isInteger(v)&&v>=0)&&entry.blocks.every(v=>Number.isInteger(v)&&v>=0));
+ checkedDefensiveDraws=true;return simulation};
 context.CookNBAGameFirst.analyze=(game,...rest)=>{analyzed++;assert.equal(game.id,future.id,'Started games must be skipped before engine execution');return actualAnalyze(game,...rest)};
 context.self.onmessage({data:{requestId:17,feed,rosters,injuries,context:null,games:[future,closed],now:clock}});
 assert.equal(analyzed,1);assert.equal(draws,1,'The worker runs the existing shared-outcome simulation once for the fixture');
+assert(checkedDefensiveDraws,'Defensive stats must be simulated from recorded STL and BLK counts');
 assert(messages.some(m=>m.type==='progress'&&m.requestId===17&&m.completed===1&&m.total===2));
 const result=messages.find(m=>m.type==='result');assert(result);assert.equal(result.requestId,17);assert.deepEqual(result.candidates,[]);
 assert.equal(result.diagnostics.gamesAnalyzed,1);assert(result.diagnostics.modelRows>0);assert.equal(result.diagnostics.qualifiedRows,0);assert.equal(result.diagnostics.modelUnavailableGames,0);
