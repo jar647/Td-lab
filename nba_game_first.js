@@ -11,6 +11,7 @@ function chance(row,line){if(!Number.isFinite(line)||line<.5||!row.samples?.leng
 function candidate(row,excluded=[],lines={}){
  if(row)row={...row,side:String(row.side||'over').toLowerCase()};
  if(row?.matchupRating?.side&&row.matchupRating.side!==row.side)return null;
+ if(row?.side==='under'&&row.matchupRating?.side!=='under')return null;
  if(row?.roleEvidence&&!supportedRole(row.roleEvidence,row.playerId,row.team))return null;
  if(!row||!markets.includes(row.market)||excluded.includes(row.market)||!['over','under'].includes(row.side)||row.reviewRequired||row.eligible!==true||!(Number(row.matchupGames)>=3)||!Number.isFinite(row.forecast)||row.forecast<0||!Array.isArray(row.samples)||!row.samples.length||!row.samples.every(x=>Number.isFinite(x)&&x>=0)||!Number.isFinite(row.matchupBoost))return null;
  // A negative defensive/projection boost is already priced into the forecast; only non-finite boosts are invalid.
