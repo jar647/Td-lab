@@ -60,17 +60,29 @@
       "probabilityCalibrated": false,
       "reason": "Suppressed defensive position rate, stable supported role, lower simulated forecast and at least 70% experimental UNDER clears. Sportsbook line unverified.",
       "capturedAt": "2026-11-21T02:04:27.516Z",
-      "result": "pending",
-      "frozen": true
+      "result": "win",
+      "frozen": true,
+      "actual": 1,
+      "gradedAt": "2026-11-21T06:42:52.072Z"
     }
   ],
   "summary": {
     "captured": 1,
-    "graded": 0,
-    "pending": 1,
+    "graded": 1,
+    "pending": 0,
     "void": 0,
     "probabilitiesCalibrated": false,
     "betReady": false,
-    "groups": []
+    "groups": [
+      {
+        "market": "threes",
+        "band": "90–94",
+        "n": 1,
+        "observedHitRate": 1,
+        "meanSimulatedFrequency": 0.875,
+        "brier": 0.015625,
+        "statisticallyReviewed": false
+      }
+    ]
   }
 }
