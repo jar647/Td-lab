@@ -80,7 +80,7 @@ const old={key:'late|player|rebounds',game:late,gameId:'late',playerId:'player',
  evaluate('nbaGameFirstResult={picks:[old]};nbaGameFirstLines={};nbaGameFirstExcluded=["threes"];nbaGameFirstMax=2;nbaGameFirstCache.clear();nbaGameFirstPick(old.key)');
  assert.equal(saved.length,1);assert.equal(saved[0].line,11.5);assert.equal(saved[0].scenarioRate,.72);
  assert.match(saved[0].notes,/^FRESH source evidence/);assert(!saved[0].notes.includes('OLD'));
- assert.equal(saved[0].recommendation,'Over 11.5 Rebounds');assert.equal(buildOptions.maxLegs,2);
+ assert.equal(saved[0].recommendation,'OVER 11.5 Rebounds');assert.equal(buildOptions.maxLegs,2);
  assert.deepEqual(plain(buildOptions.excludedMarkets),['threes']);
  context.refreshed={...refreshed,score:74};evaluate('nbaGameFirstPick(old.key)');assert.equal(saved.length,1,'A newly disqualified player cannot enter Quick Slip');
 
