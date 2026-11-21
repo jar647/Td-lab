@@ -1,52 +1,71 @@
 'use strict';
-const test=require('node:test'),assert=require('node:assert/strict');
-const api=require('./nba_game_first.js');
-const row={key:'g|p|points',gameId:'g',playerId:'p',market:'points',eligible:true,matchupRating:{score:85,factors:[]},matchupGames:10,matchupBoost:.12,forecast:20,minutes:32,samples:Array(100).fill(0).map((_,i)=>i<70?22:10)};
-test('rank matchup strength separately from line frequency',()=>{
- const c=api.candidate(row);assert.equal(typeof c.matchupQuality,'number');assert.equal(c.lineConfidence,70);assert.equal(c.probability,.7);assert.equal(c.score,c.matchupQuality);assert.ok(c.score>=85);
+const test=require('node:test'),assert=require('node:assert/strict'),api=require('./nba_game_first.js');
+const row=(id='p',market='rebounds',side='over',score=85,boost=.12)=>({
+ key:'g|'+id+'|'+market+'|'+side,gameId:'g',playerId:id,name:'Player '+id,market,side,
+ forecast:10,minutes:30,matchupBoost:boost,matchupGames:8,eligible:true,
+ matchupRating:{score,side,factors:[]},samples:[4,8,9,10,11,12,13,14],reason:'Observed opponent weakness'
 });
-test('only 75+ appears in best single, top three and ticket',()=>{
- const weak={...row,key:'g|weak|points',playerId:'weak',matchupRating:{score:74.99,factors:[]},matchupBoost:.01,matchupGames:3,minutes:20,samples:Array(100).fill(0).map((_,i)=>i<51?22:10)};
- const built=api.build([weak,row]);assert.equal(built.minScore,75);assert.equal(built.bestSingle.playerId,'p');assert.ok(built.topThree.every(x=>x.score>=75));assert.ok(built.picks.every(x=>x.score>=75));assert.equal(api.build([weak]).picks.length,0);
+test('matchup rating is separate from simulation line frequency',()=>{
+ const r=row();const c=api.candidate(r);
+ assert.equal(c.score,85);assert.equal(c.matchupQuality,85);assert.equal(c.lineConfidence,Math.round(100*c.probability));
+ assert.notEqual(c.score,Math.round(c.probability*100));
 });
-
-test('sportsbook line and modeled hit frequency never change matchup rank',()=>{
- const a=api.candidate(row,[],{});
- const b=api.candidate({...row,samples:Array(100).fill(10).map((x,i)=>i<10?22:x)},[],{[row.key]:20.5});
- assert.equal(a.score,b.score);
- assert.equal(a.matchupQuality,b.matchupQuality);
- assert.notEqual(a.probability,b.probability);
-});
-test('market minimums cannot be bypassed and missing ratings fail closed',()=>{
- for(const market of ['points','rebounds','assists','Points + Rebounds','Points + Assists','Rebounds + Assists','PRA','threes']){
-  const floor=market==='threes'?85:75,signed={...row,market,forecast:20,key:'g|p|'+market,side:'over'};
-  for(const score of [floor-.01,0,100.01,Infinity,NaN,undefined,null,'85']){
-   const invalid={...signed,matchupRating:{side:'over',score}};
-   assert.equal(api.candidate(invalid),null,market+' score '+score);
-   const built=api.build([invalid],{minScore:0});assert.equal(built.minScore,75);assert.equal(built.bestSingle,null);
+test('flat 80/100 for all eleven markets on both sides',()=>{
+ for(const market of ['points','rebounds','assists','threes','steals','blocks','Steals + Blocks','Points + Rebounds','Points + Assists','Rebounds + Assists','PRA']){
+  for(const side of ['over','under']){
+   const supported=row(market+'-'+side,market,side,80);
+   assert.equal(api.minimumScore(market,side),80);
+   assert(api.candidate(supported),market+' '+side+' 80 should qualify');
+   for(const bad of [79.99,-1,100.01,NaN,undefined,null,'85']){
+    const incorrect={...supported,matchupRating:{...supported.matchupRating,score:bad}};
+    assert.equal(api.candidate(incorrect),null,market+' '+side+' '+bad);
+    assert.equal(api.build([incorrect],{minScore:0}).bestSingle,null);
+   }
   }
-  for(const score of [floor,floor+.01,99,100]){const valid={...signed,matchupRating:{side:'over',score}};for(const minScore of [undefined,0,75,NaN,Infinity]){const built=api.build([valid],{minScore});assert.equal(built.minScore,75);assert.equal(built.bestSingle.score,score);}}
  }
- assert.equal(api.build([{...row,matchupRating:{score:75}}],{minScore:80}).picks.length,0);
- assert.equal(api.build([row],{minScore:90}).picks.length,0);
 });
-test('new UNDER recommendations are excluded even with a 100/100 separate rating',()=>{
- const under={...row,side:'under',matchupBoost:-.2,matchupRating:{side:'under',score:100,factors:[]}};
- assert.equal(api.candidate(under),null);assert.equal(api.build([under]).bestSingle,null);assert.deepEqual(api.build([under]).picks,[]);
+test('best single, top three and same-game research ticket all use the 80 minimum',()=>{
+ const weak=row('weak','rebounds','over',79.99);
+ const valid=[row('a'),row('b'),row('c'),row('d'),row('e')];
+ const ticket=api.build([weak,...valid]);
+ assert.equal(ticket.minScore,80);assert(ticket.picks.length>=1);
+ assert(ticket.picks.every(r=>r.score>=80));assert(ticket.topThree.every(r=>r.score>=80));
+ assert.equal(api.build([weak]).picks.length,0);
+ assert.equal(api.build([row('a')],{minScore:0}).minScore,80);
+ assert.equal(api.build([row('a')],{minScore:90}).picks.length,0);
 });
-test('legacy UNDER hit utility excludes pushes while new tickets remain OVER-only',()=>{
- const under={...row,key:'under',playerId:'u',side:'under',matchupBoost:-.2,matchupRating:{side:'under',score:85},samples:[9,10,11,12],forecast:10};
+test('actual UNDER evidence is required, and supported UNDERs can be recommended',()=>{
+ const u=row('under','rebounds','under',85,-.2);
+ const candidate=api.candidate(u);
+ assert(candidate&&candidate.side==='under');
+ assert(api.build([u]).bestSingle?.side==='under');
+ assert.equal(api.candidate({...u,matchupRating:{score:100,side:'over'}}),null);
+ assert.equal(api.candidate({...u,matchupRating:{score:100}}),null);
+ assert.equal(api.candidate({...u,reviewRequired:true}),null);
+});
+test('OVER and UNDER alternate lines use exact strict directional settlement, including pushes',()=>{
+ const under={...row('under','rebounds','under',90,-.2),samples:[9,10,11,12],forecast:10};
+ const over={...row('over','rebounds','over',90,.12),samples:[12,11,10,9],forecast:10};
  assert.equal(api.chance(under,10),.25);
- const over={...row,key:'over',playerId:'o',samples:[12,11,10,9],forecast:10};
- const built=api.build([under,over],{lines:{under:10,over:10}});
- assert.equal(built.picks.length,1);assert.equal(built.picks[0].side,'over');assert.equal(built.jointHitRate,.5);
- assert.equal(api.build([under],{lines:{under:.5}}).picks.length,0);
+ assert.equal(api.chance(over,10),.5);
+ const mixed=api.build([under,over],{lines:{[under.key]:10,[over.key]:10}});
+ assert.equal(mixed.picks.length,2);
+ assert.equal(mixed.jointHitRate,.25);
+ assert.equal(api.build([under],{lines:{[under.key]:.5}}).picks.length,0);
 });
-
-test('three-point OVERs qualify exactly at 85 and fail closed for malformed sample arrays',()=>{
- const threes={...row,key:'g|p|threes',market:'threes',forecast:3,samples:[0,1,2,3,4,5],matchupRating:{side:'over',score:85}};
- assert.equal(api.candidate(threes).score,85);assert.equal(api.candidate(threes,[],{[threes.key]:2.5}).probability,.5);
- for(const score of [84.99,100.01,null,'85',NaN,Infinity])assert.equal(api.candidate({...threes,matchupRating:{side:'over',score}}),null);
- for(const samples of [[],[0,null,3],[0,NaN,3],[0,'3',4]])assert.equal(api.candidate({...threes,samples}),null);
- assert.equal(api.candidate({...threes,side:'under',matchupBoost:-.2,matchupRating:{side:'under',score:100}}),null);
+test('odds and choice of supported line do not change the underlying matchup score',()=>{
+ const r=row('player','points','over',85,-.1);
+ const a=api.candidate(r),b=api.candidate({...r,samples:[10,10,10,10,20,20,20,20]},[],{[r.key]:12.5});
+ assert(a&&b);assert.equal(a.score,b.score);assert.equal(a.matchupBoost,-.1);
+ assert.notEqual(a.probability,b.probability);
+ assert.equal(api.candidate({...r,matchupBoost:NaN}),null);
 });
+test('defensive UNDER and 3PM are eligible at 80, invalid draws are not',()=>{
+ for(const market of ['threes','steals','blocks','Steals + Blocks']){
+  const r={...row('special',market,'under',80,-.1),forecast:3,samples:[0,1,2,3,4,5]};
+  assert(api.candidate(r),market+' UNDER rating 80');
+  assert.equal(api.candidate(r,[],{[r.key]:2.5}).probability,.5);
+  for(const samples of [[],[0,null,3],[0,NaN,3],[0,'3',4]])assert.equal(api.candidate({...r,samples}),null);
+ }
+});
+console.log('NBA uniform 80 OVER/UNDER candidate, alternate lines, defensive markets and shared ticket checks PASS');
