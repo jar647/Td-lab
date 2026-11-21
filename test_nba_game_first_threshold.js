@@ -3,7 +3,7 @@ const test=require('node:test'),assert=require('node:assert/strict'),api=require
 const row=(id='p',market='rebounds',side='over',score=85,boost=.12)=>({
  key:'g|'+id+'|'+market+'|'+side,gameId:'g',playerId:id,name:'Player '+id,market,side,
  forecast:10,minutes:30,matchupBoost:boost,matchupGames:8,eligible:true,
- matchupRating:{score,side,factors:[]},samples:[4,8,9,10,11,12,13,14],reason:'Observed opponent weakness'
+ matchupRating:{score,side,factors:[]},samples:['threes','steals','blocks','Steals + Blocks'].includes(market)?[0,0,1,1,2,2,3,4]:[4,8,9,10,11,12,13,14],reason:'Observed opponent weakness'
 });
 test('matchup rating is separate from simulation line frequency',()=>{
  const r=row();const c=api.candidate(r);
