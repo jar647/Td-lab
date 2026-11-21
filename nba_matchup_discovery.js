@@ -8,8 +8,8 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(boxes,roleAPI,lineAPI){
 'use strict';
 const positions=['PG','SG','SF','PF','C'];
-const components={points:['points'],rebounds:['rebounds'],assists:['assists'],threes:['threes'],pr:['points','rebounds'],pa:['points','assists'],ra:['rebounds','assists'],pra:['points','rebounds','assists']};
-const markets=Object.keys(components),labels={points:'points',rebounds:'rebounds',assists:'assists',threes:'three-pointers',pr:'points + rebounds',pa:'points + assists',ra:'rebounds + assists',pra:'points + rebounds + assists'};
+const components={points:['points'],rebounds:['rebounds'],assists:['assists'],threes:['threes'],pr:['points','rebounds'],pa:['points','assists'],ra:['rebounds','assists'],pra:['points','rebounds','assists'],steals:['steals'],blocks:['blocks'],stocks:['steals','blocks']};
+const markets=Object.keys(components),labels={points:'points',rebounds:'rebounds',assists:'assists',threes:'three-pointers',pr:'points + rebounds',pa:'points + assists',ra:'rebounds + assists',pra:'points + rebounds + assists',steals:'steals',blocks:'blocks',stocks:'steals + blocks'};
 const total=(row,market)=>components[market].every(k=>Number.isFinite(row[k]))?components[market].reduce((n,k)=>n+row[k],0):null;
 const avg=values=>{const known=values.filter(Number.isFinite);return known.length?known.reduce((s,x)=>s+x,0)/known.length:null};
 const norm=x=>String(x||'').toLowerCase().replace(/[^a-z0-9]/g,'');
@@ -20,13 +20,14 @@ function position(raw){const x=typeof raw==='object'?raw?.abbreviation||raw?.dis
 function minutes(raw){if(raw===null||raw===undefined||raw==='')return null;if(String(raw).includes(':')){const [m,s]=String(raw).split(':').map(Number);return Number.isFinite(m)&&Number.isFinite(s)?m+s/60:null}const n=Number(raw);return Number.isFinite(n)?n:null;}
 // Missing made-three evidence stays unknown; a recorded zero is an observation.
 function madeThrees(stats={}){if(!stats||typeof stats!=='object'||Array.isArray(stats))return null;const values=[];for(const key of ['3PM','3PTM'])if(Object.hasOwn(stats,key)){const raw=stats[key],n=Number(raw);if(!['number','string'].includes(typeof raw)||String(raw).trim()===''||!Number.isInteger(n)||n<0)return null;values.push(n)}if(Object.hasOwn(stats,'3PT')){const pair=/^(\d+)-(\d+)$/.exec(String(stats['3PT']).trim());if(!pair||Number(pair[1])>Number(pair[2]))return null;values.push(Number(pair[1]))}return values.length&&values.every(n=>n===values[0])?values[0]:null;}
-function recorded(p){const min=minutes(p.stats?.MIN);if(p.didNotPlay||!(min>0))return null;const values={minutes:min,threes:madeThrees(p.stats),points:Number(p.stats?.PTS),rebounds:Number(p.stats?.REB),assists:Number(p.stats?.AST),fga:attempts(p.stats?.FG),threeAttempts:attempts(p.stats?.['3PT']),freeThrows:attempts(p.stats?.FT)};return ['points','rebounds','assists'].every(k=>p.stats?.[{points:'PTS',rebounds:'REB',assists:'AST'}[k]]!==undefined&&Number.isFinite(values[k])&&values[k]>=0)?values:null;}
-function minimumScore(market){return lineAPI.minimumScore(market);}
-function qualifies(row){return !!row&&String(row.side||'over').toLowerCase()==='over'&&lineAPI.qualifiesScore(row.researchScore,row.market);}
+function defensiveStat(stats,key){const value=stats?.[key];return value!==null&&value!==undefined&&String(value).trim()!==''&&Number.isInteger(Number(value))&&Number(value)>=0?Number(value):null;}
+function recorded(p){const min=minutes(p.stats?.MIN);if(p.didNotPlay||!(min>0))return null;const values={minutes:min,threes:madeThrees(p.stats),points:Number(p.stats?.PTS),rebounds:Number(p.stats?.REB),assists:Number(p.stats?.AST),steals:defensiveStat(p.stats,'STL'),blocks:defensiveStat(p.stats,'BLK'),fga:attempts(p.stats?.FG),threeAttempts:attempts(p.stats?.['3PT']),freeThrows:attempts(p.stats?.FT)};return ['points','rebounds','assists'].every(k=>p.stats?.[{points:'PTS',rebounds:'REB',assists:'AST'}[k]]!==undefined&&Number.isFinite(values[k])&&values[k]>=0)?values:null;}
+function minimumScore(market,side='over'){return lineAPI.minimumScore(market,side);}
+function qualifies(row){return !!row&&['over','under'].includes(String(row.side||'over').toLowerCase())&&lineAPI.qualifiesScore(row.researchScore,row.market,row.side||'over');}
 function rate(history,threshold,n,side='over'){const rows=history.slice(0,n),hits=rows.filter(v=>side==='under'?v<threshold:v>=threshold).length;return {hits,games:rows.length,rate:rows.length?hits/rows.length:null};}
-function thresholds(history,market){const max=Math.max(...history,1),limit=Math.min({points:70,rebounds:35,assists:25,threes:15,pr:100,pa:95,ra:60,pra:120}[market],Math.ceil(max)+3);return Array.from({length:limit},(_,i)=>i+1);}
+function thresholds(history,market){const max=Math.max(...history,1),limit=Math.min({points:70,rebounds:35,assists:25,threes:15,steals:10,blocks:10,stocks:15,pr:100,pa:95,ra:60,pra:120}[market],Math.ceil(max)+3);return Array.from({length:limit},(_,i)=>i+1);}
 // Compatibility for historical cards only. New selections use the common line policy.
-function baseline(history,market,side='over'){if(side==='under')return thresholds(history,market).map(n=>n+.5).find(t=>rate(history,t,5,side).rate>=.8&&rate(history,t,10,side).rate>=.7)??null;const steps={points:[5,10,15,20,25,30,35,40,45,50],rebounds:[2,4,6,8,10,12,15,18,20],assists:[2,3,4,5,6,7,8,10,12,15],threes:[1,2,3,4,5,6,7,8],pr:[10,15,20,25,30,35,40,45,50,55,60],pa:[10,15,20,25,30,35,40,45,50,55,60],ra:[5,8,10,12,15,18,20,25,30],pra:[15,20,25,30,35,40,45,50,55,60,65,70]}[market];return steps.filter(t=>rate(history,t,5).rate>=.8&&rate(history,t,10).rate>=.7).at(-1)||null;}
+function baseline(history,market,side='over'){if(side==='under')return thresholds(history,market).map(n=>n+.5).find(t=>rate(history,t,5,side).rate>=.8&&rate(history,t,10,side).rate>=.7)??null;const steps={points:[5,10,15,20,25,30,35,40,45,50],rebounds:[2,4,6,8,10,12,15,18,20],assists:[2,3,4,5,6,7,8,10,12,15],threes:[1,2,3,4,5,6,7,8],steals:[1,2,3,4,5,6],blocks:[1,2,3,4,5,6],stocks:[1,2,3,4,5,6,7,8],pr:[10,15,20,25,30,35,40,45,50,55,60],pa:[10,15,20,25,30,35,40,45,50,55,60],ra:[5,8,10,12,15,18,20,25,30],pra:[15,20,25,30,35,40,45,50,55,60,65,70]}[market];return steps.filter(t=>rate(history,t,5).rate>=.8&&rate(history,t,10).rate>=.7).at(-1)||null;}
 
 function defensiveEvidence(records,metadata={}){
  const samples=[],coverage={games:0,omittedTeamGames:0};
@@ -143,7 +144,7 @@ function analyze(game,feed,rosters,injuries,now=Date.now(),options={}){
     opponentStrengthAdjustedGames:strengthRows.length,opponentStrengthAdjustment:normalizedAllowed-adjusted,
     opponentStrengthMethod:'Earlier offensive position rates only with a four-hour completion buffer; at least three prior games and thirty earlier league samples. Missing schedule evidence applies no guessed correction.',
     excess:Math.abs(shrunk/adjustedReference-1)};
-   weaknesses.push(weakness);if(side!=='over'||!pregame||!inputsFresh||roleEvidence.ready!==true)continue;
+   weaknesses.push(weakness);if(!pregame||!inputsFresh||roleEvidence.ready!==true)continue;
    const marketRows=p=>p.rows.filter(r=>total(r,market)!==null);
    const peers=peerProfiles.filter(p=>p.position===primary&&marketRows(p).length>=5);
    const peerAverage=avg(peers.map(p=>avg(marketRows(p).slice(0,5).map(r=>total(r,market)))));
@@ -159,11 +160,11 @@ function analyze(game,feed,rosters,injuries,now=Date.now(),options={}){
     const injury=(injuries?.injuries||[]).find(p=>String(p.player_id||p.id||'')===player.id||norm(p.player||p.name)===norm(player.name));
     const status=String(role.status||injury?.status||'NOT LISTED').toUpperCase();if(!['NOT LISTED','ACTIVE','AVAILABLE','PROBABLE'].includes(status))continue;
     const samples=role.selectionSamples?.[market];
-    const selected=lineAPI?.select?.({market,samples,sampleKind:role.sampleKind||'role_adjusted_history'});
+    const selected=lineAPI?.select?.({market,side,samples,sampleKind:role.sampleKind||'role_adjusted_history'});
     if(!selected?.available||!Number.isFinite(selected.milestone)||!Number.isFinite(selected.line))continue;
     const ratios=components[market].map(k=>{const value=opportunityMetric(role,k),peer=peerMetrics[k];return Number.isFinite(value)&&peer>0?value/peer:null});
     if(ratios.some(x=>x===null))continue;
-    const opportunityRatio=avg(ratios);
+    const opportunityRatio=side==='under'?avg(ratios.map(x=>Math.max(0,2-x))):avg(ratios);
     const ownHistory=teamHistory.get(attacking)||[],opponentHistory=teamHistory.get(opponent)||[],lastTeam=ownHistory[0];
     const restDays=lastTeam?Math.max(0,Math.round((Date.parse(game.date)-Date.parse(lastTeam.date))/86400000)-1):null,backToBack=restDays===0;
     const venueRows=observedRows.filter(r=>r.home===(attacking===game.home)),venueAverage=venueRows.length>=3?avg(venueRows.map(r=>total(r,market))):null;
@@ -171,7 +172,7 @@ function analyze(game,feed,rosters,injuries,now=Date.now(),options={}){
     const paceEstimate=paceValues.length>=6?Math.round(avg(paceValues)*10)/10:null;
     const minutesHistory=observedRows.slice(0,5).map(r=>r.minutes),minutesSpread=Math.max(...minutesHistory)-Math.min(...minutesHistory);
     const scenarioSpread=Number.isFinite(role.minutesLow)&&Number.isFinite(role.minutesHigh)?Math.max(0,role.minutesHigh-role.minutesLow):0;
-    const earlierAverage=avg(history.slice(5)),recentForm=earlierAverage>0?clamp((playerAverage/earlierAverage)/1.2):.5;
+    const earlierAverage=avg(history.slice(5)),recentForm=earlierAverage>0?side==='under'?clamp((earlierAverage/Math.max(.1,playerAverage))/1.2):clamp((playerAverage/earlierAverage)/1.2):.5;
     const factors=[
      {label:'Normalized opponent weakness at position',points:Math.round(30*clamp(weakness.excess/.3)),max:30},
      {label:'Supported role / observed opportunity proxy',points:Math.round(20*clamp((opportunityRatio-1)/.5)),max:20},
@@ -181,10 +182,10 @@ function analyze(game,feed,rosters,injuries,now=Date.now(),options={}){
     ];
     const researchScore=factors.reduce((s,f)=>s+f.points,0),matchupRating={side,score:researchScore,factors};
     const threshold=selected.milestone;
-    candidates.push({side,key:[game.id,player.id,market].join('|'),game,playerId:player.id,name:player.name,team:attacking,opponent,position:primary,market,
+    candidates.push({side,key:[game.id,player.id,market,...(side==='under'?['under']:[])].join('|'),game,playerId:player.id,name:player.name,team:attacking,opponent,position:primary,market,
      history,playerAverage,peerAverage,peerPlayers:peers.length,recentMinutes,projectedMinutes:role.projectedMinutes,restDays,backToBack,venueAverage,venueGames:venueRows.length,paceEstimate,
      researchScore,matchupRating,status,baseline:threshold,recommendedOverLine:selected.line,linePolicy:selected.policy,selectedLineEvidence:selected,roleEvidence:role,
-     opportunityRelativeToPeers:opportunityRatio,opportunityBasis:'Observed attempts for shooting; minutes-adjusted recorded assists/rebounds are role proxies, not official tracking chances.',
+     opportunityRelativeToPeers:opportunityRatio,opportunityBasis:'Observed shooting attempts; minutes-adjusted recorded assists, rebounds, steals and blocks are role proxies, not official tracking chances.',
      last5:rate(history,threshold,5),last10:rate(history,threshold,10),thresholds:[...new Set([...thresholds(history,market),threshold])].sort((a,b)=>a-b),
      weakness,priority:weakness.excess*opportunityRatio,eligible:true});
    }
@@ -193,7 +194,7 @@ function analyze(game,feed,rosters,injuries,now=Date.now(),options={}){
  candidates.sort((a,b)=>b.researchScore-a.researchScore||b.priority-a.priority||b.last5.rate-a.last5.rate||a.key.localeCompare(b.key));
  const seen=new Set(),topThree=candidates.filter(p=>qualifies(p)&&!seen.has(p.playerId)&&seen.add(p.playerId)).slice(0,3);
  const ready=pregame&&inputsFresh&&roleEvidence.ready===true;
- const reason=!pregame?'Historical view: recommendations close at tipoff.':!inputsFresh?'Fresh game, injury and roster data are required for player recommendations.':roleEvidence.ready!==true?roleEvidence.reason||'Supported rotation and opportunity evidence is unavailable; player picks are withheld.':!weaknesses.length?'Position-level samples are incomplete or no above-average allowances qualify yet.':!topThree.length?'PASS · No supported matchup meets 75/100 (three-pointers require 85/100).':null;
+ const reason=!pregame?'Historical view: recommendations close at tipoff.':!inputsFresh?'Fresh game, injury and roster data are required for player recommendations.':roleEvidence.ready!==true?roleEvidence.reason||'Supported rotation and opportunity evidence is unavailable; player picks are withheld.':!weaknesses.length?'Position-level samples are incomplete or no above-average allowances qualify yet.':!topThree.length?'PASS · No supported OVER/UNDER matchup meets 80/100.':null;
  return {game,weaknesses:weaknesses.sort((a,b)=>b.excess-a.excess),candidates:candidates.filter(qualifies),topThree,bestSingle:topThree[0]||null,coverage,ready,reason,
   roleSummary:{ready:roleEvidence.ready===true,reason:roleEvidence.reason||null,heldPlayers:Object.values(roles).filter(r=>r.eligible!==true).length},roleEvidence,
   method:'ESPN primary positions with verified box-score possessions and positional minutes. Defensive rates are normalized per 100 possessions and 48 positional minutes, adjusted for supported earlier opponent production and shrunk toward league average. Raw per-game totals remain descriptive. Shared rotation evidence supplies minutes and observed opportunity proxies; unknown official tracking is not invented. Recorded hit rates are historical; role-adjusted line samples are not observed hits or calibrated probabilities.'};
