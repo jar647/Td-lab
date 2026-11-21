@@ -10,7 +10,7 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(boxes,contextAPI){
  'use strict';
  const VERSION='nba-prop-evidence-v1',MIN_HISTORY=5,MIN_MINUTES=20,MAX_SCENARIO_SPREAD=6;
- const fields={points:['points'],rebounds:['rebounds'],assists:['assists'],threes:['threes'],pr:['points','rebounds'],pa:['points','assists'],ra:['rebounds','assists'],pra:['points','rebounds','assists']};
+ const fields={points:['points'],rebounds:['rebounds'],assists:['assists'],threes:['threes'],pr:['points','rebounds'],pa:['points','assists'],ra:['rebounds','assists'],pra:['points','rebounds','assists'],steals:['steals'],blocks:['blocks'],stocks:['steals','blocks']};
  const finite=x=>typeof x==='number'&&Number.isFinite(x),mean=xs=>xs.length?xs.reduce((s,x)=>s+x,0)/xs.length:null;
  const normalized=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
  const supportedStatus=status=>['NOT LISTED','ACTIVE','AVAILABLE','PROBABLE'].includes(String(status||'').toUpperCase());
@@ -77,14 +77,14 @@
      else if((low-baseline>6||low>baseline*1.25)&&!starterSupport)holdReasons.push('Projected workload jump lacks at least three supporting starter appearances');
      const fga=finite(p.fga)&&p.fga>=0?p.fga*low:null,threeAttempts=finite(p.tpa)&&p.tpa>=0?p.tpa*low:null,freeThrows=finite(p.fta)&&p.fta>=0?p.fta*low:null;
      if(fga===null||threeAttempts===null||freeThrows===null||threeAttempts>fga+1e-8||teamActions===null||!(teamActions>0))holdReasons.push('Observed shot-attempt and team-action evidence is incomplete');
-     const selectionSamples=Object.fromEntries(Object.entries(fields).map(([market,keys])=>[market,history.map(r=>keys.reduce((sum,k)=>sum+r[k],0)/r.minutes*low)]));
+     const selectionSamples=Object.fromEntries(Object.entries(fields).map(([market,keys])=>[market,history.filter(r=>keys.every(k=>finite(r[k])&&r[k]>=0)).map(r=>keys.reduce((sum,k)=>sum+r[k],0)/r.minutes*low)]));
      players[id]={playerId:id,name:p.name,team,status:p.status,lineupStatus:t.lineupStatus||'UNAVAILABLE',expectedStarter:p.starting===true,roleStatus:holdReasons.length?'HELD':'SUPPORTED',eligible:holdReasons.length===0,holdReasons,
       projectedMinutes:low,minutesLow:low,minutesHigh:high,recentMinutes:baseline,historyGames:history.length,starterGames,
       attempts:{fga,threeAttempts,freeThrows},opportunityShare:teamActions>0&&actionRate(p)!==null?included[id]*actionRate(p)/teamActions:null,
       opportunityBasis:'Share of observed field-goal attempts + 0.44 free-throw attempts + turnovers in the all-in projected rotation; a box-score proxy, not official usage or tracking.',
       selectionSamples,sampleKind:'role_adjusted_history',observedHistory:history.map(r=>({...r})),
       absentTeammates:Array.isArray(t.absent)?t.absent.slice():[],inputTimes:{...model.inputTimes},generatedAt:model.generatedAt,
-      tracking:{potentialAssists:null,reboundChances:null},
+      tracking:{potentialAssists:null,reboundChances:null,deflections:null,shotsContested:null},
       limits:'Minutes use the conservative bound across supported current and all-uncertain-out rotations. History is rescaled by those minutes; it is not recorded historical production or calibrated hit probability.'};
     }
    }

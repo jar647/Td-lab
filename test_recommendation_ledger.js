@@ -27,7 +27,7 @@ const active=api.activePicks([c.ledger.picks[0],retired,firstBasketLegacy,unissu
 assert.deepEqual(active.map(p=>p.id),[c.ledger.picks[0].id,'issued-assists','nfl-capture'],
  'archived first baskets, option sweeps and unissued legacy candidates stay out of results while real NBA/NFL plays remain');
 
-const box={id:'g',status:'STATUS_FINAL',players:[{id:'p',team:'A',starter:true,stats:{MIN:'30:00',PTS:'20',REB:'4',AST:'3','3PT':'2-7'}}],first_basket:{available:true,first_game:{player_id:'p',team:'A'}}};
+const box={id:'g',status:'STATUS_FINAL',players:[{id:'p',team:'A',starter:true,stats:{MIN:'30:00',PTS:'20',REB:'4',AST:'3',STL:'2',BLK:'1','3PT':'2-7'}}],first_basket:{available:true,first_game:{player_id:'p',team:'A'}}};
 const data={nba:{games:[box]}},p=c.ledger.picks[0],after=now+4*3600000;
 assert.equal(api.gradeOne(p,data,now).status,'pending','Future results must never settle a pre-start selection');assert.equal(api.gradeOne(p,data,after).status,'win');assert.equal(api.gradeOne({...p,side:'over'},data,after).status,'push');assert.equal(api.gradeOne({...p,side:'under'},data,after).status,'push');assert.equal(api.gradeOne({...p,side:'under',line:19.5},data,after).status,'loss');assert.equal(api.gradeOne({...p,side:'under',line:20.5},data,after).status,'win');
 assert.equal(api.gradeOne({...p,market:'PRA',line:27},data,after).status,'win');
@@ -54,7 +54,7 @@ assert.equal(api.summarize({picks:[{...graded.picks[0],score:null,probability:.2
 
 // Contract: every market emitted by either deployed NBA recommendation engine
 // must have a supported settlement path, including the short combo keys.
-const expectedNBA={points:20,rebounds:4,assists:3,threes:2,pr:24,pa:23,ra:7,pra:27,'Points + Rebounds':24,'Points + Assists':23,'Rebounds + Assists':7,PRA:27};
+const expectedNBA={points:20,rebounds:4,assists:3,threes:2,steals:2,blocks:1,stocks:3,'Steals + Blocks':3,pr:24,pa:23,ra:7,pra:27,'Points + Rebounds':24,'Points + Assists':23,'Rebounds + Assists':7,PRA:27};
 for(const market of new Set([...require('./nba_matchup_discovery').markets,...require('./nba_game_first').markets])){
  assert(Object.hasOwn(expectedNBA,market),'New NBA market needs an explicit grading contract: '+market);
  const record={...p,market,line:expectedNBA[market],side:'at_least'};

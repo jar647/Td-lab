@@ -77,7 +77,7 @@
    const at=now(),byGame=new Map(fixtures(inputs.feed,at).map(g=>[String(g.id),g]));
    return (Array.isArray(rows)?rows:[]).flatMap(row=>{
     let c;try{c=gf?.candidate?.(row)}catch(_){return []}
-    const g=byGame.get(String(c?.gameId)),r=c?.roleEvidence;if(!c||!g||!r||r.eligible!==true||r.roleStatus!=='SUPPORTED'||!Array.isArray(c.samples)||c.samples.length<1000||c.side!=='over'||c.score<gf.minimumScore(c.market)||c.reviewRequired||c.eligible!==true)return [];
+    const g=byGame.get(String(c?.gameId)),r=c?.roleEvidence;if(!c||!g||!r||r.eligible!==true||r.roleStatus!=='SUPPORTED'||!Array.isArray(c.samples)||c.samples.length<1000||!['over','under'].includes(c.side)||c.score<gf.minimumScore(c.market,c.side)||c.reviewRequired||c.eligible!==true)return [];
     if(!c.game||String(c.game.id)!==String(g.id)||c.game.home!==g.home||c.game.away!==g.away||time(c.game.date)!==time(g.date))return [];
     const statuses=['NOT LISTED','ACTIVE','AVAILABLE','PROBABLE'];if(!statuses.includes(String(r.status||'').toUpperCase())||c.status!==undefined&&!statuses.includes(String(c.status).toUpperCase())||![g.home,g.away].includes(c.team)||c.opponent!==undefined&&c.opponent!==(c.team===g.home?g.away:g.home)||!Array.isArray(inputs.rosters.teams[c.team])||!inputs.rosters.teams[c.team].map(String).includes(String(c.playerId)))return [];
     for(const [key,value]of [['games',inputs.feed],['rosters',inputs.rosters],['injuries',inputs.injuries]])if(time(c.inputTimes?.[key])!==stamp(value))return [];
@@ -93,12 +93,12 @@
     await new Promise(resolve=>schedule(resolve,0));if(destroyed||version!==revision||current?.signature!==inputs.signature)return unavailable('NBA sources changed during simulation.');
     progress({type:'progress',completed:i,total:inputs.games.length,game:inputs.games[i]});
     const result=gf.analyze(inputs.games[i],inputs.feed,inputs.injuries,inputs.rosters,inputs.context,now(),{count:1000});
-    const sampled=result?.rows||[];rows.push(...sampled);diagnostics.gamesAnalyzed++;diagnostics.modelRows+=sampled.length;diagnostics.eligibleRows+=sampled.filter(r=>r.side==='over'&&r.eligible===true&&!r.reviewRequired).length;diagnostics.ratedRows+=sampled.filter(r=>r.side==='over'&&Number.isFinite(r.matchupRating?.score)&&r.matchupRating.score>=gf.minimumScore(r.market)).length;if(result?.reason){held.push({gameId:String(inputs.games[i].id),reason:result.reason});if(!sampled.length)diagnostics.modelUnavailableGames++;}
+    const sampled=result?.rows||[];rows.push(...sampled);diagnostics.gamesAnalyzed++;diagnostics.modelRows+=sampled.length;diagnostics.eligibleRows+=sampled.filter(r=>['over','under'].includes(r.side)&&r.eligible===true&&!r.reviewRequired).length;diagnostics.ratedRows+=sampled.filter(r=>['over','under'].includes(r.side)&&Number.isFinite(r.matchupRating?.score)&&r.matchupRating.score>=gf.minimumScore(r.market,r.side)).length;if(result?.reason){held.push({gameId:String(inputs.games[i].id),reason:result.reason});if(!sampled.length)diagnostics.modelUnavailableGames++;}
    }
    const eligible=supported(rows,inputs);diagnostics.qualifiedRows=eligible.length;return {candidates:eligible,held,diagnostics,signature:inputs.signature,ready:true,reason:''};
   }
   function runWorker(inputs,version){
-   const make=options.workerFactory||(typeof root.Worker==='function'?()=>new root.Worker('./nba_parlay_worker.js?v=nba-best-props-gate-20261120-v2'):null);
+   const make=options.workerFactory||(typeof root.Worker==='function'?()=>new root.Worker('./nba_parlay_worker.js?v=nba80-def-under-20261121'):null);
    if(!make)return fallback(inputs,version);
    return new Promise(resolve=>{
     let worker,timer,finished=false;const requestId=++request;
@@ -127,7 +127,7 @@
    if(cache&&cache.signature===inputs.signature&&now()-cache.at<=60000&&now()>=cache.at)return {...cache.result,candidates:supported(cache.result.candidates,inputs)};
    if(computeTask&&computeTask.signature===inputs.signature)return computeTask.promise;
    const version=revision,promise=(async()=>{const result=await runWorker(inputs,version);if(destroyed||version!==revision||current?.signature!==inputs.signature)return unavailable('NBA sources changed during simulation.');
-    if(result.ready){const candidates=supported(result.candidates,inputs);const value={...result,candidates,heldCount:result.held?.length||0,reason:candidates.length?'':result.held?.[0]?.reason||'No supported OVER 75/100+ (three-pointers 85/100+) player props are available from the current sources.'};cache={signature:inputs.signature,at:now(),result:value};return value}return result;
+    if(result.ready){const candidates=supported(result.candidates,inputs);const value={...result,candidates,heldCount:result.held?.length||0,reason:candidates.length?'':result.held?.[0]?.reason||'No supported OVER or UNDER 80/100+ player props are available from the current sources.'};cache={signature:inputs.signature,at:now(),result:value};return value}return result;
    })().catch(()=>unavailable('The NBA research engine failed. Retry the research scan.'));computeTask={signature:inputs.signature,promise};
    try{return await promise}finally{if(computeTask?.promise===promise)computeTask=null}
   }

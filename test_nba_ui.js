@@ -146,20 +146,20 @@ console.log('NBA lineup/projections UI smoke test: PASS');
  console.log('NBA concise verdict and optional calculation details: PASS');
 }
 
-// Both sides need 85+ before entering recommendation ranks.
+// Both NBA sides must meet 80/100 before entering recommendation ranks.
 {
  const row=(key,playerId,decision,candidate,ev,quality=0,quote={line:5.5,over:-110,under:-110})=>({key,playerId,market:'points',quality,quote,result:{decision,candidate,rating:{score:candidate==='UNDER'?84.99:85},expectedValue:ev,estimatedEdge:ev/2}});
  const rows=[row('over','one','LEAN','OVER',.10),row('under','two','LEAN','UNDER',.30),row('pass','three','PASS',null,99,999),row('waiting','four','PASS',null,99,998,{}) ,row('second-market','two','LEAN','OVER',.20),row('third','five','LEAN','OVER',.08)];
  const groups=JSON.parse(vm.runInContext('JSON.stringify(nbaPropGroups('+JSON.stringify(rows)+'))',sandbox));
  assert.deepEqual(groups.recommended.map(r=>r.key),['over','second-market','third']);
- assert.deepEqual(groups.other.map(r=>r.key),[]);
- assert.deepEqual(groups.passed.map(r=>r.key),['pass','under']);
+ assert.deepEqual(groups.other.map(r=>r.key),['under']);
+ assert.deepEqual(groups.passed.map(r=>r.key),['pass']);
  assert.deepEqual(groups.awaiting.map(r=>r.key),['waiting']);
  assert.equal(new Set(groups.recommended.map(r=>r.playerId)).size,3);
  const changed=rows.map(r=>r.key==='under'?{...r,result:{decision:'PASS',candidate:null}}:r);
  const after=JSON.parse(vm.runInContext('JSON.stringify(nbaPropGroups('+JSON.stringify(changed)+'))',sandbox));
  assert(!after.recommended.some(r=>r.key==='under'));assert(after.passed.some(r=>r.key==='under'));
- console.log('NBA 85+ OVER / UNDER ranking, PASS removal and awaiting-odds buckets: PASS');
+ console.log('NBA 80+ OVER / UNDER ranking, PASS removal and awaiting-odds buckets: PASS');
 }
 
 // Current single-book prices can discover an Under. Manual edits win; a changed
@@ -230,16 +230,18 @@ assert.equal(vm.runInContext('nbaPropRating(ratingResult,{})',sandbox),null);
 assert.ok(vm.runInContext('nbaRatingHTML({rating:nbaPropRating(ratingResult,ratingContext)})',sandbox).includes('not win probability'));
 console.log('NBA matchup score isolated from prices and implied probability: PASS');
 
-// Matchup research chooses up to three distinct OVER players; unsupported directions are excluded.
+// Matchup research chooses up to three distinct 80+ NBA players across OVER and UNDER.
 sandbox.matchupFixture=Array.from({length:7},(_,i)=>({key:'m'+i,playerId:i===1?'same':'p'+i,market:'points',quality:99-i,result:{rating:{score:85}},matchup:{strength:i/10},target:{side:i%2?'OVER':'UNDER',line:20.5}}));
 sandbox.matchupFixture[0].playerId='same';sandbox.matchupFixture[6].market='threes';sandbox.matchupFixture[5].target=null;
 const three=vm.runInContext('nbaMatchupThree(matchupFixture)',sandbox);
-assert.equal(three.length,2);assert.deepEqual(Array.from(three,r=>r.key),['m3','m1']);
-assert.equal(new Set(three.map(r=>r.playerId)).size,2);
+assert.equal(three.length,3,'Return up to three distinct qualified OVER or UNDER players');
+assert.equal(new Set(three.map(r=>r.playerId)).size,3);
+assert(three.some(r=>r.target.side==='UNDER'),'An independently eligible UNDER must be considered');
+assert(three.every(r=>r.result.rating.score>=80&&r.target?.line>0));
 assert.ok(match[1].includes('outlookHTML+scoutHtml'));
 assert.ok(match[1].includes('row.target=nbaResearchTarget(row,side)'));
 assert.ok(match[1].includes('row.target.distance>.25')); 
-console.log('NBA matchup-first three-player cap, direction and game outlook: PASS');
+console.log('NBA matchup-first three-player cap, supported UNDER direction and game outlook: PASS');
 
 // Recover an old explicitly-directed leg at its own saved price, not another market.
 vm.runInContext(`
@@ -261,10 +263,10 @@ assert.match(vm.runInContext('restoredResult.ratingNote',sandbox),/does not curr
 vm.runInContext('renderProjections=repairOriginalRenderer',sandbox);
 console.log('NBA legacy saved-side recovery, missing odds and failing quote: PASS');
 
-// A new UNDER cannot qualify even with its own 85+ rating; saved history remains.
+// A supported UNDER with its own 80+ matchup evidence can qualify; unsupported/over-only evidence cannot.
 vm.runInContext('nbaQuoteContexts.target.eligible=true;nbaQuoteContexts.target.matchupRatings={under:{side:"under",score:85,factors:[]}}',sandbox);
-assert.equal(vm.runInContext('nbaPriceReview("target",20,{line:25.5,under:-110}).candidate',sandbox),null);
-vm.runInContext('nbaQuoteContexts.target.matchupRatings.under.score=84',sandbox);
+assert.equal(vm.runInContext('nbaPriceReview("target",20,{line:25.5,under:-110}).candidate',sandbox),'UNDER');
+vm.runInContext('nbaQuoteContexts.target.matchupRatings.under.score=79',sandbox);
 assert.equal(vm.runInContext('nbaPriceReview("target",20,{line:25.5,under:-110}).candidate',sandbox),null);
 vm.runInContext('delete nbaQuoteContexts.target.matchupRatings;nbaQuoteContexts.target.matchupRating.score=99',sandbox);
 assert.equal(vm.runInContext('nbaPriceReview("target",20,{line:25.5,under:-110}).candidate',sandbox),null);

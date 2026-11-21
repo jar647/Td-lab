@@ -7,7 +7,7 @@
  'use strict';
  const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const percent=value=>Number.isFinite(value)?(100*value).toFixed(1)+'%':'unavailable';
- const labels={points:'points',rebounds:'rebounds',assists:'assists',threes:'three-pointers',pr:'points + rebounds',pa:'points + assists',ra:'rebounds + assists',pra:'points + rebounds + assists'};
+ const labels={points:'points',rebounds:'rebounds',assists:'assists',threes:'three-pointers',pr:'points + rebounds',pa:'points + assists',ra:'rebounds + assists',pra:'points + rebounds + assists',steals:'steals',blocks:'blocks',stocks:'steals + blocks'};
  const label=c=>labels[String(c.market||'').toLowerCase()]||String(c.market||'player prop');
  const fixture=c=>c.game||c.fixture||{};
  const gameId=c=>String(c.gameId??fixture(c).id??fixture(c).game_id??'');
@@ -59,7 +59,7 @@
    let html='<strong>'+(allEntered?'Exact book lines':'Unverified research targets')+' · all legs win: '+percent(rates.jointFrequency)+' simulated</strong>'+
     '<p class="muted">'+(rates.independentGames?'Separate games are assumed independent. Any same-game outcomes are counted together.':'The legs are counted together in the same simulated games; individual hit rates are not multiplied.')+' Uncalibrated model frequency, not a verified win probability.</p>';
    if(allEntered&&Number(rates.pushFrequency)>0)html+='<p class="muted">No losing leg with at least one push: '+percent(rates.pushFrequency)+'. The book’s reduced-ticket and void rules determine settlement.</p>';
-   if(!allEntered)return html+'<p>Enter each exact OVER line your book offers before saving or reviewing its full-ticket payout. Default alternate lines are unverified book offerings.</p>';
+   if(!allEntered)return html+'<p>Enter each exact OVER or UNDER line your book offers before saving or reviewing its full-ticket payout. Default alternate lines are unverified book offerings.</p>';
    html+='<p class="muted">These exact lines are evaluated for the selected players. Editing a line does not rerank the board.</p>';
    const raw=String(combinedOdds).trim(),price=raw?pricing.quote(raw):null;
    if(raw&&!price)return html+'<p>Enter valid combined American odds, such as +500.</p>';
@@ -72,17 +72,17 @@
   }
   function legReviewHTML(c){
    const q=quote(c),entered=String(q.line).trim()!=='';
-   if(!entered)return 'Book offering unverified. Enter the actual strict OVER line; 10+ corresponds to OVER 9.5.';
-   if(numberLine(q.line)===null)return 'Enter a valid whole or half-point OVER line of at least 0.5.';
+   if(!entered)return 'Book offering unverified. Enter the actual strict '+String(c.side||'over').toUpperCase()+' line (10+ corresponds to OVER 9.5).';
+   if(numberLine(q.line)===null)return 'Enter a valid whole or half-point '+String(c.side||'over').toUpperCase()+' line of at least 0.5.';
    if(String(q.odds).trim()&&!pricing.quote(q.odds))return 'Enter valid American odds, such as -110 or +150, or leave the price blank.';
    const rate=legRate(c);
-   return rate?'Book OVER '+esc(q.line)+': '+percent(rate.win)+' simulated wins'+(rate.push?' · '+percent(rate.push)+' pushes':'')+'. Uncalibrated.':'This line has no supported current outcome sample.';
+   return rate?'Book '+esc(String(c.side||'over').toUpperCase())+' '+esc(q.line)+': '+percent(rate.win)+' simulated wins'+(rate.push?' · '+percent(rate.push)+' pushes':'')+'. Uncalibrated.':'This line has no supported current outcome sample.';
   }
   function render(){
    if(destroyed)return;
    const fixtures=games();
    if(!fixtures.some(g=>g.id===game))game=fixtures[0]?.id||'';
-   host.innerHTML='<p class="muted">Build an OVER-only research ticket from supported 75/100+ matchups (three-pointers 85/100+). Selection considers minutes stability, distinct players and joint outcomes, rather than simply taking the highest scores.</p>'+
+   host.innerHTML='<p class="muted">Build an OVER or UNDER research ticket from supported 80/100+ NBA matchups, including defensive stats. Selection considers minutes stability, distinct players and joint outcomes, rather than simply taking the highest scores.</p>'+
     '<div class="sim-grid"><div class="sim-field"><label>Legs<select data-nba-parlay-count aria-label="NBA parlay leg count">'+[2,3,4].map(n=>'<option value="'+n+'"'+(n===count?' selected':'')+'>'+n+' legs</option>').join('')+'</select></label></div>'+
     '<div class="sim-field"><label>Ticket type<select data-nba-parlay-mode aria-label="NBA parlay ticket type"><option value="cross_game"'+(mode==='cross_game'?' selected':'')+'>Different games</option><option value="sgp"'+(mode==='sgp'?' selected':'')+'>Same game</option></select></label></div></div>'+
     (mode==='sgp'?'<label>Matchup<select data-nba-parlay-game aria-label="NBA parlay matchup">'+(fixtures.length?fixtures.map(g=>'<option value="'+esc(g.id)+'"'+(g.id===game?' selected':'')+'>'+esc(g.label)+'</option>').join(''):'<option value="">Load current matchups with Generate</option>')+'</select></label>':'')+
@@ -92,8 +92,8 @@
      const q=quote(c),role=c.roleEvidence||{},range=Number.isFinite(role.minutesLow)&&Number.isFinite(role.minutesHigh)?role.minutesLow.toFixed(1)+'–'+role.minutesHigh.toFixed(1):'unavailable';
      return '<section class="player nba-parlay-leg" data-nba-parlay-key="'+esc(c.key)+'"><strong>Leg '+(index+1)+' · '+esc(name(c))+' · '+esc(score(c))+'/100</strong>'+
       '<p class="muted">'+esc(gameLabel(c))+' · '+esc(label(c))+' · supported minutes '+esc(range)+'.</p>'+
-      '<p>Research target: <strong>OVER '+esc(c.line)+' '+esc(label(c))+'</strong><br><span class="muted">Book availability unverified. '+esc(c.parlayReason||'Supported matchup quality, stable minutes and distinct player exposure.')+'</span></p>'+
-      '<div class="sim-grid"><div class="sim-field"><label>Actual book OVER line<input type="number" min="0.5" max="400" step="0.5" inputmode="decimal" data-nba-parlay-line="'+esc(c.key)+'" value="'+esc(q.line)+'" aria-label="NBA parlay book OVER line for '+esc(name(c))+'" placeholder="Enter the book’s line"></label></div>'+
+      '<p>Research target: <strong>'+esc(String(c.side||'over').toUpperCase())+' '+esc(c.line)+' '+esc(label(c))+'</strong><br><span class="muted">Book availability unverified. '+esc(c.parlayReason||'Supported matchup quality, stable minutes and distinct player exposure.')+'</span></p>'+
+      '<div class="sim-grid"><div class="sim-field"><label>Actual book '+esc(String(c.side||'over').toUpperCase())+' line<input type="number" min="0.5" max="400" step="0.5" inputmode="decimal" data-nba-parlay-line="'+esc(c.key)+'" value="'+esc(q.line)+'" aria-label="NBA parlay book '+esc(String(c.side||'over').toUpperCase())+' line for '+esc(name(c))+'" placeholder="Enter the book’s line"></label></div>'+
       '<div class="sim-field"><label>American odds · optional<input type="text" data-nba-parlay-odds="'+esc(c.key)+'" value="'+esc(q.odds)+'" aria-label="NBA parlay odds for '+esc(name(c))+'" placeholder="-110 or +150"></label></div></div>'+
       '<p class="muted" data-nba-parlay-review="'+esc(c.key)+'">'+legReviewHTML(c)+'</p></section>';
     }).join('')+'</div>'+
@@ -161,7 +161,7 @@
   function setGame(value){return configure(()=>{game=String(value||'')})}
   async function add(){
    if(destroyed||pending)return false;
-   if(draft.length!==count||!checkedLegs()||!complete(evaluation())){message='Enter every actual book OVER line for a complete current draft before saving.';update();return false}
+   if(draft.length!==count||!checkedLegs()||!complete(evaluation())){message='Enter every actual book OVER or UNDER line for a complete current draft before saving.';update();return false}
    if(draft.some(c=>String(quote(c).odds).trim()&&!pricing.quote(quote(c).odds))||String(combinedOdds).trim()&&!pricing.quote(combinedOdds)){message='Check the entered American odds before saving.';update();return false}
    const id=++operation,edit=edits,previousSignature=signature;pending=true;update();
    try{
@@ -173,13 +173,13 @@
     const saved=bookLegs.map(c=>{
      const q=quote(c),price=pricing.quote(q.odds),rated=result.legs?.find(row=>row.key===c.key),rate=Number.isFinite(rated?.probability)?rated.probability:legRate(c)?.win;
      return {sport:'NBA',game:gameLabel(c),gameId:gameId(c),player:name(c),playerId:playerId(c),team:c.team,opponent:c.opponent,
-      position:c.position||null,market:label(c),marketKey:c.market,side:'over',line:c.line,recommendationLine:c.line,recommendation:'OVER '+c.line+' '+label(c),
+      position:c.position||null,market:label(c),marketKey:c.market,side:c.side,line:c.line,recommendationLine:c.line,recommendation:c.side.toUpperCase()+' '+c.line+' '+label(c),
       researchMethod:'nba-parlay-research',researchScore:score(c),propScore:null,scenarioRate:Number.isFinite(rate)?rate:null,
       parlayJointFrequency:result.jointFrequency,parlaySize:count,parlayType:mode,lineOfferingConfirmed:true,
       sourceInputs:{...c.inputTimes},roleEvidence:{projectedMinutes:c.roleEvidence?.projectedMinutes,minutesLow:c.roleEvidence?.minutesLow,minutesHigh:c.roleEvidence?.minutesHigh,historyGames:c.roleEvidence?.historyGames},
       linePolicy:c.linePolicy?.policy||c.linePolicy||c.selectedLineEvidence?.policy||null,
-      ...(price?{americanOdds:price.american,overOdds:price.american}:{}),...(combined?{parlayCombinedOdds:combined.american}:{}),
-      notes:'Exact user-entered OVER line. Supported NBA matchup and role research; simulated frequencies are uncalibrated. '+(result.independentGames?'Separate games are assumed independent. ':'Same-game legs use shared simulated outcomes. ')+'Book acceptance, injuries and settlement rules require confirmation.'};
+      ...(price?{americanOdds:price.american,...(c.side==='under'?{underOdds:price.american}:{overOdds:price.american})}:{}),...(combined?{parlayCombinedOdds:combined.american}:{}),
+      notes:'Exact user-entered '+c.side.toUpperCase()+' line. Supported NBA matchup and role research; simulated frequencies are uncalibrated. '+(result.independentGames?'Separate games are assumed independent. ':'Same-game legs use shared simulated outcomes. ')+'Book acceptance, injuries and settlement rules require confirmation.'};
     });
     for(const pick of saved)options.quickSlip.add(pick);
     pending=false;message='Added '+saved.length+' exact NBA book legs to Quick Slip. Existing selections were retained.';update();return true;

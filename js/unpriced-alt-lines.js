@@ -12,8 +12,9 @@
   for(const line of thresholds)if(!Number.isFinite(line)||line<.5||line>10000||!Number.isInteger(line*2))return unavailable('Invalid alternate lines');
   if(opts.now!==undefined){if(![opts.sourceUpdatedAt,opts.startsAt].every(s=>typeof s==='string'&&/T.*(?:Z|[+-]\d{2}:\d{2})$/.test(s)))return unavailable('Timezone-aware source times required');const t=Date.parse(opts.sourceUpdatedAt),tip=Date.parse(opts.startsAt),age=opts.maxAgeMs;
    if(!Number.isFinite(opts.now)||!Number.isFinite(t)||!Number.isFinite(tip)||!Number.isFinite(age)||age<=0||t>opts.now+300000||opts.now-t>age||tip<=opts.now)return unavailable('Stale, expired or unavailable source times');}
+  const side=opts.side==='under'?'under':'over';
   const rating=Number.isFinite(opts.rating)&&opts.rating>=0&&opts.rating<=100?opts.rating:null;
-  const lines=[...new Set(thresholds)].sort((a,b)=>a-b).map(line=>{let wins=0,pushes=0;for(const value of samples){wins+=Number(value>line);pushes+=Number(value===line)}return {line,direction:'OVER',probability:wins/samples.length,pushProbability:pushes/samples.length,label:'Unpriced research target',expectedValue:null,sportsbookAvailable:null};});
+  const lines=[...new Set(thresholds)].sort((a,b)=>a-b).map(line=>{let wins=0,pushes=0;for(const value of samples){wins+=Number(side==='under'?value<line:value>line);pushes+=Number(value===line)}return {line,direction:side.toUpperCase(),probability:wins/samples.length,pushProbability:pushes/samples.length,label:'Unpriced research target',expectedValue:null,sportsbookAvailable:null};});
   return {status:'research-only',priced:false,calibrated:false,sampleSize:samples.length,rating,ratingIsProbability:false,confidence:{score:rating,kind:'heuristic_matchup',isProbability:false},sourceUpdatedAt:opts.sourceUpdatedAt||null,startsAt:opts.startsAt||null,lines};
  }
  function fromSettlement(row,thresholds,opts={}){

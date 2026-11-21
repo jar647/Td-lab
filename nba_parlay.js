@@ -37,9 +37,10 @@
  function prepare(raw,now){
   const c=raw,g=c?.game,r=c?.roleEvidence,market=lines?.canonical(c?.market);
   if(!c||!g||!r||!market||!id(c.key)||!id(c.playerId)||!id(c.gameId)||id(g.id)!==id(c.gameId)||
-   typeof c.name!=='string'||!c.name.trim()||c.side!=='over'||c.eligible!==true||c.reviewRequired||c.parlayEligible===false||
-   !finite(c.score)||c.score<lines.minimumScore(c.market)||c.score>100||!finite(c.line)||c.line<.5||c.line>400||
-   c.matchupRating?.score!==undefined&&c.matchupRating.score!==c.score)return null;
+   typeof c.name!=='string'||!c.name.trim()||!['over','under'].includes(c.side)||c.eligible!==true||c.reviewRequired||c.parlayEligible===false||
+   !finite(c.score)||c.score<lines.minimumScore(c.market,c.side)||c.score>100||!finite(c.line)||c.line<.5||c.line>400||
+   c.matchupRating?.score!==undefined&&c.matchupRating.score!==c.score||
+   c.side==='under'&&(c.matchupRating?.side!=='under'||c.selectedLineEvidence?.side!=='under'))return null;
   if(g.status!=='STATUS_SCHEDULED'||typeof g.home!=='string'||!g.home.trim()||typeof g.away!=='string'||!g.away.trim()||g.home===g.away||
    ![g.home,g.away].includes(c.team)||c.opponent!==undefined&&c.opponent!==(c.team===g.home?g.away:g.home))return null;
   const tip=time(g.date);if(!Number.isFinite(tip)||tip<=now||tip-now>7*86400000)return null;
@@ -57,14 +58,14 @@
   if(r.inputTimes!==undefined&&(!r.inputTimes||typeof r.inputTimes!=='object'||
    Object.keys(stamps).some(key=>time(r.inputTimes[key])!==stamps[key])))return null;
   if(!Array.isArray(c.samples)||c.samples.length<MIN_SAMPLES||c.samples.length>MAX_SAMPLES||c.samples.some(x=>!finite(x)||x<0))return null;
-  const settlement=lines.evaluate(c.samples,c.line);if(!settlement.available)return null;
+  const settlement=lines.evaluateSide(c.samples,c.line,c.side);if(!settlement.available)return null;
   const win=new Uint8Array(c.samples.length),nonLoss=new Uint8Array(c.samples.length);
-  for(let i=0;i<c.samples.length;i++){win[i]=Number(c.samples[i]>c.line);nonLoss[i]=Number(c.samples[i]>=c.line)}
+  for(let i=0;i<c.samples.length;i++){win[i]=Number(c.side==='under'?c.samples[i]<c.line:c.samples[i]>c.line);nonLoss[i]=Number(c.side==='under'?c.samples[i]<=c.line:c.samples[i]>=c.line)}
   return {raw:c,key:id(c.key),playerId:id(c.playerId),gameId:id(c.gameId),market,
    tip,fixture:JSON.stringify([g.home,g.away,tip]),source:JSON.stringify(stamps),set:id(c.outcomeSetId),
    win,nonLoss,settlement,probability:settlement.winFrequency,
    stability:1-clamp((r.minutesHigh-r.minutesLow)/6),coverage:clamp(r.historyGames/10),
-   quality:(c.score-lines.minimumScore(c.market))/(100-lines.minimumScore(c.market)),balance:1-clamp(Math.abs(settlement.winFrequency-.75)/.25)};
+   quality:(c.score-lines.minimumScore(c.market,c.side))/(100-lines.minimumScore(c.market,c.side)),balance:1-clamp(Math.abs(settlement.winFrequency-.75)/.25)};
  }
  function ambiguousGames(pool){
   const fixtures=new Map(),physical=new Map(),bad=new Set();
@@ -179,7 +180,7 @@
   if(mode==='cross_game'){const games=new Set();for(const p of sorted)if(!games.has(p.gameId)){games.add(p.gameId);add(p)}}
   for(const p of sorted)add(p);
   pool.sort(order);
-  if(!pool.length)return fail('No qualifying OVER candidates (75+; three-pointers 85+) have current source records, stable supported minutes and suitable exact-line simulation frequencies.');
+  if(!pool.length)return fail('No qualifying OVER or UNDER candidates (80/100 minimum) have current source records, stable supported minutes and suitable exact-line simulation frequencies.');
   let beam=[{indices:[],prepared:[],score:0,key:''}],best=null;
   const groupCache=new Map();
   function scoreCombo(combo){

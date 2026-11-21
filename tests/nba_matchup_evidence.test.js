@@ -7,16 +7,16 @@ assert.equal(saved.recommendationLine,6);assert.equal(saved.sampleHits,3);assert
 const card=vm.runInContext('nbaMatchupCard(row)',context);assert(card.includes('Center &lt;example&gt;'));assert(card.includes('16.0 rebounds'));assert(card.includes('6+ · 60% (3/5 recent games)'));assert.notEqual(card.match(/id="matchup-rate-([^"]+)/)[1],vm.runInContext('nbaMatchupCard(row)',context).match(/id="matchup-rate-([^"]+)/)[1]);assert(card.includes('12.0 league average'));assert(!card.includes('Over odds'));assert(source.includes('onclick="scanNBAMatchups()"'));assert(!script.includes('renderNBAMatchups(g)'),'Retired historical panel must not be rendered');assert(!source.includes('Where to look &amp; why'));assert(script.includes('Experimental simulator &amp; earlier projection tools'));
 console.log('NBA primary matchup UI: exact threshold hit rates, selected baseline in Quick Slip, no forecast probability or odds fields PASS');
 context.row={...row,researchScore:74};assert.equal(vm.runInContext('nbaMatchupCard(row)',context),'');
-context.row={...row,researchScore:79};assert(vm.runInContext('nbaMatchupCard(row)',context).includes('79/100'));
+context.row={...row,researchScore:79};assert.equal(vm.runInContext('nbaMatchupCard(row)',context),'');
 context.row={...row,researchScore:85};assert(vm.runInContext('nbaMatchupCard(row)',context).includes('85/100'));
 context.row={...row,key:'g|c|rebounds|under',side:'under',researchScore:79};assert.equal(vm.runInContext('nbaMatchupCard(row)',context),'');
 context.row={...context.row,researchScore:85,baseline:6.5,thresholds:[5.5,6.5,7.5]};
-assert.equal(vm.runInContext('nbaMatchupCard(row)',context),'');
+assert(vm.runInContext('nbaMatchupCard(row)',context).includes('85/100'),'Supported 80+ UNDER must remain visible');
 const priorSaved=saved;context.CookNBAMatchups.analyze=()=>({candidates:[context.row]});
-vm.runInContext('nbaMatchupCache.clear();nbaMatchupRows.set(row.key,row);addNBAMatchupPick(row.key)',context);assert.equal(saved,priorSaved,'UNDER cannot enter Quick Slip even with a current 85 score');
+vm.runInContext('nbaMatchupCache.clear();nbaMatchupRows.set(row.key,row);addNBAMatchupPick(row.key)',context);assert.notEqual(saved,priorSaved,'Supported UNDER can enter Quick Slip');assert.equal(saved.side,'under');assert.equal(saved.line,6.5);
 context.row={...row,key:'g|c|threes',side:'over',market:'threes',researchScore:85,baseline:3,thresholds:[1,2,3,4]};assert(vm.runInContext('nbaMatchupCard(row)',context).includes('85/100'));vm.runInContext('nbaMatchupCache.clear();addNBAMatchupPick(row.key)',context);assert.equal(saved.market,'threes');assert.equal(saved.side,'over');
 
-for(const side of ['over','under'])for(const researchScore of [74,74.99,100.01,NaN,Infinity,null,'85']){context.row={...row,side,researchScore};assert.equal(vm.runInContext('nbaMatchupCard(row)',context),'');}
+for(const side of ['over','under'])for(const researchScore of [74,74.99,79.99,100.01,NaN,Infinity,null,'85']){context.row={...row,side,researchScore};assert.equal(vm.runInContext('nbaMatchupCard(row)',context),'');}
 
 vm.runInContext("nbaMarketStatus={status:'unavailable',reason_code:'provider_rate_limit',reason:'<img onerror=bad>'};nbaMarketData={generated_at:new Date(Date.now()-7200000).toISOString(),markets:[{observed_at:new Date(Date.now()-7200000).toISOString()}]};renderNBAMarketStatus()",context);
 assert(el('nba-market-status').textContent.includes('HTTP 429'));assert(el('nba-market-status').textContent.includes('120 min old'));assert(el('nba-market-status').textContent.includes('0 quotes within one hour'));assert(!el('nba-market-status').textContent.includes('<img'));assert(source.includes("fetch('./data/nba_market_status.json'"));

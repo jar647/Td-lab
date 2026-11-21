@@ -10,6 +10,9 @@
   rebounds:[4,5,6,8,10,12,15,18,20,25,30],
   assists:[3,4,5,6,8,10,12,15,18,20],
   threes:[1,2,3,4,5,6,7,8,10,12],
+  steals:[1,2,3,4,5,6,7,8],
+  blocks:[1,2,3,4,5,6,7,8],
+  stocks:[1,2,3,4,5,6,7,8,9,10],
   pr:[10,15,20,25,30,35,40,45,50,55,60,65,70,80,90,100],
   pa:[10,15,20,25,30,35,40,45,50,55,60,65,70,80,90,100],
   ra:[5,8,10,12,15,18,20,25,30,35,40,45,50],
@@ -24,7 +27,7 @@
  }
  function canonical(market){
   const key=String(market??'').toLowerCase().replace(/[^a-z]/g,'');
-  return ({points:'points',rebounds:'rebounds',assists:'assists',threes:'threes',threepointers:'threes',
+  return ({points:'points',rebounds:'rebounds',assists:'assists',threes:'threes',threepointers:'threes',steals:'steals',blocks:'blocks',stocks:'stocks',stealsblocks:'stocks',blockssteals:'stocks',
    pr:'pr',pointsrebounds:'pr',pa:'pa',pointsassists:'pa',ra:'ra',reboundsassists:'ra',
    pra:'pra',pointsreboundsassists:'pra'})[key]||null;
  }
@@ -67,7 +70,7 @@
   supported.sort((a,b)=>{const gap=Math.abs(a.frequency-TARGET)-Math.abs(b.frequency-TARGET);return Math.abs(gap)>1e-12?gap:(side==='under'?a.line-b.line:b.line-a.line)});
   return {...supported[0],reason:offered?'Closest supported supplied book line to the 75% planning target.':'Closest conventional research line to the 75% planning target; book availability is unverified.'};
  }
- function minimumScore(market,side='over'){if(!['over','under'].includes(side))return 101;return side==='under'?(canonical(market)==='threes'?90:85):(canonical(market)==='threes'?85:75);}
+ function minimumScore(market,side='over'){if(!['over','under'].includes(side))return 101;return canonical(market)?80:101;}
  function qualifiesScore(score,market,side='over'){return Number.isFinite(score)&&score>=minimumScore(market,side)&&score<=100;}
  function minimum(market){const key=canonical(market);return key?GRIDS[key][0]:null;}
  return {minimumScore,qualifiesScore,POLICY,MIN_SAMPLES,TARGET,canonical,minimum,select,ladder,evaluate,evaluateSide};
