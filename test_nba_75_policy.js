@@ -29,7 +29,8 @@ for(const market of [...markets,'Points + Assists','PRA','Steals + Blocks']){
 assert.equal(auto.shortlist([row('steals',80,'under')]).length,1);
 assert.equal(auto.shortlist([row('blocks',79.99)]).length,0);
 assert.equal(parlay.evaluateResearch([row('points',80)],{now}).available,true);
-assert.equal(parlay.evaluateResearch([row('points',80,'under')],{now}).available,true);
+const underTicket=row('points',80,'under');underTicket.selectedLineEvidence={available:true,side:'under',line:underTicket.line};
+assert.equal(parlay.evaluateResearch([underTicket],{now}).available,true,'Real UNDER evidence must be present for the correlated ticket');
 assert.equal(parlay.evaluateResearch([row('threes',79.99)],{now}).available,false);
 assert.equal(parlay.evaluateResearch([row('threes',80)],{now}).available,true);
 const over={sport:'NBA',board:'Game-first recommendations',gameId:'g',playerId:'p',player:'Player',
