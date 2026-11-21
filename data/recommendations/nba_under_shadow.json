@@ -1,10 +1,73 @@
 {
   "version": 1,
-  "picks": [],
+  "picks": [
+    {
+      "key": "401909312|4871144|threes|under-shadow",
+      "gameId": "401909312",
+      "game": {
+        "id": "401909312",
+        "date": "2026-11-21T03:00Z",
+        "status": "STATUS_SCHEDULED",
+        "season_type": 2,
+        "home": "Denver Nuggets",
+        "away": "Houston Rockets",
+        "players": []
+      },
+      "startsAt": "2026-11-21T03:00Z",
+      "playerId": "4871144",
+      "player": "Alperen Sengun",
+      "team": "Houston Rockets",
+      "opponent": "Denver Nuggets",
+      "position": "C",
+      "market": "threes",
+      "side": "under",
+      "score": 91,
+      "line": 1.5,
+      "projection": 0.58,
+      "recordedBaseline": 0.8,
+      "simulatedFrequency": 0.875,
+      "simulatedRuns": 1000,
+      "sourceTimestamps": {
+        "games": "2026-11-21T01:11:21.641204+00:00",
+        "injuries": "2026-11-21T02:00:27.328687+00:00",
+        "rosters": "2026-11-21T01:11:25.228068+00:00"
+      },
+      "sampleDepth": 10,
+      "factors": [
+        {
+          "label": "Opponent suppression by position (shrunk and schedule-adjusted)",
+          "points": 31,
+          "max": 40
+        },
+        {
+          "label": "Supported and stable minutes",
+          "points": 25,
+          "max": 25
+        },
+        {
+          "label": "Simulated projection below recorded player baseline",
+          "points": 20,
+          "max": 20
+        },
+        {
+          "label": "Verified player and opponent samples",
+          "points": 15,
+          "max": 15
+        }
+      ],
+      "studyOnly": true,
+      "priceVerified": false,
+      "probabilityCalibrated": false,
+      "reason": "Suppressed defensive position rate, stable supported role, lower simulated forecast and at least 70% experimental UNDER clears. Sportsbook line unverified.",
+      "capturedAt": "2026-11-21T02:04:27.516Z",
+      "result": "pending",
+      "frozen": true
+    }
+  ],
   "summary": {
-    "captured": 0,
+    "captured": 1,
     "graded": 0,
-    "pending": 0,
+    "pending": 1,
     "void": 0,
     "probabilitiesCalibrated": false,
     "betReady": false,
