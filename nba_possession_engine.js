@@ -84,7 +84,7 @@ function build(game,feed,injuries,rosters,now=Date.now(),options={}){
 function random(seed){let s=seed>>>0;return ()=>{s+=0x6D2B79F5;let t=s;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296}}
 function draws(model,count=10000,seed=6472026,options={}){
  if(!Number.isInteger(count)||count<1000||count>100000)throw Error('Runs must be between 1000 and 100000');
- const rng=random(seed),defensiveRng=random((seed^0x9E3779B9)>>>0),gauss=()=>Math.sqrt(-2*Math.log(Math.max(1e-12,rng())))*Math.cos(2*Math.PI*rng()),g=model.game,home=[],away=[],players=Object.values(model.teams).flatMap(t=>t.players),sums=Object.fromEntries(players.map(p=>[p.id,{points:0,rebounds:0,assists:0,threes:0,steals:0,blocks:0,stocks:0,minutes:0,played:0}])),legs=(options.legs||[]).slice(0,5),legWins=legs.map(()=>0),pairWins=legs.map(()=>legs.map(()=>0));const playerOutcomes=options.collectPlayerOutcomes?{}:null;let allWin=0,overtime=0,overtimePeriods=0,blowouts=0;
+ const rng=random(seed),defensiveRng=random((seed^0x9E3779B9)>>>0),gauss=()=>Math.sqrt(-2*Math.log(Math.max(1e-12,rng())))*Math.cos(2*Math.PI*rng()),g=model.game,home=[],away=[],players=Object.values(model.teams).flatMap(t=>t.players),sums=Object.fromEntries(players.map(p=>[p.id,{points:0,rebounds:0,assists:0,threes:0,steals:0,blocks:0,stocks:0,minutes:0,played:0}])),legs=(options.legs||[]).slice(0,5),legWins=legs.map(()=>0),pairWins=legs.map(()=>legs.map(()=>0));const playerOutcomes=options.collectPlayerOutcomes?{}:null,collectDefense=!!options.collectPlayerOutcomes||legs.some(l=>(LEG_FIELDS[norm(l.market)]||[]).some(k=>k==='steals'||k==='blocks'));let allWin=0,overtime=0,overtimePeriods=0,blowouts=0;
  const choose=(ps,weight,exclude)=>{const values=ps.map(p=>p.id===exclude?0:Math.max(0,weight(p))),sum=values.reduce((a,b)=>a+b,0);if(!sum)return null;let n=rng()*sum;for(let i=0;i<ps.length;i++){n-=values[i];if(n<=0)return ps[i]}return ps.at(-1)};
  const legPlayers=legs.map(leg=>{const matches=players.filter(p=>leg.player_id?String(p.id)===String(leg.player_id):norm(p.name)===norm(leg.player));if(matches.length!==1||!LEG_FIELDS[norm(leg.market)]||!['over','under'].includes(String(leg.side).toLowerCase())||!Number.isFinite(Number(leg.line))||leg.line===null||String(leg.line).trim()==='')throw Error('Saved simulator leg has an unsupported player, market, side or line');const candidate=matches[0],fields=LEG_FIELDS[norm(leg.market)];if(fields.some(k=>k==='steals'&&candidate.stl===null||k==='blocks'&&candidate.blk===null))throw Error('Defensive prop requires recorded STL and BLK history');return candidate;});
  for(let run=0;run<count;run++){
@@ -116,6 +116,7 @@ function draws(model,count=10000,seed=6472026,options={}){
   const stats={...states[g.home].stats,...states[g.away].stats};
    // Count defensive production within the same outcome draw as points and rebounds.
    // A separate random stream leaves the original offensive/score simulation unchanged.
+   if(collectDefense){
    for(const team of [g.home,g.away]){
     const defending=states[team],attacking=states[team===g.home?g.away:g.home];
     for(const [market,rateField,opportunities] of [['steals','stl',attacking.turnovers],['blocks','blk',attacking.missedFG]]){
@@ -129,13 +130,14 @@ function draws(model,count=10000,seed=6472026,options={}){
      }
     }
    }
+   }
    for(const p of players)stats[p.id].stocks=stats[p.id].steals+stats[p.id].blocks;
    home.push(states[g.home].score);away.push(states[g.away].score);
   for(const p of players){const x=stats[p.id],sum=sums[p.id];if(playerOutcomes){const samples=playerOutcomes[p.id]??={points:[],rebounds:[],assists:[],threes:[]};for(const k of ['points','rebounds','assists','threes'])samples[k].push(x[k]);if(p.stl!==null)(samples.steals??=[]).push(x.steals);if(p.blk!==null)(samples.blocks??=[]).push(x.blocks);if(p.stl!==null&&p.blk!==null)(samples.stocks??=[]).push(x.stocks);}for(const k of ['points','rebounds','assists','threes','steals','blocks','stocks','minutes'])sum[k]+=x[k];if(x.minutes>0)sum.played++;}
   const won=legs.map((leg,i)=>{const p=legPlayers[i],x=stats[p.id],fields=LEG_FIELDS[norm(leg.market)],value=x&&fields?fields.reduce((s,k)=>s+x[k],0):null;const win=value!==null&&x.minutes>0&&(String(leg.side).toLowerCase()==='under'?value<Number(leg.line):value>Number(leg.line));if(win)legWins[i]++;return win;});
   if(won.length&&won.every(Boolean))allWin++;for(let i=0;i<won.length;i++)for(let j=0;j<won.length;j++)if(won[i]&&won[j])pairWins[i][j]++;
  }
- return {playerOutcomes,home,away,players:players.map(p=>({id:p.id,player:p.name,team:p.team,status:p.status,...Object.fromEntries(Object.entries(sums[p.id]).map(([k,v])=>[k,((k==='steals'&&p.stl===null)||(k==='blocks'&&p.blk===null)||(k==='stocks'&&(p.stl===null||p.blk===null)))?null:v/count]))})),overtimeRate:overtime/count,overtimePeriods:overtimePeriods/count,blowoutRate:blowouts/count,legs:legs.map((l,i)=>({...l,hitRate:legWins[i]/count})),jointHitRate:legs.length?allWin/count:null,pairHitRates:pairWins.map(r=>r.map(n=>n/count)),model:VERSION,runCount:count};
+ return {playerOutcomes,home,away,players:players.map(p=>({id:p.id,player:p.name,team:p.team,status:p.status,...Object.fromEntries(Object.entries(sums[p.id]).map(([k,v])=>[k,(!collectDefense||k==='steals'&&p.stl===null||k==='blocks'&&p.blk===null||k==='stocks'&&(p.stl===null||p.blk===null))&&['steals','blocks','stocks'].includes(k)?null:v/count]))})),overtimeRate:overtime/count,overtimePeriods:overtimePeriods/count,blowoutRate:blowouts/count,legs:legs.map((l,i)=>({...l,hitRate:legWins[i]/count})),jointHitRate:legs.length?allWin/count:null,pairHitRates:pairWins.map(r=>r.map(n=>n/count)),model:VERSION,runCount:count};
 }
 // Paired counterfactual sensitivity: identical seeds, only availability changes.
 // Diagnostic, not evidence that the estimated injury impact is historically accurate.
