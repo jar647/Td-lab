@@ -42,7 +42,9 @@ assert(validation.analyze(original.picks,{now}).groups[0].bands.some(b=>b.band==
 assert.equal(validation.analyze(original.picks.map(p=>({...p,score:79.99})),{now}).counts.eligibleProps,0);
 const frozen=JSON.stringify(original.picks[0]),captured=ledger.capture(original,[{...over,score:95}],now+1000);
 assert.equal(captured.ledger.picks[0].score,80);
-assert.equal(JSON.stringify(captured.ledger.picks[0]),frozen,'Frozen default recommendation does not change');
+assert.equal(captured.ledger.picks[0].line,19.5);assert.equal(captured.ledger.picks[0].capturedAt,original.picks[0].capturedAt);
+assert.equal(JSON.stringify(original.picks[0]),frozen,'Earlier frozen record stays immutable');
+assert.equal(captured.ledger.picks[0].revisions.length,1,'Later model updates are audited as revisions, not new outcomes');
 const under={...over,market:'stocks',side:'under',line:2.5,label:'Player UNDER 2.5 stocks',score:80,playerId:'another'};
 assert.equal(ledger.capture(original,[under],now+1000).added,1,'Track the exact recommended UNDER for defensive stocks');
 assert.equal(require('./nfl_goal1').MIN_SCORE,60,'NFL requirements must not change');
