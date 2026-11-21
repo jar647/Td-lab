@@ -96,7 +96,7 @@ assert(evaluate([same[0],soloNoBatch]).available);
 const invalid=[
  ['minimum matchup rating',p=>{p.score=74}],
  ['rating consistency',p=>{p.matchupRating={score:99}}],
- ['OVER only',p=>{p.side='under'}],
+ ['UNDER without independent matchup and line evidence',p=>{p.side='under'}],
  ['eligibility',p=>{p.eligible=false}],
  ['review required',p=>{p.reviewRequired=true}],
  ['parlay held',p=>{p.parlayEligible=false}],
@@ -135,7 +135,7 @@ const invalid=[
  ['insufficient simulation draws',p=>{p.samples=p.samples.slice(0,999)}],
  ['non-numeric line',p=>{p.line='14.5'}],
  ['negative line',p=>{p.line=-.5}],
- ['unknown market',p=>{p.market='stocks'}]
+ ['unknown market',p=>{p.market='turnovers'}]
 ];
 for(const [name,mutate] of invalid){
  const changed=candidate('invalid','g2');mutate(changed);
