@@ -124,8 +124,10 @@
       "probabilityCalibrated": false,
       "reason": "Suppressed defensive position rate, stable supported role, lower simulated forecast and at least 70% experimental UNDER clears. Sportsbook line unverified.",
       "capturedAt": "2026-11-21T17:22:28.575Z",
-      "result": "pending",
-      "frozen": true
+      "result": "win",
+      "frozen": true,
+      "actual": 1,
+      "gradedAt": "2026-11-22T06:44:57.126Z"
     },
     {
       "key": "401910024|3934672|assists|under-shadow",
@@ -186,18 +188,224 @@
       "probabilityCalibrated": false,
       "reason": "Suppressed defensive position rate, stable supported role, lower simulated forecast and at least 70% experimental UNDER clears. Sportsbook line unverified.",
       "capturedAt": "2026-11-21T23:25:15.662Z",
+      "result": "win",
+      "frozen": true,
+      "actual": 5,
+      "gradedAt": "2026-11-22T06:44:57.126Z"
+    },
+    {
+      "key": "401910031|4712849|threes|under-shadow",
+      "gameId": "401910031",
+      "game": {
+        "id": "401910031",
+        "date": "2026-11-23T00:00Z",
+        "status": "STATUS_SCHEDULED",
+        "season_type": 2,
+        "home": "Washington Wizards",
+        "away": "Orlando Magic",
+        "players": []
+      },
+      "startsAt": "2026-11-23T00:00Z",
+      "playerId": "4712849",
+      "player": "Anthony Black",
+      "team": "Orlando Magic",
+      "opponent": "Washington Wizards",
+      "position": "PG",
+      "market": "threes",
+      "side": "under",
+      "score": 81,
+      "line": 2.5,
+      "projection": 1.584,
+      "recordedBaseline": 1.8181818181818181,
+      "simulatedFrequency": 0.792,
+      "simulatedRuns": 1000,
+      "sourceTimestamps": {
+        "games": "2026-11-22T06:36:42.991257+00:00",
+        "injuries": "2026-11-22T04:47:30.763884+00:00",
+        "rosters": "2026-11-22T06:36:46.411335+00:00"
+      },
+      "sampleDepth": 8,
+      "factors": [
+        {
+          "label": "Opponent suppression by position (shrunk and schedule-adjusted)",
+          "points": 34,
+          "max": 40
+        },
+        {
+          "label": "Supported and stable minutes",
+          "points": 25,
+          "max": 25
+        },
+        {
+          "label": "Simulated projection below recorded player baseline",
+          "points": 10,
+          "max": 20
+        },
+        {
+          "label": "Verified player and opponent samples",
+          "points": 12,
+          "max": 15
+        }
+      ],
+      "studyOnly": true,
+      "priceVerified": false,
+      "probabilityCalibrated": false,
+      "reason": "Suppressed defensive position rate, stable supported role, lower simulated forecast and at least 70% experimental UNDER clears. Sportsbook line unverified.",
+      "capturedAt": "2026-11-22T06:44:57.126Z",
+      "result": "pending",
+      "frozen": true
+    },
+    {
+      "key": "401910033|3138160|threes|under-shadow",
+      "gameId": "401910033",
+      "game": {
+        "id": "401910033",
+        "date": "2026-11-23T00:00Z",
+        "status": "STATUS_SCHEDULED",
+        "season_type": 2,
+        "home": "Utah Jazz",
+        "away": "Dallas Mavericks",
+        "players": []
+      },
+      "startsAt": "2026-11-23T00:00Z",
+      "playerId": "3138160",
+      "player": "Caleb Martin",
+      "team": "Dallas Mavericks",
+      "opponent": "Utah Jazz",
+      "position": "SG",
+      "market": "threes",
+      "side": "under",
+      "score": 81,
+      "line": 2.5,
+      "projection": 0.95,
+      "recordedBaseline": 1.0833333333333333,
+      "simulatedFrequency": 0.93,
+      "simulatedRuns": 1000,
+      "sourceTimestamps": {
+        "games": "2026-11-22T06:36:42.991257+00:00",
+        "injuries": "2026-11-22T04:47:30.763884+00:00",
+        "rosters": "2026-11-22T06:36:46.411335+00:00"
+      },
+      "sampleDepth": 10,
+      "factors": [
+        {
+          "label": "Opponent suppression by position (shrunk and schedule-adjusted)",
+          "points": 31,
+          "max": 40
+        },
+        {
+          "label": "Supported and stable minutes",
+          "points": 25,
+          "max": 25
+        },
+        {
+          "label": "Simulated projection below recorded player baseline",
+          "points": 10,
+          "max": 20
+        },
+        {
+          "label": "Verified player and opponent samples",
+          "points": 15,
+          "max": 15
+        }
+      ],
+      "studyOnly": true,
+      "priceVerified": false,
+      "probabilityCalibrated": false,
+      "reason": "Suppressed defensive position rate, stable supported role, lower simulated forecast and at least 70% experimental UNDER clears. Sportsbook line unverified.",
+      "capturedAt": "2026-11-22T06:44:57.126Z",
+      "result": "pending",
+      "frozen": true
+    },
+    {
+      "key": "401910035|4397424|threes|under-shadow",
+      "gameId": "401910035",
+      "game": {
+        "id": "401910035",
+        "date": "2026-11-23T01:30Z",
+        "status": "STATUS_SCHEDULED",
+        "season_type": 2,
+        "home": "Golden State Warriors",
+        "away": "Boston Celtics",
+        "players": []
+      },
+      "startsAt": "2026-11-23T01:30Z",
+      "playerId": "4397424",
+      "player": "Neemias Queta",
+      "team": "Boston Celtics",
+      "opponent": "Golden State Warriors",
+      "position": "C",
+      "market": "threes",
+      "side": "under",
+      "score": 100,
+      "line": 0.5,
+      "projection": 0.255,
+      "recordedBaseline": 0.36363636363636365,
+      "simulatedFrequency": 0.772,
+      "simulatedRuns": 1000,
+      "sourceTimestamps": {
+        "games": "2026-11-22T06:36:42.991257+00:00",
+        "injuries": "2026-11-22T04:47:30.763884+00:00",
+        "rosters": "2026-11-22T06:36:46.411335+00:00"
+      },
+      "sampleDepth": 10,
+      "factors": [
+        {
+          "label": "Opponent suppression by position (shrunk and schedule-adjusted)",
+          "points": 40,
+          "max": 40
+        },
+        {
+          "label": "Supported and stable minutes",
+          "points": 25,
+          "max": 25
+        },
+        {
+          "label": "Simulated projection below recorded player baseline",
+          "points": 20,
+          "max": 20
+        },
+        {
+          "label": "Verified player and opponent samples",
+          "points": 15,
+          "max": 15
+        }
+      ],
+      "studyOnly": true,
+      "priceVerified": false,
+      "probabilityCalibrated": false,
+      "reason": "Suppressed defensive position rate, stable supported role, lower simulated forecast and at least 70% experimental UNDER clears. Sportsbook line unverified.",
+      "capturedAt": "2026-11-22T06:44:57.126Z",
       "result": "pending",
       "frozen": true
     }
   ],
   "summary": {
-    "captured": 3,
-    "graded": 1,
-    "pending": 2,
+    "captured": 6,
+    "graded": 3,
+    "pending": 3,
     "void": 0,
     "probabilitiesCalibrated": false,
     "betReady": false,
     "groups": [
+      {
+        "market": "assists",
+        "band": "BELOW",
+        "n": 1,
+        "observedHitRate": 1,
+        "meanSimulatedFrequency": 0.949,
+        "brier": 0.002601000000000005,
+        "statisticallyReviewed": false
+      },
+      {
+        "market": "threes",
+        "band": "85–89",
+        "n": 1,
+        "observedHitRate": 1,
+        "meanSimulatedFrequency": 0.85,
+        "brier": 0.022500000000000006,
+        "statisticallyReviewed": false
+      },
       {
         "market": "threes",
         "band": "90–94",
