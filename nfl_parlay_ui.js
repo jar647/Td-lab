@@ -78,7 +78,7 @@
     '<div data-parlay-offer-list>'+offers.map(o=>{const c=researchPool(s).find(c=>c.key===o.candidateKey);return '<p class="statsline">'+esc(c?.p.player||'Unavailable player')+' · OVER '+esc(o.line)+' '+esc(c?.d.label||'')+' · '+esc(Number(o.odds)>0?'+'+Number(o.odds):o.odds)+' <button type="button" class="smallbtn" data-parlay-offer-remove="'+esc(o.id)+'">Remove option</button></p>'}).join('')+'</div></details>'+
     '<button type="button" class="primary" data-parlay-optimize'+(!s.ready||running?' disabled':'')+'>Compare my options · '+count+' legs</button>'+
     '<button type="button" class="smallbtn" data-parlay-generate'+(!s.ready?' disabled':'')+'>Explore '+count+' unpriced research targets</button>'+
-    '<button type="button" class="smallbtn" data-parlay-add-research'+(!draft.length||optimized||!s.ready?' disabled':'')+'>Add all '+draft.length+' suggested picks to Quick Slip</button>'+ 
+    '<button type="button" class="primary" data-parlay-add-research'+(!draft.length||optimized||!s.ready?' disabled':'')+'>＋ Add all '+draft.length+' picks to Quick Slip</button>'+ 
     '<p class="statsline" data-parlay-status role="status">'+esc(message||(!s.ready?s.reason:'Distinct players; no filler legs. Same-game mode accounts for shared opportunities.'))+'</p>'+
     '<div data-parlay-legs>'+draft.map((c,i)=>{
      const q=quote(c,s);
