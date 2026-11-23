@@ -1,16 +1,16 @@
 {
   "method": "Earliest archived pre-tip simulator forecast per game; only final ESPN box scores; no backfilled forecasts",
-  "captured_forecasts": 119,
+  "captured_forecasts": 121,
   "awaiting_final_games": 17,
   "unusable_final_boxes": 0,
   "archive_snapshots": 240,
-  "candidate_locks": 1051,
-  "graded_games": 102,
-  "score_mae": 10.567156862745097,
-  "margin_mae": 12.238235294117647,
-  "total_mae": 16.412745098039217,
-  "brier": 0.23009140235294118,
-  "winner_accuracy": 0.6176470588235294,
+  "candidate_locks": 1063,
+  "graded_games": 104,
+  "score_mae": 10.490384615384615,
+  "margin_mae": 12.242307692307692,
+  "total_mae": 16.271153846153847,
+  "brier": 0.2317335573076923,
+  "winner_accuracy": 0.6153846153846154,
   "validated_for_betting": false,
   "rows": [
     {
@@ -1643,6 +1643,38 @@
       "total_error": 34.599999999999994,
       "brier": 0.40309801,
       "correct_winner": false,
+      "model": "nba-possession-audit-v4"
+    },
+    {
+      "game_id": "401910029",
+      "tipoff": "2026-11-22T20:30Z",
+      "captured_at": "2026-11-20T20:58:11.473515+00:00",
+      "predicted_home": 107.7,
+      "predicted_away": 113.5,
+      "actual_home": 107.0,
+      "actual_away": 97.0,
+      "home_probability": 0.3674,
+      "score_mae": 8.600000000000001,
+      "margin_error": 15.799999999999997,
+      "total_error": 17.19999999999999,
+      "brier": 0.4001827600000001,
+      "correct_winner": false,
+      "model": "nba-possession-audit-v4"
+    },
+    {
+      "game_id": "401910030",
+      "tipoff": "2026-11-22T23:00Z",
+      "captured_at": "2026-11-20T23:55:56.020670+00:00",
+      "predicted_home": 118.9,
+      "predicted_away": 118,
+      "actual_home": 123.0,
+      "actual_away": 113.0,
+      "home_probability": 0.5196,
+      "score_mae": 4.549999999999997,
+      "margin_error": 9.099999999999994,
+      "total_error": 0.9000000000000057,
+      "brier": 0.23078416000000004,
+      "correct_winner": true,
       "model": "nba-possession-audit-v4"
     }
   ]
