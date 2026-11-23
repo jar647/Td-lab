@@ -252,8 +252,10 @@
       "probabilityCalibrated": false,
       "reason": "Suppressed defensive position rate, stable supported role, lower simulated forecast and at least 70% experimental UNDER clears. Sportsbook line unverified.",
       "capturedAt": "2026-11-22T06:44:57.126Z",
-      "result": "pending",
-      "frozen": true
+      "result": "win",
+      "frozen": true,
+      "actual": 2,
+      "gradedAt": "2026-11-23T09:53:03.799Z"
     },
     {
       "key": "401910033|3138160|threes|under-shadow",
@@ -314,8 +316,10 @@
       "probabilityCalibrated": false,
       "reason": "Suppressed defensive position rate, stable supported role, lower simulated forecast and at least 70% experimental UNDER clears. Sportsbook line unverified.",
       "capturedAt": "2026-11-22T06:44:57.126Z",
-      "result": "pending",
-      "frozen": true
+      "result": "loss",
+      "frozen": true,
+      "actual": 3,
+      "gradedAt": "2026-11-23T09:53:03.799Z"
     },
     {
       "key": "401910035|4397424|threes|under-shadow",
@@ -376,14 +380,16 @@
       "probabilityCalibrated": false,
       "reason": "Suppressed defensive position rate, stable supported role, lower simulated forecast and at least 70% experimental UNDER clears. Sportsbook line unverified.",
       "capturedAt": "2026-11-22T06:44:57.126Z",
-      "result": "pending",
-      "frozen": true
+      "result": "win",
+      "frozen": true,
+      "actual": 0,
+      "gradedAt": "2026-11-23T09:53:03.799Z"
     }
   ],
   "summary": {
     "captured": 6,
-    "graded": 3,
-    "pending": 3,
+    "graded": 6,
+    "pending": 0,
     "void": 0,
     "probabilitiesCalibrated": false,
     "betReady": false,
@@ -413,6 +419,24 @@
         "observedHitRate": 1,
         "meanSimulatedFrequency": 0.875,
         "brier": 0.015625,
+        "statisticallyReviewed": false
+      },
+      {
+        "market": "threes",
+        "band": "95–100",
+        "n": 1,
+        "observedHitRate": 1,
+        "meanSimulatedFrequency": 0.772,
+        "brier": 0.05198399999999999,
+        "statisticallyReviewed": false
+      },
+      {
+        "market": "threes",
+        "band": "BELOW",
+        "n": 2,
+        "observedHitRate": 0.5,
+        "meanSimulatedFrequency": 0.861,
+        "brier": 0.45408200000000004,
         "statisticallyReviewed": false
       }
     ]
