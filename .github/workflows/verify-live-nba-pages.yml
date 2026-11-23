@@ -14,6 +14,7 @@ on:
       - 'recommendation_ledger.js'
       - 'results.html'
       - '.github/workflows/verify-live-nba-pages.yml'
+      - 'scripts/nba_market_live_audit.cjs'
   push:
     branches: [main]
     paths:
@@ -38,6 +39,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
+      - name: Checkout current NBA analysis code
+        uses: actions/checkout@v4
       - name: Verify published NBA page and simulated props UI
         shell: bash
         run: |
@@ -99,3 +102,7 @@ jobs:
           done
           echo 'FAIL: Could not verify the updated NBA page on the live GitHub Pages site.'
           exit 1
+
+      - name: Run read-only live NBA market attrition audit
+        shell: bash
+        run: node scripts/nba_market_live_audit.cjs
