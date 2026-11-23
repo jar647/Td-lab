@@ -87,7 +87,7 @@
    });
   }
   function marketKey(value){
-   const key=String(value||'unknown').trim().toLowerCase().replace(/\\s+/g,' ');
+   const key=String(value||'unknown').trim().toLowerCase().replace(/\s+/g,' ');
    return ({'points + rebounds':'pr','points + assists':'pa','rebounds + assists':'ra','steals + blocks':'stocks'})[key]||key;
   }
   function countMarkets(rows){const result={};for(const row of rows||[]){const key=marketKey(row?.market);result[key]=(result[key]||0)+1;}return result;}
