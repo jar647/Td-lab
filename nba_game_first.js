@@ -104,7 +104,7 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
     }
    }
   }
-  return {rows,underWeaknesses:(positional.weaknesses||[]).filter(w=>w.side==='under'),players:simulation.players.map(p=>({...p,reviewReasons:playerReviews.get(p.id)||[]})),reviewedMarkets:rows.filter(r=>r.reviewRequired).length,model: model.version,generatedAt:new Date(now).toISOString(),inputTimes:model.inputTimes,context:model.context,warnings:model.warnings,pace:model.pace,blowoutRate:simulation.blowoutRate,reason:null};
+  return {rows,scoreBands:positional.scoreBands||{},underWeaknesses:(positional.weaknesses||[]).filter(w=>w.side==='under'),players:simulation.players.map(p=>({...p,reviewReasons:playerReviews.get(p.id)||[]})),reviewedMarkets:rows.filter(r=>r.reviewRequired).length,model: model.version,generatedAt:new Date(now).toISOString(),inputTimes:model.inputTimes,context:model.context,warnings:model.warnings,pace:model.pace,blowoutRate:simulation.blowoutRate,reason:null};
  }catch(e){return {rows:[],reason:e.message,warnings:[]};}
 }
 return {minimumScore:propLines.minimumScore,chance,candidate,build,analyze,markets};
