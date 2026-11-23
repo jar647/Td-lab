@@ -75,7 +75,6 @@ test('direct combined-market evidence independently supports combo ratings and f
   assert.equal(combo.matchupRating.limitingMarket,'pra');
   assert(engine.candidate(combo),'A supported combined-market score of 80 qualifies without each component individually clearing 80');
  });
-});
  const lowComponent=fixture();lowComponent.candidates.find(r=>r.market==='rebounds').researchScore=65;
  lowComponent.candidates.find(r=>r.market==='rebounds').matchupRating.score=65;
  mockAnalyze(lowComponent,a=>assert(engine.candidate(a.rows.find(r=>r.market==='Points + Rebounds')),'Direct PR evidence must not be discarded when standalone rebounds score is lower'));
