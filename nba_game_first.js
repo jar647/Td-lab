@@ -80,15 +80,17 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
      const direct=ratings.get(player.id+'|'+canonical(market)+'|'+side);
      const roleEvidence=positional.roleEvidence?.players?.[String(player.id)]||direct?.roleEvidence||positionRows.find(r=>r?.roleEvidence)?.roleEvidence;
      const roleSupported=supportedRole(roleEvidence,player.id,team);
-     const supported=positionRows.every(Boolean)&&roleSupported;
+     const evidenceRows=ks.length>1?(direct?[direct]:[]):positionRows;
+     const supported=evidenceRows.length>0&&evidenceRows.every(Boolean)&&roleSupported;
      if(!roleSupported)reviewReasons.push(...(roleEvidence?.holdReasons?.length?roleEvidence.holdReasons:['Supported rotation and opportunity evidence is unavailable for this player.']));
-     // A combination's rating is constrained by its weakest supported stat.
-     // Use that SAME stat's score factors so the displayed breakdown sums to the score.
-     const limiting=supported?positionRows.reduce((lowest,r)=>r.researchScore<lowest.researchScore?r:lowest):null;
+     // Combined props use their independently scored combined-market matchup and
+     // same-draw summed outcomes. Individual components need not separately
+     // pass 80 when the combined market itself has supported 80+ evidence.
+     const limiting=supported?evidenceRows.reduce((lowest,r)=>r.researchScore<lowest.researchScore?r:lowest):null;
      const matchupRating=limiting?{side,score:limiting.researchScore,factors:limiting.matchupRating.factors,limitingMarket:limiting.market}:null;
      // Only real observed position allowances and player histories enter the
      // evidence card. Never substitute simulated frequencies for observed hits.
-     const matchupEvidence=supported?positionRows.map(r=>({
+     const matchupEvidence=supported?evidenceRows.map(r=>({
       market:r.market,position:r.position,opponent:r.opponent,componentScore:r.researchScore,
       allowed:r.weakness.allowed,leagueAverage:r.weakness.leagueAverage,
       opponentGames:r.weakness.games,playerAverage:r.playerAverage,
