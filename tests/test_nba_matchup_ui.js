@@ -13,7 +13,11 @@ function fixture(){
  const comps=[
   {market:'points',score:92,allowed:26,leagueAverage:21,playerAverage:23,peerAverage:18,baseline:15},
   {market:'rebounds',score:85,allowed:15,leagueAverage:11,playerAverage:11,peerAverage:8,baseline:8},
-  {market:'assists',score:80,allowed:9,leagueAverage:7,playerAverage:8,peerAverage:6,baseline:5}
+  {market:'assists',score:80,allowed:9,leagueAverage:7,playerAverage:8,peerAverage:6,baseline:5},
+  {market:'pr',score:88,allowed:41,leagueAverage:32,playerAverage:34,peerAverage:26,baseline:25},
+  {market:'pa',score:87,allowed:35,leagueAverage:28,playerAverage:31,peerAverage:24,baseline:25},
+  {market:'ra',score:84,allowed:24,leagueAverage:18,playerAverage:19,peerAverage:14,baseline:10},
+  {market:'pra',score:80,allowed:49,leagueAverage:38,playerAverage:42,peerAverage:31,baseline:30}
  ];
  const historical=Array.from({length:8},()=>({minutes:30,points:25,rebounds:11,assists:8}));
  const player={id:'P1',name:'Fixture Player',team:'A',sample:8,pending:false,baseline:30,fga:.45,tpa:.12,orb:.06,drb:.2,ast:.25,statHistory:historical};
@@ -47,7 +51,7 @@ function mockAnalyze(f,body){
   possessions.build=priorBuild;possessions.draws=priorDraws;matchups.analyze=priorMatchups;
  }
 }
-test('observed NBA matchup evidence reconciles with weakest combo stat and score factors',()=>{
+test('direct combined-market evidence independently supports combo ratings and factor reconciliation',()=>{
  mockAnalyze(fixture(),a=>{
   assert.equal(a.reason,null);
   const rows=a.rows.filter(r=>r.matchupRating&&r.side==='over');
@@ -57,7 +61,7 @@ test('observed NBA matchup evidence reconciles with weakest combo stat and score
    assert.equal(r.matchupRating.score,limiting.componentScore);
    assert.equal(r.matchupRating.limitingMarket,limiting.market);
    assert.equal(r.matchupRating.factors.reduce((s,x)=>s+x.points,0),r.matchupRating.score);
-   assert.equal(evidence.length,r.market==='PRA'?3:r.market.includes(' + ')?2:1);
+   assert.equal(evidence.length,1,'A combined market must provide its own supported normalized matchup evidence');
    for(const x of evidence){
     assert.equal(x.opponent,'B');assert.equal(x.opponentGames,8);assert.equal(x.playerGames,8);
     assert(x.allowed>x.leagueAverage);assert(x.playerAverage>x.peerAverage);
@@ -68,9 +72,13 @@ test('observed NBA matchup evidence reconciles with weakest combo stat and score
   }
   const combo=rows.find(r=>r.market==='PRA');
   assert.equal(combo.matchupRating.score,80);
-  assert.equal(combo.matchupRating.limitingMarket,'assists');
-  assert(engine.candidate(combo),'Regular NBA combo props at 80/100 qualify under the 75-point gate');
+  assert.equal(combo.matchupRating.limitingMarket,'pra');
+  assert(engine.candidate(combo),'A supported combined-market score of 80 qualifies without each component individually clearing 80');
  });
+});
+ const lowComponent=fixture();lowComponent.candidates.find(r=>r.market==='rebounds').researchScore=65;
+ lowComponent.candidates.find(r=>r.market==='rebounds').matchupRating.score=65;
+ mockAnalyze(lowComponent,a=>assert(engine.candidate(a.rows.find(r=>r.market==='Points + Rebounds')),'Direct PR evidence must not be discarded when standalone rebounds score is lower'));
 });
 
 test('NBA game-first and matchup recommendations share one model, draw batch and role-based line policy',()=>{
