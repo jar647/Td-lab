@@ -52,7 +52,8 @@ jobs:
             grep -Fq 'INCOMPLETE CHECK' /tmp/prop-shop-nba.html &&
             grep -Fq 'nbaRefreshVisibleSlate' /tmp/prop-shop-nba.html &&
             grep -Fq 'nba_game_first.js?v=nba80-def-under-20261121' /tmp/prop-shop-nba.html &&
-            grep -Fq 'nba_selection_ui.js?v=nba80-def-under-20261121' /tmp/prop-shop-nba.html &&
+            grep -Fq 'nba_selection_ui.js?v=nba-market-stages-20261123' /tmp/prop-shop-nba.html &&
+            grep -Fq 'Audit all 11 NBA markets' /tmp/prop-shop-nba.html &&
             grep -Fq 'nba_possession_engine.js?v=nba80-def-under-20261121' /tmp/prop-shop-nba.html &&
             ! grep -Fq 'UNDERS are being evaluated in shadow mode at 85/100' /tmp/prop-shop-nba.html &&
             curl --fail --location --silent --show-error --connect-timeout 10 --max-time 25 "${site}/nba_prop_lines.js?verify=${GITHUB_SHA}" -o /tmp/prop-shop-lines.js &&
@@ -69,10 +70,12 @@ jobs:
             grep -Fq 'stats[p.id].stocks=stats[p.id].steals+stats[p.id].blocks' /tmp/prop-shop-possessions.js &&
             curl --fail --location --silent --show-error --connect-timeout 10 --max-time 25 "${site}/nba_selection_ui.js?verify=${GITHUB_SHA}" -o /tmp/prop-shop-selection-ui.js &&
             grep -Fq 'reuseFreshInputs' /tmp/prop-shop-selection-ui.js &&
-            grep -Fq 'nba_parlay_worker.js?v=nba80-def-under-20261121' /tmp/prop-shop-selection-ui.js &&
+            grep -Fq 'marketAudit:marketAudit(data.candidates,accepted' /tmp/prop-shop-selection-ui.js &&
+            grep -Fq 'nba_parlay_worker.js?v=nba-market-stage-audit-20261123' /tmp/prop-shop-selection-ui.js &&
             curl --fail --location --silent --show-error --connect-timeout 10 --max-time 25 "${site}/nba_parlay_worker.js?verify=${GITHUB_SHA}" -o /tmp/prop-shop-worker.js &&
             grep -Fq 'nba_game_first.js?v=nba80-def-under-20261121' /tmp/prop-shop-worker.js &&
             grep -Fq 'gamesAnalyzed' /tmp/prop-shop-worker.js &&
+            grep -Fq 'diagnostics.marketStages=stages;' /tmp/prop-shop-worker.js &&
             curl --fail --location --silent --show-error --connect-timeout 10 --max-time 25 "${site}/recommendation_ledger.js?verify=${GITHUB_SHA}" -o /tmp/prop-shop-ledger.js &&
             grep -Fq "p.market==='first_basket'" /tmp/prop-shop-ledger.js &&
             grep -Fq "stocks:['STL','BLK']" /tmp/prop-shop-ledger.js &&
