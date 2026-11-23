@@ -86,6 +86,10 @@
     return [c];
    });
   }
+  function marketAudit(raw,accepted){
+   const summarize=rows=>{const out={};for(const row of rows||[]){const market=String(row?.market||'unknown').toLowerCase();out[market]=(out[market]||0)+1}return out};
+   return {beforeFinalSafety:summarize(raw),afterFinalSafety:summarize(accepted),rejectedByFinalSafety:Math.max(0,(raw||[]).length-(accepted||[]).length)};
+  }
   async function fallback(inputs,version){
    if(typeof gf?.analyze!=='function'||typeof gf?.candidate!=='function')return unavailable('The NBA research engine is unavailable.');
    const rows=[],held=[],diagnostics={gamesAnalyzed:0,modelRows:0,eligibleRows:0,ratedRows:0,qualifiedRows:0,modelUnavailableGames:0};
@@ -95,7 +99,7 @@
     const result=gf.analyze(inputs.games[i],inputs.feed,inputs.injuries,inputs.rosters,inputs.context,now(),{count:1000});
     const sampled=result?.rows||[];rows.push(...sampled);diagnostics.gamesAnalyzed++;diagnostics.modelRows+=sampled.length;diagnostics.eligibleRows+=sampled.filter(r=>['over','under'].includes(r.side)&&r.eligible===true&&!r.reviewRequired).length;diagnostics.ratedRows+=sampled.filter(r=>['over','under'].includes(r.side)&&Number.isFinite(r.matchupRating?.score)&&r.matchupRating.score>=gf.minimumScore(r.market,r.side)).length;if(result?.reason){held.push({gameId:String(inputs.games[i].id),reason:result.reason});if(!sampled.length)diagnostics.modelUnavailableGames++;}
    }
-   const eligible=supported(rows,inputs);diagnostics.qualifiedRows=eligible.length;return {candidates:eligible,held,diagnostics,signature:inputs.signature,ready:true,reason:''};
+   const eligible=supported(rows,inputs);diagnostics.qualifiedRows=eligible.length;diagnostics.marketAudit=marketAudit(rows,eligible);return {candidates:eligible,held,diagnostics,signature:inputs.signature,ready:true,reason:''};
   }
   function runWorker(inputs,version){
    const make=options.workerFactory||(typeof root.Worker==='function'?()=>new root.Worker('./nba_parlay_worker.js?v=nba80-def-under-20261121'):null);
@@ -109,7 +113,7 @@
       if(data.type==='progress'){progress(data);return}
       if(data.type==='error')return finish(unavailable(typeof data.error==='string'?data.error:'The NBA simulation worker failed.'));
       if(data.type!=='result'||!Array.isArray(data.candidates))return finish(unavailable('The NBA simulation returned incomplete results. Retry the research scan.'));
-      finish({candidates:supported(data.candidates,inputs),held:Array.isArray(data.held)?data.held:[],diagnostics:data.diagnostics||null,signature:inputs.signature,ready:true,reason:''});
+      const accepted=supported(data.candidates,inputs);const diagnostics={...(data.diagnostics||{}),marketAudit:marketAudit(data.candidates,accepted)};finish({candidates:accepted,held:Array.isArray(data.held)?data.held:[],diagnostics,signature:inputs.signature,ready:true,reason:''});
      };
      worker.onerror=()=>finish(unavailable('The NBA simulation worker failed. Retry the research scan.'));
      worker.onmessageerror=()=>finish(unavailable('The NBA simulation result could not be read.'));
