@@ -26,10 +26,27 @@ function mount({host,slip}){
  function picks(){return slip.getPicks().map((p,i)=>({...p,_key:key(p,i)}))}
  function showHistory(){history.innerHTML=placed.length?placed.map((s,i)=>'<p><b>'+escape(s.date)+'</b> · '+s.picks.length+' legs · '+escape(s.status||'Pending')+' <button type="button" data-smart-grade="'+i+'" data-grade="won">Won</button> <button type="button" data-smart-grade="'+i+'" data-grade="lost">Lost</button> <button type="button" data-smart-grade="'+i+'" data-grade="push">Push</button><br>'+s.picks.map(p=>escape(p.player+' '+p.prop)).join(' · ')+'</p>').join(''):'<p>No placed slips recorded.</p>'}
  function render(){const ps=picks(),valid=new Set(ps.map(p=>p._key));selected=new Set([...selected].filter(k=>valid.has(k)));list.innerHTML=ps.map((p,i)=>'<label style="display:flex;align-items:center;gap:8px;margin:8px 0"><input type="checkbox" style="width:auto" data-smart-pick="'+i+'" '+(selected.has(p._key)?'checked':'')+'><span>'+escape(p.player)+' · '+escape(p.recommendation||p.market||'prop')+'</span></label>').join('')||'<p>Save player props to use the analyzer.</p>';showHistory()}
- function analyze(){const ps=picks().filter(p=>selected.has(p._key));if(ps.length<2||ps.length>10){out.textContent='Select 2–10 legs.';return}const related=[];for(let i=0;i<ps.length;i++)for(let j=i+1;j<ps.length;j++){const r=relation(ps[i],ps[j]);if(r)related.push({a:ps[i].player,b:ps[j].player,...r})}
- const weakest=[...ps].sort((a,b)=>rank(a)-rank(b))[0],c=confidence(weakest);
- out.innerHTML='<h4>Selected: '+ps.length+' legs</h4><p><b>Review first:</b> '+escape(weakest.player)+' · '+escape(weakest.recommendation||weakest.market)+' ('+(c.score!==null?'research score '+c.score+'/100':c.scenario!==null?'uncalibrated scenario '+(c.scenario*100).toFixed(1)+'%':c.sample!==null?'small-sample rate '+(c.sample*100).toFixed(0)+'%':'insufficient evidence')+'). Ranking is a research heuristic, not a calibrated weakest-leg probability.</p><h4>Correlation alerts</h4>'+(related.length?related.map(r=>'<p><b>'+escape(r.a)+' + '+escape(r.b)+': '+escape(r.kind)+'</b><br>'+escape(r.detail)+'</p>').join(''):'<p>No shared-game pairs identified from saved metadata; missing game identifiers may hide dependencies.</p>')+'<p>Do not multiply displayed scenario percentages to price this slip. Use the exact joint simulator when supported, and enter actual combined sportsbook odds there.</p><button type="button" data-smart-place>Record these as placed</button>';
+
+ function verdict(p){
+  const c=confidence(p),score=c.score!==null?c.score/100:c.scenario;
+  if(score===null)return {icon:'⚠',label:'REVIEW',color:'#ffce7d',reason:'Insufficient verified evidence to recommend this leg'};
+  if(score<0.7)return {icon:'✕',label:'LEAVE OUT',color:'#ff7676',reason:c.score!==null?'Research score below 70/100':'Uncalibrated scenario estimate below 70%; review against verified simulation'};
+  return {icon:'✓',label:'KEEP',color:'#72f1b8',reason:c.score!==null?'Research score '+c.score+'/100':'Scenario estimate '+(c.scenario*100).toFixed(1)+'% (uncalibrated)'};
  }
+ function analyze(){
+  const ps=picks().filter(p=>selected.has(p._key));
+  if(ps.length<2||ps.length>10){out.textContent='Select 2–10 legs.';return}
+  const rows=ps.map(p=>({p,v:verdict(p)}));
+  const kept=rows.filter(x=>x.v.label==='KEEP').length,left=rows.filter(x=>x.v.label==='LEAVE OUT').length,review=rows.filter(x=>x.v.label==='REVIEW').length;
+  const relations=[];for(let i=0;i<ps.length;i++)for(let j=i+1;j<ps.length;j++){const r=relation(ps[i],ps[j]);if(r)relations.push(r)}
+  const names=new Set(relations.map(r=>r.kind));
+  out.innerHTML='<h4 style="margin-bottom:8px">Your slip: '+ps.length+' plays</h4><p style="font-weight:700">✓ '+kept+' keep &nbsp; <span style="color:#ff7676">✕ '+left+' leave out</span> &nbsp; <span style="color:#ffce7d">⚠ '+review+' review</span></p>'+
+   rows.map(({p,v})=>'<div style="display:flex;gap:12px;align-items:start;padding:12px 0;border-top:1px solid #315644"><span style="font-size:24px;font-weight:900;color:'+v.color+'">'+v.icon+'</span><div><b>'+escape(p.player)+' · '+escape(p.recommendation||p.market||'prop')+'</b><div style="font-weight:800;color:'+v.color+'">'+v.label+'</div><small style="color:#a9c7b7">'+escape(v.reason)+'</small></div></div>').join('')+
+   '<p class="quick-slip-help"><b>Why these marks?</b> Preliminary research filter: score or scenario estimate of 70%+ = ✓; below 70% = ✕; missing evidence = ⚠. Scenario estimates are uncalibrated, so ✓ is not a guaranteed bet and ✕ is not a validated losing pick.</p>'+
+   (relations.length?'<p class="quick-slip-help"><b>Game overlap:</b> '+relations.length+' related pair'+(relations.length===1?'':'s')+' ('+escape([...names].join(', '))+'). Shared-game picks may help or compete with one another. Confirm with the exact joint simulator.</p>':'')+
+   '<button type="button" data-smart-place>Record these as placed</button>';
+ }
+
  list.addEventListener('change',e=>{const n=e.target.dataset.smartPick;if(n===undefined)return;const p=picks()[Number(n)];if(!p)return;if(e.target.checked){if(selected.size>=10){e.target.checked=false;out.textContent='Maximum ten legs.';return}selected.add(p._key)}else selected.delete(p._key);out.textContent='Selection updated. Analyze again.'});
  host.querySelector('[data-smart-build]').addEventListener('click',()=>{const ps=[...picks()].sort((a,b)=>rank(b)-rank(a)),chosen=[];for(const p of ps){if(chosen.length>=10)break;const samePlayer=chosen.some(q=>q.sport===p.sport&&q.player===p.player);if(!samePlayer)chosen.push(p)}selected=new Set(chosen.map(p=>p._key));render();analyze()});
  host.querySelector('[data-smart-check]').addEventListener('click',analyze);
