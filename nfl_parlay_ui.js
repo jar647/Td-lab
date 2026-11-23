@@ -78,6 +78,7 @@
     '<div data-parlay-offer-list>'+offers.map(o=>{const c=researchPool(s).find(c=>c.key===o.candidateKey);return '<p class="statsline">'+esc(c?.p.player||'Unavailable player')+' · OVER '+esc(o.line)+' '+esc(c?.d.label||'')+' · '+esc(Number(o.odds)>0?'+'+Number(o.odds):o.odds)+' <button type="button" class="smallbtn" data-parlay-offer-remove="'+esc(o.id)+'">Remove option</button></p>'}).join('')+'</div></details>'+
     '<button type="button" class="primary" data-parlay-optimize'+(!s.ready||running?' disabled':'')+'>Compare my options · '+count+' legs</button>'+
     '<button type="button" class="smallbtn" data-parlay-generate'+(!s.ready?' disabled':'')+'>Explore '+count+' unpriced research targets</button>'+
+    '<button type="button" class="smallbtn" data-parlay-add-research'+(!draft.length||optimized||!s.ready?' disabled':'')+'>Add all '+draft.length+' suggested picks to Quick Slip</button>'+ 
     '<p class="statsline" data-parlay-status role="status">'+esc(message||(!s.ready?s.reason:'Distinct players; no filler legs. Same-game mode accounts for shared opportunities.'))+'</p>'+
     '<div data-parlay-legs>'+draft.map((c,i)=>{
      const q=quote(c,s);
@@ -251,6 +252,24 @@
    }
    pump();return promise;
   }
+  function addResearch(){
+   const s=current();
+   if(!s||!draft.length||optimized){message='Explore current unpriced research targets first.';render();return false}
+   const distinct=new Set(draft.map(c=>playerId(c)));
+   if(distinct.size!==draft.length){message='Duplicate players in research draft; no picks saved.';render();return false}
+   for(const c of draft){
+    const line=Number(c.line);
+    if(!Number.isSafeInteger(line)||line<0){message='An unsupported research target was found; no picks saved.';render();return false}
+   }
+   for(const c of draft){
+    options.quickSlip.add({sport:'NFL',game:c.fixture.away+' @ '+c.fixture.home,gameId:gameId(c),
+     player:c.p.player,playerId:playerId(c),team:c.p.team,opponent:c.p.opp,market:c.d.label,marketKey:c.market,
+     side:'at_least',recommendationLine:Number(c.line),line:Number(c.line),recommendation:c.line+'+ '+c.d.label,
+     researchScore:c.researchScore,scenarioRate:c.scenarioRate,researchMethod:'nfl-unpriced-research-target',
+     notes:'Unpriced research target only. Verify availability, current injury status, sportsbook line and odds before betting.'});
+   }
+   message='Added all '+draft.length+' suggested research picks to Quick Slip. Existing picks kept. No sportsbook prices were assumed.';render();return true;
+  }
   function add(){
    const s=current();if(!s||!simulation||simulation.fingerprint!==fingerprint(s)||draft.length!==count){message='Simulate the complete current ticket before saving its book legs.';render();return false}
    const checked=draft.map(c=>({c,q:quote(c,s),r:review(c,s)}));
@@ -288,6 +307,7 @@
    if(Object.hasOwn(button.dataset,'parlayOptimize'))optimize();
    if(button.dataset.parlayReplace)generate(button.dataset.parlayReplace);
    if(Object.hasOwn(button.dataset,'parlaySimulate'))simulate();
+   if(Object.hasOwn(button.dataset,'parlayAddResearch'))addResearch();
    if(Object.hasOwn(button.dataset,'parlayAdd'))add();
   }
   host.addEventListener('click',click);host.addEventListener('change',change);host.addEventListener('input',input);refresh();
