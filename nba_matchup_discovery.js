@@ -192,10 +192,15 @@ function analyze(game,feed,rosters,injuries,now=Date.now(),options={}){
   }
  }
  candidates.sort((a,b)=>b.researchScore-a.researchScore||b.priority-a.priority||b.last5.rate-a.last5.rate||a.key.localeCompare(b.key));
+ const scoreBands=Object.fromEntries(markets.map(m=>[m,{under60:0,from60to69:0,from70to79:0,atLeast80:0}]));
+ for(const row of candidates){
+  const band=row.researchScore>=80?'atLeast80':row.researchScore>=70?'from70to79':row.researchScore>=60?'from60to69':'under60';
+  scoreBands[row.market][band]++;
+ }
  const seen=new Set(),topThree=candidates.filter(p=>qualifies(p)&&!seen.has(p.playerId)&&seen.add(p.playerId)).slice(0,3);
  const ready=pregame&&inputsFresh&&roleEvidence.ready===true;
  const reason=!pregame?'Historical view: recommendations close at tipoff.':!inputsFresh?'Fresh game, injury and roster data are required for player recommendations.':roleEvidence.ready!==true?roleEvidence.reason||'Supported rotation and opportunity evidence is unavailable; player picks are withheld.':!weaknesses.length?'Position-level samples are incomplete or no above-average allowances qualify yet.':!topThree.length?'PASS · No supported OVER/UNDER matchup meets 80/100.':null;
- return {game,weaknesses:weaknesses.sort((a,b)=>b.excess-a.excess),candidates:candidates.filter(qualifies),topThree,bestSingle:topThree[0]||null,coverage,ready,reason,
+ return {game,weaknesses:weaknesses.sort((a,b)=>b.excess-a.excess),scoreBands,candidates:candidates.filter(qualifies),topThree,bestSingle:topThree[0]||null,coverage,ready,reason,
   roleSummary:{ready:roleEvidence.ready===true,reason:roleEvidence.reason||null,heldPlayers:Object.values(roles).filter(r=>r.eligible!==true).length},roleEvidence,
   method:'ESPN primary positions with verified box-score possessions and positional minutes. Defensive rates are normalized per 100 possessions and 48 positional minutes, adjusted for supported earlier opponent production and shrunk toward league average. Raw per-game totals remain descriptive. Shared rotation evidence supplies minutes and observed opportunity proxies; unknown official tracking is not invented. Recorded hit rates are historical; role-adjusted line samples are not observed hits or calibrated probabilities.'};
 }
