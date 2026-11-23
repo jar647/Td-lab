@@ -80,15 +80,17 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
      const direct=ratings.get(player.id+'|'+canonical(market)+'|'+side);
      const roleEvidence=positional.roleEvidence?.players?.[String(player.id)]||direct?.roleEvidence||positionRows.find(r=>r?.roleEvidence)?.roleEvidence;
      const roleSupported=supportedRole(roleEvidence,player.id,team);
-     const supported=positionRows.every(Boolean)&&roleSupported;
+     const evidenceRows=ks.length>1?(direct?[direct]:[]):positionRows;
+     const supported=evidenceRows.length>0&&evidenceRows.every(Boolean)&&roleSupported;
      if(!roleSupported)reviewReasons.push(...(roleEvidence?.holdReasons?.length?roleEvidence.holdReasons:['Supported rotation and opportunity evidence is unavailable for this player.']));
-     // A combination's rating is constrained by its weakest supported stat.
-     // Use that SAME stat's score factors so the displayed breakdown sums to the score.
-     const limiting=supported?positionRows.reduce((lowest,r)=>r.researchScore<lowest.researchScore?r:lowest):null;
+     // Combined props use their independently scored combined-market matchup and
+     // same-draw summed outcomes. Individual components need not separately
+     // pass 80 when the combined market itself has supported 80+ evidence.
+     const limiting=supported?evidenceRows.reduce((lowest,r)=>r.researchScore<lowest.researchScore?r:lowest):null;
      const matchupRating=limiting?{side,score:limiting.researchScore,factors:limiting.matchupRating.factors,limitingMarket:limiting.market}:null;
      // Only real observed position allowances and player histories enter the
      // evidence card. Never substitute simulated frequencies for observed hits.
-     const matchupEvidence=supported?positionRows.map(r=>({
+     const matchupEvidence=supported?evidenceRows.map(r=>({
       market:r.market,position:r.position,opponent:r.opponent,componentScore:r.researchScore,
       allowed:r.weakness.allowed,leagueAverage:r.weakness.leagueAverage,
       opponentGames:r.weakness.games,playerAverage:r.playerAverage,
@@ -100,11 +102,11 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
      rows.push({side,matchupRating,matchupEvidence,weakness:limiting?.weakness,roleEvidence,selectedLineEvidence,linePolicy:selectedLineEvidence?.policy,
       inputTimes:{...model.inputTimes},outcomeSetId:[model.version,game.id,now,options.count||1000,6472026,JSON.stringify(model.inputTimes),context?.generated_at||''].join('|'),
       availabilitySensitivity:model.uncertain?.length?{type:'equal_weight_in_out',players:model.uncertain.slice(),probabilityValidated:false}:null,
-      position:supported?positionRows[0].position:null,key:[game.id,player.id,market,...(side==='under'?['under']:[])].join('|'),gameId:String(game.id),game,playerId:player.id,name:player.name,team,opponent,market,forecast,baseline,observedMax,reviewRequired:reviewReasons.length>0,reviewReasons,minutes:projected.minutes,matchupGames:def.games,matchupBoost:boost,samples:values,reason:reason+' '+(model.context?.tracking==='fresh'&&Object.keys(player.defenderExposure||{}).length?'Fresh defender tracking incorporated; historical exposure '+Number(player.matchupSample||0).toFixed(0)+' possessions, not a confirmed assignment.':'Individual defender tracking unavailable or stale; that adjustment is omitted.'),eligible:supported});
+      position:supported?limiting.position:null,key:[game.id,player.id,market,...(side==='under'?['under']:[])].join('|'),gameId:String(game.id),game,playerId:player.id,name:player.name,team,opponent,market,forecast,baseline,observedMax,reviewRequired:reviewReasons.length>0,reviewReasons,minutes:projected.minutes,matchupGames:def.games,matchupBoost:boost,samples:values,reason:reason+' '+(model.context?.tracking==='fresh'&&Object.keys(player.defenderExposure||{}).length?'Fresh defender tracking incorporated; historical exposure '+Number(player.matchupSample||0).toFixed(0)+' possessions, not a confirmed assignment.':'Individual defender tracking unavailable or stale; that adjustment is omitted.'),eligible:supported});
     }
    }
   }
-  return {rows,underWeaknesses:(positional.weaknesses||[]).filter(w=>w.side==='under'),players:simulation.players.map(p=>({...p,reviewReasons:playerReviews.get(p.id)||[]})),reviewedMarkets:rows.filter(r=>r.reviewRequired).length,model: model.version,generatedAt:new Date(now).toISOString(),inputTimes:model.inputTimes,context:model.context,warnings:model.warnings,pace:model.pace,blowoutRate:simulation.blowoutRate,reason:null};
+  return {rows,scoreBands:positional.scoreBands||{},underWeaknesses:(positional.weaknesses||[]).filter(w=>w.side==='under'),players:simulation.players.map(p=>({...p,reviewReasons:playerReviews.get(p.id)||[]})),reviewedMarkets:rows.filter(r=>r.reviewRequired).length,model: model.version,generatedAt:new Date(now).toISOString(),inputTimes:model.inputTimes,context:model.context,warnings:model.warnings,pace:model.pace,blowoutRate:simulation.blowoutRate,reason:null};
  }catch(e){return {rows:[],reason:e.message,warnings:[]};}
 }
 return {minimumScore:propLines.minimumScore,chance,candidate,build,analyze,markets};

@@ -86,23 +86,38 @@
     return [c];
    });
   }
-  function marketAudit(raw,accepted){
-   const summarize=rows=>{const out={};for(const row of rows||[]){const market=String(row?.market||'unknown').toLowerCase();out[market]=(out[market]||0)+1}return out};
-   return {beforeFinalSafety:summarize(raw),afterFinalSafety:summarize(accepted),rejectedByFinalSafety:Math.max(0,(raw||[]).length-(accepted||[]).length)};
+  function marketKey(value){
+   const key=String(value||'unknown').trim().toLowerCase().replace(/\s+/g,' ');
+   return ({'points + rebounds':'pr','points + assists':'pa','rebounds + assists':'ra','steals + blocks':'stocks'})[key]||key;
+  }
+  function countMarkets(rows){const result={};for(const row of rows||[]){const key=marketKey(row?.market);result[key]=(result[key]||0)+1;}return result;}
+  function stages(rows){
+   const eligible=[],rated=[];
+   for(const row of rows||[]){
+    if(!['over','under'].includes(row.side)||row.eligible!==true||row.reviewRequired)continue;
+    eligible.push(row);
+    if(Number.isFinite(row.matchupRating?.score)&&row.matchupRating.score>=gf.minimumScore(row.market,row.side))rated.push(row);
+   }
+   return {simulated:countMarkets(rows),eligible:countMarkets(eligible),rated:countMarkets(rated)};
+  }
+  function marketAudit(raw,accepted,stageCounts,scoreBands={}){
+   const counts=stageCounts||stages(raw);
+   return {simulated:counts.simulated||{},eligible:counts.eligible||{},rated:counts.rated||{},preScoreBands:scoreBands,
+    beforeFinalSafety:countMarkets(raw),afterFinalSafety:countMarkets(accepted),rejectedByFinalSafety:Math.max(0,(raw||[]).length-(accepted||[]).length)};
   }
   async function fallback(inputs,version){
    if(typeof gf?.analyze!=='function'||typeof gf?.candidate!=='function')return unavailable('The NBA research engine is unavailable.');
-   const rows=[],held=[],diagnostics={gamesAnalyzed:0,modelRows:0,eligibleRows:0,ratedRows:0,qualifiedRows:0,modelUnavailableGames:0};
+   const rows=[],held=[],diagnostics={gamesAnalyzed:0,modelRows:0,eligibleRows:0,ratedRows:0,qualifiedRows:0,modelUnavailableGames:0,scoreBands:{}};
    for(let i=0;i<inputs.games.length;i++){
     await new Promise(resolve=>schedule(resolve,0));if(destroyed||version!==revision||current?.signature!==inputs.signature)return unavailable('NBA sources changed during simulation.');
     progress({type:'progress',completed:i,total:inputs.games.length,game:inputs.games[i]});
     const result=gf.analyze(inputs.games[i],inputs.feed,inputs.injuries,inputs.rosters,inputs.context,now(),{count:1000});
-    const sampled=result?.rows||[];rows.push(...sampled);diagnostics.gamesAnalyzed++;diagnostics.modelRows+=sampled.length;diagnostics.eligibleRows+=sampled.filter(r=>['over','under'].includes(r.side)&&r.eligible===true&&!r.reviewRequired).length;diagnostics.ratedRows+=sampled.filter(r=>['over','under'].includes(r.side)&&Number.isFinite(r.matchupRating?.score)&&r.matchupRating.score>=gf.minimumScore(r.market,r.side)).length;if(result?.reason){held.push({gameId:String(inputs.games[i].id),reason:result.reason});if(!sampled.length)diagnostics.modelUnavailableGames++;}
+    const sampled=result?.rows||[];for(const [market,counts] of Object.entries(result?.scoreBands||{})){if(!diagnostics.scoreBands[market])diagnostics.scoreBands[market]={under60:0,from60to69:0,from70to79:0,atLeast80:0};for(const key of Object.keys(diagnostics.scoreBands[market]))diagnostics.scoreBands[market][key]+=counts[key]||0;}rows.push(...sampled);diagnostics.gamesAnalyzed++;diagnostics.modelRows+=sampled.length;diagnostics.eligibleRows+=sampled.filter(r=>['over','under'].includes(r.side)&&r.eligible===true&&!r.reviewRequired).length;diagnostics.ratedRows+=sampled.filter(r=>['over','under'].includes(r.side)&&Number.isFinite(r.matchupRating?.score)&&r.matchupRating.score>=gf.minimumScore(r.market,r.side)).length;if(result?.reason){held.push({gameId:String(inputs.games[i].id),reason:result.reason});if(!sampled.length)diagnostics.modelUnavailableGames++;}
    }
-   const eligible=supported(rows,inputs);diagnostics.qualifiedRows=eligible.length;diagnostics.marketAudit=marketAudit(rows,eligible);return {candidates:eligible,held,diagnostics,signature:inputs.signature,ready:true,reason:''};
+   const modelCandidates=rows.map(row=>gf.candidate(row)).filter(Boolean);const eligible=supported(modelCandidates,inputs);diagnostics.qualifiedRows=eligible.length;diagnostics.marketAudit=marketAudit(modelCandidates,eligible,stages(rows),diagnostics.scoreBands);return {candidates:eligible,held,diagnostics,signature:inputs.signature,ready:true,reason:''};
   }
   function runWorker(inputs,version){
-   const make=options.workerFactory||(typeof root.Worker==='function'?()=>new root.Worker('./nba_parlay_worker.js?v=nba80-def-under-20261121'):null);
+   const make=options.workerFactory||(typeof root.Worker==='function'?()=>new root.Worker('./nba_parlay_worker.js?v=nba-score-band-audit-20261123'):null);
    if(!make)return fallback(inputs,version);
    return new Promise(resolve=>{
     let worker,timer,finished=false;const requestId=++request;
@@ -113,7 +128,7 @@
       if(data.type==='progress'){progress(data);return}
       if(data.type==='error')return finish(unavailable(typeof data.error==='string'?data.error:'The NBA simulation worker failed.'));
       if(data.type!=='result'||!Array.isArray(data.candidates))return finish(unavailable('The NBA simulation returned incomplete results. Retry the research scan.'));
-      const accepted=supported(data.candidates,inputs);const diagnostics={...(data.diagnostics||{}),marketAudit:marketAudit(data.candidates,accepted)};finish({candidates:accepted,held:Array.isArray(data.held)?data.held:[],diagnostics,signature:inputs.signature,ready:true,reason:''});
+      const accepted=supported(data.candidates,inputs);const diagnostics={...(data.diagnostics||{}),marketAudit:marketAudit(data.candidates,accepted,data.diagnostics?.marketStages,data.diagnostics?.scoreBands)};finish({candidates:accepted,held:Array.isArray(data.held)?data.held:[],diagnostics,signature:inputs.signature,ready:true,reason:''});
      };
      worker.onerror=()=>finish(unavailable('The NBA simulation worker failed. Retry the research scan.'));
      worker.onmessageerror=()=>finish(unavailable('The NBA simulation result could not be read.'));

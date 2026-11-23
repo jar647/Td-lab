@@ -135,6 +135,11 @@ function analyze(game,feed,rosters,injuries,now=Date.now(),options={}){
    if(!(adjustedReference>0))continue;
    const shrinkage=marketSample.length/(marketSample.length+8);
    const shrunk=adjustedReference+(adjusted-adjustedReference)*shrinkage;
+   const leagueNoise=Math.sqrt(avg(leagueSample.map(r=>(r.scheduleAdjusted[primary][market]-adjustedReference)**2)));
+   // Compare opponent deviation against historical game-to-game noise for
+   // THIS market; percentages alone overrate sparse counts such as blocks.
+   const matchupError=Math.max(leagueNoise/Math.sqrt(marketSample.length),adjustedReference*.02,.05);
+   const standardizedAdvantage=Math.abs(shrunk-adjustedReference)/matchupError;
    if(Math.abs(shrunk-adjustedReference)<1e-12)continue;
    const side=shrunk<adjustedReference?'under':'over';
    const strengthRows=marketSample.filter(r=>r.opponentStrength[primary][market].available);
@@ -143,7 +148,7 @@ function analyze(game,feed,rosters,injuries,now=Date.now(),options={}){
     shrunkNormalizedAllowed:shrunk,shrinkage,priorGames:8,allowanceBasis:'per_100_possessions_per_48_position_minutes',
     opponentStrengthAdjustedGames:strengthRows.length,opponentStrengthAdjustment:normalizedAllowed-adjusted,
     opponentStrengthMethod:'Earlier offensive position rates only with a four-hour completion buffer; at least three prior games and thirty earlier league samples. Missing schedule evidence applies no guessed correction.',
-    excess:Math.abs(shrunk/adjustedReference-1)};
+    excess:Math.abs(shrunk/adjustedReference-1),standardizedAdvantage,matchupError};
    weaknesses.push(weakness);if(!pregame||!inputsFresh||roleEvidence.ready!==true)continue;
    const marketRows=p=>p.rows.filter(r=>total(r,market)!==null);
    const peers=peerProfiles.filter(p=>p.position===primary&&marketRows(p).length>=5);
@@ -174,8 +179,8 @@ function analyze(game,feed,rosters,injuries,now=Date.now(),options={}){
     const scenarioSpread=Number.isFinite(role.minutesLow)&&Number.isFinite(role.minutesHigh)?Math.max(0,role.minutesHigh-role.minutesLow):0;
     const earlierAverage=avg(history.slice(5)),recentForm=earlierAverage>0?side==='under'?clamp((earlierAverage/Math.max(.1,playerAverage))/1.2):clamp((playerAverage/earlierAverage)/1.2):.5;
     const factors=[
-     {label:'Normalized opponent weakness at position',points:Math.round(30*clamp(weakness.excess/.3)),max:30},
-     {label:'Supported role / observed opportunity proxy',points:Math.round(20*clamp((opportunityRatio-1)/.5)),max:20},
+     {label:'Normalized opponent weakness at position',points:Math.round(30*clamp(weakness.standardizedAdvantage/1.5)),max:30},
+     {label:'Supported role / observed opportunity proxy',points:Math.round(20*clamp(.45+(opportunityRatio-1)/.75)),max:20},
      {label:'Recent performance',points:Math.round(15*recentForm),max:15},
      {label:'Minutes and stability',points:Math.round(20*clamp(role.projectedMinutes/32)*clamp(1-Math.max(minutesSpread,scenarioSpread)/30)),max:20},
      {label:'Available with supported samples',points:Math.round(15*Math.min(observedRows.length,marketSample.length,10)/10*(status==='PROBABLE'?.8:1)),max:15}
@@ -192,10 +197,15 @@ function analyze(game,feed,rosters,injuries,now=Date.now(),options={}){
   }
  }
  candidates.sort((a,b)=>b.researchScore-a.researchScore||b.priority-a.priority||b.last5.rate-a.last5.rate||a.key.localeCompare(b.key));
+ const scoreBands=Object.fromEntries(markets.map(m=>[m,{under60:0,from60to69:0,from70to79:0,atLeast80:0}]));
+ for(const row of candidates){
+  const band=row.researchScore>=80?'atLeast80':row.researchScore>=70?'from70to79':row.researchScore>=60?'from60to69':'under60';
+  scoreBands[row.market][band]++;
+ }
  const seen=new Set(),topThree=candidates.filter(p=>qualifies(p)&&!seen.has(p.playerId)&&seen.add(p.playerId)).slice(0,3);
  const ready=pregame&&inputsFresh&&roleEvidence.ready===true;
  const reason=!pregame?'Historical view: recommendations close at tipoff.':!inputsFresh?'Fresh game, injury and roster data are required for player recommendations.':roleEvidence.ready!==true?roleEvidence.reason||'Supported rotation and opportunity evidence is unavailable; player picks are withheld.':!weaknesses.length?'Position-level samples are incomplete or no above-average allowances qualify yet.':!topThree.length?'PASS · No supported OVER/UNDER matchup meets 80/100.':null;
- return {game,weaknesses:weaknesses.sort((a,b)=>b.excess-a.excess),candidates:candidates.filter(qualifies),topThree,bestSingle:topThree[0]||null,coverage,ready,reason,
+ return {game,weaknesses:weaknesses.sort((a,b)=>b.excess-a.excess),scoreBands,candidates:candidates.filter(qualifies),topThree,bestSingle:topThree[0]||null,coverage,ready,reason,
   roleSummary:{ready:roleEvidence.ready===true,reason:roleEvidence.reason||null,heldPlayers:Object.values(roles).filter(r=>r.eligible!==true).length},roleEvidence,
   method:'ESPN primary positions with verified box-score possessions and positional minutes. Defensive rates are normalized per 100 possessions and 48 positional minutes, adjusted for supported earlier opponent production and shrunk toward league average. Raw per-game totals remain descriptive. Shared rotation evidence supplies minutes and observed opportunity proxies; unknown official tracking is not invented. Recorded hit rates are historical; role-adjusted line samples are not observed hits or calibrated probabilities.'};
 }
