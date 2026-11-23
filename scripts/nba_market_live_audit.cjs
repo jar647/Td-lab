@@ -14,7 +14,7 @@ const fetcher=(path,options={})=>fetch(url(path),{...options,cache:'no-store',si
  const counts=Object.fromEntries(markets.map(m=>[m,Object.fromEntries(['simulated','eligible','rated','beforeFinalSafety','afterFinalSafety'].map(stage=>[stage,audit[stage]?.[m]||0]))]));
  const out={at:new Date(now).toISOString(),ready:report.ready===true,reason:report.reason||null,
   gamesAnalyzed:report.diagnostics?.gamesAnalyzed??null,modelUnavailableGames:report.diagnostics?.modelUnavailableGames??null,
-  qualified:report.candidates?.length||0,counts,held:(report.held||[]).slice(0,12)};
+  qualified:report.candidates?.length||0,counts,preThresholdScoreBands:audit.preScoreBands||{},held:(report.held||[]).slice(0,12)};
  console.log('NBA_MARKET_LIVE_AUDIT '+JSON.stringify(out));
  provider.destroy();
  if(report.ready!==true)console.log('NBA_MARKET_LIVE_AUDIT_UNAVAILABLE: live source refresh or simulation failed; a successful Pages publication alone does not verify predictions.');
