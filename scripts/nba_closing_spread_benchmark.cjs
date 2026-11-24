@@ -45,9 +45,9 @@ function historical(feed){
  }
  return {rows,skipped};
 }
-function prospective(ledger,feed){
+function prospective(ledger,feed,version='nba-possession-strength-prospective-v1'){
  const finals=new Map(engine.records(feed,Infinity).map(g=>[String(g.id),g]));
- return (ledger.records||[]).filter(r=>r.sport==='NBA'&&r.version==='nba-possession-strength-prospective-v1').flatMap(r=>{
+ return (ledger.records||[]).filter(r=>r.sport==='NBA'&&r.version===version).flatMap(r=>{
   const g=finals.get(r.game_id);
   if(!g||g.home!==r.home||g.away!==r.away||Date.parse(g.date)!==Date.parse(r.start)||!finite(r.baseline?.margin)||!finite(r.candidate?.margin)||Date.parse(r.captured_at)>=Date.parse(r.start))return [];
   return [{game_id:r.game_id,home:r.home,away:r.away,start:r.start,captured_at:r.captured_at,actual:{home:g.h.pts,away:g.a.pts},baseline:r.baseline.margin,candidate:r.candidate.margin}];
@@ -55,8 +55,8 @@ function prospective(ledger,feed){
 }
 async function main(){
  const feed=JSON.parse(fs.readFileSync('data/nba_games.json')),ledger=JSON.parse(fs.readFileSync('data/nba_spread_prospective.json'));
- const hist=historical(feed),fresh=prospective(ledger,feed),cache=new Map();
- for(const r of [...hist.rows,...fresh]){
+ const hist=historical(feed),fresh=prospective(ledger,feed),integrated=prospective(ledger,feed,'nba-possession-strength-events-v1'),cache=new Map();
+ for(const r of [...hist.rows,...fresh,...integrated]){
   if(!cache.has(r.game_id)){
    const url='https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event='+encodeURIComponent(r.game_id);
    try{const response=await fetch(url,{signal:AbortSignal.timeout(12000)});if(!response.ok)throw Error('HTTP '+response.status);cache.set(r.game_id,{quote:closingQuote(await response.json(),r),source_url:url});}
@@ -65,7 +65,7 @@ async function main(){
   Object.assign(r,cache.get(r.game_id));
  }
  const dates=[...new Set(hist.rows.map(r=>r.start.slice(0,10)))].sort(),cutoff=dates[Math.floor(dates.length*2/3)];
- const report={status:'RESEARCH_ONLY',generated_at:new Date().toISOString(),provider:'ESPN explicit DraftKings closing spread',historical_diagnostic:summarize(hist.rows.filter(r=>r.start.slice(0,10)>=cutoff)),historical_development:summarize(hist.rows.filter(r=>r.start.slice(0,10)<cutoff)),prospective:summarize(fresh),historical_skipped:hist.skipped,rows:{historical:hist.rows,prospective:fresh},limits:'Historical replay uses reused games, 1000 draws, no historical injury snapshots, 24h embargo; prospective predictions are frozen before tipoff. Closing quotes used only for grading, not inputs. Gap-3 ATS/ROI at closing quotes is diagnostic, not executable profit. No claim of calibration, no model promotion. Missing explicit quotes excluded, never imputed.'};
+ const report={status:'RESEARCH_ONLY',generated_at:new Date().toISOString(),provider:'ESPN explicit DraftKings closing spread',historical_diagnostic:summarize(hist.rows.filter(r=>r.start.slice(0,10)>=cutoff)),historical_development:summarize(hist.rows.filter(r=>r.start.slice(0,10)<cutoff)),prospective:summarize(fresh),coherent_scoring_prospective:summarize(integrated),historical_skipped:hist.skipped,rows:{historical:hist.rows,prospective:fresh,coherent_scoring_prospective:integrated},limits:'Historical replay uses reused games, 1000 draws, no historical injury snapshots, 24h embargo; prospective predictions are frozen before tipoff. Closing quotes used only for grading, not inputs. Gap-3 ATS/ROI at closing quotes is diagnostic, not executable profit. No claim of calibration, no model promotion. Missing explicit quotes excluded, never imputed.'};
  console.log(JSON.stringify(report,null,2));
 }
 if(require.main===module)main().catch(e=>{console.error(e);process.exitCode=1});
