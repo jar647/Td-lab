@@ -1,0 +1,10 @@
+'use strict';
+const assert=require('node:assert/strict'),{closingQuote,summarize,prospective}=require('./nba_closing_spread_benchmark.cjs');
+const game={game_id:'1',home:'Home Team',away:'Away Team',start:'2026-11-24T00:00:00Z',actual:{home:110,away:100},baseline:3,candidate:8};
+const source={header:{id:'1',competitions:[{id:'1',date:game.start,status:{type:{completed:true,name:'STATUS_FINAL'}},competitors:[{homeAway:'home',team:{displayName:game.home},score:'110'},{homeAway:'away',team:{displayName:game.away},score:'100'}]}]},pickcenter:[{provider:{name:'DraftKings'},spread:-12.5,pointSpread:{home:{open:{line:'-12.5'},close:{line:'-6.5',odds:'-110'}},away:{close:{line:'+6.5',odds:'-110'}}}}]};
+const quote=closingQuote(source,game);assert.equal(quote.home_spread,-6.5);
+const noClose=structuredClone(source);delete noClose.pickcenter[0].pointSpread.home.close;assert.throws(()=>closingQuote(noClose,game),/unavailable/);
+const mismatch=structuredClone(source);mismatch.header.competitions[0].competitors[0].score='111';assert.throws(()=>closingQuote(mismatch,game),/mismatch/);
+const live=structuredClone(source);live.pickcenter[0].provider.name='DraftKings Live Odds';assert.throws(()=>closingQuote(live,game),/unavailable/);
+const r=summarize([{...game,quote},{...game,game_id:'2',quote:null}]);assert.equal(r.matched,1);assert.equal(r.missing,1);assert.equal(r.baseline.margin_mae,7);assert.equal(r.candidate.margin_mae,2);assert.equal(r.market.margin_mae,3.5);assert.equal(r.candidate_comparison.closer_than_market,1);assert.equal(r.candidate_comparison.within_3_points,1);assert.equal(r.baseline_gap3_ats.loss,1);assert.equal(r.candidate_gap3_ats.pass,1);
+assert.equal(summarize([]).market.margin_mae,null);console.log('Closing spread benchmark: explicit close, team/time/score identity, missing data, paired MAE, gap and ATS checks PASS');
