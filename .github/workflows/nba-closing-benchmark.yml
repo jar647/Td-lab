@@ -37,7 +37,7 @@ jobs:
       - name: Compare to explicit sportsbook closing lines
         run: |
           node scripts/nba_closing_spread_benchmark.cjs > /tmp/nba-closing-benchmark.json
-          node -e "const r=require('/tmp/nba-closing-benchmark.json'); console.log(JSON.stringify({provider:r.provider,historical_diagnostic:r.historical_diagnostic,historical_development:r.historical_development,prospective:r.prospective,missing_examples:r.rows.historical.filter(x=>!x.quote).slice(0,3)},null,2))"
+          node -e "const r=require('/tmp/nba-closing-benchmark.json'); console.log(JSON.stringify({provider:r.provider,historical_diagnostic:r.historical_diagnostic,historical_development:r.historical_development,prospective:r.prospective,coherent_scoring_prospective:r.coherent_scoring_prospective,missing_examples:r.rows.historical.filter(x=>!x.quote).slice(0,3)},null,2))"
       - uses: actions/upload-artifact@v4
         with:
           name: nba-closing-benchmark
