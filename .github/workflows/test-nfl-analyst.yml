@@ -7,6 +7,11 @@ on:
       - 'game-odds.html'
       - 'game_odds_engine.js'
       - 'game_odds_worker.js'
+      - 'nfl_matchup_scenario.js'
+      - 'nfl_matchup_research.py'
+      - 'game_picks.py'
+      - 'test_nfl_matchup_scenario.js'
+      - 'test_nfl_matchup_scenario.py'
       - 'nfl_matchup_research_ui.js'
       - 'test_nfl_matchup_research_ui.js'
       - 'test_nfl_shared_research.js'
@@ -78,6 +83,8 @@ jobs:
       - run: node --check test_analyst_ui.js
       - run: node test_market_odds.js
       - run: node test_game_odds.js
+      - run: node test_nfl_matchup_scenario.js
+      - run: python -m unittest -v test_nfl_matchup_scenario.py
       - run: node test_game_odds_ui.js
       - run: node test_nfl_matchup_research_ui.js
       - run: node test_nfl_shared_research.js
