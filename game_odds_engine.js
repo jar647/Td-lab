@@ -66,7 +66,7 @@
   const usingMatchup=['matchup','matchup-lineup'].includes(sourceMode);
   const matchupAPI=usingMatchup?(typeof module==='object'&&module.exports?require('./nfl_matchup_scenario.js'):globalThis.CookNFLMatchupScenario):null;
   if(usingMatchup&&(!matchupAPI||typeof matchupAPI.evaluate!=='function'))throw Error('NFL pass/rush matchup scenario module unavailable');
-  if(meta.modelMode==='lineup'&&(!scenario?.available||!scenario.quarterbacks||!scenario.version))throw Error('Supported QB/lineup scenario unavailable; choose the historical baseline explicitly');
+  if(['lineup','matchup-lineup'].includes(meta.modelMode)&&(!scenario?.available||!scenario.quarterbacks||!scenario.version))throw Error('Supported QB/lineup scenario unavailable; choose the historical baseline explicitly');
   if(scenario&&meta.lineupHistory?.model_version!==scenario.base_version)throw Error('Matching chronological QB-model residual history is unavailable');
   if(scenario&&[game.home,game.away].some(t=>!scenario.quarterbacks[t]?.player_id||!scenario.quarterbacks[t]?.effect_available))throw Error('Supported quarterback identities are required for a lineup scenario');
   const home=finite(scenario?scenario.home:game.projected_home_points),away=finite(scenario?scenario.away:game.projected_away_points);
@@ -192,6 +192,12 @@
   const detailedCount=count;
   const possession=engine?engine.draws(game.possessionModel,count,seed,{legs:game.slipLegs||[],onProgress:options.onProgress}):null;
   const random=rng(seed>>>0),residuals=game.residuals,homeScores=[],awayScores=[],margins=[],totals=[];
+  // A separate reproducible random stream preserves the scoreboard draws.
+  // Opponent-adjusted rushing yards are sampled on EVERY joint game outcome,
+  // with game script providing a modest volume correlation.
+  const rushRandom=game.sport==='NFL'&&game.matchupScenario?rng((seed^0x9E3779B9)>>>0):null;
+  const gaussian=()=>Math.sqrt(-2*Math.log(Math.max(1e-12,rushRandom())))*Math.cos(2*Math.PI*rushRandom());
+  const rushSamples=rushRandom?{[game.home]:[],[game.away]:[]}:null;
   const keys=['homeML','awayML','homeATS','awayATS','over','under'];
   const counts={};for(const key of keys)counts[key]={win:0,loss:0,push:0};
   let homeWin=0,awayWin=0,ties=0,homePoints=0,awayPoints=0;
@@ -202,6 +208,19 @@
    let a=possession?possession.away[sampledIndex]:Math.max(0,Math.round(game.projectedAway+err.awayError));
    if(game.sport==='NBA'&&h===a){if(random()<.5)h++;else a++;}
    const margin=h-a,total=h+a;
+   if(rushSamples){
+    for(const [team,side] of [[game.home,1],[game.away,-1]]){
+     const ref=side===1?game.matchupScenario.home:game.matchupScenario.away;
+     const v=ref.rushYards;
+     if(!v||!Number.isFinite(v.matchupYpc)||!Number.isFinite(v.expectedAttempts)||v.matchupYpc<=0||v.expectedAttempts<=0)throw Error('Missing opponent-adjusted rushing matchup evidence');
+     // Winning game scripts permit slightly more carries; a losing team still
+     // has a tail of big rushing performances. Never force a particular winner.
+     const script=clamp(1+.005*side*margin,.8,1.2);
+     const attempts=Math.max(0,Math.round(v.expectedAttempts*script*Math.exp(gaussian()*.17-.01445)));
+     const yards=Math.max(0,Math.min(450,attempts*v.matchupYpc*Math.exp(gaussian()*.29-.04205)));
+     rushSamples[team].push(yards);
+    }
+   }
    homeScores.push(h);awayScores.push(a);margins.push(margin);totals.push(total);
    homePoints+=h;awayPoints+=a;
    const ml=margin>0?1:margin<0?-1:0;
@@ -213,6 +232,15 @@
    if(ats!==null){val('homeATS',ats);val('awayATS',-ats);}
    if(totalsSide!==null){val('over',totalsSide);val('under',-totalsSide);}
   }
+  const rushing=rushSamples?Object.fromEntries(Object.entries(rushSamples).map(([team,rows])=>{
+   rows.sort((a,b)=>a-b);
+   const ref=team===game.home?game.matchupScenario.home:game.matchupScenario.away;
+   return [team,{mean:round(mean(rows)),p10:quantile(rows,.1),median:quantile(rows,.5),p90:quantile(rows,.9),
+    under100:rows.filter(v=>v<100).length/count,over150:rows.filter(v=>v>=150).length/count,
+    baselineYards:ref.rushYards.baselineYards,expectedMatchupYards:ref.rushYards.matchupYards,
+    estimatedAttempts:ref.rushYards.expectedAttempts,offenseYpc:ref.rushYards.offenseYpc,
+    opponentAllowedYpc:ref.rushYards.opponentAllowedYpc}];
+  })):null;
   margins.sort((a,b)=>a-b);totals.sort((a,b)=>a-b);
   homeScores.sort((a,b)=>a-b);awayScores.sort((a,b)=>a-b);
   const noVig={};for(const [a,b] of [['homeML','awayML'],['homeATS','awayATS'],['over','under']]){
@@ -276,7 +304,7 @@
   audit.passed=audit.winLossConservation&&audit.moneylineSymmetry&&audit.spreadSymmetry&&audit.totalSymmetry&&audit.finiteScores&&audit.playerScoreConservation&&audit.playerMinuteConservation;
   if(!audit.passed)throw Error('Simulation integrity check failed; predictions withheld');
   const candidates=markets.filter(m=>m.eligible).sort((a,b)=>b.ev-a.ev);
-  return {possession:possession?{context:game.possessionModel.context,model:possession.model,players:possession.players,overtimeRate:possession.overtimeRate,overtimePeriods:possession.overtimePeriods,blowoutRate:possession.blowoutRate,legs:possession.legs,jointHitRate:possession.jointHitRate,pairHitRates:possession.pairHitRates,pace:game.possessionModel.pace,uncertain:game.possessionModel.uncertain,rotation:game.possessionModel.teams,baseline:game.baseline}:null,rotationFallback:game.rotationFallback||null,sport:game.sport,home:game.home,away:game.away,runCount:count,detailedGameCount:detailedCount,simulationMethod,seed,modelStatus:'RESEARCH ONLY · NOT CALIBRATED',
+  return {rushing,possession:possession?{context:game.possessionModel.context,model:possession.model,players:possession.players,overtimeRate:possession.overtimeRate,overtimePeriods:possession.overtimePeriods,blowoutRate:possession.blowoutRate,legs:possession.legs,jointHitRate:possession.jointHitRate,pairHitRates:possession.pairHitRates,pace:game.possessionModel.pace,uncertain:game.possessionModel.uncertain,rotation:game.possessionModel.teams,baseline:game.baseline}:null,rotationFallback:game.rotationFallback||null,sport:game.sport,home:game.home,away:game.away,runCount:count,detailedGameCount:detailedCount,simulationMethod,seed,modelStatus:'RESEARCH ONLY · NOT CALIBRATED',
    projection:{home:possession?round(homePoints/count):game.projectedHome,away:possession?round(awayPoints/count):game.projectedAway,margin:round(possession?(homePoints-awayPoints)/count:game.projectedHome-game.projectedAway),total:round(possession?(homePoints+awayPoints)/count:game.projectedHome+game.projectedAway)},
    simulated:{home:round(homePoints/count),away:round(awayPoints/count),homeWin:homeWin/count,awayWin:awayWin/count,tie:ties/count,
     margin:{p10:quantile(margins,.1),p25:quantile(margins,.25),median:quantile(margins,.5),p75:quantile(margins,.75),p90:quantile(margins,.9)},
