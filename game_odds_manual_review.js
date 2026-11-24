@@ -36,7 +36,11 @@
     return 'Returning quarterback scenario is not supported';
   }
   if(model.possessionModel){
-   if((model.possessionModel.uncertain||[]).length)return 'Unresolved player availability';
+   if((model.possessionModel.uncertain||[]).length){
+    const names=model.possessionModel.uncertain;
+    const players=Object.values(model.possessionModel.teams||{}).flatMap(t=>t.players||[]);
+    return 'Unresolved player availability: '+names.map(name=>{const p=players.find(x=>x.name===name);return p?name+' ('+p.status+', '+p.team+')':name;}).join('; ');
+   }
    const m=model.possessionModel.inputTimes||{};
    for(const [key,hours] of [['games',12],['injuries',12],['rosters',72]]){
     const age=now-Date.parse(m[key]);
@@ -91,7 +95,7 @@
   priced.sort((a,b)=>(rank[b.decision]-rank[a.decision])||(b.ev-a.ev)||(b.modelEdge-a.modelEdge));
   const top=priced.find(x=>x.decision!=='PASS')||null;
   const summary=top?top.decision+' · '+top.label:
-   hasQuoted?'PASS · No qualifying model advantage':'NO ODDS ENTERED';
+   hasQuoted?(quality?'PASS · Data or availability hold':'PASS · No qualifying model advantage'):'NO ODDS ENTERED';
   return {result:{...result,market:{homeSpread:market.homeSpread,total:market.total},
     markets:rows,candidates:rows.filter(x=>x.eligible).map(x=>x.key)},
    status:top?.decision||'PASS',top,summary,rows,reason:quality||(!hasQuoted?'Enter a sportsbook price after simulation':'No quoted market cleared the model thresholds'),
