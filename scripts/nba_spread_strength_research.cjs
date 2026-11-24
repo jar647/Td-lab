@@ -4,22 +4,7 @@
 const fs=require('node:fs'),path=require('node:path'),engine=require('../nba_possession_engine.js');
 const W=[0,.25,.5,.75,1],THRESHOLDS=[-14.5,-7.5,-3.5,.5,3.5,7.5,14.5];
 const mean=a=>a.reduce((s,x)=>s+x,0)/a.length;
-function fit(history){
- const rows=history.map(g=>({h:g.home,a:g.away,y:g.h.pts-g.a.pts,
-   venue:String(g.neutralSite)==='true'?0:1,w:1}));
- if(rows.length<40)throw Error('Insufficient historical team strength');
- const teams=[...new Set(rows.flatMap(r=>[r.h,r.a]))],rating=Object.fromEntries(teams.map(t=>[t,0]));
- let home=2;
- // Shrunk least squares on signed game margins, fitted jointly against opponents.
- for(let iter=0;iter<40;iter++){
-  home=(rows.reduce((s,r)=>s+r.w*r.venue*(r.y-rating[r.h]+rating[r.a]),0)+12*2)/(rows.reduce((s,r)=>s+r.w*r.venue*r.venue,0)+12);
-  for(const t of teams){
-   const games=rows.filter(r=>r.h===t||r.a===t);
-   rating[t]=games.reduce((s,r)=>s+r.w*(r.h===t?r.y-home*r.venue+rating[r.a]:-r.y+home*r.venue+rating[r.h]),0)/(games.reduce((s,r)=>s+r.w,0)+8);
-  }
- }
- return {home,rating};
-}
+const {fit}=require('../nba_spread_strength.js');
 function metrics(m,actual){
  const sorted=[...m].sort((a,b)=>a-b),q=p=>sorted[Math.floor(p*(sorted.length-1))];
  return {margin_mae:Math.abs(mean(m)-actual),spread_brier:mean(THRESHOLDS.map(t=>(mean(m.map(x=>Number(x>t)))-Number(actual>t))**2)),margin_bias:mean(m)-actual,interval80_coverage:Number(q(.1)<=actual&&actual<=q(.9))};
