@@ -17,6 +17,9 @@ on:
       - 'test_nfl_shared_research.js'
       - 'test_game_odds.js'
       - 'test_game_odds_ui.js'
+      - 'game_odds_manual_review.js'
+      - 'test_game_odds_manual_review.js'
+      - 'test_game_trust_ui.js'
       - 'nba.html'
       - 'market_odds.js'
       - 'player_probability.js'
@@ -83,6 +86,8 @@ jobs:
       - run: node --check test_analyst_ui.js
       - run: node test_market_odds.js
       - run: node test_game_odds.js
+      - run: node test_game_odds_manual_review.js
+      - run: node test_game_trust_ui.js
       - run: node test_nfl_matchup_scenario.js
       - run: python -m unittest -v test_nfl_matchup_scenario.py
       - run: node test_game_odds_ui.js

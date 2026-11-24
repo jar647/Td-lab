@@ -2,13 +2,14 @@
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const engine=require('./game_odds_engine.js');
+const review=require('./game_odds_manual_review.js');
 const html=fs.readFileSync('game-odds.html','utf8');
-assert.match(html,/<script src="\.\/game_odds_engine\.js\?v=nfl-matchup-epa-20261124"><\/script>/,'Engine assets must be versioned with the worker');
+assert.match(html,/<script src="\.\/game_odds_engine\.js\?v=manual-review-20261124"><\/script>/,'Engine assets must be versioned with the worker');
 assert.match(html,/value="matchup" selected/,'Matchup-aware simulation should be the visible default');
 assert.match(html,/nfl_matchup_scenario\.js\?v=nfl-matchup-epa-20261124/,'Matchup engine should be loaded');
 assert.match(html,/new Worker\('\.\/game_odds_worker\.js\?v=[^']+'\)/,'Game Odds must use a versioned simulation worker');
 assert.doesNotMatch(html,/Checking latest NBA availability and lineups/,'NBA simulation must not block on a live availability request');
-assert.match(html,/selected\.model=null;runId\+\+;if\(worker\)/,'Changed availability must invalidate an active forecast before it is displayed');
+assert.match(html,/selected\.model=null;lastSimulation=null;lastSimulationModel=null;.*runId\+\+;if\(worker\)/,'Changed availability must invalidate an active forecast before it is displayed');
 assert.ok(fs.readFileSync('game_odds_worker.js','utf8').includes("nba_possession_engine.js?v=nba-simulator-reliability-v4"),'Worker imports must match the page model version');
 for(const field of ['game','homeML','awayML','homeSpread','homeATS','awayATS','total','over','under','run','results','sportNFL','sportNBA'])
  assert.ok(html.includes('id="'+field+'"'),'Missing '+field);
@@ -37,7 +38,7 @@ feed.games[0].model_inputs.research_context={teams:{B:{coach:'Example Coach',sco
   temperature_f:45,wind_mph:12,wind_direction:'NW',precipitation_probability:20,condition:'Light Rain'},source_note:'Public feeds.'};
 feed.games[0].model_inputs.score_candidate={home:30,away:18,status:'SHADOW_ONLY_NOT_VALIDATED'};
 const sandbox={document:{getElementById:el},location:{search:'?sport=NFL'},URLSearchParams,Intl,Date,setTimeout,console,
- CookGameOdds:engine,
+ CookGameOdds:engine,CookGameOddsManualReview:review,
  localStorage:{getItem:key=>store.get(key)||null,setItem:(key,v)=>store.set(key,v)},
  fetch:async url=>({ok:true,json:async()=>String(url).includes('game_picks_backtest')?backtest:
  String(url).includes('game_picks')?feed:String(url).includes('nba_injuries')?null:{games:[]}})
@@ -49,6 +50,7 @@ vm.createContext(sandbox);vm.runInContext(scripts[0],sandbox,{timeout:5000});
  assert.match(el('game').innerHTML,/A @ B/,'NFL should load from current slate');
  el('game').value='2026_08_A_B';el('game').onchange();
  assert.equal(el('marketCard').hidden,false,'The sportsbook fields must open after game selection');
+ assert.equal(el('quoteCard').hidden,true,'Odds must stay hidden until independent simulation completes');
  el('homeML').value='-125';el('awayML').value='+110';
  el('homeSpread').value='-3.5';el('homeATS').value='-110';el('awayATS').value='-110';
  el('total').value='45.5';el('over').value='-115';el('under').value='-105';
@@ -56,12 +58,19 @@ vm.createContext(sandbox);vm.runInContext(scripts[0],sandbox,{timeout:5000});
  for(let attempt=0;attempt<30&&el('results').hidden;attempt++)await new Promise(resolve=>setTimeout(resolve,100));
  assert.equal(el('results').hidden,false,'The 100k simulation must render');
  assert.match(el('results').innerHTML,/100,000 (?:historical score bootstrap outcomes|paired score bootstrap outcomes)/);
- assert.match(el('results').innerHTML,/Over 45.5/);
+ assert.equal(el('quoteCard').hidden,false,'Manual odds controls appear only after the simulation');
+ assert.doesNotMatch(el('results').innerHTML,/Over 45.5/,'Book lines must not affect the first simulation');
+ const independent=el('results').innerHTML;
+ el('compare').onclick();
+ assert.match(el('compareStatus').textContent,/No resimulation was performed/i);
+ assert.match(el('results').innerHTML,/Over 45.5/,'Entered total is priced from the completed draws');
+ assert.match(el('priceDecision').innerHTML,/PASS|LEAN|PLAY/);
+ assert.match(independent,/NO ODDS ENTERED/);
  assert.match(el('results').innerHTML,/RESEARCH ONLY/);
  assert.match(el('results').innerHTML,/No bet is verified/);
  assert.match(el('results').innerHTML,/Spread warning/);
- assert.match(el('results').innerHTML,/no verified historical spread outcomes for an ATS backtest/i);
- assert.match(el('results').innerHTML,/PASS · ATS NOT BACKTESTED/);
+ assert.match(el('results').innerHTML,/capped at LEAN/i);
+ assert.match(el('results').innerHTML,/MODEL ESTIMATE/);
  assert.match(el('results').innerHTML,/National Weather Service hourly forecast/);
  assert.match(el('results').innerHTML,/Light Rain/);
  assert.match(el('results').innerHTML,/Actual scoring/);
@@ -73,7 +82,7 @@ vm.createContext(sandbox);vm.runInContext(scripts[0],sandbox,{timeout:5000});
  assert.match(el('results').innerHTML,/Opponent-adjusted candidate · testing only/);
  assert.match(el('results').innerHTML,/do not drive the percentages above/);
  assert.match(el('results').innerHTML,/historically compressed team differences/);
- console.log('Game Odds UI: game -> book lines -> 100k simulations -> research-only results PASS');
+ console.log('Game Odds UI: game -> independent 100k -> manual prices -> model decision PASS');
 })().catch(err=>{console.error(err);process.exitCode=1});
 
 

@@ -192,6 +192,9 @@
   const detailedCount=count;
   const possession=engine?engine.draws(game.possessionModel,count,seed,{legs:game.slipLegs||[],onProgress:options.onProgress}):null;
   const random=rng(seed>>>0),residuals=game.residuals,homeScores=[],awayScores=[],margins=[],totals=[];
+  // Compact, exact settlement frequencies for post-simulation manual odds comparisons.
+  // These bins are captured from the SAME draws; repricing never reruns or influences games.
+  const scoreBins={margin:Object.create(null),total:Object.create(null)};
   // A separate reproducible random stream preserves the scoreboard draws.
   // Opponent-adjusted rushing yards are sampled on EVERY joint game outcome,
   // with game script providing a modest volume correlation.
@@ -208,6 +211,8 @@
    let a=possession?possession.away[sampledIndex]:Math.max(0,Math.round(game.projectedAway+err.awayError));
    if(game.sport==='NBA'&&h===a){if(random()<.5)h++;else a++;}
    const margin=h-a,total=h+a;
+   scoreBins.margin[margin]=(scoreBins.margin[margin]||0)+1;
+   scoreBins.total[total]=(scoreBins.total[total]||0)+1;
    if(rushSamples){
     for(const [team,side] of [[game.home,1],[game.away,-1]]){
      const ref=side===1?game.matchupScenario.home:game.matchupScenario.away;
@@ -304,7 +309,7 @@
   audit.passed=audit.winLossConservation&&audit.moneylineSymmetry&&audit.spreadSymmetry&&audit.totalSymmetry&&audit.finiteScores&&audit.playerScoreConservation&&audit.playerMinuteConservation;
   if(!audit.passed)throw Error('Simulation integrity check failed; predictions withheld');
   const candidates=markets.filter(m=>m.eligible).sort((a,b)=>b.ev-a.ev);
-  return {rushing,possession:possession?{context:game.possessionModel.context,model:possession.model,players:possession.players,overtimeRate:possession.overtimeRate,overtimePeriods:possession.overtimePeriods,blowoutRate:possession.blowoutRate,legs:possession.legs,jointHitRate:possession.jointHitRate,pairHitRates:possession.pairHitRates,pace:game.possessionModel.pace,uncertain:game.possessionModel.uncertain,rotation:game.possessionModel.teams,baseline:game.baseline}:null,rotationFallback:game.rotationFallback||null,sport:game.sport,home:game.home,away:game.away,runCount:count,detailedGameCount:detailedCount,simulationMethod,seed,modelStatus:'RESEARCH ONLY · NOT CALIBRATED',
+  return {scoreBins,rushing,possession:possession?{context:game.possessionModel.context,model:possession.model,players:possession.players,overtimeRate:possession.overtimeRate,overtimePeriods:possession.overtimePeriods,blowoutRate:possession.blowoutRate,legs:possession.legs,jointHitRate:possession.jointHitRate,pairHitRates:possession.pairHitRates,pace:game.possessionModel.pace,uncertain:game.possessionModel.uncertain,rotation:game.possessionModel.teams,baseline:game.baseline}:null,rotationFallback:game.rotationFallback||null,sport:game.sport,home:game.home,away:game.away,runCount:count,detailedGameCount:detailedCount,simulationMethod,seed,modelStatus:'RESEARCH ONLY · NOT CALIBRATED',
    projection:{home:possession?round(homePoints/count):game.projectedHome,away:possession?round(awayPoints/count):game.projectedAway,margin:round(possession?(homePoints-awayPoints)/count:game.projectedHome-game.projectedAway),total:round(possession?(homePoints+awayPoints)/count:game.projectedHome+game.projectedAway)},
    simulated:{home:round(homePoints/count),away:round(awayPoints/count),homeWin:homeWin/count,awayWin:awayWin/count,tie:ties/count,
     margin:{p10:quantile(margins,.1),p25:quantile(margins,.25),median:quantile(margins,.5),p75:quantile(margins,.75),p90:quantile(margins,.9)},
