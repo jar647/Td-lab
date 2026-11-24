@@ -50,7 +50,17 @@ def simulate_v2(prior, history, home, away, draws=10000, seed=6472026, model=Non
     h=np.maximum(0,points(n[:,0],rates(model,home,away))+residual[:,0])
     a=np.maximum(0,points(n[:,1],rates(model,away,home))+residual[:,1])
     return {'home':float(h.mean()),'away':float(a.mean()),'target_drives':target,
-            'mean_unmodeled_points':extras.mean(axis=0).tolist()}
+            'mean_unmodeled_points':extras.mean(axis=0).tolist(),'margins':h-a}
+
+# Fixed synthetic thresholds, not sportsbook prices or historical lines.
+THRESHOLDS = (-14.5,-7.5,-3.5,0.5,3.5,7.5,14.5)
+def spread_metrics(margins, actual):
+    margins=np.asarray(margins,dtype=float)
+    probs=np.asarray([(margins>t).mean() for t in THRESHOLDS])
+    realized=np.asarray([actual>t for t in THRESHOLDS])
+    return {'spread_brier':float(np.mean((probs-realized)**2)),
+            'margin_bias':float(margins.mean()-actual),
+            'interval80_covered':float(np.quantile(margins,.1)<=actual<=np.quantile(margins,.9))}
 
 def main():
     rows=[]; skipped=[]
@@ -64,19 +74,26 @@ def main():
             model=fit(prior); prepared=prepare(prior,history)
             for g in s[s.week==week].itertuples():
                 try:
-                    old=simulate(prior,history,g.home_team,g.away_team,model=model)
+                    old=simulate(prior,history,g.home_team,g.away_team,model=model,return_margins=True)
                     new=simulate_v2(prior,history,g.home_team,g.away_team,model=model,prepared=prepared)
                     bh,ba=score_projection(team_rates(history,g.home_team),team_rates(history,g.away_team))
                     def errors(h,a):
                         return [abs(h-a-g.home_score+g.away_score),abs(h+a-g.home_score-g.away_score)]
                     rows.append({'season':season,'baseline':errors(bh,ba),'drive_v1':errors(old['home'],old['away']),
-                                 'drive_v2':errors(new['home'],new['away'])})
+                                 'drive_v2':errors(new['home'],new['away']),
+                                 'spread_v1':spread_metrics(old['margins'],g.home_score-g.away_score),
+                                 'spread_v2':spread_metrics(new['margins'],g.home_score-g.away_score)})
                 except ValueError as e:skipped.append({'game':str(g.game_id),'reason':str(e)})
     def summary(rs):
         if not rs:raise ValueError('Empty historical split')
         return {'games':len(rs),**{k:dict(zip(('margin_mae','total_mae'),np.mean([r[k] for r in rs],axis=0).tolist()))
-                                    for k in ('baseline','drive_v1','drive_v2')}}
+                                    for k in ('baseline','drive_v1','drive_v2')},
+                **{k:{metric:float(np.mean([r[k][metric] for r in rs])) for metric in rs[0][k]} for k in ('spread_v1','spread_v2')}}
+    development=summary([r for r in rows if r['season']<2026])
+    selected=min(('drive_v1','drive_v2'),key=lambda k:development[k]['margin_mae'])
     print(json.dumps({'status':'RESEARCH_ONLY','model':'drive-pace-residual-v2',
+        'selection_objective':'minimum development margin MAE; synthetic-threshold Brier and interval coverage reported separately',
+        'development_selected':selected,'synthetic_margin_thresholds':THRESHOLDS,
         'development':summary([r for r in rows if r['season']<2026]),
         'reused_2026_diagnostic':summary([r for r in rows if r['season']==2026]),'skipped':skipped,
         'limits':'Paired prior drive counts and empirical residuals; no event-specific ST/defensive scoring, game clock, field position, or live QB/injury effects. 2026 set reused from previous experiments; no promotion.'},indent=2))
