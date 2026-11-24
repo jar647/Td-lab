@@ -195,37 +195,59 @@
   // Compact, exact settlement frequencies for post-simulation manual odds comparisons.
   // These bins are captured from the SAME draws; repricing never reruns or influences games.
   const scoreBins={margin:Object.create(null),total:Object.create(null)};
-  // A separate reproducible random stream preserves the scoreboard draws.
-  // Opponent-adjusted rushing yards are sampled on EVERY joint game outcome,
-  // with game script providing a modest volume correlation.
+  // Independent random streams keep game outcomes reproducible and prices
+  // out of the model. BOTH net passing and rushing yard draws occur within
+  // the same game, and their deviations modestly influence final scores.
   const rushRandom=game.sport==='NFL'&&game.matchupScenario?rng((seed^0x9E3779B9)>>>0):null;
-  const gaussian=()=>Math.sqrt(-2*Math.log(Math.max(1e-12,rushRandom())))*Math.cos(2*Math.PI*rushRandom());
+  const passRandom=rushRandom?rng((seed^0x85EBCA6B)>>>0):null;
+  const gaussian=stream=>Math.sqrt(-2*Math.log(Math.max(1e-12,stream())))*Math.cos(2*Math.PI*stream());
   const rushSamples=rushRandom?{[game.home]:[],[game.away]:[]}:null;
+  const passSamples=passRandom?{[game.home]:[],[game.away]:[]}:null;
   const keys=['homeML','awayML','homeATS','awayATS','over','under'];
   const counts={};for(const key of keys)counts[key]={win:0,loss:0,push:0};
   let homeWin=0,awayWin=0,ties=0,homePoints=0,awayPoints=0;
   for(let i=0;i<count;i++){
    const err=possession?null:residuals[Math.floor(random()*residuals.length)];
    const sampledIndex=i;
-   let h=possession?possession.home[sampledIndex]:Math.max(0,Math.round(game.projectedHome+err.homeError));
-   let a=possession?possession.away[sampledIndex]:Math.max(0,Math.round(game.projectedAway+err.awayError));
+   const hScale=game.sport==='NFL'?game.matchupScenario?.home.varianceScale||1:1;
+   const aScale=game.sport==='NFL'?game.matchupScenario?.away.varianceScale||1:1;
+   let h=possession?possession.home[sampledIndex]:Math.max(0,Math.round(game.projectedHome+err.homeError*hScale));
+   let a=possession?possession.away[sampledIndex]:Math.max(0,Math.round(game.projectedAway+err.awayError*aScale));
    if(game.sport==='NBA'&&h===a){if(random()<.5)h++;else a++;}
-   const margin=h-a,total=h+a;
-   scoreBins.margin[margin]=(scoreBins.margin[margin]||0)+1;
-   scoreBins.total[total]=(scoreBins.total[total]||0)+1;
    if(rushSamples){
+    // Game script starts with the independent baseline/residual scoreboard.
+    // Small, MEAN-CENTERED yardage perturbations update the joint game score.
+    // This is not a drive-by-drive or fitted points-per-yard scoring model.
+    const provisionalMargin=h-a,scoreChanges={};
     for(const [team,side] of [[game.home,1],[game.away,-1]]){
      const ref=side===1?game.matchupScenario.home:game.matchupScenario.away;
      const v=ref.rushYards;
      if(!v||!Number.isFinite(v.matchupYpc)||!Number.isFinite(v.expectedAttempts)||v.matchupYpc<=0||v.expectedAttempts<=0)throw Error('Missing opponent-adjusted rushing matchup evidence');
-     // Winning game scripts permit slightly more carries; a losing team still
-     // has a tail of big rushing performances. Never force a particular winner.
-     const script=clamp(1+.005*side*margin,.8,1.2);
-     const attempts=Math.max(0,Math.round(v.expectedAttempts*script*Math.exp(gaussian()*.17-.01445)));
-     const yards=Math.max(0,Math.min(450,attempts*v.matchupYpc*Math.exp(gaussian()*.29-.04205)));
+     const script=clamp(1+.005*side*provisionalMargin,.8,1.2);
+     const attempts=Math.max(0,Math.round(v.expectedAttempts*script*Math.exp(gaussian(rushRandom)*.17-.01445)));
+     const yards=Math.max(0,Math.min(450,attempts*v.matchupYpc*Math.exp(gaussian(rushRandom)*.29-.04205)));
      rushSamples[team].push(yards);
+     const rushingDiff=yards-v.expectedAttempts*script*v.matchupYpc;
+     let scoreEffect=clamp(rushingDiff*.012,-1.4,1.4);
+     const passing=ref.passYards;
+     if(passing&&Number.isFinite(passing.matchupNetYpa)&&Number.isFinite(passing.expectedAttempts)&&passing.expectedAttempts>0&&passing.matchupNetYpa>0){
+      // Trailing game scripts permit more pass volume; net passing yards
+      // account for sacks in sourced play-by-play rather than QB box totals.
+      const passScript=clamp(1-.004*side*provisionalMargin,.8,1.25);
+      const passPlays=Math.max(0,Math.round(passing.expectedAttempts*passScript*Math.exp(gaussian(passRandom)*.15-.01125)));
+      const passYards=Math.max(0,Math.min(650,passPlays*passing.matchupNetYpa*Math.exp(gaussian(passRandom)*.24-.0288)));
+      passSamples[team].push(passYards);
+      const passingDiff=passYards-passing.expectedAttempts*passScript*passing.matchupNetYpa;
+      scoreEffect+=clamp(passingDiff*.009,-1.6,1.6);
+     }
+     scoreChanges[team]=clamp(scoreEffect,-2.2,2.2);
     }
+    h=Math.max(0,Math.round(h+scoreChanges[game.home]));
+    a=Math.max(0,Math.round(a+scoreChanges[game.away]));
    }
+   const margin=h-a,total=h+a;
+   scoreBins.margin[margin]=(scoreBins.margin[margin]||0)+1;
+   scoreBins.total[total]=(scoreBins.total[total]||0)+1;
    homeScores.push(h);awayScores.push(a);margins.push(margin);totals.push(total);
    homePoints+=h;awayPoints+=a;
    const ml=margin>0?1:margin<0?-1:0;
@@ -245,6 +267,15 @@
     baselineYards:ref.rushYards.baselineYards,expectedMatchupYards:ref.rushYards.matchupYards,
     estimatedAttempts:ref.rushYards.expectedAttempts,offenseYpc:ref.rushYards.offenseYpc,
     opponentAllowedYpc:ref.rushYards.opponentAllowedYpc}];
+  })):null;
+  const passing=passSamples?Object.fromEntries(Object.entries(passSamples).map(([team,rows])=>{
+   if(!rows.length)return [team,null];
+   rows.sort((a,b)=>a-b);
+   const ref=team===game.home?game.matchupScenario.home:game.matchupScenario.away;
+   return [team,{mean:round(mean(rows)),p10:quantile(rows,.1),median:quantile(rows,.5),p90:quantile(rows,.9),
+    baselineYards:ref.passYards.baselineYards,expectedMatchupYards:ref.passYards.matchupYards,
+    estimatedPassPlays:ref.passYards.expectedAttempts,offenseNetYpa:ref.passYards.offenseNetYpa,
+    opponentAllowedNetYpa:ref.passYards.opponentAllowedNetYpa}];
   })):null;
   margins.sort((a,b)=>a-b);totals.sort((a,b)=>a-b);
   homeScores.sort((a,b)=>a-b);awayScores.sort((a,b)=>a-b);
@@ -309,7 +340,7 @@
   audit.passed=audit.winLossConservation&&audit.moneylineSymmetry&&audit.spreadSymmetry&&audit.totalSymmetry&&audit.finiteScores&&audit.playerScoreConservation&&audit.playerMinuteConservation;
   if(!audit.passed)throw Error('Simulation integrity check failed; predictions withheld');
   const candidates=markets.filter(m=>m.eligible).sort((a,b)=>b.ev-a.ev);
-  return {scoreBins,rushing,possession:possession?{context:game.possessionModel.context,model:possession.model,players:possession.players,overtimeRate:possession.overtimeRate,overtimePeriods:possession.overtimePeriods,blowoutRate:possession.blowoutRate,legs:possession.legs,jointHitRate:possession.jointHitRate,pairHitRates:possession.pairHitRates,pace:game.possessionModel.pace,uncertain:game.possessionModel.uncertain,rotation:game.possessionModel.teams,baseline:game.baseline}:null,rotationFallback:game.rotationFallback||null,sport:game.sport,home:game.home,away:game.away,runCount:count,detailedGameCount:detailedCount,simulationMethod,seed,modelStatus:'RESEARCH ONLY · NOT CALIBRATED',
+  return {scoreBins,rushing,passing,possession:possession?{context:game.possessionModel.context,model:possession.model,players:possession.players,overtimeRate:possession.overtimeRate,overtimePeriods:possession.overtimePeriods,blowoutRate:possession.blowoutRate,legs:possession.legs,jointHitRate:possession.jointHitRate,pairHitRates:possession.pairHitRates,pace:game.possessionModel.pace,uncertain:game.possessionModel.uncertain,rotation:game.possessionModel.teams,baseline:game.baseline}:null,rotationFallback:game.rotationFallback||null,sport:game.sport,home:game.home,away:game.away,runCount:count,detailedGameCount:detailedCount,simulationMethod,seed,modelStatus:'RESEARCH ONLY · NOT CALIBRATED',
    projection:{home:possession?round(homePoints/count):game.projectedHome,away:possession?round(awayPoints/count):game.projectedAway,margin:round(possession?(homePoints-awayPoints)/count:game.projectedHome-game.projectedAway),total:round(possession?(homePoints+awayPoints)/count:game.projectedHome+game.projectedAway)},
    simulated:{home:round(homePoints/count),away:round(awayPoints/count),homeWin:homeWin/count,awayWin:awayWin/count,tie:ties/count,
     margin:{p10:quantile(margins,.1),p25:quantile(margins,.25),median:quantile(margins,.5),p75:quantile(margins,.75),p90:quantile(margins,.9)},
@@ -318,7 +349,7 @@
     awayPoints:{p10:quantile(awayScores,.1),p90:quantile(awayScores,.9)}},
    market:{homeSpread:market.homeSpread,total:market.total},
    markets,audit,candidates:candidates.map(x=>x.key),sample:game.sample,method:game.method,warning:game.warning,
-   verification:'No bet is verified: model calibration, real execution prices, injuries and lineups are not independently confirmed. 100,000 draws reduce simulation noise, not underlying model error.'};
+   verification:'No bet is verified: model calibration, real execution prices, injuries and lineups are not independently confirmed. NFL matchup yardage/score coupling and event-rate weights are bounded research assumptions, not fitted drive-level coefficients. 100,000 draws reduce simulation noise, not underlying model error.'};
  }
  // Walk-forward evaluation: each historical prediction sees ONLY earlier games.
  // Baseline-only mode intentionally excludes unavailable historical injury snapshots.
