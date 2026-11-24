@@ -1,0 +1,60 @@
+name: NBA closing spread benchmark
+on:
+  pull_request:
+    paths:
+      - 'scripts/nba_closing_spread_benchmark*.cjs'
+      - '.github/workflows/nba-closing-benchmark.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/nba_closing_spread_benchmark*.cjs'
+      - '.github/workflows/nba-closing-benchmark.yml'
+  schedule:
+    - cron: '20 17 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: nba-closing-benchmark-${{ github.event_name == 'pull_request' && github.event.pull_request.number || 'writer' }}
+  cancel-in-progress: false
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/nba_closing_spread_benchmark.test.cjs
+      - name: Freeze or grade independent NBA forecasts on main
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        run: |
+          node scripts/nba_spread_prospective.cjs > /tmp/nba-spread-bundle.json
+          node scripts/spread_prospective_ledger.cjs NBA /tmp/nba-spread-bundle.json data/nba_spread_prospective.json
+      - name: Compare to explicit sportsbook closing lines
+        run: |
+          node scripts/nba_closing_spread_benchmark.cjs > /tmp/nba-closing-benchmark.json
+          node -e "const r=require('/tmp/nba-closing-benchmark.json'); console.log(JSON.stringify({provider:r.provider,historical_diagnostic:r.historical_diagnostic,historical_development:r.historical_development,prospective:r.prospective,missing_examples:r.rows.historical.filter(x=>!x.quote).slice(0,3)},null,2))"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nba-closing-benchmark
+          path: /tmp/nba-closing-benchmark.json
+      - name: Publish benchmark evidence on main
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        run: |
+          cp /tmp/nba-closing-benchmark.json data/nba_closing_benchmark.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/nba_closing_benchmark.json data/nba_spread_prospective.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Record independent NBA closing spread benchmark"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 2
+          done
+          exit 1
