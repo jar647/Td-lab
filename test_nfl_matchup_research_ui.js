@@ -57,6 +57,7 @@ el('nflModelMode').value='lineup';
 const sandbox={document:{getElementById:el},location:{search:'?sport=NFL'},URLSearchParams,Intl,Date,setTimeout,console,
  CookGameOdds:engine,PropShopNFLMatchupResearchUI:ui,localStorage:{getItem(){return null},setItem(){}},
  fetch:async url=>({ok:true,json:async()=>String(url).includes('game_picks_backtest')?history:String(url).includes('game_picks.json')?feed:String(url).includes('nfl_score_model_audit')?lineupHistory:{games:[]}})};
+el('nflModelMode').value='lineup'; // This fixture explicitly exercises a missing QB-lineup scenario, not the new matchup mode.
 vm.createContext(sandbox);vm.runInContext(controller,sandbox,{timeout:5000});
 (async()=>{
  await new Promise(resolve=>setTimeout(resolve,60));el('game').value='2026_08_A_B';el('game').onchange();
@@ -77,7 +78,7 @@ vm.createContext(sandbox);vm.runInContext(controller,sandbox,{timeout:5000});
  const output=el('results').innerHTML;assert.equal(el('results').hidden,false);assert.match(output,/Opponent-adjusted team strength/);
  assert.match(output,/Selected QB/);assert.match(output,/Sourced depth-chart first unit/);assert.match(output,/starting status is not confirmed/);
  assert.doesNotMatch(output,/Other high usage QB/,'A different quarterback’s usage must not be attributed to the selected starter');
- assert.match(output,/Selected-QB usage is unavailable/);assert.match(output,/experimental point corrections are disabled/);
+ assert.match(output,/Selected-QB usage is unavailable/);assert.match(output,/The signals do not change forecast scores or simulated percentages/);
  assert.doesNotMatch(output,/EPA\/success matchup and home\/road scoring splits shift the score mean/);
  el('nflModelMode').value='lineup';el('nflModelMode').onchange();
  const preview=el('trustPreview').innerHTML;

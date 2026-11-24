@@ -28,6 +28,7 @@ const feed={season:2026,week:8,generated_at:new Date().toISOString(),games:[{
 const sandbox={document:{getElementById:el},location:{search:'?sport=NFL'},URLSearchParams,Intl,Date,setTimeout,console,
  CookGameOdds:engine,localStorage:{getItem(){return null},setItem(){}},
  fetch:async url=>({ok:true,json:async()=>url.includes('game_picks_backtest')?history:url.includes('game_picks')?feed:{games:[]}})};
+el('nflModelMode').value='baseline'; // This test exercises historical QB risk, not the new matchup-only scenario.
 vm.createContext(sandbox);vm.runInContext(controller,sandbox,{timeout:5000});
 (async()=>{
  await new Promise(r=>setTimeout(r,60));

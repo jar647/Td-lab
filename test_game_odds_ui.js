@@ -3,7 +3,9 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const engine=require('./game_odds_engine.js');
 const html=fs.readFileSync('game-odds.html','utf8');
-assert.match(html,/<script src="\.\/game_odds_engine\.js\?v=game-line-shared-research-v2"><\/script>/,'Engine assets must be versioned with the worker');
+assert.match(html,/<script src="\.\/game_odds_engine\.js\?v=nfl-matchup-epa-20261124"><\/script>/,'Engine assets must be versioned with the worker');
+assert.match(html,/value="matchup" selected/,'Matchup-aware simulation should be the visible default');
+assert.match(html,/nfl_matchup_scenario\.js\?v=nfl-matchup-epa-20261124/,'Matchup engine should be loaded');
 assert.match(html,/new Worker\('\.\/game_odds_worker\.js\?v=[^']+'\)/,'Game Odds must use a versioned simulation worker');
 assert.doesNotMatch(html,/Checking latest NBA availability and lineups/,'NBA simulation must not block on a live availability request');
 assert.match(html,/selected\.model=null;runId\+\+;if\(worker\)/,'Changed availability must invalidate an active forecast before it is displayed');
@@ -40,6 +42,7 @@ const sandbox={document:{getElementById:el},location:{search:'?sport=NFL'},URLSe
  fetch:async url=>({ok:true,json:async()=>String(url).includes('game_picks_backtest')?backtest:
  String(url).includes('game_picks')?feed:String(url).includes('nba_injuries')?null:{games:[]}})
 };
+el('nflModelMode').value='baseline';
 vm.createContext(sandbox);vm.runInContext(scripts[0],sandbox,{timeout:5000});
 (async()=>{
  await new Promise(resolve=>setTimeout(resolve,60));

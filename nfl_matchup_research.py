@@ -2,7 +2,8 @@
 
 The caller supplies the same completed-game-ID-filtered PBP used by game_picks.
 We additionally exclude target/future weeks and invalid scrimmage observations.
-These descriptions neither fit a new model nor change scores or probabilities.
+The feed is descriptive and does not change production scoring by itself.
+The optional client-side matchup scenario can use these prior-only inputs for bounded research simulations.
 """
 import math
 
@@ -104,7 +105,8 @@ def _eligible_rows(play_rows, season, week):
                 continue
             seen.add(key)
         rows.append({'season': yr, 'week': wk, 'game_id': game, 'mode': mode,
-                     'offense': offense, 'defense': defense, 'epa': epa})
+                     'offense': offense, 'defense': defense, 'epa': epa,
+                     'yards': _finite(row.get('yards_gained')) if mode == 'run' else None})
     return rows
 
 
@@ -126,6 +128,22 @@ def _opportunity(rows, mode, team, opponent, context, opponent_context):
     off, allowed, league = avg(offense), avg(defense), avg(pool)
     offense_relative, allowance_relative = off-league, allowed-league
     effect = offense_relative + allowance_relative
+    # Completed-game rushing totals and defensive allowances; do not use
+    # target-game outcomes or assume a value when PBP yardage is missing.
+    rushing = None
+    if mode == 'run':
+        off_yards = [r['yards'] for r in offense if r['yards'] is not None]
+        def_yards = [r['yards'] for r in defense if r['yards'] is not None]
+        league_yards = [r['yards'] for r in pool if r['yards'] is not None]
+        if (len(off_yards) >= 45 and len(def_yards) >= 45
+                and len(league_yards) >= 200):
+            rushing = {'offense_yards_per_carry': _round(sum(off_yards)/len(off_yards)),
+                       'opponent_yards_allowed_per_carry': _round(sum(def_yards)/len(def_yards)),
+                       'league_yards_per_carry': _round(sum(league_yards)/len(league_yards)),
+                       'offense_carries_per_game': _round(len(offense)/offense_games),
+                       'opponent_carries_allowed_per_game': _round(len(defense)/defense_games),
+                       'offense_yardage_plays': len(off_yards),
+                       'defense_yardage_plays': len(def_yards)}
     recent_key = 'pass_epa' if mode == 'pass' else 'rush_epa'
     return {**result, 'available': True, 'method': 'RAW_EPA_LEAGUE_RELATIVE',
             'offense_epa': _round(off), 'opponent_allowed_epa': _round(allowed), 'league_epa': _round(league),
@@ -134,7 +152,8 @@ def _opportunity(rows, mode, team, opponent, context, opponent_context):
             'matchup_epa_estimate': _round(league+effect), 'matchup_relative_to_league': _round(effect),
             'signal': 'FAVORABLE' if effect > 1e-12 else 'ADVERSE' if effect < -1e-12 else 'NEUTRAL',
             'recent_offense_epa': _finite(_object(_object(context).get('recent_offense')).get(recent_key)),
-            'recent_opponent_allowed_epa': _finite(_object(_object(opponent_context).get('recent_defense')).get(recent_key))}
+            'recent_opponent_allowed_epa': _finite(_object(_object(opponent_context).get('recent_defense')).get(recent_key)),
+            'rushing_yards': rushing}
 
 
 def build_matchup_research(model, play_rows, home_context, away_context, home, away, season, week):
@@ -159,10 +178,10 @@ def build_matchup_research(model, play_rows, home_context, away_context, home, a
                             'Net strength equals offense minus defense allowance. QB and venue effects are excluded.',
                 'epa_matchup': 'Raw historical league-relative EPA: league + (offense EPA - league) + '
                                '(opponent EPA allowed - league). Higher opponent allowance improves the offensive signal. '
-                               'These pass/rush signals are not schedule-adjusted and do not modify scores.',
+                               'These pass/rush signals are not schedule-adjusted and do not modify the production scoring baseline. An explicitly selected research scenario may use a bounded interaction.',
                 'confidence': 'Confidence labels describe sample coverage only, never a calibrated win or prop probability.',
                 'source_scope': 'The feed builder supplies completed-game-ID-filtered regular-season PBP. '
                                 'This analysis additionally excludes target/future weeks, no-plays and invalid EPA.'},
             'limits': ['Raw EPA style signals and opponent-adjusted scoring ratings are distinct analyses.',
                        'Historical opponents, quarterback changes and game scripts can confound raw EPA.',
-                       'No new score model, point correction, calibrated probability or sportsbook edge is supplied.']}
+                       'The feed supplies source evidence for an optional explicitly labeled research simulation; it does not validate a sportsbook edge.']}
