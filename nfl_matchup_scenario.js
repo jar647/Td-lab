@@ -57,12 +57,37 @@
       pointsShift:Number(shift.toFixed(3))};
     details.push(detail);all.push(detail);
    }
-   directions[team]={team,opponent,details,pointsShift:Number(clamp(details.reduce((n,x)=>n+x.pointsShift,0),-2.5,2.5).toFixed(3))};
+   const rushRecord=row.rush.rushing_yards;
+   const fields=['offense_yards_per_carry','opponent_yards_allowed_per_carry','league_yards_per_carry','offense_carries_per_game','opponent_carries_allowed_per_game'];
+   if(!rushRecord||fields.some(k=>number(rushRecord[k])===null)||
+      !Number.isInteger(rushRecord.offense_yardage_plays)||rushRecord.offense_yardage_plays<45||
+      !Number.isInteger(rushRecord.defense_yardage_plays)||rushRecord.defense_yardage_plays<45||
+      fields.slice(0,3).some(k=>rushRecord[k]<-2||rushRecord[k]>14)||
+      fields.slice(3).some(k=>rushRecord[k]<5||rushRecord[k]>70))
+     throw Error(team+' prior-week rushing yardage or volume source is unavailable; refresh the verified NFL feed');
+   const leagueYpc=rushRecord.league_yards_per_carry;
+   const baselineYpc=clamp(leagueYpc+.7*(rushRecord.offense_yards_per_carry-leagueYpc),1.25,8.5);
+   const matchupYpc=clamp(baselineYpc+.75*(rushRecord.opponent_yards_allowed_per_carry-leagueYpc),1.1,8.5);
+   const rushAttempts=clamp(.7*rushRecord.offense_carries_per_game+.3*rushRecord.opponent_carries_allowed_per_game,10,50);
+   const rushYards={
+     baselineYpc:Number(baselineYpc.toFixed(3)),
+     matchupYpc:Number(matchupYpc.toFixed(3)),
+     expectedAttempts:Number(rushAttempts.toFixed(3)),
+     baselineYards:Number((rushAttempts*baselineYpc).toFixed(2)),
+     matchupYards:Number((rushAttempts*matchupYpc).toFixed(2)),
+     offenseYpc:rushRecord.offense_yards_per_carry,
+     opponentAllowedYpc:rushRecord.opponent_yards_allowed_per_carry,
+     leagueYpc,
+     offenseGames:row.rush.offense_games,defenseGames:row.rush.opponent_games,
+     offenseYardagePlays:rushRecord.offense_yardage_plays,
+     defenseYardagePlays:rushRecord.defense_yardage_plays
+   };
+   directions[team]={team,opponent,details,rushYards,pointsShift:Number(clamp(details.reduce((n,x)=>n+x.pointsShift,0),-2.5,2.5).toFixed(3))};
   }
   return {version:VERSION,sourceVersion:research.version,throughWeek:expectedWeek,
    status:'RESEARCH SCENARIO · NOT CALIBRATED',
    home:directions[home],away:directions[away],
-   assumptions:'Prior-week pass/run EPA aligned weaknesses add at most ±1.5 team points per play type and ±2.5 per team. 25% shrinkage is heuristic, not fitted or calibrated. This adjusts score center before the same residual draws; it does not simulate individual rush attempts or verify betting value.',
+   assumptions:'Prior-week pass/run EPA aligned weaknesses add at most ±1.5 team points per play type and ±2.5 per team. Rushing yard expectations use 70% offense and 30% opponent attempts allowed, 70% of the offense-versus-league yards/carry gap and 75% of the opponent allowance gap. Rushing totals are drawn in each simulated game with game-script and skewed performance variation. All these weights are heuristic, not calibrated betting probabilities.',
    verifiedCoverage:'At least 3 completed games and 45 plays per offense/defense play type; duplicate/missing observations rejected.'};
  }
  return {VERSION,evaluate};
