@@ -59,7 +59,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
 <button type="button" id="sportNBA">🏀 NBA</button>
 </div>
 <label for="game">Matchup</label><select id="game"><option value="">Loading scheduled games…</option></select>
-<p class="caption">NFL analysis runs automatically: opponent-adjusted passing/rushing data plus supported QB and injury scenarios when verified. Any missing inputs are identified below.</p><div id="trustPreview"></div>
+<p class="caption">NFL analysis runs automatically using supported matchup, QB and lineup evidence. No model selection required.</p><div id="nflAutoStatus" class="caption" hidden></div>
 <p id="feedStatus" class="muted" role="status">Connecting to existing game feeds…</p>
 </section>
 <section id="marketCard" class="panel">
@@ -67,6 +67,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
 <p class="muted">The simulator uses matchup statistics only. No sportsbook odds are sent to the engine.</p>
 <button type="button" id="run" class="primary">🔥 Simulate 100,000 games</button>
 <p id="runStatus" class="muted" role="status">Select a matchup and simulate before comparing prices.</p>
+<details id="nflEvidence" style="margin-top:14px" hidden><summary>Matchup research, QB/injury coverage and source checks</summary><div id="trustPreview" style="margin-top:12px"></div></details>
 </section>
 <section class="panel" id="nbaLedgerCard" hidden>
 <h2>NBA pregame odds & forward-test ledger</h2>
@@ -139,8 +140,10 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   if(busy){runId++;if(worker){worker.terminate();worker=null}busy=false;$('run').disabled=false;$('run').textContent='🔥 Simulate 100,000 games';}
   $('results').hidden=true;$('quoteCard').hidden=true;lastSimulation=null;lastSimulationModel=null;$('priceDecision').innerHTML='';
   const id=$('game').value;selected=gamesBySport[sport].find(x=>x.id===id)||null;
-  if(!selected){$('marketCard').hidden=true;return;}
+  if(!selected){$('marketCard').hidden=true;$('nflAutoStatus').hidden=true;$('nflEvidence').hidden=true;return;}
   $('marketCard').hidden=false;
+  $('nflEvidence').hidden=sport!=='NFL';$('nflAutoStatus').hidden=sport!=='NFL';
+  if(sport==='NFL')$('nflAutoStatus').innerHTML=nflAutomaticSummary(selected);
   const g=selected.game;
   // The NFL model is selected automatically from the supported source inputs.
   // NBA models still prepare on Run to refresh pregame availability.
@@ -154,7 +157,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   $('runStatus').textContent=sport==='NFL'&&!selected.model?(selected.autoModelError||'Supported matchup evidence unavailable. Refresh later.'):'Ready for '+g.away+' @ '+g.home+'. '+(sport==='NBA'?'Latest availability will be checked when you simulate.':'The simulator automatically uses available pregame matchup and QB evidence.');
  }
  function refresh(){
-  $('nbaLedgerCard').hidden=sport!=='NBA';
+  $('nbaLedgerCard').hidden=sport!=='NBA';$('nflEvidence').hidden=true;$('nflAutoStatus').hidden=true;
   $('sportNFL').classList.toggle('current',sport==='NFL');
   $('sportNBA').classList.toggle('current',sport==='NBA');
   $('results').hidden=true;$('quoteCard').hidden=true;lastSimulation=null;lastSimulationModel=null;$('priceDecision').innerHTML='';
@@ -479,7 +482,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   const requested=selected;
   if(sport==='NFL'&&source.nflFeed){
    const refreshId=++runId;busy=true;$('run').disabled=true;$('runStatus').textContent='Refreshing sourced NFL QB and lineup scenarios…';
-   try{const response=await fetch('./data/game_picks.json',{cache:'no-store',signal:typeof AbortSignal!=='undefined'?AbortSignal.timeout(8000):undefined});if(!response.ok)throw Error('NFL source refresh unavailable');const feed=await response.json();if(selected!==requested||refreshId!==runId)return;const game=(feed.games||[]).find(g=>g.game_id===requested.game.game_id&&g.home===requested.game.home&&g.away===requested.game.away);if(!game)throw Error('This matchup is no longer in the current feed');requested.game=game;source.nflFeed=feed;prepareNFL(requested,feed);$('trustPreview').innerHTML=nflAutomaticSummary(requested)+(requested.model?lineupPanel(requested.model)+trustPanel(requested.model)+researchPanel(requested.model)+nflMatchupSummary(requested.model):'<p class="warn">'+esc(requested.autoModelError||'Matchup evidence unavailable')+'</p>');}catch(error){if(selected===requested&&refreshId===runId)$('runStatus').textContent='NFL input refresh required: '+error.message;return}finally{if(selected===requested&&refreshId===runId){busy=false;$('run').disabled=false}}
+   try{const response=await fetch('./data/game_picks.json',{cache:'no-store',signal:typeof AbortSignal!=='undefined'?AbortSignal.timeout(8000):undefined});if(!response.ok)throw Error('NFL source refresh unavailable');const feed=await response.json();if(selected!==requested||refreshId!==runId)return;const game=(feed.games||[]).find(g=>g.game_id===requested.game.game_id&&g.home===requested.game.home&&g.away===requested.game.away);if(!game)throw Error('This matchup is no longer in the current feed');requested.game=game;source.nflFeed=feed;prepareNFL(requested,feed);$('nflAutoStatus').innerHTML=nflAutomaticSummary(requested);$('trustPreview').innerHTML=nflAutomaticSummary(requested)+(requested.model?lineupPanel(requested.model)+trustPanel(requested.model)+researchPanel(requested.model)+nflMatchupSummary(requested.model):'<p class="warn">'+esc(requested.autoModelError||'Matchup evidence unavailable')+'</p>');}catch(error){if(selected===requested&&refreshId===runId)$('runStatus').textContent='NFL input refresh required: '+error.message;return}finally{if(selected===requested&&refreshId===runId){busy=false;$('run').disabled=false}}
   }
   if(sport==='NBA'&&requested.nbaInputs&&typeof CookNBALiveContext!=='undefined'&&typeof CookNBALiveContext.latest==='function'){
    busy=true;$('run').disabled=true;$('runStatus').textContent='Refreshing injury availability and lineups before simulation…';
