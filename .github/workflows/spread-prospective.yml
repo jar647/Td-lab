@@ -32,6 +32,30 @@ jobs:
           python-version: '3.11'
       - run: python -m py_compile nfl_spread_prospective.py
       - run: node --check scripts/nba_spread_prospective.cjs && node scripts/spread_prospective_ledger.test.cjs
+  integration:
+    if: github.event_name == 'pull_request'
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - name: Exercise real feeds without publishing forecasts
+        run: |
+          python nfl_spread_prospective.py > /tmp/nfl-spread-bundle.json
+          node scripts/spread_prospective_ledger.cjs NFL /tmp/nfl-spread-bundle.json /tmp/nfl-preview.json
+          node scripts/nba_spread_prospective.cjs > /tmp/nba-spread-bundle.json
+          node scripts/spread_prospective_ledger.cjs NBA /tmp/nba-spread-bundle.json /tmp/nba-preview.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: prospective-preview-not-published
+          path: /tmp/*-preview.json
   capture:
     needs: validate
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
