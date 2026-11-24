@@ -38,7 +38,7 @@ const residual={records:Array.from({length:150},(_,i)=>({season:2025,week:(i%17)
  projected_home:22,projected_away:24,
  actual_home:22+Math.round(Math.sin(i)*7),actual_away:24+Math.round(Math.cos(i)*8)
 }))};
-const game={game_id:'2026_09_BAD_GOOD',home:'GOOD',away:'BAD',projected_home_points:18,projected_away_points:32,
+const game={game_id:'2026_09_BAD_GOOD',home:'GOOD',away:'BAD',projected_home_points:22,projected_away_points:28,
  model_inputs:{home:{games:9,offense:23,defense_allowed:20},
  away:{games:9,offense:30,defense_allowed:21},matchup_research:feed}};
 const neutral=engine.nflGame(game,residual,{week:9,season:2026,modelMode:'baseline'});
