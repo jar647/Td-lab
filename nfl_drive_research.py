@@ -70,7 +70,7 @@ def rates(model,off,defense):
     p=np.maximum(.001,beta[0]+beta[1+index[off]]+beta[1+n+index[defense]])
     return p/p.sum()
 
-def simulate(prior,history,home,away,draws=10000,seed=6472026,model=None):
+def simulate(prior,history,home,away,draws=10000,seed=6472026,model=None,return_margins=False):
     if not isinstance(draws,int) or draws<1:
         raise ValueError('Invalid draw count')
     model=fit(prior) if model is None else model
@@ -93,7 +93,7 @@ def simulate(prior,history,home,away,draws=10000,seed=6472026,model=None):
         return td*7+fg*3
     h,a=score(volume[:,0],ph),score(volume[:,1],pa)
     return {'home':float(h.mean()),'away':float(a.mean()),'home_win':float(np.mean(h>a)),
-            'tie':float(np.mean(h==a)),'drive_games':len(paired),'home_rates':ph.tolist(),'away_rates':pa.tolist()}
+            'tie':float(np.mean(h==a)),'drive_games':len(paired),'home_rates':ph.tolist(),'away_rates':pa.tolist(),**({'margins':h-a} if return_margins else {})}
 
 def main():
     rows=[]; skipped=[]
