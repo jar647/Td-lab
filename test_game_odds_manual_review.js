@@ -29,7 +29,7 @@ assert.equal(compared.top.decision,'PLAY','Model-based PLAY must be available ev
 const home=compared.rows.find(x=>x.key==='homeML');
 const away=compared.rows.find(x=>x.key==='awayML');
 const ats=compared.rows.find(x=>x.key==='homeATS');
-assert.equal(ats.decision,'LEAN','Unverified ATS model discrepancies must be capped at LEAN');
+assert.equal(ats.decision,'PLAY','Strong NFL ATS signals may be PLAY without a calibration badge');
 assert.equal(home.win,away.loss,'Moneyline settlements share one distribution');
 assert.ok(home.ev>.08&&home.modelEdge>.05);
 assert.equal(compared.result.markets.length,6);
@@ -54,10 +54,28 @@ const same=JSON.stringify(nbaResult.scoreBins);
 const disagreement=review.analyze(nbaModel,nbaResult,{homeSpread:10.5,homeATS:-110,awayATS:-110},nbaNow);
 const homeSide=disagreement.rows.find(x=>x.key==='homeATS');assert.equal(homeSide.win,.8);assert.equal(homeSide.strengthCover.win,.3);assert.equal(homeSide.decision,'PASS');
 assert.equal(disagreement.rows.find(x=>x.key==='awayATS').decision,'PASS');assert.equal(JSON.stringify(nbaResult.scoreBins),same);
-const agreement=review.analyze({...nbaModel,spreadStrength:{margin:-4}},nbaResult,{homeSpread:10.5,homeATS:-110},nbaNow);assert.equal(agreement.rows.find(x=>x.key==='homeATS').decision,'LEAN');
+const agreement=review.analyze({...nbaModel,spreadStrength:{margin:-4}},nbaResult,{homeSpread:10.5,homeATS:-110},nbaNow);assert.equal(agreement.rows.find(x=>x.key==='homeATS').decision,'PLAY');
 const integer=review.analyze(nbaModel,nbaResult,{homeSpread:10,homeATS:-110},nbaNow);assert.equal(integer.rows.find(x=>x.key==='homeATS').decision,'PASS');
 const missing=review.analyze({...nbaModel,spreadStrength:null},nbaResult,{homeSpread:10.5,homeATS:-110},nbaNow);assert.equal(missing.rows.find(x=>x.key==='homeATS').decision,'PASS');
-const money=review.analyze(nbaModel,nbaResult,{homeML:500},nbaNow);assert.equal(money.rows.find(x=>x.key==='homeML').decision,'LEAN');
+const money=review.analyze(nbaModel,nbaResult,{homeML:500},nbaNow);assert.equal(money.rows.find(x=>x.key==='homeML').decision,'PLAY');
+
+// Same sealed 100k outcomes; prices alone move the decision across all three tiers.
+const priceModel={...nbaModel,spreadStrength:{margin:-4}};
+const priceResult={...nbaResult,scoreBins:{margin:{'-15':43900,'-5':56100},total:{218:100000}}};
+// Center equals the frozen score histogram; the two estimates agree on 56.1%.
+priceModel.spreadStrength.margin=-9.39;
+const snap=JSON.stringify(priceResult);
+for(const [price,expected] of [[100,'PLAY'],[-105,'LEAN'],[-110,'LEAN'],[-130,'PASS']]){
+ const row=review.analyze(priceModel,priceResult,{homeSpread:10.5,homeATS:price},nbaNow).rows.find(x=>x.key==='homeATS');
+ assert.equal(row.decision,expected);assert.equal(row.win,.561);assert.equal(row.strengthCover.win,.561);
+ assert.equal(JSON.stringify(priceResult),snap);
+}
+// A high original estimate cannot upgrade a weaker opponent-adjusted estimate.
+const conservativeResult={...nbaResult,scoreBins:{margin:{'-20':20000,'-10':23900,'0':56100},total:{218:100000}}};
+const conservativeModel={...nbaModel,spreadStrength:{margin:-9.39}};
+const conservative=review.analyze(conservativeModel,conservativeResult,{homeSpread:10.5,homeATS:-110},nbaNow).rows.find(x=>x.key==='homeATS');
+assert.equal(conservative.win,.8);assert.equal(conservative.strengthCover.win,.561);assert.equal(conservative.decision,'LEAN');assert.equal(conservative.decisionEdge,conservative.strengthCover.modelEdge);
+
 const corrupted=structuredClone(result);corrupted.scoreBins.margin[12]+=1;
 assert.throws(()=>review.analyze(prepared,corrupted,prices),/reconcile/);
 console.log('Manual Game Odds Review: frozen 100k simulation -> odds -> PLAY / LEAN / PASS; source gates and no-resimulation invariant PASS');
