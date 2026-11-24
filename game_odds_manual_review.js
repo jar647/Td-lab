@@ -67,6 +67,8 @@
    if(pa&&pb){const sum=pa.implied+pb.implied;noVig[a]=pa.implied/sum;noVig[b]=pb.implied/sum;}
   }
   const quality=health(model,result,now);
+  const strengthAPI=model.sport==='NBA'?(root.CookNBASpreadStrength||(typeof module==='object'&&module.exports?require('./nba_spread_strength.js'):null)):null;
+  const strength=strengthAPI?.distribution(model.spreadStrength,result)||null;
   const hasQuoted=keys.some(k=>market.prices[k]!==null);
   const rows=keys.filter(k=>counts[k]).map(key=>{
    const c=counts[key],p=market.prices[key],win=c.win/total,loss=c.loss/total,push=c.push/total;
@@ -78,9 +80,15 @@
     key==='homeATS'?model.home+' '+(market.homeSpread>0?'+':'')+market.homeSpread:
     key==='awayATS'?model.away+' '+(-market.homeSpread>0?'+':'')+(-market.homeSpread):
     key==='over'?'Over '+market.total:'Under '+market.total;
+   const ats=key.endsWith('ATS');
+   const alternative=ats&&strength?strengthAPI.cover(strength,market.homeSpread,key==='homeATS'):null;
+   const strengthCover=alternative&&p?{...alternative,breakEven:p.implied*(1-alternative.push),modelEdge:alternative.win-p.implied*(1-alternative.push),ev:alternative.win*(p.decimal-1)-alternative.loss}:null;
    let decision='PASS',reason='';
    if(!p)reason='No price entered';
    else if(quality)reason=quality;
+   else if(model.sport==='NBA'&&ats&&!strengthCover)reason='Opponent-adjusted spread comparison unavailable (experimental candidate supports half-point lines only)';
+   else if(model.sport==='NBA'&&ats&&(strengthCover.modelEdge<.02||strengthCover.ev<.025||modelEdge<.02||ev<.025))reason='Both independent model estimates must support value; spread agreement insufficient';
+   else if(model.sport==='NBA'&&modelEdge>=.02&&ev>=.025){decision='LEAN';reason=ats?'Both margin estimates support a research lean; prospective ATS validation pending':'Unvalidated model discrepancy; research lean only, not a verified betting edge';}
    else if(modelEdge>=.05&&ev>=.08){
     decision=key.endsWith('ATS')&&model.atsBacktestVerified!==true?'LEAN':'PLAY';
     reason=decision==='LEAN'?'Strong model discrepancy, but spread outcomes lack a verified ATS benchmark':'Strong positive model discrepancy at your quoted price';
@@ -89,7 +97,7 @@
    }else reason='No meaningful positive price discrepancy';
    return {key,label,win,loss,push,price:quoteOdds(p),implied:p?p.implied:null,
     breakEven,noVig:noVig[key]??null,modelEdge,ev,fair,signal:p?decision+' · MODEL ESTIMATE':'NO ODDS ENTERED',
-    eligible:decision!=='PASS',decision,reason};
+    strengthCover,eligible:decision!=='PASS',decision,reason};
   });
   const priced=rows.filter(x=>x.price!==null);
   priced.sort((a,b)=>(rank[b.decision]-rank[a.decision])||(b.ev-a.ev)||(b.modelEdge-a.modelEdge));
