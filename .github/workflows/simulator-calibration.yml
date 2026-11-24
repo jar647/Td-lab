@@ -1,0 +1,50 @@
+name: NBA NFL multifactor calibration research
+on:
+  pull_request:
+    paths:
+      - 'nfl_multifactor_calibration.py'
+      - 'scripts/nba_multifactor_calibration.cjs'
+      - 'nfl_matchup_scenario.js'
+      - 'nfl_matchup_research.py'
+      - 'nba_possession_engine.js'
+      - '.github/workflows/simulator-calibration.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  nfl-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - name: Replay current NFL matchup score-center component
+        run: |
+          set -o pipefail
+          python nfl_multifactor_calibration.py | tee nfl-calibration.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nfl-calibration
+          path: nfl-calibration.json
+  nba-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Replay current NBA possession model
+        run: |
+          set -o pipefail
+          node scripts/nba_multifactor_calibration.cjs | tee nba-calibration.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nba-calibration
+          path: nba-calibration.json
