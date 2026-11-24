@@ -38,7 +38,7 @@ assert.equal(JSON.stringify({scores:result.simulated,bins:result.scoreBins,proje
 assert.deepEqual(compared.result.simulated,result.simulated);
 assert.deepEqual(compared.result.scoreBins,result.scoreBins);
 const badBook=review.analyze(prepared,result,{homeML:'-10000'});
-assert.equal(badBook.status,'PLAY','Unusually expensive prices still require positive calculated advantage');
+assert.equal(badBook.status,'PASS','A high-confidence winner is not automatically worth an extremely expensive price');
 assert.throws(()=>review.analyze(prepared,result,{homeML:'-99'}),/Invalid American odds/);
 assert.throws(()=>review.analyze(prepared,result,{homeATS:'-110'}),/spread/);
 assert.throws(()=>review.analyze(prepared,result,{over:'-110'}),/total/);
