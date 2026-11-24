@@ -68,7 +68,7 @@ vm.createContext(sandbox);vm.runInContext(scripts[0],sandbox,{timeout:5000});
  el('compare').onclick();
  assert.match(el('compareStatus').textContent,/No resimulation was performed/i);
  assert.match(el('results').innerHTML,/Over 45.5/,'Entered total is priced from the completed draws');
- assert.match(el('priceDecision').innerHTML,/PASS|LEAN|PLAY/);assert.match(el('priceDecision').innerHTML,/Book break-even/);assert.match(el('priceDecision').innerHTML,/Model difference/);
+ assert.match(el('priceDecision').innerHTML,/PASS|LEAN|PLAY|HOLD/);assert.match(el('priceDecision').innerHTML,/Book break-even/);assert.match(el('priceDecision').innerHTML,/Model difference/);
  assert.match(independent,/NO ODDS ENTERED/);
  assert.match(el('results').innerHTML,/RESEARCH ONLY/);
  assert.match(el('results').innerHTML,/No bet is verified/);
