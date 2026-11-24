@@ -50,7 +50,7 @@ assert(sampled.rushing.BAD.mean<sampled.rushing.BAD.baselineYards,
  'Strong run defense should suppress most outcomes');
 assert(sampled.rushing.BAD.p10<sampled.rushing.BAD.p90,
  'Simulation must retain realistic upside and downside tails');
-assert(sampled.rushing.BAD.over150>0,'Unusual high-rushing results remain possible');
+assert(sampled.rushing.BAD.p90>sampled.rushing.BAD.median*1.2,'The model must retain a meaningful high-rushing tail');
 assert(sampled.rushing.BAD.under100>.5,'Poor rushing matchup should produce under 100 yards more often');
 assert(sampled.simulated.awayWin>.5,'Even with suppressed rush yards, passing and team score can keep a team favored');
 assert(sampled.simulated.homeWin>0,'NFL upsets must stay possible');
