@@ -404,10 +404,10 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   // forecast alongside those quotes only on the manual comparison step.
   let saved=null;if(pricingOnly&&result.manualReview?.rows.some(x=>x.price!==null)&&result.possession&&typeof localStorage!=='undefined'&&typeof CookNBASimulatorUI!=='undefined'){try{saved=CookNBASimulatorUI.capture(result,model,localStorage)}catch(e){console.warn('Optional result archival failed',e)}}
   const s=result.simulated,p=result.projection;
-  // Keep the price-based decision summary singular. The older NBA research
-  // shortlist used different thresholds and could contradict this review.
-  const nbaScreen=null;
-  const nbaScreenHtml=nbaScreen?CookNBABetResearch.html(nbaScreen):'';
+  // Preserve the legacy NBA research calculation for other research workflows,
+  // but do not display a competing shortlist over the manual PLAY/LEAN/PASS result.
+  const nbaScreen=model.sport==='NBA'&&typeof CookNBABetResearch!=='undefined'?CookNBABetResearch.analyze(result,model):null;
+  const nbaScreenHtml=result.manualReview||!result.markets.some(x=>x.price!==null)?'':nbaScreen?CookNBABetResearch.html(nbaScreen):'';
   const favorites=result.markets.filter(x=>x.eligible).sort((a,b)=>b.ev-a.ev);
   const highest=favorites[0], priced=result.markets.filter(x=>x.price!==null);
   const headline=result.manualReview?result.manualReview.summary:nbaScreen?.candidates.length?'NBA price-backed shortlist: '+nbaScreen.candidates[0].label+' at '+nbaScreen.candidates[0].priceDisplay+' · research only, not approved.':
