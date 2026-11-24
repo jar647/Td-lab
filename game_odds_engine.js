@@ -60,7 +60,12 @@
  }
  function nflGame(game,backtest,meta={}){
   if(!game||!game.home||!game.away)throw Error('Selected NFL matchup is unavailable');
-  const scenario=meta.modelMode==='lineup'?game.model_inputs?.lineup_scenario:null;
+  const sourceMode=meta.modelMode||'baseline';
+  if(!['baseline','lineup','matchup','matchup-lineup'].includes(sourceMode))throw Error('Unknown NFL simulation source mode');
+  const scenario=['lineup','matchup-lineup'].includes(sourceMode)?game.model_inputs?.lineup_scenario:null;
+  const usingMatchup=['matchup','matchup-lineup'].includes(sourceMode);
+  const matchupAPI=usingMatchup?(typeof module==='object'&&module.exports?require('./nfl_matchup_scenario.js'):globalThis.CookNFLMatchupScenario):null;
+  if(usingMatchup&&(!matchupAPI||typeof matchupAPI.evaluate!=='function'))throw Error('NFL pass/rush matchup scenario module unavailable');
   if(meta.modelMode==='lineup'&&(!scenario?.available||!scenario.quarterbacks||!scenario.version))throw Error('Supported QB/lineup scenario unavailable; choose the historical baseline explicitly');
   if(scenario&&meta.lineupHistory?.model_version!==scenario.base_version)throw Error('Matching chronological QB-model residual history is unavailable');
   if(scenario&&[game.home,game.away].some(t=>!scenario.quarterbacks[t]?.player_id||!scenario.quarterbacks[t]?.effect_available))throw Error('Supported quarterback identities are required for a lineup scenario');
@@ -71,6 +76,9 @@
   if(hGames===null||aGames===null||hGames<2||aGames<2)throw Error('Insufficient earlier NFL team games');
   const season=Number(meta.season)||Number(String(game.game_id||'').split('_')[0])||2026;
   const week=Number(meta.week)||Number(String(game.game_id||'').split('_')[1])||0;
+  const matchupScenario=usingMatchup?matchupAPI.evaluate(game.model_inputs?.matchup_research,game.home,game.away,week):null;
+  const projectedHome=home+(matchupScenario?.home.pointsShift||0),projectedAway=away+(matchupScenario?.away.pointsShift||0);
+  if(projectedHome<0||projectedAway<0)throw Error('Invalid matchup-adjusted NFL score projection');
   if(scenario&&scenario.through_week!==undefined&&Number(scenario.through_week)!==week-1)throw Error('Lineup scenario is for a different source week');
   if(scenario){const ids=meta.lineupHistory.records.map(r=>r.game_id);if(ids.some(id=>!id)||new Set(ids).size!==ids.length)throw Error('Duplicate or missing chronological residual game identities');}
   const baselineResiduals=!scenario&&game.model_inputs?.trust?.projection_basis==='SCORING_BASELINE';
@@ -87,18 +95,19 @@
   const conditional=contextualResiduals(records,game.model_inputs?.residual_context);
   const simulationRecords=conditional.records;
   return {sport:'NFL',id:String(game.game_id||game.away+'-'+game.home),date:String(game.kickoff_at||game.gameday||''),pregameOnly:meta.live===true,home:String(game.home),away:String(game.away),
-   modelVersion:scenario?scenario.version:game.model_version,projectedHome:home,projectedAway:away,residuals:pairedResiduals(simulationRecords),sample:{homeGames:hGames,awayGames:aGames,residualGames:simulationRecords.length,
+   modelVersion:matchupScenario?(scenario?scenario.version:game.model_version)+'+'+matchupScenario.version:scenario?scenario.version:game.model_version,projectedHome,projectedAway,residuals:pairedResiduals(simulationRecords),sample:{homeGames:hGames,awayGames:aGames,residualGames:simulationRecords.length,
     residualContextUsed:conditional.used,residualWeatherUsed:conditional.weatherUsed,residualContextReason:conditional.reason},
    scoreSourceCheck:game.model_inputs?.lineup_scenario?.score_source_check||null,historicalBaseline:{home:finite(game.projected_home_points),away:finite(game.projected_away_points)},lineupScenario:scenario||null,trust:scenario?{...game.model_inputs?.trust,projection_basis:'QB_LINEUP_SCENARIO',calibration_status:'NOT_CALIBRATED'}:game.model_inputs?.trust||null,feedGeneratedAt:meta.generatedAt||null,
    scoreCandidate:game.model_inputs?.score_candidate||null,
+   matchupScenario,
    residualBasis:scenario?'OPPONENT_QB_CHRONOLOGICAL_ERRORS':baselineResiduals?'SCORING_BASELINE':'MATCHUP_ADJUSTED',
    matchupAnalysis:game.model_inputs?.matchup||null,
    matchupResearch:game.model_inputs?.matchup_research||null,
    pregameContext:game.model_inputs?.research_context||null,
-   method:(scenario?'Opponent-adjusted scoring with explicit QB and observed joint absence scenarios; matching chronological opponent/QB residuals':baselineResiduals?'Historical scoring baseline. Experimental EPA point corrections disabled; residuals use the same baseline':game.model_version==='score-baseline-pbp-v2'?'Pregame scoring baseline with shrunk home/road scoring splits and season/recent EPA-success offense-vs-defense adjustment':'Pregame score baseline')+', plus '+conditional.reason+' Paired historical score residual simulation.',
+   method:(scenario?'Opponent-adjusted scoring with explicit QB and observed joint absence scenarios; matching chronological opponent/QB residuals':baselineResiduals?'Historical scoring baseline. Experimental EPA point corrections disabled; residuals use the same baseline':game.model_version==='score-baseline-pbp-v2'?'Pregame scoring baseline with shrunk home/road scoring splits and season/recent EPA-success offense-vs-defense adjustment':'Pregame score baseline')+(matchupScenario?' + capped offense-vs-opponent-defense run/pass EPA interaction (research scenario only)':'')+', plus '+conditional.reason+' Paired historical score residual simulation.',
    homeOffense:finite(game.model_inputs?.home?.offense),awayOffense:finite(game.model_inputs?.away?.offense),
    homeAllowed:finite(game.model_inputs?.home?.defense_allowed),awayAllowed:finite(game.model_inputs?.away?.defense_allowed),
-   warning:'Experimental NFL score model. Historical team performance includes prior player/coaching effects; only confirmed current game information should alter projections. Weather conditions residual sampling only when enough matched history exists. Injury/lineup effects are not assigned a guessed point value. Probabilities are uncalibrated.'};
+   warning:'Experimental NFL score model. Historical team performance includes prior player/coaching effects; only confirmed current game information should alter projections. Weather conditions residual sampling only when enough matched history exists. '+(matchupScenario?'Pass/rush EPA shifts use a heuristic 25% interaction, not a calibrated scoring effect. ':'')+'Unverified injury/lineup effects are not assigned guessed point values. Probabilities are uncalibrated.'};
  }
  function gamePoints(game){
   if(!game||game.status!=='STATUS_FINAL'||Number(game.season_type)!==2)return null;
