@@ -1,7 +1,7 @@
 {
   "season": 2026,
   "week": 12,
-  "generated_at": "2026-11-24T15:50:27.193467+00:00",
+  "generated_at": "2026-11-24T16:07:34.374559+00:00",
   "model_status": "AUDITED_BASELINE_UNCALIBRATED",
   "model_version": "score-baseline-trust-v3",
   "note": "Historical scoring research baseline; independently recomputed source rates; QB-led history separated; no unvalidated EPA point correction or verified betting recommendation.",
@@ -436,8 +436,8 @@
                   "player": "Matthew Stafford",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/14/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:46:05+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:02:10+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Matthew Stafford starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -651,7 +651,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 0,
                   "rejected_rows": 0
                 }
@@ -806,8 +806,8 @@
                   "player": "Jordan Love",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/9/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:48:31+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:04:23+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Jordan Love starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -1021,7 +1021,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 0,
                   "rejected_rows": 0
                 }
@@ -1048,7 +1048,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-24T15:50:23.321258+00:00",
+            "retrieved_at": "2026-11-24T16:07:30.193717+00:00",
             "season": 2026,
             "through_week": 11,
             "sources": [
@@ -1082,7 +1082,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "02087949e239158a189c1a43a5499da5478b61ec25ad2b43a7bd241623a4aad2",
-          "checked_at": "2026-11-24T15:50:23.039067+00:00",
+          "checked_at": "2026-11-24T16:07:29.868186+00:00",
           "through_week": 11,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -1316,7 +1316,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v2",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-24T15:50:23.321766+00:00",
+          "generated_at": "2026-11-24T16:07:30.194543+00:00",
           "available": true,
           "quarterbacks": {
             "LA": {
@@ -1324,8 +1324,8 @@
               "player": "Matthew Stafford",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/14/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:46:05+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:02:10+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Matthew Stafford starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -1335,8 +1335,8 @@
               "player": "Jordan Love",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/9/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:48:31+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:04:23+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Jordan Love starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -1354,7 +1354,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 0,
                 "rejected_rows": 0
               },
@@ -1394,7 +1394,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 0,
                 "rejected_rows": 0
               },
@@ -1910,8 +1910,8 @@
                   "player": "Jared Goff",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/8/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:45:39+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:06:26+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Jared Goff starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -2071,14 +2071,14 @@
                       "athleteId": "4566092",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -2158,7 +2158,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 1,
                   "rejected_rows": 0
                 }
@@ -2313,8 +2313,8 @@
                   "player": "Caleb Williams",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/3/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:46:04+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:06:26+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Caleb Williams starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -2474,14 +2474,14 @@
                       "athleteId": "4361093",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -2561,7 +2561,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 1,
                   "rejected_rows": 0
                 }
@@ -2588,7 +2588,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-24T15:50:23.452030+00:00",
+            "retrieved_at": "2026-11-24T16:07:30.370412+00:00",
             "season": 2026,
             "through_week": 11,
             "sources": [
@@ -2622,7 +2622,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "02087949e239158a189c1a43a5499da5478b61ec25ad2b43a7bd241623a4aad2",
-          "checked_at": "2026-11-24T15:50:23.039067+00:00",
+          "checked_at": "2026-11-24T16:07:29.868186+00:00",
           "through_week": 11,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -2856,7 +2856,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v2",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-24T15:50:23.452557+00:00",
+          "generated_at": "2026-11-24T16:07:30.371206+00:00",
           "available": true,
           "quarterbacks": {
             "DET": {
@@ -2864,8 +2864,8 @@
               "player": "Jared Goff",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/8/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:45:39+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:06:26+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Jared Goff starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -2875,8 +2875,8 @@
               "player": "Caleb Williams",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/3/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:46:04+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:06:26+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Caleb Williams starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -2911,14 +2911,14 @@
                     "athleteId": "4566092",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -2927,7 +2927,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 1,
                 "rejected_rows": 0
               },
@@ -2984,14 +2984,14 @@
                     "athleteId": "4361093",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -3000,7 +3000,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 1,
                 "rejected_rows": 0
               },
@@ -3516,8 +3516,8 @@
                   "player": "Dak Prescott",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/6/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:46:03+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:02:09+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Dak Prescott starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -3685,14 +3685,14 @@
                       "athleteId": "3929850",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -3717,14 +3717,14 @@
                       "athleteId": "4426485",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -3749,14 +3749,14 @@
                       "athleteId": "4685266",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -3836,7 +3836,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 3,
                   "rejected_rows": 0
                 }
@@ -3991,8 +3991,8 @@
                   "player": "Joe Milton III",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/21/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:46:04+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:02:10+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Joe Milton III starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -4152,14 +4152,14 @@
                       "athleteId": "4431573",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -4239,7 +4239,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 1,
                   "rejected_rows": 0
                 }
@@ -4270,7 +4270,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-24T15:50:23.726982+00:00",
+            "retrieved_at": "2026-11-24T16:07:30.746900+00:00",
             "season": 2026,
             "through_week": 11,
             "sources": [
@@ -4311,7 +4311,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "02087949e239158a189c1a43a5499da5478b61ec25ad2b43a7bd241623a4aad2",
-          "checked_at": "2026-11-24T15:50:23.039067+00:00",
+          "checked_at": "2026-11-24T16:07:29.868186+00:00",
           "through_week": 11,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -4546,7 +4546,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v2",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-24T15:50:23.727495+00:00",
+          "generated_at": "2026-11-24T16:07:30.747678+00:00",
           "available": true,
           "quarterbacks": {
             "DAL": {
@@ -4554,8 +4554,8 @@
               "player": "Dak Prescott",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/6/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:46:03+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:02:09+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Dak Prescott starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -4565,8 +4565,8 @@
               "player": "Joe Milton III",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/21/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:46:04+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:02:10+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Joe Milton III starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -4601,14 +4601,14 @@
                     "athleteId": "3929850",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 },
                 {
@@ -4633,14 +4633,14 @@
                     "athleteId": "4426485",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 },
                 {
@@ -4665,14 +4665,14 @@
                     "athleteId": "4685266",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -4681,7 +4681,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 3,
                 "rejected_rows": 0
               },
@@ -4738,14 +4738,14 @@
                     "athleteId": "4431573",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -4754,7 +4754,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 1,
                 "rejected_rows": 0
               },
@@ -5270,8 +5270,8 @@
                   "player": "Josh Allen",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/2/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:49:42+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:05:08+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Josh Allen starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -5431,14 +5431,14 @@
                       "athleteId": "4684527",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -5518,7 +5518,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 1,
                   "rejected_rows": 0
                 }
@@ -5673,8 +5673,8 @@
                   "player": "Patrick Mahomes",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/12/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:46:04+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:02:10+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Patrick Mahomes starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -5888,7 +5888,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 0,
                   "rejected_rows": 0
                 }
@@ -5919,7 +5919,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-24T15:50:23.983027+00:00",
+            "retrieved_at": "2026-11-24T16:07:31.028264+00:00",
             "season": 2026,
             "through_week": 11,
             "sources": [
@@ -5960,7 +5960,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "02087949e239158a189c1a43a5499da5478b61ec25ad2b43a7bd241623a4aad2",
-          "checked_at": "2026-11-24T15:50:23.039067+00:00",
+          "checked_at": "2026-11-24T16:07:29.868186+00:00",
           "through_week": 11,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -6194,7 +6194,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v2",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-24T15:50:23.983552+00:00",
+          "generated_at": "2026-11-24T16:07:31.029070+00:00",
           "available": true,
           "quarterbacks": {
             "BUF": {
@@ -6202,8 +6202,8 @@
               "player": "Josh Allen",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/2/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:49:42+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:05:08+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Josh Allen starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -6213,8 +6213,8 @@
               "player": "Patrick Mahomes",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/12/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:46:04+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:02:10+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Patrick Mahomes starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -6249,14 +6249,14 @@
                     "athleteId": "4684527",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -6265,7 +6265,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 1,
                 "rejected_rows": 0
               },
@@ -6305,7 +6305,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 0,
                 "rejected_rows": 0
               },
@@ -6821,8 +6821,8 @@
                   "player": "Aaron Rodgers",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/23/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:45:46+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:06:25+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Aaron Rodgers starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -6982,14 +6982,14 @@
                       "athleteId": "4429164",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -7069,7 +7069,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 1,
                   "rejected_rows": 0
                 }
@@ -7224,8 +7224,8 @@
                   "player": "Bo Nix",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/7/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:46:03+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:06:55+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Bo Nix starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -7385,14 +7385,14 @@
                       "athleteId": "4039059",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -7472,7 +7472,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 1,
                   "rejected_rows": 0
                 }
@@ -7503,7 +7503,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-24T15:50:24.233079+00:00",
+            "retrieved_at": "2026-11-24T16:07:31.297688+00:00",
             "season": 2026,
             "through_week": 11,
             "sources": [
@@ -7544,7 +7544,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "02087949e239158a189c1a43a5499da5478b61ec25ad2b43a7bd241623a4aad2",
-          "checked_at": "2026-11-24T15:50:23.039067+00:00",
+          "checked_at": "2026-11-24T16:07:29.868186+00:00",
           "through_week": 11,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -7778,7 +7778,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v2",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-24T15:50:24.233589+00:00",
+          "generated_at": "2026-11-24T16:07:31.298460+00:00",
           "available": true,
           "quarterbacks": {
             "PIT": {
@@ -7786,8 +7786,8 @@
               "player": "Aaron Rodgers",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/23/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:45:46+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:06:25+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Aaron Rodgers starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -7797,8 +7797,8 @@
               "player": "Bo Nix",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/7/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:46:03+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:06:55+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Bo Nix starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -7833,14 +7833,14 @@
                     "athleteId": "4429164",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -7849,7 +7849,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 1,
                 "rejected_rows": 0
               },
@@ -7906,14 +7906,14 @@
                     "athleteId": "4039059",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -7922,7 +7922,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 1,
                 "rejected_rows": 0
               },
@@ -8438,8 +8438,8 @@
                   "player": "Joe Burrow",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/4/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:45:08+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:06:55+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Joe Burrow starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -8653,7 +8653,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 0,
                   "rejected_rows": 0
                 }
@@ -8808,8 +8808,8 @@
                   "player": "Tyler Shough",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/18/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:45:58+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:02:10+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Tyler Shough starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -8969,14 +8969,14 @@
                       "athleteId": "4241993",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -9001,14 +9001,14 @@
                       "athleteId": "4429568",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -9088,7 +9088,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 2,
                   "rejected_rows": 0
                 }
@@ -9119,7 +9119,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-24T15:50:24.489407+00:00",
+            "retrieved_at": "2026-11-24T16:07:31.579087+00:00",
             "season": 2026,
             "through_week": 11,
             "sources": [
@@ -9160,7 +9160,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "02087949e239158a189c1a43a5499da5478b61ec25ad2b43a7bd241623a4aad2",
-          "checked_at": "2026-11-24T15:50:23.039067+00:00",
+          "checked_at": "2026-11-24T16:07:29.868186+00:00",
           "through_week": 11,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -9394,7 +9394,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v2",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-24T15:50:24.489896+00:00",
+          "generated_at": "2026-11-24T16:07:31.579885+00:00",
           "available": true,
           "quarterbacks": {
             "CIN": {
@@ -9402,8 +9402,8 @@
               "player": "Joe Burrow",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/4/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:45:08+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:06:55+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Joe Burrow starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -9413,8 +9413,8 @@
               "player": "Tyler Shough",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/18/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:45:58+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:02:10+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Tyler Shough starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -9432,7 +9432,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 0,
                 "rejected_rows": 0
               },
@@ -9489,14 +9489,14 @@
                     "athleteId": "4241993",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 },
                 {
@@ -9521,14 +9521,14 @@
                     "athleteId": "4429568",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -9537,7 +9537,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 2,
                 "rejected_rows": 0
               },
@@ -10053,8 +10053,8 @@
                   "player": "Deshaun Watson",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/5/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:46:29+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:03:31+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Deshaun Watson starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -10214,14 +10214,14 @@
                       "athleteId": "4569620",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -10301,7 +10301,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 1,
                   "rejected_rows": 0
                 }
@@ -10456,8 +10456,8 @@
                   "player": "Fernando Mendoza",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/13/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:46:10+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:03:36+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Fernando Mendoza starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -10625,14 +10625,14 @@
                       "athleteId": "4429109",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -10657,14 +10657,14 @@
                       "athleteId": "4432665",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -10744,7 +10744,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 2,
                   "rejected_rows": 0
                 }
@@ -10775,7 +10775,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-24T15:50:24.750059+00:00",
+            "retrieved_at": "2026-11-24T16:07:31.828977+00:00",
             "season": 2026,
             "through_week": 11,
             "sources": [
@@ -10816,7 +10816,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "02087949e239158a189c1a43a5499da5478b61ec25ad2b43a7bd241623a4aad2",
-          "checked_at": "2026-11-24T15:50:23.039067+00:00",
+          "checked_at": "2026-11-24T16:07:29.868186+00:00",
           "through_week": 11,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -11051,7 +11051,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v2",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-24T15:50:24.750581+00:00",
+          "generated_at": "2026-11-24T16:07:31.829789+00:00",
           "available": true,
           "quarterbacks": {
             "CLE": {
@@ -11059,8 +11059,8 @@
               "player": "Deshaun Watson",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/5/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:46:29+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:03:31+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Deshaun Watson starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -11070,8 +11070,8 @@
               "player": "Fernando Mendoza",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/13/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:46:10+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:03:36+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Fernando Mendoza starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -11106,14 +11106,14 @@
                     "athleteId": "4569620",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -11122,7 +11122,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 1,
                 "rejected_rows": 0
               },
@@ -11179,14 +11179,14 @@
                     "athleteId": "4429109",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 },
                 {
@@ -11211,14 +11211,14 @@
                     "athleteId": "4432665",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -11227,7 +11227,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 2,
                 "rejected_rows": 0
               },
@@ -11743,8 +11743,8 @@
                   "player": "C.J. Stroud",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/34/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:45:51+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:03:01+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes C.J. Stroud starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -11904,14 +11904,14 @@
                       "athleteId": "4362504",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -11936,14 +11936,14 @@
                       "athleteId": "4432708",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -11968,14 +11968,14 @@
                       "athleteId": "2976560",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -12055,7 +12055,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 3,
                   "rejected_rows": 0
                 }
@@ -12210,8 +12210,8 @@
                   "player": "Jacoby Brissett",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/33/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:46:28+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:03:28+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Jacoby Brissett starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -12379,14 +12379,14 @@
                       "athleteId": "4035245",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -12411,14 +12411,14 @@
                       "athleteId": "3858276",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -12498,7 +12498,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 2,
                   "rejected_rows": 0
                 }
@@ -12529,7 +12529,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-24T15:50:25.040820+00:00",
+            "retrieved_at": "2026-11-24T16:07:32.093047+00:00",
             "season": 2026,
             "through_week": 11,
             "sources": [
@@ -12570,7 +12570,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "02087949e239158a189c1a43a5499da5478b61ec25ad2b43a7bd241623a4aad2",
-          "checked_at": "2026-11-24T15:50:23.039067+00:00",
+          "checked_at": "2026-11-24T16:07:29.868186+00:00",
           "through_week": 11,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -12805,7 +12805,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v2",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-24T15:50:25.041321+00:00",
+          "generated_at": "2026-11-24T16:07:32.093844+00:00",
           "available": true,
           "quarterbacks": {
             "HOU": {
@@ -12813,8 +12813,8 @@
               "player": "C.J. Stroud",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/34/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:45:51+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:03:01+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes C.J. Stroud starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -12824,8 +12824,8 @@
               "player": "Jacoby Brissett",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/33/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:46:28+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:03:28+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Jacoby Brissett starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -12860,14 +12860,14 @@
                     "athleteId": "4362504",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 },
                 {
@@ -12892,14 +12892,14 @@
                     "athleteId": "4432708",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 },
                 {
@@ -12924,14 +12924,14 @@
                     "athleteId": "2976560",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -12940,7 +12940,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 3,
                 "rejected_rows": 0
               },
@@ -12997,14 +12997,14 @@
                     "athleteId": "4035245",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 },
                 {
@@ -13029,14 +13029,14 @@
                     "athleteId": "3858276",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -13045,7 +13045,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 2,
                 "rejected_rows": 0
               },
@@ -13561,8 +13561,8 @@
                   "player": "Anthony Richardson",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/11/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:45:53+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:03:01+00:00",
                   "effect_available": false,
                   "assumption": "Depth-chart first unit; assumes Anthony Richardson starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -13730,14 +13730,14 @@
                       "athleteId": "3863182",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -13762,14 +13762,14 @@
                       "athleteId": "4037361",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -13794,14 +13794,14 @@
                       "athleteId": "4362523",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -13826,14 +13826,14 @@
                       "athleteId": "4427250",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -13913,7 +13913,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 4,
                   "rejected_rows": 0
                 }
@@ -14068,8 +14068,8 @@
                   "player": "J.J. McCarthy",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/19/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:46:29+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:02:10+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes J.J. McCarthy starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -14283,7 +14283,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 0,
                   "rejected_rows": 0
                 }
@@ -14314,7 +14314,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-24T15:50:25.346892+00:00",
+            "retrieved_at": "2026-11-24T16:07:32.449962+00:00",
             "season": 2026,
             "through_week": 11,
             "sources": [
@@ -14355,7 +14355,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "02087949e239158a189c1a43a5499da5478b61ec25ad2b43a7bd241623a4aad2",
-          "checked_at": "2026-11-24T15:50:23.039067+00:00",
+          "checked_at": "2026-11-24T16:07:29.868186+00:00",
           "through_week": 11,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -14590,7 +14590,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v2",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-24T15:50:25.347378+00:00",
+          "generated_at": "2026-11-24T16:07:32.450705+00:00",
           "available": false,
           "quarterbacks": {
             "IND": {
@@ -14598,8 +14598,8 @@
               "player": "Anthony Richardson",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/11/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:45:53+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:03:01+00:00",
               "effect_available": false,
               "assumption": "Depth-chart first unit; assumes Anthony Richardson starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -14609,8 +14609,8 @@
               "player": "J.J. McCarthy",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/19/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:46:29+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:02:10+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes J.J. McCarthy starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -15097,8 +15097,8 @@
                   "player": "Kyle McCord",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/15/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:46:29+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:03:35+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Kyle McCord starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -15258,14 +15258,14 @@
                       "athleteId": "4567225",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -15290,14 +15290,14 @@
                       "athleteId": "4431664",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -15322,14 +15322,14 @@
                       "athleteId": "4430681",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -15354,14 +15354,14 @@
                       "athleteId": "2977680",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -15441,7 +15441,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 4,
                   "rejected_rows": 0
                 }
@@ -15596,8 +15596,8 @@
                   "player": "Geno Smith",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/20/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:46:29+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:03:06+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Geno Smith starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -15765,14 +15765,14 @@
                       "athleteId": "4569371",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -15797,14 +15797,14 @@
                       "athleteId": "4683815",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -15829,14 +15829,14 @@
                       "athleteId": "4723820",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -15916,7 +15916,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 3,
                   "rejected_rows": 0
                 }
@@ -15947,7 +15947,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-24T15:50:25.612876+00:00",
+            "retrieved_at": "2026-11-24T16:07:32.721146+00:00",
             "season": 2026,
             "through_week": 11,
             "sources": [
@@ -15988,7 +15988,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "02087949e239158a189c1a43a5499da5478b61ec25ad2b43a7bd241623a4aad2",
-          "checked_at": "2026-11-24T15:50:23.039067+00:00",
+          "checked_at": "2026-11-24T16:07:29.868186+00:00",
           "through_week": 11,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -16223,7 +16223,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v2",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-24T15:50:25.613439+00:00",
+          "generated_at": "2026-11-24T16:07:32.721902+00:00",
           "available": true,
           "quarterbacks": {
             "MIA": {
@@ -16231,8 +16231,8 @@
               "player": "Kyle McCord",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/15/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:46:29+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:03:35+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Kyle McCord starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -16242,8 +16242,8 @@
               "player": "Geno Smith",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/20/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:46:29+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:03:06+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Geno Smith starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -16278,14 +16278,14 @@
                     "athleteId": "4567225",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 },
                 {
@@ -16310,14 +16310,14 @@
                     "athleteId": "4431664",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 },
                 {
@@ -16342,14 +16342,14 @@
                     "athleteId": "4430681",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 },
                 {
@@ -16374,14 +16374,14 @@
                     "athleteId": "2977680",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -16390,7 +16390,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 4,
                 "rejected_rows": 0
               },
@@ -16447,14 +16447,14 @@
                     "athleteId": "4569371",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 },
                 {
@@ -16479,14 +16479,14 @@
                     "athleteId": "4683815",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 },
                 {
@@ -16511,14 +16511,14 @@
                     "athleteId": "4723820",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -16527,7 +16527,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 3,
                 "rejected_rows": 0
               },
@@ -17043,8 +17043,8 @@
                   "player": "Kirk Cousins",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/16/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:45:10+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:06:27+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Kirk Cousins starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -17204,14 +17204,14 @@
                       "athleteId": "4044540",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -17236,14 +17236,14 @@
                       "athleteId": "4568007",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -17268,14 +17268,14 @@
                       "athleteId": "3917315",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -17355,7 +17355,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 3,
                   "rejected_rows": 0
                 }
@@ -17510,8 +17510,8 @@
                   "player": "Michael Penix Jr.",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/1/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:45:47+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:03:27+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Michael Penix Jr. starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -17671,14 +17671,14 @@
                       "athleteId": "4037626",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -17703,14 +17703,14 @@
                       "athleteId": "4870612",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -17790,7 +17790,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 2,
                   "rejected_rows": 0
                 }
@@ -17817,7 +17817,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-24T15:50:25.743422+00:00",
+            "retrieved_at": "2026-11-24T16:07:32.899182+00:00",
             "season": 2026,
             "through_week": 11,
             "sources": [
@@ -17851,7 +17851,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "02087949e239158a189c1a43a5499da5478b61ec25ad2b43a7bd241623a4aad2",
-          "checked_at": "2026-11-24T15:50:23.039067+00:00",
+          "checked_at": "2026-11-24T16:07:29.868186+00:00",
           "through_week": 11,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -18085,7 +18085,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v2",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-24T15:50:25.743919+00:00",
+          "generated_at": "2026-11-24T16:07:32.899957+00:00",
           "available": true,
           "quarterbacks": {
             "MIN": {
@@ -18093,8 +18093,8 @@
               "player": "Kirk Cousins",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/16/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:45:10+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:06:27+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Kirk Cousins starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -18104,8 +18104,8 @@
               "player": "Michael Penix Jr.",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/1/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:45:47+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:03:27+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Michael Penix Jr. starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -18140,14 +18140,14 @@
                     "athleteId": "4044540",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 },
                 {
@@ -18172,14 +18172,14 @@
                     "athleteId": "4568007",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 },
                 {
@@ -18204,14 +18204,14 @@
                     "athleteId": "3917315",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -18220,7 +18220,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 3,
                 "rejected_rows": 0
               },
@@ -18277,14 +18277,14 @@
                     "athleteId": "4037626",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 },
                 {
@@ -18309,14 +18309,14 @@
                     "athleteId": "4870612",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -18325,7 +18325,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 2,
                 "rejected_rows": 0
               },
@@ -18841,8 +18841,8 @@
                   "player": "Trevor Lawrence",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/30/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:45:55+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:06:28+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Trevor Lawrence starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -19002,14 +19002,14 @@
                       "athleteId": "4573319",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -19034,14 +19034,14 @@
                       "athleteId": "3134316",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -19121,7 +19121,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 2,
                   "rejected_rows": 0
                 }
@@ -19276,8 +19276,8 @@
                   "player": "Cam Ward",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/10/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:46:02+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:02:52+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Cam Ward starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -19491,7 +19491,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 0,
                   "rejected_rows": 0
                 }
@@ -19507,12 +19507,12 @@
             "location": "Home",
             "roof": "outdoors",
             "surface": "grass",
-            "temperature_f": 66,
+            "temperature_f": 64,
             "wind_mph": 5.0,
             "wind_direction": "SE",
-            "precipitation_probability": 15,
-            "weather_condition": "Slight Chance Rain Showers",
-            "weather_updated_at": "2026-11-24T09:11:22+00:00"
+            "precipitation_probability": 12,
+            "weather_condition": "Mostly Cloudy",
+            "weather_updated_at": "2026-11-24T15:06:36+00:00"
           },
           "travel": {
             "available": true,
@@ -19522,7 +19522,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-24T15:50:26.039593+00:00",
+            "retrieved_at": "2026-11-24T16:07:33.153808+00:00",
             "season": 2026,
             "through_week": 11,
             "sources": [
@@ -19551,19 +19551,19 @@
             "available": true,
             "source": "National Weather Service hourly forecast",
             "forecast_time": "2026-11-29T13:00:00-05:00",
-            "updated_at": "2026-11-24T09:11:22+00:00",
+            "updated_at": "2026-11-24T15:06:36+00:00",
             "source_timestamp_field": "updateTime",
-            "temperature_f": 66,
+            "temperature_f": 64,
             "wind_mph": 5.0,
             "wind_direction": "SE",
-            "precipitation_probability": 15,
-            "condition": "Slight Chance Rain Showers"
+            "precipitation_probability": 12,
+            "condition": "Mostly Cloudy"
           }
         },
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "02087949e239158a189c1a43a5499da5478b61ec25ad2b43a7bd241623a4aad2",
-          "checked_at": "2026-11-24T15:50:23.039067+00:00",
+          "checked_at": "2026-11-24T16:07:29.868186+00:00",
           "through_week": 11,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -19797,7 +19797,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v2",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-24T15:50:26.040092+00:00",
+          "generated_at": "2026-11-24T16:07:33.154597+00:00",
           "available": true,
           "quarterbacks": {
             "JAX": {
@@ -19805,8 +19805,8 @@
               "player": "Trevor Lawrence",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/30/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:45:55+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:06:28+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Trevor Lawrence starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -19816,8 +19816,8 @@
               "player": "Cam Ward",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/10/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:46:02+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:02:52+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Cam Ward starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -19852,14 +19852,14 @@
                     "athleteId": "4573319",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 },
                 {
@@ -19884,14 +19884,14 @@
                     "athleteId": "3134316",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -19900,7 +19900,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 2,
                 "rejected_rows": 0
               },
@@ -19940,7 +19940,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 0,
                 "rejected_rows": 0
               },
@@ -20000,7 +20000,7 @@
           "away_rest": 7.0,
           "travel_miles": 501,
           "roof": "outdoors",
-          "temperature_f": 66,
+          "temperature_f": 64,
           "wind_mph": 5.0
         },
         "prior_games": 4.0,
@@ -20456,8 +20456,8 @@
                   "player": "Carson Beck",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/22/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:46:04+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:03:07+00:00",
                   "effect_available": false,
                   "assumption": "Depth-chart first unit; assumes Carson Beck starts. Game-day starting status is not confirmed.",
                   "availability": "QUESTIONABLE"
@@ -20625,14 +20625,14 @@
                       "athleteId": "4430841",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -20712,7 +20712,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 1,
                   "rejected_rows": 0
                 }
@@ -20867,8 +20867,8 @@
                   "player": "Jayden Daniels",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/28/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:45:29+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:06:56+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Jayden Daniels starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -21082,7 +21082,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 0,
                   "rejected_rows": 0
                 }
@@ -21113,7 +21113,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-24T15:50:26.411209+00:00",
+            "retrieved_at": "2026-11-24T16:07:33.422108+00:00",
             "season": 2026,
             "through_week": 11,
             "sources": [
@@ -21154,7 +21154,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "02087949e239158a189c1a43a5499da5478b61ec25ad2b43a7bd241623a4aad2",
-          "checked_at": "2026-11-24T15:50:23.039067+00:00",
+          "checked_at": "2026-11-24T16:07:29.868186+00:00",
           "through_week": 11,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -21389,7 +21389,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v2",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-24T15:50:26.411721+00:00",
+          "generated_at": "2026-11-24T16:07:33.422902+00:00",
           "available": false,
           "quarterbacks": {
             "ARI": {
@@ -21397,8 +21397,8 @@
               "player": "Carson Beck",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/22/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:46:04+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:03:07+00:00",
               "effect_available": false,
               "assumption": "Depth-chart first unit; assumes Carson Beck starts. Game-day starting status is not confirmed.",
               "availability": "QUESTIONABLE"
@@ -21408,8 +21408,8 @@
               "player": "Jayden Daniels",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/28/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:45:29+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:06:56+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Jayden Daniels starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -21896,8 +21896,8 @@
                   "player": "Brock Purdy",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/25/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:46:16+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:02:44+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Brock Purdy starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -22057,14 +22057,14 @@
                       "athleteId": "4039029",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -22089,14 +22089,14 @@
                       "athleteId": "3916903",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -22176,7 +22176,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 2,
                   "rejected_rows": 0
                 }
@@ -22331,8 +22331,8 @@
                   "player": "Sam Darnold",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/26/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:46:18+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:02:55+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Sam Darnold starts. Game-day starting status is not confirmed.",
                   "availability": "QUESTIONABLE"
@@ -22492,14 +22492,14 @@
                       "athleteId": "3912547",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T15:31:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T15:31:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -22524,14 +22524,14 @@
                       "athleteId": "2971622",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -22611,7 +22611,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 2,
                   "rejected_rows": 0
                 }
@@ -22642,7 +22642,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-24T15:50:26.676887+00:00",
+            "retrieved_at": "2026-11-24T16:07:33.758085+00:00",
             "season": 2026,
             "through_week": 11,
             "sources": [
@@ -22683,7 +22683,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "02087949e239158a189c1a43a5499da5478b61ec25ad2b43a7bd241623a4aad2",
-          "checked_at": "2026-11-24T15:50:23.039067+00:00",
+          "checked_at": "2026-11-24T16:07:29.868186+00:00",
           "through_week": 11,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -22917,7 +22917,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v2",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-24T15:50:26.677365+00:00",
+          "generated_at": "2026-11-24T16:07:33.758895+00:00",
           "available": true,
           "quarterbacks": {
             "SF": {
@@ -22925,8 +22925,8 @@
               "player": "Brock Purdy",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/25/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:46:16+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:02:44+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Brock Purdy starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -22936,8 +22936,8 @@
               "player": "Sam Darnold",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/26/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:46:18+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:02:55+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Sam Darnold starts. Game-day starting status is not confirmed.",
               "availability": "QUESTIONABLE"
@@ -22972,14 +22972,14 @@
                     "athleteId": "4039029",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 },
                 {
@@ -23004,14 +23004,14 @@
                     "athleteId": "3916903",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -23020,7 +23020,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 2,
                 "rejected_rows": 0
               },
@@ -23077,14 +23077,14 @@
                     "athleteId": "3912547",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T15:31:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T15:31:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 },
                 {
@@ -23109,14 +23109,14 @@
                     "athleteId": "2971622",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -23125,7 +23125,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 2,
                 "rejected_rows": 0
               },
@@ -23641,8 +23641,8 @@
                   "player": "Justin Herbert",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/24/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:46:05+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:03:36+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Justin Herbert starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -23802,14 +23802,14 @@
                       "athleteId": "4360745",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -23834,14 +23834,14 @@
                       "athleteId": "4432571",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -23866,14 +23866,14 @@
                       "athleteId": "4685553",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -23898,14 +23898,14 @@
                       "athleteId": "4241597",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -23985,7 +23985,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 4,
                   "rejected_rows": 0
                 }
@@ -24140,8 +24140,8 @@
                   "player": "Tommy DeVito",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/17/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:45:21+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:06:56+00:00",
                   "effect_available": false,
                   "assumption": "Depth-chart first unit; assumes Tommy DeVito starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -24301,14 +24301,14 @@
                       "athleteId": "4047941",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   {
@@ -24333,14 +24333,14 @@
                       "athleteId": "3916923",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -24420,7 +24420,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 2,
                   "rejected_rows": 0
                 }
@@ -24447,7 +24447,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-24T15:50:26.805430+00:00",
+            "retrieved_at": "2026-11-24T16:07:33.934429+00:00",
             "season": 2026,
             "through_week": 11,
             "sources": [
@@ -24481,7 +24481,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "02087949e239158a189c1a43a5499da5478b61ec25ad2b43a7bd241623a4aad2",
-          "checked_at": "2026-11-24T15:50:23.039067+00:00",
+          "checked_at": "2026-11-24T16:07:29.868186+00:00",
           "through_week": 11,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -24715,7 +24715,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v2",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-24T15:50:26.805908+00:00",
+          "generated_at": "2026-11-24T16:07:33.935197+00:00",
           "available": false,
           "quarterbacks": {
             "LAC": {
@@ -24723,8 +24723,8 @@
               "player": "Justin Herbert",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/24/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:46:05+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:03:36+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Justin Herbert starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -24734,8 +24734,8 @@
               "player": "Tommy DeVito",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/17/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:45:21+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:06:56+00:00",
               "effect_available": false,
               "assumption": "Depth-chart first unit; assumes Tommy DeVito starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -25222,8 +25222,8 @@
                   "player": "Baker Mayfield",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/27/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:46:29+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:03:36+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Baker Mayfield starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -25383,14 +25383,14 @@
                       "athleteId": "4034790",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -25470,7 +25470,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 1,
                   "rejected_rows": 0
                 }
@@ -25625,8 +25625,8 @@
                   "player": "Bryce Young",
                   "source": "SOURCED_DEPTH_CHART",
                   "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/29/depthcharts",
-                  "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_updated_at": "2026-11-24T15:45:49+00:00",
+                  "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_updated_at": "2026-11-24T16:03:29+00:00",
                   "effect_available": true,
                   "assumption": "Depth-chart first unit; assumes Bryce Young starts. Game-day starting status is not confirmed.",
                   "availability": "NOT_REPORTED"
@@ -25786,14 +25786,14 @@
                       "athleteId": "3117253",
                       "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                       "reportedAt": "2026-11-24T12:39:00+00:00",
-                      "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                      "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                      "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                      "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                       "cached": false
                     },
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "source_updated_at": "2026-11-24T12:39:00+00:00",
-                    "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                    "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                    "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                    "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   }
                 ],
@@ -25873,7 +25873,7 @@
                 "live_source": {
                   "status": "ok",
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
                   "accepted_reports": 1,
                   "rejected_rows": 0
                 }
@@ -25904,7 +25904,7 @@
           },
           "source_note": "Team/player statistics, injury report fields, coach labels and venue fields are taken from the published nflverse feeds; source coverage and status freshness are shown separately.",
           "research": {
-            "retrieved_at": "2026-11-24T15:50:27.097509+00:00",
+            "retrieved_at": "2026-11-24T16:07:34.246264+00:00",
             "season": 2026,
             "through_week": 11,
             "sources": [
@@ -25945,7 +25945,7 @@
         "trust": {
           "source_status": "RECONCILED",
           "source_sha256": "02087949e239158a189c1a43a5499da5478b61ec25ad2b43a7bd241623a4aad2",
-          "checked_at": "2026-11-24T15:50:23.039067+00:00",
+          "checked_at": "2026-11-24T16:07:29.868186+00:00",
           "through_week": 11,
           "epa_missing_plays": 0,
           "external_verification": false,
@@ -26179,7 +26179,7 @@
         "lineup_scenario": {
           "version": "nfl-qb-lineup-scenario-v2",
           "base_version": "opponent-score-ridge-v1",
-          "generated_at": "2026-11-24T15:50:27.097982+00:00",
+          "generated_at": "2026-11-24T16:07:34.247016+00:00",
           "available": true,
           "quarterbacks": {
             "TB": {
@@ -26187,8 +26187,8 @@
               "player": "Baker Mayfield",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/27/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:46:29+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:03:36+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Baker Mayfield starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -26198,8 +26198,8 @@
               "player": "Bryce Young",
               "source": "SOURCED_DEPTH_CHART",
               "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/29/depthcharts",
-              "source_observed_at": "2026-11-24T15:50:04.150764+00:00",
-              "source_updated_at": "2026-11-24T15:45:49+00:00",
+              "source_observed_at": "2026-11-24T16:07:04.954868+00:00",
+              "source_updated_at": "2026-11-24T16:03:29+00:00",
               "effect_available": true,
               "assumption": "Depth-chart first unit; assumes Bryce Young starts. Game-day starting status is not confirmed.",
               "availability": "NOT_REPORTED"
@@ -26234,14 +26234,14 @@
                     "athleteId": "4034790",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -26250,7 +26250,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 1,
                 "rejected_rows": 0
               },
@@ -26307,14 +26307,14 @@
                     "athleteId": "3117253",
                     "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                     "reportedAt": "2026-11-24T12:39:00+00:00",
-                    "observedAt": "2026-11-24T15:50:04.150764+00:00",
-                    "sourceUpdatedAt": "2026-11-24T15:48:36+00:00",
+                    "observedAt": "2026-11-24T16:07:04.954868+00:00",
+                    "sourceUpdatedAt": "2026-11-24T16:06:56+00:00",
                     "cached": false
                   },
                   "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
                   "source_updated_at": "2026-11-24T12:39:00+00:00",
-                  "observed_at": "2026-11-24T15:50:04.150764+00:00",
-                  "source_document_updated_at": "2026-11-24T15:48:36+00:00",
+                  "observed_at": "2026-11-24T16:07:04.954868+00:00",
+                  "source_document_updated_at": "2026-11-24T16:06:56+00:00",
                   "cached": false
                 }
               ],
@@ -26323,7 +26323,7 @@
               "live_source": {
                 "status": "ok",
                 "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries?limit=1000",
-                "observed_at": "2026-11-24T15:50:04.150764+00:00",
+                "observed_at": "2026-11-24T16:07:04.954868+00:00",
                 "accepted_reports": 1,
                 "rejected_rows": 0
               },
