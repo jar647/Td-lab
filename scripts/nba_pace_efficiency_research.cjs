@@ -30,6 +30,14 @@ function candidate(current,hist){
  }))};
  return result;
 }
+// Fixed synthetic margin thresholds, deliberately independent of market lines.
+const THRESHOLDS=[-14.5,-7.5,-3.5,.5,3.5,7.5,14.5];
+function spreadMetrics(home,away,actual){
+ const m=home.map((h,i)=>h-away[i]),sorted=[...m].sort((a,b)=>a-b);
+ const q=p=>sorted[Math.floor(p*(sorted.length-1))];
+ return {spread_brier:mean(THRESHOLDS.map(t=>(mean(m.map(x=>Number(x>t)))-Number(actual>t))**2)),
+   margin_bias:mean(m)-actual,interval80_covered:Number(q(.1)<=actual&&actual<=q(.9))};
+}
 function replay(feed){
  const rows=[],skipped=[];
  for(const g of engine.records(feed,Infinity).slice(0,80).reverse()){
@@ -44,16 +52,17 @@ function replay(feed){
    for(const [name,model] of Object.entries({current,previous,next})){
     const r=engine.draws(model,1000,6472026);
     results[name]={margin:Math.abs(mean(r.home)-mean(r.away)-g.h.pts+g.a.pts),
-      total:Math.abs(mean(r.home)+mean(r.away)-g.h.pts-g.a.pts)};
+      total:Math.abs(mean(r.home)+mean(r.away)-g.h.pts-g.a.pts),...spreadMetrics(r.home,r.away,g.h.pts-g.a.pts)};
    }
    rows.push({date:g.date,...results});
   }catch(e){skipped.push({id:String(g.id),reason:e.message})}
  }
  const dates=[...new Set(rows.map(r=>r.date.slice(0,10)))].sort(),cutoff=dates[Math.floor(dates.length*2/3)];
- const summarize=rs=>({games:rs.length,...Object.fromEntries(['current','previous','next'].map(k=>[k,rs.length?{margin_mae:mean(rs.map(r=>r[k].margin)),total_mae:mean(rs.map(r=>r[k].total))}:null]))});
+ const summarize=rs=>({games:rs.length,...Object.fromEntries(['current','previous','next'].map(k=>[k,rs.length?{margin_mae:mean(rs.map(r=>r[k].margin)),total_mae:mean(rs.map(r=>r[k].total)),spread_brier:mean(rs.map(r=>r[k].spread_brier)),margin_bias:mean(rs.map(r=>r[k].margin_bias)),interval80_coverage:mean(rs.map(r=>r[k].interval80_covered))}:null]))});
  const development=summarize(rows.filter(r=>r.date.slice(0,10)<cutoff)),diagnostic=summarize(rows.filter(r=>r.date.slice(0,10)>=cutoff));
  if(development.games<10||diagnostic.games<10)throw Error('Insufficient historical replay');
- return {status:'RESEARCH_ONLY',candidate:'opponent-pace-rebounds-v2',model:engine.VERSION,cutoff,development,reused_diagnostic:diagnostic,skipped,
+ const selected=['current','previous','next'].sort((a,b)=>development[a].margin_mae-development[b].margin_mae)[0];
+ return {selection_objective:'minimum development margin MAE; synthetic-threshold Brier and interval coverage reported separately',development_selected:selected,synthetic_margin_thresholds:THRESHOLDS,status:'RESEARCH_ONLY',candidate:'opponent-pace-rebounds-v2',model:engine.VERSION,cutoff,development,reused_diagnostic:diagnostic,skipped,
  limits:'24-hour result embargo; historical injuries unknown. Existing engine uses estimated possessions; no verified future results or live model changes.'};
 }
 if(require.main===module)console.log(JSON.stringify(replay(JSON.parse(fs.readFileSync(path.resolve(__dirname,'../data/nba_games.json'),'utf8'))),null,2));
