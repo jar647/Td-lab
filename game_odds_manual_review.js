@@ -10,7 +10,7 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(root){
  'use strict';
  const keys=['homeML','awayML','homeATS','awayATS','over','under'];
- const rank={PLAY:3,LEAN:2,PASS:1};
+ const rank={PLAY:3,LEAN:2,PASS:1,HOLD:0};
  function engine(){return root.CookGameOdds||(typeof module==='object'&&module.exports?require('./game_odds_engine.js'):null);}
  function quoteOdds(p){return p&&p.american!==null?p.american:null;}
  function settlement(bins,predicate){
@@ -27,6 +27,7 @@
   const sample=model?.sample||{};
   if(sample.homeGames<5||sample.awayGames<5||sample.residualGames<(model.sport==='NFL'?100:35))
    return 'Limited team or historical outcome sample';
+  if(model.strengthRequired&&!result.possession?.strengthAnchor)return 'Opponent-adjusted scoring model unavailable: '+(model.strengthError||'rotation data missing');
   if(model.rotationFallback)return 'NBA rotation fallback; player availability unverified';
   if(model.sport==='NFL'){
    if(model.trust?.source_status!=='RECONCILED')return 'NFL data source not reconciled';
@@ -68,7 +69,8 @@
   }
   const quality=health(model,result,now);
   const strengthAPI=model.sport==='NBA'?(root.CookNBASpreadStrength||(typeof module==='object'&&module.exports?require('./nba_spread_strength.js'):null)):null;
-  const strength=strengthAPI?.distribution(model.spreadStrength,result)||null;
+  const integrated=!!result.possession?.strengthAnchor;
+  const strength=integrated?null:strengthAPI?.distribution(model.spreadStrength,result)||null;
   const hasQuoted=keys.some(k=>market.prices[k]!==null);
   const rows=keys.filter(k=>counts[k]).map(key=>{
    const c=counts[key],p=market.prices[key],win=c.win/total,loss=c.loss/total,push=c.push/total;
@@ -89,8 +91,8 @@
    const decisionEV=strengthCover?Math.min(ev,strengthCover.ev):ev;
    let decision='PASS',reason='';
    if(!p)reason='No price entered';
-   else if(quality)reason=quality;
-   else if(model.sport==='NBA'&&ats&&!strengthCover)reason='Opponent-adjusted spread comparison unavailable (experimental candidate supports half-point lines only)';
+   else if(quality){decision='HOLD';reason=quality;}
+   else if(model.sport==='NBA'&&ats&&!integrated&&!strengthCover)reason='Opponent-adjusted spread comparison unavailable (experimental candidate supports half-point lines only)';
    else if(decisionEdge>=.05&&decisionEV>=.08){
     decision='PLAY';reason='Strong model-estimated value at your quoted price; experimental, not a verified betting edge';
    }else if(decisionEdge>=.02&&decisionEV>=.025){
@@ -99,16 +101,16 @@
    else reason='No meaningful positive price discrepancy';
    return {key,label,win,loss,push,price:quoteOdds(p),implied:p?p.implied:null,
     breakEven,noVig:noVig[key]??null,modelEdge,ev,fair,signal:p?decision+' · EXPERIMENTAL MODEL ESTIMATE':'NO ODDS ENTERED',
-    strengthCover,decisionEdge,decisionEV,eligible:decision!=='PASS',decision,reason};
+    strengthCover,decisionEdge,decisionEV,eligible:decision==='PLAY'||decision==='LEAN',decision,reason};
   });
   const priced=rows.filter(x=>x.price!==null);
   priced.sort((a,b)=>(rank[b.decision]-rank[a.decision])||(b.decisionEV-a.decisionEV)||(b.decisionEdge-a.decisionEdge));
-  const top=priced.find(x=>x.decision!=='PASS')||null;
+  const top=priced.find(x=>x.eligible)||null;
   const summary=top?top.decision+' · '+top.label:
-   hasQuoted?(quality?'PASS · Data or availability hold':'PASS · No qualifying model advantage'):'NO ODDS ENTERED';
+   hasQuoted?(quality?'HOLD · Data or availability hold':'PASS · No qualifying model advantage'):'NO ODDS ENTERED';
   return {result:{...result,market:{homeSpread:market.homeSpread,total:market.total},
     markets:rows,candidates:rows.filter(x=>x.eligible).map(x=>x.key)},
-   status:top?.decision||'PASS',top,summary,rows,reason:quality||(!hasQuoted?'Enter a sportsbook price after simulation':'No quoted market cleared the model thresholds'),
+   status:top?.decision||(hasQuoted&&quality?'HOLD':'PASS'),top,summary,rows,reason:quality||(!hasQuoted?'Enter a sportsbook price after simulation':'No quoted market cleared the model thresholds'),
    disclaimer:'Research-only model comparison, not an independently verified betting edge. Lines and odds never change the simulation.'};
  }
  return {analyze,health};
