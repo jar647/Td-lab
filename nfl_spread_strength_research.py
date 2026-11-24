@@ -5,6 +5,7 @@ No sportsbook features. Only earlier completed games fit the ratings.
 """
 import json
 import numpy as np
+import pandas as pd
 from nfl_drive_research import drives, fit as drive_fit, simulate
 from nfl_multifactor_calibration import load_schedules, load_plays
 from nfl_score_model import fit as rating_fit, predict
@@ -12,7 +13,10 @@ from nfl_drive_pace_research import spread_metrics
 
 WEIGHTS=(0.,.25,.5,.75,1.)
 def main():
-    schedules=load_schedules(2026)
+    schedules=pd.concat([load_schedules(year) for year in (2023,2024,2025,2026)],ignore_index=True)
+    schedules=schedules.drop_duplicates(subset=['game_id'])
+    if not {2023,2024,2025,2026}.issubset(set(schedules.season)):
+        raise ValueError('Historical schedule seasons missing')
     schedules=schedules[(schedules.game_type=='REG')&schedules.home_score.notna()&schedules.away_score.notna()]
     rows=[]; skipped=[]
     for season in (2024,2025,2026):
