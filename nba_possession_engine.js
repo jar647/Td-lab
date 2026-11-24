@@ -104,7 +104,7 @@ function draws(model,count=10000,seed=6472026,options={}){
     const event=rng();if(event<turn){s.turnovers++;continue;}
     if(event<turn+ftTrip){const p=choose(s.active,p=>mins(p)*p.fta);if(p){for(let k=0;k<2;k++){const made=rng()<p.ft;if(made){s.stats[p.id].points++;s.score++}else if(k===1)rebound()}}continue;}
     for(let attempt=0;attempt<5;attempt++){
-     const p=choose(s.active,p=>mins(p)*p.fga);if(!p)break;const three=rng()<p.tpa/Math.max(.001,p.fga),zone=!three&&p.rimShare!==null&&d.rimDefense!==null&&d.midDefense!==null?(rng()<p.rimShare?'rim':'mid'):null,teamDefense=three?d.threeDefense:zone==='rim'?d.rimDefense:zone==='mid'?d.midDefense:d.twoDefense,tracked=s.matchupDeltas[p.id],defense=tracked===null?teamDefense:.8*teamDefense+.2*tracked,shooting=(three?p.three:zone==='rim'?p.rimFG:zone==='mid'?p.midFG:p.two)+defense,chance=clamp(shooting+s.heat+sharedHeat+context,.12,.85);
+     const p=choose(s.active,p=>mins(p)*p.fga);if(!p)break;const three=rng()<p.tpa/Math.max(.001,p.fga),zone=!three&&p.rimShare!==null&&d.rimDefense!==null&&d.midDefense!==null?(rng()<p.rimShare?'rim':'mid'):null,teamDefense=three?d.threeDefense:zone==='rim'?d.rimDefense:zone==='mid'?d.midDefense:d.twoDefense,tracked=s.matchupDeltas[p.id],defense=tracked===null?teamDefense:.8*teamDefense+.2*tracked,shooting=(three?p.three:zone==='rim'?p.rimFG:zone==='mid'?p.midFG:p.two)+defense,chance=clamp(shooting+s.heat+sharedHeat+context+(model.strengthAnchor?.shotOffsets?.[team]||0),.12,.85);
      if(rng()<chance){const pts=three?3:2;s.stats[p.id].points+=pts;if(three)s.stats[p.id].threes++;s.score+=pts;if(rng()<s.assist){const helper=choose(s.active,x=>mins(x)*x.ast,p.id);if(helper)s.stats[helper.id].assists++}break;}
      s.missedFG++;if(!rebound())break;
     }
