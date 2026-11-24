@@ -104,9 +104,24 @@ def _eligible_rows(play_rows, season, week):
             if key in seen:
                 continue
             seen.add(key)
+        # Preserve real play-level evidence instead of turning missing values
+        # into zero. A sack is a pressure *proxy*, not an actual pressure rate.
+        yards = _finite(row.get('yards_gained'))
+        success = _finite(row.get('success'))
+        down = _integer(row.get('down'))
+        yardline = _finite(row.get('yardline_100'))
+        first_down = _finite(row.get('first_down'))
+        touchdown = _finite(row.get('pass_touchdown' if mode == 'pass' else 'rush_touchdown'))
+        interception, fumble = _finite(row.get('interception')), _finite(row.get('fumble_lost'))
+        turnover = float(interception > 0 or fumble > 0) if interception is not None and fumble is not None else None
+        third = float(first_down > 0 or touchdown > 0) if down in (3, 4) and first_down is not None and touchdown is not None else None
+        redzone = float(touchdown > 0) if yardline is not None and 0 <= yardline <= 20 and touchdown is not None else None
         rows.append({'season': yr, 'week': wk, 'game_id': game, 'mode': mode,
-                     'offense': offense, 'defense': defense, 'epa': epa,
-                     'yards': _finite(row.get('yards_gained')) if mode == 'run' else None})
+                     'offense': offense, 'defense': defense, 'epa': epa, 'yards': yards,
+                     'success': success if success in (0, 1) else None,
+                     'explosive': float(yards >= (20 if mode == 'pass' else 10)) if yards is not None else None,
+                     'sack': _finite(row.get('sack')) if mode == 'pass' else None,
+                     'turnover': turnover, 'third_conversion': third, 'red_zone_td': redzone})
     return rows
 
 
@@ -144,6 +159,48 @@ def _opportunity(rows, mode, team, opponent, context, opponent_context):
                        'opponent_carries_allowed_per_game': _round(len(defense)/defense_games),
                        'offense_yardage_plays': len(off_yards),
                        'defense_yardage_plays': len(def_yards)}
+    # Situational rates enter the score model as *corroborating estimates*
+    # of the same EPA contribution, not fresh independent points. All sources
+    # require coverage on both offense and opposing defense.
+    situational = {}
+    metrics = ['success', 'explosive', 'turnover', 'third_conversion', 'red_zone_td']
+    if mode == 'pass':
+        metrics.append('sack')
+    for metric in metrics:
+        offense_values = [r[metric] for r in offense if r.get(metric) in (0, 1)]
+        defense_values = [r[metric] for r in defense if r.get(metric) in (0, 1)]
+        league_values = [r[metric] for r in pool if r.get(metric) in (0, 1)]
+        minimum, league_min = (8, 60) if metric == 'red_zone_td' else (12, 100) if metric == 'third_conversion' else (45, 200)
+        if min(len(offense_values), len(defense_values)) < minimum or len(league_values) < league_min:
+            continue
+        situational[metric] = {
+            'offense_rate': _round(sum(offense_values)/len(offense_values)),
+            'opponent_allowed_rate': _round(sum(defense_values)/len(defense_values)),
+            'league_rate': _round(sum(league_values)/len(league_values)),
+            'offense_plays': len(offense_values), 'opponent_plays': len(defense_values),
+            'league_plays': len(league_values),
+            'definition': {
+                'success': 'nflverse success flag / documented play',
+                'explosive': '20+ net passing or 10+ rushing yards / documented play',
+                'sack': 'sacks / passing plays, not total pressure rate',
+                'turnover': 'interception or lost fumble / documented play',
+                'third_conversion': 'first down or touchdown / documented 3rd-4th down play',
+                'red_zone_td': 'touchdown / documented play snapped inside the 20'
+            }[metric]}
+    passing_yards = None
+    if mode == 'pass':
+        off_yards = [r['yards'] for r in offense if r['yards'] is not None]
+        def_yards = [r['yards'] for r in defense if r['yards'] is not None]
+        league_yards = [r['yards'] for r in pool if r['yards'] is not None]
+        if len(off_yards) >= 45 and len(def_yards) >= 45 and len(league_yards) >= 200:
+            passing_yards = {
+                'offense_net_yards_per_play': _round(sum(off_yards)/len(off_yards)),
+                'opponent_net_yards_allowed_per_play': _round(sum(def_yards)/len(def_yards)),
+                'league_net_yards_per_play': _round(sum(league_yards)/len(league_yards)),
+                'offense_pass_plays_per_game': _round(len(offense)/offense_games),
+                'opponent_pass_plays_allowed_per_game': _round(len(defense)/defense_games),
+                'offense_yardage_plays': len(off_yards),
+                'defense_yardage_plays': len(def_yards)}
     recent_key = 'pass_epa' if mode == 'pass' else 'rush_epa'
     return {**result, 'available': True, 'method': 'RAW_EPA_LEAGUE_RELATIVE',
             'offense_epa': _round(off), 'opponent_allowed_epa': _round(allowed), 'league_epa': _round(league),
@@ -153,7 +210,8 @@ def _opportunity(rows, mode, team, opponent, context, opponent_context):
             'signal': 'FAVORABLE' if effect > 1e-12 else 'ADVERSE' if effect < -1e-12 else 'NEUTRAL',
             'recent_offense_epa': _finite(_object(_object(context).get('recent_offense')).get(recent_key)),
             'recent_opponent_allowed_epa': _finite(_object(_object(opponent_context).get('recent_defense')).get(recent_key)),
-            'rushing_yards': rushing}
+            'rushing_yards': rushing, 'passing_yards': passing_yards,
+            'situational': situational}
 
 
 def build_matchup_research(model, play_rows, home_context, away_context, home, away, season, week):
@@ -171,7 +229,10 @@ def build_matchup_research(model, play_rows, home_context, away_context, home, a
                 'rush': _opportunity(rows, 'run', team, opponent, context, other)}
                 for team, opponent, context, other in directions],
             'source_coverage': {'eligible_plays': len(rows), 'completed_games_supplied': len({r['game_id'] for r in rows}),
-                                'latest_source_week': max((r['week'] for r in rows), default=None)},
+                                'latest_source_week': max((r['week'] for r in rows), default=None),
+                                'league_scrimmage_plays_per_team_game': _round(
+                                    len(rows) / len({(r['offense'], r['game_id']) for r in rows}))
+                                    if rows else None},
             'definitions': {
                 'strength': 'Offense and defense point effects come from the existing opponent-adjusted score fit. '
                             'Positive defense allowance means weaker defense; defense ranks sort lower allowances first. '
@@ -180,6 +241,7 @@ def build_matchup_research(model, play_rows, home_context, away_context, home, a
                                '(opponent EPA allowed - league). Higher opponent allowance improves the offensive signal. '
                                'These pass/rush signals are not schedule-adjusted and do not modify the production scoring baseline. An explicitly selected research scenario may use a bounded interaction.',
                 'confidence': 'Confidence labels describe sample coverage only, never a calibrated win or prop probability.',
+                'situational': 'Success, explosive plays, sacks, turnovers, red-zone TDs and third/fourth conversions use documented nflverse play flags. Missing columns are not assumed to be zeros. Net pass yards include sack effects when PBP records them. These are overlapping diagnostics of EPA, not six additive scoring advantages.',
                 'source_scope': 'The feed builder supplies completed-game-ID-filtered regular-season PBP. '
                                 'This analysis additionally excludes target/future weeks, no-plays and invalid EPA.'},
             'limits': ['Raw EPA style signals and opponent-adjusted scoring ratings are distinct analyses.',
