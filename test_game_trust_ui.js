@@ -1,6 +1,7 @@
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const engine=require('./game_odds_engine.js');
+const review=require('./game_odds_manual_review.js');
 const html=fs.readFileSync('game-odds.html','utf8');
 const controller=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(x=>x[1]).filter(Boolean)[0];
 const elements=new Map();
@@ -26,7 +27,7 @@ const feed={season:2026,week:8,generated_at:new Date().toISOString(),games:[{
  matchup:{home_offense_vs_away_defense:direction,away_offense_vs_home_defense:direction}}
 }]};
 const sandbox={document:{getElementById:el},location:{search:'?sport=NFL'},URLSearchParams,Intl,Date,setTimeout,console,
- CookGameOdds:engine,localStorage:{getItem(){return null},setItem(){}},
+ CookGameOdds:engine,CookGameOddsManualReview:review,localStorage:{getItem(){return null},setItem(){}},
  fetch:async url=>({ok:true,json:async()=>url.includes('game_picks_backtest')?history:url.includes('game_picks')?feed:{games:[]}})};
 el('nflModelMode').value='baseline'; // This test exercises historical QB risk, not the new matchup-only scenario.
 vm.createContext(sandbox);vm.runInContext(controller,sandbox,{timeout:5000});
@@ -36,11 +37,14 @@ vm.createContext(sandbox);vm.runInContext(controller,sandbox,{timeout:5000});
  assert.match(el('trustPreview').innerHTML,/Lamar Jackson return/,'show lineup risk before taking odds or running the model');
  el('homeML').value='+150';el('run').onclick();
  for(let i=0;i<30&&el('results').hidden;i++)await new Promise(r=>setTimeout(r,50));
+ assert.equal(el('quoteCard').hidden,false);
+ el('compare').onclick();
  const output=el('results').innerHTML;
  assert.match(output,/0\.051/);assert.match(output,/0\.125/,'EPA rounding must preserve the visible difference');
  assert.match(output,/NOT APPLIED/);assert.match(output,/QB-led game split/);
  assert.match(output,/3 of the last 4/);assert.match(output,/season only/);
- assert.match(output,/PASS · QB CHANGE NOT VALIDATED/);
+ assert.match(el('priceDecision').innerHTML,/Returning quarterback scenario is not supported/);
+ assert.match(output,/PASS · MODEL ESTIMATE/);
  assert.match(output,/Independent calculation from the same/);
  assert(!output.includes('RESEARCH LEAN · UNVALIDATED'));
  console.log('Trust UI: source checks, precise EPA, starter split and disabled unsupported advice passed');
