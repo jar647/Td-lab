@@ -53,16 +53,14 @@ const feed={season:2026,week:8,generated_at:new Date().toISOString(),games:[{gam
  quarterback_basis:{player_id:'chosen-qb',player:'Selected QB',source:'SOURCED_DEPTH_CHART',assumption:'Depth-chart first unit; game-day starting status is not confirmed.'}}}}}}}]};
 const history={records:Array.from({length:70},(_,i)=>({season:2025,week:1+i%17,projected_home:22,projected_away:20,actual_home:21+i%7,actual_away:19+i%5}))};
 const lineupHistory={model_version:'opponent-score-ridge-v1',records:history.records.map((r,i)=>({...r,game_id:'earlier-'+i,candidate_home:22,candidate_away:20}))};
-el('nflModelMode').value='lineup';
 const sandbox={document:{getElementById:el},location:{search:'?sport=NFL'},URLSearchParams,Intl,Date,setTimeout,console,
  CookGameOdds:engine,PropShopNFLMatchupResearchUI:ui,localStorage:{getItem(){return null},setItem(){}},
  fetch:async url=>({ok:true,json:async()=>String(url).includes('game_picks_backtest')?history:String(url).includes('game_picks.json')?feed:String(url).includes('nfl_score_model_audit')?lineupHistory:{games:[]}})};
-el('nflModelMode').value='lineup'; // This fixture explicitly exercises a missing QB-lineup scenario, not the new matchup mode.
 vm.createContext(sandbox);vm.runInContext(controller,sandbox,{timeout:5000});
 (async()=>{
  await new Promise(resolve=>setTimeout(resolve,60));el('game').value='2026_08_A_B';el('game').onchange();
- assert.match(el('trustPreview').innerHTML,/Supported QB\/lineup scenario unavailable/);
- assert.match(el('trustPreview').innerHTML,/Opponent-adjusted team strength/,'Research remains visible before odds even when the selected lineup is unavailable');
+ assert.match(el('trustPreview').innerHTML,/Historical team scoring only/,'Automatic analysis must disclose missing source inputs without a model dropdown');
+ assert.match(el('trustPreview').innerHTML,/Opponent-adjusted team strength/,'Research remains visible before a supported lineup scenario is available');
  assert.equal(el('homeML').value,'');assert.equal(el('awayML').value,'');
  feed.games[0].model_inputs.lineup_scenario={available:true,version:'nfl-qb-lineup-scenario-v2',base_version:'opponent-score-ridge-v1',generated_at:new Date().toISOString(),
   home:24,away:22,through_week:7,before_absence_adjustment:{home:24,away:22},reason:'Sourced starting assumptions, game-day status unconfirmed.',
@@ -73,15 +71,14 @@ vm.createContext(sandbox);vm.runInContext(controller,sandbox,{timeout:5000});
    {player:'Doubtful tackle',position:'OT',designation:'DOUBTFUL',source_updated_at:'2026-10-29T13:00:00Z',source:'javascript:alert(1)'},
    {player:'Retained receiver',position:'WR',designation:'OUT',cached:true}],
    units:[{side:'offense',status:'NO_SUPPORTED_SHIFT',players:[],applied:false,reason:'No injury point adjustment guessed.'}]}},limits:['Injury status requires confirmation.']};
- el('nflModelMode').value='baseline';el('nflModelMode').onchange();
  el('run').onclick();for(let i=0;i<40&&el('results').hidden;i++)await new Promise(resolve=>setTimeout(resolve,30));
  const output=el('results').innerHTML;assert.equal(el('results').hidden,false);assert.match(output,/Opponent-adjusted team strength/);
  assert.match(output,/Selected QB/);assert.match(output,/Sourced depth-chart first unit/);assert.match(output,/starting status is not confirmed/);
  assert.doesNotMatch(output,/Other high usage QB/,'A different quarterback’s usage must not be attributed to the selected starter');
  assert.match(output,/Selected-QB usage is unavailable/);assert.match(output,/The signals do not change forecast scores or simulated percentages/);
  assert.doesNotMatch(output,/EPA\/success matchup and home\/road scoring splits shift the score mean/);
- el('nflModelMode').value='lineup';el('nflModelMode').onchange();
  const preview=el('trustPreview').innerHTML;
+ assert.match(preview,/Supported QB\/lineup scenario; full passing\/rushing matchup inputs unavailable/,'Valid QB inputs must be applied automatically when full EPA inputs are unsupported');
  assert.match(preview,/<details><summary>Current injury reports · 3<\/summary>/,'Current reports stay in a compact dropdown before a run');
  assert.match(preview,/Current receiver &lt;check&gt;/);assert.match(preview,/QUESTIONABLE · uncertain availability; not assumed OUT/);
  assert.match(preview,/DOUBTFUL · uncertain availability; not assumed OUT/);assert.match(preview,/source report date 2026-10-29T12:00:00Z/);
