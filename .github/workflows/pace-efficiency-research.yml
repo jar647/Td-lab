@@ -1,0 +1,44 @@
+name: NFL drive pace and NBA possession efficiency
+on:
+  pull_request:
+    paths:
+      - 'nfl_drive_pace_research.py'
+      - 'scripts/nba_pace_efficiency_research.cjs'
+      - '.github/workflows/pace-efficiency-research.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  nfl-drive-pace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - run: python -m py_compile nfl_drive_pace_research.py
+      - run: |
+          set -o pipefail
+          python nfl_drive_pace_research.py | tee nfl-pace-report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nfl-pace-report
+          path: nfl-pace-report.json
+  nba-possession-efficiency:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check scripts/nba_pace_efficiency_research.cjs
+      - run: |
+          set -o pipefail
+          node scripts/nba_pace_efficiency_research.cjs | tee nba-pace-report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nba-pace-report
+          path: nba-pace-report.json
