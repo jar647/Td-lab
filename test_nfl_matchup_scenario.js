@@ -20,12 +20,18 @@ const team=(name,opponent,rush,pass)=>({team:name,opponent,
 const feed={version:'nfl-matchup-research-v1',status:'RESEARCH_ONLY',through_week:8,
  opportunities:[
   team('GOOD','BAD',{off:.05,allowed:.08},{off:.11,allowed:.08}),
-  team('BAD','GOOD',{off:-.28,allowed:-.25},{off:.30,allowed:.30})
+  team('BAD','GOOD',{off:-.28,allowed:-.25},{off:.12,allowed:.12})
  ]};
 const research=match.evaluate(feed,'GOOD','BAD',9);
 assert(research.away.rushYards.matchupYards<research.away.rushYards.baselineYards,
  'Bad rush offense versus good rush defense must reduce yard expectation');
-assert(research.away.pointsShift<0,'Weak run match lowers score center');
+assert(research.away.details.find(x=>x.mode==='rush').pointsShift<0,'Weak run matchup must reduce rushing contribution');
+assert(research.away.pointsShift<0,'Strong rushing defense should affect overall scoring when passing does not fully offset it');
+const strongPass=structuredClone(feed);
+strongPass.opportunities[1].pass.offense_epa=.3;
+strongPass.opportunities[1].pass.opponent_allowed_epa=.3;
+const offset=match.evaluate(strongPass,'GOOD','BAD',9);
+assert(offset.away.pointsShift>=research.away.pointsShift,'Strong passing matchup can offset bad rushing');
 assert(research.away.pointsShift>-2.51,'Poor rush alone cannot determine the scoreboard');
 assert.equal(research.away.rushYards.offenseYpc,2.9);
 const residual={records:Array.from({length:150},(_,i)=>({season:2025,week:(i%17)+1,
