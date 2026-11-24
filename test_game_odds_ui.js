@@ -9,7 +9,7 @@ assert.match(html,/value="matchup" selected/,'Matchup-aware simulation should be
 assert.match(html,/nfl_matchup_scenario\.js\?v=nfl-matchup-epa-20261124/,'Matchup engine should be loaded');
 assert.match(html,/new Worker\('\.\/game_odds_worker\.js\?v=[^']+'\)/,'Game Odds must use a versioned simulation worker');
 assert.doesNotMatch(html,/Checking latest NBA availability and lineups/,'NBA simulation must not block on a live availability request');
-assert.match(html,/selected\.model=null;runId\+\+;if\(worker\)/,'Changed availability must invalidate an active forecast before it is displayed');
+assert.match(html,/selected\.model=null;lastSimulation=null;lastSimulationModel=null;.*runId\+\+;if\(worker\)/,'Changed availability must invalidate an active forecast before it is displayed');
 assert.ok(fs.readFileSync('game_odds_worker.js','utf8').includes("nba_possession_engine.js?v=nba-simulator-reliability-v4"),'Worker imports must match the page model version');
 for(const field of ['game','homeML','awayML','homeSpread','homeATS','awayATS','total','over','under','run','results','sportNFL','sportNBA'])
  assert.ok(html.includes('id="'+field+'"'),'Missing '+field);
