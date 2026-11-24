@@ -1,0 +1,70 @@
+name: Prospective spread evidence
+on:
+  pull_request:
+    paths:
+      - 'nfl_spread_prospective.py'
+      - 'scripts/nba_spread_prospective.cjs'
+      - 'scripts/spread_prospective_ledger*.cjs'
+      - '.github/workflows/spread-prospective.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'nfl_spread_prospective.py'
+      - 'scripts/nba_spread_prospective.cjs'
+      - 'scripts/spread_prospective_ledger*.cjs'
+      - '.github/workflows/spread-prospective.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: spread-evidence-${{ github.event_name == 'pull_request' && github.event.pull_request.number || 'writer' }}
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m py_compile nfl_spread_prospective.py
+      - run: node --check scripts/nba_spread_prospective.cjs && node scripts/spread_prospective_ledger.test.cjs
+  capture:
+    needs: validate
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - name: Capture current independent forecasts
+        run: |
+          python nfl_spread_prospective.py > /tmp/nfl-spread-bundle.json
+          node scripts/spread_prospective_ledger.cjs NFL /tmp/nfl-spread-bundle.json data/nfl_spread_prospective.json
+          node scripts/nba_spread_prospective.cjs > /tmp/nba-spread-bundle.json
+          node scripts/spread_prospective_ledger.cjs NBA /tmp/nba-spread-bundle.json data/nba_spread_prospective.json
+      - name: Persist first pregame forecasts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/nfl_spread_prospective.json data/nba_spread_prospective.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Freeze and grade paired spread research forecasts"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 2
+          done
+          exit 1
