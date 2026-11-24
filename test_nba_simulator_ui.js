@@ -25,7 +25,7 @@ const sandbox={Date,console,$:el,esc:x=>String(x),oddsFormat:'american',fromOdds
  simulatorStats:state,simulatorGame:{home:'Home',away:'Away'},nbaSimBusy:false,nbaSimRequest:0,nbaSimWorker:null,
  historicalGames:[],generatedAt:new Date().toISOString(),injuryData:{},rosterData:{},nbaGameContext:{},
  CookNBAPossessions:{},CookNBASimulatorUI:ui,nbaSimulatorReport:null,Worker,
- CookNBALiveContext:{latest:async()=>{if(refreshFails)throw Error('Refresh failed');return {context:{},injuries:{}}}},
+ CookNBALiveContext:{latest:async options=>{assert.equal(options.force,true);if(refreshFails)throw Error('Refresh failed');return {context:{},injuries:{status:'ok',generated_at:new Date().toISOString(),source:'Test source',injuries:[]}}}},
  CookGameOdds:{nbaGame:()=>model,marketInput:()=>{}},
  setTimeout:fn=>{timers.set(++timerId,fn);return timerId},clearTimeout:id=>timers.delete(id)};
 vm.createContext(sandbox);vm.runInContext(handler,sandbox);
