@@ -2,7 +2,8 @@
 
 The caller supplies the same completed-game-ID-filtered PBP used by game_picks.
 We additionally exclude target/future weeks and invalid scrimmage observations.
-These descriptions neither fit a new model nor change scores or probabilities.
+The feed is descriptive and does not change production scoring by itself.
+The optional client-side matchup scenario can use these prior-only inputs for bounded research simulations.
 """
 import math
 
@@ -177,10 +178,10 @@ def build_matchup_research(model, play_rows, home_context, away_context, home, a
                             'Net strength equals offense minus defense allowance. QB and venue effects are excluded.',
                 'epa_matchup': 'Raw historical league-relative EPA: league + (offense EPA - league) + '
                                '(opponent EPA allowed - league). Higher opponent allowance improves the offensive signal. '
-                               'These pass/rush signals are not schedule-adjusted and do not modify scores.',
+                               'These pass/rush signals are not schedule-adjusted and do not modify the production scoring baseline. An explicitly selected research scenario may use a bounded interaction.',
                 'confidence': 'Confidence labels describe sample coverage only, never a calibrated win or prop probability.',
                 'source_scope': 'The feed builder supplies completed-game-ID-filtered regular-season PBP. '
                                 'This analysis additionally excludes target/future weeks, no-plays and invalid EPA.'},
             'limits': ['Raw EPA style signals and opponent-adjusted scoring ratings are distinct analyses.',
                        'Historical opponents, quarterback changes and game scripts can confound raw EPA.',
-                       'No new score model, point correction, calibrated probability or sportsbook edge is supplied.']}
+                       'The feed supplies source evidence for an optional explicitly labeled research simulation; it does not validate a sportsbook edge.']}
