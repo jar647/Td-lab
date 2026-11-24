@@ -1,0 +1,27 @@
+name: NBA 100k spread stability audit
+on:
+  pull_request:
+    paths:
+      - 'scripts/test_nba_spread_100k.cjs'
+      - '.github/workflows/nba-spread-100k.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run read-only full-draw audit
+        run: |
+          set -o pipefail
+          node scripts/test_nba_spread_100k.cjs | tee nba-spread-100k-report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nba-spread-100k-report
+          path: nba-spread-100k-report.json
