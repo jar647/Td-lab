@@ -5,7 +5,8 @@ const engine=require('./game_odds_engine.js');
 const review=require('./game_odds_manual_review.js');
 const html=fs.readFileSync('game-odds.html','utf8');
 assert.match(html,/<script src="\.\/game_odds_engine\.js\?v=manual-review-20261124"><\/script>/,'Engine assets must be versioned with the worker');
-assert.match(html,/value="matchup" selected/,'Matchup-aware simulation should be the visible default');
+assert.doesNotMatch(html,/id="nflModelMode"|NFL score model<\/label>/,'NFL must not show manual model choices');
+assert.match(html,/Automatic NFL analysis:/,'Automatic model coverage must be disclosed');
 assert.match(html,/nfl_matchup_scenario\.js\?v=nfl-matchup-epa-20261124/,'Matchup engine should be loaded');
 assert.match(html,/new Worker\('\.\/game_odds_worker\.js\?v=[^']+'\)/,'Game Odds must use a versioned simulation worker');
 assert.doesNotMatch(html,/Checking latest NBA availability and lineups/,'NBA simulation must not block on a live availability request');
@@ -43,13 +44,13 @@ const sandbox={document:{getElementById:el},location:{search:'?sport=NFL'},URLSe
  fetch:async url=>({ok:true,json:async()=>String(url).includes('game_picks_backtest')?backtest:
  String(url).includes('game_picks')?feed:String(url).includes('nba_injuries')?null:{games:[]}})
 };
-el('nflModelMode').value='baseline';
 vm.createContext(sandbox);vm.runInContext(scripts[0],sandbox,{timeout:5000});
 (async()=>{
  await new Promise(resolve=>setTimeout(resolve,60));
  assert.match(el('game').innerHTML,/A @ B/,'NFL should load from current slate');
  el('game').value='2026_08_A_B';el('game').onchange();
- assert.equal(el('marketCard').hidden,false,'The sportsbook fields must open after game selection');
+ assert.equal(el('marketCard').hidden,false,'The simulator must open after game selection');
+ assert.match(el('trustPreview').innerHTML,/Historical team scoring only/,'Unverified matchup evidence must trigger a visible fallback warning');
  assert.equal(el('quoteCard').hidden,true,'Odds must stay hidden until independent simulation completes');
  el('homeML').value='-125';el('awayML').value='+110';
  el('homeSpread').value='-3.5';el('homeATS').value='-110';el('awayATS').value='-110';
