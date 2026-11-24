@@ -11,7 +11,7 @@ assert.ok(html.indexOf('id="run"')<html.indexOf('id="trustPreview"'),'Simulate m
 assert.match(html,/<details id="nflEvidence"[^>]*hidden>/,'Long NFL research must be collapsed by default');
 assert.match(html,/nfl_matchup_scenario\.js\?v=nfl-multifactor-20261124/,'Matchup engine should be loaded');
 assert.match(html,/new Worker\('\.\/game_odds_worker\.js\?v=[^']+'\)/,'Game Odds must use a versioned simulation worker');
-assert.doesNotMatch(html,/Checking latest NBA availability and lineups/,'NBA simulation must not block on a live availability request');
+assert.match(html,/CookNBALiveContext\.latest\(\{force:true\}\)/,'NBA simulation must request current availability');
 assert.match(html,/selected\.model=null;lastSimulation=null;lastSimulationModel=null;.*runId\+\+;if\(worker\)/,'Changed availability must invalidate an active forecast before it is displayed');
 assert.ok(fs.readFileSync('game_odds_worker.js','utf8').includes("nba_possession_engine.js?v=nba-simulator-reliability-v4"),'Worker imports must match the page model version');
 for(const field of ['game','homeML','awayML','homeSpread','homeATS','awayATS','total','over','under','run','results','sportNFL','sportNBA'])
@@ -54,7 +54,7 @@ vm.createContext(sandbox);vm.runInContext(scripts[0],sandbox,{timeout:5000});
  assert.equal(el('marketCard').hidden,false,'The simulator must open after game selection');
  assert.match(el('nflAutoStatus').innerHTML,/Historical team scoring only/,'Missing matchup evidence must be explicitly flagged above the button');
  assert.match(el('trustPreview').innerHTML,/Historical team scoring only/,'Detailed research must disclose fallback evidence');
- assert.equal(el('quoteCard').hidden,true,'Odds must stay hidden until independent simulation completes');
+ assert.equal(el('quoteCard').hidden,true,'Odds must stay hidden until independent simulation completes');assert.equal(el('total').placeholder,'47.5');
  el('homeML').value='-125';el('awayML').value='+110';
  el('homeSpread').value='-3.5';el('homeATS').value='-110';el('awayATS').value='-110';
  el('total').value='45.5';el('over').value='-115';el('under').value='-105';
@@ -68,7 +68,7 @@ vm.createContext(sandbox);vm.runInContext(scripts[0],sandbox,{timeout:5000});
  el('compare').onclick();
  assert.match(el('compareStatus').textContent,/No resimulation was performed/i);
  assert.match(el('results').innerHTML,/Over 45.5/,'Entered total is priced from the completed draws');
- assert.match(el('priceDecision').innerHTML,/PASS|LEAN|PLAY/);
+ assert.match(el('priceDecision').innerHTML,/PASS|LEAN|PLAY/);assert.match(el('priceDecision').innerHTML,/Book break-even/);assert.match(el('priceDecision').innerHTML,/Model difference/);
  assert.match(independent,/NO ODDS ENTERED/);
  assert.match(el('results').innerHTML,/RESEARCH ONLY/);
  assert.match(el('results').innerHTML,/No bet is verified/);
