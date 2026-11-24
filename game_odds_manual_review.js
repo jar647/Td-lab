@@ -83,24 +83,26 @@
    const ats=key.endsWith('ATS');
    const alternative=ats&&strength?strengthAPI.cover(strength,market.homeSpread,key==='homeATS'):null;
    const strengthCover=alternative&&p?{...alternative,breakEven:p.implied*(1-alternative.push),modelEdge:alternative.win-p.implied*(1-alternative.push),ev:alternative.win*(p.decimal-1)-alternative.loss}:null;
+   // Freeze probabilities first; only the quoted line/price changes the model signal.
+   // For NBA ATS, use the lower of both estimates rather than promoting a disputed signal.
+   const decisionEdge=strengthCover?Math.min(modelEdge,strengthCover.modelEdge):modelEdge;
+   const decisionEV=strengthCover?Math.min(ev,strengthCover.ev):ev;
    let decision='PASS',reason='';
    if(!p)reason='No price entered';
    else if(quality)reason=quality;
    else if(model.sport==='NBA'&&ats&&!strengthCover)reason='Opponent-adjusted spread comparison unavailable (experimental candidate supports half-point lines only)';
-   else if(model.sport==='NBA'&&ats&&(strengthCover.modelEdge<.02||strengthCover.ev<.025||modelEdge<.02||ev<.025))reason='Both independent model estimates must support value; spread agreement insufficient';
-   else if(model.sport==='NBA'&&modelEdge>=.02&&ev>=.025){decision='LEAN';reason=ats?'Both margin estimates support a research lean; prospective ATS validation pending':'Unvalidated model discrepancy; research lean only, not a verified betting edge';}
-   else if(modelEdge>=.05&&ev>=.08){
-    decision=key.endsWith('ATS')&&model.atsBacktestVerified!==true?'LEAN':'PLAY';
-    reason=decision==='LEAN'?'Strong model discrepancy, but spread outcomes lack a verified ATS benchmark':'Strong positive model discrepancy at your quoted price';
-   }else if(modelEdge>=.02&&ev>=.025){
-    decision='LEAN';reason='Positive model discrepancy; smaller margin for model error';
-   }else reason='No meaningful positive price discrepancy';
+   else if(decisionEdge>=.05&&decisionEV>=.08){
+    decision='PLAY';reason='Strong model-estimated value at your quoted price; experimental, not a verified betting edge';
+   }else if(decisionEdge>=.02&&decisionEV>=.025){
+    decision='LEAN';reason='Positive model-estimated value at your quoted price; smaller margin for model error';
+   }else if(strengthCover&&(modelEdge>=.02&&ev>=.025||strengthCover.modelEdge>=.02&&strengthCover.ev>=.025))reason='Both spread estimates must support value; agreement insufficient';
+   else reason='No meaningful positive price discrepancy';
    return {key,label,win,loss,push,price:quoteOdds(p),implied:p?p.implied:null,
-    breakEven,noVig:noVig[key]??null,modelEdge,ev,fair,signal:p?decision+' · MODEL ESTIMATE':'NO ODDS ENTERED',
-    strengthCover,eligible:decision!=='PASS',decision,reason};
+    breakEven,noVig:noVig[key]??null,modelEdge,ev,fair,signal:p?decision+' · EXPERIMENTAL MODEL ESTIMATE':'NO ODDS ENTERED',
+    strengthCover,decisionEdge,decisionEV,eligible:decision!=='PASS',decision,reason};
   });
   const priced=rows.filter(x=>x.price!==null);
-  priced.sort((a,b)=>(rank[b.decision]-rank[a.decision])||(b.ev-a.ev)||(b.modelEdge-a.modelEdge));
+  priced.sort((a,b)=>(rank[b.decision]-rank[a.decision])||(b.decisionEV-a.decisionEV)||(b.decisionEdge-a.decisionEdge));
   const top=priced.find(x=>x.decision!=='PASS')||null;
   const summary=top?top.decision+' · '+top.label:
    hasQuoted?(quality?'PASS · Data or availability hold':'PASS · No qualifying model advantage'):'NO ODDS ENTERED';
