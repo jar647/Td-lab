@@ -69,7 +69,7 @@ class RushingOpportunityTests(unittest.TestCase):
 
     def test_missing_flags_are_not_zero_imputed(self):
         profile = _opportunity(_eligible_rows(self.rows(), 2026, 4), 'run', 'A', 'B', {}, {})
-        self.assertEqual(profile['situational'], {}, 'No play flags must not become clean-event or safe-turnover rates')
+        self.assertEqual(set(profile['situational']), {'explosive'}, 'Only actual yardage can support an explosive-play rate; missing success, turnover and third-down flags must stay absent')
         self.assertIsNone(profile['passing_yards'])
 
     def test_pass_yardage_and_sack_proxy(self):
