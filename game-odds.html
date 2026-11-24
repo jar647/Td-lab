@@ -400,9 +400,13 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    `<p class="caption">${esc(ctx.source_note||'Public feed context; individual source rows can be missing or stale.')}</p></div>`;
  }
  function render(result,model,{pricingOnly=false}={}){
-  let saved=null;if(!pricingOnly&&result.possession&&typeof localStorage!=='undefined'&&typeof CookNBASimulatorUI!=='undefined'){try{saved=CookNBASimulatorUI.capture(result,model,localStorage)}catch(e){console.warn('Optional result archival failed',e)}}
+  // The user enters book odds after simulating. Freeze the original pregame
+  // forecast alongside those quotes only on the manual comparison step.
+  let saved=null;if(pricingOnly&&result.manualReview?.rows.some(x=>x.price!==null)&&result.possession&&typeof localStorage!=='undefined'&&typeof CookNBASimulatorUI!=='undefined'){try{saved=CookNBASimulatorUI.capture(result,model,localStorage)}catch(e){console.warn('Optional result archival failed',e)}}
   const s=result.simulated,p=result.projection;
-  const nbaScreen=model.sport==='NBA'&&typeof CookNBABetResearch!=='undefined'?CookNBABetResearch.analyze(result,model):null;
+  // Keep the price-based decision summary singular. The older NBA research
+  // shortlist used different thresholds and could contradict this review.
+  const nbaScreen=null;
   const nbaScreenHtml=nbaScreen?CookNBABetResearch.html(nbaScreen):'';
   const favorites=result.markets.filter(x=>x.eligible).sort((a,b)=>b.ev-a.ev);
   const highest=favorites[0], priced=result.markets.filter(x=>x.price!==null);
