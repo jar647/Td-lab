@@ -1,0 +1,42 @@
+name: NFL drives and NBA opponent possessions
+on:
+  pull_request:
+    paths:
+      - 'nfl_drive_research.py'
+      - 'scripts/nba_opponent_possession_research.cjs'
+      - '.github/workflows/drive-possession-research.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  nfl-drive-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - run: |
+          set -o pipefail
+          python nfl_drive_research.py | tee nfl-drive-report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nfl-drive-report
+          path: nfl-drive-report.json
+  nba-opponent-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: |
+          set -o pipefail
+          node scripts/nba_opponent_possession_research.cjs | tee nba-opponent-report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nba-opponent-report
+          path: nba-opponent-report.json
