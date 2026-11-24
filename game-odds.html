@@ -348,7 +348,35 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   }).join('');
   return '<div class="breakdown" style="margin-top:12px"><h3>Opponent-adjusted team rushing yards · same 100,000 simulations</h3>'+
    '<div class="tableWrap"><table><thead><tr><th>Offense</th><th>Own yards/carry</th><th>Opp allowed/carry</th><th>Est. carries</th><th>Sim avg yards</th><th>80% range</th><th>Under 100 yd</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
-   '<p class="caption">Opposing run defense adjusts rushing-yard outcomes in every draw. Game script affects rushing attempts, and outlier rushing games are possible. Passing, defense, QB context and historical score residuals still contribute to game outcomes. These estimates are not calibrated betting probabilities.</p></div>';
+   '<p class="caption">Opposing run defense adjusts rushing-yard outcomes in every draw. Game script affects rushing attempts, and deviations from expected rushing yards now modestly change the same game’s score. Passing, defense, QB context and historical score residuals still contribute. These are not calibrated probabilities.</p></div>';
+ }
+ function nflPassingPanel(result,model){
+  if(!model.matchupScenario||!result.passing)return '';
+  const rows=[model.home,model.away].map(team=>{
+   const r=result.passing[team];
+   return r?'<tr><td>'+esc(team)+'</td><td>'+num(r.offenseNetYpa)+'</td><td>'+num(r.opponentAllowedNetYpa)+'</td><td>'+num(r.estimatedPassPlays)+'</td><td>'+num(r.mean)+'</td><td>'+num(r.p10)+'–'+num(r.p90)+'</td></tr>':
+    '<tr><td>'+esc(team)+'</td><td colspan="5">Not enough verified prior-game net passing yardage</td></tr>';
+  }).join('');
+  return '<div class="breakdown" style="margin-top:12px"><h3>Opponent-adjusted NET team passing yards · same 100,000 outcomes</h3>'+
+   '<div class="tableWrap"><table><thead><tr><th>Offense</th><th>Own net yd/pass</th><th>Opp net yd/pass allowed</th><th>Est. pass plays</th><th>Sim avg net yards</th><th>80% range</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+   '<p class="caption">These are TEAM net passing-play yards including sacks when recorded, not quarterback box-score passing yards. Pass volume reflects the provisional game script; yardage deviations feed bounded score adjustments. This is not a drive-level play simulation.</p></div>';
+ }
+ function nflFactorPanel(model){
+  if(!model.matchupScenario)return '';
+  const label={success:'Success',explosive:'Explosive gains',turnover:'Turnovers',sack:'Sacks (pressure proxy)',third_conversion:'3rd/4th downs',red_zone_td:'Red-zone TD/play'};
+  const rows=[model.home,model.away].flatMap(team=>{
+   const d=team===model.home?model.matchupScenario.home:model.matchupScenario.away;
+   return d.details.map(x=>{
+    const used=x.situational?.observed||[];
+    return '<tr><td>'+esc(team)+'</td><td>'+esc(x.mode)+'</td><td>'+num(x.offenseEpa)+'</td><td>'+num(x.defenseAllowedEpa)+'</td>'+
+     '<td>'+esc(used.map(m=>label[m.name]||m.name).join(', ')||'EPA only: situational samples missing')+'</td>'+
+     '<td>'+num(x.epaPointsShift)+' → '+num(x.pointsShift)+'</td></tr>';
+   });
+  }).join('');
+  return '<details class="breakdown" style="margin-top:12px"><summary>Stats actually used by the NFL model · source audit</summary>'+
+   '<div class="tableWrap"><table><thead><tr><th>Team</th><th>Play type</th><th>EPA offense</th><th>EPA allowed</th><th>Supported additional factors</th><th>EPA-only → blended points</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+   [model.matchupScenario.home,model.matchupScenario.away].map(x=>'<p>'+esc(x.team)+' expected plays '+num(x.expectedPlays)+' · outcome variability '+num(x.varianceScale)+'× · net passing yard source '+(x.passYards?'available':'unavailable')+'.</p>').join('')+
+   '<p class="caption">Additional rates corroborate EPA within the SAME capped adjustment, not six independent point bonuses. Unsupported features are excluded, not estimated as zero. Tempo and play-event risk affect the score distribution, not a second baseline quality adjustment. No complete pressure, OL/DL blocking or drive-level model is claimed.</p></details>';
  }
  function nflMatchupSummary(model){
   if(!model?.matchupScenario)return '';
@@ -357,7 +385,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    esc(model.home)+' score center '+num(model.projectedHome)+' ('+num(d.home.pointsShift)+' matchup points), '+
    esc(model.away)+' '+num(model.projectedAway)+' ('+num(d.away.pointsShift)+' matchup points).</p>'+
    [d.home,d.away].map(x=>'<p>'+esc(x.team)+' rushing expectation: '+num(x.rushYards.matchupYards)+' yards versus prior baseline '+num(x.rushYards.baselineYards)+' · own yards/carry '+num(x.rushYards.offenseYpc)+'; opponent allows '+num(x.rushYards.opponentAllowedYpc)+'.</p>').join('')+
-   '<p class="warn">Run and pass EPA interactions are bounded research assumptions. A bad rushing matchup does not automatically mean losing the game.</p></div>';
+   '<p class="warn">Run/pass EPA and corroborating situational rates drive bounded research adjustments. Strong rushing defense does not force a loss. The adjustment weights and pace/risk multipliers are not calibrated.</p></div>';
  }
  function matchupPanel(model){
   const data=model.matchupAnalysis;
@@ -445,7 +473,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    '<div class="kpi"><span>Sim median total</span><b>'+num(s.total.median)+'</b></div>'+
    '<div class="kpi"><span>Sim median home margin</span><b>'+num(s.margin.median)+'</b></div></div>'+
    (s.tie>0?'<p class="muted">Tie rate: '+pct(s.tie)+' (treated as a moneyline push).</p>':'')+
-   '<p class="muted"><a href="#quoteCard">Compare your sportsbook odds after reviewing the independent simulation</a></p>'+scoreComparison(model,result)+nbaScreenHtml+'<h3>Estimated market pricing</h3>'+(model.sport==='NBA'?'<p class="warn"><strong>All NBA simulator markets are unvalidated:</strong> moneyline, spread, total and player frequencies are model estimates, not established real-world win probabilities. Calculated EV does not establish a betting edge. The ATS warning below is an additional spread-specific limitation.</p>':'')+marketTable(result.markets)+(typeof CookNBASimulatorUI!=='undefined'?CookNBASimulatorUI.detail(result,model)+(result.possession?CookNBASimulatorUI.validation(source.nbaValidation)+CookNBASimulatorUI.localValidation(source.nbaGrades||{graded:0}):''):'')+matchupPanel(model)+nflRushingPanel(result,model)+contextPanel(model)+
+   '<p class="muted"><a href="#quoteCard">Compare your sportsbook odds after reviewing the independent simulation</a></p>'+scoreComparison(model,result)+nbaScreenHtml+'<h3>Estimated market pricing</h3>'+(model.sport==='NBA'?'<p class="warn"><strong>All NBA simulator markets are unvalidated:</strong> moneyline, spread, total and player frequencies are model estimates, not established real-world win probabilities. Calculated EV does not establish a betting edge. The ATS warning below is an additional spread-specific limitation.</p>':'')+marketTable(result.markets)+(typeof CookNBASimulatorUI!=='undefined'?CookNBASimulatorUI.detail(result,model)+(result.possession?CookNBASimulatorUI.validation(source.nbaValidation)+CookNBASimulatorUI.localValidation(source.nbaGrades||{graded:0}):''):'')+matchupPanel(model)+nflFactorPanel(model)+nflRushingPanel(result,model)+nflPassingPanel(result,model)+contextPanel(model)+
    '<div class="breakdown"><h3>Decision summary</h3><strong class="warn">'+esc(headline)+'</strong>'+
    '<p>'+esc(details)+'</p><p class="muted">Only entered odds are evaluated. A 100,000-draw research result is not a calibrated probability or a guaranteed bet.</p></div></div>'+
    '<div class="panel"><h2>🔬 Deep game breakdown</h2><div class="grid2">'+
