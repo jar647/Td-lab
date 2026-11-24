@@ -46,6 +46,6 @@ const stale=review.analyze({...prepared,feedGeneratedAt:'2026-01-01T00:00:00Z'},
 assert.equal(stale.status,'PASS','Stale feed cannot create a PLAY or LEAN');
 const uncertain=review.analyze({...prepared,trust:{...prepared.trust,qb_context:{HOME:{status:'RETURNING_STARTER_SAMPLE_MISMATCH'}}}},result,prices);
 assert.equal(uncertain.status,'PASS','Unsupported QB changes cannot create a PLAY or LEAN');
-const corrupted=structuredClone(result);corrupted.scoreBins.margin[12]+=1;
+const held=review.analyze({...prepared,sport:'NBA',possessionModel:{uncertain:['Player A'],teams:{HOME:{players:[{name:'Player A',status:'QUESTIONABLE',team:'HOME'}]}}}},result,prices);assert.equal(held.status,'PASS');assert.match(held.summary,/Data or availability hold/);assert.match(held.reason,/Player A \(QUESTIONABLE, HOME\)/);assert.ok(held.rows.filter(x=>x.price!==null).every(x=>Number.isFinite(x.win)&&Number.isFinite(x.breakEven)&&Number.isFinite(x.modelEdge)));const corrupted=structuredClone(result);corrupted.scoreBins.margin[12]+=1;
 assert.throws(()=>review.analyze(prepared,corrupted,prices),/reconcile/);
 console.log('Manual Game Odds Review: frozen 100k simulation -> odds -> PLAY / LEAN / PASS; source gates and no-resimulation invariant PASS');
