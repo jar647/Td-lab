@@ -73,7 +73,7 @@ vm.createContext(sandbox);vm.runInContext(scripts[0],sandbox,{timeout:5000});
  assert.match(el('results').innerHTML,/RESEARCH ONLY/);
  assert.match(el('results').innerHTML,/No bet is verified/);
  assert.match(el('results').innerHTML,/Spread warning/);
- assert.match(el('results').innerHTML,/capped at LEAN/i);
+ assert.match(el('results').innerHTML,/model-estimated value at your entered price/i);
  assert.match(el('results').innerHTML,/MODEL ESTIMATE/);
  assert.match(el('results').innerHTML,/National Weather Service hourly forecast/);
  assert.match(el('results').innerHTML,/Light Rain/);
