@@ -24,7 +24,7 @@ assert.equal(empty.summary,'NO ODDS ENTERED');
 assert.equal(empty.status,'PASS');
 const prices={homeML:'-130',awayML:'+110',homeSpread:-3.5,homeATS:'-110',awayATS:'-110',total:55.5,over:'-110',under:'-110'};
 const compared=review.analyze(prepared,result,prices);
-assert.equal(compared.top.key,'homeML');
+assert.equal(compared.top.key,'under','The strongest positive model-value discrepancy should rank first, regardless of market');
 assert.equal(compared.top.decision,'PLAY','Model-based PLAY must be available even without a calibration badge');
 const home=compared.rows.find(x=>x.key==='homeML');
 const away=compared.rows.find(x=>x.key==='awayML');
