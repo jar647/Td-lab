@@ -7,6 +7,7 @@ evaluate it once on completed 2026 games. Never modify live model weights.
 """
 import json
 import subprocess
+import sys
 from pathlib import Path
 
 import nflreadpy
@@ -17,14 +18,28 @@ from nfl_matchup_research import build_matchup_research
 ROOT = Path(__file__).resolve().parent
 SCALES = (0.0, 0.5, 1.0, 1.5)
 
+def load_schedules(season):
+    try:
+        return frame(nflreadpy.load_schedules([season]))
+    except (ConnectionError, OSError) as error:
+        print(f'Schedule parquet unavailable: {error}; trying upstream CSV', file=sys.stderr)
+        return pd.read_csv('https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv', low_memory=False)
+
+def load_plays(season):
+    try:
+        return frame(nflreadpy.load_pbp([season]))
+    except (ConnectionError, OSError) as error:
+        print(f'PBP parquet unavailable: {error}; trying upstream CSV', file=sys.stderr)
+        return pd.read_csv(f'https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_{season}.csv.gz', low_memory=False)
+
 def candidates():
     records = []
     for season in (2024, 2025, 2026):
-        schedules = frame(nflreadpy.load_schedules([season]))
+        schedules = load_schedules(season)
         schedules = schedules[(schedules.season == season) &
             (schedules.game_type == 'REG') & schedules.home_score.notna() &
             schedules.away_score.notna()].copy()
-        plays = frame(nflreadpy.load_pbp([season]))
+        plays = load_plays(season)
         for week in sorted(schedules.week.unique()):
             week = int(week)
             if week < 5:
