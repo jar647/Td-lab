@@ -43,7 +43,7 @@ vm.createContext(sandbox);vm.runInContext(controller,sandbox,{timeout:5000});
   el('game').value=g.id;el('game').onchange();
   assert.equal(el('marketCard').hidden,false,'Simulate control visible for '+g.type);
   assert.equal(el('nflEvidence').hidden,false,'Research details remain available but optional');
-  assert.match(el('nflAutoStatus').innerHTML,new RegExp(g.expected.replace(/[.*+?^\${}()|[\\]\\\\]/g,'\\\\  assert.equal(el('marketCard').hidden,false,'Simulate control visible for '+g.type);')),'Selection summary is immediately visible before running');
+  assert.ok(el('nflAutoStatus').innerHTML.includes(g.expected),'Selection summary is immediately visible before running');
   assert.match(el('trustPreview').innerHTML,new RegExp(g.expected.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')),'Automatic coverage report for '+g.type);
  }
  console.log('NFL automatic model: combined -> EPA -> supported QB -> explicit historical fallback, no selector PASS');
