@@ -78,7 +78,7 @@ vm.createContext(sandbox);vm.runInContext(controller,sandbox,{timeout:5000});
  const output=el('results').innerHTML;assert.equal(el('results').hidden,false);assert.match(output,/Opponent-adjusted team strength/);
  assert.match(output,/Selected QB/);assert.match(output,/Sourced depth-chart first unit/);assert.match(output,/starting status is not confirmed/);
  assert.doesNotMatch(output,/Other high usage QB/,'A different quarterback’s usage must not be attributed to the selected starter');
- assert.match(output,/Selected-QB usage is unavailable/);assert.match(output,/No EPA matchup score correction is applied to this baseline/);
+ assert.match(output,/Selected-QB usage is unavailable/);assert.match(output,/The signals do not change forecast scores or simulated percentages/);
  assert.doesNotMatch(output,/EPA\/success matchup and home\/road scoring splits shift the score mean/);
  el('nflModelMode').value='lineup';el('nflModelMode').onchange();
  const preview=el('trustPreview').innerHTML;
