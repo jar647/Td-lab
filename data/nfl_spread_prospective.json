@@ -1,0 +1,123 @@
+{
+  "status": "PROSPECTIVE_RESEARCH_ONLY",
+  "thresholds": [
+    -14.5,
+    -7.5,
+    -3.5,
+    0.5,
+    3.5,
+    7.5,
+    14.5
+  ],
+  "summary": {
+    "NFL|nfl-drive-strength-prospective-v1": {
+      "frozen": 2,
+      "graded": 0,
+      "baseline": {
+        "margin_mae": null,
+        "margin_bias": null,
+        "spread_brier": null,
+        "interval80_coverage": null
+      },
+      "candidate": {
+        "margin_mae": null,
+        "margin_bias": null,
+        "spread_brier": null,
+        "interval80_coverage": null
+      }
+    }
+  },
+  "records": [
+    {
+      "sport": "NFL",
+      "game_id": "2026_12_GB_LA",
+      "version": "nfl-drive-strength-prospective-v1",
+      "home": "LA",
+      "away": "GB",
+      "start": "2026-11-26T01:00:00+00:00",
+      "captured_at": "2026-11-24T19:16:32.768433+00:00",
+      "draws": 10000,
+      "source_at": "2026-11-24T16:26:28.739840+00:00",
+      "baseline": {
+        "margin": 2.5132,
+        "probabilities": [
+          0.9024,
+          0.7737,
+          0.6833,
+          0.5635,
+          0.4834,
+          0.3621,
+          0.189
+        ],
+        "interval80": [
+          -14,
+          20
+        ]
+      },
+      "candidate": {
+        "margin": 3.8065999999999978,
+        "probabilities": [
+          0.9071,
+          0.7809,
+          0.691,
+          0.5897,
+          0.4949,
+          0.3942,
+          0.2151
+        ],
+        "interval80": [
+          -12.706600000000002,
+          21.2934
+        ]
+      },
+      "actual": null
+    },
+    {
+      "sport": "NFL",
+      "game_id": "2026_12_CHI_DET",
+      "version": "nfl-drive-strength-prospective-v1",
+      "home": "DET",
+      "away": "CHI",
+      "start": "2026-11-26T18:00:00+00:00",
+      "captured_at": "2026-11-24T19:16:32.798330+00:00",
+      "draws": 10000,
+      "source_at": "2026-11-24T16:26:28.739840+00:00",
+      "baseline": {
+        "margin": 1.3104,
+        "probabilities": [
+          0.8675,
+          0.7384,
+          0.62,
+          0.5069,
+          0.434,
+          0.3208,
+          0.175
+        ],
+        "interval80": [
+          -17,
+          20
+        ]
+      },
+      "candidate": {
+        "margin": 1.5052000000000003,
+        "probabilities": [
+          0.8675,
+          0.7384,
+          0.62,
+          0.5069,
+          0.434,
+          0.3208,
+          0.175
+        ],
+        "interval80": [
+          -16.8052,
+          20.1948
+        ]
+      },
+      "actual": null
+    }
+  ],
+  "latest_failures": [],
+  "updated_at": "2026-11-24T19:16:32.916Z",
+  "limits": "First paired pregame freeze per model version. Synthetic fixed thresholds, not sportsbook lines; no profitability or live promotion implied."
+}
