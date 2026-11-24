@@ -1,0 +1,86 @@
+name: NBA NFL betting reliability evidence
+
+on:
+  pull_request:
+    paths:
+      - 'betting_readiness.js'
+      - 'scripts/betting_readiness.cjs'
+      - 'tests/betting_readiness.test.js'
+      - 'reliability.html'
+      - 'game-odds.html'
+      - 'nba.html'
+      - 'index.html'
+      - '.github/workflows/betting-reliability.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'betting_readiness.js'
+      - 'scripts/betting_readiness.cjs'
+      - 'tests/betting_readiness.test.js'
+      - 'reliability.html'
+      - 'game-odds.html'
+      - 'nba.html'
+      - 'index.html'
+      - '.github/workflows/betting-reliability.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evidence-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate report logic and reject fake betting approval
+        run: |
+          node --check betting_readiness.js
+          node --check scripts/betting_readiness.cjs
+          node --test tests/betting_readiness.test.js
+          node scripts/betting_readiness.cjs --assert-no-false-ready > /tmp/betting-readiness.json
+          node - <<'JS'
+          const fs=require('node:fs'),assert=require('node:assert/strict');
+          const r=JSON.parse(fs.readFileSync('/tmp/betting-readiness.json','utf8'));
+          assert.equal(r.betReady,false);
+          assert.equal(r.nba.betReady,false);
+          assert.equal(r.nfl.betReady,false);
+          assert(r.nba.currentModelForwardGames>=0);
+          assert(r.nfl.retrospectiveGames>=0);
+          assert(fs.readFileSync('game-odds.html','utf8').includes('./reliability.html'));
+          assert(fs.readFileSync('reliability.html','utf8').includes('./betting_readiness.js'));
+          console.log('PRODUCTION EVIDENCE: '+JSON.stringify({
+            status:r.overall,nba_model:r.nba.model,nba_forward_games:r.nba.currentModelForwardGames,
+            nfl_model:r.nfl.model,nfl_historical_games:r.nfl.retrospectiveGames,
+            nba_prices:r.nba.prices,nfl_ats_brier:r.nfl.atsBrier,
+            nba_total_mae:r.nba.totalMae,nba_total_baseline_mae:r.nba.baselineTotalMae
+          }));
+          JS
+
+  verify-pages:
+    if: github.event_name == 'push'
+    needs: [evidence-gate]
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - name: Verify latest reliability dashboard and evaluator on GitHub Pages
+        run: |
+          set -euo pipefail
+          site='https://jar647.github.io/Td-lab'
+          for attempt in $(seq 1 24); do
+            if curl -fsSL --max-time 20 "$site/reliability.html?ref=$GITHUB_SHA" -o /tmp/reliability.html \
+              && curl -fsSL --max-time 20 "$site/betting_readiness.js?ref=$GITHUB_SHA" -o /tmp/betting_readiness.js \
+              && curl -fsSL --max-time 20 "$site/game-odds.html?ref=$GITHUB_SHA" -o /tmp/game-odds.html \
+              && grep -Fq 'trust-gate-20261124' /tmp/reliability.html \
+              && grep -Fq 'PropShopBettingReadiness' /tmp/betting_readiness.js \
+              && grep -Fq './reliability.html' /tmp/game-odds.html; then
+              echo 'PASS: Published Pages contain reliability dashboard and shared evaluator.'
+              exit 0
+            fi
+            if [ "$attempt" -lt 24 ]; then sleep 10; fi
+          done
+          echo 'FAIL: Published Pages do not yet contain reliability dashboard.'
+          exit 1
