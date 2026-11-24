@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Prop Shop · Betting Simulator Reliability</title>
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;color:#eafaf1;background:#091510}
+*{box-sizing:border-box}body{margin:0}header{background:#10251b;padding:22px 18px;border-bottom:1px solid #355947}
+main{max-width:900px;padding:20px 16px 48px;margin:auto}
+h1{font-size:25px;margin:0 0 8px}h2{font-size:21px;margin:0 0 12px}
+a{color:#8cf3b9}p{line-height:1.5}.muted{color:#b1c8bb;font-size:14px}
+.panel{background:#12271c;border:1px solid #365b45;border-radius:14px;padding:18px;margin:17px 0}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px}
+.metric{padding:12px;border:1px solid #2f4e3d;border-radius:10px;background:#0b1d14}
+.metric strong{display:block;font-size:25px;margin-top:5px;color:#dffce9}
+.metric span{font-size:12px;color:#bdd3c4}
+.checks{margin:8px 0 0;padding:0;list-style:none}.checks li{border-top:1px solid #335741;padding:11px 0;line-height:1.45}
+.checks b{color:#f1fff7}.warn{color:#ffce9a;font-weight:750}
+.good{color:#9df2c4}details summary{cursor:pointer;padding:12px 0;font-weight:700}
+.status{border-top:2px solid #e6a35e;margin-top:12px;padding-top:11px}
+footer{font-size:13px;color:#b6cebf}
+@media(max-width:480px){h1{font-size:23px}.panel{padding:14px}}
+</style></head>
+<body>
+<header><h1>The Prop Shop · Simulator Reliability</h1>
+<p class="muted">The proof behind the NBA and NFL numbers, not another 100,000-draw badge.</p>
+<nav><a href="./game-odds.html">Game Odds Simulator</a> · <a href="./nba.html">NBA Edition</a> · <a href="./">NFL Edition</a></nav>
+</header>
+<main>
+<section class="panel" aria-live="polite">
+<h2 id="overall">Checking actual validation evidence…</h2>
+<p id="intro">Current model results and price-source checks are loaded directly from the published repository.</p>
+<p class="muted" id="stamp"></p>
+</section>
+<div id="sports" aria-live="polite"></div>
+<section class="panel">
+<h2>When should I trust a betting edge?</h2>
+<p>A matchup score out of 100 is not a win probability. A simulation percentage is not a verified sportsbook edge until independent, same-version forward results show that it is calibrated and the quoted price is real and executable.</p>
+<p>Historical backtests, 100,000 Monte Carlo draws, and green GitHub Actions do not substitute for those checks. An unverified market remains <strong>RESEARCH ONLY</strong>, not a forced recommendation.</p>
+</section>
+<footer>The report is read-only and cannot place bets or modify model results. Historical odds in the repository may reflect closing lines, not executable pregame prices.</footer>
+</main>
+<script src="./betting_readiness.js?v=trust-gate-20261124"></script>
+<script>
+(function(){
+'use strict';
+const sources={
+ nbaReport:'./data/nba_simulator_report.json',
+ nbaAccuracy:'./data/nba_prospective_accuracy.json',
+ nbaMarket:'./data/nba_market_status.json',
+ nflAudit:'./data/game_picks_simulator_audit.json',
+ nflSummary:'./data/nfl_score_model_summary.json',
+ nflMarket:'./data/game_picks_market_comparison.json'
+};
+const el=id=>document.getElementById(id);
+const node=(tag,parent,text,cls)=>{
+ const item=document.createElement(tag);
+ if(cls)item.className=cls;
+ if(text!==undefined&&text!==null)item.textContent=String(text);
+ if(parent)parent.appendChild(item);
+ return item;
+};
+const format=n=>typeof n==='number'&&Number.isFinite(n)?String(n):'Unknown';
+function metric(container,label,value){
+ const cell=node('div',container,undefined,'metric');
+ node('span',cell,label);node('strong',cell,format(value));
+}
+function card(sport,report){
+ const area=node('section',el('sports'),undefined,'panel');
+ node('h2',area,sport+' · '+report.status);
+ node('p',area,'Model: '+report.model,'muted');
+ const metrics=node('div',area,undefined,'metrics');
+ if(sport==='NBA'){
+  metric(metrics,'Same-model frozen games',report.currentModelForwardGames);
+  metric(metrics,'Average total error',report.totalMae===null?'Unknown':report.totalMae+' pts');
+  metric(metrics,'Baseline total error',report.baselineTotalMae===null?'Unknown':report.baselineTotalMae+' pts');
+  metric(metrics,'Winner Brier score',report.winnerBrier);
+ }else{
+  metric(metrics,'Retrospective games',report.retrospectiveGames);
+  metric(metrics,'Prospective validated games',report.prospectiveGames);
+  metric(metrics,'ATS Brier score',report.atsBrier);
+  metric(metrics,'Total Brier score',report.totalBrier);
+ }
+ const details=node('details',area);
+ node('summary',details,'Show validation gates');
+ const ul=node('ul',details,undefined,'checks');
+ for(const [key,check]of Object.entries(report.checks)){
+  const item=node('li',ul);
+  node('span',item,check.pass?'✓ ':'✕ ',check.pass?'good':'warn');
+  node('b',item,key.replace(/([A-Z])/g,' $1').replace(/^./,c=>c.toUpperCase())+': ');
+  node('span',item,check.detail);
+ }
+ node('p',area,'Research numbers only. Betting validation: NOT APPROVED','status warn');
+}
+async function load(){
+ try{
+  if(!window.PropShopBettingReadiness)throw new Error('Reliability evaluator could not load.');
+  const entries=Object.entries(sources);
+  const responses=await Promise.all(entries.map(async ([name,url])=>{
+   const resp=await fetch(url,{cache:'no-store'});
+   if(!resp.ok)throw new Error(name+' HTTP '+resp.status);
+   return [name,await resp.json()];
+  }));
+  const report=window.PropShopBettingReadiness.evaluate(Object.fromEntries(responses));
+  el('overall').textContent='Betting validation: '+(report.betReady?'REVIEW REQUIRED':'NOT APPROVED');
+  el('intro').textContent=report.warning;
+  el('stamp').textContent='Checked at '+new Date(report.generatedAt).toLocaleString()+' · published source snapshots';
+  card('NBA',report.nba);card('NFL',report.nfl);
+ }catch(error){
+  el('overall').textContent='Validation data unavailable';
+  el('intro').textContent='Unable to verify current source evidence. Treat every simulator probability as research-only. '+error.message;
+ }
+}
+load();
+})();
+</script>
+</body></html>
