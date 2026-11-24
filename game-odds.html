@@ -101,7 +101,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
 </section>
 <section class="panel"><h2>Important model limits</h2><p class="muted">NFL runs resample paired historical score errors. NBA runs generate player outcomes within shared estimated possessions and rotations. The sportsbook's lines and prices do not influence the simulated scores. Historical scoring patterns and 100,000 draws do not establish predictive calibration or a verified edge. Starter announcements and weather are shown only where sourced. Availability and starting-five confirmations apply only when explicitly sourced. Future injury and tactical changes remain unknown. Research-only estimates can be wrong, especially with changing rosters, limited samples, or stale feeds.</p></section>
 </main>
-<script src="./nba_game_context.js?v=nba-sim-availability-1"></script><script src="./nba_live_context.js?v=nba-click-availability-v1"></script><script src="./nba_possession_engine.js?v=nba-simulator-reliability-v4"></script><script src="./nba_simulator_ui.js?v=nba-simulator-reliability-v4"></script><script src="./nba_bet_research.js?v=nba-consensus-20261109"></script><script src="./quick_slip.js"></script><script src="./nfl_matchup_scenario.js?v=nfl-multifactor-20261124"></script><script src="./game_odds_engine.js?v=nfl-multifactor-20261124"></script><script src="./game_odds_manual_review.js?v=nba-click-availability-v1"></script><script src="./nfl_matchup_research_ui.js?v=nfl-shared-research-v1"></script>
+<script src="./nba_game_context.js?v=nba-sim-availability-1"></script><script src="./nba_live_context.js?v=nba-click-availability-v1"></script><script src="./nba_possession_engine.js?v=nba-simulator-reliability-v4"></script><script src="./nba_simulator_ui.js?v=nba-simulator-reliability-v4"></script><script src="./nba_bet_research.js?v=nba-consensus-20261109"></script><script src="./quick_slip.js"></script><script src="./nfl_matchup_scenario.js?v=nfl-multifactor-20261124"></script><script src="./game_odds_engine.js?v=nfl-multifactor-20261124"></script><script src="./nba_spread_strength.js?v=spread-strength-v1"></script><script src="./game_odds_manual_review.js?v=nba-spread-strength-v1"></script><script src="./nfl_matchup_research_ui.js?v=nfl-shared-research-v1"></script>
 <script>
 (function(){
  'use strict';
@@ -183,7 +183,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    $('compareStatus').textContent='Compared against the SAME '+lastSimulation.runCount.toLocaleString()+' completed games. No resimulation was performed.';
    $('priceDecision').innerHTML='<div class="breakdown"><h3>'+esc(review.summary)+'</h3>'+
     (top?'<p>Simulated hit chance: '+pct(top.win)+' · Book break-even: '+pct(top.breakEven)+' · Model advantage: '+(top.modelEdge>=0?'+':'')+pct(top.modelEdge)+' · Hypothetical EV: '+(top.ev>=0?'+':'')+pct(top.ev)+'.</p>':'<p>'+esc(review.reason)+'</p>')+
-    (review.rows.filter(x=>x.price!==null).map(x=>'<div class="breakdown"><strong>'+esc(x.label)+' · '+esc(x.decision)+'</strong><p>Simulated '+(x.key.endsWith('ATS')?'cover':'win')+': '+pct(x.win)+' · Book break-even: '+pct(x.breakEven)+' · Model difference: '+(x.modelEdge>=0?'+':'')+pct(x.modelEdge)+' · Hypothetical EV: '+(x.ev>=0?'+':'')+pct(x.ev)+'</p><p class="muted">'+esc(x.reason)+'</p></div>').join(''))+
+    (review.rows.filter(x=>x.price!==null).map(x=>'<div class="breakdown"><strong>'+esc(x.label)+' · '+esc(x.decision)+'</strong><p>Simulated '+(x.key.endsWith('ATS')?'cover':'win')+': '+pct(x.win)+' · Book break-even: '+pct(x.breakEven)+' · Model difference: '+(x.modelEdge>=0?'+':'')+pct(x.modelEdge)+' · Hypothetical EV: '+(x.ev>=0?'+':'')+pct(x.ev)+'</p>'+(x.strengthCover?'<p>Opponent-adjusted cover estimate: '+pct(x.strengthCover.win)+' · Difference from break-even: '+(x.strengthCover.modelEdge>=0?'+':'')+pct(x.strengthCover.modelEdge)+' (experimental)</p>':'')+'<p class="muted">'+esc(x.reason)+'</p></div>').join(''))+
     '<p class="warn">'+esc(review.disclaimer)+'</p></div>';
    render({...review.result,manualReview:review},lastSimulationModel,{pricingOnly:true});
   }catch(e){$('compareStatus').textContent='Correct your prices: '+e.message;$('priceDecision').innerHTML='';}
@@ -451,6 +451,9 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   // forecast alongside those quotes only on the manual comparison step.
   let saved=null;if(pricingOnly&&result.manualReview?.rows.some(x=>x.price!==null)&&result.possession&&typeof localStorage!=='undefined'&&typeof CookNBASimulatorUI!=='undefined'){try{saved=CookNBASimulatorUI.capture(result,model,localStorage)}catch(e){console.warn('Optional result archival failed',e)}}
   const s=result.simulated,p=result.projection;
+  const strength=model.sport==='NBA'&&typeof CookNBASpreadStrength!=='undefined'?CookNBASpreadStrength.distribution(model.spreadStrength,result):null;
+  const strengthLabel=m=>Math.abs(m)<.05?'Even':esc(m>0?model.home:model.away)+' -'+Math.abs(m).toFixed(1);
+  const spreadPanel=model.sport!=='NBA'?'':strength?'<div class="breakdown"><h3>Independent spread research · opponent-adjusted strength</h3><strong>'+strengthLabel(strength.margin)+'</strong><p>Possession model: '+strengthLabel(strength.baseline)+' · '+strength.historyGames+' earlier completed games in strength fit.</p><p class="warn">Experimental spread-only estimate. The team-strength center does not adjust for today’s injuries; rotation simulations supply the distribution shape. Not a replacement score or validated probability. When models disagree on value, pass.</p></div>':'<div class="breakdown"><p class="warn">Opponent-adjusted spread estimate unavailable. Spread recommendations remain on hold. '+esc(model.spreadStrengthError||'')+'</p></div>';
   // Preserve the legacy NBA research calculation for other research workflows,
   // but do not display a competing shortlist over the manual PLAY/LEAN/PASS result.
   const nbaScreen=model.sport==='NBA'&&typeof CookNBABetResearch!=='undefined'?CookNBABetResearch.analyze(result,model):null;
@@ -470,7 +473,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
    '<p class="muted">Date: '+esc(date)+' · '+esc(result.simulationMethod||'100,000 score outcomes')+' · Score model: <strong>RESEARCH ONLY</strong></p>'+
    (model.sport==='NBA'&&typeof CookNBASimulatorUI!=='undefined'?CookNBASimulatorUI.reliability(source.nbaValidation,result.possession?.model):'')+(saved&&!saved.saved?'<p class="warn">'+esc(saved.reason)+'. This run was not saved for grading.</p>':'')+lineupPanel(model)+trustPanel(model)+researchPanel(model)+(typeof CookNBASimulatorUI!=='undefined'?CookNBASimulatorUI.modelNote(model):'')+'<div class="scoreboard"><div class="score"><span>'+esc(model.away)+' · projected</span><b>'+num(p.away)+'</b></div>'+
    '<div class="score"><span>'+esc(model.home)+' · projected</span><b>'+num(p.home)+'</b></div></div>'+
-   '<div class="kpis"><div class="kpi"><span>'+esc(model.home)+' win</span><b>'+pct(s.homeWin)+'</b></div>'+
+   spreadPanel+'<div class="kpis"><div class="kpi"><span>'+esc(model.home)+' win</span><b>'+pct(s.homeWin)+'</b></div>'+
    '<div class="kpi"><span>'+esc(model.away)+' win</span><b>'+pct(s.awayWin)+'</b></div>'+
    '<div class="kpi"><span>Sim median total</span><b>'+num(s.total.median)+'</b></div>'+
    '<div class="kpi"><span>Sim median home margin</span><b>'+num(s.margin.median)+'</b></div></div>'+
@@ -537,7 +540,7 @@ th{color:#abc9b4;font-weight:700}td strong{color:#e7fff1}
   }
   if(selected!==requested)return;
   if(sport==='NBA'&&!selected.model&&selected.nbaInputs){
-   try{selected.model=CookGameOdds.nbaGame(selected.game,selected.nbaInputs.feed,{injuries:selected.nbaInputs.injuries,rosters:selected.nbaInputs.rosters,gameContext:selected.nbaInputs.gameContext,allowScoreFallback:true});}
+   try{selected.model=CookGameOdds.nbaGame(selected.game,selected.nbaInputs.feed,{injuries:selected.nbaInputs.injuries,rosters:selected.nbaInputs.rosters,gameContext:selected.nbaInputs.gameContext,allowScoreFallback:true});if(selected.model.possessionModel&&typeof CookNBASpreadStrength!=='undefined'&&typeof CookNBAPossessions!=='undefined'){try{selected.model.spreadStrength=CookNBASpreadStrength.prepare(selected.game,selected.nbaInputs.feed,CookNBAPossessions);}catch(e){selected.model.spreadStrengthError=e.message;}}}
    catch(e){$('runStatus').textContent='Cannot prepare NBA model: '+e.message;return;}
   }
   if(!selected.model){$('runStatus').textContent=selected.autoModelError||'Simulation modules unavailable. Reload this page to retry.';return;}
