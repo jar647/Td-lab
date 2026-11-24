@@ -239,11 +239,11 @@ def build_matchup_research(model, play_rows, home_context, away_context, home, a
                             'Net strength equals offense minus defense allowance. QB and venue effects are excluded.',
                 'epa_matchup': 'Raw historical league-relative EPA: league + (offense EPA - league) + '
                                '(opponent EPA allowed - league). Higher opponent allowance improves the offensive signal. '
-                               'These pass/rush signals are not schedule-adjusted and do not modify the production scoring baseline. An explicitly selected research scenario may use a bounded interaction.',
+                               'These pass/rush signals are not schedule-adjusted and do not modify the production scoring baseline. The automatic simulator may use a bounded interaction from these prior-game inputs.',
                 'confidence': 'Confidence labels describe sample coverage only, never a calibrated win or prop probability.',
                 'situational': 'Success, explosive plays, sacks, turnovers, red-zone TDs and third/fourth conversions use documented nflverse play flags. Missing columns are not assumed to be zeros. Net pass yards include sack effects when PBP records them. These are overlapping diagnostics of EPA, not six additive scoring advantages.',
                 'source_scope': 'The feed builder supplies completed-game-ID-filtered regular-season PBP. '
                                 'This analysis additionally excludes target/future weeks, no-plays and invalid EPA.'},
             'limits': ['Raw EPA style signals and opponent-adjusted scoring ratings are distinct analyses.',
                        'Historical opponents, quarterback changes and game scripts can confound raw EPA.',
-                       'The feed supplies source evidence for an optional explicitly labeled research simulation; it does not validate a sportsbook edge.']}
+                       'The feed supplies source evidence for a bounded research simulation, but does not validate a sportsbook edge.']}
