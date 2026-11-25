@@ -42,6 +42,11 @@ function capture(options={},adapter=source){
  return result;
 }
 const result=capture(),bestPicks=result.picks.filter(p=>p.board==='Best Props');
+const competitiveRows=rows.map(row=>({...row,samples:[...Array(420).fill(20),...Array(180).fill(23),...Array(400).fill(26)]}));
+const competitivePicks=capture({simulationRows:competitiveRows}).picks.filter(p=>p.board==='Competitive NBA Props');
+assert.equal(competitivePicks.length,3);
+assert(competitivePicks.every(p=>p.line===22.5&&p.probability===.58&&p.inputs.selectionEvidence.line.policy===lines.COMPETITIVE_POLICY));
+assert.equal(ledger.capture(null,competitivePicks,now).added,3);
 const gamePicks=result.picks.filter(p=>p.board==='Game-first recommendations');
 assert.equal(bestPicks.length,8,'all displayed Best Props default lines remain tracked');
 assert.equal(gamePicks.length,0,'the same player-market cannot be tracked twice across NBA boards');
