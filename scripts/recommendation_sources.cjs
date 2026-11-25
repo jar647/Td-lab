@@ -3,7 +3,8 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),cryp
 const ROOT=path.resolve(__dirname,'..'),read=(file,fallback={})=>fs.existsSync(path.join(ROOT,file))?JSON.parse(fs.readFileSync(path.join(ROOT,file),'utf8')):fallback;
 const hash=files=>crypto.createHash('sha256').update(files.map(f=>fs.readFileSync(path.join(ROOT,f),'utf8')).join('\n')).digest('hex').slice(0,12);
 const fresh=(stamp,now,h=24)=>Number.isFinite(Date.parse(stamp))&&Date.parse(stamp)<=now+300000&&now-Date.parse(stamp)<=h*3600000;
-const nbaMinimum=require('../nba_prop_lines').minimumScore;
+const nbaLinePolicy=require('../nba_prop_lines'),nbaMinimum=nbaLinePolicy.minimumScore;
+const nbaAuto=require('../nba_auto_alt_ui');
 const recommendationScore=(score,minimum=75)=>Number.isFinite(score)&&score>=minimum&&score<=100;
 function nbaSelectionEvidence(row){
  const role=row.roleEvidence,line=row.selectedLineEvidence,defense=row.weakness;
@@ -24,6 +25,7 @@ function captureSources(now=Date.now(),overrides={}){
   const feed=overrides.nbaInputs?.feed||read('data/nba_games.json'),rosters=overrides.nbaInputs?.rosters||read('data/nba_rosters.json'),injuries=overrides.nbaInputs?.injuries||read('data/nba_injuries.json'),context=overrides.nbaInputs?.context||read('data/nba_game_context.json');
   const selectionFiles=['nba_matchup_discovery.js','nba_prop_evidence.js','nba_prop_lines.js','nba_possession_engine.js','nba_game_context.js'];
   const version='nba-matchup-'+hash(selectionFiles),gameFirstVersion='nba-game-first-'+hash(['nba_game_first.js',...selectionFiles]);
+  const competitiveVersion=nbaLinePolicy.COMPETITIVE_POLICY+'-'+hash(['nba_auto_alt_ui.js','nba_game_first.js',...selectionFiles]);
   const nowDay=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(now);
   const games=(feed.games||[]).filter(g=>g.status==='STATUS_SCHEDULED'&&Date.parse(g.date)>now&&new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(g.date))===nowDay);
   for(const g of games){const result=matchups.analyze(g,feed,rosters,injuries,now,{context});
@@ -34,6 +36,17 @@ function captureSources(now=Date.now(),overrides={}){
    // Alternate-line menus are research options, not independently recommended plays.
    const selected=new Map([...ticket.picks,...ticket.topThree,...(ticket.bestSingle?[ticket.bestSingle]:[])].map(p=>[p.key,p]));
    for(const r of [...selected.values()].filter(r=>['over','under'].includes(String(r.side||'over').toLowerCase())&&recommendationScore(r.score,nbaMinimum(r.market)))){if(picks.some(p=>p.sport==='NBA'&&p.gameId===String(g.id)&&String(p.playerId)===String(r.playerId)&&p.market===r.market))continue;picks.push({sport:'NBA',board:'Game-first recommendations',gameId:String(g.id),startsAt:g.date,playerId:r.playerId,player:r.name,team:r.team,market:r.market,side:r.side,line:r.line,score:r.score,probability:r.probability,scoreKind:'Matchup score /100',modelVersion:gameFirstVersion,label:r.name+' '+r.side.toUpperCase()+' '+r.line+' '+r.market,reason:r.reason,inputs:{recommendationScope:'game-first-visible',...analysis.inputTimes,context:context?.generated_at||null,selectionEvidence:nbaSelectionEvidence(r)}});}
+   const candidates=typeof gf.candidate==='function'?(analysis.rows||[]).map(row=>gf.candidate(row)).filter(Boolean):[];
+   for(const r of nbaAuto.shortlist(candidates)){
+    const research=nbaAuto.research(r,now),line=research.competitive;
+    if(research.status!=='research-only'||!line)continue;
+    picks.push({sport:'NBA',board:'Competitive NBA Props',gameId:String(g.id),startsAt:g.date,
+     playerId:r.playerId,player:r.name,team:r.team,market:r.market,side:r.side,line:line.line,
+     score:r.score,scoreKind:'Matchup score /100',probability:line.frequency,modelVersion:competitiveVersion,
+     label:r.name+' '+r.side.toUpperCase()+' '+line.line+' '+r.market,reason:r.reason,
+     inputs:{recommendationScope:'competitive-props-visible',...analysis.inputTimes,context:context?.generated_at||null,
+      selectionEvidence:nbaSelectionEvidence({...r,selectedLineEvidence:line})}});
+   }
   }
   coverage.push({sport:'NBA',status:!fresh(feed.generated_at,now,12)?'stale':'ok',games:games.length,bestPropsCandidates:picks.filter(p=>p.sport==='NBA'&&p.board==='Best Props').length});
   for(const p of picks.filter(p=>p.sport==='NBA'))p.inputs.recommendationMinimum=nbaMinimum(p.market);

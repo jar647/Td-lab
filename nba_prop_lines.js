@@ -70,8 +70,27 @@
   supported.sort((a,b)=>{const gap=Math.abs(a.frequency-TARGET)-Math.abs(b.frequency-TARGET);return Math.abs(gap)>1e-12?gap:(side==='under'?a.line-b.line:b.line-a.line)});
   return {...supported[0],reason:offered?'Closest supported supplied book line to the 75% planning target.':'Closest conventional research line to the 75% planning target; book availability is unverified.'};
  }
+ const COMPETITIVE_POLICY='nba-competitive-alt-v1';
+ function competitive({market,samples,side='over'}={}){
+  const key=canonical(market);
+  if(!key||!['over','under'].includes(side)||!validNumbers(samples,0,Infinity)||samples.length<1000)return null;
+  const ordered=[...samples].sort((a,b)=>a-b),middle=Math.floor(ordered.length/2);
+  const median=ordered.length%2?ordered[middle]:(ordered[middle-1]+ordered[middle])/2;
+  const radius=Math.min(4,Math.max(1.5,median*.12));
+  const first=Math.max(.5,Math.ceil(median-radius-.5)+.5);
+  const eligible=[];
+  for(let line=first;line<=Math.min(400,median+radius);line++){
+   const result=evaluateSide(samples,line,side);
+   if(result.winFrequency>=.55&&result.winFrequency<=.60)eligible.push({
+    ...result,line,market:key,side,median,frequency:result.winFrequency,policy:COMPETITIVE_POLICY,
+    sampleCount:result.count,sampleKind:'simulation_outcomes',calibrated:false,
+    breakEvenAmerican:Math.round(-100*result.winFrequency/result.lossFrequency)
+   });
+  }
+  return eligible.sort((a,b)=>Math.abs(a.line-median)-Math.abs(b.line-median)||Math.abs(a.frequency-.575)-Math.abs(b.frequency-.575))[0]||null;
+ }
  function minimumScore(market,side='over'){if(!['over','under'].includes(side))return 101;return canonical(market)?80:101;}
  function qualifiesScore(score,market,side='over'){return Number.isFinite(score)&&score>=minimumScore(market,side)&&score<=100;}
  function minimum(market){const key=canonical(market);return key?GRIDS[key][0]:null;}
- return {minimumScore,qualifiesScore,POLICY,MIN_SAMPLES,TARGET,canonical,minimum,select,ladder,evaluate,evaluateSide};
+ return {minimumScore,qualifiesScore,POLICY,MIN_SAMPLES,TARGET,COMPETITIVE_POLICY,competitive,canonical,minimum,select,ladder,evaluate,evaluateSide};
 });
