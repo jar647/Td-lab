@@ -1,0 +1,28 @@
+name: NBA margin compression and variance research
+on:
+  pull_request:
+    paths:
+      - 'nba_spread_strength.js'
+      - 'nba_possession_engine.js'
+      - 'scripts/nba_margin_variance_research.cjs'
+      - '.github/workflows/nba-margin-variance-research.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Compare candidate scoring algorithms on earlier-only inputs
+        run: |
+          node scripts/nba_margin_variance_research.cjs > /tmp/nba-margin-variance.json
+          node -e "const r=require('/tmp/nba-margin-variance.json');const {rows, ...summary}=r;console.log(JSON.stringify(summary,null,2))"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nba-margin-variance-research
+          path: /tmp/nba-margin-variance.json
