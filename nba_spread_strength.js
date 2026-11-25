@@ -39,5 +39,24 @@ function cover(dist,homeSpread,home){
  for(const [x,n] of dist.bins){const v=x+dist.shift+homeSpread;if(v===0)push+=n;else if((v>0)===home)win+=n;else loss+=n;}
  return {win:win/dist.count,loss:loss/dist.count,push:push/dist.count};
 }
-return {fit,prepare,distribution,cover};
+
+// Anchor the current rotation forecast to the prior-only rating by comparing
+// against a historical-availability reference. Preserve the current lineup's
+// modeled difference instead of forcing an injury-blind team rating.
+function anchor(game,feed,engine,current,pilot,now){
+ const target=prepare(game,feed,engine,now);
+ const reference=engine.build(game,feed,{injuries:[]},{},now,{historical:true});
+ const mean=x=>x.reduce((s,v)=>s+v,0)/x.length;
+ const margin=x=>mean(x.home)-mean(x.away);
+ const baseline=margin(pilot),referenceMargin=margin(engine.draws(reference,1000,6472026));
+ const correction=Math.max(-8,Math.min(8,target.margin-referenceMargin));
+ // Approximate shot sensitivity; bound probability offsets to avoid extreme changes.
+ const offset=Math.max(-.025,Math.min(.025,correction/(current.pace*4)));
+ const model={...current,strengthAnchor:{version:'nba-possession-strength-events-v1',ratingMargin:target.margin,referenceMargin,originalMargin:baseline,targetMargin:baseline+correction,historyGames:target.historyGames,shotOffsets:{[game.home]:offset,[game.away]:-offset}}};
+ const revised=engine.draws(model,1000,6472026);
+ model.strengthAnchor.pilotMargin=margin(revised);
+ return {model,pilot:revised};
+}
+
+return {fit,prepare,distribution,cover,anchor};
 });

@@ -1,0 +1,22 @@
+name: NBA coherent scoring audit
+on:
+  pull_request:
+    paths:
+      - 'nba_possession_engine.js'
+      - 'nba_spread_strength.js'
+      - 'game_odds_engine.js'
+      - 'scripts/test_nba_coherent_scoring.cjs'
+      - '.github/workflows/nba-coherent-scoring.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/test_nba_coherent_scoring.cjs

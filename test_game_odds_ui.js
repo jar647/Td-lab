@@ -4,7 +4,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 const engine=require('./game_odds_engine.js');
 const review=require('./game_odds_manual_review.js');
 const html=fs.readFileSync('game-odds.html','utf8');
-assert.match(html,/<script src="\.\/game_odds_engine\.js\?v=nfl-multifactor-20261124"><\/script>/,'Engine assets must be versioned with the worker');
+assert.match(html,/<script src="\.\/game_odds_engine\.js\?v=strength-events-v1"><\/script>/,'Engine assets must be versioned with the worker');
 assert.doesNotMatch(html,/id="nflModelMode"|NFL score model<\/label>/,'NFL must not show manual model choices');
 assert.match(html,/Automatic NFL analysis:/,'Automatic model coverage must be disclosed');
 assert.ok(html.indexOf('id="run"')<html.indexOf('id="trustPreview"'),'Simulate must appear before detailed research on mobile');
@@ -13,7 +13,7 @@ assert.match(html,/nfl_matchup_scenario\.js\?v=nfl-multifactor-20261124/,'Matchu
 assert.match(html,/new Worker\('\.\/game_odds_worker\.js\?v=[^']+'\)/,'Game Odds must use a versioned simulation worker');
 assert.match(html,/CookNBALiveContext\.latest\(\{force:true\}\)/,'NBA simulation must request current availability');
 assert.match(html,/selected\.model=null;lastSimulation=null;lastSimulationModel=null;.*runId\+\+;if\(worker\)/,'Changed availability must invalidate an active forecast before it is displayed');
-assert.ok(fs.readFileSync('game_odds_worker.js','utf8').includes("nba_possession_engine.js?v=nba-simulator-reliability-v4"),'Worker imports must match the page model version');
+assert.ok(fs.readFileSync('game_odds_worker.js','utf8').includes("nba_possession_engine.js?v=strength-events-v1"),'Worker imports must match the page model version');
 for(const field of ['game','homeML','awayML','homeSpread','homeATS','awayATS','total','over','under','run','results','sportNFL','sportNBA'])
  assert.ok(html.includes('id="'+field+'"'),'Missing '+field);
 assert.ok(html.indexOf('id="game"')<html.indexOf('id="homeML"'),'Game selector must appear before odds');
@@ -68,7 +68,7 @@ vm.createContext(sandbox);vm.runInContext(scripts[0],sandbox,{timeout:5000});
  el('compare').onclick();
  assert.match(el('compareStatus').textContent,/No resimulation was performed/i);
  assert.match(el('results').innerHTML,/Over 45.5/,'Entered total is priced from the completed draws');
- assert.match(el('priceDecision').innerHTML,/PASS|LEAN|PLAY/);assert.match(el('priceDecision').innerHTML,/Book break-even/);assert.match(el('priceDecision').innerHTML,/Model difference/);
+ assert.match(el('priceDecision').innerHTML,/PASS|LEAN|PLAY|HOLD/);assert.match(el('priceDecision').innerHTML,/Book break-even/);assert.match(el('priceDecision').innerHTML,/Model difference/);
  assert.match(independent,/NO ODDS ENTERED/);
  assert.match(el('results').innerHTML,/RESEARCH ONLY/);
  assert.match(el('results').innerHTML,/No bet is verified/);

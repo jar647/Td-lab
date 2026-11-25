@@ -44,7 +44,7 @@ vm.createContext(sandbox);vm.runInContext(controller,sandbox,{timeout:5000});
  assert.match(output,/NOT APPLIED/);assert.match(output,/QB-led game split/);
  assert.match(output,/3 of the last 4/);assert.match(output,/season only/);
  assert.match(el('priceDecision').innerHTML,/Returning quarterback scenario is not supported/);
- assert.match(output,/PASS · EXPERIMENTAL MODEL ESTIMATE/);
+ assert.match(output,/HOLD · EXPERIMENTAL MODEL ESTIMATE/);
  assert.match(output,/Independent calculation from the same/);
  assert(!output.includes('RESEARCH LEAN · UNVALIDATED'));
  console.log('Trust UI: source checks, precise EPA, starter split and disabled unsupported advice passed');
