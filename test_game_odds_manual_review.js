@@ -88,6 +88,30 @@ assert.equal(integrated.rows.find(x=>x.key==='awayML').win,.7);
 assert.equal(integrated.rows.find(x=>x.key==='over').push,1);
 const unavailable=review.analyze(integratedModel,nbaResult,{homeML:500},nbaNow);
 assert.equal(unavailable.status,'HOLD');assert.equal(unavailable.top,null);assert.equal(unavailable.rows.find(x=>x.key==='homeML').eligible,false);
+
+// Injury uncertainty is priced per market using the SAME sealed 100k outcomes.
+const pending={id:'pj',name:'P.J. Washington',team:'Washington',status:'DAY-TO-DAY',pending:true};
+const scenarioModel={...integratedModel,possessionModel:{...integratedModel.possessionModel,uncertain:[pending.name],teams:{Washington:{players:[pending]}}}};
+function injuryResult(pOut,pIn){
+ const rows=[pOut,pIn].map((p,mask)=>({mask,active:mask?['pj']:[],inactive:mask?[]:['pj'],count:50000,scoreBins:{margin:{'5':p*500,'-5':50000-p*500},total:{'218':50000}}}));
+ return {...integratedResult,scoreBins:{margin:{'5':(pOut+pIn)*500,'-5':100000-(pOut+pIn)*500},total:{'218':100000}},possession:{...integratedResult.possession,availabilityScenarios:{version:'balanced-availability-v1',players:[{id:'pj',name:pending.name,team:pending.team,status:pending.status}],rows}}};
+}
+for(const [out,inn,expected] of [[60,58,'PLAY'],[60,55,'LEAN'],[60,50,'HOLD'],[50,49,'PASS']]){
+ const r=injuryResult(out,inn),sealed=JSON.stringify(r);
+ const compared=review.analyze(scenarioModel,r,{homeML:-110,awayML:-110,total:234.5,over:-110,under:-110},nbaNow);
+ const row=compared.rows.find(x=>x.key==='homeML');
+ assert.equal(row.decision,expected);assert.equal(row.availability.length,2);
+ assert.equal(row.win,(out+inn)/200);assert.equal(row.availability[0].win,out/100);
+ assert.equal(row.eligible,['PLAY','LEAN'].includes(expected));
+ assert.equal(compared.rows.find(x=>x.key==='over').decision,'PASS','Unfavorable total is not held');
+ assert.equal(compared.rows.find(x=>x.key==='under').decision,'PLAY','Stable value survives injury uncertainty');
+ assert.equal(JSON.stringify(r),sealed,'Repricing must never change scenario outcomes');
+}
+const damaged=injuryResult(60,58);damaged.possession.availabilityScenarios.rows[0].scoreBins.margin['5']--;
+assert.equal(review.analyze(scenarioModel,damaged,{homeML:-110},nbaNow).status,'HOLD');
+const staleScenario={...scenarioModel,possessionModel:{...scenarioModel.possessionModel,inputTimes:{...scenarioModel.possessionModel.inputTimes,injuries:'2020-01-01'}}};
+assert.equal(review.analyze(staleScenario,injuryResult(60,58),{homeML:-110},nbaNow).status,'HOLD');
+
 const corrupted=structuredClone(result);corrupted.scoreBins.margin[12]+=1;
 assert.throws(()=>review.analyze(prepared,corrupted,prices),/reconcile/);
 console.log('Manual Game Odds Review: frozen 100k simulation -> odds -> PLAY / LEAN / PASS; source gates and no-resimulation invariant PASS');
