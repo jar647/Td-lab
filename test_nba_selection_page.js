@@ -52,7 +52,7 @@ const old={key:'late|player|rebounds',game:late,gameId:'late',playerId:'player',
  context.verification=verification;context.PropShopNBAAutoAlt={shortlist:()=>[]};
  evaluate('nbaAutoAltView={render:()=>""};nbaSelectionController={refreshInputs:async()=>({ready:true}),getCandidates:async()=>verification}');
  await evaluate('scanNBAMatchups()');
- assert.match(element('slate-results').innerHTML,/Audit: 2\/2 games/);
+ assert.match(element('nba-board-audit').innerHTML,/Audit: 2\/2 games/);
  assert.match(element('slate-results').innerHTML,/PASS · No supported OVER or UNDER clears all current model requirements/);
  context.verification={...verification,diagnostics:{...verification.diagnostics,gamesAnalyzed:1}};
  await evaluate('scanNBAMatchups()');
