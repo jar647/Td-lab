@@ -54,12 +54,12 @@
    if(draft.length!==count)return 'A complete '+count+'-leg supported draft is required. No filler legs are added.';
    const exact=evaluation(),allEntered=checkedLegs()!==null;
    if(allEntered&&!complete(exact))return esc(exact?.reason||'The exact book lines cannot be evaluated with current evidence. Regenerate the draft.');
-   const rates=allEntered?exact:parlay.evaluate(draft,{now:now()});
+   const rates=allEntered?exact:selection;
    if(!complete(rates))return 'Current shared-outcome evaluation is unavailable. Generate a fresh draft.';
    let html='<strong>'+(allEntered?'Exact book lines':'Unverified research targets')+' · all legs win: '+percent(rates.jointFrequency)+' simulated</strong>'+
     '<p class="muted">'+(rates.independentGames?'Separate games are assumed independent. Any same-game outcomes are counted together.':'The legs are counted together in the same simulated games; individual hit rates are not multiplied.')+' Uncalibrated model frequency, not a verified win probability.</p>';
    if(allEntered&&Number(rates.pushFrequency)>0)html+='<p class="muted">No losing leg with at least one push: '+percent(rates.pushFrequency)+'. The book’s reduced-ticket and void rules determine settlement.</p>';
-   if(!allEntered)return html+'<p>Enter each exact OVER or UNDER line your book offers before saving or reviewing its full-ticket payout. Default alternate lines are unverified book offerings.</p>';
+   if(!allEntered)return html+'<p>Enter each exact OVER or UNDER line your book offers before reviewing its full-ticket payout. Default alternate lines are unverified book offerings.</p>';
    html+='<p class="muted">These exact lines are evaluated for the selected players. Editing a line does not rerank the board.</p>';
    const raw=String(combinedOdds).trim(),price=raw?pricing.quote(raw):null;
    if(raw&&!price)return html+'<p>Enter valid combined American odds, such as +500.</p>';
@@ -83,12 +83,12 @@
    const fixtures=games();
    if(!fixtures.some(g=>g.id===game))game=fixtures[0]?.id||'';
    host.innerHTML='<p class="muted">Build an OVER or UNDER research ticket from supported 80/100+ NBA matchups, including defensive stats. Selection considers minutes stability, distinct players and joint outcomes, rather than simply taking the highest scores.</p>'+
-    '<div class="sim-grid"><div class="sim-field"><label>Legs<select data-nba-parlay-count aria-label="NBA parlay leg count">'+[2,3,4].map(n=>'<option value="'+n+'"'+(n===count?' selected':'')+'>'+n+' legs</option>').join('')+'</select></label></div>'+
+    '<div class="sim-grid"><div class="sim-field"><label>Legs<select data-nba-parlay-count aria-label="NBA parlay leg count">'+[2,3,4,5,6,7,8,9,10].map(n=>'<option value="'+n+'"'+(n===count?' selected':'')+'>'+n+' legs</option>').join('')+'</select></label></div>'+
     '<div class="sim-field"><label>Ticket type<select data-nba-parlay-mode aria-label="NBA parlay ticket type"><option value="cross_game"'+(mode==='cross_game'?' selected':'')+'>Different games</option><option value="sgp"'+(mode==='sgp'?' selected':'')+'>Same game</option></select></label></div></div>'+
     (mode==='sgp'?'<label>Matchup<select data-nba-parlay-game aria-label="NBA parlay matchup">'+(fixtures.length?fixtures.map(g=>'<option value="'+esc(g.id)+'"'+(g.id===game?' selected':'')+'>'+esc(g.label)+'</option>').join(''):'<option value="">Load current matchups with Generate</option>')+'</select></label>':'')+
-    '<button type="button" data-nba-parlay-generate'+(pending?' disabled':'')+'>Generate '+count+'-leg NBA draft</button>'+
+    '<button type="button" data-nba-parlay-generate'+(pending?' disabled':'')+'>Explore '+count+' unpriced NBA picks</button>'+
     '<p class="muted" data-nba-parlay-status role="status">'+esc(message||'Distinct players, supported minutes and no filler legs.')+'</p>'+
-    '<div data-nba-parlay-legs>'+draft.map((c,index)=>{
+    (draft.length?'<button type="button" class="primary" data-nba-parlay-add-research'+(pending?' disabled':'')+'>＋ Add all '+draft.length+' picks to Quick Slip</button>':'')+'<div data-nba-parlay-legs>'+draft.map((c,index)=>{
      const q=quote(c),role=c.roleEvidence||{},range=Number.isFinite(role.minutesLow)&&Number.isFinite(role.minutesHigh)?role.minutesLow.toFixed(1)+'–'+role.minutesHigh.toFixed(1):'unavailable';
      return '<section class="player nba-parlay-leg" data-nba-parlay-key="'+esc(c.key)+'"><strong>Leg '+(index+1)+' · '+esc(name(c))+' · '+esc(score(c))+'/100</strong>'+
       '<p class="muted">'+esc(gameLabel(c))+' · '+esc(label(c))+' · supported minutes '+esc(range)+'.</p>'+
@@ -156,7 +156,7 @@
   function setCombined(value){if(destroyed)return false;combinedOdds=typeof value==='string'||typeof value==='number'?String(value):'';const node=host.querySelector?.('[data-nba-parlay-combined]');if(node&&node.value!==combinedOdds)node.value=combinedOdds;edits++;update();return true}
   function setStake(value){if(destroyed)return false;stake=typeof value==='string'||typeof value==='number'?String(value):'';const node=host.querySelector?.('[data-nba-parlay-stake]');if(node&&node.value!==stake)node.value=stake;update();return true}
   function configure(change){if(destroyed)return false;operation++;pending=false;clearDraft();change();message='Generate a draft using the updated ticket settings.';render();return true}
-  function setCount(value){const n=Number(value);return [2,3,4].includes(n)?configure(()=>{count=n}):false}
+  function setCount(value){const n=Number(value);return [2,3,4,5,6,7,8,9,10].includes(n)?configure(()=>{count=n}):false}
   function setMode(value){return ['cross_game','sgp'].includes(value)?configure(()=>{mode=value}):false}
   function setGame(value){return configure(()=>{game=String(value||'')})}
   async function add(){
@@ -187,9 +187,19 @@
   }
   function change(event){const d=event.target.dataset;if(Object.hasOwn(d,'nbaParlayCount'))setCount(event.target.value);if(Object.hasOwn(d,'nbaParlayMode'))setMode(event.target.value);if(Object.hasOwn(d,'nbaParlayGame'))setGame(event.target.value)}
   function input(event){const d=event.target.dataset;if(d.nbaParlayLine)setQuote(d.nbaParlayLine,{line:event.target.value});if(d.nbaParlayOdds)setQuote(d.nbaParlayOdds,{odds:event.target.value});if(Object.hasOwn(d,'nbaParlayCombined'))setCombined(event.target.value);if(Object.hasOwn(d,'nbaParlayStake'))setStake(event.target.value)}
-  function click(event){const button=event.target.closest?.('button');if(!button)return;if(Object.hasOwn(button.dataset,'nbaParlayGenerate'))generate();if(Object.hasOwn(button.dataset,'nbaParlayAdd'))add()}
+  function addResearch(){
+   if(destroyed||pending||!draft.length)return false;
+   const current=parlay.evaluateResearch(draft,{now:now()});
+   if(!complete(current)){message='Research expired or unsupported. Generate a fresh draft.';update();return false}
+   for(const c of draft){
+    const rate=current.legFrequencies?.find(r=>r.key===c.key)?.winFrequency;
+    options.quickSlip.add({sport:'NBA',game:gameLabel(c),gameId:gameId(c),player:name(c),playerId:playerId(c),team:c.team,opponent:c.opponent,position:c.position||null,market:label(c),marketKey:c.market,side:c.side,line:c.line,recommendationLine:c.line,recommendation:String(c.side).toUpperCase()+' '+c.line+' '+label(c),researchScore:score(c),scenarioRate:Number.isFinite(rate)?rate:null,researchMethod:'nba-parlay-research',lineOfferingConfirmed:false,notes:'Unpriced research target; verify current book offering.'});
+   }
+   message='Research picks added to Quick Slip. Verify actual book lines and prices.';update();return true;
+  }
+  function click(event){const button=event.target.closest?.('button');if(!button)return;if(Object.hasOwn(button.dataset,'nbaParlayGenerate'))generate();if(Object.hasOwn(button.dataset,'nbaParlayAdd'))add();if(Object.hasOwn(button.dataset,'nbaParlayAddResearch'))addResearch()}
   host.addEventListener('click',click);host.addEventListener('change',change);host.addEventListener('input',input);render();
-  return {generate,refresh,add,setQuote,setCombined,setStake,setCount,setMode,setGame,
+  return {generate,refresh,add,addResearch,setQuote,setCombined,setStake,setCount,setMode,setGame,
    getDraft:()=>JSON.parse(JSON.stringify(draft)),getState:()=>({count,mode,game,pending,signature}),
    destroy(){destroyed=true;operation++;host.removeEventListener('click',click);host.removeEventListener('change',change);host.removeEventListener('input',input)}};
  }
