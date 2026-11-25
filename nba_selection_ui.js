@@ -67,7 +67,7 @@
     const games=fixtures(inputs.feed,now()),signature=sourceSignature(inputs,games);
     if(current&&current.signature!==signature){cache=null;stop('The NBA sources changed during simulation. Generate a fresh draft.');}
     current={...inputs,games,signature,ready:true,reason:games.length?'':'No upcoming NBA games remain today (Eastern).'};
-    if(typeof options.updateInputs==='function')await options.updateInputs(inputs);
+    if(typeof options.updateInputs==='function')await options.updateInputs(current);
     if(destroyed||version!==revision)return unavailable('NBA sources changed during refresh.');
     lastRefreshAt=now();return current;
    })();

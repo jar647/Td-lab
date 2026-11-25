@@ -209,7 +209,7 @@ function setupNBASelection(){
   getInputs:()=>({feed:{games:historicalGames,generated_at:generatedAt},rosters:rosterData,injuries:injuryData,context:nbaGameContext}),
   updateInputs:updateNBASelectionInputs,
   refreshAvailability:typeof CookNBALiveContext!=='undefined'?()=>CookNBALiveContext.latest():undefined,
-  onProgress:progress=>{const target=$('slate-results');if(target&&progress?.type==='progress')target.textContent='Simulating NBA matchups · '+progress.completed+'/'+progress.total+' games…';}
+  onProgress:progress=>{const target=$('slate-results');if(target&&$('scan-slate')?.disabled&&progress?.type==='progress')target.textContent='Simulating NBA matchups · '+progress.completed+'/'+progress.total+' games…';}
  });
  if(!nbaResearchSlip){
   const panel=$('quickSlipPanel'),smart=document.createElement('section');
