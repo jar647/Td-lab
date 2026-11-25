@@ -27,13 +27,9 @@
   }
   return total===row.count;
  }
- function evaluate({settlement,line,odds}={}){
-  const unavailable=status=>({status,play:false,verifiedValue:false});
+ function settleLine(settlement,line){
   const posted=parseLine(line);
-  if(posted===null)return unavailable('invalid-line');
-  const price=pricing?.quote(odds);
-  if(!price)return unavailable('invalid-odds');
-  if(!validSettlement(settlement))return unavailable('unavailable');
+  if(posted===null||!validSettlement(settlement))return null;
   let winCount=0,pushCount=0,lossCount=0;
   for(const [value,n] of settlement.bins){
    if(value>posted)winCount+=n;
@@ -41,14 +37,25 @@
    else lossCount+=n;
   }
   const count=settlement.count,winRate=winCount/count,pushRate=pushCount/count,lossRate=lossCount/count;
+  return {line:posted,winCount,pushCount,lossCount,count,winRate,pushRate,lossRate};
+ }
+ function evaluate({settlement,line,odds}={}){
+  const unavailable=status=>({status,play:false,verifiedValue:false});
+  const posted=parseLine(line);
+  if(posted===null)return unavailable('invalid-line');
+  const price=pricing?.quote(odds);
+  if(!price)return unavailable('invalid-odds');
+  const result=settleLine(settlement,posted);
+  if(!result)return unavailable('unavailable');
+  const {winCount,lossCount,winRate,pushRate}=result;
   // Compare frequencies on the same denominator: every model run, including
   // refunds. Quoted implied probability applies only among resolved wagers.
   const requiredWinRate=price.implied*(1-pushRate);
-  return {status:'ready',line:posted,winCount,pushCount,lossCount,count,winRate,pushRate,lossRate,
+  return {status:'ready',...result,
    resolvedWinRate:winCount+lossCount?winCount/(winCount+lossCount):null,
    requiredWinRate,modelDifference:winRate-requiredWinRate,
    decimal:price.decimal,american:price.american,implied:price.implied,
    play:false,verifiedValue:false};
  }
- return {parseLine,evaluate};
+ return {parseLine,settleLine,evaluate};
 });
