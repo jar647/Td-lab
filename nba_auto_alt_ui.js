@@ -3,13 +3,26 @@
  'use strict';
  const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const label=m=>({pr:'points + rebounds',pa:'points + assists',ra:'rebounds + assists',pra:'points + rebounds + assists',threes:'three-pointers',steals:'steals',blocks:'blocks',stocks:'steals + blocks','Steals + Blocks':'steals + blocks'}[m]||m);
- function shortlist(rows){const games=new Map(),out=[];for(const c of [...rows].filter(c=>['over','under'].includes(c.side)&&c.eligible===true&&policy.qualifiesScore(c.score,c.market,c.side)&&!c.reviewRequired).sort((a,b)=>b.score-a.score||a.key.localeCompare(b.key))){const game=String(c.gameId);if(!games.has(game))games.set(game,new Set());const used=games.get(game);if(used.size>=3||used.has(String(c.playerId)))continue;used.add(String(c.playerId));out.push(c)}return out;}
+ function shortlist(rows){
+  const games=new Map(),out=[];
+  const ranked=rows.filter(c=>['over','under'].includes(c.side)&&c.eligible===true&&policy.qualifiesScore(c.score,c.market,c.side)&&!c.reviewRequired)
+   .map(c=>({c,competitive:!!policy.competitive(c)}))
+   .sort((a,b)=>Number(b.competitive)-Number(a.competitive)||b.c.score-a.c.score||a.c.key.localeCompare(b.c.key));
+  for(const {c} of ranked){
+   const game=String(c.gameId);
+   if(!games.has(game))games.set(game,new Set());
+   const used=games.get(game);
+   if(used.size>=3||used.has(String(c.playerId)))continue;
+   used.add(String(c.playerId));out.push(c);
+  }
+  return out;
+ }
  function research(c,now){const tip=Date.parse(c.game?.date),times=c.inputTimes||{},valid=(key,hours)=>Number.isFinite(Date.parse(times[key]))&&Date.parse(times[key])<=now+300000&&now-Date.parse(times[key])<=hours*3600000;
   const stale=!valid('games',12)||!valid('rosters',72)||!valid('injuries',tip-now<=90*60000?.25:12);
   const competitive=policy.competitive(c);
   const alternate=competitive?policy.select({...c,sampleKind:'simulation_outcomes'}):null;
   const safer=alternate?.frequency>competitive?.frequency?alternate:null;
-  const ladder=policy.ladder({market:c.market,samples:c.samples,sampleKind:'simulation_outcomes',side:c.side}),thresholds=ladder.filter(r=>r.frequency>=.12&&r.frequency<=.97||r.line===c.line).map(r=>r.line);if(!thresholds.includes(c.line))thresholds.push(c.line);if(competitive&&!thresholds.includes(competitive.line))thresholds.push(competitive.line);
+  const ladder=policy.ladder({market:c.market,samples:c.samples,sampleKind:'simulation_outcomes',side:c.side}),thresholds=ladder.filter(r=>r.frequency>=.12&&r.frequency<=.97||r.line===c.line).map(r=>r.line);if(!thresholds.includes(c.line))thresholds.push(c.line);if(competitive&&!thresholds.includes(competitive.line))thresholds.push(competitive.line);if(safer&&!thresholds.includes(safer.line))thresholds.push(safer.line);
   return {...cards.nba(c,thresholds,{now,sourceUpdatedAt:times.injuries,startsAt:c.game?.date,maxAgeMs:tip-now<=90*60000?15*60000:12*3600000,stale}),competitive,safer};
  }
  function create({getCandidates,quickSlip,now=Date.now,document,bookComparison=null}){
