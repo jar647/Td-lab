@@ -50,7 +50,7 @@ function replay(feed,quoteRows=[]){
     models[cfg.id]=outcomeMetrics(draw,actual,actualTotal);
    }
    rows.push({id:String(g.id),date:g.date,home:g.home,away:g.away,actual,actualTotal,models});
-  }catch(e){skipped.push({id:String(g.id),reason:e.message});}
+  }catch(e){if(e.code==='ERR_ASSERTION')throw e;skipped.push({id:String(g.id),reason:e.message});}
  }
  const days=[...new Set(rows.map(r=>r.date.slice(0,10)))].sort(),split=days[Math.floor(days.length*2/3)];
  const development=rows.filter(r=>r.date.slice(0,10)<split),diagnostic=rows.filter(r=>r.date.slice(0,10)>=split);
