@@ -116,7 +116,7 @@
     (result.gameGroups.find(g=>g.gameId===p.gameId).legs>1?'Evaluated jointly with the other legs in this game.':'Adds a distinct game exposure.') }));
  }
  function evaluate(legs,{now=Date.now(),research=false}={}){
-  if(!finite(now)||!Array.isArray(legs)||legs.length<(research?1:2)||legs.length>(research?5:4))return empty('A parlay requires two to four supported exact-line legs.',{requested:Array.isArray(legs)?legs.length:0});
+  if(!finite(now)||!Array.isArray(legs)||legs.length<(research?1:2)||legs.length>10)return empty('A parlay requires two to ten supported exact-line legs.',{requested:Array.isArray(legs)?legs.length:0});
   const prepared=legs.map(c=>prepare(c,now));
   if(prepared.some(p=>!p))return empty('A selected player, line, role, source timestamp or upcoming fixture is no longer supported.',{requested:legs.length});
   if(new Set(prepared.map(p=>p.key)).size!==prepared.length)return empty('Selected legs must have distinct, unambiguous identities.',{requested:legs.length});
@@ -154,9 +154,9 @@
    definition:'Research planning rank, not a hit probability. Prices are excluded.'};
  }
  function generate(candidates,{count=3,mode='cross_game',gameId,now=Date.now()}={}){
-  const requested=Number.isInteger(count)&&count>=2&&count<=4?count:0,selectedGame=id(gameId);
+  const requested=Number.isInteger(count)&&count>=2&&count<=10?count:0,selectedGame=id(gameId);
   const fail=reason=>empty(reason,{requested,mode,gameId:selectedGame});
-  if(!requested)return fail('Choose two to four legs.');
+  if(!requested)return fail('Choose two to ten legs.');
   if(mode!=='cross_game'&&mode!=='sgp')return fail('Choose distinct games or a selected same-game parlay.');
   if(mode==='sgp'&&!selectedGame)return fail('Choose a verified game for the same-game draft.');
   if(!finite(now)||!Array.isArray(candidates)||typeof lines?.evaluate!=='function')return fail('Current supported NBA outcomes are unavailable.');
