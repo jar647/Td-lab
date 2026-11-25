@@ -101,9 +101,11 @@
    allWinFrequency:allWinCount/count,nonLossFrequency:nonLossCount/count,
    pushFrequency:(nonLossCount-allWinCount)/count,lossFrequency:1-nonLossCount/count,correlations};
  }
- function metrics(prepared){
+ function metrics(prepared,cache){
   const byGame=new Map();for(const p of prepared){if(!byGame.has(p.gameId))byGame.set(p.gameId,[]);byGame.get(p.gameId).push(p)}
-  const groups=[];for(const group of byGame.values()){const result=groupMetrics(group);if(!result)return null;groups.push(result)}
+  const groups=[];for(const group of byGame.values()){const key=cache?JSON.stringify(group.map(p=>p.key)):null;
+   const result=cache?.has(key)?cache.get(key):groupMetrics(group);if(cache&&!cache.has(key))cache.set(key,result);
+   if(!result)return null;groups.push(result)}
   const jointFrequency=groups.reduce((n,g)=>n*g.allWinFrequency,1),nonLossFrequency=groups.reduce((n,g)=>n*g.nonLossFrequency,1);
   return {jointFrequency,nonLossFrequency,pushFrequency:nonLossFrequency-jointFrequency,
    lossFrequency:1-nonLossFrequency,gameGroups:groups,correlations:groups.flatMap(g=>g.correlations),independentGames:groups.length>1};
@@ -116,7 +118,7 @@
     (result.gameGroups.find(g=>g.gameId===p.gameId).legs>1?'Evaluated jointly with the other legs in this game.':'Adds a distinct game exposure.') }));
  }
  function evaluate(legs,{now=Date.now(),research=false}={}){
-  if(!finite(now)||!Array.isArray(legs)||legs.length<(research?1:2)||legs.length>(research?5:4))return empty('A parlay requires two to four supported exact-line legs.',{requested:Array.isArray(legs)?legs.length:0});
+  if(!finite(now)||!Array.isArray(legs)||legs.length<(research?1:2)||legs.length>10)return empty('A parlay requires two to ten supported exact-line legs.',{requested:Array.isArray(legs)?legs.length:0});
   const prepared=legs.map(c=>prepare(c,now));
   if(prepared.some(p=>!p))return empty('A selected player, line, role, source timestamp or upcoming fixture is no longer supported.',{requested:legs.length});
   if(new Set(prepared.map(p=>p.key)).size!==prepared.length)return empty('Selected legs must have distinct, unambiguous identities.',{requested:legs.length});
@@ -154,10 +156,10 @@
    definition:'Research planning rank, not a hit probability. Prices are excluded.'};
  }
  function generate(candidates,{count=3,mode='cross_game',gameId,now=Date.now()}={}){
-  const requested=Number.isInteger(count)&&count>=2&&count<=4?count:0,selectedGame=id(gameId);
+  const requested=Number.isInteger(count)&&count>=2&&count<=10?count:0,selectedGame=id(gameId);
   const fail=reason=>empty(reason,{requested,mode,gameId:selectedGame});
-  if(!requested)return fail('Choose two to four legs.');
-  if(mode!=='cross_game'&&mode!=='sgp')return fail('Choose distinct games or a selected same-game parlay.');
+  if(!requested)return fail('Choose two to ten legs.');
+  if(!['cross_game','multi_game','sgp'].includes(mode))return fail('Choose distinct games or a selected same-game parlay.');
   if(mode==='sgp'&&!selectedGame)return fail('Choose a verified game for the same-game draft.');
   if(!finite(now)||!Array.isArray(candidates)||typeof lines?.evaluate!=='function')return fail('Current supported NBA outcomes are unavailable.');
   const prepared=candidates.map(c=>prepare(c,now)).filter(Boolean),bad=ambiguousGames(prepared),unique=new Map(),keys=new Map(),ambiguousKeys=new Set();
@@ -177,23 +179,24 @@
    perPlayer.set(key,n+1);pooled.add(p.key);pool.push(p)};
   // Reserve fixture diversity before bounding search; a crowded game must not
   // erase otherwise supported games. Keep at most three markets per player.
-  if(mode==='cross_game'){const games=new Set();for(const p of sorted)if(!games.has(p.gameId)){games.add(p.gameId);add(p)}}
+  if(mode!=='sgp'){const games=new Set();for(const p of sorted)if(!games.has(p.gameId)){games.add(p.gameId);add(p)}}
   for(const p of sorted)add(p);
   pool.sort(order);
   if(!pool.length)return fail('No qualifying OVER or UNDER candidates (80/100 minimum) have current source records, stable supported minutes and suitable exact-line simulation frequencies.');
   let beam=[{indices:[],prepared:[],score:0,key:''}],best=null;
   const groupCache=new Map();
   function scoreCombo(combo){
-   const cacheKey=combo.map(p=>p.key).sort().join('\n');
-   if(groupCache.has(cacheKey))return groupCache.get(cacheKey);
-   const result=metrics(combo),objective=utility(combo,result),scored=objective?{result,objective}:null;
-   groupCache.set(cacheKey,scored);return scored;
+   const result=metrics(combo,groupCache),objective=utility(combo,result);
+   return objective?{result,objective}:null;
   }
-  for(let depth=1;depth<=requested;depth++){
+  const attainable=Math.min(requested,new Set(pool.map(p=>mode==='cross_game'?p.gameId:p.playerId)).size);
+  for(let depth=1;depth<=attainable;depth++){
    const next=[];
-   for(const prior of beam)for(let index=(prior.indices.at(-1)??-1)+1;index<pool.length;index++){
+   for(const prior of beam)for(let index=(prior.indices.at(-1)??-1)+1;index<=pool.length-(attainable-depth)-1;index++){
     const p=pool[index];if(prior.prepared.some(x=>x.playerId===p.playerId||mode==='cross_game'&&x.gameId===p.gameId))continue;
-    const combo=[...prior.prepared,p],scored=scoreCombo(combo);if(!scored)continue;
+    const combo=[...prior.prepared,p];
+    if(mode==='multi_game'&&depth===requested&&combo.every(x=>x.gameId===p.gameId))continue;
+    const scored=scoreCombo(combo);if(!scored)continue;
     next.push({indices:[...prior.indices,index],prepared:combo,score:scored.objective.score,key:combo.map(x=>x.key).sort().join('|'),...scored});
    }
    next.sort((a,b)=>b.score-a.score||a.key.localeCompare(b.key));beam=next.slice(0,BEAM);

@@ -152,6 +152,7 @@ function analyze(game,feed,rosters,injuries,now=Date.now(),options={}){
    weaknesses.push(weakness);if(!pregame||!inputsFresh||roleEvidence.ready!==true)continue;
    const marketRows=p=>p.rows.filter(r=>total(r,market)!==null);
    const peers=peerProfiles.filter(p=>p.position===primary&&marketRows(p).length>=5);
+   const peerMinutes=avg(peers.map(p=>avg(marketRows(p).slice(0,5).map(r=>r.minutes))));
    const peerAverage=avg(peers.map(p=>avg(marketRows(p).slice(0,5).map(r=>total(r,market)))));
    if(peers.length<3||!(peerAverage>0))continue;
    // Compare current supported opportunity to observed position-peer volumes,
@@ -188,7 +189,7 @@ function analyze(game,feed,rosters,injuries,now=Date.now(),options={}){
     const researchScore=factors.reduce((s,f)=>s+f.points,0),matchupRating={side,score:researchScore,factors};
     const threshold=selected.milestone;
     candidates.push({side,key:[game.id,player.id,market,...(side==='under'?['under']:[])].join('|'),game,playerId:player.id,name:player.name,team:attacking,opponent,position:primary,market,
-     history,playerAverage,peerAverage,peerPlayers:peers.length,recentMinutes,projectedMinutes:role.projectedMinutes,restDays,backToBack,venueAverage,venueGames:venueRows.length,paceEstimate,
+     history,playerAverage,peerAverage,peerMinutes,peerPlayers:peers.length,recentMinutes,projectedMinutes:role.projectedMinutes,restDays,backToBack,venueAverage,venueGames:venueRows.length,paceEstimate,
      researchScore,matchupRating,status,baseline:threshold,recommendedOverLine:selected.line,linePolicy:selected.policy,selectedLineEvidence:selected,roleEvidence:role,
      opportunityRelativeToPeers:opportunityRatio,opportunityBasis:'Observed shooting attempts; minutes-adjusted recorded assists, rebounds, steals and blocks are role proxies, not official tracking chances.',
      last5:rate(history,threshold,5),last10:rate(history,threshold,10),thresholds:[...new Set([...thresholds(history,market),threshold])].sort((a,b)=>a-b),

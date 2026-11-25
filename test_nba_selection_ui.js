@@ -29,7 +29,8 @@ function mount(extra={}){
  const worker=v.workers[0];assert.deepEqual(worker.message.games.map(g=>g.id),['1','2'],'slate includes future games today in Eastern time, including next UTC date');assert.equal(worker.message.now,NOW);assert.equal(worker.message.feed.generated_at,STAMP);assert.equal(v.getInputs().injuries.generated_at,STAMP,'fetching never restamps source evidence');assert([...v.timers.values()].every(timer=>timer.delay===120000));
  worker.onmessage({data:{type:'progress',requestId:worker.message.requestId,completed:1,total:2}});assert.equal(v.progress.at(-1).completed,1);v.finish();const [a,b]=await Promise.all([first,other]);assert.equal(a.ready,true);assert.equal(a.candidates.length,2);assert.equal(b.candidates.length,2);assert.equal(worker.terminated,true);assert.equal(v.timers.size,0);
  const signature=a.signature,cached=await v.provider.getCandidates();assert.equal(v.requests.length,8,'cache still refreshes source evidence before reuse');assert.equal(v.workers.length,1);assert.equal(cached.signature,signature);assert.equal(cached.candidates.length,2);
- v.setTime(NOW+61000);const expired=v.provider.getCandidates();await until(()=>v.workers.length===2);v.finish();assert.equal((await expired).ready,true,'outcome cache expires within 60 seconds');
+ v.setTime(NOW+61000);assert.equal((await v.provider.getCandidates()).ready,true);assert.equal(v.workers.length,1,'reuse unchanged verified outcomes after one minute');
+ v.setTime(NOW+301000);const expired=v.provider.getCandidates();await until(()=>v.workers.length===2);v.finish();assert.equal((await expired).ready,true,'outcome cache expires after five minutes');
  v.server.injuries.injuries=[{player_id:'p1',team:'H1',status:'OUT'}];const changed=v.provider.getCandidates();await until(()=>v.workers.length===3);v.finish();assert.notEqual((await changed).signature,signature,'changed injury contents invalidate even an unchanged source timestamp');
  v.provider.destroy();
 
