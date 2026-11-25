@@ -89,6 +89,10 @@ function draws(model,count=10000,seed=6472026,options={}){
  const legPlayers=legs.map(leg=>{const matches=players.filter(p=>leg.player_id?String(p.id)===String(leg.player_id):norm(p.name)===norm(leg.player));if(matches.length!==1||!LEG_FIELDS[norm(leg.market)]||!['over','under'].includes(String(leg.side).toLowerCase())||!Number.isFinite(Number(leg.line))||leg.line===null||String(leg.line).trim()==='')throw Error('Saved simulator leg has an unsupported player, market, side or line');const candidate=matches[0],fields=LEG_FIELDS[norm(leg.market)];if(fields.some(k=>k==='steals'&&candidate.stl===null||k==='blocks'&&candidate.blk===null))throw Error('Defensive prop requires recorded STL and BLK history');return candidate;});
  // Balanced participation combinations are sensitivity scenarios, not injury probabilities.
  const noise=options.researchNoiseScale??1;
+ const research=options.researchDistribution;
+ const paceNoise=research?.fixedPace?0:noise;
+ const teamHeat=research?.noTeamHeat?0:.018*noise;
+ const commonHeat=research?.noSharedHeat?0:.008*noise;
  if(!Number.isFinite(noise)||noise<0||noise>1)throw Error('Unsupported research noise scale');
  const pending=players.filter(p=>p.pending).sort((a,b)=>String(a.id).localeCompare(String(b.id)));
  const scenarioCount=options.availabilityScenarios&&!options.availability&&pending.length>0&&pending.length<=5&&Math.floor(count/2**pending.length)>=1000?2**pending.length:0;
@@ -97,20 +101,30 @@ function draws(model,count=10000,seed=6472026,options={}){
  for(let run=0;run<count;run++){
   const scenario=scenarioRows[run%scenarioCount];
   if(run%500===0&&typeof options.onProgress==='function')options.onProgress(run,count);
-  const states={};for(const team of [g.home,g.away]){const t=model.teams[team],active=t.players.filter(p=>!p.pending||(scenario?Boolean(scenario.mask&(1<<pendingIndex.get(String(p.id)))):options.availability==='in'||options.availability!=='out'&&rng()<.5)),weights=Object.fromEntries(active.map(p=>[p.id,p.weight]));const minutes=allocate(weights);if(!minutes)throw Error(team+': in/out scenario lacks six supported rotation players');const weighted=key=>active.reduce((sum,p)=>sum+minutes[p.id]*p[key],0);states[team]={...t,turnover:clamp((t.turnover+weighted('to')/t.pace)/2,.05,.25),ftTrips:clamp((t.ftTrips+.5*weighted('fta')/t.pace)/2,.04,.3),orb:clamp(t.orb*weighted('orb')/Math.max(1,t.historicalOrb),.08,.4),assist:clamp(t.assist*weighted('ast')/Math.max(1,t.historicalAst),.2,.85),active,minutes,stats:Object.fromEntries(t.players.map(p=>[p.id,{points:0,rebounds:0,assists:0,threes:0,steals:0,blocks:0,stocks:0,minutes:0}])),turnovers:0,missedFG:0,score:0,heat:gauss()*.018*noise};}
-  const sampled=model.paceSamples[Math.floor(rng()*model.paceSamples.length)],pace=clamp(model.pace+.65*noise*(sampled-model.league.pace)+gauss()*1.5*noise,70,130),sharedHeat=gauss()*.008*noise;
+  const states={};for(const team of [g.home,g.away]){const t=model.teams[team],active=t.players.filter(p=>!p.pending||(scenario?Boolean(scenario.mask&(1<<pendingIndex.get(String(p.id)))):options.availability==='in'||options.availability!=='out'&&rng()<.5)),weights=Object.fromEntries(active.map(p=>[p.id,p.weight]));const minutes=allocate(weights);if(!minutes)throw Error(team+': in/out scenario lacks six supported rotation players');const weighted=key=>active.reduce((sum,p)=>sum+minutes[p.id]*p[key],0);states[team]={...t,turnover:clamp((t.turnover+weighted('to')/t.pace)/2,.05,.25),ftTrips:clamp((t.ftTrips+.5*weighted('fta')/t.pace)/2,.04,.3),orb:clamp(t.orb*weighted('orb')/Math.max(1,t.historicalOrb),.08,.4),assist:clamp(t.assist*weighted('ast')/Math.max(1,t.historicalAst),.2,.85),active,minutes,stats:Object.fromEntries(t.players.map(p=>[p.id,{points:0,rebounds:0,assists:0,threes:0,steals:0,blocks:0,stocks:0,minutes:0}])),turnovers:0,missedFG:0,score:0,heat:gauss()*teamHeat};}
+  const sampled=model.paceSamples[Math.floor(rng()*model.paceSamples.length)],pace=clamp(model.pace+.65*paceNoise*(sampled-model.league.pace)+gauss()*1.5*paceNoise,70,130),sharedHeat=gauss()*commonHeat;
   const period=(duration,late,qIndex=-1)=>{
-   for(const team of [g.home,g.away]){const s=states[team],large=late&&Math.abs(states[g.home].score-states[g.away].score)>=18;
+   for(const team of [g.home,g.away]){const s=states[team],large=!research?.noBlowoutRotation&&late&&Math.abs(states[g.home].score-states[g.away].score)>=18;
     const weights=Object.fromEntries(s.active.map(p=>[p.id,s.minutes[p.id]*(qIndex>=0&&p.quarterWeights?Math.max(.05,p.quarterWeights[qIndex])/(Math.max(.1,p.quarterWeights.reduce((a,b)=>a+b,0))/4):1)*(large?(s.minutes[p.id]>=28?.8:1.15):1)]));const lower={},upper={};for(const p of s.active){const spent=s.stats[p.id].minutes,remaining=s.minutes[p.id]-spent;lower[p.id]=qIndex>=0&&!large?Math.max(0,remaining-12*(3-qIndex)):0;upper[p.id]=qIndex>=0?Math.max(0,Math.min(12,large?40-spent:remaining)):duration;}s.periodMinutes=boundedMinutes(weights,lower,upper,5*duration);if(!s.periodMinutes)throw Error('Unsupported period rotation');for(const p of s.active)s.stats[p.id].minutes+=s.periodMinutes[p.id];
    }
    for(const team of [g.home,g.away]){const s=states[team],d=states[team===g.home?g.away:g.home];s.matchupDeltas=Object.fromEntries(s.active.map(p=>[p.id,contextAPI?contextAPI.defensiveDelta(p,d.active,d.periodMinutes):null]));}
-   const possessions=Math.round(pace*duration/48);
+   const possessions=research?.distributePace&&qIndex>=0
+    ?Math.round(pace*(qIndex+1)/4)-Math.round(pace*qIndex/4)
+    :Math.round(pace*duration/48);
    for(let n=0;n<possessions;n++)for(const team of [g.home,g.away]){
     const s=states[team],d=states[team===g.home?g.away:g.home],mins=p=>s.periodMinutes[p.id],restPenalty=s.rest<1.3?(.005+(s.venueChanged?.0025:0)):0,context=clamp(s.venueShift*.25+s.strength+(team===g.home?.004:-.004)-restPenalty,-.025,.025);
     const turn=(s.turnover+d.forceTurnover)/2,ftTrip=(s.ftTrips+d.allowFT)/2;
     const rebound=()=>{if(rng()>(s.liveRebound+d.allowLiveRebound)/2)return false;const offensive=rng()<s.orb,t=offensive?s:d,p=choose(t.active,p=>t.periodMinutes[p.id]*(offensive?p.orb:p.drb));if(p)t.stats[p.id].rebounds++;return offensive};
     const event=rng();if(event<turn){s.turnovers++;continue;}
-    if(event<turn+ftTrip){const p=choose(s.active,p=>mins(p)*p.fta);if(p){for(let k=0;k<2;k++){const made=rng()<p.ft;if(made){s.stats[p.id].points++;s.score++}else if(k===1)rebound()}}continue;}
+    if(event<turn+ftTrip){
+     const p=choose(s.active,p=>mins(p)*p.fta);
+     let retained=false;
+     if(p)for(let k=0;k<2;k++){
+      if(rng()<p.ft){s.stats[p.id].points++;s.score++}
+      else if(k===1)retained=rebound();
+     }
+     if(!research?.continueAfterFTRebound||!retained)continue;
+    }
     for(let attempt=0;attempt<5;attempt++){
      const p=choose(s.active,p=>mins(p)*p.fga);if(!p)break;const three=rng()<p.tpa/Math.max(.001,p.fga),zone=!three&&p.rimShare!==null&&d.rimDefense!==null&&d.midDefense!==null?(rng()<p.rimShare?'rim':'mid'):null,teamDefense=three?d.threeDefense:zone==='rim'?d.rimDefense:zone==='mid'?d.midDefense:d.twoDefense,tracked=s.matchupDeltas[p.id],defense=tracked===null?teamDefense:.8*teamDefense+.2*tracked,shooting=(three?p.three:zone==='rim'?p.rimFG:zone==='mid'?p.midFG:p.two)+defense,chance=clamp(shooting+s.heat+sharedHeat+context+(model.strengthAnchor?.shotOffsets?.[team]||0),.12,.85);
      if(rng()<chance){const pts=three?3:2;s.stats[p.id].points+=pts;if(three)s.stats[p.id].threes++;s.score+=pts;if(rng()<s.assist){const helper=choose(s.active,x=>mins(x)*x.ast,p.id);if(helper)s.stats[helper.id].assists++}break;}
