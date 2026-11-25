@@ -117,7 +117,7 @@
    const modelCandidates=rows.map(row=>gf.candidate(row)).filter(Boolean);const eligible=supported(modelCandidates,inputs);diagnostics.qualifiedRows=eligible.length;diagnostics.marketAudit=marketAudit(modelCandidates,eligible,stages(rows),diagnostics.scoreBands);return {candidates:eligible,held,diagnostics,signature:inputs.signature,ready:true,reason:''};
   }
   function runWorker(inputs,version){
-   const make=options.workerFactory||(typeof root.Worker==='function'?()=>new root.Worker('./nba_parlay_worker.js?v=nba-score-band-audit-20261123'):null);
+   const make=options.workerFactory||(typeof root.Worker==='function'?()=>new root.Worker('./nba_parlay_worker.js?v=nba-prop-workload-1'):null);
    if(!make)return fallback(inputs,version);
    return new Promise(resolve=>{
     let worker,timer,finished=false;const requestId=++request;

@@ -18,6 +18,25 @@ for(const team of Object.values(model.teams))for(const p of team.players)assert(
 const threeLegs=[{player_id:star.id,market:'threes',line:1.5,side:'over'},{player_id:star.id,market:'threes',line:1.5,side:'under'}];
 const shooting=p.draws(model,1000,77,{collectPlayerOutcomes:true,legs:threeLegs});assert.deepEqual(shooting.home,d.home);assert.deepEqual(shooting.away,d.away,'Recording 3PM never changes RNG or game outcomes');
 for(const x of shooting.players){const samples=shooting.playerOutcomes[x.id];assert.equal(samples.threes.length,1000);assert(samples.threes.every((v,i)=>Number.isInteger(v)&&v>=0&&3*v<=samples.points[i]));assert(Math.abs(x.threes-avg(samples.threes))<1e-9)}
+// Workload samples vary before overtime, using a separate seeded stream.
+const workloadOptions={collectPlayerOutcomes:true,collectPlayerMinutes:true,playerWorkloadVariation:true};
+const workloadData=p.draws(model,1000,77,workloadOptions);
+assert.deepEqual(workloadData,p.draws(model,1000,77,workloadOptions));
+assert.match(workloadData.model,/-workload-v1$/);
+const homeWorkload=workloadData.players.filter(x=>x.team===game.home).map(x=>workloadData.playerOutcomes[x.id]);
+const awayWorkload=workloadData.players.filter(x=>x.team===game.away).map(x=>workloadData.playerOutcomes[x.id]);
+const minutesByTeam=[];
+for(const [samples,totals] of [[homeWorkload,workloadData.home],[awayWorkload,workloadData.away]]){
+ const minutes=totals.map((score,i)=>{
+  assert.equal(samples.reduce((sum,row)=>sum+row.points[i],0),score);
+  return samples.reduce((sum,row)=>sum+row.minutes[i],0);
+ });
+ assert.ok(minutes.every(value=>Math.abs((value-240)/25-Math.round((value-240)/25))<1e-7&&value>=240-1e-6));
+ const regulation=minutes.flatMap((v,i)=>Math.abs(v-240)<1e-6?[i]:[]);
+ assert.ok(samples.some(row=>Math.max(...regulation.map(i=>row.minutes[i]))-Math.min(...regulation.map(i=>row.minutes[i]))>1));
+ minutesByTeam.push(minutes);
+}
+assert.ok(minutesByTeam[0].every((value,i)=>Math.abs(value-minutesByTeam[1][i])<1e-6));
 const madeSamples=shooting.playerOutcomes[star.id].threes;assert.equal(shooting.legs[0].hitRate,madeSamples.filter(x=>x>1.5).length/1000);assert.equal(shooting.legs[1].hitRate,madeSamples.filter(x=>x<1.5).length/1000);assert.equal(shooting.jointHitRate,0);
 const values=new Map(),storage={getItem:k=>values.get(k)||null,setItem:(k,v)=>values.set(k,v)};ui.capture(r,prepared,storage,now);const first=storage.getItem(ui.KEY);ui.capture({...r,simulated:{...r.simulated,home:999}},prepared,storage,now+1000);assert.equal(storage.getItem(ui.KEY),first,'Frozen same-quote prediction cannot be rewritten');assert.equal(ui.grade(feed,storage).graded,0);
 const final={...game,status:'STATUS_FINAL',players:[...Array.from({length:7},(_,i)=>({team:game.home,stats:{PTS:15}})),...Array.from({length:7},(_,i)=>({team:game.away,stats:{PTS:14}}))]};const grades=ui.grade({games:[final],generated_at:new Date().toISOString()},storage,Date.parse(game.date)+3600000);assert.equal(grades.graded,1);assert.ok(Number.isFinite(grades.brier));assert.equal(grades.marketBlend1.games,1);assert.match(ui.detail(r,prepared),/Your lines do not change/);assert.ok(r.markets.every(x=>!x.eligible),'Candidate is not promoted before calibration approval');

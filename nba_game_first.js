@@ -50,7 +50,7 @@ function build(rows,options={}){
 function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
  try{
   const model=possessions.build(game,feed,injuries,rosters,now,{context});
-  const simulation=possessions.draws(model,options.count||1000,6472026,{collectPlayerOutcomes:true});
+  const simulation=possessions.draws(model,options.count||1000,6472026,{collectPlayerOutcomes:true,playerWorkloadVariation:true});
   const positional=matchups.analyze(game,feed,rosters,injuries,now,{model,simulation,context,reuseHistory:true});
   const ratings=new Map(positional.candidates.map(r=>[r.playerId+'|'+r.market+'|'+(r.side||'over'),r]));
   const rows=[],playerReviews=new Map();
@@ -73,7 +73,7 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
      const reviewReasons=[];if(minuteReview)reviewReasons.push('Rotation estimate '+own.minutes[player.id].toFixed(1)+' MIN exceeds the recent workload bound '+minuteUpper.toFixed(1)+' MIN in a limited '+player.sample+'-game sample');if(observedMax!==null&&forecast>observedMax&&player.sample<10)reviewReasons.push('Forecast exceeds every observed '+market+' result in the limited prior sample');
      if(minuteReview)playerReviews.set(player.id,[reviewReasons[0]]);
      const values=samples[ks[0]].map((_,i)=>ks.reduce((s,k)=>s+samples[k][i],0));
-     const reason='Prior sample average '+baseline.toFixed(1)+' '+market+' ('+recorded.length+' games); simulated '+forecast.toFixed(1)+'. '+player.name+' vs '+opponent+': '+projected.minutes.toFixed(1)+' simulated minutes ('+player.baseline.toFixed(1)+' recent baseline), '+(100*shotShare).toFixed(1)+'% of projected team field-goal attempts. '+
+     const reason='Prior sample average '+baseline.toFixed(1)+' '+market+' ('+recorded.length+' games); simulated '+forecast.toFixed(1)+'. '+player.name+' vs '+opponent+': '+projected.minutes.toFixed(1)+' simulated minutes on average ('+player.baseline.toFixed(1)+' recent baseline), '+(100*shotShare).toFixed(1)+'% of projected team field-goal attempts. '+
       ks.map(k=>k==='threes'?'Three-point opportunity: '+(player.tpa*36).toFixed(1)+' attempts per 36 observed minutes; opponent three-point defense delta '+(100*def.threeDefense).toFixed(1)+' percentage points. ':k==='rebounds'?'Rebound role: '+(player.orb*36).toFixed(1)+' offensive / '+(player.drb*36).toFixed(1)+' defensive boards per 36 observed minutes; opponent offensive-rebound rate '+(100*def.orb).toFixed(1)+'%. ':k==='steals'?'Steal activity: '+(Number(player.stl)*36).toFixed(1)+' recorded steals per 36 minutes when available; opponent turnover context is descriptive. ':k==='blocks'?'Block activity: '+(Number(player.blk)*36).toFixed(1)+' recorded blocks per 36 minutes when available; player shots contested are not verified. ':k==='assists'?'Creation role: '+(player.ast*36).toFixed(1)+' assists per 36 observed minutes; teammate shooting and opponent defense share the same simulation. ':'Player shooting mix: '+(100*(1-player.tpa/Math.max(.001,player.fga))).toFixed(0)+'% two-point attempts; opponent two-point defense delta '+(100*def.twoDefense).toFixed(1)+' percentage points. ').join('')+
       'Pace '+model.pace.toFixed(1)+' vs '+model.league.pace.toFixed(1)+' league sample possessions; '+player.sample+' player games / '+def.games+' opponent games.'+(own.absent.length?' Rotation redistributed with '+own.absent.join(', ')+' absent.':'')+' '+(100*simulation.blowoutRate).toFixed(1)+'% simulated blowouts; late-game minutes adjust in those outcomes.';
      const positionRows=ks.map(k=>ratings.get(player.id+'|'+k+'|'+side));
@@ -100,13 +100,13 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
      })):[];
      const selectedLineEvidence=direct?.selectedLineEvidence||(roleEvidence?propLines?.select?.({market:canonical(market),samples:roleEvidence.selectionSamples?.[canonical(market)],sampleKind:roleEvidence.sampleKind,side}):null);
      rows.push({side,matchupRating,matchupEvidence,weakness:limiting?.weakness,roleEvidence,selectedLineEvidence,linePolicy:selectedLineEvidence?.policy,
-      inputTimes:{...model.inputTimes},outcomeSetId:[model.version,game.id,now,options.count||1000,6472026,JSON.stringify(model.inputTimes),context?.generated_at||''].join('|'),
+      inputTimes:{...model.inputTimes},outcomeSetId:[simulation.model,game.id,now,options.count||1000,6472026,JSON.stringify(model.inputTimes),context?.generated_at||''].join('|'),
       availabilitySensitivity:model.uncertain?.length?{type:'equal_weight_in_out',players:model.uncertain.slice(),probabilityValidated:false}:null,
       position:supported?limiting.position:null,key:[game.id,player.id,market,...(side==='under'?['under']:[])].join('|'),gameId:String(game.id),game,playerId:player.id,name:player.name,team,opponent,market,forecast,baseline,observedMax,reviewRequired:reviewReasons.length>0,reviewReasons,minutes:projected.minutes,matchupGames:def.games,matchupBoost:boost,samples:values,reason:reason+' '+(model.context?.tracking==='fresh'&&Object.keys(player.defenderExposure||{}).length?'Fresh defender tracking incorporated; historical exposure '+Number(player.matchupSample||0).toFixed(0)+' possessions, not a confirmed assignment.':'Individual defender tracking unavailable or stale; that adjustment is omitted.'),eligible:supported});
     }
    }
   }
-  return {rows,scoreBands:positional.scoreBands||{},underWeaknesses:(positional.weaknesses||[]).filter(w=>w.side==='under'),players:simulation.players.map(p=>({...p,reviewReasons:playerReviews.get(p.id)||[]})),reviewedMarkets:rows.filter(r=>r.reviewRequired).length,model: model.version,generatedAt:new Date(now).toISOString(),inputTimes:model.inputTimes,context:model.context,warnings:model.warnings,pace:model.pace,blowoutRate:simulation.blowoutRate,reason:null};
+  return {rows,scoreBands:positional.scoreBands||{},underWeaknesses:(positional.weaknesses||[]).filter(w=>w.side==='under'),players:simulation.players.map(p=>({...p,reviewReasons:playerReviews.get(p.id)||[]})),reviewedMarkets:rows.filter(r=>r.reviewRequired).length,model: simulation.model,generatedAt:new Date(now).toISOString(),inputTimes:model.inputTimes,context:model.context,warnings:model.warnings,pace:model.pace,blowoutRate:simulation.blowoutRate,reason:null};
  }catch(e){return {rows:[],reason:e.message,warnings:[]};}
 }
 return {minimumScore:propLines.minimumScore,chance,candidate,build,analyze,markets};
