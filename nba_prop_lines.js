@@ -31,6 +31,8 @@
    pr:'pr',pointsrebounds:'pr',pa:'pa',pointsassists:'pa',ra:'ra',reboundsassists:'ra',
    pra:'pra',pointsreboundsassists:'pra'})[key]||null;
  }
+ const SELECTION_MARKETS=Object.freeze(['points','rebounds','assists','threes','pr','pa','ra','pra']);
+ function selectionMarket(market){return SELECTION_MARKETS.includes(canonical(market));}
  function evaluateSide(samples,line,side='over'){
   if(!['over','under'].includes(side))return {available:false,reason:'Unsupported prop direction.',count:0,wins:0,pushes:0,losses:0,winFrequency:null,pushFrequency:null,lossFrequency:null};
   const empty=reason=>({available:false,reason,count:0,wins:0,pushes:0,losses:0,winFrequency:null,pushFrequency:null,lossFrequency:null});
@@ -92,5 +94,5 @@
  function minimumScore(market,side='over'){if(!['over','under'].includes(side))return 101;return canonical(market)?80:101;}
  function qualifiesScore(score,market,side='over'){return Number.isFinite(score)&&score>=minimumScore(market,side)&&score<=100;}
  function minimum(market){const key=canonical(market);return key?GRIDS[key][0]:null;}
- return {minimumScore,qualifiesScore,POLICY,MIN_SAMPLES,TARGET,COMPETITIVE_POLICY,competitive,canonical,minimum,select,ladder,evaluate,evaluateSide};
+ return {minimumScore,qualifiesScore,POLICY,MIN_SAMPLES,TARGET,COMPETITIVE_POLICY,competitive,canonical,SELECTION_MARKETS,selectionMarket,minimum,select,ladder,evaluate,evaluateSide};
 });

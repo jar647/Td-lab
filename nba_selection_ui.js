@@ -1,8 +1,9 @@
 /* Fresh NBA research inputs and a shared slate simulation provider. */
 (function(root,factory){
- const api=factory(root,typeof module==='object'&&module.exports?require('./nba_game_first.js'):root.CookNBAGameFirst);
+ const common=typeof module==='object'&&module.exports;
+ const api=factory(root,common?require('./nba_game_first.js'):root.CookNBAGameFirst,common?require('./nba_prop_lines.js'):root.CookNBAPropLines);
  if(typeof module==='object'&&module.exports)module.exports=api;root.PropShopNBASelectionUI=api;
-})(typeof globalThis!=='undefined'?globalThis:this,function(root,gf){
+})(typeof globalThis!=='undefined'?globalThis:this,function(root,gf,lines){
  'use strict';
  const PATHS={feed:'./data/nba_games.json',rosters:'./data/nba_rosters.json',injuries:'./data/nba_injuries.json',context:'./data/nba_game_context.json'};
  const time=value=>typeof value==='string'&&/T.*(?:Z|[+-]\d{2}:\d{2})$/.test(value)?Date.parse(value):NaN;
@@ -77,7 +78,7 @@
    const at=now(),byGame=new Map(fixtures(inputs.feed,at).map(g=>[String(g.id),g]));
    return (Array.isArray(rows)?rows:[]).flatMap(row=>{
     let c;try{c=gf?.candidate?.(row)}catch(_){return []}
-    const g=byGame.get(String(c?.gameId)),r=c?.roleEvidence;if(!c||!g||!r||r.eligible!==true||r.roleStatus!=='SUPPORTED'||!Array.isArray(c.samples)||c.samples.length<1000||!['over','under'].includes(c.side)||c.score<gf.minimumScore(c.market,c.side)||c.reviewRequired||c.eligible!==true)return [];
+    const g=byGame.get(String(c?.gameId)),r=c?.roleEvidence;if(!c||!lines.selectionMarket(c.market)||!g||!r||r.eligible!==true||r.roleStatus!=='SUPPORTED'||!Array.isArray(c.samples)||c.samples.length<1000||!['over','under'].includes(c.side)||c.score<gf.minimumScore(c.market,c.side)||c.reviewRequired||c.eligible!==true)return [];
     if(!c.game||String(c.game.id)!==String(g.id)||c.game.home!==g.home||c.game.away!==g.away||time(c.game.date)!==time(g.date))return [];
     const statuses=['NOT LISTED','ACTIVE','AVAILABLE','PROBABLE'];if(!statuses.includes(String(r.status||'').toUpperCase())||c.status!==undefined&&!statuses.includes(String(c.status).toUpperCase())||![g.home,g.away].includes(c.team)||c.opponent!==undefined&&c.opponent!==(c.team===g.home?g.away:g.home)||!Array.isArray(inputs.rosters.teams[c.team])||!inputs.rosters.teams[c.team].map(String).includes(String(c.playerId)))return [];
     for(const [key,value]of [['games',inputs.feed],['rosters',inputs.rosters],['injuries',inputs.injuries]])if(time(c.inputTimes?.[key])!==stamp(value))return [];
