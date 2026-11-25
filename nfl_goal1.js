@@ -49,6 +49,19 @@ function matchupRating(r,category){
  const label=d>=.45&&o>=.45&&adjustedScore>=65&&matchupSupportsPrime?'🔥 PRIME MATCHUP':d>=.45&&o>=.45&&matchupSupportsStrong?'STRONG MATCHUP':o>=.45?'LEAN':'LOW PRIORITY';
  return {score:adjustedScore,trendRatio,defense:d,offense:o,label};
 }
+function propProjection(record,category){
+ const cfg=SPECS[category];
+ if(!cfg||!record||record.playerAppearancesVerified!==true)return null;
+ const average=finite(record[cfg.player]);
+ if(average===null||average<0)return null;
+ const recentField={PTD:'recent3PassTDs',PASS:'recent3PassYards',RUSH:'recent3RushYards',REC:'recent3RecYards',CATCH:'recent3Receptions'}[category];
+ const recent=Number(record.games)>=3?finite(record[recentField]):null;
+ const blend=recent!==null&&recent>=0?.7*average+.3*recent:average;
+ const ratio=finite(record.defenseOpponentRatio?.[category]);
+ // Allowance divided by opponents' usual production uses the same position and units.
+ const matchup=ratio!==null&&ratio>=0?Math.max(.85,Math.min(1.15,ratio)):1;
+ return blend*(.75+.25*matchup);
+}
 function matchupScore(r,category){return matchupRating(r,category)?.score??null}
 function eligibleCandidate(c){return !!c&&qualifies(c.researchScore)}
 function identity(c){return String(c.p.player_id||c.p.team+'|'+c.p.player)}
@@ -196,7 +209,7 @@ function gameMarketDraft(type,side,line,odds,game){
  return {ok:true,leg:{type:kind,side:direction,line:kind==='ML'?null:numeric,odds:String(odds||'').trim(),
   name,team,source:'USER_ENTERED_NOT_MODELED'}};
 }
-const api={MIN_ALT,LABEL,MIN_SCORE,SPECS,matchupRating,matchupScore,qualifies,eligibleCandidate,rankPlayers,buildTicket,alternatives,applyAlternative,script,americanDecimal,singlePrice,priceReview,gameMarketDraft,marketId,identity};
+const api={MIN_ALT,LABEL,MIN_SCORE,SPECS,propProjection,matchupRating,matchupScore,qualifies,eligibleCandidate,rankPlayers,buildTicket,alternatives,applyAlternative,script,americanDecimal,singlePrice,priceReview,gameMarketDraft,marketId,identity};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;
 root.PropVaultGoal1=api;
 })(typeof self!=='undefined'?self:typeof globalThis!=='undefined'?globalThis:this);

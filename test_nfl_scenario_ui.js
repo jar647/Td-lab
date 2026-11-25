@@ -5,14 +5,14 @@ const html=fs.readFileSync('index.html','utf8');
 const code=html.slice(html.indexOf('function updateNFLScenarioSelection(details)'),html.indexOf(' const propLineUI='));
 assert(code.startsWith('function updateNFLScenarioSelection'));
 async function load(result){
- const select={disabled:true,value:'',innerHTML:''},output={textContent:''};
+ const select={disabled:true,value:'',innerHTML:''},output={textContent:''},exact={textContent:''};
  const details={open:true,dataset:{game:'NYG|WAS',playerId:'mccarthy',scenarioMarket:'passYards',postedLine:'175',projection:'220'},
-  querySelector:selector=>selector==='select'?select:selector==='.pv-scenario-result'?output:selector==='.pv-scenario-body'?{insertAdjacentHTML(){}}:null};
- const requests=[],context={runNFLPlayerScenario:async(...args)=>{requests.push(args);return result},nflScenarioInputs:()=>'',console};
+  querySelector:selector=>selector==='select'?select:selector==='.pv-scenario-result'?output:selector==='.pv-exact-result'?exact:selector==='.pv-scenario-body'?{insertAdjacentHTML(){}}:null};
+ const requests=[],context={runNFLPlayerScenario:async(...args)=>{requests.push(args);return result},nflScenarioInputs:()=>'',PropShopNFLBookReview:require('./nfl_book_review'),console};
  vm.createContext(context);vm.runInContext(code,context);
  context.loadNFLPlayerScenarios(details);
  await new Promise(resolve=>setImmediate(resolve));
- return {details,select,output,context,requests};
+ return {details,select,output,exact,context,requests};
 }
 (async()=>{
  const unsupported=await load({markets:[],unavailableMarkets:[{id:'mccarthy',market:'passYards',reason:'J.J. McCarthy is not the modeled quarterback for NYG.'}]});
@@ -33,6 +33,10 @@ async function load(result){
  assert.match(modeled.select.innerHTML,/175\+ · 0\.0% simulated/);
  assert.match(modeled.output.textContent,/0\.0% simulated hit frequency \(0\/10,000 runs\)/);
  assert.equal(modeled.details._scenarioRows.length,1);
+ const exactLine=await load({markets:[{id:'mccarthy',market:'passYards',line:200,hits:1,scenarioRate:.0001,modeledMean:170}],
+  settlements:[{id:'mccarthy',market:'passYards',count:10000,bins:[[174,6000],[175,1000],[176,3000]]}]});
+ assert.match(exactLine.exact.textContent,/Posted line 175 · Over 30.0% · Push 10.0% · Under 60.0%/);
+ assert.match(exactLine.output.textContent,/At 200\+/,'the alternate threshold remains separate from the entered line');
  // Different quarterback scenarios for one game must not share a cached run.
  const workerRequests=[];
  class Worker{
