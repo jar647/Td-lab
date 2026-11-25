@@ -92,6 +92,19 @@ const near=(actual,expected)=>assert(Math.abs(actual-expected)<1e-12,actual+' !=
  view.controller.setCount(3);view.controller.setMode('sgp');view.controller.setGame('G1');draft=await view.controller.generate();assert.equal(draft.length,3);assert(draft.every(c=>c.gameId==='G1'));assert.match(view.result(),/70\.0% simulated/,'shared same-game draws replace a product of 70% marginals');assert.match(view.result(),/same simulated games/);assert.doesNotMatch(view.result(),/assumed independent/);fill(view);
  assert.equal(await view.controller.add(),true);for(const pick of view.picks.slice(-3)){near(pick.parlayJointFrequency,.7);assert.equal(pick.parlayType,'sgp');assert.equal(pick.side,'over')}
  view.controller.setGame('G2');draft=await view.controller.generate();assert.equal(draft.length,1);assert.match(view.result(),/complete 3-leg/);assert.doesNotMatch(view.result(),/all legs win:/);assert.equal(await view.controller.add(),false);
+ const ten=mount(Array.from({length:10},(_,i)=>candidate('ten'+i,i<5?'G1':'G2')));
+ ten.controller.setCount(10);ten.controller.setMode('multi_game');
+ assert.equal((await ten.controller.generate()).length,10);
+ assert.equal(await ten.controller.addResearch(),true);
+ assert.equal(ten.picks.length,11,'Add All preserves existing picks and saves ten research targets');
+ ten.state.signature='changed-after-generation';
+ assert.equal(await ten.controller.addResearch(),false);
+ assert.equal(ten.picks.length,11,'Add All rejects changed source evidence');
+ ten.controller.destroy();
+ const sameTen=mount(Array.from({length:10},(_,i)=>candidate('same'+i,'G1')));
+ sameTen.controller.setCount(10);sameTen.controller.setMode('sgp');
+ assert.equal((await sameTen.controller.generate()).length,10);
+ sameTen.controller.destroy();
  const sensitive=mount(pool().map(c=>({...c,availabilitySensitivity:{type:'equal_weight_in_out',players:['Questionable teammate'],probabilityValidated:false}})));await sensitive.controller.generate();assert.match(sensitive.host.innerHTML,/not estimates of participation probability/);assert.match(sensitive.host.innerHTML,/equally weighted in\/out sensitivity/);sensitive.controller.destroy();
 
  // A source ID alone is insufficient: actual role, availability and sample

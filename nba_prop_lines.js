@@ -31,7 +31,7 @@
    pr:'pr',pointsrebounds:'pr',pa:'pa',pointsassists:'pa',ra:'ra',reboundsassists:'ra',
    pra:'pra',pointsreboundsassists:'pra'})[key]||null;
  }
- const SELECTION_MARKETS=Object.freeze(['points','rebounds','assists','threes','pr','pa','ra','pra']);
+ const SELECTION_MARKETS=Object.freeze(['points','rebounds','assists','threes','pr','pa','ra','pra','steals','blocks','stocks']);
  function selectionMarket(market){return SELECTION_MARKETS.includes(canonical(market));}
  function evaluateSide(samples,line,side='over'){
   if(!['over','under'].includes(side))return {available:false,reason:'Unsupported prop direction.',count:0,wins:0,pushes:0,losses:0,winFrequency:null,pushFrequency:null,lossFrequency:null};

@@ -50,9 +50,9 @@
    return result?.available===true&&Number.isFinite(result.winFrequency)?{win:result.winFrequency,push:result.pushFrequency||0}:null;
   }
   const validPrices=()=>!draft.some(c=>String(quote(c).odds).trim()&&!pricing.quote(quote(c).odds))&&(!String(combinedOdds).trim()||!!pricing.quote(combinedOdds));
-  function resultHTML(){
+  function resultHTML(exact){
    if(draft.length!==count)return 'A complete '+count+'-leg supported draft is required. No filler legs are added.';
-   const exact=evaluation(),allEntered=checkedLegs()!==null;
+   const allEntered=checkedLegs()!==null;
    if(allEntered&&!complete(exact))return esc(exact?.reason||'The exact book lines cannot be evaluated with current evidence. Regenerate the draft.');
    const rates=allEntered?exact:selection;
    if(!complete(rates))return 'Current shared-outcome evaluation is unavailable. Generate a fresh draft.';
@@ -80,15 +80,15 @@
   }
   function render(){
    if(destroyed)return;
-   const fixtures=games();
+   const fixtures=games(),exact=evaluation();
    if(!fixtures.some(g=>g.id===game))game=fixtures[0]?.id||'';
    host.innerHTML='<p class="muted">Build an OVER or UNDER research ticket from supported 80/100+ NBA matchups, including defensive stats. Selection considers minutes stability, distinct players and joint outcomes, rather than simply taking the highest scores.</p>'+
     '<div class="sim-grid"><div class="sim-field"><label>Legs<select data-nba-parlay-count aria-label="NBA parlay leg count">'+[2,3,4,5,6,7,8,9,10].map(n=>'<option value="'+n+'"'+(n===count?' selected':'')+'>'+n+' legs</option>').join('')+'</select></label></div>'+
-    '<div class="sim-field"><label>Ticket type<select data-nba-parlay-mode aria-label="NBA parlay ticket type"><option value="cross_game"'+(mode==='cross_game'?' selected':'')+'>Different games</option><option value="sgp"'+(mode==='sgp'?' selected':'')+'>Same game</option></select></label></div></div>'+
+    '<div class="sim-field"><label>Ticket type<select data-nba-parlay-mode aria-label="NBA parlay ticket type"><option value="cross_game"'+(mode==='cross_game'?' selected':'')+'>Different games</option><option value="multi_game"'+(mode==='multi_game'?' selected':'')+'>Mix legs across games</option><option value="sgp"'+(mode==='sgp'?' selected':'')+'>Same game</option></select></label></div></div>'+
     (mode==='sgp'?'<label>Matchup<select data-nba-parlay-game aria-label="NBA parlay matchup">'+(fixtures.length?fixtures.map(g=>'<option value="'+esc(g.id)+'"'+(g.id===game?' selected':'')+'>'+esc(g.label)+'</option>').join(''):'<option value="">Load current matchups with Generate</option>')+'</select></label>':'')+
     '<button type="button" data-nba-parlay-generate'+(pending?' disabled':'')+'>Explore '+count+' unpriced NBA picks</button>'+
     '<p class="muted" data-nba-parlay-status role="status">'+esc(message||'Distinct players, supported minutes and no filler legs.')+'</p>'+
-    (draft.length?'<button type="button" class="primary" data-nba-parlay-add-research'+(pending?' disabled':'')+'>＋ Add all '+draft.length+' picks to Quick Slip</button>':'')+'<div data-nba-parlay-legs>'+draft.map((c,index)=>{
+    (draft.length===count&&complete(selection)?'<button type="button" class="primary" data-nba-parlay-add-research'+(pending?' disabled':'')+'>＋ Add all '+draft.length+' picks to Quick Slip</button>':'')+'<div data-nba-parlay-legs>'+draft.map((c,index)=>{
      const q=quote(c),role=c.roleEvidence||{},range=Number.isFinite(role.minutesLow)&&Number.isFinite(role.minutesHigh)?role.minutesLow.toFixed(1)+'–'+role.minutesHigh.toFixed(1):'unavailable';
      return '<section class="player nba-parlay-leg" data-nba-parlay-key="'+esc(c.key)+'"><strong>Leg '+(index+1)+' · '+esc(name(c))+' · '+esc(score(c))+'/100</strong>'+
       '<p class="muted">'+esc(gameLabel(c))+' · '+esc(label(c))+' · supported minutes '+esc(range)+'.</p>'+
@@ -99,19 +99,20 @@
     }).join('')+'</div>'+
     (draft.length?'<div class="sim-grid"><div class="sim-field"><label>Book’s combined American odds<input type="text" data-nba-parlay-combined value="'+esc(combinedOdds)+'" aria-label="Combined NBA parlay odds" placeholder="Actual full-ticket price"></label></div>'+
      '<div class="sim-field"><label>Stake ($)<input type="number" min="0.01" max="100000" step="0.01" data-nba-parlay-stake value="'+esc(stake)+'" aria-label="NBA parlay stake"></label></div></div>'+
-     '<div data-nba-parlay-result aria-live="polite">'+resultHTML()+'</div><button type="button" data-nba-parlay-add'+(pending||!complete(evaluation())||!validPrices()?' disabled':'')+'>Add exact book legs to Quick Slip</button>':'')+
+     '<div data-nba-parlay-result aria-live="polite">'+resultHTML(exact)+'</div><button type="button" data-nba-parlay-add'+(pending||!complete(exact)||!validPrices()?' disabled':'')+'>Add exact book legs to Quick Slip</button>':'')+
     (draft.length?'<details><summary>Simulation assumptions and research limits</summary>'+(draft.some(c=>c.availabilitySensitivity)?'<p class="muted">Questionable teammate outcomes are sensitivity scenarios, not estimates of participation probability.</p>':'')+(Array.isArray(selection?.limits)?selection.limits.filter(text=>typeof text==='string').map(text=>'<p class="muted">'+esc(text)+'</p>').join(''):'')+'</details>':'')+
     '<p class="muted">This is a research draft, not a placed bet. Verify injuries, exact book lines and parlay rules. Adding a price does not change matchup scores or simulated outcomes.</p>';
   }
   function update(){
    if(destroyed)return;
+   const exact=evaluation();
    for(const node of host.querySelectorAll?.('[data-nba-parlay-review]')||[]){const c=draft.find(row=>row.key===node.dataset.nbaParlayReview);if(c)node.innerHTML=legReviewHTML(c)}
-   const target=host.querySelector?.('[data-nba-parlay-result]');if(target)target.innerHTML=resultHTML();
+   const target=host.querySelector?.('[data-nba-parlay-result]');if(target)target.innerHTML=resultHTML(exact);
    const status=host.querySelector?.('[data-nba-parlay-status]');if(status)status.textContent=message;
-   const add=host.querySelector?.('[data-nba-parlay-add]');if(add)add.disabled=pending||!complete(evaluation())||!validPrices();
+   const add=host.querySelector?.('[data-nba-parlay-add]');if(add)add.disabled=pending||!complete(exact)||!validPrices();
   }
-  async function load(){
-   const value=await options.getCandidates();
+  async function load(fresh=false){
+   const value=await options.getCandidates({fresh});
    const payload=Array.isArray(value)?{candidates:value}:value&&typeof value==='object'?value:{};
    return {...payload,candidates:payload.ready===false?[]:Array.isArray(payload.candidates)?payload.candidates:[]};
   }
@@ -157,7 +158,7 @@
   function setStake(value){if(destroyed)return false;stake=typeof value==='string'||typeof value==='number'?String(value):'';const node=host.querySelector?.('[data-nba-parlay-stake]');if(node&&node.value!==stake)node.value=stake;update();return true}
   function configure(change){if(destroyed)return false;operation++;pending=false;clearDraft();change();message='Generate a draft using the updated ticket settings.';render();return true}
   function setCount(value){const n=Number(value);return [2,3,4,5,6,7,8,9,10].includes(n)?configure(()=>{count=n}):false}
-  function setMode(value){return ['cross_game','sgp'].includes(value)?configure(()=>{mode=value}):false}
+  function setMode(value){return ['cross_game','multi_game','sgp'].includes(value)?configure(()=>{mode=value}):false}
   function setGame(value){return configure(()=>{game=String(value||'')})}
   async function add(){
    if(destroyed||pending)return false;
@@ -165,7 +166,7 @@
    if(draft.some(c=>String(quote(c).odds).trim()&&!pricing.quote(quote(c).odds))||String(combinedOdds).trim()&&!pricing.quote(combinedOdds)){message='Check the entered American odds before saving.';update();return false}
    const id=++operation,edit=edits,previousSignature=signature;pending=true;update();
    try{
-    const payload=await load();if(destroyed||id!==operation)return false;
+    const payload=await load(true);if(destroyed||id!==operation)return false;
     if(poolSignature(payload)!==previousSignature){applyPool(payload);pending=false;message='The NBA board or source evidence changed. Generate a fresh draft and recheck book lines.';render();return false}
     if(edit!==edits){pending=false;message='The ticket changed during the source check. Review the updated lines and save again.';update();return false}
     const result=evaluation();if(!complete(result)||draft.length!==count){pending=false;message=result?.reason||'The current ticket is no longer supported. Generate a fresh draft.';update();return false}
@@ -187,8 +188,16 @@
   }
   function change(event){const d=event.target.dataset;if(Object.hasOwn(d,'nbaParlayCount'))setCount(event.target.value);if(Object.hasOwn(d,'nbaParlayMode'))setMode(event.target.value);if(Object.hasOwn(d,'nbaParlayGame'))setGame(event.target.value)}
   function input(event){const d=event.target.dataset;if(d.nbaParlayLine)setQuote(d.nbaParlayLine,{line:event.target.value});if(d.nbaParlayOdds)setQuote(d.nbaParlayOdds,{odds:event.target.value});if(Object.hasOwn(d,'nbaParlayCombined'))setCombined(event.target.value);if(Object.hasOwn(d,'nbaParlayStake'))setStake(event.target.value)}
-  function addResearch(){
-   if(destroyed||pending||!draft.length)return false;
+  async function addResearch(){
+   if(destroyed||pending||draft.length!==count||!complete(selection))return false;
+   const id=++operation,previous=signature;pending=true;update();
+   let payload;
+   try{payload=await load(true)}catch{payload={candidates:[]};}
+   if(destroyed||id!==operation)return false;
+   pending=false;
+   if(poolSignature(payload)!==previous){
+    applyPool(payload);message=payload.reason||'Sources changed. Generate a fresh research ticket before saving.';render();return false;
+   }
    const current=parlay.evaluateResearch(draft,{now:now()});
    if(!complete(current)){message='Research expired or unsupported. Generate a fresh draft.';update();return false}
    for(const c of draft){

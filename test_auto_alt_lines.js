@@ -18,7 +18,7 @@ assert.equal(auto.research(candidate(),now).competitive,null,'do not force a lin
 assert.match(auto.create({getCandidates:async()=>payload,quickSlip:{},now:()=>now}).render([{...candidate(),samples:competitiveSamples}]),/Competitive research line: OVER 22.5/);
 const competing={...candidate(),key:'competitive-same-player',score:80,samples:competitiveSamples};
 assert.equal(auto.shortlist([candidate(),competing])[0].key,competing.key,'a qualifying competitive line takes precedence for the same player');
-assert.equal(auto.shortlist([{...candidate(),market:'Steals + Blocks',score:100}]).length,0);
+assert.equal(auto.shortlist([{...candidate(),market:'Steals + Blocks',score:100}]).length,1);
 assert.equal(auto.shortlist(pool,{game:'other'}).length,0);
 assert.equal(auto.shortlist(pool,{market:'assists'}).length,0);
 assert.equal(auto.shortlist(pool,{game:'g',market:'points'}).length,3);
