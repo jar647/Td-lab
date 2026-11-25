@@ -11,7 +11,7 @@
   ],
   "summary": {
     "NFL|nfl-drive-strength-prospective-v1": {
-      "frozen": 2,
+      "frozen": 3,
       "graded": 0,
       "baseline": {
         "margin_mae": null,
@@ -115,9 +115,53 @@
         ]
       },
       "actual": null
+    },
+    {
+      "sport": "NFL",
+      "game_id": "2026_12_PHI_DAL",
+      "version": "nfl-drive-strength-prospective-v1",
+      "home": "DAL",
+      "away": "PHI",
+      "start": "2026-11-26T21:30:00+00:00",
+      "captured_at": "2026-11-25T00:07:26.238762+00:00",
+      "draws": 10000,
+      "source_at": "2026-11-24T23:23:38.987509+00:00",
+      "baseline": {
+        "margin": 7.1094,
+        "probabilities": [
+          0.9381,
+          0.8484,
+          0.7605,
+          0.666,
+          0.5881,
+          0.4776,
+          0.2951
+        ],
+        "interval80": [
+          -11,
+          25
+        ]
+      },
+      "candidate": {
+        "margin": 6.1047,
+        "probabilities": [
+          0.9233,
+          0.8201,
+          0.7446,
+          0.6537,
+          0.5631,
+          0.467,
+          0.2831
+        ],
+        "interval80": [
+          -12.0047,
+          23.9953
+        ]
+      },
+      "actual": null
     }
   ],
   "latest_failures": [],
-  "updated_at": "2026-11-24T19:16:32.916Z",
+  "updated_at": "2026-11-25T00:07:26.349Z",
   "limits": "First paired pregame freeze per model version. Synthetic fixed thresholds, not sportsbook lines; no profitability or live promotion implied."
 }
