@@ -192,7 +192,7 @@
   // Each requested NBA run is a full shared player/team outcome. Resampling
   // a capped pool overstated simulation precision and disconnected player means.
   const detailedCount=count;
-  const possession=engine?engine.draws(game.possessionModel,count,seed,{legs:game.slipLegs||[],onProgress:options.onProgress}):null;
+  const possession=engine?engine.draws(game.possessionModel,count,seed,{legs:game.slipLegs||[],availabilityScenarios:!!game.possessionModel.strengthAnchor,onProgress:options.onProgress}):null;
   const random=rng(seed>>>0),residuals=game.residuals,homeScores=[],awayScores=[],margins=[],totals=[];
   // Compact, exact settlement frequencies for post-simulation manual odds comparisons.
   // These bins are captured from the SAME draws; repricing never reruns or influences games.
@@ -342,7 +342,7 @@
   audit.passed=audit.winLossConservation&&audit.moneylineSymmetry&&audit.spreadSymmetry&&audit.totalSymmetry&&audit.finiteScores&&audit.playerScoreConservation&&audit.playerMinuteConservation;
   if(!audit.passed)throw Error('Simulation integrity check failed; predictions withheld');
   const candidates=markets.filter(m=>m.eligible).sort((a,b)=>b.ev-a.ev);
-  return {scoreBins,rushing,passing,possession:possession?{context:game.possessionModel.context,strengthAnchor:game.possessionModel.strengthAnchor||null,model:game.possessionModel.strengthAnchor?.version||possession.model,players:possession.players,overtimeRate:possession.overtimeRate,overtimePeriods:possession.overtimePeriods,blowoutRate:possession.blowoutRate,legs:possession.legs,jointHitRate:possession.jointHitRate,pairHitRates:possession.pairHitRates,pace:game.possessionModel.pace,uncertain:game.possessionModel.uncertain,rotation:game.possessionModel.teams,baseline:game.baseline}:null,rotationFallback:game.rotationFallback||null,sport:game.sport,home:game.home,away:game.away,runCount:count,detailedGameCount:detailedCount,simulationMethod,seed,modelStatus:'RESEARCH ONLY · NOT CALIBRATED',
+  return {scoreBins,rushing,passing,possession:possession?{context:game.possessionModel.context,strengthAnchor:game.possessionModel.strengthAnchor||null,availabilityScenarios:possession.availabilityScenarios||null,model:game.possessionModel.strengthAnchor?.version||possession.model,players:possession.players,overtimeRate:possession.overtimeRate,overtimePeriods:possession.overtimePeriods,blowoutRate:possession.blowoutRate,legs:possession.legs,jointHitRate:possession.jointHitRate,pairHitRates:possession.pairHitRates,pace:game.possessionModel.pace,uncertain:game.possessionModel.uncertain,rotation:game.possessionModel.teams,baseline:game.baseline}:null,rotationFallback:game.rotationFallback||null,sport:game.sport,home:game.home,away:game.away,runCount:count,detailedGameCount:detailedCount,simulationMethod,seed,modelStatus:'RESEARCH ONLY · NOT CALIBRATED',
    projection:{home:possession?round(homePoints/count):game.projectedHome,away:possession?round(awayPoints/count):game.projectedAway,margin:round(possession?(homePoints-awayPoints)/count:game.projectedHome-game.projectedAway),total:round(possession?(homePoints+awayPoints)/count:game.projectedHome+game.projectedAway)},
    simulated:{home:round(homePoints/count),away:round(awayPoints/count),homeWin:homeWin/count,awayWin:awayWin/count,tie:ties/count,
     margin:{p10:quantile(margins,.1),p25:quantile(margins,.25),median:quantile(margins,.5),p75:quantile(margins,.75),p90:quantile(margins,.9)},
