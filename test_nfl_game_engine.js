@@ -25,6 +25,21 @@ const lineup=[
  player('B','b-te','TE',{t:6,c:4,y:48}),
  player('A','a-out','WR',{t:12,c:10,y:140},{injuryReportStatus:'OUT'})
 ];
+const quiet={...lineup[3],snapShare:.61,defTargetsAllowed:10,
+ depthChart:{unit:'first',position:'TE',sourceStatus:'ok',source:'https://example.com/nfl/depth',observedAt:new Date().toISOString()},
+ seasonGameStats:lineup[3].seasonGameStats.map((row,i)=>i<5?row:{...row,targets:3,receptions:2})};
+const receivingLineup=lineup.map(p=>p.player_id===quiet.player_id?quiet:p);
+const expanded={receiverMatchup:{id:quiet.player_id,leagueTargets:7}};
+assert(engine.tightEndOpportunity(quiet,7));
+for(const unsupported of [{injuryReportStatus:'QUESTIONABLE'},{snapShare:null},{defTargetsAllowed:7},{gameDayAvailability:'INACTIVE'}])
+ assert.equal(engine.tightEndOpportunity({...quiet,...unsupported},7),null);
+const originalTargets=engine.build(receivingLineup).teams.find(t=>t.team==='A');
+const expandedTargets=engine.build(receivingLineup,expanded).teams.find(t=>t.team==='A');
+assert.equal(expandedTargets.pace,originalTargets.pace);
+assert.equal(expandedTargets.targetPool.sum,originalTargets.targetPool.sum);
+assert.ok(Math.abs(expandedTargets.targetPool.items.reduce((sum,row)=>sum+row.weight,0)-expandedTargets.targetPool.sum)<1e-9);
+assert(expandedTargets.roster.find(p=>p.id===quiet.player_id).targetMatchup.scenarioTargets>
+ expandedTargets.roster.find(p=>p.id===quiet.player_id).targetMatchup.baselineTargets);
 function run(){
  const legs=[{id:'a-wr',market:'receptions',line:3},{id:'a-qb',market:'passYards',line:200}];
  const result=engine.simulate(lineup,1500,12,legs);
