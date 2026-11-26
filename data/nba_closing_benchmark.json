@@ -1,167 +1,221 @@
 {
   "status": "RESEARCH_ONLY",
-  "generated_at": "2026-11-24T21:50:58.835Z",
+  "generated_at": "2026-11-26T01:04:02.224Z",
   "provider": "ESPN explicit DraftKings closing spread",
   "historical_diagnostic": {
-    "eligible": 32,
-    "matched": 32,
+    "eligible": 25,
+    "matched": 25,
     "missing": 0,
     "baseline": {
-      "margin_mae": 7.88965625,
-      "margin_bias": -2.79759375,
-      "rmse": 9.851443528425163
+      "margin_mae": 9.82128,
+      "margin_bias": -2.0244800000000005,
+      "rmse": 11.872211878163226
     },
     "candidate": {
-      "margin_mae": 7.475811862056157,
-      "margin_bias": -2.472936266674917,
-      "rmse": 9.241743484702326
+      "margin_mae": 8.431977124733336,
+      "margin_bias": -2.2428079824160347,
+      "rmse": 10.60485890414857
     },
     "market": {
-      "margin_mae": 7.8125,
-      "margin_bias": -2.0625,
-      "rmse": 9.880536422684752
+      "margin_mae": 9.22,
+      "margin_bias": -1.5,
+      "rmse": 12.17908042505673
     },
     "baseline_comparison": {
-      "closer_than_market": 19,
-      "farther_than_market": 13,
+      "closer_than_market": 11,
+      "farther_than_market": 14,
       "equal": 0,
-      "mean_absolute_market_gap": 3.779406250000001,
-      "within_3_points": 0.4375,
-      "over_7_points": 0.0625
+      "mean_absolute_market_gap": 4.3677600000000005,
+      "within_3_points": 0.44,
+      "over_7_points": 0.16
     },
     "candidate_comparison": {
-      "closer_than_market": 22,
-      "farther_than_market": 10,
+      "closer_than_market": 17,
+      "farther_than_market": 8,
       "equal": 0,
-      "mean_absolute_market_gap": 2.5433013784063485,
-      "within_3_points": 0.59375,
-      "over_7_points": 0.03125
+      "mean_absolute_market_gap": 3.1681262200500124,
+      "within_3_points": 0.52,
+      "over_7_points": 0.08
     },
     "baseline_gap3_ats": {
-      "win": 12,
-      "loss": 6,
-      "push": 0,
-      "pass": 14,
-      "hit_rate": 0.6666666666666666,
-      "priced": 18,
-      "diagnostic_roi": 0.26517021625056797
-    },
-    "candidate_gap3_ats": {
-      "win": 8,
+      "win": 9,
       "loss": 5,
       "push": 0,
-      "pass": 19,
-      "hit_rate": 0.6153846153846154,
-      "priced": 13,
-      "diagnostic_roi": 0.18145575556224255
-    }
-  },
-  "historical_development": {
-    "eligible": 47,
-    "matched": 47,
-    "missing": 0,
-    "baseline": {
-      "margin_mae": 13.212106382978723,
-      "margin_bias": 1.9654255319148939,
-      "rmse": 16.398531910807968
-    },
-    "candidate": {
-      "margin_mae": 12.3835486433176,
-      "margin_bias": 1.627963292538011,
-      "rmse": 15.968418602077712
-    },
-    "market": {
-      "margin_mae": 11.861702127659575,
-      "margin_bias": 1.6702127659574468,
-      "rmse": 14.827913584742655
-    },
-    "baseline_comparison": {
-      "closer_than_market": 19,
-      "farther_than_market": 28,
-      "equal": 0,
-      "mean_absolute_market_gap": 4.104234042553191,
-      "within_3_points": 0.46808510638297873,
-      "over_7_points": 0.1702127659574468
-    },
-    "candidate_comparison": {
-      "closer_than_market": 22,
-      "farther_than_market": 25,
-      "equal": 0,
-      "mean_absolute_market_gap": 3.2316327804822054,
-      "within_3_points": 0.5531914893617021,
-      "over_7_points": 0.10638297872340426
-    },
-    "baseline_gap3_ats": {
-      "win": 11,
-      "loss": 14,
-      "push": 0,
-      "pass": 22,
-      "hit_rate": 0.44,
-      "priced": 25,
-      "diagnostic_roi": -0.16153483698030183
+      "pass": 11,
+      "hit_rate": 0.6428571428571429,
+      "priced": 14,
+      "diagnostic_roi": 0.22000162580385643
     },
     "candidate_gap3_ats": {
       "win": 9,
-      "loss": 12,
+      "loss": 3,
       "push": 0,
-      "pass": 26,
-      "hit_rate": 0.42857142857142855,
-      "priced": 21,
-      "diagnostic_roi": -0.18573804533677565
+      "pass": 13,
+      "hit_rate": 0.75,
+      "priced": 12,
+      "diagnostic_roi": 0.4398200084300406
+    }
+  },
+  "historical_development": {
+    "eligible": 54,
+    "matched": 54,
+    "missing": 0,
+    "baseline": {
+      "margin_mae": 11.473111111111118,
+      "margin_bias": 2.803407407407408,
+      "rmse": 14.564482987861382
+    },
+    "candidate": {
+      "margin_mae": 11.028619899977285,
+      "margin_bias": 2.697611919360596,
+      "rmse": 14.331468113219138
+    },
+    "market": {
+      "margin_mae": 10.851851851851851,
+      "margin_bias": 2.388888888888889,
+      "rmse": 13.690697030654984
+    },
+    "baseline_comparison": {
+      "closer_than_market": 29,
+      "farther_than_market": 25,
+      "equal": 0,
+      "mean_absolute_market_gap": 3.8871111111111123,
+      "within_3_points": 0.42592592592592593,
+      "over_7_points": 0.12962962962962962
+    },
+    "candidate_comparison": {
+      "closer_than_market": 28,
+      "farther_than_market": 26,
+      "equal": 0,
+      "mean_absolute_market_gap": 2.874869620371942,
+      "within_3_points": 0.6296296296296297,
+      "over_7_points": 0.07407407407407407
+    },
+    "baseline_gap3_ats": {
+      "win": 16,
+      "loss": 15,
+      "push": 0,
+      "pass": 23,
+      "hit_rate": 0.5161290322580645,
+      "priced": 31,
+      "diagnostic_roi": -0.018394260946807656
+    },
+    "candidate_gap3_ats": {
+      "win": 9,
+      "loss": 11,
+      "push": 0,
+      "pass": 34,
+      "hit_rate": 0.45,
+      "priced": 20,
+      "diagnostic_roi": -0.14784298303034554
     }
   },
   "prospective": {
-    "eligible": 0,
-    "matched": 0,
+    "eligible": 3,
+    "matched": 3,
     "missing": 0,
     "baseline": {
-      "margin_mae": null,
-      "margin_bias": null,
-      "rmse": null
+      "margin_mae": 17.470533333333336,
+      "margin_bias": 17.470533333333336,
+      "rmse": 18.345059762780824
     },
     "candidate": {
-      "margin_mae": null,
-      "margin_bias": null,
-      "rmse": null
+      "margin_mae": 14.275429038008928,
+      "margin_bias": 14.275429038008928,
+      "rmse": 15.391004318647049
     },
     "market": {
-      "margin_mae": null,
-      "margin_bias": null,
-      "rmse": null
+      "margin_mae": 17.5,
+      "margin_bias": 17.5,
+      "rmse": 19.872510326243805
     },
     "baseline_comparison": {
-      "closer_than_market": 0,
-      "farther_than_market": 0,
+      "closer_than_market": 2,
+      "farther_than_market": 1,
       "equal": 0,
-      "mean_absolute_market_gap": null,
-      "within_3_points": null,
-      "over_7_points": null
+      "mean_absolute_market_gap": 4.918399999999999,
+      "within_3_points": 0.3333333333333333,
+      "over_7_points": 0.3333333333333333
     },
     "candidate_comparison": {
-      "closer_than_market": 0,
-      "farther_than_market": 0,
+      "closer_than_market": 2,
+      "farther_than_market": 1,
       "equal": 0,
-      "mean_absolute_market_gap": null,
-      "within_3_points": null,
-      "over_7_points": null
+      "mean_absolute_market_gap": 5.263091303275291,
+      "within_3_points": 0,
+      "over_7_points": 0.3333333333333333
+    },
+    "baseline_gap3_ats": {
+      "win": 1,
+      "loss": 1,
+      "push": 0,
+      "pass": 1,
+      "hit_rate": 0.5,
+      "priced": 2,
+      "diagnostic_roi": -0.06140350877192985
+    },
+    "candidate_gap3_ats": {
+      "win": 2,
+      "loss": 1,
+      "push": 0,
+      "pass": 0,
+      "hit_rate": 0.6666666666666666,
+      "priced": 3,
+      "diagnostic_roi": 0.2705908072361589
+    }
+  },
+  "coherent_scoring_prospective": {
+    "eligible": 2,
+    "matched": 2,
+    "missing": 0,
+    "baseline": {
+      "margin_mae": 18.6633,
+      "margin_bias": 18.6633,
+      "rmse": 19.74224685110588
+    },
+    "candidate": {
+      "margin_mae": 16.063000000000002,
+      "margin_bias": 16.063000000000002,
+      "rmse": 17.50711741806743
+    },
+    "market": {
+      "margin_mae": 15.5,
+      "margin_bias": 15.5,
+      "rmse": 19.00657780874821
+    },
+    "baseline_comparison": {
+      "closer_than_market": 1,
+      "farther_than_market": 1,
+      "equal": 0,
+      "mean_absolute_market_gap": 4.5628,
+      "within_3_points": 0.5,
+      "over_7_points": 0.5
+    },
+    "candidate_comparison": {
+      "closer_than_market": 1,
+      "farther_than_market": 1,
+      "equal": 0,
+      "mean_absolute_market_gap": 4.0373,
+      "within_3_points": 0,
+      "over_7_points": 0
     },
     "baseline_gap3_ats": {
       "win": 0,
-      "loss": 0,
+      "loss": 1,
       "push": 0,
-      "pass": 0,
-      "hit_rate": null,
-      "priced": 0,
-      "diagnostic_roi": null
+      "pass": 1,
+      "hit_rate": 0,
+      "priced": 1,
+      "diagnostic_roi": -1
     },
     "candidate_gap3_ats": {
-      "win": 0,
-      "loss": 0,
+      "win": 1,
+      "loss": 1,
       "push": 0,
       "pass": 0,
-      "hit_rate": null,
-      "priced": 0,
-      "diagnostic_roi": null
+      "hit_rate": 0.5,
+      "priced": 2,
+      "diagnostic_roi": -0.03271028037383178
     }
   },
   "historical_skipped": [
@@ -173,66 +227,6 @@
   "rows": {
     "historical": [
       {
-        "game_id": "401909298",
-        "home": "Miami Heat",
-        "away": "Cleveland Cavaliers",
-        "start": "2026-11-14T01:00Z",
-        "actual": {
-          "home": 133,
-          "away": 121
-        },
-        "baseline": -3.227,
-        "candidate": -1.9603130265024489,
-        "quote": {
-          "provider": "DraftKings",
-          "home_spread": -2.5,
-          "away_spread": 2.5,
-          "home_price": -108,
-          "away_price": -112
-        },
-        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909298"
-      },
-      {
-        "game_id": "401909301",
-        "home": "Houston Rockets",
-        "away": "Utah Jazz",
-        "start": "2026-11-14T01:30Z",
-        "actual": {
-          "home": 125,
-          "away": 118
-        },
-        "baseline": 16.246,
-        "candidate": 14.10352858385535,
-        "quote": {
-          "provider": "DraftKings",
-          "home_spread": -15.5,
-          "away_spread": 15.5,
-          "home_price": -108,
-          "away_price": -112
-        },
-        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909301"
-      },
-      {
-        "game_id": "401909302",
-        "home": "San Antonio Spurs",
-        "away": "Golden State Warriors",
-        "start": "2026-11-14T02:30Z",
-        "actual": {
-          "home": 123,
-          "away": 85
-        },
-        "baseline": -0.467,
-        "candidate": 2.811938217053606,
-        "quote": {
-          "provider": "DraftKings",
-          "home_spread": -12.5,
-          "away_spread": 12.5,
-          "home_price": -112,
-          "away_price": -108
-        },
-        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909302"
-      },
-      {
         "game_id": "401909303",
         "home": "Sacramento Kings",
         "away": "Portland Trail Blazers",
@@ -241,8 +235,8 @@
           "home": 107,
           "away": 120
         },
-        "baseline": -5.568,
-        "candidate": -9.812485147211113,
+        "baseline": -5.645,
+        "candidate": -9.588984473498945,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 10.5,
@@ -261,8 +255,8 @@
           "home": 113,
           "away": 112
         },
-        "baseline": -7.723,
-        "candidate": -4.658015334369741,
+        "baseline": -7.869,
+        "candidate": -3.735237083889928,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 6.5,
@@ -281,8 +275,8 @@
           "home": 108,
           "away": 116
         },
-        "baseline": 0.188,
-        "candidate": -4.63480028490693,
+        "baseline": -0.907,
+        "candidate": -4.4965225513622435,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 12.5,
@@ -301,8 +295,8 @@
           "home": 127,
           "away": 117
         },
-        "baseline": 4.939,
-        "candidate": 1.8426975310972693,
+        "baseline": 4.682,
+        "candidate": 1.8036734817955473,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 8.5,
@@ -321,8 +315,8 @@
           "home": 106,
           "away": 117
         },
-        "baseline": 12.677,
-        "candidate": 17.29988316989477,
+        "baseline": 12.861,
+        "candidate": 17.342265311064228,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -16.5,
@@ -341,8 +335,8 @@
           "home": 129,
           "away": 110
         },
-        "baseline": 6.266,
-        "candidate": 7.378275002470968,
+        "baseline": 5.75,
+        "candidate": 7.409549208462704,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -361,8 +355,8 @@
           "home": 137,
           "away": 117
         },
-        "baseline": -3.213,
-        "candidate": -4.319169056174236,
+        "baseline": -3.483,
+        "candidate": -3.758381030337147,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 4.5,
@@ -381,8 +375,8 @@
           "home": 131,
           "away": 124
         },
-        "baseline": 2.253,
-        "candidate": 4.583355342442645,
+        "baseline": 2.506,
+        "candidate": 4.174493039488148,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -7.5,
@@ -401,8 +395,8 @@
           "home": 123,
           "away": 131
         },
-        "baseline": -1.772,
-        "candidate": -4.611453602218909,
+        "baseline": -1.978,
+        "candidate": -4.529260252298158,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 3.5,
@@ -421,8 +415,8 @@
           "home": 113,
           "away": 105
         },
-        "baseline": 2.44,
-        "candidate": 6.479202157442674,
+        "baseline": 2.796,
+        "candidate": 6.548123194546205,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -1.5,
@@ -441,8 +435,8 @@
           "home": 102,
           "away": 110
         },
-        "baseline": -11.67,
-        "candidate": -11.452136692601048,
+        "baseline": -11.492,
+        "candidate": -12.20972130895924,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 14.5,
@@ -461,8 +455,8 @@
           "home": 108,
           "away": 112
         },
-        "baseline": -0.976,
-        "candidate": 0.2771644341663635,
+        "baseline": 0.019,
+        "candidate": -0.11833721019320764,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 4.5,
@@ -481,8 +475,8 @@
           "home": 131,
           "away": 94
         },
-        "baseline": 8.161,
-        "candidate": 6.095667568627476,
+        "baseline": 7.374,
+        "candidate": 6.564844710582218,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -14.5,
@@ -501,8 +495,8 @@
           "home": 119,
           "away": 147
         },
-        "baseline": -2.125,
-        "candidate": -8.294120059118093,
+        "baseline": -1.026,
+        "candidate": -8.290908178114227,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 8.5,
@@ -521,8 +515,8 @@
           "home": 106,
           "away": 113
         },
-        "baseline": -0.002,
-        "candidate": -5.860299111943759,
+        "baseline": -0.919,
+        "candidate": -5.724342776862281,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 8.5,
@@ -541,8 +535,8 @@
           "home": 120,
           "away": 136
         },
-        "baseline": -4.477,
-        "candidate": -6.155240818527263,
+        "baseline": -4.497,
+        "candidate": -6.122568853552705,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 3.5,
@@ -561,8 +555,8 @@
           "home": 126,
           "away": 115
         },
-        "baseline": 9.457,
-        "candidate": 8.463317233783055,
+        "baseline": 9.484,
+        "candidate": 8.357019481266594,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -8.5,
@@ -581,8 +575,8 @@
           "home": 105,
           "away": 115
         },
-        "baseline": 11.825,
-        "candidate": 11.805880152901095,
+        "baseline": 12.163,
+        "candidate": 12.336278485898026,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -8.5,
@@ -601,8 +595,8 @@
           "home": 128,
           "away": 110
         },
-        "baseline": -1.911,
-        "candidate": -5.344726300723909,
+        "baseline": -1.362,
+        "candidate": -5.334949802856285,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 1.5,
@@ -621,8 +615,8 @@
           "home": 123,
           "away": 135
         },
-        "baseline": 1.049,
-        "candidate": -2.422450436727483,
+        "baseline": 1.05,
+        "candidate": -1.8067707582042414,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 5.5,
@@ -641,8 +635,8 @@
           "home": 115,
           "away": 94
         },
-        "baseline": -5.946,
-        "candidate": -7.770132092800928,
+        "baseline": -6.641,
+        "candidate": -7.726592133143028,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 3.5,
@@ -661,8 +655,8 @@
           "home": 106,
           "away": 98
         },
-        "baseline": -2.741,
-        "candidate": 3.2982550368675456,
+        "baseline": -2.532,
+        "candidate": 3.468211816014735,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -2.5,
@@ -681,8 +675,8 @@
           "home": 105,
           "away": 117
         },
-        "baseline": 1.991,
-        "candidate": 5.414543025908691,
+        "baseline": 3.113,
+        "candidate": 5.492447536398693,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -9.5,
@@ -701,8 +695,8 @@
           "home": 102,
           "away": 111
         },
-        "baseline": -4.568,
-        "candidate": -0.21085618106402548,
+        "baseline": -3.534,
+        "candidate": -0.5901045817459785,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 2.5,
@@ -721,8 +715,8 @@
           "home": 93,
           "away": 105
         },
-        "baseline": 6.939,
-        "candidate": 6.727544739622209,
+        "baseline": 6.1,
+        "candidate": 8.183745760459624,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -9.5,
@@ -741,8 +735,8 @@
           "home": 106,
           "away": 105
         },
-        "baseline": -2.705,
-        "candidate": 3.2032585916002674,
+        "baseline": -1.994,
+        "candidate": 3.360109027687126,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -761,8 +755,8 @@
           "home": 107,
           "away": 132
         },
-        "baseline": 4.535,
-        "candidate": 4.900890638072366,
+        "baseline": 3.298,
+        "candidate": 4.766232761540279,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -5.5,
@@ -781,8 +775,8 @@
           "home": 118,
           "away": 114
         },
-        "baseline": 18.65,
-        "candidate": 14.05336326651378,
+        "baseline": 18.647,
+        "candidate": 14.179074277691086,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -6.5,
@@ -801,8 +795,8 @@
           "home": 116,
           "away": 121
         },
-        "baseline": -0.75,
-        "candidate": -0.9548037582547966,
+        "baseline": -0.485,
+        "candidate": -0.33827467287015267,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -821,8 +815,8 @@
           "home": 137,
           "away": 130
         },
-        "baseline": 8.45,
-        "candidate": 10.097981497993432,
+        "baseline": 9.011,
+        "candidate": 10.084514217661319,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -11.5,
@@ -841,8 +835,8 @@
           "home": 104,
           "away": 119
         },
-        "baseline": -7.723,
-        "candidate": -5.9708496239020405,
+        "baseline": -7.101,
+        "candidate": -5.94569778787737,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 7.5,
@@ -861,8 +855,8 @@
           "home": 121,
           "away": 124
         },
-        "baseline": 0.87,
-        "candidate": -1.4363890202808756,
+        "baseline": -0.677,
+        "candidate": -1.4050517914422667,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -881,8 +875,8 @@
           "home": 99,
           "away": 103
         },
-        "baseline": 4.113,
-        "candidate": 8.308324000620834,
+        "baseline": 3.025,
+        "candidate": 8.489497535352582,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -901,8 +895,8 @@
           "home": 107,
           "away": 137
         },
-        "baseline": 1.578,
-        "candidate": 3.436708605722046,
+        "baseline": 1.17,
+        "candidate": 3.411110460081896,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -1.5,
@@ -921,8 +915,8 @@
           "home": 116,
           "away": 94
         },
-        "baseline": 0.721,
-        "candidate": -1.0036034218161836,
+        "baseline": 0.318,
+        "candidate": -0.895831105650907,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -5.5,
@@ -941,8 +935,8 @@
           "home": 112,
           "away": 117
         },
-        "baseline": 12.035,
-        "candidate": 6.035778699337475,
+        "baseline": 11.982,
+        "candidate": 5.272962480966406,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -6.5,
@@ -961,8 +955,8 @@
           "home": 109,
           "away": 122
         },
-        "baseline": -3.258,
-        "candidate": -6.072268429865124,
+        "baseline": -4.14,
+        "candidate": -5.488547395599818,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 4.5,
@@ -981,8 +975,8 @@
           "home": 105,
           "away": 101
         },
-        "baseline": -2.13,
-        "candidate": -3.519827996469431,
+        "baseline": -1.926,
+        "candidate": -3.91022871861008,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 2.5,
@@ -1001,8 +995,8 @@
           "home": 107,
           "away": 128
         },
-        "baseline": -6.549,
-        "candidate": -3.9471069807924914,
+        "baseline": -6.12,
+        "candidate": -3.833856678947777,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 7.5,
@@ -1021,8 +1015,8 @@
           "home": 97,
           "away": 109
         },
-        "baseline": 18.868,
-        "candidate": 12.114051067059439,
+        "baseline": 19.193,
+        "candidate": 12.07249171918059,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -11.5,
@@ -1041,8 +1035,8 @@
           "home": 124,
           "away": 112
         },
-        "baseline": 13.317,
-        "candidate": 12.135761274122427,
+        "baseline": 12.943,
+        "candidate": 13.03464525697404,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -15.5,
@@ -1061,8 +1055,8 @@
           "home": 99,
           "away": 102
         },
-        "baseline": 0.331,
-        "candidate": 4.738992200029234,
+        "baseline": 1.533,
+        "candidate": 4.389872564945632,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 1.5,
@@ -1081,8 +1075,8 @@
           "home": 114,
           "away": 124
         },
-        "baseline": -5.222,
-        "candidate": -11.317834948710022,
+        "baseline": -3.452,
+        "candidate": -11.192738682386844,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 9.5,
@@ -1101,8 +1095,8 @@
           "home": 126,
           "away": 98
         },
-        "baseline": 0.199,
-        "candidate": 3.6367950370623237,
+        "baseline": -0.33,
+        "candidate": 3.6413642727870745,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -5.5,
@@ -1121,8 +1115,8 @@
           "home": 111,
           "away": 97
         },
-        "baseline": 4.11,
-        "candidate": 8.521542660755719,
+        "baseline": 4.111,
+        "candidate": 8.609261248205444,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -7.5,
@@ -1141,8 +1135,8 @@
           "home": 102,
           "away": 105
         },
-        "baseline": 5.519,
-        "candidate": 5.205547199694928,
+        "baseline": 4.568,
+        "candidate": 4.842396088281461,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -6.5,
@@ -1161,8 +1155,8 @@
           "home": 128,
           "away": 119
         },
-        "baseline": 10.423,
-        "candidate": 5.107785953386468,
+        "baseline": 10.873,
+        "candidate": 5.127316179152874,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -6.5,
@@ -1181,8 +1175,8 @@
           "home": 111,
           "away": 113
         },
-        "baseline": -3.516,
-        "candidate": -2.170806478887697,
+        "baseline": -4.198,
+        "candidate": -2.156073634720216,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 6.5,
@@ -1201,8 +1195,8 @@
           "home": 126,
           "away": 120
         },
-        "baseline": 5.331,
-        "candidate": 10.158833965222904,
+        "baseline": 5.395,
+        "candidate": 9.474309351187848,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -11.5,
@@ -1221,8 +1215,8 @@
           "home": 94,
           "away": 98
         },
-        "baseline": 4.684,
-        "candidate": 2.040304222950657,
+        "baseline": 5.392,
+        "candidate": 2.253396548725247,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -2.5,
@@ -1241,8 +1235,8 @@
           "home": 101,
           "away": 111
         },
-        "baseline": -9.529,
-        "candidate": -1.016513396476771,
+        "baseline": -8.875,
+        "candidate": -0.8474696757473636,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 4.5,
@@ -1261,8 +1255,8 @@
           "home": 106,
           "away": 104
         },
-        "baseline": 10.022,
-        "candidate": 12.565555510733287,
+        "baseline": 11.104,
+        "candidate": 12.603170668992583,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -14.5,
@@ -1281,8 +1275,8 @@
           "home": 133,
           "away": 124
         },
-        "baseline": -0.267,
-        "candidate": -3.74877906953867,
+        "baseline": -0.671,
+        "candidate": -3.721318608398547,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 1.5,
@@ -1301,8 +1295,8 @@
           "home": 132,
           "away": 129
         },
-        "baseline": 10.77,
-        "candidate": 10.528932038417437,
+        "baseline": 10.777,
+        "candidate": 10.14643670735089,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -11.5,
@@ -1321,8 +1315,8 @@
           "home": 97,
           "away": 96
         },
-        "baseline": 2.581,
-        "candidate": 0.2359007758600724,
+        "baseline": 2.044,
+        "candidate": 0.7540567220636654,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 1.5,
@@ -1341,8 +1335,8 @@
           "home": 114,
           "away": 91
         },
-        "baseline": 6.781,
-        "candidate": 13.799239046664201,
+        "baseline": 7.39,
+        "candidate": 14.628026341889743,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -19.5,
@@ -1361,8 +1355,8 @@
           "home": 104,
           "away": 95
         },
-        "baseline": -2.656,
-        "candidate": 2.4106318550617196,
+        "baseline": -2.462,
+        "candidate": 2.5508523407860784,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -5.5,
@@ -1381,8 +1375,8 @@
           "home": 110,
           "away": 100
         },
-        "baseline": 11.047,
-        "candidate": 5.631985477276862,
+        "baseline": 12.634,
+        "candidate": 5.786261463463011,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -1401,8 +1395,8 @@
           "home": 97,
           "away": 96
         },
-        "baseline": -6.468,
-        "candidate": -12.286815166485992,
+        "baseline": -5.825,
+        "candidate": -12.63273417969315,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 12.5,
@@ -1421,8 +1415,8 @@
           "home": 107,
           "away": 97
         },
-        "baseline": -3.305,
-        "candidate": -1.5701638811377983,
+        "baseline": -4.11,
+        "candidate": -1.1360992159601648,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 2.5,
@@ -1441,8 +1435,8 @@
           "home": 123,
           "away": 113
         },
-        "baseline": 3.425,
-        "candidate": -2.095285586114773,
+        "baseline": 2.461,
+        "candidate": -1.3182100611789422,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -1461,8 +1455,8 @@
           "home": 114,
           "away": 116
         },
-        "baseline": -5.785,
-        "candidate": -2.547727747851037,
+        "baseline": -6.009,
+        "candidate": -2.4498726740129744,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 2.5,
@@ -1481,8 +1475,8 @@
           "home": 145,
           "away": 151
         },
-        "baseline": -2.69,
-        "candidate": -4.713565310213292,
+        "baseline": -2.491,
+        "candidate": -4.548770494533389,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 9.5,
@@ -1501,8 +1495,8 @@
           "home": 116,
           "away": 96
         },
-        "baseline": -2.162,
-        "candidate": -1.4039479530631858,
+        "baseline": -2.167,
+        "candidate": -1.4430168650972182,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 4.5,
@@ -1521,8 +1515,8 @@
           "home": 113,
           "away": 106
         },
-        "baseline": 9.422,
-        "candidate": 7.733667645005662,
+        "baseline": 8.963,
+        "candidate": 8.246164405407786,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -6.5,
@@ -1541,8 +1535,8 @@
           "home": 88,
           "away": 87
         },
-        "baseline": -4.925,
-        "candidate": -4.156361148074845,
+        "baseline": -4.342,
+        "candidate": -4.484063923145881,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 8.5,
@@ -1561,8 +1555,8 @@
           "home": 111,
           "away": 128
         },
-        "baseline": 0.802,
-        "candidate": -2.437085270278673,
+        "baseline": 0.853,
+        "candidate": -2.8067775088093594,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 1.5,
@@ -1581,8 +1575,8 @@
           "home": 111,
           "away": 117
         },
-        "baseline": -9.339,
-        "candidate": -10.730240967984665,
+        "baseline": -9.151,
+        "candidate": -10.693258271342083,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 2.5,
@@ -1601,8 +1595,8 @@
           "home": 142,
           "away": 116
         },
-        "baseline": 7.482,
-        "candidate": 13.711397837710358,
+        "baseline": 8.065,
+        "candidate": 13.817742824628375,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -10.5,
@@ -1621,8 +1615,8 @@
           "home": 111,
           "away": 116
         },
-        "baseline": 5.431,
-        "candidate": 9.257951764989468,
+        "baseline": 5.25,
+        "candidate": 9.334475041453311,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -10.5,
@@ -1641,8 +1635,8 @@
           "home": 125,
           "away": 120
         },
-        "baseline": -4.065,
-        "candidate": -4.1580486792339695,
+        "baseline": -2.997,
+        "candidate": -3.366139867322438,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 4.5,
@@ -1661,8 +1655,8 @@
           "home": 119,
           "away": 123
         },
-        "baseline": -9.787,
-        "candidate": -3.5723789917097397,
+        "baseline": -10.307,
+        "candidate": -3.525352786877814,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 3.5,
@@ -1681,8 +1675,8 @@
           "home": 122,
           "away": 108
         },
-        "baseline": -6.149,
-        "candidate": -4.232430595332227,
+        "baseline": -5.596,
+        "candidate": -4.033772639479757,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 8.5,
@@ -1701,8 +1695,8 @@
           "home": 116,
           "away": 104
         },
-        "baseline": 13.499,
-        "candidate": 11.366950664867753,
+        "baseline": 13.837,
+        "candidate": 11.479004063628187,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -13.5,
@@ -1721,8 +1715,8 @@
           "home": 107,
           "away": 123
         },
-        "baseline": -7.508,
-        "candidate": -12.70523985223602,
+        "baseline": -7.51,
+        "candidate": -13.355077422241823,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 8.5,
@@ -1741,8 +1735,8 @@
           "home": 109,
           "away": 94
         },
-        "baseline": 9.299,
-        "candidate": 8.135202942424488,
+        "baseline": 8.978,
+        "candidate": 8.106410101406391,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -13.5,
@@ -1751,9 +1745,177 @@
           "away_price": -117
         },
         "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401910044"
+      },
+      {
+        "game_id": "401909314",
+        "home": "Orlando Magic",
+        "away": "Detroit Pistons",
+        "start": "2026-11-25T00:00Z",
+        "actual": {
+          "home": 86,
+          "away": 104
+        },
+        "baseline": -2.526,
+        "candidate": -3.8755873794899367,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -3.5,
+          "away_spread": 3.5,
+          "home_price": -106,
+          "away_price": -114
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909314"
+      },
+      {
+        "game_id": "401909315",
+        "home": "Washington Wizards",
+        "away": "Boston Celtics",
+        "start": "2026-11-25T01:00Z",
+        "actual": {
+          "home": 116,
+          "away": 131
+        },
+        "baseline": -4.862,
+        "candidate": -7.826011765586305,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": 10.5,
+          "away_spread": -10.5,
+          "home_price": -104,
+          "away_price": -116
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909315"
+      },
+      {
+        "game_id": "401909316",
+        "home": "Denver Nuggets",
+        "away": "Dallas Mavericks",
+        "start": "2026-11-25T03:00Z",
+        "actual": {
+          "home": 101,
+          "away": 120
+        },
+        "baseline": 5.268,
+        "candidate": 2.7215521896438006,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -7.5,
+          "away_spread": 7.5,
+          "home_price": -113,
+          "away_price": -107
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909316"
       }
     ],
-    "prospective": []
+    "prospective": [
+      {
+        "game_id": "401909314",
+        "home": "Orlando Magic",
+        "away": "Detroit Pistons",
+        "start": "2026-11-25T00:00Z",
+        "captured_at": "2026-11-24T19:16:35.998Z",
+        "actual": {
+          "home": 86,
+          "away": 104
+        },
+        "baseline": -2.5223,
+        "candidate": -4.340367219966914,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -3.5,
+          "away_spread": 3.5,
+          "home_price": -106,
+          "away_price": -114
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909314"
+      },
+      {
+        "game_id": "401909315",
+        "home": "Washington Wizards",
+        "away": "Boston Celtics",
+        "start": "2026-11-25T01:00Z",
+        "captured_at": "2026-11-24T19:16:39.304Z",
+        "actual": {
+          "home": 116,
+          "away": 131
+        },
+        "baseline": -3.1666,
+        "candidate": -7.442219488073672,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": 10.5,
+          "away_spread": -10.5,
+          "home_price": -104,
+          "away_price": -116
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909315"
+      },
+      {
+        "game_id": "401909316",
+        "home": "Denver Nuggets",
+        "away": "Dallas Mavericks",
+        "start": "2026-11-25T03:00Z",
+        "captured_at": "2026-11-24T19:16:42.320Z",
+        "actual": {
+          "home": 101,
+          "away": 120
+        },
+        "baseline": 6.1005,
+        "candidate": 2.6088738220673693,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -7.5,
+          "away_spread": 7.5,
+          "home_price": -113,
+          "away_price": -107
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909316"
+      }
+    ],
+    "coherent_scoring_prospective": [
+      {
+        "game_id": "401909315",
+        "home": "Washington Wizards",
+        "away": "Boston Celtics",
+        "start": "2026-11-25T01:00Z",
+        "captured_at": "2026-11-25T00:07:34.214Z",
+        "actual": {
+          "home": 116,
+          "away": 131
+        },
+        "baseline": -2.7739,
+        "candidate": -5.8997,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": 10.5,
+          "away_spread": -10.5,
+          "home_price": -104,
+          "away_price": -116
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909315"
+      },
+      {
+        "game_id": "401909316",
+        "home": "Denver Nuggets",
+        "away": "Dallas Mavericks",
+        "start": "2026-11-25T03:00Z",
+        "captured_at": "2026-11-25T00:07:41.276Z",
+        "actual": {
+          "home": 101,
+          "away": 120
+        },
+        "baseline": 6.1005,
+        "candidate": 4.0257,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -7.5,
+          "away_spread": 7.5,
+          "home_price": -113,
+          "away_price": -107
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909316"
+      }
+    ]
   },
   "limits": "Historical replay uses reused games, 1000 draws, no historical injury snapshots, 24h embargo; prospective predictions are frozen before tipoff. Closing quotes used only for grading, not inputs. Gap-3 ATS/ROI at closing quotes is diagnostic, not executable profit. No claim of calibration, no model promotion. Missing explicit quotes excluded, never imputed."
 }

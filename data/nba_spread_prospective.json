@@ -12,34 +12,34 @@
   "summary": {
     "NBA|nba-possession-strength-prospective-v1": {
       "frozen": 12,
-      "graded": 0,
+      "graded": 3,
       "baseline": {
-        "margin_mae": null,
-        "margin_bias": null,
-        "spread_brier": null,
-        "interval80_coverage": null
+        "margin_mae": 17.470533333333336,
+        "margin_bias": 17.470533333333336,
+        "spread_brier": 0.2958877280952381,
+        "interval80_coverage": 0.6666666666666666
       },
       "candidate": {
-        "margin_mae": null,
-        "margin_bias": null,
-        "spread_brier": null,
-        "interval80_coverage": null
+        "margin_mae": 14.275429038008928,
+        "margin_bias": 14.275429038008928,
+        "spread_brier": 0.23702103809523814,
+        "interval80_coverage": 0.6666666666666666
       }
     },
     "NBA|nba-possession-strength-events-v1": {
-      "frozen": 11,
-      "graded": 0,
+      "frozen": 16,
+      "graded": 2,
       "baseline": {
-        "margin_mae": null,
-        "margin_bias": null,
-        "spread_brier": null,
-        "interval80_coverage": null
+        "margin_mae": 18.6633,
+        "margin_bias": 18.6633,
+        "spread_brier": 0.32769266142857145,
+        "interval80_coverage": 0.5
       },
       "candidate": {
-        "margin_mae": null,
-        "margin_bias": null,
-        "spread_brier": null,
-        "interval80_coverage": null
+        "margin_mae": 16.063000000000002,
+        "margin_bias": 16.063000000000002,
+        "spread_brier": 0.2774468685714286,
+        "interval80_coverage": 0.5
       }
     }
   },
@@ -86,7 +86,11 @@
           17.18193278003295
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 86,
+        "away": 104,
+        "graded_at": "2026-11-26T01:03:16.432Z"
+      }
     },
     {
       "sport": "NBA",
@@ -130,7 +134,11 @@
           14.724380511925599
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 116,
+        "away": 131,
+        "graded_at": "2026-11-26T01:03:16.432Z"
+      }
     },
     {
       "sport": "NBA",
@@ -174,7 +182,11 @@
           23.50837382206735
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 101,
+        "away": 120,
+        "graded_at": "2026-11-26T01:03:16.432Z"
+      }
     },
     {
       "sport": "NBA",
@@ -614,7 +626,11 @@
           16
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 116,
+        "away": 131,
+        "graded_at": "2026-11-26T01:03:16.432Z"
+      }
     },
     {
       "sport": "NBA",
@@ -658,7 +674,11 @@
           25
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 101,
+        "away": 120,
+        "graded_at": "2026-11-26T01:03:16.432Z"
+      }
     },
     {
       "sport": "NBA",
@@ -1055,9 +1075,234 @@
         ]
       },
       "actual": null
+    },
+    {
+      "sport": "NBA",
+      "game_id": "401909326",
+      "version": "nba-possession-strength-events-v1",
+      "home": "New York Knicks",
+      "away": "Miami Heat",
+      "start": "2026-11-28T00:00Z",
+      "captured_at": "2026-11-26T01:02:37.777Z",
+      "source_at": "2026-11-25T20:52:16.081068+00:00",
+      "draws": 10000,
+      "baseline": {
+        "margin": 7.8409,
+        "probabilities": [
+          0.8978,
+          0.8082,
+          0.7372,
+          0.6755,
+          0.6059,
+          0.5081,
+          0.3494
+        ],
+        "interval80": [
+          -15,
+          30
+        ]
+      },
+      "candidate": {
+        "margin": 8.5006,
+        "probabilities": [
+          0.9057,
+          0.8153,
+          0.7421,
+          0.6822,
+          0.6135,
+          0.5218,
+          0.3644
+        ],
+        "interval80": [
+          -14,
+          31
+        ]
+      },
+      "actual": null
+    },
+    {
+      "sport": "NBA",
+      "game_id": "401909327",
+      "version": "nba-possession-strength-events-v1",
+      "home": "Detroit Pistons",
+      "away": "Milwaukee Bucks",
+      "start": "2026-11-28T00:30Z",
+      "captured_at": "2026-11-26T01:02:47.168Z",
+      "source_at": "2026-11-25T20:52:16.081068+00:00",
+      "draws": 10000,
+      "baseline": {
+        "margin": 9.4339,
+        "probabilities": [
+          0.9226,
+          0.8424,
+          0.775,
+          0.7101,
+          0.6434,
+          0.547,
+          0.3811
+        ],
+        "interval80": [
+          -12,
+          31
+        ]
+      },
+      "candidate": {
+        "margin": 11.5837,
+        "probabilities": [
+          0.9353,
+          0.8643,
+          0.8092,
+          0.7544,
+          0.6903,
+          0.5965,
+          0.4317
+        ],
+        "interval80": [
+          -11,
+          33
+        ]
+      },
+      "actual": null
+    },
+    {
+      "sport": "NBA",
+      "game_id": "401909328",
+      "version": "nba-possession-strength-events-v1",
+      "home": "Indiana Pacers",
+      "away": "Philadelphia 76ers",
+      "start": "2026-11-28T00:30Z",
+      "captured_at": "2026-11-26T01:02:57.023Z",
+      "source_at": "2026-11-25T20:52:16.081068+00:00",
+      "draws": 10000,
+      "baseline": {
+        "margin": -0.1844,
+        "probabilities": [
+          0.8013,
+          0.6647,
+          0.5681,
+          0.4961,
+          0.4208,
+          0.3235,
+          0.1935
+        ],
+        "interval80": [
+          -22,
+          21
+        ]
+      },
+      "candidate": {
+        "margin": -0.9188,
+        "probabilities": [
+          0.7908,
+          0.6555,
+          0.5575,
+          0.4802,
+          0.4053,
+          0.3082,
+          0.1766
+        ],
+        "interval80": [
+          -22,
+          20
+        ]
+      },
+      "actual": null
+    },
+    {
+      "sport": "NBA",
+      "game_id": "401909329",
+      "version": "nba-possession-strength-events-v1",
+      "home": "Toronto Raptors",
+      "away": "Brooklyn Nets",
+      "start": "2026-11-28T00:30Z",
+      "captured_at": "2026-11-26T01:03:06.888Z",
+      "source_at": "2026-11-25T20:52:16.081068+00:00",
+      "draws": 10000,
+      "baseline": {
+        "margin": 0.4014,
+        "probabilities": [
+          0.8112,
+          0.6796,
+          0.5857,
+          0.5123,
+          0.4399,
+          0.3392,
+          0.1996
+        ],
+        "interval80": [
+          -21,
+          22
+        ]
+      },
+      "candidate": {
+        "margin": 6.6859,
+        "probabilities": [
+          0.8948,
+          0.7973,
+          0.7173,
+          0.6538,
+          0.5831,
+          0.4816,
+          0.3206
+        ],
+        "interval80": [
+          -15,
+          29
+        ]
+      },
+      "actual": null
+    },
+    {
+      "sport": "NBA",
+      "game_id": "401909330",
+      "version": "nba-possession-strength-events-v1",
+      "home": "Boston Celtics",
+      "away": "Atlanta Hawks",
+      "start": "2026-11-28T01:00Z",
+      "captured_at": "2026-11-26T01:03:16.395Z",
+      "source_at": "2026-11-25T20:52:16.081068+00:00",
+      "draws": 10000,
+      "baseline": {
+        "margin": 8.4537,
+        "probabilities": [
+          0.9044,
+          0.8133,
+          0.746,
+          0.685,
+          0.6149,
+          0.5204,
+          0.3606
+        ],
+        "interval80": [
+          -14,
+          31
+        ]
+      },
+      "candidate": {
+        "margin": 5.4449,
+        "probabilities": [
+          0.877,
+          0.7705,
+          0.6895,
+          0.6197,
+          0.5441,
+          0.4478,
+          0.2955
+        ],
+        "interval80": [
+          -17,
+          28
+        ]
+      },
+      "actual": null
     }
   ],
-  "latest_failures": [],
-  "updated_at": "2026-11-25T00:08:49.099Z",
+  "latest_failures": [
+    {
+      "game_id": "401909323",
+      "reason": "Inside 90 minutes of tipoff, availability must be refreshed within 15 minutes"
+    }
+  ],
+  "updated_at": "2026-11-26T01:03:16.432Z",
   "limits": "First paired pregame freeze per model version. Synthetic fixed thresholds, not sportsbook lines; no profitability or live promotion implied."
 }
