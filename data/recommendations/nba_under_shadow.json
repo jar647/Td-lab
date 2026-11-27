@@ -448,12 +448,198 @@
       "frozen": true,
       "actual": 1,
       "gradedAt": "2026-11-26T12:26:01.611Z"
+    },
+    {
+      "key": "401909327|3134907|threes|under-shadow",
+      "gameId": "401909327",
+      "game": {
+        "id": "401909327",
+        "date": "2026-11-28T00:30Z",
+        "status": "STATUS_SCHEDULED",
+        "season_type": 2,
+        "home": "Detroit Pistons",
+        "away": "Milwaukee Bucks",
+        "players": []
+      },
+      "startsAt": "2026-11-28T00:30Z",
+      "playerId": "3134907",
+      "player": "Kyle Kuzma",
+      "team": "Milwaukee Bucks",
+      "opponent": "Detroit Pistons",
+      "position": "PF",
+      "market": "threes",
+      "side": "under",
+      "score": 91,
+      "line": 2.5,
+      "projection": 1.716,
+      "recordedBaseline": 2.090909090909091,
+      "simulatedFrequency": 0.754,
+      "simulatedRuns": 1000,
+      "sourceTimestamps": {
+        "games": "2026-11-27T04:11:15.383535+00:00",
+        "injuries": "2026-11-27T02:10:00.188863+00:00",
+        "rosters": "2026-11-27T04:11:18.406788+00:00"
+      },
+      "sampleDepth": 8,
+      "factors": [
+        {
+          "label": "Opponent suppression by position (shrunk and schedule-adjusted)",
+          "points": 40,
+          "max": 40
+        },
+        {
+          "label": "Supported and stable minutes",
+          "points": 25,
+          "max": 25
+        },
+        {
+          "label": "Simulated projection below recorded player baseline",
+          "points": 14,
+          "max": 20
+        },
+        {
+          "label": "Verified player and opponent samples",
+          "points": 12,
+          "max": 15
+        }
+      ],
+      "studyOnly": true,
+      "priceVerified": false,
+      "probabilityCalibrated": false,
+      "reason": "Suppressed defensive position rate, stable supported role, lower simulated forecast and at least 70% experimental UNDER clears. Sportsbook line unverified.",
+      "capturedAt": "2026-11-27T08:07:45.174Z",
+      "result": "pending",
+      "frozen": true
+    },
+    {
+      "key": "401909332|4278078|assists|under-shadow",
+      "gameId": "401909332",
+      "game": {
+        "id": "401909332",
+        "date": "2026-11-28T02:00Z",
+        "status": "STATUS_SCHEDULED",
+        "season_type": 2,
+        "home": "Phoenix Suns",
+        "away": "Dallas Mavericks",
+        "players": []
+      },
+      "startsAt": "2026-11-28T02:00Z",
+      "playerId": "4278078",
+      "player": "P.J. Washington",
+      "team": "Dallas Mavericks",
+      "opponent": "Phoenix Suns",
+      "position": "PF",
+      "market": "assists",
+      "side": "under",
+      "score": 82,
+      "line": 2.5,
+      "projection": 1.067,
+      "recordedBaseline": 1.3,
+      "simulatedFrequency": 0.903,
+      "simulatedRuns": 1000,
+      "sourceTimestamps": {
+        "games": "2026-11-27T04:11:15.383535+00:00",
+        "injuries": "2026-11-27T02:10:00.188863+00:00",
+        "rosters": "2026-11-27T04:11:18.406788+00:00"
+      },
+      "sampleDepth": 9,
+      "factors": [
+        {
+          "label": "Opponent suppression by position (shrunk and schedule-adjusted)",
+          "points": 29,
+          "max": 40
+        },
+        {
+          "label": "Supported and stable minutes",
+          "points": 25,
+          "max": 25
+        },
+        {
+          "label": "Simulated projection below recorded player baseline",
+          "points": 14,
+          "max": 20
+        },
+        {
+          "label": "Verified player and opponent samples",
+          "points": 14,
+          "max": 15
+        }
+      ],
+      "studyOnly": true,
+      "priceVerified": false,
+      "probabilityCalibrated": false,
+      "reason": "Suppressed defensive position rate, stable supported role, lower simulated forecast and at least 70% experimental UNDER clears. Sportsbook line unverified.",
+      "capturedAt": "2026-11-27T08:07:45.174Z",
+      "result": "pending",
+      "frozen": true
+    },
+    {
+      "key": "401909336|5105565|threes|under-shadow",
+      "gameId": "401909336",
+      "game": {
+        "id": "401909336",
+        "date": "2026-11-28T02:30Z",
+        "status": "STATUS_SCHEDULED",
+        "season_type": 2,
+        "home": "Portland Trail Blazers",
+        "away": "Golden State Warriors",
+        "players": []
+      },
+      "startsAt": "2026-11-28T02:30Z",
+      "playerId": "5105565",
+      "player": "Donovan Clingan",
+      "team": "Portland Trail Blazers",
+      "opponent": "Golden State Warriors",
+      "position": "C",
+      "market": "threes",
+      "side": "under",
+      "score": 83,
+      "line": 1.5,
+      "projection": 0.791,
+      "recordedBaseline": 0.9166666666666666,
+      "simulatedFrequency": 0.815,
+      "simulatedRuns": 1000,
+      "sourceTimestamps": {
+        "games": "2026-11-27T04:11:15.383535+00:00",
+        "injuries": "2026-11-27T02:10:00.188863+00:00",
+        "rosters": "2026-11-27T04:11:18.406788+00:00"
+      },
+      "sampleDepth": 10,
+      "factors": [
+        {
+          "label": "Opponent suppression by position (shrunk and schedule-adjusted)",
+          "points": 32,
+          "max": 40
+        },
+        {
+          "label": "Supported and stable minutes",
+          "points": 25,
+          "max": 25
+        },
+        {
+          "label": "Simulated projection below recorded player baseline",
+          "points": 11,
+          "max": 20
+        },
+        {
+          "label": "Verified player and opponent samples",
+          "points": 15,
+          "max": 15
+        }
+      ],
+      "studyOnly": true,
+      "priceVerified": false,
+      "probabilityCalibrated": false,
+      "reason": "Suppressed defensive position rate, stable supported role, lower simulated forecast and at least 70% experimental UNDER clears. Sportsbook line unverified.",
+      "capturedAt": "2026-11-27T08:07:45.174Z",
+      "result": "pending",
+      "frozen": true
     }
   ],
   "summary": {
-    "captured": 7,
+    "captured": 10,
     "graded": 7,
-    "pending": 0,
+    "pending": 3,
     "void": 0,
     "probabilitiesCalibrated": false,
     "betReady": false,
