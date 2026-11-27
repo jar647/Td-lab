@@ -109,5 +109,35 @@ function analyze(game,feed,injuries,rosters,context,now=Date.now(),options={}){
   return {rows,scoreBands:positional.scoreBands||{},underWeaknesses:(positional.weaknesses||[]).filter(w=>w.side==='under'),players:simulation.players.map(p=>({...p,reviewReasons:playerReviews.get(p.id)||[]})),reviewedMarkets:rows.filter(r=>r.reviewRequired).length,model: simulation.model,generatedAt:new Date(now).toISOString(),inputTimes:model.inputTimes,context:model.context,warnings:model.warnings,pace:model.pace,blowoutRate:simulation.blowoutRate,reason:null};
  }catch(e){return {rows:[],reason:e.message,warnings:[]};}
 }
-return {minimumScore:propLines.minimumScore,chance,candidate,build,analyze,markets};
+// Optional usage sensitivity. Same team possessions and rotation budget;
+ // only the selected player's share of supported scoring events changes.
+function opportunityEvidence(row){
+ const market=canonical(row?.market),role=row?.roleEvidence,weakness=row?.weakness;
+ const field={points:'points',threes:'threes',rebounds:'rebounds',assists:'assists'}[market];
+ if(!field||row.side!=='over'||row.eligible!==true||row.reviewRequired||
+  !['PG','SG','SF','PF','C'].includes(row.position)||!supportedRole(role,row.playerId,row.team)||
+  !(weakness?.games>=5)||!(weakness.standardizedAdvantage>=.8)||weakness.side!=='over')return null;
+ const history=role.observedHistory||[];
+ if(history.length<6||history.some(x=>!Number.isFinite(x.minutes)||x.minutes<=0||!Number.isFinite(x[field])||x[field]<0))return null;
+ const recent=mean(history.slice(0,3).map(x=>x[field]/x.minutes));
+ const earlier=mean(history.slice(3).map(x=>x[field]/x.minutes));
+ if(earlier<=0||recent>earlier*.8)return null;
+ const increase=Math.min(.2,(1-recent/earlier)*.4,weakness.standardizedAdvantage*.1);
+ return {market,increase,priorPer36:36*earlier,recentPer36:36*recent};
+}
+function expandedOpportunity(row,line,feed,injuries,rosters,context,now){
+ const evidence=opportunityEvidence(row);
+ if(!evidence||!Number.isFinite(line)||line<.5||line>400)throw Error('This prop does not support an expanded-opportunity scenario.');
+ const model=possessions.build(row.game,feed,injuries,rosters,now,{context});
+ if(Object.keys(model.inputTimes).some(key=>model.inputTimes[key]!==row.inputTimes?.[key]))throw Error('NBA inputs changed. Refresh the slate.');
+ const player=model.teams[row.team]?.players.find(p=>String(p.id)===String(row.playerId));
+ if(!player||player.pending)throw Error('The player’s active rotation is unavailable.');
+ const weights={points:['fga','tpa'],threes:['fga','tpa'],assists:['ast'],rebounds:['orb','drb']}[evidence.market];
+ for(const key of weights)player[key]*=1+evidence.increase;
+ const draws=possessions.draws(model,row.samples.length,6472026,{collectPlayerOutcomes:true,playerWorkloadVariation:true});
+ const values=draws.playerOutcomes[row.playerId]?.[evidence.market];
+ if(!values||values.length!==row.samples.length)throw Error('The expanded simulation is unavailable.');
+ return {line,baseline:chance(row,line),expanded:chance({...row,samples:values},line),baselineMean:mean(row.samples),expandedMean:mean(values)};
+}
+return {minimumScore:propLines.minimumScore,chance,candidate,build,analyze,opportunityEvidence,expandedOpportunity,markets};
 });

@@ -38,11 +38,13 @@ function firstUnitQuarterback(p,now){
  if(!Number.isFinite(observed)||observed>now+300000||now-observed>72*3600000||!Number.isInteger(season)||season<1900)return false;
  return p.season===null||p.season===undefined||p.season===''||sourceNumber(p.season)===season;
 }
-function tightEndTargetBaseline(records){
+const RECEIVER_POSITIONS=['TE','WR','RB'];
+function receiverTargetBaseline(records,position='TE'){
+ if(!RECEIVER_POSITIONS.includes(position))return null;
  const allowed=new Map(),conflicts=new Set();
  for(const row of records||[]){
   const value=sourceNumber(row?.defTargetsAllowed);
-  if(row?.market!=='ATD'||row.pos!=='TE'||!row.opp||value===null||value<0)continue;
+  if(row?.market!=='ATD'||row.pos!==position||!row.opp||value===null||value<0)continue;
   if(allowed.has(row.opp)&&allowed.get(row.opp)!==value)conflicts.add(row.opp);
   allowed.set(row.opp,value);
  }
@@ -51,26 +53,28 @@ function tightEndTargetBaseline(records){
  if(values.length<20)return null;
  return (values[Math.floor((values.length-1)/2)]+values[Math.floor(values.length/2)])/2;
 }
-function tightEndOpportunity(player,leagueTargets,now=Date.now()){
+function receiverOpportunity(player,leagueTargets,now=Date.now()){
  const observed=Date.parse(player?.depthChart?.observedAt);
- if(player?.pos!=='TE'||player.playerAppearancesVerified!==true||
+ if(!RECEIVER_POSITIONS.includes(player?.pos)||player.playerAppearancesVerified!==true||
     player.availability!=='ROSTER_ACTIVE'||!['ACTIVE','AVAILABLE','NOT_REPORTED'].includes(player.injuryReportStatus)||
-    player.depthChart?.unit!=='first'||player.depthChart?.position!=='TE'||player.depthChart?.sourceStatus!=='ok'||
+    player.depthChart?.unit!=='first'||player.depthChart?.position!==player.pos||player.depthChart?.sourceStatus!=='ok'||
     /OUT|INACTIVE|DOUBTFUL|QUESTIONABLE|LIMITED|DNP/.test([player.gameDayAvailability,player.injuryPracticeStatus].join('|').toUpperCase())||
     !sourceURL(player.depthChart?.source)||!Number.isFinite(observed)||observed>now+300000||now-observed>72*3600000)return null;
  const rawSnap=sourceNumber(player.snapShare),snap=rawSnap>1?rawSnap/100:rawSnap;
  if(!(snap>=.5&&snap<=1))return null;
- const opportunity=quietTightEndTargets(player.seasonGameStats,sourceNumber(player.defTargetsAllowed),leagueTargets);
+ const opportunity=quietReceiverTargets(player.seasonGameStats,sourceNumber(player.defTargetsAllowed),leagueTargets,player.pos);
  return opportunity?{...opportunity,snapShare:snap}:null;
 }
-function quietTightEndTargets(history,allowed,leagueTargets){
+function quietReceiverTargets(history,allowed,leagueTargets,position='TE'){
+ const minimum={TE:2.5,WR:3.5,RB:2}[position];
+ if(!minimum)return null;
  if(!Number.isFinite(leagueTargets)||leagueTargets<=0||!Number.isFinite(allowed)||allowed<leagueTargets*1.15||
     !Array.isArray(history)||history.length<6||history.some(row=>!row||!Number.isInteger(row.week)||row.week<1||
     ['targets','receptions'].some(key=>sourceNumber(row[key])===null||sourceNumber(row[key])<0)))return null;
  const ordered=[...history].sort((a,b)=>a.week-b.week),recent=ordered.slice(-3),previous=ordered.slice(0,-3);
  if(new Set(ordered.map(row=>row.week)).size!==ordered.length)return null;
  const earlierTargets=mean(previous,'targets'),recentTargets=mean(recent,'targets'),catchRate=mean(previous,'receptions')/earlierTargets;
- if(earlierTargets<2.5||recentTargets>earlierTargets*.8||!Number.isFinite(catchRate)||catchRate<.5||catchRate>1)return null;
+ if(earlierTargets<minimum||recentTargets>earlierTargets*.8||!Number.isFinite(catchRate)||catchRate<.5||catchRate>1)return null;
  const addedWeight=Math.min(.75,(earlierTargets-recentTargets)*.35,(allowed/leagueTargets-1)*2);
  return {earlierTargets,recentTargets,allowed,leagueTargets,addedWeight};
 }
@@ -176,7 +180,7 @@ function build(records,options={}){
   const receiverMatchup=options.receiverMatchup;
   const selected=targetPool.items.find(item=>item.p&&String(receiverMatchup?.id)===item.p.id);
   const source=selected&&records.find(p=>p&&String(p.player_id||p.team+'|'+p.player)===selected.p.id);
-  const opportunity=source&&tightEndOpportunity(source,receiverMatchup.leagueTargets);
+  const opportunity=source&&receiverOpportunity(source,receiverMatchup.leagueTargets);
   if(opportunity){
    const otherWeight=targetPool.sum-selected.weight;
    const gain=Math.min(opportunity.addedWeight,otherWeight*.1);
@@ -369,7 +373,7 @@ function simulate(records,count=10000,seed=1307,selected=[],options={}){
   scenarioAvgRushes:Math.round(sumScores[t.team].rushes/count*10)/10
  }));
  const baseVersion=model.efficiencyProfile==='legacy'?LEGACY_MODEL_VERSION:MODEL_VERSION;
- const outputVersion=model.players.some(p=>p.targetMatchup)?baseVersion+'-te-target-scenario-v1':baseVersion;
+ const outputVersion=model.players.some(p=>p.targetMatchup)?baseVersion+'-receiver-target-scenario-v2':baseVersion;
  let fingerprint=2166136261;
  const evidence=JSON.stringify(model.players.map(p=>[p.id,p.team,p.pos,p.pass,p.targets,p.carries,p.catchRate,p.ypc,p.ypcarry,p.passMatch,p.recMatch,p.rushMatch,p.sourceAvailability,...(p.targetMatchup?[p.targetMatchup]:[])]));
  for(let i=0;i<evidence.length;i++)fingerprint=Math.imul(fingerprint^evidence.charCodeAt(i),16777619);
@@ -393,7 +397,9 @@ function simulate(records,count=10000,seed=1307,selected=[],options={}){
    'Receptions require target and completion','Quarterback passing yards derive from completed receiver outcomes',
    'Pace/game script drive within-game dependencies','Distribution parameters and correlations are NOT calibrated']};
 }
-const api={build,simulate,tightEndTargetBaseline,tightEndOpportunity,quietTightEndTargets,MARKETS,blocked,MODEL_VERSION};
+const api={build,simulate,receiverTargetBaseline,receiverOpportunity,quietReceiverTargets,
+ tightEndTargetBaseline:records=>receiverTargetBaseline(records,'TE'),
+ tightEndOpportunity:(p,...args)=>p?.pos==='TE'?receiverOpportunity(p,...args):null,quietTightEndTargets:quietReceiverTargets,MARKETS,blocked,MODEL_VERSION};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;
 root.PropVaultGameEngine=api;
 })(typeof self!=='undefined'?self:typeof globalThis!=='undefined'?globalThis:this);

@@ -1,5 +1,5 @@
 /* Worker keeps 10k–100k correlated game simulations off the page thread. */
-importScripts('./nfl_game_engine.js?v=nfl-target-scenario-v1');
+importScripts('./nfl_game_engine.js?v=nfl-target-scenario-v2');
 self.onmessage=function(event){
  const {players,count,seed,selected,requestId,options}=event.data||{};
  try{
