@@ -12,34 +12,34 @@
   "summary": {
     "NBA|nba-possession-strength-prospective-v1": {
       "frozen": 12,
-      "graded": 3,
+      "graded": 12,
       "baseline": {
-        "margin_mae": 17.470533333333336,
-        "margin_bias": 17.470533333333336,
-        "spread_brier": 0.2958877280952381,
-        "interval80_coverage": 0.6666666666666666
+        "margin_mae": 10.155858333333333,
+        "margin_bias": 0.5743916666666671,
+        "spread_brier": 0.18599154309523813,
+        "interval80_coverage": 0.9166666666666666
       },
       "candidate": {
-        "margin_mae": 14.275429038008928,
-        "margin_bias": 14.275429038008928,
-        "spread_brier": 0.23702103809523814,
-        "interval80_coverage": 0.6666666666666666
+        "margin_mae": 8.58800200817375,
+        "margin_bias": 0.687704661439375,
+        "spread_brier": 0.16368318214285718,
+        "interval80_coverage": 0.9166666666666666
       }
     },
     "NBA|nba-possession-strength-events-v1": {
       "frozen": 16,
-      "graded": 2,
+      "graded": 11,
       "baseline": {
-        "margin_mae": 18.6633,
-        "margin_bias": 18.6633,
-        "spread_brier": 0.32769266142857145,
-        "interval80_coverage": 0.5
+        "margin_mae": 9.186318181818182,
+        "margin_bias": -0.6297363636363641,
+        "spread_brier": 0.1791110342857143,
+        "interval80_coverage": 0.9090909090909091
       },
       "candidate": {
-        "margin_mae": 16.063000000000002,
-        "margin_bias": 16.063000000000002,
-        "spread_brier": 0.2774468685714286,
-        "interval80_coverage": 0.5
+        "margin_mae": 8.022245454545455,
+        "margin_bias": -0.1486272727272724,
+        "spread_brier": 0.16211921363636364,
+        "interval80_coverage": 0.9090909090909091
       }
     }
   },
@@ -230,7 +230,11 @@
           24.003163348120086
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 111,
+        "away": 104,
+        "graded_at": "2026-11-27T01:02:44.040Z"
+      }
     },
     {
       "sport": "NBA",
@@ -274,7 +278,11 @@
           20.783529375763646
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 105,
+        "away": 107,
+        "graded_at": "2026-11-27T01:02:44.040Z"
+      }
     },
     {
       "sport": "NBA",
@@ -318,7 +326,11 @@
           25.6561631050618
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 121,
+        "away": 102,
+        "graded_at": "2026-11-27T01:02:44.040Z"
+      }
     },
     {
       "sport": "NBA",
@@ -362,7 +374,11 @@
           20.058437672050605
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 106,
+        "away": 113,
+        "graded_at": "2026-11-27T01:02:44.040Z"
+      }
     },
     {
       "sport": "NBA",
@@ -406,7 +422,11 @@
           32.71436503208308
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 115,
+        "away": 97,
+        "graded_at": "2026-11-27T01:02:44.040Z"
+      }
     },
     {
       "sport": "NBA",
@@ -450,7 +470,11 @@
           21.744885855837587
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 97,
+        "away": 104,
+        "graded_at": "2026-11-27T01:02:44.040Z"
+      }
     },
     {
       "sport": "NBA",
@@ -494,7 +518,11 @@
           29.509862519967342
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 116,
+        "away": 104,
+        "graded_at": "2026-11-27T01:02:44.040Z"
+      }
     },
     {
       "sport": "NBA",
@@ -538,7 +566,11 @@
           30.333710820837364
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 129,
+        "away": 110,
+        "graded_at": "2026-11-27T01:02:44.040Z"
+      }
     },
     {
       "sport": "NBA",
@@ -582,7 +614,11 @@
           22.140951093527992
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 116,
+        "away": 111,
+        "graded_at": "2026-11-27T01:02:44.040Z"
+      }
     },
     {
       "sport": "NBA",
@@ -722,7 +758,11 @@
           25
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 111,
+        "away": 104,
+        "graded_at": "2026-11-27T01:02:44.040Z"
+      }
     },
     {
       "sport": "NBA",
@@ -766,7 +806,11 @@
           21
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 105,
+        "away": 107,
+        "graded_at": "2026-11-27T01:02:44.040Z"
+      }
     },
     {
       "sport": "NBA",
@@ -810,7 +854,11 @@
           28
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 121,
+        "away": 102,
+        "graded_at": "2026-11-27T01:02:44.040Z"
+      }
     },
     {
       "sport": "NBA",
@@ -854,7 +902,11 @@
           18
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 106,
+        "away": 113,
+        "graded_at": "2026-11-27T01:02:44.040Z"
+      }
     },
     {
       "sport": "NBA",
@@ -898,7 +950,11 @@
           34
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 115,
+        "away": 97,
+        "graded_at": "2026-11-27T01:02:44.040Z"
+      }
     },
     {
       "sport": "NBA",
@@ -942,7 +998,11 @@
           22
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 97,
+        "away": 104,
+        "graded_at": "2026-11-27T01:02:44.040Z"
+      }
     },
     {
       "sport": "NBA",
@@ -986,7 +1046,11 @@
           29
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 116,
+        "away": 104,
+        "graded_at": "2026-11-27T01:02:44.040Z"
+      }
     },
     {
       "sport": "NBA",
@@ -1030,7 +1094,11 @@
           29
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 129,
+        "away": 110,
+        "graded_at": "2026-11-27T01:02:44.040Z"
+      }
     },
     {
       "sport": "NBA",
@@ -1074,7 +1142,11 @@
           23
         ]
       },
-      "actual": null
+      "actual": {
+        "home": 116,
+        "away": 111,
+        "graded_at": "2026-11-27T01:02:44.040Z"
+      }
     },
     {
       "sport": "NBA",
@@ -1299,10 +1371,66 @@
   ],
   "latest_failures": [
     {
-      "game_id": "401909323",
-      "reason": "Inside 90 minutes of tipoff, availability must be refreshed within 15 minutes"
+      "game_id": "401909326",
+      "reason": "Fresh game, injury and roster feeds are required for rotation simulation"
+    },
+    {
+      "game_id": "401909327",
+      "reason": "Fresh game, injury and roster feeds are required for rotation simulation"
+    },
+    {
+      "game_id": "401909328",
+      "reason": "Fresh game, injury and roster feeds are required for rotation simulation"
+    },
+    {
+      "game_id": "401909329",
+      "reason": "Fresh game, injury and roster feeds are required for rotation simulation"
+    },
+    {
+      "game_id": "401909330",
+      "reason": "Fresh game, injury and roster feeds are required for rotation simulation"
+    },
+    {
+      "game_id": "401909331",
+      "reason": "Fresh game, injury and roster feeds are required for rotation simulation"
+    },
+    {
+      "game_id": "401909332",
+      "reason": "Fresh game, injury and roster feeds are required for rotation simulation"
+    },
+    {
+      "game_id": "401909333",
+      "reason": "Fresh game, injury and roster feeds are required for rotation simulation"
+    },
+    {
+      "game_id": "401909334",
+      "reason": "Fresh game, injury and roster feeds are required for rotation simulation"
+    },
+    {
+      "game_id": "401909335",
+      "reason": "Fresh game, injury and roster feeds are required for rotation simulation"
+    },
+    {
+      "game_id": "401909336",
+      "reason": "Fresh game, injury and roster feeds are required for rotation simulation"
+    },
+    {
+      "game_id": "401910046",
+      "reason": "Fresh game, injury and roster feeds are required for rotation simulation"
+    },
+    {
+      "game_id": "401910047",
+      "reason": "Fresh game, injury and roster feeds are required for rotation simulation"
+    },
+    {
+      "game_id": "401910048",
+      "reason": "Fresh game, injury and roster feeds are required for rotation simulation"
+    },
+    {
+      "game_id": "401910049",
+      "reason": "Fresh game, injury and roster feeds are required for rotation simulation"
     }
   ],
-  "updated_at": "2026-11-26T01:03:16.432Z",
+  "updated_at": "2026-11-27T01:02:44.040Z",
   "limits": "First paired pregame freeze per model version. Synthetic fixed thresholds, not sportsbook lines; no profitability or live promotion implied."
 }

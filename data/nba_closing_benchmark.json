@@ -1,221 +1,221 @@
 {
   "status": "RESEARCH_ONLY",
-  "generated_at": "2026-11-26T01:04:02.224Z",
+  "generated_at": "2026-11-27T01:03:18.200Z",
   "provider": "ESPN explicit DraftKings closing spread",
   "historical_diagnostic": {
-    "eligible": 25,
-    "matched": 25,
+    "eligible": 27,
+    "matched": 27,
     "missing": 0,
     "baseline": {
-      "margin_mae": 9.82128,
-      "margin_bias": -2.0244800000000005,
-      "rmse": 11.872211878163226
+      "margin_mae": 9.651296296296298,
+      "margin_bias": -1.6482592592592593,
+      "rmse": 11.615604687628588
     },
     "candidate": {
-      "margin_mae": 8.431977124733336,
-      "margin_bias": -2.2428079824160347,
-      "rmse": 10.60485890414857
+      "margin_mae": 8.35566018664711,
+      "margin_bias": -2.0844992903773982,
+      "rmse": 10.303057870423855
     },
     "market": {
-      "margin_mae": 9.22,
-      "margin_bias": -1.5,
-      "rmse": 12.17908042505673
+      "margin_mae": 9.796296296296296,
+      "margin_bias": -0.8333333333333334,
+      "rmse": 12.278783267022776
     },
     "baseline_comparison": {
-      "closer_than_market": 11,
-      "farther_than_market": 14,
+      "closer_than_market": 14,
+      "farther_than_market": 13,
       "equal": 0,
-      "mean_absolute_market_gap": 4.3677600000000005,
-      "within_3_points": 0.44,
-      "over_7_points": 0.16
+      "mean_absolute_market_gap": 3.5024074074074067,
+      "within_3_points": 0.4444444444444444,
+      "over_7_points": 0.1111111111111111
     },
     "candidate_comparison": {
-      "closer_than_market": 17,
+      "closer_than_market": 19,
       "farther_than_market": 8,
       "equal": 0,
-      "mean_absolute_market_gap": 3.1681262200500124,
-      "within_3_points": 0.52,
-      "over_7_points": 0.08
+      "mean_absolute_market_gap": 3.2816310477211537,
+      "within_3_points": 0.5185185185185185,
+      "over_7_points": 0.14814814814814814
     },
     "baseline_gap3_ats": {
-      "win": 9,
+      "win": 10,
       "loss": 5,
       "push": 0,
-      "pass": 11,
-      "hit_rate": 0.6428571428571429,
-      "priced": 14,
-      "diagnostic_roi": 0.22000162580385643
+      "pass": 12,
+      "hit_rate": 0.6666666666666666,
+      "priced": 15,
+      "diagnostic_roi": 0.2671595446129232
     },
     "candidate_gap3_ats": {
-      "win": 9,
-      "loss": 3,
+      "win": 11,
+      "loss": 2,
       "push": 0,
-      "pass": 13,
-      "hit_rate": 0.75,
-      "priced": 12,
-      "diagnostic_roi": 0.4398200084300406
+      "pass": 14,
+      "hit_rate": 0.8461538461538461,
+      "priced": 13,
+      "diagnostic_roi": 0.614747658489773
     }
   },
   "historical_development": {
-    "eligible": 54,
-    "matched": 54,
+    "eligible": 52,
+    "matched": 52,
     "missing": 0,
     "baseline": {
-      "margin_mae": 11.473111111111118,
-      "margin_bias": 2.803407407407408,
-      "rmse": 14.564482987861382
+      "margin_mae": 11.102038461538458,
+      "margin_bias": 2.1679230769230777,
+      "rmse": 14.396882891792933
     },
     "candidate": {
-      "margin_mae": 11.028619899977285,
-      "margin_bias": 2.697611919360596,
-      "rmse": 14.331468113219138
+      "margin_mae": 10.509320178798665,
+      "margin_bias": 1.3099662575218718,
+      "rmse": 13.614268161871378
     },
     "market": {
-      "margin_mae": 10.851851851851851,
-      "margin_bias": 2.388888888888889,
-      "rmse": 13.690697030654984
+      "margin_mae": 10.153846153846153,
+      "margin_bias": 2.25,
+      "rmse": 12.81450500259524
     },
     "baseline_comparison": {
-      "closer_than_market": 29,
-      "farther_than_market": 25,
-      "equal": 0,
-      "mean_absolute_market_gap": 3.8871111111111123,
-      "within_3_points": 0.42592592592592593,
-      "over_7_points": 0.12962962962962962
-    },
-    "candidate_comparison": {
-      "closer_than_market": 28,
+      "closer_than_market": 26,
       "farther_than_market": 26,
       "equal": 0,
-      "mean_absolute_market_gap": 2.874869620371942,
-      "within_3_points": 0.6296296296296297,
-      "over_7_points": 0.07407407407407407
+      "mean_absolute_market_gap": 3.951538461538461,
+      "within_3_points": 0.46153846153846156,
+      "over_7_points": 0.17307692307692307
+    },
+    "candidate_comparison": {
+      "closer_than_market": 29,
+      "farther_than_market": 23,
+      "equal": 0,
+      "mean_absolute_market_gap": 2.8278706562345826,
+      "within_3_points": 0.5961538461538461,
+      "over_7_points": 0.038461538461538464
     },
     "baseline_gap3_ats": {
-      "win": 16,
+      "win": 13,
       "loss": 15,
       "push": 0,
-      "pass": 23,
-      "hit_rate": 0.5161290322580645,
-      "priced": 31,
-      "diagnostic_roi": -0.018394260946807656
+      "pass": 24,
+      "hit_rate": 0.4642857142857143,
+      "priced": 28,
+      "diagnostic_roi": -0.11487302258928982
     },
     "candidate_gap3_ats": {
       "win": 9,
-      "loss": 11,
+      "loss": 12,
       "push": 0,
-      "pass": 34,
-      "hit_rate": 0.45,
-      "priced": 20,
-      "diagnostic_roi": -0.14784298303034554
+      "pass": 31,
+      "hit_rate": 0.42857142857142855,
+      "priced": 21,
+      "diagnostic_roi": -0.18727259541563768
     }
   },
   "prospective": {
-    "eligible": 3,
-    "matched": 3,
+    "eligible": 12,
+    "matched": 12,
     "missing": 0,
     "baseline": {
-      "margin_mae": 17.470533333333336,
-      "margin_bias": 17.470533333333336,
-      "rmse": 18.345059762780824
+      "margin_mae": 10.155858333333333,
+      "margin_bias": 0.5743916666666671,
+      "rmse": 11.783040097211755
     },
     "candidate": {
-      "margin_mae": 14.275429038008928,
-      "margin_bias": 14.275429038008928,
-      "rmse": 15.391004318647049
+      "margin_mae": 8.58800200817375,
+      "margin_bias": 0.687704661439375,
+      "rmse": 10.16703642568488
     },
     "market": {
-      "margin_mae": 17.5,
-      "margin_bias": 17.5,
-      "rmse": 19.872510326243805
+      "margin_mae": 11.083333333333334,
+      "margin_bias": 1.75,
+      "rmse": 12.835497652993435
     },
     "baseline_comparison": {
-      "closer_than_market": 2,
-      "farther_than_market": 1,
+      "closer_than_market": 8,
+      "farther_than_market": 4,
       "equal": 0,
-      "mean_absolute_market_gap": 4.918399999999999,
-      "within_3_points": 0.3333333333333333,
-      "over_7_points": 0.3333333333333333
+      "mean_absolute_market_gap": 3.854741666666667,
+      "within_3_points": 0.5,
+      "over_7_points": 0.16666666666666666
     },
     "candidate_comparison": {
-      "closer_than_market": 2,
-      "farther_than_market": 1,
+      "closer_than_market": 9,
+      "farther_than_market": 3,
       "equal": 0,
-      "mean_absolute_market_gap": 5.263091303275291,
-      "within_3_points": 0,
-      "over_7_points": 0.3333333333333333
+      "mean_absolute_market_gap": 3.252090472975841,
+      "within_3_points": 0.4166666666666667,
+      "over_7_points": 0.08333333333333333
     },
     "baseline_gap3_ats": {
-      "win": 1,
-      "loss": 1,
+      "win": 4,
+      "loss": 2,
       "push": 0,
-      "pass": 1,
-      "hit_rate": 0.5,
-      "priced": 2,
-      "diagnostic_roi": -0.06140350877192985
+      "pass": 6,
+      "hit_rate": 0.6666666666666666,
+      "priced": 6,
+      "diagnostic_roi": 0.2550776817124505
     },
     "candidate_gap3_ats": {
-      "win": 2,
+      "win": 6,
       "loss": 1,
       "push": 0,
-      "pass": 0,
-      "hit_rate": 0.6666666666666666,
-      "priced": 3,
-      "diagnostic_roi": 0.2705908072361589
+      "pass": 5,
+      "hit_rate": 0.8571428571428571,
+      "priced": 7,
+      "diagnostic_roi": 0.6225575246263118
     }
   },
   "coherent_scoring_prospective": {
-    "eligible": 2,
-    "matched": 2,
+    "eligible": 11,
+    "matched": 11,
     "missing": 0,
     "baseline": {
-      "margin_mae": 18.6633,
-      "margin_bias": 18.6633,
-      "rmse": 19.74224685110588
+      "margin_mae": 9.186318181818182,
+      "margin_bias": -0.6297363636363641,
+      "rmse": 11.203050302606307
     },
     "candidate": {
-      "margin_mae": 16.063000000000002,
-      "margin_bias": 16.063000000000002,
-      "rmse": 17.50711741806743
+      "margin_mae": 8.022245454545455,
+      "margin_bias": -0.1486272727272724,
+      "rmse": 9.98951112967997
     },
     "market": {
-      "margin_mae": 15.5,
-      "margin_bias": 15.5,
-      "rmse": 19.00657780874821
+      "margin_mae": 10.136363636363637,
+      "margin_bias": -0.045454545454545456,
+      "rmse": 11.734758005793962
     },
     "baseline_comparison": {
-      "closer_than_market": 1,
-      "farther_than_market": 1,
+      "closer_than_market": 7,
+      "farther_than_market": 4,
       "equal": 0,
-      "mean_absolute_market_gap": 4.5628,
-      "within_3_points": 0.5,
-      "over_7_points": 0.5
+      "mean_absolute_market_gap": 3.5783727272727273,
+      "within_3_points": 0.5454545454545454,
+      "over_7_points": 0.18181818181818182
     },
     "candidate_comparison": {
-      "closer_than_market": 1,
-      "farther_than_market": 1,
+      "closer_than_market": 8,
+      "farther_than_market": 3,
       "equal": 0,
-      "mean_absolute_market_gap": 4.0373,
-      "within_3_points": 0,
+      "mean_absolute_market_gap": 3.4633545454545445,
+      "within_3_points": 0.36363636363636365,
       "over_7_points": 0
     },
     "baseline_gap3_ats": {
-      "win": 0,
-      "loss": 1,
+      "win": 3,
+      "loss": 2,
       "push": 0,
-      "pass": 1,
-      "hit_rate": 0,
-      "priced": 1,
-      "diagnostic_roi": -1
+      "pass": 6,
+      "hit_rate": 0.6,
+      "priced": 5,
+      "diagnostic_roi": 0.1306546215637125
     },
     "candidate_gap3_ats": {
-      "win": 1,
+      "win": 6,
       "loss": 1,
       "push": 0,
-      "pass": 0,
-      "hit_rate": 0.5,
-      "priced": 2,
-      "diagnostic_roi": -0.03271028037383178
+      "pass": 4,
+      "hit_rate": 0.8571428571428571,
+      "priced": 7,
+      "diagnostic_roi": 0.6271143712884216
     }
   },
   "historical_skipped": [
@@ -227,186 +227,6 @@
   "rows": {
     "historical": [
       {
-        "game_id": "401909303",
-        "home": "Sacramento Kings",
-        "away": "Portland Trail Blazers",
-        "start": "2026-11-14T03:00Z",
-        "actual": {
-          "home": 107,
-          "away": 120
-        },
-        "baseline": -5.645,
-        "candidate": -9.588984473498945,
-        "quote": {
-          "provider": "DraftKings",
-          "home_spread": 10.5,
-          "away_spread": -10.5,
-          "home_price": -115,
-          "away_price": -105
-        },
-        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909303"
-      },
-      {
-        "game_id": "401909304",
-        "home": "LA Clippers",
-        "away": "Oklahoma City Thunder",
-        "start": "2026-11-14T03:30Z",
-        "actual": {
-          "home": 113,
-          "away": 112
-        },
-        "baseline": -7.869,
-        "candidate": -3.735237083889928,
-        "quote": {
-          "provider": "DraftKings",
-          "home_spread": 6.5,
-          "away_spread": -6.5,
-          "home_price": -113,
-          "away_price": -107
-        },
-        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909304"
-      },
-      {
-        "game_id": "401909980",
-        "home": "New Orleans Pelicans",
-        "away": "Denver Nuggets",
-        "start": "2026-11-15T00:00Z",
-        "actual": {
-          "home": 108,
-          "away": 116
-        },
-        "baseline": -0.907,
-        "candidate": -4.4965225513622435,
-        "quote": {
-          "provider": "DraftKings",
-          "home_spread": 12.5,
-          "away_spread": -12.5,
-          "home_price": -115,
-          "away_price": -105
-        },
-        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909980"
-      },
-      {
-        "game_id": "401909981",
-        "home": "Cleveland Cavaliers",
-        "away": "Dallas Mavericks",
-        "start": "2026-11-15T00:30Z",
-        "actual": {
-          "home": 127,
-          "away": 117
-        },
-        "baseline": 4.682,
-        "candidate": 1.8036734817955473,
-        "quote": {
-          "provider": "DraftKings",
-          "home_spread": 8.5,
-          "away_spread": -8.5,
-          "home_price": -113,
-          "away_price": -107
-        },
-        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909981"
-      },
-      {
-        "game_id": "401909984",
-        "home": "Minnesota Timberwolves",
-        "away": "Chicago Bulls",
-        "start": "2026-11-15T01:00Z",
-        "actual": {
-          "home": 106,
-          "away": 117
-        },
-        "baseline": 12.861,
-        "candidate": 17.342265311064228,
-        "quote": {
-          "provider": "DraftKings",
-          "home_spread": -16.5,
-          "away_spread": 16.5,
-          "home_price": -104,
-          "away_price": -116
-        },
-        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909984"
-      },
-      {
-        "game_id": "401909983",
-        "home": "Memphis Grizzlies",
-        "away": "Brooklyn Nets",
-        "start": "2026-11-15T01:00Z",
-        "actual": {
-          "home": 129,
-          "away": 110
-        },
-        "baseline": 5.75,
-        "candidate": 7.409549208462704,
-        "quote": {
-          "provider": "DraftKings",
-          "home_spread": -4.5,
-          "away_spread": 4.5,
-          "home_price": -101,
-          "away_price": -119
-        },
-        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909983"
-      },
-      {
-        "game_id": "401909982",
-        "home": "Miami Heat",
-        "away": "Detroit Pistons",
-        "start": "2026-11-15T01:00Z",
-        "actual": {
-          "home": 137,
-          "away": 117
-        },
-        "baseline": -3.483,
-        "candidate": -3.758381030337147,
-        "quote": {
-          "provider": "DraftKings",
-          "home_spread": 4.5,
-          "away_spread": -4.5,
-          "home_price": -112,
-          "away_price": -108
-        },
-        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909982"
-      },
-      {
-        "game_id": "401909985",
-        "home": "Philadelphia 76ers",
-        "away": "Indiana Pacers",
-        "start": "2026-11-15T18:00Z",
-        "actual": {
-          "home": 131,
-          "away": 124
-        },
-        "baseline": 2.506,
-        "candidate": 4.174493039488148,
-        "quote": {
-          "provider": "DraftKings",
-          "home_spread": -7.5,
-          "away_spread": 7.5,
-          "home_price": -106,
-          "away_price": -115
-        },
-        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909985"
-      },
-      {
-        "game_id": "401909986",
-        "home": "Phoenix Suns",
-        "away": "Los Angeles Lakers",
-        "start": "2026-11-15T21:00Z",
-        "actual": {
-          "home": 123,
-          "away": 131
-        },
-        "baseline": -1.978,
-        "candidate": -4.529260252298158,
-        "quote": {
-          "provider": "DraftKings",
-          "home_spread": 3.5,
-          "away_spread": -3.5,
-          "home_price": -112,
-          "away_price": -108
-        },
-        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909986"
-      },
-      {
         "game_id": "401909987",
         "home": "LA Clippers",
         "away": "Charlotte Hornets",
@@ -415,8 +235,8 @@
           "home": 113,
           "away": 105
         },
-        "baseline": 2.796,
-        "candidate": 6.548123194546205,
+        "baseline": 1.888,
+        "candidate": 5.1679246576767595,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -1.5,
@@ -435,8 +255,8 @@
           "home": 102,
           "away": 110
         },
-        "baseline": -11.492,
-        "candidate": -12.20972130895924,
+        "baseline": -12.061,
+        "candidate": -12.786915022436695,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 14.5,
@@ -455,8 +275,8 @@
           "home": 108,
           "away": 112
         },
-        "baseline": 0.019,
-        "candidate": -0.11833721019320764,
+        "baseline": -3.072,
+        "candidate": -3.145235439512553,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 4.5,
@@ -475,8 +295,8 @@
           "home": 131,
           "away": 94
         },
-        "baseline": 7.374,
-        "candidate": 6.564844710582218,
+        "baseline": 6.556,
+        "candidate": 5.185464771602509,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -14.5,
@@ -495,8 +315,8 @@
           "home": 119,
           "away": 147
         },
-        "baseline": -1.026,
-        "candidate": -8.290908178114227,
+        "baseline": -0.832,
+        "candidate": -9.167115799878669,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 8.5,
@@ -515,8 +335,8 @@
           "home": 106,
           "away": 113
         },
-        "baseline": -0.919,
-        "candidate": -5.724342776862281,
+        "baseline": -0.652,
+        "candidate": -5.756069125186366,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 8.5,
@@ -535,8 +355,8 @@
           "home": 120,
           "away": 136
         },
-        "baseline": -4.497,
-        "candidate": -6.122568853552705,
+        "baseline": -4.888,
+        "candidate": -6.825056463998196,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 3.5,
@@ -555,8 +375,8 @@
           "home": 126,
           "away": 115
         },
-        "baseline": 9.484,
-        "candidate": 8.357019481266594,
+        "baseline": 6.606,
+        "candidate": 6.006070269677462,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -8.5,
@@ -575,8 +395,8 @@
           "home": 105,
           "away": 115
         },
-        "baseline": 12.163,
-        "candidate": 12.336278485898026,
+        "baseline": 16.287,
+        "candidate": 11.678652450582469,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -8.5,
@@ -595,8 +415,8 @@
           "home": 128,
           "away": 110
         },
-        "baseline": -1.362,
-        "candidate": -5.334949802856285,
+        "baseline": -1.848,
+        "candidate": -4.703411128481362,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 1.5,
@@ -615,8 +435,8 @@
           "home": 123,
           "away": 135
         },
-        "baseline": 1.05,
-        "candidate": -1.8067707582042414,
+        "baseline": 1.199,
+        "candidate": -2.0550270761480056,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 5.5,
@@ -635,8 +455,8 @@
           "home": 115,
           "away": 94
         },
-        "baseline": -6.641,
-        "candidate": -7.726592133143028,
+        "baseline": -6.003,
+        "candidate": -9.221432589090773,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 3.5,
@@ -655,8 +475,8 @@
           "home": 106,
           "away": 98
         },
-        "baseline": -2.532,
-        "candidate": 3.468211816014735,
+        "baseline": -1.405,
+        "candidate": 3.7337219885250086,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -2.5,
@@ -675,8 +495,8 @@
           "home": 105,
           "away": 117
         },
-        "baseline": 3.113,
-        "candidate": 5.492447536398693,
+        "baseline": 2.333,
+        "candidate": 2.995957379344203,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -9.5,
@@ -695,8 +515,8 @@
           "home": 102,
           "away": 111
         },
-        "baseline": -3.534,
-        "candidate": -0.5901045817459785,
+        "baseline": -3.439,
+        "candidate": -3.2452456825480467,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 2.5,
@@ -715,8 +535,8 @@
           "home": 93,
           "away": 105
         },
-        "baseline": 6.1,
-        "candidate": 8.183745760459624,
+        "baseline": 8.103,
+        "candidate": 7.960527177540679,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -9.5,
@@ -735,8 +555,8 @@
           "home": 106,
           "away": 105
         },
-        "baseline": -1.994,
-        "candidate": 3.360109027687126,
+        "baseline": -0.948,
+        "candidate": 3.6097769576606034,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -755,8 +575,8 @@
           "home": 107,
           "away": 132
         },
-        "baseline": 3.298,
-        "candidate": 4.766232761540279,
+        "baseline": 3.438,
+        "candidate": 2.7645265813903013,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -5.5,
@@ -775,8 +595,8 @@
           "home": 118,
           "away": 114
         },
-        "baseline": 18.647,
-        "candidate": 14.179074277691086,
+        "baseline": 19.211,
+        "candidate": 13.097855408710243,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -6.5,
@@ -795,8 +615,8 @@
           "home": 116,
           "away": 121
         },
-        "baseline": -0.485,
-        "candidate": -0.33827467287015267,
+        "baseline": -1.321,
+        "candidate": -0.8031516405021248,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -815,8 +635,8 @@
           "home": 137,
           "away": 130
         },
-        "baseline": 9.011,
-        "candidate": 10.084514217661319,
+        "baseline": 10.231,
+        "candidate": 10.104679105951472,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -11.5,
@@ -835,8 +655,8 @@
           "home": 104,
           "away": 119
         },
-        "baseline": -7.101,
-        "candidate": -5.94569778787737,
+        "baseline": -6.408,
+        "candidate": -6.127732535305954,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 7.5,
@@ -855,8 +675,8 @@
           "home": 121,
           "away": 124
         },
-        "baseline": -0.677,
-        "candidate": -1.4050517914422667,
+        "baseline": 0.043,
+        "candidate": -1.4007585039819404,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -875,8 +695,8 @@
           "home": 99,
           "away": 103
         },
-        "baseline": 3.025,
-        "candidate": 8.489497535352582,
+        "baseline": 3.402,
+        "candidate": 6.551713793198214,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -895,8 +715,8 @@
           "home": 107,
           "away": 137
         },
-        "baseline": 1.17,
-        "candidate": 3.411110460081896,
+        "baseline": 2.048,
+        "candidate": 1.7008848696944998,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -1.5,
@@ -915,8 +735,8 @@
           "home": 116,
           "away": 94
         },
-        "baseline": 0.318,
-        "candidate": -0.895831105650907,
+        "baseline": 0.333,
+        "candidate": -1.7652640213946174,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -5.5,
@@ -935,8 +755,8 @@
           "home": 112,
           "away": 117
         },
-        "baseline": 11.982,
-        "candidate": 5.272962480966406,
+        "baseline": 11.69,
+        "candidate": 4.833026118869288,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -6.5,
@@ -955,8 +775,8 @@
           "home": 109,
           "away": 122
         },
-        "baseline": -4.14,
-        "candidate": -5.488547395599818,
+        "baseline": -4.108,
+        "candidate": -5.687185597378965,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 4.5,
@@ -975,8 +795,8 @@
           "home": 105,
           "away": 101
         },
-        "baseline": -1.926,
-        "candidate": -3.91022871861008,
+        "baseline": -0.399,
+        "candidate": -4.65563840586646,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 2.5,
@@ -995,8 +815,8 @@
           "home": 107,
           "away": 128
         },
-        "baseline": -6.12,
-        "candidate": -3.833856678947777,
+        "baseline": -5.246,
+        "candidate": -5.164103846117445,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 7.5,
@@ -1015,8 +835,8 @@
           "home": 97,
           "away": 109
         },
-        "baseline": 19.193,
-        "candidate": 12.07249171918059,
+        "baseline": 18.353,
+        "candidate": 10.088412961499026,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -11.5,
@@ -1035,8 +855,8 @@
           "home": 124,
           "away": 112
         },
-        "baseline": 12.943,
-        "candidate": 13.03464525697404,
+        "baseline": 13.115,
+        "candidate": 13.76033461394269,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -15.5,
@@ -1055,8 +875,8 @@
           "home": 99,
           "away": 102
         },
-        "baseline": 1.533,
-        "candidate": 4.389872564945632,
+        "baseline": 1.556,
+        "candidate": 2.9154001326070516,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 1.5,
@@ -1075,8 +895,8 @@
           "home": 114,
           "away": 124
         },
-        "baseline": -3.452,
-        "candidate": -11.192738682386844,
+        "baseline": -5.65,
+        "candidate": -9.64232264275788,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 9.5,
@@ -1095,8 +915,8 @@
           "home": 126,
           "away": 98
         },
-        "baseline": -0.33,
-        "candidate": 3.6413642727870745,
+        "baseline": 0.326,
+        "candidate": 1.5897338696187773,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -5.5,
@@ -1115,8 +935,8 @@
           "home": 111,
           "away": 97
         },
-        "baseline": 4.111,
-        "candidate": 8.609261248205444,
+        "baseline": 4.314,
+        "candidate": 8.194722194585966,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -7.5,
@@ -1135,8 +955,8 @@
           "home": 102,
           "away": 105
         },
-        "baseline": 4.568,
-        "candidate": 4.842396088281461,
+        "baseline": 4.59,
+        "candidate": 6.021708809438251,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -6.5,
@@ -1155,8 +975,8 @@
           "home": 128,
           "away": 119
         },
-        "baseline": 10.873,
-        "candidate": 5.127316179152874,
+        "baseline": 9.571,
+        "candidate": 4.604075454263915,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -6.5,
@@ -1175,8 +995,8 @@
           "home": 111,
           "away": 113
         },
-        "baseline": -4.198,
-        "candidate": -2.156073634720216,
+        "baseline": -3.026,
+        "candidate": -2.4322749959089145,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 6.5,
@@ -1195,8 +1015,8 @@
           "home": 126,
           "away": 120
         },
-        "baseline": 5.395,
-        "candidate": 9.474309351187848,
+        "baseline": 5.21,
+        "candidate": 8.47900294482416,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -11.5,
@@ -1215,8 +1035,8 @@
           "home": 94,
           "away": 98
         },
-        "baseline": 5.392,
-        "candidate": 2.253396548725247,
+        "baseline": 4.652,
+        "candidate": 4.022630151479577,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -2.5,
@@ -1235,8 +1055,8 @@
           "home": 101,
           "away": 111
         },
-        "baseline": -8.875,
-        "candidate": -0.8474696757473636,
+        "baseline": -9.39,
+        "candidate": -2.723020531974738,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 4.5,
@@ -1255,8 +1075,8 @@
           "home": 106,
           "away": 104
         },
-        "baseline": 11.104,
-        "candidate": 12.603170668992583,
+        "baseline": 10.114,
+        "candidate": 10.162288842876697,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -14.5,
@@ -1275,8 +1095,8 @@
           "home": 133,
           "away": 124
         },
-        "baseline": -0.671,
-        "candidate": -3.721318608398547,
+        "baseline": -0.751,
+        "candidate": -3.885283909747574,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 1.5,
@@ -1295,8 +1115,8 @@
           "home": 132,
           "away": 129
         },
-        "baseline": 10.777,
-        "candidate": 10.14643670735089,
+        "baseline": 10.975,
+        "candidate": 9.438100165981757,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -11.5,
@@ -1315,8 +1135,8 @@
           "home": 97,
           "away": 96
         },
-        "baseline": 2.044,
-        "candidate": 0.7540567220636654,
+        "baseline": 2.564,
+        "candidate": 1.857993764033679,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 1.5,
@@ -1335,8 +1155,8 @@
           "home": 114,
           "away": 91
         },
-        "baseline": 7.39,
-        "candidate": 14.628026341889743,
+        "baseline": 6.964,
+        "candidate": 14.092141028434844,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -19.5,
@@ -1355,8 +1175,8 @@
           "home": 104,
           "away": 95
         },
-        "baseline": -2.462,
-        "candidate": 2.5508523407860784,
+        "baseline": -3.51,
+        "candidate": 1.6036254057133537,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -5.5,
@@ -1375,8 +1195,8 @@
           "home": 110,
           "away": 100
         },
-        "baseline": 12.634,
-        "candidate": 5.786261463463011,
+        "baseline": 11.55,
+        "candidate": 6.894868369849394,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -1395,8 +1215,8 @@
           "home": 97,
           "away": 96
         },
-        "baseline": -5.825,
-        "candidate": -12.63273417969315,
+        "baseline": -5.756,
+        "candidate": -12.274926653381305,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 12.5,
@@ -1415,8 +1235,8 @@
           "home": 107,
           "away": 97
         },
-        "baseline": -4.11,
-        "candidate": -1.1360992159601648,
+        "baseline": -1.502,
+        "candidate": -1.7673027973030613,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 2.5,
@@ -1435,8 +1255,8 @@
           "home": 123,
           "away": 113
         },
-        "baseline": 2.461,
-        "candidate": -1.3182100611789422,
+        "baseline": 2.725,
+        "candidate": -0.763100439533884,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -1455,8 +1275,8 @@
           "home": 114,
           "away": 116
         },
-        "baseline": -6.009,
-        "candidate": -2.4498726740129744,
+        "baseline": -5.687,
+        "candidate": -3.27695015244353,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 2.5,
@@ -1475,8 +1295,8 @@
           "home": 145,
           "away": 151
         },
-        "baseline": -2.491,
-        "candidate": -4.548770494533389,
+        "baseline": -3.043,
+        "candidate": -3.464587667072986,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 9.5,
@@ -1495,8 +1315,8 @@
           "home": 116,
           "away": 96
         },
-        "baseline": -2.167,
-        "candidate": -1.4430168650972182,
+        "baseline": -1.155,
+        "candidate": -2.667266252811962,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 4.5,
@@ -1515,8 +1335,8 @@
           "home": 113,
           "away": 106
         },
-        "baseline": 8.963,
-        "candidate": 8.246164405407786,
+        "baseline": 9.395,
+        "candidate": 7.596678550752274,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -6.5,
@@ -1535,8 +1355,8 @@
           "home": 88,
           "away": 87
         },
-        "baseline": -4.342,
-        "candidate": -4.484063923145881,
+        "baseline": -3.952,
+        "candidate": -4.295045849602705,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 8.5,
@@ -1555,8 +1375,8 @@
           "home": 111,
           "away": 128
         },
-        "baseline": 0.853,
-        "candidate": -2.8067775088093594,
+        "baseline": 0.895,
+        "candidate": -1.5684272037969573,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 1.5,
@@ -1575,8 +1395,8 @@
           "home": 111,
           "away": 117
         },
-        "baseline": -9.151,
-        "candidate": -10.693258271342083,
+        "baseline": -9.789,
+        "candidate": -11.231719891506474,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 2.5,
@@ -1595,8 +1415,8 @@
           "home": 142,
           "away": 116
         },
-        "baseline": 8.065,
-        "candidate": 13.817742824628375,
+        "baseline": 7.179,
+        "candidate": 11.993293787100566,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -10.5,
@@ -1615,8 +1435,8 @@
           "home": 111,
           "away": 116
         },
-        "baseline": 5.25,
-        "candidate": 9.334475041453311,
+        "baseline": 5.558,
+        "candidate": 6.821553854049086,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -10.5,
@@ -1635,8 +1455,8 @@
           "home": 125,
           "away": 120
         },
-        "baseline": -2.997,
-        "candidate": -3.366139867322438,
+        "baseline": -3.297,
+        "candidate": -3.707916758086929,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 4.5,
@@ -1655,8 +1475,8 @@
           "home": 119,
           "away": 123
         },
-        "baseline": -10.307,
-        "candidate": -3.525352786877814,
+        "baseline": -9.909,
+        "candidate": -5.456464794749779,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 3.5,
@@ -1675,8 +1495,8 @@
           "home": 122,
           "away": 108
         },
-        "baseline": -5.596,
-        "candidate": -4.033772639479757,
+        "baseline": -6.172,
+        "candidate": -3.1055241985181725,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 8.5,
@@ -1695,8 +1515,8 @@
           "home": 116,
           "away": 104
         },
-        "baseline": 13.837,
-        "candidate": 11.479004063628187,
+        "baseline": 14.714,
+        "candidate": 11.542288250859253,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -13.5,
@@ -1715,8 +1535,8 @@
           "home": 107,
           "away": 123
         },
-        "baseline": -7.51,
-        "candidate": -13.355077422241823,
+        "baseline": -7.229,
+        "candidate": -13.16974627268675,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 8.5,
@@ -1735,8 +1555,8 @@
           "home": 109,
           "away": 94
         },
-        "baseline": 8.978,
-        "candidate": 8.106410101406391,
+        "baseline": 9.094,
+        "candidate": 6.377827898004063,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -13.5,
@@ -1755,8 +1575,8 @@
           "home": 86,
           "away": 104
         },
-        "baseline": -2.526,
-        "candidate": -3.8755873794899367,
+        "baseline": -1.626,
+        "candidate": -4.121458785151659,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -3.5,
@@ -1775,8 +1595,8 @@
           "home": 116,
           "away": 131
         },
-        "baseline": -4.862,
-        "candidate": -7.826011765586305,
+        "baseline": -3.306,
+        "candidate": -8.912608999084881,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 10.5,
@@ -1795,8 +1615,8 @@
           "home": 101,
           "away": 120
         },
-        "baseline": 5.268,
-        "candidate": 2.7215521896438006,
+        "baseline": 5.715,
+        "candidate": 1.6693239135764797,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -7.5,
@@ -1805,6 +1625,186 @@
           "away_price": -107
         },
         "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909316"
+      },
+      {
+        "game_id": "401909317",
+        "home": "Philadelphia 76ers",
+        "away": "Miami Heat",
+        "start": "2026-11-25T22:00Z",
+        "actual": {
+          "home": 111,
+          "away": 104
+        },
+        "baseline": -0.025,
+        "candidate": -0.03409460154963795,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": 1.5,
+          "away_spread": -1.5,
+          "home_price": -121,
+          "away_price": 100
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909317"
+      },
+      {
+        "game_id": "401909318",
+        "home": "Charlotte Hornets",
+        "away": "Chicago Bulls",
+        "start": "2026-11-26T00:00Z",
+        "actual": {
+          "home": 105,
+          "away": 107
+        },
+        "baseline": -2.582,
+        "candidate": -3.902152736019284,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -4.5,
+          "away_spread": 4.5,
+          "home_price": -112,
+          "away_price": -108
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909318"
+      },
+      {
+        "game_id": "401909320",
+        "home": "Oklahoma City Thunder",
+        "away": "Minnesota Timberwolves",
+        "start": "2026-11-26T00:30Z",
+        "actual": {
+          "home": 106,
+          "away": 113
+        },
+        "baseline": -1.533,
+        "candidate": -3.3004931701017948,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -2.5,
+          "away_spread": 2.5,
+          "home_price": -109,
+          "away_price": -111
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909320"
+      },
+      {
+        "game_id": "401909319",
+        "home": "New York Knicks",
+        "away": "Cleveland Cavaliers",
+        "start": "2026-11-26T00:30Z",
+        "actual": {
+          "home": 121,
+          "away": 102
+        },
+        "baseline": 2.822,
+        "candidate": 4.4014840542970415,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -4.5,
+          "away_spread": 4.5,
+          "home_price": -107,
+          "away_price": -113
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909319"
+      },
+      {
+        "game_id": "401909322",
+        "home": "Milwaukee Bucks",
+        "away": "Brooklyn Nets",
+        "start": "2026-11-26T01:00Z",
+        "actual": {
+          "home": 97,
+          "away": 104
+        },
+        "baseline": -2.499,
+        "candidate": 0.11043787915831027,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -1.5,
+          "away_spread": 1.5,
+          "home_price": -105,
+          "away_price": -115
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909322"
+      },
+      {
+        "game_id": "401909321",
+        "home": "Memphis Grizzlies",
+        "away": "LA Clippers",
+        "start": "2026-11-26T01:00Z",
+        "actual": {
+          "home": 115,
+          "away": 97
+        },
+        "baseline": 8.666,
+        "candidate": 10.763540905270684,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -7.5,
+          "away_spread": 7.5,
+          "home_price": -112,
+          "away_price": -108
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909321"
+      },
+      {
+        "game_id": "401909323",
+        "home": "Houston Rockets",
+        "away": "Phoenix Suns",
+        "start": "2026-11-26T01:30Z",
+        "actual": {
+          "home": 116,
+          "away": 104
+        },
+        "baseline": 4.462,
+        "candidate": 5.411737592181543,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -8.5,
+          "away_spread": 8.5,
+          "home_price": -115,
+          "away_price": -105
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909323"
+      },
+      {
+        "game_id": "401909325",
+        "home": "Portland Trail Blazers",
+        "away": "San Antonio Spurs",
+        "start": "2026-11-26T03:00Z",
+        "actual": {
+          "home": 116,
+          "away": 111
+        },
+        "baseline": -2.71,
+        "candidate": -3.2998043636464804,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": 3.5,
+          "away_spread": -3.5,
+          "home_price": -110,
+          "away_price": -110
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909325"
+      },
+      {
+        "game_id": "401909324",
+        "home": "Golden State Warriors",
+        "away": "Sacramento Kings",
+        "start": "2026-11-26T03:00Z",
+        "actual": {
+          "home": 129,
+          "away": 110
+        },
+        "baseline": 7.511,
+        "candidate": 8.544614171390926,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -8.5,
+          "away_spread": 8.5,
+          "home_price": -115,
+          "away_price": -105
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909324"
       }
     ],
     "prospective": [
@@ -1870,6 +1870,195 @@
           "away_price": -107
         },
         "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909316"
+      },
+      {
+        "game_id": "401909317",
+        "home": "Philadelphia 76ers",
+        "away": "Miami Heat",
+        "start": "2026-11-25T22:00Z",
+        "captured_at": "2026-11-24T19:16:45.524Z",
+        "actual": {
+          "home": 111,
+          "away": 104
+        },
+        "baseline": 2.0329,
+        "candidate": 2.0360633481197743,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": 1.5,
+          "away_spread": -1.5,
+          "home_price": -121,
+          "away_price": 100
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909317"
+      },
+      {
+        "game_id": "401909318",
+        "home": "Charlotte Hornets",
+        "away": "Chicago Bulls",
+        "start": "2026-11-26T00:00Z",
+        "captured_at": "2026-11-24T19:16:48.878Z",
+        "actual": {
+          "home": 105,
+          "away": 107
+        },
+        "baseline": -5.7288,
+        "candidate": -0.9452706242364882,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -4.5,
+          "away_spread": 4.5,
+          "home_price": -112,
+          "away_price": -108
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909318"
+      },
+      {
+        "game_id": "401909319",
+        "home": "New York Knicks",
+        "away": "Cleveland Cavaliers",
+        "start": "2026-11-26T00:30Z",
+        "captured_at": "2026-11-24T19:16:52.243Z",
+        "actual": {
+          "home": 121,
+          "away": 102
+        },
+        "baseline": 3.1889,
+        "candidate": 3.8450631050619535,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -4.5,
+          "away_spread": 4.5,
+          "home_price": -107,
+          "away_price": -113
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909319"
+      },
+      {
+        "game_id": "401909320",
+        "home": "Oklahoma City Thunder",
+        "away": "Minnesota Timberwolves",
+        "start": "2026-11-26T00:30Z",
+        "captured_at": "2026-11-24T19:16:55.133Z",
+        "actual": {
+          "home": 106,
+          "away": 113
+        },
+        "baseline": -1.0034,
+        "candidate": -1.9449623279492327,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -2.5,
+          "away_spread": 2.5,
+          "home_price": -109,
+          "away_price": -111
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909320"
+      },
+      {
+        "game_id": "401909321",
+        "home": "Memphis Grizzlies",
+        "away": "LA Clippers",
+        "start": "2026-11-26T01:00Z",
+        "captured_at": "2026-11-24T19:16:58.160Z",
+        "actual": {
+          "home": 115,
+          "away": 97
+        },
+        "baseline": 10.1538,
+        "candidate": 10.868165032080604,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -7.5,
+          "away_spread": 7.5,
+          "home_price": -112,
+          "away_price": -108
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909321"
+      },
+      {
+        "game_id": "401909322",
+        "home": "Milwaukee Bucks",
+        "away": "Brooklyn Nets",
+        "start": "2026-11-26T01:00Z",
+        "captured_at": "2026-11-24T19:17:01.552Z",
+        "actual": {
+          "home": 97,
+          "away": 104
+        },
+        "baseline": -1.0267,
+        "candidate": -0.28181414416232275,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -1.5,
+          "away_spread": 1.5,
+          "home_price": -105,
+          "away_price": -115
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909322"
+      },
+      {
+        "game_id": "401909323",
+        "home": "Houston Rockets",
+        "away": "Phoenix Suns",
+        "start": "2026-11-26T01:30Z",
+        "captured_at": "2026-11-24T19:17:04.847Z",
+        "actual": {
+          "home": 116,
+          "away": 104
+        },
+        "baseline": 5.1623,
+        "candidate": 7.672162519966839,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -8.5,
+          "away_spread": 8.5,
+          "home_price": -115,
+          "away_price": -105
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909323"
+      },
+      {
+        "game_id": "401909324",
+        "home": "Golden State Warriors",
+        "away": "Sacramento Kings",
+        "start": "2026-11-26T03:00Z",
+        "captured_at": "2026-11-24T19:17:08.074Z",
+        "actual": {
+          "home": 129,
+          "away": 110
+        },
+        "baseline": 6.6474,
+        "candidate": 8.981110820836411,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -8.5,
+          "away_spread": 8.5,
+          "home_price": -115,
+          "away_price": -105
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909324"
+      },
+      {
+        "game_id": "401909325",
+        "home": "Portland Trail Blazers",
+        "away": "San Antonio Spurs",
+        "start": "2026-11-26T03:00Z",
+        "captured_at": "2026-11-24T19:17:11.217Z",
+        "actual": {
+          "home": 116,
+          "away": 111
+        },
+        "baseline": -0.9453,
+        "candidate": -0.8043489064718254,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": 3.5,
+          "away_spread": -3.5,
+          "home_price": -110,
+          "away_price": -110
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909325"
       }
     ],
     "coherent_scoring_prospective": [
@@ -1914,6 +2103,195 @@
           "away_price": -107
         },
         "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909316"
+      },
+      {
+        "game_id": "401909317",
+        "home": "Philadelphia 76ers",
+        "away": "Miami Heat",
+        "start": "2026-11-25T22:00Z",
+        "captured_at": "2026-11-25T00:07:48.849Z",
+        "actual": {
+          "home": 111,
+          "away": 104
+        },
+        "baseline": 2.0329,
+        "candidate": 3.1532,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": 1.5,
+          "away_spread": -1.5,
+          "home_price": -121,
+          "away_price": 100
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909317"
+      },
+      {
+        "game_id": "401909318",
+        "home": "Charlotte Hornets",
+        "away": "Chicago Bulls",
+        "start": "2026-11-26T00:00Z",
+        "captured_at": "2026-11-25T00:07:56.742Z",
+        "actual": {
+          "home": 105,
+          "away": 107
+        },
+        "baseline": -2.7814,
+        "candidate": -0.8789,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -4.5,
+          "away_spread": 4.5,
+          "home_price": -112,
+          "away_price": -108
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909318"
+      },
+      {
+        "game_id": "401909319",
+        "home": "New York Knicks",
+        "away": "Cleveland Cavaliers",
+        "start": "2026-11-26T00:30Z",
+        "captured_at": "2026-11-25T00:08:04.570Z",
+        "actual": {
+          "home": 121,
+          "away": 102
+        },
+        "baseline": 4.4422,
+        "candidate": 5.6042,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -4.5,
+          "away_spread": 4.5,
+          "home_price": -107,
+          "away_price": -113
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909319"
+      },
+      {
+        "game_id": "401909320",
+        "home": "Oklahoma City Thunder",
+        "away": "Minnesota Timberwolves",
+        "start": "2026-11-26T00:30Z",
+        "captured_at": "2026-11-25T00:08:11.102Z",
+        "actual": {
+          "home": 106,
+          "away": 113
+        },
+        "baseline": -3.2387,
+        "candidate": -3.5107,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -2.5,
+          "away_spread": 2.5,
+          "home_price": -109,
+          "away_price": -111
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909320"
+      },
+      {
+        "game_id": "401909321",
+        "home": "Memphis Grizzlies",
+        "away": "LA Clippers",
+        "start": "2026-11-26T01:00Z",
+        "captured_at": "2026-11-25T00:08:18.242Z",
+        "actual": {
+          "home": 115,
+          "away": 97
+        },
+        "baseline": 10.1538,
+        "candidate": 11.3297,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -7.5,
+          "away_spread": 7.5,
+          "home_price": -112,
+          "away_price": -108
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909321"
+      },
+      {
+        "game_id": "401909322",
+        "home": "Milwaukee Bucks",
+        "away": "Brooklyn Nets",
+        "start": "2026-11-26T01:00Z",
+        "captured_at": "2026-11-25T00:08:26.285Z",
+        "actual": {
+          "home": 97,
+          "away": 104
+        },
+        "baseline": -1.0267,
+        "candidate": -0.4315,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -1.5,
+          "away_spread": 1.5,
+          "home_price": -105,
+          "away_price": -115
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909322"
+      },
+      {
+        "game_id": "401909323",
+        "home": "Houston Rockets",
+        "away": "Phoenix Suns",
+        "start": "2026-11-26T01:30Z",
+        "captured_at": "2026-11-25T00:08:34.120Z",
+        "actual": {
+          "home": 116,
+          "away": 104
+        },
+        "baseline": 5.1623,
+        "candidate": 7.477,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -8.5,
+          "away_spread": 8.5,
+          "home_price": -115,
+          "away_price": -105
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909323"
+      },
+      {
+        "game_id": "401909324",
+        "home": "Golden State Warriors",
+        "away": "Sacramento Kings",
+        "start": "2026-11-26T03:00Z",
+        "captured_at": "2026-11-25T00:08:41.692Z",
+        "actual": {
+          "home": 129,
+          "away": 110
+        },
+        "baseline": 5.9472,
+        "candidate": 6.7025,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": -8.5,
+          "away_spread": 8.5,
+          "home_price": -115,
+          "away_price": -105
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909324"
+      },
+      {
+        "game_id": "401909325",
+        "home": "Portland Trail Blazers",
+        "away": "San Antonio Spurs",
+        "start": "2026-11-26T03:00Z",
+        "captured_at": "2026-11-25T00:08:49.068Z",
+        "actual": {
+          "home": 116,
+          "away": 111
+        },
+        "baseline": -0.9453,
+        "candidate": 0.7936,
+        "quote": {
+          "provider": "DraftKings",
+          "home_spread": 3.5,
+          "away_spread": -3.5,
+          "home_price": -110,
+          "away_price": -110
+        },
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=401909325"
       }
     ]
   },
