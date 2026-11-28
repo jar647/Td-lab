@@ -3,11 +3,12 @@
  'use strict';
  const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const label=m=>({pr:'points + rebounds',pa:'points + assists',ra:'rebounds + assists',pra:'points + rebounds + assists',threes:'three-pointers',steals:'steals',blocks:'blocks',stocks:'steals + blocks','Steals + Blocks':'steals + blocks'}[m]||m);
- function shortlist(rows,{game='all',market='all',limit=3}={}){
+ function shortlist(rows,{game='all',market='all',limit=3,allQualified=false}={}){
   const games=new Map(),out=[];
   const ranked=rows.filter(c=>policy.selectionMarket(c.market)&&(game==='all'||String(c.gameId)===game)&&(market==='all'||policy.canonical(c.market)===market)&&['over','under'].includes(c.side)&&c.eligible===true&&policy.qualifiesScore(c.score,c.market,c.side)&&!c.reviewRequired)
    .map(c=>({c,competitive:!!policy.competitive(c)}))
    .sort((a,b)=>Number(b.competitive)-Number(a.competitive)||b.c.score-a.c.score||a.c.key.localeCompare(b.c.key));
+  if(allQualified)return ranked.map(({c})=>c);
   for(const {c} of ranked){
    const game=String(c.gameId);
    if(!games.has(game))games.set(game,new Set());

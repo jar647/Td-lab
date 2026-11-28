@@ -26,6 +26,9 @@ for(const market of [...markets,'Points + Assists','PRA','Steals + Blocks']){
  assert.equal(gf.candidate(row(market,79.99)),null);
  assert.equal(gf.candidate(row(market,79.99,'under')),null);
 }
+assert(gf.candidate({...row('Rebounds + Assists',86),forecast:9.22,
+ samples:Array.from({length:1000},(_,i)=>i<700?11:5)}),'RA uses its own projection floor');
+assert.equal(gf.candidate({...row('Rebounds + Assists',79.99),forecast:9.22}),null);
 assert.equal(auto.shortlist([row('steals',80,'under')]).length,1);
 assert.equal(auto.shortlist([row('blocks',79.99)]).length,0);
 assert.equal(parlay.evaluateResearch([row('points',80)],{now}).available,true);
