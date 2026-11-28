@@ -634,12 +634,74 @@
       "capturedAt": "2026-11-27T08:07:45.174Z",
       "result": "pending",
       "frozen": true
+    },
+    {
+      "key": "401909333|5104157|assists|under-shadow",
+      "gameId": "401909333",
+      "game": {
+        "id": "401909333",
+        "date": "2026-11-28T02:30Z",
+        "status": "STATUS_SCHEDULED",
+        "season_type": 2,
+        "home": "San Antonio Spurs",
+        "away": "Los Angeles Lakers",
+        "players": []
+      },
+      "startsAt": "2026-11-28T02:30Z",
+      "playerId": "5104157",
+      "player": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "opponent": "Los Angeles Lakers",
+      "position": "C",
+      "market": "assists",
+      "side": "under",
+      "score": 90,
+      "line": 3.5,
+      "projection": 2.383,
+      "recordedBaseline": 3.090909090909091,
+      "simulatedFrequency": 0.783,
+      "simulatedRuns": 1000,
+      "sourceTimestamps": {
+        "games": "2026-11-27T22:40:02.758554+00:00",
+        "injuries": "2026-11-28T02:09:58.103890+00:00",
+        "rosters": "2026-11-27T22:40:05.960456+00:00"
+      },
+      "sampleDepth": 10,
+      "factors": [
+        {
+          "label": "Opponent suppression by position (shrunk and schedule-adjusted)",
+          "points": 32,
+          "max": 40
+        },
+        {
+          "label": "Supported and stable minutes",
+          "points": 25,
+          "max": 25
+        },
+        {
+          "label": "Simulated projection below recorded player baseline",
+          "points": 18,
+          "max": 20
+        },
+        {
+          "label": "Verified player and opponent samples",
+          "points": 15,
+          "max": 15
+        }
+      ],
+      "studyOnly": true,
+      "priceVerified": false,
+      "probabilityCalibrated": false,
+      "reason": "Suppressed defensive position rate, stable supported role, lower simulated forecast and at least 70% experimental UNDER clears. Sportsbook line unverified.",
+      "capturedAt": "2026-11-28T02:14:04.665Z",
+      "result": "pending",
+      "frozen": true
     }
   ],
   "summary": {
-    "captured": 10,
+    "captured": 11,
     "graded": 7,
-    "pending": 3,
+    "pending": 4,
     "void": 0,
     "probabilitiesCalibrated": false,
     "betReady": false,
