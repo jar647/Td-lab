@@ -22,6 +22,7 @@ assert.equal(auto.shortlist([{...candidate(),market:'Steals + Blocks',score:100}
 assert.equal(auto.shortlist(pool,{game:'other'}).length,0);
 assert.equal(auto.shortlist(pool,{market:'assists'}).length,0);
 assert.equal(auto.shortlist(pool,{game:'g',market:'points'}).length,3);
+assert.equal(auto.shortlist([...pool,{...pool[0],key:'same-player-other-market',market:'assists'}],{allQualified:true}).length,8);
 const picks=pool.map(c=>({sport:'NBA',gameId:c.gameId,playerId:c.playerId,player:c.name,team:c.team,opponent:c.opponent,market:c.market,side:'over',line:19.5}));const payload={ready:true,candidates:pool};const five=slip.nbaLegs(picks.slice(0,5),payload),joint=nba.evaluateResearch(five,{now});assert.equal(joint.available,true);assert.equal(joint.jointFrequency,.7);assert.notEqual(joint.jointFrequency,.7**5);assert.equal(nba.evaluateResearch([five[0]],{now}).jointFrequency,.7);assert.throws(()=>slip.nbaLegs(picks.slice(0,6),payload));assert.equal(nba.evaluateResearch([five[0],five[0]],{now}).available,false);assert.equal(nba.evaluateResearch(five.map((c,i)=>i?{...c,outcomeSetId:'different'}:c),{now}).available,false);
 const base={sport:'NBA',board:'Automatic OVER alternate lines',gameId:'g',playerId:'p',player:'P',market:'points',side:'over',line:19.5,score:89,modelVersion:'v1',startsAt:tip,label:'P OVER 19.5',probability:.7,inputs:{alternateLineResearch:{confidence:r.confidence}}};
 let frozen=ledger.capture(null,[base,{...base,line:24.5,label:'P OVER 24.5',probability:.4}],now);
