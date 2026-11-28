@@ -508,8 +508,10 @@
       "probabilityCalibrated": false,
       "reason": "Suppressed defensive position rate, stable supported role, lower simulated forecast and at least 70% experimental UNDER clears. Sportsbook line unverified.",
       "capturedAt": "2026-11-27T08:07:45.174Z",
-      "result": "pending",
-      "frozen": true
+      "result": "win",
+      "frozen": true,
+      "actual": 2,
+      "gradedAt": "2026-11-28T09:27:14.351Z"
     },
     {
       "key": "401909332|4278078|assists|under-shadow",
@@ -696,11 +698,73 @@
       "capturedAt": "2026-11-28T02:14:04.665Z",
       "result": "pending",
       "frozen": true
+    },
+    {
+      "key": "401910047|4278104|assists|under-shadow",
+      "gameId": "401910047",
+      "game": {
+        "id": "401910047",
+        "date": "2026-11-28T23:00Z",
+        "status": "STATUS_SCHEDULED",
+        "season_type": 2,
+        "home": "Charlotte Hornets",
+        "away": "Brooklyn Nets",
+        "players": []
+      },
+      "startsAt": "2026-11-28T23:00Z",
+      "playerId": "4278104",
+      "player": "Michael Porter Jr.",
+      "team": "Brooklyn Nets",
+      "opponent": "Charlotte Hornets",
+      "position": "SF",
+      "market": "assists",
+      "side": "under",
+      "score": 82,
+      "line": 2.5,
+      "projection": 1.692,
+      "recordedBaseline": 1.8181818181818181,
+      "simulatedFrequency": 0.766,
+      "simulatedRuns": 1000,
+      "sourceTimestamps": {
+        "games": "2026-11-28T04:15:07.021384+00:00",
+        "injuries": "2026-11-28T02:09:58.103890+00:00",
+        "rosters": "2026-11-28T04:15:13.138768+00:00"
+      },
+      "sampleDepth": 10,
+      "factors": [
+        {
+          "label": "Opponent suppression by position (shrunk and schedule-adjusted)",
+          "points": 36,
+          "max": 40
+        },
+        {
+          "label": "Supported and stable minutes",
+          "points": 25,
+          "max": 25
+        },
+        {
+          "label": "Simulated projection below recorded player baseline",
+          "points": 6,
+          "max": 20
+        },
+        {
+          "label": "Verified player and opponent samples",
+          "points": 15,
+          "max": 15
+        }
+      ],
+      "studyOnly": true,
+      "priceVerified": false,
+      "probabilityCalibrated": false,
+      "reason": "Suppressed defensive position rate, stable supported role, lower simulated forecast and at least 70% experimental UNDER clears. Sportsbook line unverified.",
+      "capturedAt": "2026-11-28T09:27:14.351Z",
+      "result": "pending",
+      "frozen": true
     }
   ],
   "summary": {
-    "captured": 11,
-    "graded": 7,
+    "captured": 12,
+    "graded": 8,
     "pending": 4,
     "void": 0,
     "probabilitiesCalibrated": false,
@@ -727,10 +791,10 @@
       {
         "market": "threes",
         "band": "90–94",
-        "n": 1,
+        "n": 2,
         "observedHitRate": 1,
-        "meanSimulatedFrequency": 0.875,
-        "brier": 0.015625,
+        "meanSimulatedFrequency": 0.8145,
+        "brier": 0.0380705,
         "statisticallyReviewed": false
       },
       {
