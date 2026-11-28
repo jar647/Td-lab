@@ -1,14 +1,14 @@
 {
   "status": "PROSPECTIVE_RESEARCH_NOT_CALIBRATED",
-  "updated_at": "2026-11-28T01:30:40.380Z",
+  "updated_at": "2026-11-28T09:23:43.788Z",
   "method": "First baseline and supported lineup-scenario forecasts per game/model frozen before verified scheduled kickoff. Existing predictions are never replaced. Results graded next calendar day from schedule finals; no historical backfill.",
   "summary": {
     "frozen": 119,
-    "graded": 98,
-    "non_tie_winner_games": 98,
-    "margin_mae": 10.24795918367347,
-    "total_mae": 11.849999999999994,
-    "brier": 0.22121067736898328,
+    "graded": 100,
+    "non_tie_winner_games": 100,
+    "margin_mae": 10.484000000000002,
+    "total_mae": 11.835999999999997,
+    "brier": 0.2227907400089248,
     "calibration": [
       {
         "range": [
@@ -33,9 +33,9 @@
           0.4,
           0.6
         ],
-        "games": 48,
-        "mean_forecast": 0.5191110682594094,
-        "actual_home_win_rate": 0.5625
+        "games": 50,
+        "mean_forecast": 0.5165301260241303,
+        "actual_home_win_rate": 0.58
       },
       {
         "range": [
@@ -94,17 +94,17 @@
       },
       "213a848f692a9c8037cd03c1e71cbbac8bd43feb56291ad2c6042c75c968853c|nfl-qb-lineup-scenario-v2": {
         "frozen": 25,
-        "graded": 16,
-        "margin_mae": 8.206249999999999,
-        "total_mae": 14.406250000000004,
-        "brier": 0.24478327204448563
+        "graded": 17,
+        "margin_mae": 9.129411764705882,
+        "total_mae": 14.200000000000003,
+        "brier": 0.2514020749316656
       },
       "213a848f692a9c8037cd03c1e71cbbac8bd43feb56291ad2c6042c75c968853c": {
         "frozen": 16,
-        "graded": 4,
-        "margin_mae": 5.65,
-        "total_mae": 20.9,
-        "brier": 0.2721871363589507
+        "graded": 5,
+        "margin_mae": 8.559999999999999,
+        "total_mae": 19,
+        "brier": 0.2663746486082743
       }
     },
     "scope": "Aggregate research scorecard; compare per-signature groups when model code changes."
@@ -9438,7 +9438,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-28T09:23:43.788Z",
+        "home": 27,
+        "away": 5,
+        "margin_error": -20.2,
+        "total_error": 11.399999999999999,
+        "brier": 0.24312469760556882,
+        "home_won": true
+      }
     },
     {
       "key": "score-baseline-trust-v3|2026_12_NO_CIN",
@@ -10644,7 +10652,15 @@
         }
       },
       "status": "FROZEN_BEFORE_KICKOFF",
-      "result": null
+      "result": {
+        "graded_at": "2026-11-28T09:23:43.788Z",
+        "home": 27,
+        "away": 5,
+        "margin_error": -23.9,
+        "total_error": 10.899999999999999,
+        "brier": 0.3573029211265451,
+        "home_won": true
+      }
     },
     {
       "key": "nfl-qb-lineup-scenario-v2|2026_12_NO_CIN",
