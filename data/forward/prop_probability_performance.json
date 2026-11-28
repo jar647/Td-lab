@@ -2,8 +2,8 @@
   "status": "RESEARCH_ONLY_NOT_BET_READY",
   "bet_ready": false,
   "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
-  "graded": 15656,
-  "current_model_graded": 4006,
+  "graded": 15889,
+  "current_model_graded": 4130,
   "game_first_model_version": "game-first-volume-v4-depth-chart-qb",
   "game_first_graded": 1988,
   "game_first_distinct_weeks": 2,
@@ -369,25 +369,25 @@
   "eligible_for_research_review": false,
   "markets": {
     "PASS": {
-      "n": 288,
-      "model_brier": 0.178759,
-      "baseline_brier": 0.183736,
+      "n": 292,
+      "model_brier": 0.177847,
+      "baseline_brier": 0.182884,
       "beats_baseline": true,
       "distinct_weeks": 4,
-      "model_log_loss": 0.535778,
-      "baseline_log_loss": 0.547517,
+      "model_log_loss": 0.533476,
+      "baseline_log_loss": 0.545326,
       "calibration_bins": [
         {
           "range": "0-10%",
-          "n": 4,
-          "predicted": 0.089,
+          "n": 5,
+          "predicted": 0.0879,
           "observed": 0.0
         },
         {
           "range": "10-20%",
-          "n": 31,
-          "predicted": 0.1515,
-          "observed": 0.0323
+          "n": 32,
+          "predicted": 0.152,
+          "observed": 0.0312
         },
         {
           "range": "20-30%",
@@ -409,15 +409,15 @@
         },
         {
           "range": "50-60%",
-          "n": 24,
-          "predicted": 0.5371,
-          "observed": 0.4167
+          "n": 25,
+          "predicted": 0.5381,
+          "observed": 0.4
         },
         {
           "range": "60-70%",
-          "n": 43,
-          "predicted": 0.6505,
-          "observed": 0.6744
+          "n": 44,
+          "predicted": 0.6514,
+          "observed": 0.6818
         },
         {
           "range": "70-80%",
@@ -438,18 +438,18 @@
           "observed": 0.8571
         }
       ],
-      "expected_calibration_error": 0.068387,
-      "distinct_player_games": 72,
-      "distinct_game_market_players": 72
+      "expected_calibration_error": 0.071303,
+      "distinct_player_games": 73,
+      "distinct_game_market_players": 73
     },
     "RUSH": {
-      "n": 488,
-      "model_brier": 0.16062,
-      "baseline_brier": 0.161974,
+      "n": 500,
+      "model_brier": 0.16063,
+      "baseline_brier": 0.1622,
       "beats_baseline": true,
       "distinct_weeks": 4,
-      "model_log_loss": 0.491261,
-      "baseline_log_loss": 0.491015,
+      "model_log_loss": 0.4916,
+      "baseline_log_loss": 0.491578,
       "calibration_bins": [
         {
           "range": "0-10%",
@@ -459,15 +459,15 @@
         },
         {
           "range": "10-20%",
-          "n": 159,
-          "predicted": 0.1267,
-          "observed": 0.1195
+          "n": 163,
+          "predicted": 0.1268,
+          "observed": 0.1227
         },
         {
           "range": "20-30%",
-          "n": 61,
-          "predicted": 0.2358,
-          "observed": 0.2295
+          "n": 63,
+          "predicted": 0.237,
+          "observed": 0.2222
         },
         {
           "range": "30-40%",
@@ -477,9 +477,9 @@
         },
         {
           "range": "40-50%",
-          "n": 31,
-          "predicted": 0.4429,
-          "observed": 0.4194
+          "n": 33,
+          "predicted": 0.4416,
+          "observed": 0.3939
         },
         {
           "range": "50-60%",
@@ -489,21 +489,21 @@
         },
         {
           "range": "60-70%",
-          "n": 35,
-          "predicted": 0.6447,
-          "observed": 0.5714
+          "n": 37,
+          "predicted": 0.6446,
+          "observed": 0.5676
         },
         {
           "range": "70-80%",
-          "n": 36,
-          "predicted": 0.7472,
-          "observed": 0.6944
+          "n": 37,
+          "predicted": 0.7473,
+          "observed": 0.7027
         },
         {
           "range": "80-90%",
-          "n": 47,
-          "predicted": 0.8634,
-          "observed": 0.8085
+          "n": 48,
+          "predicted": 0.8628,
+          "observed": 0.8125
         },
         {
           "range": "90-100%",
@@ -512,60 +512,60 @@
           "observed": 0.9032
         }
       ],
-      "expected_calibration_error": 0.026084,
-      "distinct_player_games": 122,
-      "distinct_game_market_players": 122
+      "expected_calibration_error": 0.027,
+      "distinct_player_games": 125,
+      "distinct_game_market_players": 125
     },
     "REC": {
-      "n": 1400,
-      "model_brier": 0.140582,
-      "baseline_brier": 0.145363,
+      "n": 1448,
+      "model_brier": 0.139373,
+      "baseline_brier": 0.143937,
       "beats_baseline": true,
       "distinct_weeks": 4,
-      "model_log_loss": 0.441393,
-      "baseline_log_loss": 0.453558,
+      "model_log_loss": 0.438206,
+      "baseline_log_loss": 0.449925,
       "calibration_bins": [
         {
           "range": "0-10%",
-          "n": 125,
-          "predicted": 0.0891,
-          "observed": 0.048
+          "n": 134,
+          "predicted": 0.0887,
+          "observed": 0.0448
         },
         {
           "range": "10-20%",
-          "n": 482,
-          "predicted": 0.1269,
-          "observed": 0.0685
+          "n": 503,
+          "predicted": 0.1272,
+          "observed": 0.0676
         },
         {
           "range": "20-30%",
-          "n": 185,
+          "n": 188,
           "predicted": 0.2402,
-          "observed": 0.1892
+          "observed": 0.1915
         },
         {
           "range": "30-40%",
-          "n": 136,
-          "predicted": 0.3456,
-          "observed": 0.2794
+          "n": 141,
+          "predicted": 0.3458,
+          "observed": 0.2766
         },
         {
           "range": "40-50%",
-          "n": 96,
-          "predicted": 0.4369,
-          "observed": 0.375
+          "n": 98,
+          "predicted": 0.4372,
+          "observed": 0.3673
         },
         {
           "range": "50-60%",
-          "n": 99,
-          "predicted": 0.539,
-          "observed": 0.4747
+          "n": 104,
+          "predicted": 0.5397,
+          "observed": 0.4808
         },
         {
           "range": "60-70%",
-          "n": 93,
+          "n": 96,
           "predicted": 0.6452,
-          "observed": 0.6129
+          "observed": 0.6146
         },
         {
           "range": "70-80%",
@@ -586,83 +586,83 @@
           "observed": 0.9524
         }
       ],
-      "expected_calibration_error": 0.055597,
-      "distinct_player_games": 350,
-      "distinct_game_market_players": 350
+      "expected_calibration_error": 0.056274,
+      "distinct_player_games": 362,
+      "distinct_game_market_players": 362
     },
     "CATCH": {
-      "n": 1830,
-      "model_brier": 0.175548,
-      "baseline_brier": 0.18052,
+      "n": 1890,
+      "model_brier": 0.176809,
+      "baseline_brier": 0.181582,
       "beats_baseline": true,
       "distinct_weeks": 4,
-      "model_log_loss": 0.528142,
-      "baseline_log_loss": 0.540339,
+      "model_log_loss": 0.531177,
+      "baseline_log_loss": 0.543083,
       "calibration_bins": [
         {
           "range": "0-10%",
-          "n": 58,
-          "predicted": 0.0896,
-          "observed": 0.1034
+          "n": 62,
+          "predicted": 0.0892,
+          "observed": 0.0968
         },
         {
           "range": "10-20%",
-          "n": 329,
-          "predicted": 0.1388,
-          "observed": 0.0821
+          "n": 344,
+          "predicted": 0.1387,
+          "observed": 0.0843
         },
         {
           "range": "20-30%",
-          "n": 257,
-          "predicted": 0.2373,
-          "observed": 0.1907
+          "n": 267,
+          "predicted": 0.2376,
+          "observed": 0.191
         },
         {
           "range": "30-40%",
-          "n": 153,
-          "predicted": 0.3455,
-          "observed": 0.2876
+          "n": 158,
+          "predicted": 0.345,
+          "observed": 0.2911
         },
         {
           "range": "40-50%",
-          "n": 129,
+          "n": 132,
           "predicted": 0.4322,
-          "observed": 0.3876
+          "observed": 0.3788
         },
         {
           "range": "50-60%",
-          "n": 180,
-          "predicted": 0.5383,
-          "observed": 0.4778
+          "n": 189,
+          "predicted": 0.5391,
+          "observed": 0.4709
         },
         {
           "range": "60-70%",
-          "n": 177,
-          "predicted": 0.6423,
-          "observed": 0.5989
+          "n": 181,
+          "predicted": 0.6427,
+          "observed": 0.5912
         },
         {
           "range": "70-80%",
-          "n": 213,
-          "predicted": 0.7422,
-          "observed": 0.6667
+          "n": 221,
+          "predicted": 0.7423,
+          "observed": 0.6606
         },
         {
           "range": "80-90%",
-          "n": 233,
+          "n": 234,
           "predicted": 0.8402,
-          "observed": 0.7768
+          "observed": 0.7735
         },
         {
           "range": "90-100%",
-          "n": 101,
-          "predicted": 0.9068,
-          "observed": 0.901
+          "n": 102,
+          "predicted": 0.9069,
+          "observed": 0.8922
         }
       ],
-      "expected_calibration_error": 0.052513,
-      "distinct_player_games": 366,
-      "distinct_game_market_players": 366
+      "expected_calibration_error": 0.055321,
+      "distinct_player_games": 378,
+      "distinct_game_market_players": 378
     }
   },
   "version_reports": {
@@ -1883,19 +1883,19 @@
       }
     },
     "game-first-volume-v5-counts-catch": {
-      "graded": 1245,
+      "graded": 1354,
       "distinct_weeks": 2,
-      "distinct_player_games": 179,
-      "distinct_games": 16,
+      "distinct_player_games": 192,
+      "distinct_games": 17,
       "markets": {
         "PASS": {
-          "n": 100,
-          "model_brier": 0.192851,
-          "baseline_brier": 0.181536,
+          "n": 104,
+          "model_brier": 0.190818,
+          "baseline_brier": 0.178869,
           "beats_baseline": false,
           "distinct_weeks": 2,
-          "model_log_loss": 0.566297,
-          "baseline_log_loss": 0.544093,
+          "model_log_loss": 0.561103,
+          "baseline_log_loss": 0.537308,
           "calibration_bins": [
             {
               "range": "0-10%",
@@ -1905,9 +1905,9 @@
             },
             {
               "range": "10-20%",
-              "n": 12,
-              "predicted": 0.1513,
-              "observed": 0.25
+              "n": 13,
+              "predicted": 0.1514,
+              "observed": 0.2308
             },
             {
               "range": "20-30%",
@@ -1917,9 +1917,9 @@
             },
             {
               "range": "30-40%",
-              "n": 10,
-              "predicted": 0.3302,
-              "observed": 0.6
+              "n": 11,
+              "predicted": 0.332,
+              "observed": 0.5455
             },
             {
               "range": "40-50%",
@@ -1935,9 +1935,9 @@
             },
             {
               "range": "60-70%",
-              "n": 7,
-              "predicted": 0.6562,
-              "observed": 0.5714
+              "n": 8,
+              "predicted": 0.6532,
+              "observed": 0.5
             },
             {
               "range": "70-80%",
@@ -1947,9 +1947,9 @@
             },
             {
               "range": "80-90%",
-              "n": 10,
-              "predicted": 0.8711,
-              "observed": 0.8
+              "n": 11,
+              "predicted": 0.8719,
+              "observed": 0.8182
             },
             {
               "range": "90-100%",
@@ -1958,30 +1958,30 @@
               "observed": 0.9286
             }
           ],
-          "expected_calibration_error": 0.111294,
-          "distinct_player_games": 25,
-          "distinct_game_market_players": 25
+          "expected_calibration_error": 0.1071,
+          "distinct_player_games": 26,
+          "distinct_game_market_players": 26
         },
         "RUSH": {
-          "n": 138,
-          "model_brier": 0.169038,
-          "baseline_brier": 0.167687,
+          "n": 147,
+          "model_brier": 0.169487,
+          "baseline_brier": 0.168755,
           "beats_baseline": false,
           "distinct_weeks": 2,
-          "model_log_loss": 0.545349,
-          "baseline_log_loss": 0.501761,
+          "model_log_loss": 0.54277,
+          "baseline_log_loss": 0.505626,
           "calibration_bins": [
             {
               "range": "0-10%",
-              "n": 43,
-              "predicted": 0.0274,
-              "observed": 0.093
+              "n": 45,
+              "predicted": 0.0264,
+              "observed": 0.0889
             },
             {
               "range": "10-20%",
-              "n": 6,
-              "predicted": 0.1467,
-              "observed": 0.6667
+              "n": 8,
+              "predicted": 0.1485,
+              "observed": 0.625
             },
             {
               "range": "20-30%",
@@ -1991,9 +1991,9 @@
             },
             {
               "range": "30-40%",
-              "n": 10,
-              "predicted": 0.3571,
-              "observed": 0.4
+              "n": 11,
+              "predicted": 0.3577,
+              "observed": 0.3636
             },
             {
               "range": "40-50%",
@@ -2009,89 +2009,89 @@
             },
             {
               "range": "60-70%",
-              "n": 11,
-              "predicted": 0.641,
-              "observed": 0.6364
+              "n": 12,
+              "predicted": 0.6429,
+              "observed": 0.6667
             },
             {
               "range": "70-80%",
-              "n": 5,
-              "predicted": 0.7276,
-              "observed": 0.6
+              "n": 6,
+              "predicted": 0.7328,
+              "observed": 0.5
             },
             {
               "range": "80-90%",
-              "n": 14,
-              "predicted": 0.8495,
-              "observed": 0.5714
+              "n": 15,
+              "predicted": 0.8519,
+              "observed": 0.6
             },
             {
               "range": "90-100%",
-              "n": 27,
-              "predicted": 0.9751,
-              "observed": 0.963
+              "n": 28,
+              "predicted": 0.9752,
+              "observed": 0.9643
             }
           ],
-          "expected_calibration_error": 0.089023,
-          "distinct_player_games": 47,
-          "distinct_game_market_players": 47
+          "expected_calibration_error": 0.091537,
+          "distinct_player_games": 50,
+          "distinct_game_market_players": 50
         },
         "REC": {
-          "n": 362,
-          "model_brier": 0.138093,
-          "baseline_brier": 0.145238,
+          "n": 398,
+          "model_brier": 0.134699,
+          "baseline_brier": 0.144205,
           "beats_baseline": true,
           "distinct_weeks": 2,
-          "model_log_loss": 0.427617,
-          "baseline_log_loss": 0.449237,
+          "model_log_loss": 0.417566,
+          "baseline_log_loss": 0.446414,
           "calibration_bins": [
             {
               "range": "0-10%",
-              "n": 127,
-              "predicted": 0.0276,
-              "observed": 0.0394
+              "n": 140,
+              "predicted": 0.0268,
+              "observed": 0.0357
             },
             {
               "range": "10-20%",
-              "n": 40,
+              "n": 45,
               "predicted": 0.1467,
-              "observed": 0.175
+              "observed": 0.1556
             },
             {
               "range": "20-30%",
-              "n": 37,
-              "predicted": 0.2474,
-              "observed": 0.2703
+              "n": 41,
+              "predicted": 0.2472,
+              "observed": 0.2683
             },
             {
               "range": "30-40%",
-              "n": 31,
-              "predicted": 0.3511,
-              "observed": 0.3871
+              "n": 33,
+              "predicted": 0.3486,
+              "observed": 0.3939
             },
             {
               "range": "40-50%",
-              "n": 23,
-              "predicted": 0.4468,
-              "observed": 0.3043
+              "n": 28,
+              "predicted": 0.4512,
+              "observed": 0.2857
             },
             {
               "range": "50-60%",
-              "n": 26,
-              "predicted": 0.5522,
-              "observed": 0.4615
+              "n": 29,
+              "predicted": 0.5513,
+              "observed": 0.4483
             },
             {
               "range": "60-70%",
-              "n": 23,
-              "predicted": 0.6515,
-              "observed": 0.8261
+              "n": 26,
+              "predicted": 0.6542,
+              "observed": 0.8462
             },
             {
               "range": "70-80%",
-              "n": 28,
-              "predicted": 0.7488,
-              "observed": 0.7143
+              "n": 29,
+              "predicted": 0.749,
+              "observed": 0.7241
             },
             {
               "range": "80-90%",
@@ -2106,72 +2106,72 @@
               "observed": 0.9375
             }
           ],
-          "expected_calibration_error": 0.044288,
-          "distinct_player_games": 122,
-          "distinct_game_market_players": 122
+          "expected_calibration_error": 0.045659,
+          "distinct_player_games": 134,
+          "distinct_game_market_players": 134
         },
         "CATCH": {
-          "n": 645,
-          "model_brier": 0.170965,
-          "baseline_brier": 0.183477,
+          "n": 705,
+          "model_brier": 0.17427,
+          "baseline_brier": 0.186185,
           "beats_baseline": true,
           "distinct_weeks": 2,
-          "model_log_loss": 0.516133,
-          "baseline_log_loss": 0.546463,
+          "model_log_loss": 0.523606,
+          "baseline_log_loss": 0.55304,
           "calibration_bins": [
             {
               "range": "0-10%",
-              "n": 107,
-              "predicted": 0.0405,
-              "observed": 0.0748
+              "n": 119,
+              "predicted": 0.0423,
+              "observed": 0.0756
             },
             {
               "range": "10-20%",
-              "n": 88,
-              "predicted": 0.1447,
-              "observed": 0.1818
+              "n": 97,
+              "predicted": 0.144,
+              "observed": 0.1753
             },
             {
               "range": "20-30%",
-              "n": 66,
-              "predicted": 0.2441,
-              "observed": 0.197
+              "n": 75,
+              "predicted": 0.2439,
+              "observed": 0.2
             },
             {
               "range": "30-40%",
-              "n": 64,
-              "predicted": 0.35,
-              "observed": 0.4062
+              "n": 69,
+              "predicted": 0.3501,
+              "observed": 0.4058
             },
             {
               "range": "40-50%",
-              "n": 55,
-              "predicted": 0.4462,
-              "observed": 0.3636
+              "n": 60,
+              "predicted": 0.4457,
+              "observed": 0.35
             },
             {
               "range": "50-60%",
-              "n": 51,
-              "predicted": 0.5542,
-              "observed": 0.6078
+              "n": 56,
+              "predicted": 0.5521,
+              "observed": 0.5714
             },
             {
               "range": "60-70%",
-              "n": 53,
-              "predicted": 0.6475,
-              "observed": 0.6226
+              "n": 59,
+              "predicted": 0.6492,
+              "observed": 0.6102
             },
             {
               "range": "70-80%",
-              "n": 54,
-              "predicted": 0.7444,
-              "observed": 0.6852
+              "n": 60,
+              "predicted": 0.745,
+              "observed": 0.6333
             },
             {
               "range": "80-90%",
-              "n": 65,
-              "predicted": 0.8546,
-              "observed": 0.7846
+              "n": 68,
+              "predicted": 0.8548,
+              "observed": 0.7794
             },
             {
               "range": "90-100%",
@@ -2180,9 +2180,9 @@
               "observed": 0.9524
             }
           ],
-          "expected_calibration_error": 0.046674,
-          "distinct_player_games": 129,
-          "distinct_game_market_players": 129
+          "expected_calibration_error": 0.04994,
+          "distinct_player_games": 141,
+          "distinct_game_market_players": 141
         }
       }
     },
@@ -2443,31 +2443,31 @@
       }
     },
     "opportunity-2024-trained-eligible-fullseason-v2": {
-      "graded": 4006,
+      "graded": 4130,
       "distinct_weeks": 4,
-      "distinct_player_games": 500,
-      "distinct_games": 46,
+      "distinct_player_games": 513,
+      "distinct_games": 47,
       "markets": {
         "PASS": {
-          "n": 288,
-          "model_brier": 0.178759,
-          "baseline_brier": 0.183736,
+          "n": 292,
+          "model_brier": 0.177847,
+          "baseline_brier": 0.182884,
           "beats_baseline": true,
           "distinct_weeks": 4,
-          "model_log_loss": 0.535778,
-          "baseline_log_loss": 0.547517,
+          "model_log_loss": 0.533476,
+          "baseline_log_loss": 0.545326,
           "calibration_bins": [
             {
               "range": "0-10%",
-              "n": 4,
-              "predicted": 0.089,
+              "n": 5,
+              "predicted": 0.0879,
               "observed": 0.0
             },
             {
               "range": "10-20%",
-              "n": 31,
-              "predicted": 0.1515,
-              "observed": 0.0323
+              "n": 32,
+              "predicted": 0.152,
+              "observed": 0.0312
             },
             {
               "range": "20-30%",
@@ -2489,15 +2489,15 @@
             },
             {
               "range": "50-60%",
-              "n": 24,
-              "predicted": 0.5371,
-              "observed": 0.4167
+              "n": 25,
+              "predicted": 0.5381,
+              "observed": 0.4
             },
             {
               "range": "60-70%",
-              "n": 43,
-              "predicted": 0.6505,
-              "observed": 0.6744
+              "n": 44,
+              "predicted": 0.6514,
+              "observed": 0.6818
             },
             {
               "range": "70-80%",
@@ -2518,18 +2518,18 @@
               "observed": 0.8571
             }
           ],
-          "expected_calibration_error": 0.068387,
-          "distinct_player_games": 72,
-          "distinct_game_market_players": 72
+          "expected_calibration_error": 0.071303,
+          "distinct_player_games": 73,
+          "distinct_game_market_players": 73
         },
         "RUSH": {
-          "n": 488,
-          "model_brier": 0.16062,
-          "baseline_brier": 0.161974,
+          "n": 500,
+          "model_brier": 0.16063,
+          "baseline_brier": 0.1622,
           "beats_baseline": true,
           "distinct_weeks": 4,
-          "model_log_loss": 0.491261,
-          "baseline_log_loss": 0.491015,
+          "model_log_loss": 0.4916,
+          "baseline_log_loss": 0.491578,
           "calibration_bins": [
             {
               "range": "0-10%",
@@ -2539,15 +2539,15 @@
             },
             {
               "range": "10-20%",
-              "n": 159,
-              "predicted": 0.1267,
-              "observed": 0.1195
+              "n": 163,
+              "predicted": 0.1268,
+              "observed": 0.1227
             },
             {
               "range": "20-30%",
-              "n": 61,
-              "predicted": 0.2358,
-              "observed": 0.2295
+              "n": 63,
+              "predicted": 0.237,
+              "observed": 0.2222
             },
             {
               "range": "30-40%",
@@ -2557,9 +2557,9 @@
             },
             {
               "range": "40-50%",
-              "n": 31,
-              "predicted": 0.4429,
-              "observed": 0.4194
+              "n": 33,
+              "predicted": 0.4416,
+              "observed": 0.3939
             },
             {
               "range": "50-60%",
@@ -2569,21 +2569,21 @@
             },
             {
               "range": "60-70%",
-              "n": 35,
-              "predicted": 0.6447,
-              "observed": 0.5714
+              "n": 37,
+              "predicted": 0.6446,
+              "observed": 0.5676
             },
             {
               "range": "70-80%",
-              "n": 36,
-              "predicted": 0.7472,
-              "observed": 0.6944
+              "n": 37,
+              "predicted": 0.7473,
+              "observed": 0.7027
             },
             {
               "range": "80-90%",
-              "n": 47,
-              "predicted": 0.8634,
-              "observed": 0.8085
+              "n": 48,
+              "predicted": 0.8628,
+              "observed": 0.8125
             },
             {
               "range": "90-100%",
@@ -2592,60 +2592,60 @@
               "observed": 0.9032
             }
           ],
-          "expected_calibration_error": 0.026084,
-          "distinct_player_games": 122,
-          "distinct_game_market_players": 122
+          "expected_calibration_error": 0.027,
+          "distinct_player_games": 125,
+          "distinct_game_market_players": 125
         },
         "REC": {
-          "n": 1400,
-          "model_brier": 0.140582,
-          "baseline_brier": 0.145363,
+          "n": 1448,
+          "model_brier": 0.139373,
+          "baseline_brier": 0.143937,
           "beats_baseline": true,
           "distinct_weeks": 4,
-          "model_log_loss": 0.441393,
-          "baseline_log_loss": 0.453558,
+          "model_log_loss": 0.438206,
+          "baseline_log_loss": 0.449925,
           "calibration_bins": [
             {
               "range": "0-10%",
-              "n": 125,
-              "predicted": 0.0891,
-              "observed": 0.048
+              "n": 134,
+              "predicted": 0.0887,
+              "observed": 0.0448
             },
             {
               "range": "10-20%",
-              "n": 482,
-              "predicted": 0.1269,
-              "observed": 0.0685
+              "n": 503,
+              "predicted": 0.1272,
+              "observed": 0.0676
             },
             {
               "range": "20-30%",
-              "n": 185,
+              "n": 188,
               "predicted": 0.2402,
-              "observed": 0.1892
+              "observed": 0.1915
             },
             {
               "range": "30-40%",
-              "n": 136,
-              "predicted": 0.3456,
-              "observed": 0.2794
+              "n": 141,
+              "predicted": 0.3458,
+              "observed": 0.2766
             },
             {
               "range": "40-50%",
-              "n": 96,
-              "predicted": 0.4369,
-              "observed": 0.375
+              "n": 98,
+              "predicted": 0.4372,
+              "observed": 0.3673
             },
             {
               "range": "50-60%",
-              "n": 99,
-              "predicted": 0.539,
-              "observed": 0.4747
+              "n": 104,
+              "predicted": 0.5397,
+              "observed": 0.4808
             },
             {
               "range": "60-70%",
-              "n": 93,
+              "n": 96,
               "predicted": 0.6452,
-              "observed": 0.6129
+              "observed": 0.6146
             },
             {
               "range": "70-80%",
@@ -2666,91 +2666,90 @@
               "observed": 0.9524
             }
           ],
-          "expected_calibration_error": 0.055597,
-          "distinct_player_games": 350,
-          "distinct_game_market_players": 350
+          "expected_calibration_error": 0.056274,
+          "distinct_player_games": 362,
+          "distinct_game_market_players": 362
         },
         "CATCH": {
-          "n": 1830,
-          "model_brier": 0.175548,
-          "baseline_brier": 0.18052,
+          "n": 1890,
+          "model_brier": 0.176809,
+          "baseline_brier": 0.181582,
           "beats_baseline": true,
           "distinct_weeks": 4,
-          "model_log_loss": 0.528142,
-          "baseline_log_loss": 0.540339,
+          "model_log_loss": 0.531177,
+          "baseline_log_loss": 0.543083,
           "calibration_bins": [
             {
               "range": "0-10%",
-              "n": 58,
-              "predicted": 0.0896,
-              "observed": 0.1034
+              "n": 62,
+              "predicted": 0.0892,
+              "observed": 0.0968
             },
             {
               "range": "10-20%",
-              "n": 329,
-              "predicted": 0.1388,
-              "observed": 0.0821
+              "n": 344,
+              "predicted": 0.1387,
+              "observed": 0.0843
             },
             {
               "range": "20-30%",
-              "n": 257,
-              "predicted": 0.2373,
-              "observed": 0.1907
+              "n": 267,
+              "predicted": 0.2376,
+              "observed": 0.191
             },
             {
               "range": "30-40%",
-              "n": 153,
-              "predicted": 0.3455,
-              "observed": 0.2876
+              "n": 158,
+              "predicted": 0.345,
+              "observed": 0.2911
             },
             {
               "range": "40-50%",
-              "n": 129,
+              "n": 132,
               "predicted": 0.4322,
-              "observed": 0.3876
+              "observed": 0.3788
             },
             {
               "range": "50-60%",
-              "n": 180,
-              "predicted": 0.5383,
-              "observed": 0.4778
+              "n": 189,
+              "predicted": 0.5391,
+              "observed": 0.4709
             },
             {
               "range": "60-70%",
-              "n": 177,
-              "predicted": 0.6423,
-              "observed": 0.5989
+              "n": 181,
+              "predicted": 0.6427,
+              "observed": 0.5912
             },
             {
               "range": "70-80%",
-              "n": 213,
-              "predicted": 0.7422,
-              "observed": 0.6667
+              "n": 221,
+              "predicted": 0.7423,
+              "observed": 0.6606
             },
             {
               "range": "80-90%",
-              "n": 233,
+              "n": 234,
               "predicted": 0.8402,
-              "observed": 0.7768
+              "observed": 0.7735
             },
             {
               "range": "90-100%",
-              "n": 101,
-              "predicted": 0.9068,
-              "observed": 0.901
+              "n": 102,
+              "predicted": 0.9069,
+              "observed": 0.8922
             }
           ],
-          "expected_calibration_error": 0.052513,
-          "distinct_player_games": 366,
-          "distinct_game_market_players": 366
+          "expected_calibration_error": 0.055321,
+          "distinct_player_games": 378,
+          "distinct_game_market_players": 378
         }
       }
     }
   },
   "skipped": {
-    "NO_OFFENSIVE_SNAPS": 1482,
-    "GAME_NOT_FINAL": 22,
-    "SNAP_DATA_INCOMPLETE": 2
+    "NO_OFFENSIVE_SNAPS": 1497,
+    "GAME_NOT_FINAL": 22
   },
   "records": [
     {
@@ -32536,6 +32535,1494 @@
       "model_probability": 0.20833333,
       "baseline_probability": 0.16666667,
       "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039732",
+      "market": "PASS",
+      "threshold": 149.5,
+      "model_probability": 0.6875,
+      "baseline_probability": 0.66666667,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039732",
+      "market": "PASS",
+      "threshold": 199.5,
+      "model_probability": 0.5625,
+      "baseline_probability": 0.58333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039732",
+      "market": "PASS",
+      "threshold": 249.5,
+      "model_probability": 0.16666667,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039732",
+      "market": "PASS",
+      "threshold": 299.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "RUSH",
+      "threshold": 24.5,
+      "model_probability": 0.75,
+      "baseline_probability": 0.75,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "RUSH",
+      "threshold": 49.5,
+      "model_probability": 0.40625,
+      "baseline_probability": 0.5,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "RUSH",
+      "threshold": 74.5,
+      "model_probability": 0.25,
+      "baseline_probability": 0.25,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "RUSH",
+      "threshold": 99.5,
+      "model_probability": 0.15625,
+      "baseline_probability": 0.25,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.375,
+      "baseline_probability": 0.375,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.15625,
+      "baseline_probability": 0.25,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "REC",
+      "threshold": 74.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.75,
+      "baseline_probability": 0.75,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.6875,
+      "baseline_probability": 0.625,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.3125,
+      "baseline_probability": 0.5,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.125,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.125,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0033881",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.47916667,
+      "baseline_probability": 0.41666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0033881",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.1875,
+      "baseline_probability": 0.25,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0033881",
+      "market": "REC",
+      "threshold": 74.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0033881",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0033881",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.5,
+      "baseline_probability": 0.5,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0033881",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.45833333,
+      "baseline_probability": 0.41666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0033881",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.29166667,
+      "baseline_probability": 0.41666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0033881",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0033881",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0034348",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.5625,
+      "baseline_probability": 0.5,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0034348",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.16666667,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0034348",
+      "market": "REC",
+      "threshold": 74.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0034348",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0034348",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.75,
+      "baseline_probability": 0.75,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0034348",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.54166667,
+      "baseline_probability": 0.5,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0034348",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.25,
+      "baseline_probability": 0.25,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0034348",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.16666667,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0034348",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036613",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.5625,
+      "baseline_probability": 0.5,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036613",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.25,
+      "baseline_probability": 0.25,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036613",
+      "market": "REC",
+      "threshold": 74.5,
+      "model_probability": 0.16666667,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036613",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.10416667,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036613",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.75,
+      "baseline_probability": 0.75,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036613",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.58333333,
+      "baseline_probability": 0.58333333,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036613",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.33333333,
+      "baseline_probability": 0.41666667,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036613",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.25,
+      "baseline_probability": 0.25,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036613",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0040134",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.65625,
+      "baseline_probability": 0.75,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0040134",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.34375,
+      "baseline_probability": 0.25,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0040134",
+      "market": "REC",
+      "threshold": 74.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0040134",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0040134",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.75,
+      "baseline_probability": 0.75,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0040134",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.5625,
+      "baseline_probability": 0.625,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0040134",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.25,
+      "baseline_probability": 0.375,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0040134",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0040134",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "RUSH",
+      "threshold": 24.5,
+      "model_probability": 0.83333333,
+      "baseline_probability": 0.83333333,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "RUSH",
+      "threshold": 49.5,
+      "model_probability": 0.64583333,
+      "baseline_probability": 0.58333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "RUSH",
+      "threshold": 74.5,
+      "model_probability": 0.4375,
+      "baseline_probability": 0.5,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "RUSH",
+      "threshold": 99.5,
+      "model_probability": 0.29166667,
+      "baseline_probability": 0.41666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.5625,
+      "baseline_probability": 0.75,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.22916667,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "REC",
+      "threshold": 74.5,
+      "model_probability": 0.10416667,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.83333333,
+      "baseline_probability": 0.83333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.58333333,
+      "baseline_probability": 0.58333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.33333333,
+      "baseline_probability": 0.33333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.20833333,
+      "baseline_probability": 0.33333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "RUSH",
+      "threshold": 24.5,
+      "model_probability": 0.63888889,
+      "baseline_probability": 0.55555556,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "RUSH",
+      "threshold": 49.5,
+      "model_probability": 0.13888889,
+      "baseline_probability": 0.22222222,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "RUSH",
+      "threshold": 74.5,
+      "model_probability": 0.11111111,
+      "baseline_probability": 0.11111111,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "RUSH",
+      "threshold": 99.5,
+      "model_probability": 0.11111111,
+      "baseline_probability": 0.11111111,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.30555556,
+      "baseline_probability": 0.22222222,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.11111111,
+      "baseline_probability": 0.11111111,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "REC",
+      "threshold": 74.5,
+      "model_probability": 0.11111111,
+      "baseline_probability": 0.11111111,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.11111111,
+      "baseline_probability": 0.11111111,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.72222222,
+      "baseline_probability": 0.77777778,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.55555556,
+      "baseline_probability": 0.44444444,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.22222222,
+      "baseline_probability": 0.33333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.16666667,
+      "baseline_probability": 0.22222222,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.16666667,
+      "baseline_probability": 0.22222222,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0038558",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.41666667,
+      "baseline_probability": 0.41666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0038558",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.25,
+      "baseline_probability": 0.25,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0038558",
+      "market": "REC",
+      "threshold": 74.5,
+      "model_probability": 0.10416667,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0038558",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0038558",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.66666667,
+      "baseline_probability": 0.66666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0038558",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.41666667,
+      "baseline_probability": 0.5,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0038558",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0038558",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0038558",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036894",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.66666667,
+      "baseline_probability": 0.66666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036894",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.14583333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036894",
+      "market": "REC",
+      "threshold": 74.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036894",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036894",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.91666667,
+      "baseline_probability": 0.91666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036894",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.58333333,
+      "baseline_probability": 0.5,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036894",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.33333333,
+      "baseline_probability": 0.41666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036894",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.20833333,
+      "baseline_probability": 0.33333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036894",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0035640",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.60416667,
+      "baseline_probability": 0.66666667,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0035640",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.35416667,
+      "baseline_probability": 0.41666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0035640",
+      "market": "REC",
+      "threshold": 74.5,
+      "model_probability": 0.1875,
+      "baseline_probability": 0.25,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0035640",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.10416667,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0035640",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.75,
+      "baseline_probability": 0.75,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0035640",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.58333333,
+      "baseline_probability": 0.58333333,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0035640",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.41666667,
+      "baseline_probability": 0.41666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0035640",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.20833333,
+      "baseline_probability": 0.25,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0035640",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041489",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.52083333,
+      "baseline_probability": 0.58333333,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041489",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.1875,
+      "baseline_probability": 0.25,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041489",
+      "market": "REC",
+      "threshold": 74.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.25,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041489",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.08333333,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041489",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.66666667,
+      "baseline_probability": 0.66666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041489",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.625,
+      "baseline_probability": 0.58333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041489",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.5,
+      "baseline_probability": 0.5,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041489",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.33333333,
+      "baseline_probability": 0.41666667,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041489",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.29166667,
+      "baseline_probability": 0.33333333,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039739",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.5625,
+      "baseline_probability": 0.75,
+      "hit": 1
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039739",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.375,
+      "baseline_probability": 0.375,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039739",
+      "market": "REC",
+      "threshold": 74.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039739",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039739",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.75,
+      "baseline_probability": 0.75,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039739",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.75,
+      "baseline_probability": 0.75,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039739",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.25,
+      "baseline_probability": 0.25,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039739",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.1875,
+      "baseline_probability": 0.25,
+      "hit": 0
+    },
+    {
+      "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039739",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.125,
+      "baseline_probability": 0.125,
+      "hit": 0
     },
     {
       "model_version": "opportunity-2024-trained-eligible-fullseason-v2",
@@ -152920,6 +154407,1314 @@
       "model_probability": 0.1252,
       "baseline_probability": 0.20833333,
       "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039732",
+      "market": "PASS",
+      "threshold": 149.5,
+      "model_probability": 0.8801,
+      "baseline_probability": 0.6875,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039732",
+      "market": "PASS",
+      "threshold": 199.5,
+      "model_probability": 0.6322,
+      "baseline_probability": 0.5625,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039732",
+      "market": "PASS",
+      "threshold": 249.5,
+      "model_probability": 0.3498,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039732",
+      "market": "PASS",
+      "threshold": 299.5,
+      "model_probability": 0.1535,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "RUSH",
+      "threshold": 24.5,
+      "model_probability": 0.885,
+      "baseline_probability": 0.75,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "RUSH",
+      "threshold": 49.5,
+      "model_probability": 0.364,
+      "baseline_probability": 0.40625,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "RUSH",
+      "threshold": 99.5,
+      "model_probability": 0.0101,
+      "baseline_probability": 0.15625,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.4989,
+      "baseline_probability": 0.375,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.1399,
+      "baseline_probability": 0.15625,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.0047,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.7642,
+      "baseline_probability": 0.75,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.521,
+      "baseline_probability": 0.6875,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.3023,
+      "baseline_probability": 0.3125,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.1524,
+      "baseline_probability": 0.125,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041496",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.0659,
+      "baseline_probability": 0.125,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0033881",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.4867,
+      "baseline_probability": 0.47916667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0033881",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.1588,
+      "baseline_probability": 0.1875,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0033881",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.0076,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0033881",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.6721,
+      "baseline_probability": 0.5,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0033881",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.4179,
+      "baseline_probability": 0.45833333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0033881",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.217,
+      "baseline_probability": 0.29166667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0033881",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.099,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0033881",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.0392,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0034348",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.4851,
+      "baseline_probability": 0.5625,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0034348",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.1418,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0034348",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.0062,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0034348",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.7068,
+      "baseline_probability": 0.75,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0034348",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.4511,
+      "baseline_probability": 0.54166667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0034348",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.2405,
+      "baseline_probability": 0.25,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0034348",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.108,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0034348",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.0412,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036613",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.6722,
+      "baseline_probability": 0.5625,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036613",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.31,
+      "baseline_probability": 0.25,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036613",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.0294,
+      "baseline_probability": 0.10416667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036613",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.8224,
+      "baseline_probability": 0.75,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036613",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.614,
+      "baseline_probability": 0.58333333,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036613",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.3932,
+      "baseline_probability": 0.33333333,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036613",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.2205,
+      "baseline_probability": 0.25,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036613",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.1067,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0040134",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.5577,
+      "baseline_probability": 0.65625,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0040134",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.2234,
+      "baseline_probability": 0.34375,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0040134",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.0199,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0040134",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.6809,
+      "baseline_probability": 0.75,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0040134",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.4243,
+      "baseline_probability": 0.5625,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0040134",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.2141,
+      "baseline_probability": 0.25,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0040134",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.0948,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0040134",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.0362,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "RUSH",
+      "threshold": 24.5,
+      "model_probability": 0.9778,
+      "baseline_probability": 0.83333333,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "RUSH",
+      "threshold": 49.5,
+      "model_probability": 0.7591,
+      "baseline_probability": 0.64583333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "RUSH",
+      "threshold": 99.5,
+      "model_probability": 0.1601,
+      "baseline_probability": 0.29166667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.5708,
+      "baseline_probability": 0.5625,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.2043,
+      "baseline_probability": 0.22916667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.0118,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.7745,
+      "baseline_probability": 0.83333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.5424,
+      "baseline_probability": 0.58333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.3225,
+      "baseline_probability": 0.33333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.1641,
+      "baseline_probability": 0.20833333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0037228",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.0724,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "RUSH",
+      "threshold": 24.5,
+      "model_probability": 0.6636,
+      "baseline_probability": 0.63888889,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "RUSH",
+      "threshold": 49.5,
+      "model_probability": 0.1479,
+      "baseline_probability": 0.13888889,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "RUSH",
+      "threshold": 99.5,
+      "model_probability": 0.0025,
+      "baseline_probability": 0.11111111,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.26,
+      "baseline_probability": 0.30555556,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.0292,
+      "baseline_probability": 0.11111111,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.0002,
+      "baseline_probability": 0.11111111,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.6964,
+      "baseline_probability": 0.72222222,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.4435,
+      "baseline_probability": 0.55555556,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.2273,
+      "baseline_probability": 0.22222222,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.1013,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036139",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.0378,
+      "baseline_probability": 0.16666667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0038558",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.4745,
+      "baseline_probability": 0.41666667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0038558",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.1542,
+      "baseline_probability": 0.25,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0038558",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.0086,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0038558",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.6391,
+      "baseline_probability": 0.66666667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0038558",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.3713,
+      "baseline_probability": 0.41666667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0038558",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.1805,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0038558",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.0697,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0038558",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.0239,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036894",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.5027,
+      "baseline_probability": 0.66666667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036894",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.1416,
+      "baseline_probability": 0.14583333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036894",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.0047,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036894",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.7573,
+      "baseline_probability": 0.91666667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036894",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.5171,
+      "baseline_probability": 0.58333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036894",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.2972,
+      "baseline_probability": 0.33333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036894",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.1457,
+      "baseline_probability": 0.20833333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0036894",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.0623,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0035640",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.7537,
+      "baseline_probability": 0.60416667,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0035640",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.411,
+      "baseline_probability": 0.35416667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0035640",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.0654,
+      "baseline_probability": 0.10416667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0035640",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.8624,
+      "baseline_probability": 0.75,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0035640",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.68,
+      "baseline_probability": 0.58333333,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0035640",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.4625,
+      "baseline_probability": 0.41666667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0035640",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.2828,
+      "baseline_probability": 0.20833333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0035640",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.1482,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041489",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.6932,
+      "baseline_probability": 0.52083333,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041489",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.2905,
+      "baseline_probability": 0.1875,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041489",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.0175,
+      "baseline_probability": 0.08333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041489",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.8975,
+      "baseline_probability": 0.66666667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041489",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.75,
+      "baseline_probability": 0.625,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041489",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.5628,
+      "baseline_probability": 0.5,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041489",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.3684,
+      "baseline_probability": 0.33333333,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0041489",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.211,
+      "baseline_probability": 0.29166667,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039739",
+      "market": "REC",
+      "threshold": 24.5,
+      "model_probability": 0.6589,
+      "baseline_probability": 0.5625,
+      "hit": 1
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039739",
+      "market": "REC",
+      "threshold": 49.5,
+      "model_probability": 0.3075,
+      "baseline_probability": 0.375,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039739",
+      "market": "REC",
+      "threshold": 99.5,
+      "model_probability": 0.0396,
+      "baseline_probability": 0.125,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039739",
+      "market": "CATCH",
+      "threshold": 1.5,
+      "model_probability": 0.7504,
+      "baseline_probability": 0.75,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039739",
+      "market": "CATCH",
+      "threshold": 2.5,
+      "model_probability": 0.5116,
+      "baseline_probability": 0.75,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039739",
+      "market": "CATCH",
+      "threshold": 3.5,
+      "model_probability": 0.2753,
+      "baseline_probability": 0.25,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039739",
+      "market": "CATCH",
+      "threshold": 4.5,
+      "model_probability": 0.1302,
+      "baseline_probability": 0.1875,
+      "hit": 0
+    },
+    {
+      "model_version": "game-first-volume-v5-counts-catch",
+      "season": 2026,
+      "week": 12,
+      "game_id": "2026_12_DEN_PIT",
+      "player_id": "00-0039739",
+      "market": "CATCH",
+      "threshold": 5.5,
+      "model_probability": 0.0579,
+      "baseline_probability": 0.125,
+      "hit": 0
     },
     {
       "model_version": "game-first-volume-v5-counts-catch",
