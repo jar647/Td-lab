@@ -1,20 +1,20 @@
 {
   "status": "RESEARCH_ONLY",
-  "generated_at": "2026-11-27T01:03:18.200Z",
+  "generated_at": "2026-11-28T00:38:09.082Z",
   "provider": "ESPN explicit DraftKings closing spread",
   "historical_diagnostic": {
     "eligible": 27,
     "matched": 27,
     "missing": 0,
     "baseline": {
-      "margin_mae": 9.651296296296298,
-      "margin_bias": -1.6482592592592593,
-      "rmse": 11.615604687628588
+      "margin_mae": 9.56303703703704,
+      "margin_bias": -1.7717777777777775,
+      "rmse": 11.547925890408647
     },
     "candidate": {
-      "margin_mae": 8.35566018664711,
-      "margin_bias": -2.0844992903773982,
-      "rmse": 10.303057870423855
+      "margin_mae": 8.359198589942748,
+      "margin_bias": -2.213235153617532,
+      "rmse": 10.355866892810909
     },
     "market": {
       "margin_mae": 9.796296296296296,
@@ -22,29 +22,29 @@
       "rmse": 12.278783267022776
     },
     "baseline_comparison": {
-      "closer_than_market": 14,
-      "farther_than_market": 13,
+      "closer_than_market": 15,
+      "farther_than_market": 12,
       "equal": 0,
-      "mean_absolute_market_gap": 3.5024074074074067,
-      "within_3_points": 0.4444444444444444,
-      "over_7_points": 0.1111111111111111
+      "mean_absolute_market_gap": 3.399703703703704,
+      "within_3_points": 0.48148148148148145,
+      "over_7_points": 0.037037037037037035
     },
     "candidate_comparison": {
       "closer_than_market": 19,
       "farther_than_market": 8,
       "equal": 0,
-      "mean_absolute_market_gap": 3.2816310477211537,
+      "mean_absolute_market_gap": 3.2883654104677076,
       "within_3_points": 0.5185185185185185,
       "over_7_points": 0.14814814814814814
     },
     "baseline_gap3_ats": {
       "win": 10,
-      "loss": 5,
+      "loss": 4,
       "push": 0,
-      "pass": 12,
-      "hit_rate": 0.6666666666666666,
-      "priced": 15,
-      "diagnostic_roi": 0.2671595446129232
+      "pass": 13,
+      "hit_rate": 0.7142857142857143,
+      "priced": 14,
+      "diagnostic_roi": 0.359560585403491
     },
     "candidate_gap3_ats": {
       "win": 11,
@@ -61,14 +61,14 @@
     "matched": 52,
     "missing": 0,
     "baseline": {
-      "margin_mae": 11.102038461538458,
-      "margin_bias": 2.1679230769230777,
-      "rmse": 14.396882891792933
+      "margin_mae": 10.981403846153846,
+      "margin_bias": 2.1438653846153843,
+      "rmse": 14.203725117430938
     },
     "candidate": {
-      "margin_mae": 10.509320178798665,
-      "margin_bias": 1.3099662575218718,
-      "rmse": 13.614268161871378
+      "margin_mae": 10.452766268668402,
+      "margin_bias": 1.2571619304762875,
+      "rmse": 13.586429214639443
     },
     "market": {
       "margin_mae": 10.153846153846153,
@@ -76,29 +76,29 @@
       "rmse": 12.81450500259524
     },
     "baseline_comparison": {
-      "closer_than_market": 26,
-      "farther_than_market": 26,
+      "closer_than_market": 28,
+      "farther_than_market": 24,
       "equal": 0,
-      "mean_absolute_market_gap": 3.951538461538461,
-      "within_3_points": 0.46153846153846156,
+      "mean_absolute_market_gap": 3.921903846153846,
+      "within_3_points": 0.4807692307692308,
       "over_7_points": 0.17307692307692307
     },
     "candidate_comparison": {
       "closer_than_market": 29,
       "farther_than_market": 23,
       "equal": 0,
-      "mean_absolute_market_gap": 2.8278706562345826,
+      "mean_absolute_market_gap": 2.8188537592671916,
       "within_3_points": 0.5961538461538461,
       "over_7_points": 0.038461538461538464
     },
     "baseline_gap3_ats": {
       "win": 13,
-      "loss": 15,
+      "loss": 14,
       "push": 0,
-      "pass": 24,
-      "hit_rate": 0.4642857142857143,
-      "priced": 28,
-      "diagnostic_roi": -0.11487302258928982
+      "pass": 25,
+      "hit_rate": 0.48148148148148145,
+      "priced": 27,
+      "diagnostic_roi": -0.08209054194444876
     },
     "candidate_gap3_ats": {
       "win": 9,
@@ -235,8 +235,8 @@
           "home": 113,
           "away": 105
         },
-        "baseline": 1.888,
-        "candidate": 5.1679246576767595,
+        "baseline": 1.829,
+        "candidate": 5.018054595067476,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -1.5,
@@ -255,8 +255,8 @@
           "home": 102,
           "away": 110
         },
-        "baseline": -12.061,
-        "candidate": -12.786915022436695,
+        "baseline": -11.862,
+        "candidate": -12.875664559429419,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 14.5,
@@ -275,8 +275,8 @@
           "home": 108,
           "away": 112
         },
-        "baseline": -3.072,
-        "candidate": -3.145235439512553,
+        "baseline": -3.091,
+        "candidate": -3.2643529477758353,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 4.5,
@@ -295,8 +295,8 @@
           "home": 131,
           "away": 94
         },
-        "baseline": 6.556,
-        "candidate": 5.185464771602509,
+        "baseline": 7.443,
+        "candidate": 5.060603969127759,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -14.5,
@@ -315,8 +315,8 @@
           "home": 119,
           "away": 147
         },
-        "baseline": -0.832,
-        "candidate": -9.167115799878669,
+        "baseline": -1.675,
+        "candidate": -9.323697124528765,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 8.5,
@@ -335,8 +335,8 @@
           "home": 106,
           "away": 113
         },
-        "baseline": -0.652,
-        "candidate": -5.756069125186366,
+        "baseline": -0.084,
+        "candidate": -5.870210847260756,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 8.5,
@@ -355,8 +355,8 @@
           "home": 120,
           "away": 136
         },
-        "baseline": -4.888,
-        "candidate": -6.825056463998196,
+        "baseline": -5.203,
+        "candidate": -6.9653590923057624,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 3.5,
@@ -375,8 +375,8 @@
           "home": 126,
           "away": 115
         },
-        "baseline": 6.606,
-        "candidate": 6.006070269677462,
+        "baseline": 7.17,
+        "candidate": 6.219716008554398,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -8.5,
@@ -395,8 +395,8 @@
           "home": 105,
           "away": 115
         },
-        "baseline": 16.287,
-        "candidate": 11.678652450582469,
+        "baseline": 14.921,
+        "candidate": 11.577548920385787,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -8.5,
@@ -415,8 +415,8 @@
           "home": 128,
           "away": 110
         },
-        "baseline": -1.848,
-        "candidate": -4.703411128481362,
+        "baseline": -1.357,
+        "candidate": -4.8053590696073885,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 1.5,
@@ -435,8 +435,8 @@
           "home": 123,
           "away": 135
         },
-        "baseline": 1.199,
-        "candidate": -2.0550270761480056,
+        "baseline": 1.776,
+        "candidate": -1.8248117480372077,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 5.5,
@@ -455,8 +455,8 @@
           "home": 115,
           "away": 94
         },
-        "baseline": -6.003,
-        "candidate": -9.221432589090773,
+        "baseline": -5.968,
+        "candidate": -9.26162445687582,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 3.5,
@@ -475,8 +475,8 @@
           "home": 106,
           "away": 98
         },
-        "baseline": -1.405,
-        "candidate": 3.7337219885250086,
+        "baseline": -0.675,
+        "candidate": 3.702710048134246,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -2.5,
@@ -495,8 +495,8 @@
           "home": 105,
           "away": 117
         },
-        "baseline": 2.333,
-        "candidate": 2.995957379344203,
+        "baseline": 2.058,
+        "candidate": 3.396015317832047,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -9.5,
@@ -515,8 +515,8 @@
           "home": 102,
           "away": 111
         },
-        "baseline": -3.439,
-        "candidate": -3.2452456825480467,
+        "baseline": -3.56,
+        "candidate": -3.3449897263308346,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 2.5,
@@ -535,8 +535,8 @@
           "home": 93,
           "away": 105
         },
-        "baseline": 8.103,
-        "candidate": 7.960527177540679,
+        "baseline": 7.532,
+        "candidate": 7.922857241118508,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -9.5,
@@ -555,8 +555,8 @@
           "home": 106,
           "away": 105
         },
-        "baseline": -0.948,
-        "candidate": 3.6097769576606034,
+        "baseline": -1.937,
+        "candidate": 3.5792572423728672,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -575,8 +575,8 @@
           "home": 107,
           "away": 132
         },
-        "baseline": 3.438,
-        "candidate": 2.7645265813903013,
+        "baseline": 3.652,
+        "candidate": 2.6286650180587836,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -5.5,
@@ -595,8 +595,8 @@
           "home": 118,
           "away": 114
         },
-        "baseline": 19.211,
-        "candidate": 13.097855408710243,
+        "baseline": 17.699,
+        "candidate": 12.996157186859694,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -6.5,
@@ -615,8 +615,8 @@
           "home": 116,
           "away": 121
         },
-        "baseline": -1.321,
-        "candidate": -0.8031516405021248,
+        "baseline": -1.588,
+        "candidate": -0.5873881260919502,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -635,8 +635,8 @@
           "home": 137,
           "away": 130
         },
-        "baseline": 10.231,
-        "candidate": 10.104679105951472,
+        "baseline": 9.323,
+        "candidate": 10.014076377377107,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -11.5,
@@ -655,8 +655,8 @@
           "home": 104,
           "away": 119
         },
-        "baseline": -6.408,
-        "candidate": -6.127732535305954,
+        "baseline": -8.083,
+        "candidate": -6.2294859009346855,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 7.5,
@@ -675,8 +675,8 @@
           "home": 121,
           "away": 124
         },
-        "baseline": 0.043,
-        "candidate": -1.4007585039819404,
+        "baseline": -0.259,
+        "candidate": -1.226264394583293,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -695,8 +695,8 @@
           "home": 99,
           "away": 103
         },
-        "baseline": 3.402,
-        "candidate": 6.551713793198214,
+        "baseline": 2.876,
+        "candidate": 6.47829646271579,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -715,8 +715,8 @@
           "home": 107,
           "away": 137
         },
-        "baseline": 2.048,
-        "candidate": 1.7008848696944998,
+        "baseline": 1.711,
+        "candidate": 1.6212001210624927,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -1.5,
@@ -735,8 +735,8 @@
           "home": 116,
           "away": 94
         },
-        "baseline": 0.333,
-        "candidate": -1.7652640213946174,
+        "baseline": 0.19,
+        "candidate": -1.8913588955387064,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -5.5,
@@ -755,8 +755,8 @@
           "home": 112,
           "away": 117
         },
-        "baseline": 11.69,
-        "candidate": 4.833026118869288,
+        "baseline": 11.789,
+        "candidate": 4.336369277720598,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -6.5,
@@ -775,8 +775,8 @@
           "home": 109,
           "away": 122
         },
-        "baseline": -4.108,
-        "candidate": -5.687185597378965,
+        "baseline": -2.391,
+        "candidate": -5.642711125608173,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 4.5,
@@ -795,8 +795,8 @@
           "home": 105,
           "away": 101
         },
-        "baseline": -0.399,
-        "candidate": -4.65563840586646,
+        "baseline": -0.325,
+        "candidate": -4.282680651972715,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 2.5,
@@ -815,8 +815,8 @@
           "home": 107,
           "away": 128
         },
-        "baseline": -5.246,
-        "candidate": -5.164103846117445,
+        "baseline": -5.756,
+        "candidate": -5.304549490749112,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 7.5,
@@ -835,8 +835,8 @@
           "home": 97,
           "away": 109
         },
-        "baseline": 18.353,
-        "candidate": 10.088412961499026,
+        "baseline": 18.974,
+        "candidate": 9.965922192053645,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -11.5,
@@ -855,8 +855,8 @@
           "home": 124,
           "away": 112
         },
-        "baseline": 13.115,
-        "candidate": 13.76033461394269,
+        "baseline": 13.803,
+        "candidate": 13.69439057706869,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -15.5,
@@ -875,8 +875,8 @@
           "home": 99,
           "away": 102
         },
-        "baseline": 1.556,
-        "candidate": 2.9154001326070516,
+        "baseline": 1.393,
+        "candidate": 2.8549943280885746,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 1.5,
@@ -895,8 +895,8 @@
           "home": 114,
           "away": 124
         },
-        "baseline": -5.65,
-        "candidate": -9.64232264275788,
+        "baseline": -5.411,
+        "candidate": -9.695401864789195,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 9.5,
@@ -915,8 +915,8 @@
           "home": 126,
           "away": 98
         },
-        "baseline": 0.326,
-        "candidate": 1.5897338696187773,
+        "baseline": 0.397,
+        "candidate": 1.4708428082595357,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -5.5,
@@ -935,8 +935,8 @@
           "home": 111,
           "away": 97
         },
-        "baseline": 4.314,
-        "candidate": 8.194722194585966,
+        "baseline": 3.938,
+        "candidate": 8.089631223724519,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -7.5,
@@ -955,8 +955,8 @@
           "home": 102,
           "away": 105
         },
-        "baseline": 4.59,
-        "candidate": 6.021708809438251,
+        "baseline": 3.735,
+        "candidate": 5.871115081974965,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -6.5,
@@ -975,8 +975,8 @@
           "home": 128,
           "away": 119
         },
-        "baseline": 9.571,
-        "candidate": 4.604075454263915,
+        "baseline": 9.529,
+        "candidate": 4.781737927355228,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -6.5,
@@ -995,8 +995,8 @@
           "home": 111,
           "away": 113
         },
-        "baseline": -3.026,
-        "candidate": -2.4322749959089145,
+        "baseline": -3.391,
+        "candidate": -2.5189776553966037,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 6.5,
@@ -1015,8 +1015,8 @@
           "home": 126,
           "away": 120
         },
-        "baseline": 5.21,
-        "candidate": 8.47900294482416,
+        "baseline": 4.989,
+        "candidate": 7.850213947147248,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -11.5,
@@ -1035,8 +1035,8 @@
           "home": 94,
           "away": 98
         },
-        "baseline": 4.652,
-        "candidate": 4.022630151479577,
+        "baseline": 4.818,
+        "candidate": 3.924146497351725,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -2.5,
@@ -1055,8 +1055,8 @@
           "home": 101,
           "away": 111
         },
-        "baseline": -9.39,
-        "candidate": -2.723020531974738,
+        "baseline": -7.814,
+        "candidate": -2.8501928702502717,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 4.5,
@@ -1075,8 +1075,8 @@
           "home": 106,
           "away": 104
         },
-        "baseline": 10.114,
-        "candidate": 10.162288842876697,
+        "baseline": 9.891,
+        "candidate": 10.058373295274674,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -14.5,
@@ -1095,8 +1095,8 @@
           "home": 133,
           "away": 124
         },
-        "baseline": -0.751,
-        "candidate": -3.885283909747574,
+        "baseline": 0,
+        "candidate": -3.4895972381220366,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 1.5,
@@ -1115,8 +1115,8 @@
           "home": 132,
           "away": 129
         },
-        "baseline": 10.975,
-        "candidate": 9.438100165981757,
+        "baseline": 10.967,
+        "candidate": 9.017854487968922,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -11.5,
@@ -1135,8 +1135,8 @@
           "home": 97,
           "away": 96
         },
-        "baseline": 2.564,
-        "candidate": 1.857993764033679,
+        "baseline": 2.895,
+        "candidate": 1.8000948645756079,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 1.5,
@@ -1155,8 +1155,8 @@
           "home": 114,
           "away": 91
         },
-        "baseline": 6.964,
-        "candidate": 14.092141028434844,
+        "baseline": 7.574,
+        "candidate": 13.919352682055923,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -19.5,
@@ -1175,8 +1175,8 @@
           "home": 104,
           "away": 95
         },
-        "baseline": -3.51,
-        "candidate": 1.6036254057133537,
+        "baseline": -2.551,
+        "candidate": 1.5249109196909025,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -5.5,
@@ -1195,8 +1195,8 @@
           "home": 110,
           "away": 100
         },
-        "baseline": 11.55,
-        "candidate": 6.894868369849394,
+        "baseline": 11.83,
+        "candidate": 6.837091268908265,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -1215,8 +1215,8 @@
           "home": 97,
           "away": 96
         },
-        "baseline": -5.756,
-        "candidate": -12.274926653381305,
+        "baseline": -5.816,
+        "candidate": -12.361702078698647,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 12.5,
@@ -1235,8 +1235,8 @@
           "home": 107,
           "away": 97
         },
-        "baseline": -1.502,
-        "candidate": -1.7673027973030613,
+        "baseline": -2.295,
+        "candidate": -1.8235694850111968,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 2.5,
@@ -1255,8 +1255,8 @@
           "home": 123,
           "away": 113
         },
-        "baseline": 2.725,
-        "candidate": -0.763100439533884,
+        "baseline": 2.871,
+        "candidate": -0.3998301532206636,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -1275,8 +1275,8 @@
           "home": 114,
           "away": 116
         },
-        "baseline": -5.687,
-        "candidate": -3.27695015244353,
+        "baseline": -5.053,
+        "candidate": -3.3610579578420756,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 2.5,
@@ -1295,8 +1295,8 @@
           "home": 145,
           "away": 151
         },
-        "baseline": -3.043,
-        "candidate": -3.464587667072986,
+        "baseline": -3.826,
+        "candidate": -4.0880076061770065,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 9.5,
@@ -1315,8 +1315,8 @@
           "home": 116,
           "away": 96
         },
-        "baseline": -1.155,
-        "candidate": -2.667266252811962,
+        "baseline": -1.604,
+        "candidate": -2.759830100631044,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 4.5,
@@ -1335,8 +1335,8 @@
           "home": 113,
           "away": 106
         },
-        "baseline": 9.395,
-        "candidate": 7.596678550752274,
+        "baseline": 9.137,
+        "candidate": 7.495663302715318,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -6.5,
@@ -1355,8 +1355,8 @@
           "home": 88,
           "away": 87
         },
-        "baseline": -3.952,
-        "candidate": -4.295045849602705,
+        "baseline": -4.417,
+        "candidate": -4.359035083517317,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 8.5,
@@ -1375,8 +1375,8 @@
           "home": 111,
           "away": 128
         },
-        "baseline": 0.895,
-        "candidate": -1.5684272037969573,
+        "baseline": 1.356,
+        "candidate": -1.9440368783196011,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 1.5,
@@ -1395,8 +1395,8 @@
           "home": 111,
           "away": 117
         },
-        "baseline": -9.789,
-        "candidate": -11.231719891506474,
+        "baseline": -9.456,
+        "candidate": -11.346896085650148,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 2.5,
@@ -1415,8 +1415,8 @@
           "home": 142,
           "away": 116
         },
-        "baseline": 7.179,
-        "candidate": 11.993293787100566,
+        "baseline": 7.041,
+        "candidate": 11.94918264445675,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -10.5,
@@ -1435,8 +1435,8 @@
           "home": 111,
           "away": 116
         },
-        "baseline": 5.558,
-        "candidate": 6.821553854049086,
+        "baseline": 4.869,
+        "candidate": 6.7395216019828545,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -10.5,
@@ -1455,8 +1455,8 @@
           "home": 125,
           "away": 120
         },
-        "baseline": -3.297,
-        "candidate": -3.707916758086929,
+        "baseline": -4.12,
+        "candidate": -3.3521239585803433,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 4.5,
@@ -1475,8 +1475,8 @@
           "home": 119,
           "away": 123
         },
-        "baseline": -9.909,
-        "candidate": -5.456464794749779,
+        "baseline": -9.97,
+        "candidate": -5.530023649201329,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 3.5,
@@ -1495,8 +1495,8 @@
           "home": 122,
           "away": 108
         },
-        "baseline": -6.172,
-        "candidate": -3.1055241985181725,
+        "baseline": -5.422,
+        "candidate": -3.4720141630305528,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 8.5,
@@ -1515,8 +1515,8 @@
           "home": 116,
           "away": 104
         },
-        "baseline": 14.714,
-        "candidate": 11.542288250859253,
+        "baseline": 14.37,
+        "candidate": 11.505645159089662,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -13.5,
@@ -1535,8 +1535,8 @@
           "home": 107,
           "away": 123
         },
-        "baseline": -7.229,
-        "candidate": -13.16974627268675,
+        "baseline": -6.989,
+        "candidate": -13.26755962859618,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 8.5,
@@ -1555,8 +1555,8 @@
           "home": 109,
           "away": 94
         },
-        "baseline": 9.094,
-        "candidate": 6.377827898004063,
+        "baseline": 9.241,
+        "candidate": 6.27008541225214,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -13.5,
@@ -1575,8 +1575,8 @@
           "home": 86,
           "away": 104
         },
-        "baseline": -1.626,
-        "candidate": -4.121458785151659,
+        "baseline": -1.663,
+        "candidate": -4.190729157860046,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -3.5,
@@ -1595,8 +1595,8 @@
           "home": 116,
           "away": 131
         },
-        "baseline": -3.306,
-        "candidate": -8.912608999084881,
+        "baseline": -5.06,
+        "candidate": -9.022742063484284,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 10.5,
@@ -1615,8 +1615,8 @@
           "home": 101,
           "away": 120
         },
-        "baseline": 5.715,
-        "candidate": 1.6693239135764797,
+        "baseline": 5.432,
+        "candidate": 2.0738082977350225,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -7.5,
@@ -1635,8 +1635,8 @@
           "home": 111,
           "away": 104
         },
-        "baseline": -0.025,
-        "candidate": -0.03409460154963795,
+        "baseline": 0.22,
+        "candidate": -0.4062231004825536,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 1.5,
@@ -1655,8 +1655,8 @@
           "home": 105,
           "away": 107
         },
-        "baseline": -2.582,
-        "candidate": -3.902152736019284,
+        "baseline": -3.085,
+        "candidate": -4.007058126735833,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -1675,8 +1675,8 @@
           "home": 106,
           "away": 113
         },
-        "baseline": -1.533,
-        "candidate": -3.3004931701017948,
+        "baseline": -1.545,
+        "candidate": -3.8529526707261836,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -2.5,
@@ -1695,8 +1695,8 @@
           "home": 121,
           "away": 102
         },
-        "baseline": 2.822,
-        "candidate": 4.4014840542970415,
+        "baseline": 3.133,
+        "candidate": 4.063460533833148,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -4.5,
@@ -1715,8 +1715,8 @@
           "home": 97,
           "away": 104
         },
-        "baseline": -2.499,
-        "candidate": 0.11043787915831027,
+        "baseline": -1.899,
+        "candidate": 0.027541193120523833,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -1.5,
@@ -1735,8 +1735,8 @@
           "home": 115,
           "away": 97
         },
-        "baseline": 8.666,
-        "candidate": 10.763540905270684,
+        "baseline": 9.055,
+        "candidate": 10.721130874704473,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -7.5,
@@ -1755,8 +1755,8 @@
           "home": 116,
           "away": 104
         },
-        "baseline": 4.462,
-        "candidate": 5.411737592181543,
+        "baseline": 4.538,
+        "candidate": 5.311247010732327,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -8.5,
@@ -1775,8 +1775,8 @@
           "home": 116,
           "away": 111
         },
-        "baseline": -2.71,
-        "candidate": -3.2998043636464804,
+        "baseline": -2.973,
+        "candidate": -3.4417422784960614,
         "quote": {
           "provider": "DraftKings",
           "home_spread": 3.5,
@@ -1795,8 +1795,8 @@
           "home": 129,
           "away": 110
         },
-        "baseline": 7.511,
-        "candidate": 8.544614171390926,
+        "baseline": 6.852,
+        "candidate": 8.487397331034966,
         "quote": {
           "provider": "DraftKings",
           "home_spread": -8.5,
